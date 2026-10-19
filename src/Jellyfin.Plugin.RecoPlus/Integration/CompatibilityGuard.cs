@@ -215,7 +215,7 @@ public sealed class CompatibilityGuard : IHostedService
         var hss = Opt("Jellyfin.Plugin.HomeScreenSections");
         Checks.Add(("Home Screen Sections", hss.Length > 0, hss.Length > 0 ? $"présent ({hss}) : rangée « {Plugin.Instance?.Configuration.HssSectionTitle} » disponible" : "absent : pas de rangée d'accueil (le reste fonctionne)"));
         var jfe = Opt("Jellyfin.Plugin.JellyfinEnhanced");
-        Checks.Add(("Jellyfin Enhanced", jfe.Length > 0, jfe.Length > 0 ? $"présent ({jfe}) : le mode étendu ouvre sa fiche détaillée" : "absent : le mode étendu ouvre la page Seerr"));
+        Checks.Add(("Jellyfin Enhanced", jfe.Length > 0, jfe.Length > 0 ? $"présent ({jfe}) : le mode étendu utilise ses cartes, sa fiche et ses demandes (s'il est relié à Seerr)" : "absent : le mode étendu utilise les cartes Reco+ et ouvre la page Seerr"));
         var mbe = Opt("Jellyfin.Plugin.MediaBarEnhanced");
         Checks.Add(("Media Bar Enhanced", true, mbe.Length > 0 ? $"présent ({mbe}) : profite automatiquement des recommandations" : "absent"));
         var lr = asm.FirstOrDefault(a => a.Name?.Contains("LocalRecs", StringComparison.OrdinalIgnoreCase) == true);

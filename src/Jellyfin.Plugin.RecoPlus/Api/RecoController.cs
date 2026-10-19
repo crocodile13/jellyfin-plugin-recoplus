@@ -110,10 +110,14 @@ public sealed class RecoController : ControllerBase
 
         var r = _reco.For(me.Value);
         bool on = cfg.Enabled && cfg.ExtendedEnabled && _seerr.Configured;
+        bool hss = cfg.HssSection && HomeScreenSectionsIntegration.Registered && CompatibilityGuard.Allowed(Feature.HomeScreenSection);
         return Ok(new
         {
             enabled = on,
-            homeRow = on && CompatibilityGuard.Allowed(Feature.ClientScript),
+            homeRow = on && cfg.ExtendedHomeRow && CompatibilityGuard.Allowed(Feature.ClientScript),
+            hss,
+            mixEvery = Math.Clamp(cfg.ExtendedMixEvery, 2, 20),
+            skip = Math.Min(r?.Pinned.Count ?? 0, 20),
             title = cfg.ExtendedTitle,
             canRequest = on && cfg.ExtendedRequestButton && (r?.SeerrUserId ?? 0) > 0,
             seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? cfg.SeerrUrl.TrimEnd('/') : cfg.SeerrPublicUrl.TrimEnd('/'),

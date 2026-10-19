@@ -244,9 +244,10 @@
             ['RatingCountry', 'Pays des classifications', 'text', 'ex. FR', 0, 0, 0, 'seerr', 'c'],
 
             ['ExtendedEnabled', 'Activer le mode étendu', 'bool', '', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedHomeRow', 'Rangée sur l\'accueil', 'bool', 'Script ajouté à l\'interface web (aucun fichier modifié).', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedTitle', 'Titre de la rangée', 'text', '', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedRequestButton', 'Bouton « Demander »', 'bool', 'Au nom de l\'utilisateur, avec ses droits et quotas Seerr.', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedHomeRow', 'Sur l\'accueil', 'bool', 'Mélangés dans « Pour toi » si Home Screen Sections est présent, sinon rangée à part. Cartes et demandes de Jellyfin Enhanced s\'il est relié à Seerr.', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedMixEvery', 'Mélange : 1 titre hors bibliothèque toutes les', 'int', 'cartes de « Pour toi » (2 = un sur deux).', 1, 2, 20, 'ext', 'c'],
+            ['ExtendedTitle', 'Titre de la rangée à part (sans Home Screen Sections)', 'text', '', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedRequestButton', 'Bouton « Demander » (sans Jellyfin Enhanced)', 'bool', 'Au nom de l\'utilisateur, avec ses droits et quotas Seerr. Avec Jellyfin Enhanced, ce sont ses propres boutons.', 0, 0, 0, 'ext', 'c'],
             ['ExtendedCount', 'Titres proposés', 'int', '', 1, 1, 100, 'ext', 'c'],
             ['ExtendedAnchors', 'Titres aimés servant de point de départ', 'int', '', 1, 1, 50, 'extadv', 'c'],
             ['ExtendedDetails', 'Candidats détaillés par compte', 'int', 'Appels à Seerr, mis en cache 14 jours.', 5, 10, 300, 'extadv', 'c'],

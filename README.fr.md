@@ -11,7 +11,7 @@ Reco+ remplace les recommandations de Jellyfin par des listes calculées sur **t
 | « Plus comme ceci » (films) | recouvrement pondéré genres/mots-clés/personnes | ressemblance de contenu + un peu du goût du compte, volet suivant d'une saga d'abord |
 | « Plus comme ceci » (séries) | des séries **au hasard** partageant un genre ou un mot-clé | ressemblance de contenu, comme pour les films |
 | Home Screen Sections | — | rangée « Pour toi » (facultative) |
-| Hors bibliothèque | — | rangée « À découvrir » facultative, à partir du catalogue Seerr/TMDb, avec bouton *Demander* |
+| Hors bibliothèque | — | facultatif : titres du catalogue Seerr/TMDb **mélangés dans la rangée « Pour toi »**, avec les cartes et le bouton *Demander* de Jellyfin Enhanced |
 
 Tout est calculé en arrière-plan et gardé en cache, en mémoire et sur disque : aucune page n'attend un calcul. Un compte dont la liste n'est pas encore prête reçoit la réponse normale de Jellyfin.
 
@@ -107,7 +107,7 @@ Tableau de bord → Extensions → Reco+. La page est organisée en onglets :
 | Général | ce qui est remplacé, rangée Home Screen Sections, demandes en tête |
 | Moteur | réglages groupés ; les valeurs par défaut sont celles qui ont été évaluées |
 | Seerr | URL et clé, avec un bouton **Tester** qui utilise les valeurs saisies sans les enregistrer |
-| Mode étendu | titres hors bibliothèque |
+| Mode étendu | titres hors bibliothèque : activation, un toutes les N cartes de « Pour toi » |
 | Notifications | webhook, avec envoi de test |
 | Calibrage | voir ci-dessous |
 | Aperçu | ce que voit actuellement un compte |
@@ -129,7 +129,7 @@ Il affiche ensuite le réglage actuel et le réglage proposé, l'intervalle de c
 | Plugin / service | Présent | Absent |
 |---|---|---|
 | Home Screen Sections | rangée « Pour toi » (à activer aussi dans HSS) | pas de rangée d'accueil, le reste marche |
-| Jellyfin Enhanced | les cartes du mode étendu ouvrent sa fiche détaillée | les cartes ouvrent la page Seerr |
+| Jellyfin Enhanced | le mode étendu utilise ses cartes, sa fiche et son bouton *Demander*, avec l'état Seerr du moment (s'il est relié à Seerr) | cartes Reco+, qui ouvrent la page Seerr, et bouton *Demander* de Reco+ |
 | Media Bar Enhanced | en profite automatiquement | — |
 | Playback Reporting | dates de premier lancement précises pour le calibrage | calibrage moins précis ; Reco+ relève lui-même les premiers lancements à partir de son installation |
 | Seerr (ex-Jellyseerr) | demandes comme signal, arrivées en tête, mode étendu | tout cela est coupé, le reste marche |
@@ -169,7 +169,7 @@ La CI compile et teste à chaque push. Quand une nouvelle version apparaît dans
 
 - Construit pour Jellyfin 12.2. Les autres versions sont détectées et chaque point d'accroche est vérifié, mais elles ne sont pas testées.
 - Les valeurs par défaut ont été choisies sur un seul petit foyer (environ 16 comptes actifs). Utilisez le calibrage sur le vôtre.
-- La rangée du mode étendu est un script ajouté au client web (mise en page Modern testée). Les autres clients (TV, applications mobiles) reçoivent les recommandations remplacées, mais pas cette rangée.
+- Les titres hors bibliothèque sont ajoutés par un script du client web (mise en page Modern testée) : mélangés dans la rangée « Pour toi » de Home Screen Sections, ou en rangée à part sans HSS. Les autres clients (TV, applications mobiles) ne reçoivent que les recommandations de la bibliothèque.
 
 ## Licence
 

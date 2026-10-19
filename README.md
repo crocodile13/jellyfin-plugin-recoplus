@@ -13,7 +13,7 @@ It has been built and tested against **Jellyfin 12.2** only.
 | "More like this" (movies) | weighted overlap of genres/tags/people | content similarity + a bit of the account's taste, next saga volume first |
 | "More like this" (series) | **random** series sharing a genre or a tag | content similarity, same as movies |
 | Home Screen Sections | — | a "For you" row (optional) |
-| Outside the library | — | optional "To discover" row from the Seerr/TMDb catalogue, with a *Request* button |
+| Outside the library | — | optional: titles from the Seerr/TMDb catalogue **mixed into the "For you" row**, with Jellyfin Enhanced's cards and *Request* button |
 
 Everything is computed in the background and cached in memory and on disk, so no page ever waits for a computation. An account without a ready list simply gets Jellyfin's normal answer.
 
@@ -104,7 +104,7 @@ Dashboard → Plugins → Reco+. The page has one tab per topic:
 | General | what to replace, Home Screen Sections row, pinned requests |
 | Engine | grouped settings; defaults are the evaluated ones |
 | Seerr | URL and key, with a **Test** button that uses the values typed in without saving them |
-| Extended mode | titles outside the library |
+| Extended mode | titles outside the library: on/off, one every N cards in "For you" |
 | Notifications | webhook, with a test button |
 | Calibration | see below |
 | Preview | what an account currently gets |
@@ -127,7 +127,7 @@ Nothing is applied until you click **Apply**, and the previous settings are kept
 | Plugin / service | If present | If absent |
 |---|---|---|
 | Home Screen Sections | "For you" row (enable it in HSS settings too) | no home row; everything else works |
-| Jellyfin Enhanced | extended-mode cards open its detail modal | cards open the Seerr page |
+| Jellyfin Enhanced | extended mode uses its cards, detail modal and *Request* button, with the live Seerr status (if it is linked to Seerr) | Reco+ cards, opening the Seerr page, with Reco+'s own *Request* button |
 | Media Bar Enhanced | benefits automatically (it calls the replaced endpoints) | — |
 | Playback Reporting | precise first-play dates for calibration | calibration is less precise; Reco+ also records first plays itself from install time |
 | Seerr (formerly Jellyseerr) | requests as a signal, pinned arrivals, extended mode | all of this is off; the rest works |
@@ -167,7 +167,7 @@ CI builds and tests on every push. When `manifest.json` gets a new version, a re
 
 - Built for Jellyfin 12.2. Other versions are detected and each hook is checked, but they are not tested.
 - The defaults were chosen on a single, small household (about 16 active accounts). Use Calibration on yours.
-- The extended-mode home row is a script added to the web client (Modern layout tested). Other clients (TV, mobile apps) get the replaced endpoints but not this row.
+- Titles outside the library are added by a script in the web client (Modern layout tested): mixed into the Home Screen Sections "For you" row, or as a separate row without HSS. Other clients (TV, mobile apps) get the library recommendations only.
 
 ## License
 
