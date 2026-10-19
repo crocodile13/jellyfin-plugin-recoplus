@@ -108,6 +108,31 @@ await test('aucun doublon quand la page change, réinsertion quand HSS recharge 
     assert.equal(p.calls.getJSON, 1, 'réponse serveur gardée en cache');
 });
 
+await test('mélange libre : chaque titre à la place du classement commun, rien au-delà de la rangée', async () => {
+    const items = ext(5).map((it, i) => ({ ...it, After: [0, 3, 3, 9, -1][i] }));
+    const p = page({ hssCards: 6, data: { ...base, mixMode: 'score', skip: 1, items }, je: jeStub() });
+    await wait(700);
+    // 1 demande en tête, puis : 1000 devant tout, 1001 et 1002 (dans cet ordre) après 3 titres, 1003 (après 9) et 1004 (non calculé) absents
+    assert.deepEqual(p.row(), ['L', 'E:1000', 'L', 'L', 'L', 'E:1001', 'E:1002', 'L', 'L']);
+    p.sections.appendChild(p.w.document.createElement('div'));
+    await wait(700);
+    assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 3, 'pas de doublon');
+});
+
+await test('rien ne trouve sa place : la rangée n\'est plus retraitée à chaque changement de page', async () => {
+    const items = ext(2).map((it) => ({ ...it, After: 50 }));
+    const p = page({ hssCards: 4, data: { ...base, mixMode: 'score', items }, je: jeStub() });
+    await wait(700);
+    const n = p.w.JellyfinEnhanced.jellyseerrUI.created.length;
+    assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 0);
+    p.sections.appendChild(p.w.document.createElement('div'));
+    await wait(700);
+    assert.equal(p.w.JellyfinEnhanced.jellyseerrUI.created.length, n, 'cartes non reconstruites');
+    p.fill(4); // nouveau rendu HSS → nouvel essai
+    await wait(700);
+    assert.ok(p.w.JellyfinEnhanced.jellyseerrUI.created.length > n);
+});
+
 await test('demandes arrivées en tête : jamais précédées d\'un titre hors bibliothèque', async () => {
     const p = page({ hssCards: 6, data: { ...base, skip: 2 }, je: jeStub() });
     await wait(700);

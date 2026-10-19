@@ -10,23 +10,45 @@
     <div data-role="content">
         <div class="content-primary">
             <style>
-                #RecoPlusConfigPage { --rp-line: rgba(255,255,255,.09); --rp-soft: rgba(255,255,255,.04); --rp-mute: #9aa0a6; }
+                #RecoPlusConfigPage { --rp-line: rgba(255,255,255,.09); --rp-soft: rgba(255,255,255,.04); --rp-mute: #9aa0a6; --rp-accent: #00a4dc; }
                 #RecoPlusConfigPage .rp-head { display: flex; align-items: baseline; gap: .8em; flex-wrap: wrap; margin: 1em 0 .2em; }
                 #RecoPlusConfigPage .rp-head h2 { margin: 0; }
                 #RecoPlusConfigPage .rp-sub { color: var(--rp-mute); font-size: .9em; margin: 0 0 1em; max-width: 60em; }
                 #RecoPlusConfigPage .rp-alert { background: #5c1414; border-left: 4px solid #e04848; padding: .7em 1em; border-radius: 4px; margin: .5em 0; }
                 #RecoPlusConfigPage .rp-alert b { display: block; }
-                #RecoPlusConfigPage .rp-tabs { display: flex; gap: .3em; flex-wrap: wrap; border-bottom: 1px solid var(--rp-line); margin: 1em 0; position: sticky; top: 0; z-index: 2; background: inherit; }
+                #RecoPlusConfigPage .rp-tabs { display: flex; gap: .3em; flex-wrap: wrap; border-bottom: 1px solid var(--rp-line); margin: 1em 0; position: sticky; top: 0; z-index: 3; background: inherit; }
                 #RecoPlusConfigPage .rp-tab { background: none; border: none; color: inherit; padding: .7em 1em; cursor: pointer; border-bottom: 2px solid transparent; font: inherit; opacity: .75; }
-                #RecoPlusConfigPage .rp-tab.on { border-bottom-color: #00a4dc; opacity: 1; }
+                #RecoPlusConfigPage .rp-tab.on { border-bottom-color: var(--rp-accent); opacity: 1; }
                 #RecoPlusConfigPage .rp-pane { display: none; }
                 #RecoPlusConfigPage .rp-pane.on { display: block; }
                 #RecoPlusConfigPage .rp-box { background: var(--rp-soft); border-radius: 8px; padding: 1em 1.2em; margin: 0 0 1em; }
                 #RecoPlusConfigPage .rp-box h3 { margin: 0 0 .3em; font-size: 1.05em; }
-                #RecoPlusConfigPage .rp-box > p { color: var(--rp-mute); font-size: .88em; margin: 0 0 .9em; }
-                #RecoPlusConfigPage .rp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 2em; }
-                #RecoPlusConfigPage details.rp-adv { margin-top: .6em; }
-                #RecoPlusConfigPage details.rp-adv summary { cursor: pointer; color: var(--rp-mute); margin: .3em 0 .8em; }
+                #RecoPlusConfigPage .rp-box > p { color: var(--rp-mute); font-size: .88em; margin: 0 0 .9em; max-width: 60em; }
+                #RecoPlusConfigPage .rp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 2em; align-items: end; }
+                #RecoPlusConfigPage details.rp-adv { margin: 1.5em 0 1em; border-top: 1px dashed var(--rp-line); padding-top: .6em; }
+                #RecoPlusConfigPage details.rp-adv > summary { cursor: pointer; color: var(--rp-mute); margin: .3em 0 .9em; font-weight: 600; }
+                #RecoPlusConfigPage details.rp-adv > summary span { font-weight: normal; }
+                #RecoPlusConfigPage .rp-field { position: relative; }
+                #RecoPlusConfigPage .rp-field .inputContainer, #RecoPlusConfigPage .rp-field .selectContainer, #RecoPlusConfigPage .rp-field .checkboxContainer { margin-bottom: 1.2em; }
+                #RecoPlusConfigPage .rp-field .checkboxContainer { padding-right: 2em; }
+                /* aide au survol (et au toucher / clavier : focus) */
+                #RecoPlusConfigPage .rp-tip { position: absolute; top: 0; right: 0; width: 1.35em; height: 1.35em; border-radius: 50%; border: 1px solid var(--rp-mute); color: var(--rp-mute); font-size: .78em; line-height: 1.3em; text-align: center; cursor: help; user-select: none; z-index: 1; }
+                #RecoPlusConfigPage .rp-tip:hover, #RecoPlusConfigPage .rp-tip:focus { z-index: 50; color: #fff; border-color: var(--rp-accent); background: var(--rp-accent); outline: none; }
+                #RecoPlusConfigPage .rp-tip .rp-bubble { display: none; position: absolute; right: 0; top: 1.7em; width: min(24em, 80vw); background: #202124; color: #e8eaed; border: 1px solid var(--rp-line); border-radius: 6px; padding: .7em .85em; font-size: 1.15em; line-height: 1.4; text-align: left; box-shadow: 0 6px 18px rgba(0,0,0,.5); white-space: normal; cursor: auto; }
+                #RecoPlusConfigPage .rp-tip:hover .rp-bubble, #RecoPlusConfigPage .rp-tip:focus .rp-bubble { display: block; }
+                #RecoPlusConfigPage .rp-h4 { margin: 1em 0 .3em; font-size: .9em; color: var(--rp-mute); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+                #RecoPlusConfigPage .rp-factors { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 0 2em; }
+                #RecoPlusConfigPage .rp-factor { display: grid; grid-template-columns: minmax(11em, 1fr) minmax(8em, 1.2fr) 7.5em 1.6em; gap: .8em; align-items: center; padding: .45em 0; border-bottom: 1px solid var(--rp-line); }
+                #RecoPlusConfigPage .rp-factor label { display: flex; gap: .55em; align-items: center; cursor: pointer; }
+                #RecoPlusConfigPage .rp-factor input[type=range] { width: 100%; accent-color: var(--rp-accent); }
+                #RecoPlusConfigPage .rp-factor input[type=range]:disabled { opacity: .3; }
+                #RecoPlusConfigPage .rp-factor .rp-mult { font-size: .85em; color: var(--rp-mute); white-space: nowrap; }
+                #RecoPlusConfigPage .rp-factor.off .rp-mult { opacity: .5; }
+                #RecoPlusConfigPage .rp-factor .rp-tip { position: relative; }
+                @media (max-width: 600px) { #RecoPlusConfigPage .rp-factors { grid-template-columns: 1fr; } #RecoPlusConfigPage .rp-factor { grid-template-columns: 1fr 1fr 1.6em; } #RecoPlusConfigPage .rp-factor .rp-mult { grid-column: 1 / 3; } }
+                #RecoPlusConfigPage .rp-default { color: var(--rp-mute); font-size: .85em; margin-top: .4em; display: block; }
+                #RecoPlusConfigPage .rp-checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .1em 1em; max-height: 18em; overflow: auto; padding: .3em 0; }
+                #RecoPlusConfigPage .rp-checks label { display: flex; gap: .5em; align-items: center; cursor: pointer; padding: .2em 0; }
                 #RecoPlusConfigPage .rp-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .6em; margin-bottom: 1em; }
                 #RecoPlusConfigPage .rp-kpi { background: var(--rp-soft); border-radius: 8px; padding: .7em .9em; }
                 #RecoPlusConfigPage .rp-kpi span { display: block; color: var(--rp-mute); font-size: .8em; }
@@ -40,12 +62,13 @@
             </style>
 
             <div class="rp-head"><h2>Reco+</h2><span class="mute" id="rpVersion"></span></div>
-            <p class="rp-sub">Recommandations personnelles à la place de celles de Jellyfin, calculées en arrière-plan et mises en cache : aucune page n'attend. Une partie qui ne colle plus à la version de Jellyfin se coupe seule et Jellyfin reprend son comportement normal pour elle.</p>
+            <p class="rp-sub">Recommandations personnelles à la place de celles de Jellyfin, calculées en arrière-plan et mises en cache : aucune page n'attend. Une partie qui ne colle plus à la version de Jellyfin se coupe seule et Jellyfin reprend son comportement normal pour elle. Passez la souris sur <b>?</b> pour l'aide d'un réglage.</p>
             <div id="rpAlerts"></div>
 
             <div class="rp-tabs">
                 <button type="button" class="rp-tab on" data-tab="etat">État</button>
                 <button type="button" class="rp-tab" data-tab="general">Général</button>
+                <button type="button" class="rp-tab" data-tab="listes">Listes</button>
                 <button type="button" class="rp-tab" data-tab="moteur">Moteur</button>
                 <button type="button" class="rp-tab" data-tab="seerr">Seerr</button>
                 <button type="button" class="rp-tab" data-tab="etendu">Mode étendu</button>
@@ -72,21 +95,42 @@
                 <!-- GÉNÉRAL -->
                 <div class="rp-pane" data-pane="general">
                     <div class="rp-box"><h3>Ce que Reco+ remplace</h3><p>Chaque interrupteur coupé rend la main à Jellyfin pour cette partie.</p><div class="rp-grid" data-fields="replace"></div></div>
-                    <div class="rp-box"><h3>Rangée d'accueil (Home Screen Sections)</h3><p>À activer aussi dans la configuration de Home Screen Sections.</p><div class="rp-grid" data-fields="hss"></div></div>
+                    <div class="rp-box"><h3>Rangée d'accueil</h3><p data-tpl="Avec Home Screen Sections : ajoutez aussi la section {ROW} dans sa configuration (bouton « Add Section »), à la place voulue. Le titre est celui de la rangée sur l'accueil."></p><div class="rp-grid" data-fields="hss"></div></div>
+                    <div class="rp-box"><h3>Comptes ignorés</h3><p>Ces comptes n'ont pas de recommandations Reco+ (Jellyfin leur répond normalement) et leur historique ne compte pas pour le foyer : compte invité, de test, d'un enfant…</p><div data-fields="users"></div></div>
+                    <details class="rp-adv"><summary>Réglages avancés <span>— fonctionnement</span></summary>
+                        <div class="rp-box"><div class="rp-grid" data-fields="genadv"></div></div>
+                    </details>
+                </div>
+
+                <!-- LISTES -->
+                <div class="rp-pane" data-pane="listes">
+                    <p class="rp-sub" data-tpl="Ce qui est montré, sans changer le calcul des goûts : ces réglages s'appliquent après le classement (ils n'entrent ni dans l'évaluation ni dans le calibrage). Ils valent pour {ROW}, les Suggestions et le mode étendu ; « Plus comme ceci » n'est filtré que par les comptes ignorés."></p>
+                    <div class="rp-box"><h3>Composition du haut de liste</h3><p data-tpl="Les 20 premiers titres : ceux de la rangée {ROW}."></p><div class="rp-grid" data-fields="mix"></div></div>
+                    <div class="rp-box"><h3>Filtres</h3><p>Un titre filtré n'est jamais proposé. Un titre sans note ou sans année passe.</p><div class="rp-grid" data-fields="filters"></div><h4 class="rp-h4">Genres jamais proposés</h4><div data-fields="genres"></div></div>
+                    <div class="rp-box"><h3>Diversité et sagas</h3><div class="rp-factors" data-fields="divers"></div><div class="rp-grid" data-fields="sagas"></div></div>
                     <div class="rp-box"><h3>Demandes arrivées</h3><p>Un titre demandé dans Seerr, arrivé récemment et pas encore regardé passe en tête de la liste de ce compte.</p><div class="rp-grid" data-fields="pinned"></div></div>
-                    <details class="rp-adv"><summary>Réglages avancés</summary><div class="rp-box"><div class="rp-grid" data-fields="genadv"></div></div></details>
+                    <details class="rp-adv"><summary>Réglages avancés <span>— taille des listes, sagas</span></summary>
+                        <div class="rp-box"><div class="rp-grid" data-fields="listadv"></div></div>
+                    </details>
                 </div>
 
                 <!-- MOTEUR -->
                 <div class="rp-pane" data-pane="moteur">
-                    <p class="rp-sub">Valeurs par défaut = réglage retenu après évaluation sur l'historique de ce serveur. Le garde-fou (bonus de nouveauté et de popularité réservés aux titres qui collent déjà aux goûts du compte) est toujours actif ; la nouveauté est plafonnée à 4. Pour ajuster sur vos données, utilisez plutôt l'onglet Calibrage.</p>
-                    <div class="rp-box"><h3>Historique</h3><p>Combien un titre compte selon son ancienneté.</p><div class="rp-grid" data-fields="hist"></div></div>
-                    <div class="rp-box"><h3>Abandons</h3><p>Un titre commencé puis laissé compte en négatif, avec une marge : on peut regarder un film en deux fois.</p><div class="rp-grid" data-fields="abandon"></div></div>
-                    <div class="rp-box"><h3>Demandes Seerr</h3><p>Signal de court terme : dès que le titre est regardé, c'est ce visionnage qui compte.</p><div class="rp-grid" data-fields="req"></div></div>
-                    <div class="rp-box"><h3>Classement</h3><div class="rp-grid" data-fields="score"></div></div>
-                    <div class="rp-box"><h3>Liste affichée</h3><div class="rp-grid" data-fields="list"></div></div>
-                    <details class="rp-adv"><summary>Réglages avancés (contenu, « vus ensemble », séries)</summary><div class="rp-box"><div class="rp-grid" data-fields="engadv"></div></div></details>
-                    <div class="rp-row"><button is="emby-button" type="button" class="raised" id="rpEngineReset"><span>Remettre les réglages par défaut</span></button></div>
+                    <p class="rp-sub">Valeurs par défaut = réglage retenu après évaluation. Le garde-fou (bonus de nouveauté, de popularité et de note réservés aux titres qui collent déjà aux goûts du compte) est toujours actif ; la nouveauté est plafonnée à 4. Pour ajuster sur vos données, préférez l'onglet Calibrage.</p>
+                    <div class="rp-box"><h3>Facteurs de classement</h3><p>Chaque facteur s'active ou se coupe, et se renforce ou s'atténue (×1 = valeur évaluée, ×0,25 à ×3). Survolez le ? pour ce qu'il fait.</p>
+                        <h4 class="rp-h4">Ce qui compte comme un goût</h4><div class="rp-factors" data-fields="fsig"></div>
+                        <h4 class="rp-h4">Ce qui fait remonter un titre</h4><div class="rp-factors" data-fields="fsim"></div>
+                        <h4 class="rp-h4">Bonus réservés aux titres qui collent déjà aux goûts (garde-fou)</h4><div class="rp-factors" data-fields="fbonus"></div>
+                    </div>
+                    <div class="rp-box"><h3>Durées</h3><p>Combien de temps un signal compte.</p><div class="rp-grid" data-fields="durees"></div></div>
+                    <details class="rp-adv"><summary>Réglages avancés <span>— signaux fins, bonus, contenu, « vus ensemble »</span></summary>
+                        <div class="rp-box"><h3>Signaux</h3><div class="rp-grid" data-fields="sigadv"></div></div>
+                        <div class="rp-box"><h3>Séries</h3><div class="rp-grid" data-fields="seriesadv"></div></div>
+                        <div class="rp-box"><h3>Bonus réservés et garde-fou</h3><div class="rp-grid" data-fields="bonusadv"></div></div>
+                        <div class="rp-box"><h3>Ce qui fait que deux titres se ressemblent</h3><div class="rp-factors" data-fields="contentadv"></div><div class="rp-grid" data-fields="contentnum"></div></div>
+                        <div class="rp-box"><h3>« Vus ensemble »</h3><div class="rp-grid" data-fields="collabadv"></div></div>
+                    </details>
+                    <div class="rp-row"><button is="emby-button" type="button" class="raised" id="rpEngineReset"><span>Remettre les réglages du moteur par défaut</span></button></div>
                 </div>
 
                 <!-- SEERR -->
@@ -95,9 +139,11 @@
                         <h3>Connexion à Seerr</h3>
                         <p>Facultatif. Sans Seerr (ou s'il est injoignable), tout le reste fonctionne. La clé est stockée à part (fichier en droits 600) et n'est jamais renvoyée par l'API.</p>
                         <div class="rp-grid" data-fields="seerr"></div>
-                        <div class="inputContainer">
-                            <label class="inputLabel" for="rpSeerrKey">Clé d'API — <span id="rpSeerrKeyState" class="mute">…</span></label>
-                            <input is="emby-input" type="password" id="rpSeerrKey" autocomplete="new-password" placeholder="laisser vide pour garder la clé enregistrée">
+                        <div class="rp-field">
+                            <div class="inputContainer">
+                                <label class="inputLabel" for="rpSeerrKey">Clé d'API — <span id="rpSeerrKeyState" class="mute">…</span></label>
+                                <input is="emby-input" type="password" id="rpSeerrKey" autocomplete="new-password" placeholder="laisser vide pour garder la clé enregistrée">
+                            </div>
                         </div>
                         <div class="rp-row">
                             <button is="emby-button" type="button" class="raised" id="rpSeerrTest"><span>Tester</span></button>
@@ -105,16 +151,21 @@
                         </div>
                         <div class="rp-result" id="rpSeerrTestResult"></div>
                     </div>
+                    <details class="rp-adv"><summary>Réglages avancés <span>— langue, classifications</span></summary>
+                        <div class="rp-box"><div class="rp-grid" data-fields="seerradv"></div></div>
+                    </details>
                 </div>
 
                 <!-- ÉTENDU -->
                 <div class="rp-pane" data-pane="etendu">
                     <div class="rp-box">
                         <h3>Titres absents de la bibliothèque</h3>
-                        <p>À partir des recommandations TMDb des titres que chaque compte aime, triés par le même moteur et le même garde-fou. Rien n'est jamais demandé automatiquement. Classification parentale maximale du compte respectée (classification inconnue = exclu si une limite est fixée). Nécessite Seerr.</p>
+                        <p>À partir des recommandations TMDb des titres que chaque compte aime, triés par le même moteur et le même garde-fou. Rien n'est jamais demandé automatiquement. Nécessite Seerr.</p>
                         <div class="rp-grid" data-fields="ext"></div>
-                        <details class="rp-adv"><summary>Réglages avancés</summary><div class="rp-grid" data-fields="extadv"></div></details>
                     </div>
+                    <details class="rp-adv"><summary>Réglages avancés <span>— sans HSS ni Jellyfin Enhanced, recherche des candidats</span></summary>
+                        <div class="rp-box"><div class="rp-grid" data-fields="extadv"></div></div>
+                    </details>
                 </div>
 
                 <!-- NOTIFICATIONS -->
@@ -148,7 +199,7 @@
             <div class="rp-pane" data-pane="calibrage">
                 <div class="rp-box">
                     <h3>Calibrage sur l'historique</h3>
-                    <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, le titre figurait-il dans les recommandations calculées juste avant ? Essaie des réglages un par un, dans des bornes sûres (garde-fou non réglable), et ne garde un changement que s'il améliore les deux moitiés de l'historique. Rien n'est appliqué sans votre clic. Quelques minutes de calcul ; visible aussi dans Tâches planifiées.</p>
+                    <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, le titre figurait-il dans les recommandations calculées juste avant ? Essaie des réglages du moteur un par un, dans des bornes sûres (garde-fou non réglable), et ne garde un changement que s'il améliore les deux moitiés de l'historique. Rien n'est appliqué sans votre clic. Les réglages de l'onglet Listes n'entrent pas en jeu. Quelques minutes de calcul ; visible aussi dans Tâches planifiées.</p>
                     <div class="rp-row">
                         <button is="emby-button" type="button" class="raised" id="rpCalStart"><span>Lancer</span></button>
                         <button is="emby-button" type="button" class="raised" id="rpCalCancel"><span>Interrompre</span></button>
@@ -169,6 +220,7 @@
             <div class="rp-pane" data-pane="apercu">
                 <div class="rp-box">
                     <h3>Ce que voit un compte</h3>
+                    <p>Liste actuellement servie (après filtres, hasard du jour et minimums). Après un Enregistrer, attendez la fin du recalcul.</p>
                     <div class="rp-row">
                         <select is="emby-select" id="rpPreviewUser"></select>
                         <button is="emby-button" type="button" class="raised" id="rpPreviewBtn"><span>Afficher</span></button>
@@ -188,72 +240,107 @@
         var pluginId = '6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8';
         var page = document.querySelector('#RecoPlusConfigPage');
         var timer = null;
+        var lastCfg = null;
 
-        // [clé, libellé, type, aide, pas, min, max, groupe, cible (c = configuration, e = moteur)]
+        // [clé, libellé, type, aide (bulle au survol), pas, min, max, groupe, cible, valeur par défaut affichée]
+        // cible : c = configuration, e = moteur (Engine), l = listes (Lists)
         var F = [
-            ['Enabled', 'Plugin actif', 'bool', 'Coupé : Jellyfin se comporte exactement comme sans le plugin.', 0, 0, 0, 'replace', 'c'],
-            ['OverrideMovieRecommendations', 'Recommandations de films', 'bool', 'Onglet Suggestions des films, Media Bar…', 0, 0, 0, 'replace', 'c'],
-            ['OverrideSuggestions', 'Suggestions', 'bool', 'Aujourd\'hui dans Jellyfin : du hasard.', 0, 0, 0, 'replace', 'c'],
-            ['OverrideSimilar', '« Plus comme ceci »', 'bool', 'Films et séries (Jellyfin : séries au hasard).', 0, 0, 0, 'replace', 'c'],
-            ['SimilarPersonalization', 'Personnalisation de « Plus comme ceci »', 'num', '0 = pure ressemblance, 1 = surtout les goûts du compte.', 0.05, 0, 1, 'replace', 'c'],
-            ['HssSection', 'Rangée « Pour toi »', 'bool', '', 0, 0, 0, 'hss', 'c'],
-            ['HssSectionTitle', 'Titre de la rangée', 'text', '', 0, 0, 0, 'hss', 'c'],
-            ['PinnedRequests', 'Nombre de titres placés en tête', 'int', '0 = jamais.', 1, 0, 20, 'pinned', 'c'],
-            ['PinnedMaxDays', 'Pendant (jours après l\'arrivée)', 'int', '', 1, 1, 365, 'pinned', 'c'],
-            ['ListSize', 'Taille de la liste par compte', 'int', '', 10, 20, 1000, 'genadv', 'c'],
-            ['DebounceSeconds', 'Recalcul d\'un compte après une lecture (s)', 'int', 'Regroupe les lectures rapprochées.', 10, 10, 3600, 'genadv', 'c'],
-            ['PlaybackReportingDbPath', 'Base Playback Reporting', 'text', 'Vide = détection automatique. Date précisément l\'historique pour le calibrage.', 0, 0, 0, 'genadv', 'c'],
+            // ---- Général
+            ['Enabled', 'Plugin actif', 'bool', 'Coupé : Jellyfin se comporte exactement comme sans le plugin, partout.', 0, 0, 0, 'replace', 'c'],
+            ['OverrideMovieRecommendations', 'Recommandations de films', 'bool', 'Onglet « Suggestions » des films, Media Bar, et tout ce qui appelle /Movies/Recommendations. Reco+ y met des catégories « Parce que tu as aimé X » tirées de tout l\'historique (Jellyfin : les 7 derniers films vus).', 0, 0, 0, 'replace', 'c'],
+            ['OverrideSuggestions', 'Suggestions', 'bool', '/Items/Suggestions : chez Jellyfin, des titres au hasard. Reco+ y met la liste classée du compte.', 0, 0, 0, 'replace', 'c'],
+            ['OverrideSimilar', '« Plus comme ceci »', 'bool', 'Sur la fiche d\'un film ou d\'une série. Jellyfin : recouvrement de genres et de personnes pour les films, séries au hasard. Reco+ : ressemblance de contenu, un peu des goûts du compte, et le volet suivant d\'une saga en premier.', 0, 0, 0, 'replace', 'c'],
+            ['HssSection', 'Rangée {ROW}', 'bool', 'Déclare la rangée auprès de Home Screen Sections. Il faut ensuite l\'ajouter dans la configuration de HSS (bouton « Add Section ») ; sa place se règle là-bas.', 0, 0, 0, 'hss', 'c'],
+            ['HssSectionTitle', 'Titre de la rangée', 'text', 'Pris en compte au prochain démarrage de Jellyfin.', 0, 0, 0, 'hss', 'c'],
+            ['ExcludedUsers', '', 'users', '', 0, 0, 0, 'users', 'c'],
+            ['SimilarPersonalization', 'Personnalisation de « Plus comme ceci »', 'num', '0 = pure ressemblance avec le titre affiché. 1 = surtout les goûts du compte. 0,25 : la fiche reste le sujet, les goûts départagent.', 0.05, 0, 1, 'genadv', 'c', '0,25'],
+            ['DebounceSeconds', 'Recalcul d\'un compte après une lecture (s)', 'int', 'Délai avant de recalculer un compte qui vient de regarder quelque chose. Regroupe les lectures rapprochées (zapping, épisodes enchaînés).', 10, 10, 3600, 'genadv', 'c', '120'],
+            ['ListSize', 'Taille de la liste par compte', 'int', 'Titres gardés par compte. Les pages qui en demandent davantage reçoivent la liste entière. Plus grand = un peu plus de mémoire et de disque.', 10, 20, 1000, 'genadv', 'c', '200'],
+            ['PlaybackReportingDbPath', 'Base Playback Reporting', 'text', 'Vide = détection automatique. Sert à dater précisément le premier lancement de chaque titre, utile au calibrage.', 0, 0, 0, 'genadv', 'c', 'vide'],
 
-            ['HalfLifeDays', 'Demi-vie (jours)', 'num', 'Âge auquel un titre compte moitié moins. Référence MovieLens : 92 j.', 1, 7, 3650, 'hist', 'e'],
-            ['Decay', 'Forme', 'enum:Exponential=exponentielle,Power=puissance', '', 0, 0, 0, 'hist', 'e'],
-            ['RecencyFloor', 'Poids minimal d\'un titre ancien', 'num', '', 0.05, 0, 1, 'hist', 'e'],
-            ['FavoriteBoost', 'Bonus d\'un favori', 'num', '', 0.1, 0, 5, 'hist', 'e'],
-            ['MovieDone', 'Film « vu » au-delà de', 'num', 'Part du film (0-1).', 0.05, 0.3, 1, 'abandon', 'e'],
-            ['Zap', 'Simple zapping en dessous de', 'num', 'Part du film (0-1) : ni aimé ni abandonné.', 0.01, 0, 0.3, 'abandon', 'e'],
-            ['AbandonDays', 'Marge (jours sans reprise)', 'num', 'Avant cette durée, un titre commencé est « en cours », pas abandonné.', 1, 1, 365, 'abandon', 'e'],
-            ['AbandonWeight', 'Poids négatif d\'un abandon', 'num', '', 0.1, 0, 2, 'abandon', 'e'],
-            ['WNegative', 'Écart aux titres abandonnés', 'num', 'Pénalise ce qui ressemble à un abandon.', 0.1, 0, 10, 'abandon', 'e'],
-            ['RequestWeight', 'Poids d\'une demande', 'num', '', 0.1, 0, 2, 'req', 'e'],
-            ['RequestHalfLifeDays', 'Demi-vie d\'une demande (jours)', 'num', '', 1, 1, 365, 'req', 'e'],
-            ['RequestMaxDays', 'Ne compte plus après (jours)', 'num', '', 1, 1, 730, 'req', 'e'],
-            ['WMaxSim', 'Proche d\'un titre aimé', 'num', '', 0.1, 0, 10, 'score', 'e'],
-            ['WCentroid', 'Proche du profil d\'ensemble', 'num', '', 0.1, 0, 10, 'score', 'e'],
-            ['WCollab', '« Vus ensemble » dans le foyer', 'num', '', 0.1, 0, 10, 'score', 'e'],
-            ['WFresh', 'Nouveauté', 'num', 'Bonus réservé ; plafond 4.', 0.1, 0, 4, 'score', 'e'],
-            ['FreshDays', 'Échelle de nouveauté (jours)', 'num', '', 1, 1, 365, 'score', 'e'],
-            ['WPopularity', 'Popularité dans le foyer', 'num', 'Bonus réservé.', 0.1, 0, 10, 'score', 'e'],
-            ['WQuality', 'Note de la communauté', 'num', 'Bonus réservé.', 0.05, 0, 10, 'score', 'e'],
-            ['GateTop', 'Bonus réservés aux N premiers par goût', 'int', 'Garde-fou : un titre hors de ces N n\'a aucun bonus.', 5, 5, 500, 'score', 'e'],
-            ['Mmr', 'Diversité', 'num', '0,3 ≈ « rester pertinent » (Carbonell & Goldstein, 1998).', 0.05, 0, 2, 'list', 'e'],
-            ['Saga', 'Règle de saga', 'bool', 'Une seule entrée par saga, et le premier volet pas encore vu.', 0, 0, 0, 'list', 'e'],
-            ['SagaMax', 'Au-delà : regroupement thématique', 'int', 'Collection plus grande = 2 entrées au plus.', 1, 2, 100, 'list', 'e'],
-            ['Weighting', 'Pondération du contenu', 'enum:TfIdf=TF-IDF,Bm25=BM25', '', 0, 0, 0, 'engadv', 'e'],
-            ['Actors', 'Acteurs pris en compte', 'int', '', 1, 0, 30, 'engadv', 'e'],
-            ['Shrink', 'Rétrécissement de « vus ensemble »', 'num', '', 1, 0, 1000, 'engadv', 'e'],
-            ['MinCommon', 'Spectateurs communs minimum', 'int', '', 1, 1, 50, 'engadv', 'e'],
-            ['SeriesFullEpisodes', 'Épisodes pour qu\'une série compte pleinement', 'int', '', 1, 1, 200, 'engadv', 'e'],
-            ['SeriesAbandonEpisodes', 'Série abandonnée si au plus … épisodes vus', 'int', '', 1, 0, 20, 'engadv', 'e'],
-            ['SeriesAbandonFraction', '… et moins de cette part de la série', 'num', '', 0.01, 0, 1, 'engadv', 'e'],
-            ['SeriesMinEpisodes', '… dans une série d\'au moins … épisodes', 'int', '', 1, 1, 500, 'engadv', 'e'],
-            ['WTmdbAgreement', 'Accord TMDb (mode étendu)', 'num', 'Bonus réservé.', 0.1, 0, 10, 'engadv', 'e'],
+            // ---- Listes
+            ['RandomPercent', 'Hasard (% du haut de liste)', 'int', 'Part des 20 premiers titres tirée au hasard parmi tout ce qui est proposable au compte (bibliothèques autorisées, non vus, filtres respectés), à des places elles aussi tirées. Le tirage change chaque jour et reste le même dans la journée. 0 = aucun hasard.', 5, 0, 50, 'mix', 'l', '0'],
+            ['MinMovies', 'Minimum de films', 'int', 'Dans les 20 premiers. S\'il en manque, les films les mieux classés remontent à la place des séries les moins bien classées. 0 = pas de minimum.', 1, 0, 20, 'mix', 'l', '0'],
+            ['MinSeries', 'Minimum de séries', 'int', 'Dans les 20 premiers. S\'il en manque, les séries les mieux classées remontent à la place des films les moins bien classés. 0 = pas de minimum. Si films + séries dépasse 20, partage au prorata.', 1, 0, 20, 'mix', 'l', '0'],
+            ['MinCommunityRating', 'Note minimale de la communauté', 'num', 'Sur 10 (note TMDb/IMDb récupérée par Jellyfin). En dessous, jamais proposé. Un titre sans note passe. 0 = pas de filtre.', 0.5, 0, 10, 'filters', 'l', '0'],
+            ['MinYear', 'Année de sortie minimale', 'int', 'Avant cette année, jamais proposé. Un titre sans année passe. 0 = pas de filtre.', 1, 0, 2100, 'filters', 'l', '0'],
+            ['ExcludedGenres', '', 'genres', '', 0, 0, 0, 'genres', 'l'],
+            ['Saga', 'Règle de saga', 'bool', 'Une seule entrée par saga, et c\'est le premier volet pas encore vu (pas le 4ᵉ quand on n\'a pas vu le 1ᵉʳ).', 0, 0, 0, 'sagas', 'e', 'activée'],
+            ['PinnedRequests', 'Titres placés en tête', 'int', 'Nombre maximal de titres demandés, arrivés et pas encore vus mis tout en haut. 0 = jamais. Nécessite Seerr.', 1, 0, 20, 'pinned', 'c', '3'],
+            ['PinnedMaxDays', 'Pendant (jours après l\'arrivée)', 'int', 'Au-delà, le titre redevient un titre comme les autres : c\'est une nouvelle, pas une liste permanente.', 1, 1, 365, 'pinned', 'c', '30'],
+            ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. La rangée {ROW} en montre 20.', 1, 5, 100, 'listadv', 'l', '20'],
+            ['SagaMax', 'Au-delà : regroupement thématique', 'int', 'Une collection plus grande que ce nombre n\'est pas une saga mais un regroupement (« Films Marvel », « Ghibli ») : 2 entrées au plus, sans règle de premier volet.', 1, 2, 100, 'listadv', 'e', '12'],
 
-            ['SeerrEnabled', 'Utiliser Seerr', 'bool', '', 0, 0, 0, 'seerr', 'c'],
-            ['SeerrUrl', 'URL vue depuis le serveur Jellyfin', 'text', 'ex. http://jellyseerr:5055', 0, 0, 0, 'seerr', 'c'],
-            ['SeerrPublicUrl', 'URL publique (liens)', 'text', 'Vide = la même.', 0, 0, 0, 'seerr', 'c'],
-            ['SeerrLanguage', 'Langue TMDb', 'text', 'Celle des métadonnées de la bibliothèque (genres).', 0, 0, 0, 'seerr', 'c'],
-            ['RatingCountry', 'Pays des classifications', 'text', 'ex. FR', 0, 0, 0, 'seerr', 'c'],
+            // ---- Facteurs de classement : interrupteur + force (×0,25 à ×3 de la valeur évaluée ; coupé = 0)
+            ['FavoriteBoost', 'Favoris', 'factor', 'Un titre mis en favori compte davantage comme goût. Coupé : un favori compte comme un titre simplement vu.', 0, 0, 3, 'fsig', 'e', '1', 1],
+            ['RequestWeight', 'Demandes Seerr', 'factor', 'Un titre demandé dans Seerr compte comme un goût déclaré tant qu\'il n\'est pas vu (signal de court terme, voir la demi-vie). Plus fort : ce que le compte demande pèse davantage dans ses recommandations. Coupé : les demandes sont ignorées (les titres arrivés restent en tête, réglage de l\'onglet Listes).', 0, 0, 3, 'fsig', 'e', '0,6', 0.6],
+            ['AbandonWeight', 'Abandons', 'factor', 'Un titre commencé puis laissé (après la marge) compte en négatif. Plus fort : un abandon dit davantage « pas pour moi ». Coupé : les abandons sont ignorés.', 0, 0, 3, 'fsig', 'e', '0,5', 0.5],
+            ['WNegative', 'Écarter ce qui ressemble aux abandons', 'factor', 'Pénalise les titres proches de ceux que le compte a abandonnés. Coupé : un abandon ne fait plus baisser les titres semblables.', 0, 0, 3, 'fsig', 'e', '0,6', 0.6],
+            ['WMaxSim', 'Proche d\'un titre aimé', 'factor', 'Ressemblance avec LE titre aimé le plus proche : fait remonter ce qui prolonge un goût précis, même minoritaire (un seul film de Miyazaki vu et aimé suffit).', 0, 0, 3, 'fsim', 'e', '2', 2],
+            ['WCentroid', 'Proche des goûts d\'ensemble', 'factor', 'Ressemblance avec l\'ensemble de ce que le compte aime : fait remonter ce qui correspond à ses goûts dominants.', 0, 0, 3, 'fsim', 'e', '1', 1],
+            ['WCollab', 'Vus ensemble dans le foyer', 'factor', 'Fait remonter les titres souvent regardés par les mêmes personnes que les titres aimés du compte (filtrage collaboratif, prudent sur un petit foyer).', 0, 0, 3, 'fsim', 'e', '0,3', 0.3],
+            ['WFresh', 'Nouveauté', 'factor', 'Bonus des titres récemment ajoutés, uniquement s\'ils collent déjà aux goûts du compte (garde-fou). Plafonné : ×2 au plus.', 0, 0, 2, 'fbonus', 'e', '2', 2],
+            ['WPopularity', 'Popularité dans le foyer', 'factor', 'Bonus des titres regardés par beaucoup de comptes du serveur, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
+            ['WQuality', 'Note de la communauté', 'factor', 'Bonus des titres bien notés (TMDb/IMDb), uniquement s\'ils collent déjà aux goûts (garde-fou). Pour écarter les titres mal notés, utilisez plutôt le filtre « Note minimale » de l\'onglet Listes.', 0, 0, 3, 'fbonus', 'e', '0,1', 0.1],
+            ['WTmdbAgreement', 'Accord TMDb (mode étendu)', 'factor', 'Bonus des titres hors bibliothèque que TMDb recommande à partir de plusieurs titres aimés, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
+            ['Mmr', 'Diversité', 'factor', 'Pénalise un titre trop proche de ceux déjà placés au-dessus (Maximal Marginal Relevance). Coupé : ordre pur des goûts, au risque de 5 films du même genre d\'affilée.', 0, 0, 3, 'divers', 'e', '0,3', 0.3],
+            ['FeatGenre', 'Genres', 'factor', 'Poids des genres dans la ressemblance entre deux titres.', 0, 0, 3, 'contentadv', 'e', '1', 1],
+            ['FeatTag', 'Mots-clés', 'factor', 'Poids des mots-clés (tags) dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,5', 0.5],
+            ['FeatStudio', 'Studios', 'factor', 'Poids des studios dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,35', 0.35],
+            ['FeatActor', 'Acteurs', 'factor', 'Poids des acteurs principaux dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,7', 0.7],
+            ['FeatDirector', 'Réalisateurs', 'factor', 'Poids des réalisateurs dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '1,3', 1.3],
+            ['FeatWriter', 'Scénaristes', 'factor', 'Poids des scénaristes dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,6', 0.6],
+            ['FeatCreator', 'Créateurs (séries)', 'factor', 'Poids des créateurs de séries dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '1', 1],
+            ['FeatDecade', 'Décennie', 'factor', 'Poids de la décennie de sortie dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,5', 0.5],
+            ['FeatKind', 'Film ou série', 'factor', 'Poids du type : plus fort, on recommande plutôt des films à qui regarde des films et des séries à qui regarde des séries.', 0, 0, 3, 'contentadv', 'e', '0,6', 0.6],
 
-            ['ExtendedEnabled', 'Activer le mode étendu', 'bool', '', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedHomeRow', 'Sur l\'accueil', 'bool', 'Mélangés dans « Pour toi » si Home Screen Sections est présent, sinon rangée à part. Cartes et demandes de Jellyfin Enhanced s\'il est relié à Seerr.', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedMixEvery', 'Mélange : 1 titre hors bibliothèque toutes les', 'int', 'cartes de « Pour toi » (2 = un sur deux).', 1, 2, 20, 'ext', 'c'],
-            ['ExtendedTitle', 'Titre de la rangée à part (sans Home Screen Sections)', 'text', '', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedRequestButton', 'Bouton « Demander » (sans Jellyfin Enhanced)', 'bool', 'Au nom de l\'utilisateur, avec ses droits et quotas Seerr. Avec Jellyfin Enhanced, ce sont ses propres boutons.', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedCount', 'Titres proposés', 'int', '', 1, 1, 100, 'ext', 'c'],
-            ['ExtendedAnchors', 'Titres aimés servant de point de départ', 'int', '', 1, 1, 50, 'extadv', 'c'],
-            ['ExtendedDetails', 'Candidats détaillés par compte', 'int', 'Appels à Seerr, mis en cache 14 jours.', 5, 10, 300, 'extadv', 'c'],
+            // ---- Moteur
+            ['HalfLifeDays', 'Demi-vie de l\'historique (jours)', 'num', 'Âge auquel un titre vu compte moitié moins. Plus court = suit les envies du moment ; plus long = goûts de fond. Référence MovieLens : 90 j.', 1, 7, 3650, 'durees', 'e', '90'],
+            ['AbandonDays', 'Marge (jours sans reprise)', 'num', 'Un titre commencé n\'est « abandonné » qu\'après ce délai sans reprise : avant, il est simplement en cours.', 1, 1, 365, 'durees', 'e', '30'],
+            ['RequestHalfLifeDays', 'Demi-vie d\'une demande (jours)', 'num', 'Une demande perd la moitié de son poids après ce délai.', 1, 1, 365, 'durees', 'e', '21'],
 
-            ['Webhook', 'Type', 'enum:None=aucun,Ntfy=ntfy,Gotify=Gotify,Discord=Discord,Json=JSON générique', '', 0, 0, 0, 'notif', 'c']
+            ['Decay', 'Forme de la décroissance', 'enum:Exponential=exponentielle,Power=puissance', 'Exponentielle : l\'ancien s\'efface franchement. Puissance : l\'ancien s\'efface lentement et garde une traîne (Larrain, Parra et al. 2015).', 0, 0, 0, 'sigadv', 'e', 'exponentielle'],
+            ['RecencyFloor', 'Poids minimal d\'un titre ancien', 'num', 'Un titre très ancien ne descend jamais sous cette part de son poids (0-1).', 0.05, 0, 1, 'sigadv', 'e', '0,25'],
+            ['MovieDone', 'Film « vu » au-delà de', 'num', 'Part du film regardée (0-1) à partir de laquelle il compte comme vu.', 0.05, 0.3, 1, 'sigadv', 'e', '0,7'],
+            ['Zap', 'Simple zapping en dessous de', 'num', 'Part du film (0-1) en dessous de laquelle ce n\'est ni un goût ni un abandon.', 0.01, 0, 0.3, 'sigadv', 'e', '0,05'],
+            ['RequestMaxDays', 'Demande ignorée après (jours)', 'num', 'Une demande jamais regardée ne compte plus du tout après ce délai.', 1, 1, 730, 'sigadv', 'e', '90'],
+            ['SeriesFullEpisodes', 'Épisodes pour qu\'une série compte pleinement', 'int', 'En dessous, le poids d\'une série est proportionnel aux épisodes vus.', 1, 1, 200, 'seriesadv', 'e', '10'],
+            ['SeriesAbandonEpisodes', 'Abandonnée si au plus … épisodes vus', 'int', 'Première condition d\'abandon d\'une série.', 1, 0, 20, 'seriesadv', 'e', '2'],
+            ['SeriesAbandonFraction', '… et moins de cette part de la série', 'num', 'Deuxième condition (0-1).', 0.01, 0, 1, 'seriesadv', 'e', '0,1'],
+            ['SeriesMinEpisodes', '… dans une série d\'au moins … épisodes', 'int', 'Troisième condition : on n\'abandonne pas une mini-série de 3 épisodes après 2.', 1, 1, 500, 'seriesadv', 'e', '6'],
+            ['GateTop', 'Bonus réservés aux N premiers par goût', 'int', 'Garde-fou, toujours actif : seuls les N premiers titres par goût peuvent recevoir nouveauté, popularité et note. Un titre sans rapport avec le compte n\'est jamais poussé.', 5, 5, 500, 'bonusadv', 'e', '60'],
+            ['FreshDays', 'Échelle de nouveauté (jours)', 'num', 'Le bonus de nouveauté décroît sur cette durée après l\'ajout.', 1, 1, 365, 'bonusadv', 'e', '45'],
+            ['Weighting', 'Pondération du contenu', 'enum:TfIdf=TF-IDF,Bm25=BM25', 'TF-IDF : une caractéristique rare (un réalisateur) pèse plus qu\'une courante (« Drame »). BM25 : variante qui atténue les titres très décrits.', 0, 0, 0, 'contentnum', 'e', 'TF-IDF'],
+            ['Bm25K1', 'BM25 k1', 'num', 'Saturation : au-delà, une caractéristique répétée n\'apporte presque plus rien. Seulement en BM25.', 0.1, 0, 5, 'contentnum', 'e', '1,2'],
+            ['Bm25B', 'BM25 b', 'num', 'Correction de la longueur de description (0-1). Seulement en BM25.', 0.05, 0, 1, 'contentnum', 'e', '0,75'],
+            ['Actors', 'Acteurs pris en compte', 'int', 'Premiers du générique.', 1, 0, 30, 'contentnum', 'e', '8'],
+            ['StudiosKept', 'Studios pris en compte', 'int', 'Premiers studios listés.', 1, 0, 10, 'contentnum', 'e', '3'],
+            ['Shrink', 'Rétrécissement', 'num', 'Freine les liens « vus ensemble » appuyés sur peu de spectateurs, pour qu\'une seule personne qui regarde tout ne relie pas tous les titres (Ferrari Dacrema et al. 2019).', 1, 0, 1000, 'collabadv', 'e', '10'],
+            ['MinCommon', 'Spectateurs communs minimum', 'int', 'Deux titres ne sont liés que si au moins ce nombre de comptes ont vu les deux.', 1, 1, 50, 'collabadv', 'e', '2'],
+
+            // ---- Seerr
+            ['SeerrEnabled', 'Utiliser Seerr', 'bool', 'Demandes comme signal de goût, titres demandés arrivés en tête, mode étendu.', 0, 0, 0, 'seerr', 'c'],
+            ['SeerrUrl', 'URL vue depuis le serveur Jellyfin', 'text', 'Adresse que le serveur Jellyfin utilise pour joindre Seerr, ex. http://seerr:5055 sur un réseau Docker.', 0, 0, 0, 'seerr', 'c'],
+            ['SeerrPublicUrl', 'URL publique (liens)', 'text', 'Adresse ouverte par les navigateurs des utilisateurs (liens vers Seerr). Vide = la même que ci-dessus.', 0, 0, 0, 'seerr', 'c'],
+            ['SeerrLanguage', 'Langue TMDb', 'text', 'Doit être celle des métadonnées de la bibliothèque, pour que les genres se comparent (ex. fr).', 0, 0, 0, 'seerradv', 'c', 'fr'],
+            ['RatingCountry', 'Pays des classifications', 'text', 'Pays dont on lit la classification d\'âge des titres hors bibliothèque, pour le contrôle parental (ex. FR).', 0, 0, 0, 'seerradv', 'c', 'FR'],
+
+            // ---- Mode étendu
+            ['ExtendedEnabled', 'Activer le mode étendu', 'bool', 'Recommande aussi des titres absents de la bibliothèque. Contrôle parental du compte respecté (classification inconnue = exclu si une limite est fixée).', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedHomeRow', 'Sur l\'accueil', 'bool', 'Avec Home Screen Sections : mélangés dans la rangée {ROW}. Sans : rangée à part. Avec Jellyfin Enhanced relié à Seerr : ses cartes, sa fiche et son bouton Demander.', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedMixMode', 'Mélange dans la rangée {ROW}', 'enum:Interleave=à intervalle fixe,Score=libre (classement du moteur)', 'À intervalle fixe : un titre hors bibliothèque toutes les N cartes, quoi qu\'il arrive. Libre : bibliothèque et hors bibliothèque sont notés ensemble par le moteur et chacun prend sa place ; un titre hors bibliothèque moins bien classé que toute la rangée n\'apparaît pas (il peut donc y en avoir beaucoup, ou aucun).', 0, 0, 0, 'ext', 'c', 'à intervalle fixe'],
+            ['ExtendedMixEvery', '1 titre hors bibliothèque toutes les … cartes', 'int', 'Mélange à intervalle fixe seulement. 3 = deux titres de la bibliothèque puis un à découvrir. 2 = un sur deux.', 1, 2, 20, 'ext', 'c', '3'],
+            ['ExtendedCount', 'Titres proposés', 'int', 'Nombre maximal de titres hors bibliothèque par compte.', 1, 1, 100, 'ext', 'c', '20'],
+            ['ExtendedRequestButton', 'Bouton « Demander » de Reco+', 'bool', 'Utilisé seulement sans Jellyfin Enhanced. La demande est faite au nom de l\'utilisateur, avec ses droits et quotas Seerr.', 0, 0, 0, 'extadv', 'c', 'activé'],
+            ['ExtendedTitle', 'Titre de la rangée à part', 'text', 'Utilisé seulement sans Home Screen Sections.', 0, 0, 0, 'extadv', 'c'],
+            ['ExtendedAnchors', 'Titres aimés servant de point de départ', 'int', 'Les N titres les plus aimés du compte dont on lit les recommandations TMDb.', 1, 1, 50, 'extadv', 'c', '15'],
+            ['ExtendedDetails', 'Candidats détaillés par compte', 'int', 'Fiches demandées à Seerr pour départager les candidats (mises en cache 14 jours). Plus = meilleur choix, plus d\'appels.', 5, 10, 300, 'extadv', 'c', '60'],
+
+            // ---- Notifications
+            ['Webhook', 'Type', 'enum:None=aucun,Ntfy=ntfy,Gotify=Gotify,Discord=Discord,Json=JSON générique', 'Format du message envoyé quand une partie de Reco+ se coupe ou revient.', 0, 0, 0, 'notif', 'c']
         ];
+
+        var genres = [], users = [];
 
         function el(tag, attrs, text) {
             var e = document.createElement(tag);
@@ -263,49 +350,159 @@
         }
         function $(s) { return page.querySelector(s); }
         function fid(f) { return 'rp_' + f[8] + '_' + f[0]; }
+        function src(cfg, f) { return f[8] === 'e' ? (cfg.Engine = cfg.Engine || {}) : f[8] === 'l' ? (cfg.Lists = cfg.Lists || {}) : cfg; }
+
+        // « {ROW} » = titre actuel de la rangée d'accueil, mis à jour pendant la frappe
+        function rowName() {
+            var i = $('#rp_c_HssSectionTitle');
+            var v = i && i.value.trim() ? i.value.trim() : 'Pour toi';
+            return '« ' + v + ' »';
+        }
+        function tpl(e, text, attr) {
+            if (String(text).indexOf('{ROW}') < 0) { if (attr) { e.setAttribute(attr, text); } else { e.textContent = text; } return e; }
+            e.setAttribute(attr ? 'data-tpl-' + attr : 'data-tpl', text);
+            return e;
+        }
+        function applyTpl() {
+            var r = rowName();
+            page.querySelectorAll('[data-tpl]').forEach(function (e) { e.textContent = e.getAttribute('data-tpl').replace(/\{ROW\}/g, r); });
+            page.querySelectorAll('[data-tpl-aria-label]').forEach(function (e) { e.setAttribute('aria-label', e.getAttribute('data-tpl-aria-label').replace(/\{ROW\}/g, r)); });
+        }
+
+        function tip(f) {
+            var text = f[3] + (f[9] ? ' ' + (f[2] === 'factor' ? 'Valeur évaluée (×1)' : 'Par défaut') + ' : ' + f[9] + '.' : '');
+            var t = tpl(el('span', { 'class': 'rp-tip', tabindex: '0', role: 'note' }, '?'), text, 'aria-label');
+            t.appendChild(tpl(el('span', { 'class': 'rp-bubble' }), text));
+            return t;
+        }
+
+        // Facteur : interrupteur + force. Valeur enregistrée = valeur évaluée × force, ou 0 si coupé.
+        var LEVELS = [[0.45, 'très atténué'], [0.85, 'atténué'], [1.15, 'normal'], [1.75, 'renforcé'], [99, 'très renforcé']];
+        function multText(m) {
+            for (var i = 0; i < LEVELS.length; i++) { if (m < LEVELS[i][0]) { return '×' + m.toFixed(2).replace('.', ',') + ' · ' + LEVELS[i][1]; } }
+            return '';
+        }
+        function factorUi(f) {
+            var id = fid(f), row = el('div', { 'class': 'rp-field rp-factor' });
+            var lab = el('label');
+            lab.appendChild(el('input', { type: 'checkbox', id: id + '_on' }));
+            lab.appendChild(tpl(el('span'), f[1]));
+            var range = el('input', { type: 'range', id: id, min: '0.25', max: String(f[6]), step: '0.05', value: '1', 'aria-label': 'Force : ' + f[1] });
+            var m = el('span', { 'class': 'rp-mult' });
+            var sync = function () {
+                var on = $('#' + id + '_on').checked;
+                range.disabled = !on;
+                row.classList.toggle('off', !on);
+                m.textContent = on ? multText(parseFloat(range.value)) : 'coupé';
+            };
+            row.__sync = sync;
+            row.appendChild(lab); row.appendChild(range); row.appendChild(m); row.appendChild(tip(f));
+            lab.querySelector('input').addEventListener('change', sync);
+            range.addEventListener('input', sync);
+            return row;
+        }
 
         function build() {
             F.forEach(function (f) {
                 var host = page.querySelector('[data-fields="' + f[7] + '"]');
-                var id = fid(f), type = f[2], wrap;
+                var id = fid(f), type = f[2], wrap = el('div', { 'class': 'rp-field' }), inner;
+                if (type === 'users' || type === 'genres') {
+                    host.appendChild(el('div', { 'class': 'rp-checks', id: id }));
+                    return;
+                }
+                if (type === 'factor') {
+                    host.appendChild(factorUi(f));
+                    return;
+                }
                 if (type === 'bool') {
-                    wrap = el('div', { 'class': 'checkboxContainer checkboxContainer-withDescription' });
+                    inner = el('div', { 'class': 'checkboxContainer' });
                     var lab = el('label');
                     lab.appendChild(el('input', { type: 'checkbox', is: 'emby-checkbox', id: id }));
-                    lab.appendChild(el('span', {}, f[1]));
-                    wrap.appendChild(lab);
+                    lab.appendChild(tpl(el('span'), f[1]));
+                    inner.appendChild(lab);
                 } else if (type.indexOf('enum:') === 0) {
-                    wrap = el('div', { 'class': 'selectContainer' });
-                    wrap.appendChild(el('label', { 'class': 'selectLabel', 'for': id }, f[1]));
+                    inner = el('div', { 'class': 'selectContainer' });
+                    inner.appendChild(tpl(el('label', { 'class': 'selectLabel', 'for': id }), f[1]));
                     var sel = el('select', { is: 'emby-select', id: id });
                     type.substring(5).split(',').forEach(function (o) { var kv = o.split('='); sel.appendChild(el('option', { value: kv[0] }, kv[1])); });
-                    wrap.appendChild(sel);
+                    inner.appendChild(sel);
                 } else {
-                    wrap = el('div', { 'class': 'inputContainer' });
-                    wrap.appendChild(el('label', { 'class': 'inputLabel', 'for': id }, f[1]));
+                    inner = el('div', { 'class': 'inputContainer' });
+                    inner.appendChild(tpl(el('label', { 'class': 'inputLabel', 'for': id }), f[1]));
                     var a = { is: 'emby-input', id: id, type: type === 'text' ? 'text' : 'number' };
                     if (type !== 'text') { a.step = f[4]; a.min = f[5]; a.max = f[6]; }
-                    wrap.appendChild(el('input', a));
+                    inner.appendChild(el('input', a));
                 }
-                if (f[3]) { wrap.appendChild(el('div', { 'class': 'fieldDescription' }, f[3])); }
+                wrap.appendChild(inner);
+                if (f[3]) { wrap.appendChild(tip(f)); }
                 host.appendChild(wrap);
+            });
+            $('#rp_c_HssSectionTitle').addEventListener('input', applyTpl);
+            applyTpl();
+        }
+
+        // listes à cocher (comptes, genres) : construites quand les données arrivent, cochées d'après la configuration
+        function checks(f, items, selected) {
+            var box = $('#' + fid(f));
+            box.innerHTML = '';
+            if (!items.length) { box.appendChild(el('span', { 'class': 'mute' }, f[2] === 'genres' ? 'Genres disponibles après le premier calcul.' : '…')); return; }
+            var sel = (selected || []).map(function (x) { return String(x).toLowerCase(); });
+            items.forEach(function (it) {
+                var lab = el('label');
+                var cb = el('input', { type: 'checkbox', value: it.value });
+                cb.checked = sel.indexOf(String(it.value).toLowerCase()) >= 0;
+                lab.appendChild(cb);
+                lab.appendChild(el('span', {}, it.label));
+                box.appendChild(lab);
+            });
+        }
+        function renderChecks() {
+            if (!lastCfg) { return; }
+            F.forEach(function (f) {
+                if (f[2] === 'users') { checks(f, users.map(function (u) { return { value: u.id, label: u.name }; }), (lastCfg.ExcludedUsers || []).map(function (x) { return String(x).replace(/-/g, ''); })); }
+                if (f[2] === 'genres') {
+                    var cur = (lastCfg.Lists || {}).ExcludedGenres || [];
+                    // un genre exclu absent de la bibliothèque reste visible (et décochable)
+                    var all = genres.slice();
+                    cur.forEach(function (g) { if (all.map(function (x) { return x.toLowerCase(); }).indexOf(String(g).toLowerCase()) < 0) { all.push(g); } });
+                    checks(f, all.map(function (g) { return { value: g, label: g }; }), cur);
+                }
             });
         }
 
         function fill(cfg) {
+            lastCfg = cfg;
             F.forEach(function (f) {
-                var src = f[8] === 'e' ? (cfg.Engine || {}) : cfg, e = $('#' + fid(f)), v = src[f[0]];
+                if (f[2] === 'users' || f[2] === 'genres') { return; }
+                var e = $('#' + fid(f)), v = src(cfg, f)[f[0]];
+                if (f[2] === 'factor') {
+                    var w = Number(v), on = isFinite(w) && w > 0;
+                    $('#' + fid(f) + '_on').checked = on;
+                    e.value = String(on ? Math.min(f[6], Math.max(0.25, w / f[10])) : 1);
+                    e.closest('.rp-factor').__sync();
+                    return;
+                }
                 if (f[2] === 'bool') { e.checked = !!v; } else { e.value = v === null || v === undefined ? '' : v; }
             });
+            renderChecks();
+            applyTpl();
         }
 
         function read(cfg) {
-            cfg.Engine = cfg.Engine || {};
             F.forEach(function (f) {
-                var dst = f[8] === 'e' ? cfg.Engine : cfg, e = $('#' + fid(f));
+                var dst = src(cfg, f);
+                if (f[2] === 'users' || f[2] === 'genres') {
+                    dst[f[0]] = Array.prototype.map.call(page.querySelectorAll('#' + fid(f) + ' input:checked'), function (c) { return c.value; });
+                    return;
+                }
+                var e = $('#' + fid(f));
+                if (f[2] === 'factor') {
+                    dst[f[0]] = $('#' + fid(f) + '_on').checked ? Math.round(f[10] * parseFloat(e.value) * 10000) / 10000 : 0;
+                    return;
+                }
                 if (f[2] === 'bool') { dst[f[0]] = e.checked; }
-                else if (f[2] === 'int') { dst[f[0]] = parseInt(e.value, 10); }
-                else if (f[2] === 'num') { dst[f[0]] = parseFloat(String(e.value).replace(',', '.')); }
+                else if (f[2] === 'int') { var i = parseInt(e.value, 10); dst[f[0]] = isNaN(i) ? 0 : i; }
+                else if (f[2] === 'num') { var n = parseFloat(String(e.value).replace(',', '.')); dst[f[0]] = isNaN(n) ? 0 : n; }
                 else { dst[f[0]] = String(e.value).trim(); }
             });
         }
@@ -359,8 +556,11 @@
             $('#rpCalRollback').disabled = !s.canRollback;
 
             var sel = $('#rpPreviewUser'), cur = sel.value; sel.innerHTML = '';
-            (s.users || []).forEach(function (u) { sel.appendChild(el('option', { value: u.id }, u.name + (u.ready ? '' : ' (pas encore calculé)'))); });
+            (s.users || []).forEach(function (u) { sel.appendChild(el('option', { value: u.id }, u.name + (u.ready ? '' : ' (pas de liste)'))); });
             if (cur) { sel.value = cur; }
+
+            var names = (s.users || []).map(function (u) { return u.id + u.name; }).join('|');
+            if (names !== users.map(function (u) { return u.id + u.name; }).join('|')) { users = s.users || []; renderChecks(); }
         }
 
         function refresh() {
@@ -369,6 +569,7 @@
         function load() {
             Dashboard.showLoadingMsg();
             ApiClient.getPluginConfiguration(pluginId).then(function (cfg) { fill(cfg); Dashboard.hideLoadingMsg(); });
+            api('GET', 'Genres').then(function (g) { genres = g || []; renderChecks(); }, function () { genres = []; });
             refresh();
         }
         function say(id, ok, text) { var e = $('#' + id); e.className = 'rp-result ' + (ok === null ? 'mute' : (ok ? 'ok' : 'ko')); e.textContent = text; }
@@ -378,7 +579,7 @@
             b.addEventListener('click', function () {
                 page.querySelectorAll('.rp-tab').forEach(function (x) { x.classList.toggle('on', x === b); });
                 page.querySelectorAll('.rp-pane').forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-pane') === b.getAttribute('data-tab')); });
-                var formTab = ['general', 'moteur', 'seerr', 'etendu', 'notif'].indexOf(b.getAttribute('data-tab')) >= 0;
+                var formTab = ['general', 'listes', 'moteur', 'seerr', 'etendu', 'notif'].indexOf(b.getAttribute('data-tab')) >= 0;
                 $('#rpSaveBar').style.display = formTab ? '' : 'none';
             });
         });
@@ -395,7 +596,7 @@
             var chain = Promise.resolve();
             secrets.forEach(function (p) { chain = chain.then(function () { return api('POST', 'Secret', { Name: p[0], Value: $(p[1]).value }); }); });
             chain.then(function () { return ApiClient.getPluginConfiguration(pluginId); })
-                .then(function (cfg) { read(cfg); return ApiClient.updatePluginConfiguration(pluginId, cfg); })
+                .then(function (cfg) { read(cfg); lastCfg = cfg; return ApiClient.updatePluginConfiguration(pluginId, cfg); })
                 .then(function (r) { secrets.forEach(function (p) { $(p[1]).value = ''; }); Dashboard.processPluginConfigurationUpdateResult(r); refresh(); })
                 .catch(function () { Dashboard.hideLoadingMsg(); Dashboard.alert('Enregistrement impossible.'); });
             return false;
@@ -425,7 +626,7 @@
         $('#rpRecompute').addEventListener('click', function () { api('POST', 'Recompute').then(refresh, refresh); });
         $('#rpRecheck').addEventListener('click', function () { api('POST', 'Checks').then(refresh, refresh); });
         $('#rpEngineReset').addEventListener('click', function () {
-            if (confirm('Remettre les réglages du moteur par défaut ? (l\'actuel est gardé pour revenir en arrière)')) { api('POST', 'Engine/Reset').then(load, load); }
+            if (confirm('Remettre les réglages du moteur par défaut ? (l\'actuel est gardé pour revenir en arrière ; les onglets Général et Listes ne changent pas)')) { api('POST', 'Engine/Reset').then(load, load); }
         });
         $('#rpCalStart').addEventListener('click', function () { api('POST', 'Calibration/Start').then(refresh, refresh); });
         $('#rpCalCancel').addEventListener('click', function () { api('POST', 'Calibration/Cancel').then(refresh, refresh); });
@@ -437,7 +638,7 @@
             api('GET', 'Preview?userId=' + encodeURIComponent($('#rpPreviewUser').value)).then(function (r) {
                 var ol = $('#rpPreviewList'), ox = $('#rpPreviewExt'); ol.innerHTML = ''; ox.innerHTML = '';
                 (r.items || []).forEach(function (n) { ol.appendChild(el('li', {}, n)); });
-                if (!r.items || !r.items.length) { ol.appendChild(el('li', { 'class': 'mute' }, 'pas encore calculé')); }
+                if (!r.items || !r.items.length) { ol.appendChild(el('li', { 'class': 'mute' }, 'pas de liste (compte ignoré ou pas encore calculé)')); }
                 (r.extended || []).forEach(function (n) { ox.appendChild(el('li', {}, n)); });
                 if (!r.extended || !r.extended.length) { ox.appendChild(el('li', { 'class': 'mute' }, 'désactivé ou vide')); }
             });

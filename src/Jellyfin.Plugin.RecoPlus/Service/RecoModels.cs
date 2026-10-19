@@ -38,6 +38,12 @@ public sealed class ExternalRec
 
     /// <summary>Titre aimé qui a amené celui-ci (« parce que tu as aimé … »).</summary>
     public string Because { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Mélange libre : nombre de titres de la bibliothèque (rangée « Pour toi », hors demandes en tête) que le moteur classe
+    /// devant celui-ci ; -1 = non calculé.
+    /// </summary>
+    public int After { get; set; } = -1;
 }
 
 /// <summary>Résultat précalculé pour un compte.</summary>

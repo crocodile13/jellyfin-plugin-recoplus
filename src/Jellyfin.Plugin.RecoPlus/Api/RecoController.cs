@@ -116,6 +116,7 @@ public sealed class RecoController : ControllerBase
             enabled = on,
             homeRow = on && cfg.ExtendedHomeRow && CompatibilityGuard.Allowed(Feature.ClientScript),
             hss,
+            mixMode = cfg.ExtendedMixMode == Configuration.MixMode.Score ? "score" : "interleave",
             mixEvery = Math.Clamp(cfg.ExtendedMixEvery, 2, 20),
             skip = Math.Min(r?.Pinned.Count ?? 0, 20),
             title = cfg.ExtendedTitle,
@@ -214,6 +215,11 @@ public sealed class RecoController : ControllerBase
             users = _users.GetUsers().Select(u => new { id = u.Id.ToString("N"), name = u.Username, ready = _reco.For(u.Id) is not null }),
         });
     }
+
+    /// <summary>Genres de la bibliothèque (choix des genres exclus).</summary>
+    [HttpGet("Genres")]
+    [Authorize(Policy = Policies.RequiresElevation)]
+    public ActionResult Genres() => Ok(_reco.Genres());
 
     /// <summary>Aperçu des 20 premiers titres d'un compte.</summary>
     [HttpGet("Preview")]

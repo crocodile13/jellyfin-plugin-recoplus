@@ -104,15 +104,16 @@ Tableau de bord → Extensions → Reco+. La page est organisée en onglets :
 | Onglet | Contenu |
 |---|---|
 | État | vérifications de compatibilité, dernier calcul, comptes prêts |
-| Général | ce qui est remplacé, rangée Home Screen Sections, demandes en tête |
-| Moteur | réglages groupés ; les valeurs par défaut sont celles qui ont été évaluées |
+| Général | ce qui est remplacé, rangée Home Screen Sections, comptes ignorés |
+| Listes | ce qui est montré, appliqué après le classement : part de hasard du jour, minimums de films et de séries, genres exclus, note et année minimales, diversité, sagas, demandes en tête |
+| Moteur | chaque facteur de classement (favoris, demandes, abandons, ressemblances, vus ensemble, nouveauté, popularité, note, accord TMDb, caractéristiques de contenu) se coupe ou se règle en force (×0,25 à ×3) ; durées ; valeurs par défaut évaluées |
 | Seerr | URL et clé, avec un bouton **Tester** qui utilise les valeurs saisies sans les enregistrer |
-| Mode étendu | titres hors bibliothèque : activation, un toutes les N cartes de « Pour toi » |
+| Mode étendu | titres hors bibliothèque : activation ; mélangés dans la rangée d'accueil un toutes les N cartes, ou librement selon le classement commun du moteur |
 | Notifications | webhook, avec envoi de test |
 | Calibrage | voir ci-dessous |
 | Aperçu | ce que voit actuellement un compte |
 
-Un seul bouton **Enregistrer** sauvegarde à la fois les réglages et les secrets saisis.
+Chaque onglet montre l'essentiel ; les réglages avancés sont repliés. Survolez (ou touchez) le **?** à côté d'un réglage pour son aide et sa valeur par défaut. Un seul bouton **Enregistrer** sauvegarde à la fois les réglages et les secrets saisis.
 
 ### Calibrage
 

@@ -101,15 +101,16 @@ Dashboard → Plugins → Reco+. The page has one tab per topic:
 | Tab | Content |
 |---|---|
 | State | compatibility checks, last computation, per-account readiness |
-| General | what to replace, Home Screen Sections row, pinned requests |
-| Engine | grouped settings; defaults are the evaluated ones |
+| General | what to replace, Home Screen Sections row, ignored accounts |
+| Lists | what is shown, applied after ranking: share of daily randomness, minimum movies / series, excluded genres, minimum rating and year, diversity, sagas, pinned requests |
+| Engine | every ranking factor (favourites, requests, abandons, similarities, watched together, freshness, popularity, rating, TMDb agreement, content features) can be switched off or made weaker/stronger (×0.25 to ×3); durations; defaults are the evaluated ones |
 | Seerr | URL and key, with a **Test** button that uses the values typed in without saving them |
-| Extended mode | titles outside the library: on/off, one every N cards in "For you" |
+| Extended mode | titles outside the library: on/off; mixed into the home row one every N cards, or freely by the engine's joint ranking |
 | Notifications | webhook, with a test button |
 | Calibration | see below |
 | Preview | what an account currently gets |
 
-A single **Save** button stores both the settings and any secret you typed.
+Every tab shows the essential settings; advanced ones are folded away. Hover (or tap) the **?** next to a setting for its help and default value. A single **Save** button stores both the settings and any secret you typed.
 
 ### Calibration
 
