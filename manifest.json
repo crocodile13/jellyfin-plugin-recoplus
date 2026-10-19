@@ -11,9 +11,9 @@
         "version": "1.0.2.0",
         "changelog": "1.0.2 : mode étendu mélangé dans la rangée « Pour toi » de Home Screen Sections (un titre hors bibliothèque toutes les N cartes, réglable), avec les cartes, la fiche et le bouton Demander de Jellyfin Enhanced et l'état Seerr du moment ; sans HSS, rangée à part sans barre de défilement ; l'option « Sur l'accueil » est enfin respectée.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.2.0/RecoPlus_1.0.2.0.zip",
+        "checksum": "63a2ad3efbc6a479abc671ba904bd1d1",
+        "timestamp": "2026-10-19T15:04:59Z"
       },
       {
         "version": "1.0.1.0",
