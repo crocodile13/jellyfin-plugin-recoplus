@@ -81,6 +81,7 @@
                     var c = j.jellyseerrUI.createJellyseerrCard(item, !!st.active, !!st.userFound);
                     if (!c) { return; }
                     c.classList.add(EXT);
+                    c.__rpAfter = items[i].After;
                     if (items[i].Because) { c.title = 'Parce que tu as aimé ' + items[i].Because; }
                     cards.push(c);
                 });
@@ -123,6 +124,7 @@
 
     function ownCard(d, it) {
         var c = el('div', 'card overflowPortraitCard card-hoverable ' + EXT);
+        c.__rpAfter = it.After;
         var box = el('div', 'cardBox cardBox-bottompadded');
         var sc = el('div', 'cardScalable');
         sc.appendChild(el('div', 'cardPadder cardPadder-overflowPortrait'));
@@ -170,15 +172,42 @@
         return out;
     }
 
+    // Ordre final du mélange libre : un titre hors bibliothèque classé derrière n titres de la bibliothèque vient juste
+    // après le n-ième ; classé derrière toute la rangée, il n'est pas montré (c'est le classement, rien de plus).
+    function freeOrder(lib, ext, skip) {
+        skip = Math.max(0, skip | 0);
+        var byAfter = {};
+        ext.forEach(function (c) {
+            var a = c.__rpAfter;
+            if (typeof a !== 'number' || a < 0) { return; }
+            (byAfter[a] = byAfter[a] || []).push(c);
+        });
+        var seq = [];
+        lib.forEach(function (l, i) {
+            if (i >= skip) { (byAfter[i - skip] || []).forEach(function (c) { seq.push(c); }); }
+            seq.push(l);
+        });
+        return seq;
+    }
+
     function mix(container, d) {
-        if (container.__recoPlusBusy || container.querySelector('.' + EXT)) { return; }
-        var isCard = function (c) { return c.classList.contains('card'); };
-        if (!Array.prototype.some.call(container.children, isCard)) { return; }
+        var isCard = function (c) { return c.classList.contains('card') && !c.classList.contains(EXT); };
+        var first = Array.prototype.find.call(container.children, isCard);
+        // déjà traitée pour ce rendu de HSS (même si aucun titre n'a trouvé sa place) : rien à refaire
+        if (!first || container.__recoPlusBusy || container.__recoPlusDoneFor === first || container.querySelector('.' + EXT)) { return; }
         container.__recoPlusBusy = true;
         buildCards(d).then(function (ext) {
             container.__recoPlusBusy = false;
-            if (!ext.length || !container.isConnected || container.querySelector('.' + EXT)) { return; }
+            if (!container.isConnected || container.querySelector('.' + EXT)) { return; }
             var lib = Array.prototype.filter.call(container.children, isCard);
+            container.__recoPlusDoneFor = lib[0];
+            if (!ext.length) { return; }
+            if (d.mixMode === 'score') {
+                // libre : chaque titre après les `After` premiers titres de la bibliothèque (demandes en tête exclues)
+                var seq = freeOrder(lib, ext, d.skip);
+                seq.forEach(function (n) { container.appendChild(n); });
+                return;
+            }
             // insertion de la fin vers le début : les positions calculées restent valables
             var at = slots(lib.length, ext.length, d.mixEvery, d.skip);
             for (var k = at.length - 1; k >= 0; k--) { lib[at[k]].after(ext[k]); }
@@ -229,6 +258,7 @@
     }
 
     window.__recoPlusSlots = slots; // pour les tests
+    window.__recoPlusFreeOrder = freeOrder;
 
     var style = el('style');
     style.textContent = '#' + ROW_ID + ' .itemsContainer::-webkit-scrollbar{display:none}';

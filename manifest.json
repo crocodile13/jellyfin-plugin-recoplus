@@ -8,6 +8,14 @@
     "category": "General",
     "versions": [
       {
+        "version": "1.0.3.0",
+        "changelog": "1.0.3 : page de configuration repensée — l'essentiel visible, l'avancé replié, une aide au survol (?) pour chaque réglage avec sa valeur par défaut ; chaque facteur de classement (favoris, demandes, abandons, ressemblances, vus ensemble, nouveauté, popularité, note, accord TMDb, diversité, caractéristiques de contenu) s'active ou se coupe et se règle en force (×0,25 à ×3) ; nouvel onglet Listes : part de hasard du jour, minimums de films et de séries, genres exclus, note et année minimales ; comptes ignorés ; mode étendu : mélange libre selon le classement du moteur ; le nom de la rangée suit son titre.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.2.0",
         "changelog": "1.0.2 : mode étendu mélangé dans la rangée « Pour toi » de Home Screen Sections (un titre hors bibliothèque toutes les N cartes, réglable), avec les cartes, la fiche et le bouton Demander de Jellyfin Enhanced et l'état Seerr du moment ; sans HSS, rangée à part sans barre de défilement ; l'option « Sur l'accueil » est enfin respectée.",
         "targetAbi": "12.2.0.0",

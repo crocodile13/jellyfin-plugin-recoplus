@@ -200,6 +200,8 @@ public sealed class EngineSettings
         s.GateTop = (int)Clamp(s.GateTop, 5, 500);
         s.Mmr = Clamp(s.Mmr, 0, 2);
         s.SagaMax = (int)Clamp(s.SagaMax, 2, 100);
+        s.Bm25K1 = Clamp(s.Bm25K1, 0, 5);
+        s.Bm25B = Clamp(s.Bm25B, 0, 1);
         foreach (var p in typeof(EngineSettings).GetProperties())
         {
             if (p.PropertyType == typeof(double) && p.Name.StartsWith('W') && p.CanWrite)

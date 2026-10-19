@@ -73,6 +73,11 @@ public sealed class SimilarItemsManagerDecorator : ISimilarItemsManager
     /// <summary>Ressemblance de contenu (+ part de goût du compte), même type, saga : volet suivant d'abord.</summary>
     private IReadOnlyList<BaseItem>? Similar(BaseItem item, User? user, int limit)
     {
+        if (user is not null && RecoService.IsExcluded(user.Id))
+        {
+            return null; // compte ignoré : réponse de Jellyfin
+        }
+
         var vec = Reco.Vectors;
         var lib = Reco.Library;
         var id = item.Id.ToString("N");

@@ -1,7 +1,18 @@
+using System.Collections.Generic;
 using MediaBrowser.Model.Plugins;
 using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Configuration;
+
+/// <summary>Mélange des titres hors bibliothèque dans « Pour toi ».</summary>
+public enum MixMode
+{
+    /// <summary>Un titre hors bibliothèque toutes les N cartes.</summary>
+    Interleave,
+
+    /// <summary>Libre : chacun à la place que lui donne le classement commun du moteur.</summary>
+    Score
+}
 
 /// <summary>Type de webhook de notification.</summary>
 public enum WebhookKind
@@ -66,6 +77,12 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Réglages du moteur.</summary>
     public EngineSettings Engine { get; set; } = new();
 
+    /// <summary>Présentation des listes : filtres, hasard du jour, minimums de films et de séries.</summary>
+    public ListOptions Lists { get; set; } = new();
+
+    /// <summary>Comptes ignorés par Reco+ (identifiants) : Jellyfin leur répond normalement et leur historique ne compte pas pour le foyer.</summary>
+    public List<string> ExcludedUsers { get; set; } = new();
+
     /// <summary>Réglages précédents (retour arrière après un calibrage appliqué).</summary>
     public EngineSettings? PreviousEngine { get; set; }
 
@@ -108,6 +125,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// Sections est présent, sinon rangée à part.
     /// </summary>
     public bool ExtendedHomeRow { get; set; } = true;
+
+    /// <summary>Mélange dans « Pour toi » : à intervalle fixe, ou libre (classement commun du moteur).</summary>
+    public MixMode ExtendedMixMode { get; set; } = MixMode.Interleave;
 
     /// <summary>Mélange dans « Pour toi » : un titre hors bibliothèque toutes les N cartes (2 = un sur deux).</summary>
     public int ExtendedMixEvery { get; set; } = 3;

@@ -90,8 +90,21 @@ public sealed class RecoService
     public UserRecs? For(Guid user)
     {
         EnsureLoaded();
-        return _recs.TryGetValue(user.ToString("N"), out var r) ? r : null;
+        var key = user.ToString("N");
+        if (Excluded(key))
+        {
+            return null; // compte exclu : Jellyfin répond normalement, effet immédiat
+        }
+
+        return _recs.TryGetValue(key, out var r) ? r : null;
     }
+
+    /// <summary>Compte ignoré par Reco+ (réglage « Comptes ignorés ») : Jellyfin lui répond normalement partout.</summary>
+    public static bool IsExcluded(Guid user) => Excluded(user.ToString("N"));
+
+    private static bool Excluded(string userKey)
+        => Plugin.Instance?.Configuration.ExcludedUsers is { Count: > 0 } ex
+           && ex.Any(e => Guid.TryParse(e, out var g) && g.ToString("N") == userKey);
 
     private void EnsureLoaded()
     {
@@ -224,7 +237,14 @@ public sealed class RecoService
         var s = Settings;
         var lib = _index.Get();
         var pr = PlaybackReporting(only is null);
-        var users = _users.GetUsers().ToList();
+        // comptes exclus : ni recommandations, ni historique pris en compte pour le foyer
+        var users = _users.GetUsers().Where(u => !Excluded(u.Id.ToString("N"))).ToList();
+        foreach (var gone in _recs.Keys.Where(Excluded).ToList())
+        {
+            _recs.TryRemove(gone, out _);
+        }
+
+        var lo = cfg.Lists.Sanitized();
         progress?.Report(5);
 
         // Seerr : relu à chaque calcul complet, réutilisé (30 min) pour un calcul d'un seul compte
@@ -346,7 +366,8 @@ public sealed class RecoService
             var key = u.Id.ToString("N");
             var h = hist[key];
             var accessible = _history.Accessible(u);
-            var cands = accessible.Where(id => titles.ContainsKey(id) && !h.ContainsKey(id)).OrderBy(id => id, StringComparer.Ordinal).ToList();
+            var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !h.ContainsKey(id) && ListPolicy.Allows(ct0, lo))
+                .OrderBy(id => id, StringComparer.Ordinal).ToList();
             var r = new UserRecs { ComputedAt = DateTime.UtcNow, SeerrUserId = seerr.UserMap.GetValueOrDefault(key) };
 
             // demandés, arrivés, jamais commencés : en tête
@@ -360,17 +381,34 @@ public sealed class RecoService
             if (cands.Count > 0)
             {
                 var sc = Recommender.Score(ctx, vec, key, cands, s);
-                var ranked = Recommender.Rank(ctx, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s);
-                r.Ranked = ranked.Where(id => !pinned.Contains(id)).ToList();
+                var ranked = Recommender.Rank(ctx, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s).Where(id => !pinned.Contains(id)).ToList();
+
+                // présentation : hasard du jour et minimums films/séries (le classement par goût reste intact pour les catégories)
+                var pool = cands.Where(id => !pinned.Contains(id)).ToList();
+                r.Ranked = ListPolicy.Shape(ranked, pool, id => titles.TryGetValue(id, out var kt) ? (TitleKind?)kt.Kind : null, lo, ListPolicy.Seed(key, DateTime.UtcNow));
                 r.Taste = r.Ranked.ToDictionary(id => id, id => Math.Round(sc[id], 5), StringComparer.Ordinal);
-                r.MovieCategories = Categories(ctx, vec, key, r.Ranked, titles);
+                r.MovieCategories = Categories(ctx, vec, key, ranked, titles);
             }
 
-            if (extCands.TryGetValue(key, out var ex) && ex.Ids.Count > 0)
+            var extIds = extCands.TryGetValue(key, out var ex) ? ex.Ids.Where(id => ListPolicy.Allows(titles[id], lo)).ToList() : new List<string>();
+            if (extIds.Count > 0)
             {
-                var sc = Recommender.Score(ctx, vec, key, ex.Ids, s, ex.Agree);
-                r.Extended = Recommender.Rank(ctx, vec, ex.Ids, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s)
-                    .Select(id => ToExternalRec(id, titles, ex.Because)).Where(e => e is not null).Select(e => e!).ToList();
+                var sc = Recommender.Score(ctx, vec, key, extIds, s, ex.Agree);
+                var extRanked = Recommender.Rank(ctx, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s);
+                var recs = extRanked.Select(id => (Id: id, Rec: ToExternalRec(id, titles, ex.Because))).Where(p => p.Rec is not null).ToList();
+                r.Extended = recs.Select(p => p.Rec!).ToList();
+
+                // mélange libre : bibliothèque et hors bibliothèque notés ensemble, chacun à sa place dans la rangée
+                if (cfg.ExtendedMixMode == Configuration.MixMode.Score && r.Ranked.Count > 0)
+                {
+                    var shown = r.Ranked.Take(Math.Max(0, 20 - r.Pinned.Count)).ToList();
+                    var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), s, ex.Agree);
+                    foreach (var (id, rec) in recs)
+                    {
+                        var se = joint[id];
+                        rec!.After = shown.Count(x => joint[x] > se);
+                    }
+                }
             }
 
             _recs[key] = r;
@@ -417,6 +455,12 @@ public sealed class RecoService
         ds.LinkCollections();
         return ds;
     }
+
+    /// <summary>Genres présents dans la bibliothèque (page de configuration).</summary>
+    public List<string> Genres()
+        => (Library ?? _index.Current)?.Titles.Values.SelectMany(t => t.Genres).Where(g => !string.IsNullOrWhiteSpace(g))
+            .GroupBy(ListOptions.Normalize).Select(g => g.First()).OrderBy(g => g, StringComparer.CurrentCultureIgnoreCase).ToList()
+           ?? new List<string>();
 
     /// <summary>Aperçu lisible des 20 premiers titres d'un compte (page de configuration).</summary>
     public List<string> Preview(Guid user, int n = 20)

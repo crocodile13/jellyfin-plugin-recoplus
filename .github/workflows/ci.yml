@@ -40,7 +40,7 @@ jobs:
         run: ./build.sh
 
       - name: Web client tests (jsdom)
-        run: cd tests/client && npm install --no-save --no-package-lock --silent jsdom@24.1.3 && node client.test.mjs
+        run: cd tests/client && npm install --no-save --no-package-lock --silent jsdom@24.1.3 && node client.test.mjs && node configpage.test.mjs
 
       - name: reco-export tests
         run: cd tools/reco-export && python test_reco_export.py
