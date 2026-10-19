@@ -34,6 +34,8 @@ public sealed class EngineStatus
 
     public string Seerr { get; set; } = "désactivé";
 
+    public string JellyfinEnhanced { get; set; } = "non lu";
+
     public int ExternalTitles { get; set; }
 
     public bool Running { get; set; }
@@ -54,6 +56,7 @@ public sealed class RecoService
     private readonly ILocalizationManager _loc;
     private readonly ILogger<RecoService> _log;
     private readonly SemaphoreSlim _gate = new(1, 1);
+    private readonly JellyfinEnhancedReader _je;
     private readonly ConcurrentDictionary<string, UserRecs> _recs = new(StringComparer.Ordinal);
     private Dictionary<string, Dictionary<string, Interaction>> _lastHist = new(StringComparer.Ordinal);
     private IReadOnlyDictionary<(Guid, Guid), double>? _prCache;
@@ -61,8 +64,9 @@ public sealed class RecoService
     private bool _loaded;
 
     public RecoService(LibraryIndex index, UserHistory history, UserDataReader userData, PlaybackReportingReader pr, SeerrService seerr,
-        IUserManager users, ILocalizationManager loc, ILogger<RecoService> log)
+        JellyfinEnhancedReader je, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log)
     {
+        _je = je;
         _index = index;
         _history = history;
         _userData = userData;
@@ -228,6 +232,13 @@ public sealed class RecoService
         }
     }
 
+    /// <summary>
+    /// Déjà vu ou écarté : regardé (même un peu), masqué ou mal noté. Un titre seulement voulu (liste de suivi, demande
+    /// ancienne, favori sans visionnage) reste proposable — c'est même le meilleur candidat.
+    /// </summary>
+    internal static bool Seen(IReadOnlyDictionary<string, Interaction> h, string id)
+        => h.TryGetValue(id, out var x) && (x.Hidden || x.Last != 0 || x.Played || x.Episodes > 0 || x.Completion > 0 || x.Rating is < 0);
+
     private static double Unix(DateTime d) => new DateTimeOffset(DateTime.SpecifyKind(d, DateTimeKind.Utc)).ToUnixTimeMilliseconds() / 1000.0;
 
     private async Task ComputeCore(Guid? only, CancellationToken ct, IProgress<double>? progress)
@@ -296,6 +307,43 @@ public sealed class RecoService
         var tmdbOf = lib.ByTmdb.ToDictionary(kv => kv.Value, kv => kv.Key, StringComparer.Ordinal);
         var cl = seerr.Ok ? _seerr.Client() : null;
 
+        // confiance dans les notes : nombre de votes TMDb, lu dans les fiches Seerr en cache ; au calcul complet, on
+        // complète au plus 150 fiches manquantes (le cache se remplit en quelques nuits, sans charger Seerr)
+        if (cfg.UseSeerrVotes)
+        {
+            int fetched = 0;
+            foreach (var (id, t) in titles)
+            {
+                if (t.External || !tmdbOf.TryGetValue(id, out var tk))
+                {
+                    continue;
+                }
+
+                var parts = tk.Split(':');
+                if (parts.Length != 2 || !int.TryParse(parts[1], out var tid))
+                {
+                    continue;
+                }
+
+                var d = _seerr.CachedDetails(parts[0], tid);
+                if (d?.VoteCount is null && only is null && seerr.Ok && cl is not null && fetched < 150)
+                {
+                    fetched++;
+                    d = await _seerr.DetailsAsync(cl, parts[0], tid, ct, requireVotes: true).ConfigureAwait(false);
+                }
+
+                if (d?.VoteCount is int v)
+                {
+                    t.Votes = v;
+                }
+            }
+
+            if (fetched > 0)
+            {
+                _seerr.SaveCache();
+            }
+        }
+
         // demandes Seerr → signal (titre voulu) ; titres demandés absents → titres externes (profil seulement)
         if (seerr.Ok && cl is not null)
         {
@@ -333,10 +381,91 @@ public sealed class RecoService
                     x.Requested = x.Requested == 0 ? Unix(r.CreatedAt) : Math.Min(x.Requested, Unix(r.CreatedAt));
                 }
             }
+
+            // liste de suivi Seerr : intention plus faible qu'une demande, même traitement (titres de la bibliothèque,
+            // ou titres externes déjà connus — on n'interroge pas Seerr pour chaque titre suivi)
+            if (cfg.UseSeerrWatchlist)
+            {
+                foreach (var (jf, list) in seerr.WatchlistByUser)
+                {
+                    if (!hist.TryGetValue(jf, out var h))
+                    {
+                        continue;
+                    }
+
+                    foreach (var w in list)
+                    {
+                        var key = w.MediaType + ":" + w.TmdbId;
+                        string? id = lib.ByTmdb.TryGetValue(key, out var lid) ? lid : titles.ContainsKey("tmdb:" + key) ? "tmdb:" + key : null;
+                        if (id is null)
+                        {
+                            var d = _seerr.CachedDetails(w.MediaType, w.TmdbId);
+                            if (d is null || d.Adult)
+                            {
+                                continue;
+                            }
+
+                            id = "tmdb:" + key;
+                            titles[id] = ExternalTitle(d, id, colls);
+                        }
+
+                        if (!h.TryGetValue(id, out var x))
+                        {
+                            h[id] = x = new Interaction { Title = id };
+                        }
+
+                        double at = Unix(w.CreatedAt);
+                        x.Watchlisted = x.Watchlisted == 0 ? at : Math.Min(x.Watchlisted, at);
+                    }
+                }
+            }
+        }
+
+        // Jellyfin Enhanced : « pas intéressé » (masqué partout) et avis notés — ce que le compte a dit explicitement
+        var hiddenTmdb = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+        var reviews = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
+        if (cfg.UseJellyfinEnhanced)
+        {
+            var fb = _je.ReadAll(users.Select(u => u.Id));
+            Status.JellyfinEnhanced = _je.State;
+            foreach (var (jf, f) in fb)
+            {
+                if (!hist.TryGetValue(jf, out var h))
+                {
+                    continue;
+                }
+
+                hiddenTmdb[jf] = f.HiddenTmdb;
+                Interaction Get(string id) => h.TryGetValue(id, out var x) ? x : h[id] = new Interaction { Title = id };
+                foreach (var id in f.HiddenItems.Where(titles.ContainsKey)
+                             .Concat(f.HiddenTmdb.Select(k => lib.ByTmdb.GetValueOrDefault(k)).OfType<string>()).Distinct())
+                {
+                    Get(id).Hidden = true;
+                }
+
+                foreach (var (k, stars) in f.Ratings)
+                {
+                    var id = lib.ByTmdb.TryGetValue(k, out var lid) ? lid : titles.ContainsKey("tmdb:" + k) ? "tmdb:" + k : null;
+                    if (id is not null)
+                    {
+                        Get(id).Rating = HistoryMath.ReviewRating(stars); // un avis prime sur la note ou le pouce Jellyfin
+                        if (!reviews.TryGetValue(id, out var by))
+                        {
+                            reviews[id] = by = new Dictionary<string, double>(StringComparer.Ordinal);
+                        }
+
+                        by[jf] = stars;                                    // avis du foyer, pour les autres comptes
+                    }
+                }
+            }
+        }
+        else
+        {
+            Status.JellyfinEnhanced = "désactivé";
         }
 
         double now = Unix(DateTime.UtcNow);
-        var ds = new Dataset { Titles = titles, Users = hist, Collections = colls, Now = now };
+        var ds = new Dataset { Titles = titles, Users = hist, Collections = colls, Now = now, Reviews = reviews };
         var ctx = new Context(ds, now, hist, s);
         progress?.Report(40);
 
@@ -366,7 +495,7 @@ public sealed class RecoService
             var key = u.Id.ToString("N");
             var h = hist[key];
             var accessible = _history.Accessible(u);
-            var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !h.ContainsKey(id) && ListPolicy.Allows(ct0, lo))
+            var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !Seen(h, id) && ListPolicy.Allows(ct0, lo))
                 .OrderBy(id => id, StringComparer.Ordinal).ToList();
             var r = new UserRecs { ComputedAt = DateTime.UtcNow, SeerrUserId = seerr.UserMap.GetValueOrDefault(key) };
 
@@ -376,6 +505,19 @@ public sealed class RecoService
             var pinned = h.Values.Where(x => x.Requested > 0 && x.Last == 0 && !x.Played && accessible.Contains(x.Title)
                     && lib.Titles.TryGetValue(x.Title, out var lt) && (lt.Added ?? 0) >= pinCut)
                 .OrderByDescending(x => x.Requested).Take(Math.Max(0, cfg.PinnedRequests)).Select(x => x.Title).ToList();
+
+            // nouveaux épisodes d'une série rattrapée et aimée (nouvelle saison) : en tête aussi, pendant un temps
+            if (cfg.NewEpisodesPinned > 0)
+            {
+                double newCut = now - (Math.Clamp(cfg.NewEpisodesMaxDays, 1, 365) * Core.Day);
+                var sig = ctx.Sig.GetValueOrDefault(key);
+                pinned.AddRange(h.Values
+                    .Where(x => x.NewEpisodes > 0 && !x.Hidden && accessible.Contains(x.Title) && sig is not null && sig.GetValueOrDefault(x.Title) > 0
+                        && Guid.TryParse(x.Title, out var sg) && lib.EpisodeAdded.TryGetValue(sg, out var ad) && ad.Length > 0 && ad[^1] >= newCut)
+                    .OrderByDescending(x => lib.EpisodeAdded[Guid.Parse(x.Title)][^1])
+                    .Take(cfg.NewEpisodesPinned).Select(x => x.Title).Where(id => !pinned.Contains(id)).ToList());
+            }
+
             r.Pinned = pinned;
 
             if (cands.Count > 0)
@@ -390,7 +532,10 @@ public sealed class RecoService
                 r.MovieCategories = Categories(ctx, vec, key, ranked, titles);
             }
 
-            var extIds = extCands.TryGetValue(key, out var ex) ? ex.Ids.Where(id => ListPolicy.Allows(titles[id], lo)).ToList() : new List<string>();
+            var hid = hiddenTmdb.GetValueOrDefault(key);
+            var extIds = extCands.TryGetValue(key, out var ex)
+                ? ex.Ids.Where(id => ListPolicy.Allows(titles[id], lo) && (hid is null || !hid.Contains(id.StartsWith("tmdb:", StringComparison.Ordinal) ? id[5..] : id))).ToList()
+                : new List<string>();
             if (extIds.Count > 0)
             {
                 var sc = Recommender.Score(ctx, vec, key, extIds, s, ex.Agree);
@@ -537,6 +682,11 @@ public sealed class RecoService
             Added = null,
             EpisodeCount = d.EpisodeCount,
             External = true,
+            Votes = d.VoteCount,
+            Released = DateTime.TryParse(d.ReleaseDate, System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, out var rd) ? Unix(rd) : null,
+            Language = d.OriginalLanguage,
+            Countries = d.Countries,
         };
     }
 
@@ -599,7 +749,7 @@ public sealed class RecoService
             foreach (var r in await _seerr.RelatedAsync(cl, p[0], tid, ct).ConfigureAwait(false))
             {
                 var k = r.MediaType + ":" + r.TmdbId;
-                if (r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || seen.ContainsKey("tmdb:" + k))
+                if (r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Seen(seen, "tmdb:" + k))
                 {
                     continue;
                 }

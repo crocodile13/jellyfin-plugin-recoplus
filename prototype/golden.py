@@ -33,7 +33,12 @@ def synth(seed=7):
                             rng.sample(studios, rng.randint(0, 4)), people,
                             rng.choice([None, 0, 5.1, 6.5, 7.2, 8.4, 9.1]),
                             rng.choice([None, now - rng.uniform(0, 400) * DAY, now - rng.uniform(0, 30) * DAY]),
-                            n_episodes=rng.randint(1, 60) if kind == "Series" else 0)
+                            n_episodes=rng.randint(1, 60) if kind == "Series" else 0,
+                            released=rng.choice([None, now - rng.uniform(0, 3000) * DAY, now - rng.uniform(0, 60) * DAY, now + 5 * DAY]),
+                            critic=rng.choice([None, 0, 35, 62, 88, 97]),
+                            countries=rng.sample(["Japan", "France", "United States of America", "United Kingdom", "Korea"], rng.randint(0, 2)),
+                            language=rng.choice([None, "ja", "fr", "en", " EN ", "ko"]),
+                            votes=rng.choice([None, 0, 8, 150, 4000]))
     ids = list(titles)
     colls = {}
     saga = ids[1:9:3]                       # 3 films en saga
@@ -55,18 +60,41 @@ def synth(seed=7):
                 played = rng.random() < 0.6
                 comp = 1.0 if played else rng.choice([0.0, 0.02, 0.3, 0.5, 0.8])
                 h[tid] = Interaction(tid, start, last, comp, played, plays=1 if played else 0, fav=rng.random() < 0.15)
+                h[tid].rewatch = rng.choice([0.0, 0.0, 0.0, 0.5, 1.0])
             else:
                 eps = rng.choice([0, 1, 2, 3, 8, 20])
                 n = max(t.n_episodes, 1)
                 h[tid] = Interaction(tid, start, last, min(1.0, eps / n), eps > 0, episodes=eps, plays=eps,
                                      fav=rng.random() < 0.15)
+                h[tid].fav_seasons = rng.choice([0, 0, 0, 1, 2])
+                h[tid].fav_episodes = rng.choice([0, 0, 1, 2, 5])
+                h[tid].rewatch = rng.choice([0.0, 0.0, 0.34, 1.0])
+            x = h[tid]
+            x.rating = rng.choice([None] * 6 + [-1.0, -0.5, 0.5, 1.0, 0.0])
+            x.hidden = rng.random() < 0.05
+            x.requested = rng.choice([0.0] * 8 + [now - rng.uniform(0, 120) * DAY])
+            x.watchlisted = rng.choice([0.0] * 8 + [now - rng.uniform(0, 120) * DAY])
         users[f"u{u}"] = h
-    ds = Dataset(titles, users, {"now": now, "colls": {c: [k for k in v if k in titles] for c, v in colls.items()}})
+    reviews = {}
+    for tid in rng.sample(ids, 25):
+        reviews[tid] = {f"u{u}": rng.choice([1.0, 2.5, 3.0, 4.0, 5.0]) for u in rng.sample(range(7), rng.randint(1, 4))}
+    ds = Dataset(titles, users, {"now": now, "colls": {c: [k for k in v if k in titles] for c, v in colls.items()},
+                                 "reviews": reviews})
     return ds
 
 
-def run(ds, P, W, scheme, mmr, k=12):
+def run(ds, P, W, scheme, mmr, k=12, feat=None):
     EN.WEIGHTING["scheme"] = scheme
+    saved = dict(EN.FEAT_W)
+    EN.FEAT_W.update(feat or {})
+    try:
+        return _run(ds, P, W, scheme, mmr, k)
+    finally:
+        EN.FEAT_W.clear()
+        EN.FEAT_W.update(saved)
+
+
+def _run(ds, P, W, scheme, mmr, k=12):
     vec = EN.build_vectors(ds.titles)
     ctx = EN.Context(ds, ds.meta["now"], ds.users, P)
     out = {"signals": ctx.sig, "cooc": {i: r for i, r in list(ctx.cooc.items())[:10]}, "vectors": {}, "users": {}}
@@ -84,11 +112,15 @@ def dump_ds(ds):
     return {
         "now": ds.meta["now"],
         "collections": ds.meta["colls"],
+        "reviews": ds.meta.get("reviews", {}),
         "titles": [dict(id=t.id, kind=t.kind, name=t.name, year=t.year, genres=t.genres, tags=t.tags, studios=t.studios,
-                        people=t.people, community=t.community, added=t.added, episodes=t.n_episodes)
+                        people=t.people, community=t.community, added=t.added, episodes=t.n_episodes,
+                        released=t.released, critic=t.critic, countries=t.countries, language=t.language, votes=t.votes)
                    for t in ds.titles.values()],
         "users": {u: [dict(title=x.title, start=x.start, last=x.last, completion=x.completion, played=x.played,
-                           episodes=x.episodes, plays=x.plays, fav=x.fav) for x in h.values()] for u, h in ds.users.items()},
+                           episodes=x.episodes, plays=x.plays, fav=x.fav, requested=x.requested, watchlisted=x.watchlisted,
+                           rewatch=x.rewatch, fav_seasons=x.fav_seasons, fav_episodes=x.fav_episodes, rating=x.rating,
+                           hidden=x.hidden) for x in h.values()] for u, h in ds.users.items()},
     }
 
 
@@ -103,9 +135,20 @@ if __name__ == "__main__":
          dict(base_W, fresh=1, gate_top=15, quality=0.7), "bm25", 0.0),
         ("abandons marqués", dict(base_P, abandon_days=10, abandon_weight=1.2, fav_boost=0.4),
          dict(base_W, neg=1.5, centroid=0.5, collab=1.0), "tfidf", 0.8),
+        ("signaux explicites + sortie + critiques + langue/pays",
+         dict(base_P, fav_season_share=0.8, fav_episode_share=0.45, rewatch_boost=1.2, rating_weight=1.5, hidden_weight=2.0,
+              watchlist_weight=0.9, request_weight=0.3, request_half_life=10.0, request_max_days=60.0),
+         dict(base_W, release=1.3, release_days=200.0, rating="best", quality=0.8, household=1.1, household_prior=0.5,
+              rating_prior_votes=40.0), "tfidf", 0.3, dict(n=0.4, l=0.9)),
+        ("note des critiques (moyenne) + bm25 + langue seule", base_P, dict(base_W, rating="mean", quality=1.0, release=0.5,
+                                                                             rating_prior_votes=0.0, household=0.0),
+         "bm25", 0.0, dict(l=0.5)),
     ]
-    for name, P, W, scheme, mmr in variants:
-        cases.append({"name": name, "P": P, "W": W, "scheme": scheme, "mmr": mmr, "expected": run(ds, P, W, scheme, mmr)})
+    for v in variants:
+        name, P, W, scheme, mmr = v[:5]
+        feat = v[5] if len(v) > 5 else {}
+        cases.append({"name": name, "P": P, "W": W, "scheme": scheme, "mmr": mmr, "feat": feat,
+                      "expected": run(ds, P, W, scheme, mmr, feat=feat)})
     EN.WEIGHTING["scheme"] = "tfidf"
     # évaluation temporelle de référence (réglage par défaut, liste intégrée MMR + saga, k = 20)
     from evaluate import events, snapshot

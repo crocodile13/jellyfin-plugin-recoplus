@@ -46,8 +46,20 @@ public sealed class UserHistory
         }
 
         var perSeries = new Dictionary<Guid, List<UserDataRow>>();
+        var favSeasons = new Dictionary<Guid, int>();
         foreach (var d in rows.Values)
         {
+            // saison en favori : un goût pour la série, moindre que la série entière
+            if (lib.SeasonSeries.TryGetValue(d.ItemId, out var ssid))
+            {
+                if (d.Favorite)
+                {
+                    favSeasons[ssid] = favSeasons.GetValueOrDefault(ssid) + 1;
+                }
+
+                continue;
+            }
+
             if (lib.EpisodeSeries.TryGetValue(d.ItemId, out var sid))
             {
                 if (!perSeries.TryGetValue(sid, out var l))
@@ -78,11 +90,13 @@ public sealed class UserHistory
                     Played = d.Played,
                     Plays = d.PlayCount,
                     Favorite = d.Favorite,
+                    Rewatch = HistoryMath.MovieRewatch(d.PlayCount),
+                    Rating = HistoryMath.ExplicitRating(d.Rating, d.Likes),
                 };
             }
-            else if (d.Favorite)
+            else if (d.Favorite || HistoryMath.ExplicitRating(d.Rating, d.Likes) is not null)
             {
-                inter[id] = new Interaction { Title = id, Favorite = true };
+                inter[id] = new Interaction { Title = id, Favorite = d.Favorite, Rating = HistoryMath.ExplicitRating(d.Rating, d.Likes) };
             }
         }
 
@@ -95,8 +109,16 @@ public sealed class UserHistory
             }
 
             var lasts = eps.Select(e => Unix(e.LastPlayed)).Where(v => v != 0).ToList();
+            int favEps = eps.Count(e => e.Favorite);
             if (lasts.Count == 0)
             {
+                if (favEps > 0)
+                {
+                    // épisodes aimés sans visionnage enregistré (lecture ailleurs, base importée…)
+                    var only = inter.TryGetValue(id, out var p0) ? p0 : inter[id] = new Interaction { Title = id };
+                    only.FavEpisodes = favEps;
+                }
+
                 continue;
             }
 
@@ -112,22 +134,38 @@ public sealed class UserHistory
                 }
             }
 
-            bool fav = inter.TryGetValue(id, out var prev) && prev.Favorite;
+            inter.TryGetValue(id, out var prev);
+            double seriesLast = lasts.Max();
             inter[id] = new Interaction
             {
                 Title = id,
                 Start = first == 0 ? lasts.Min() : first,
-                Last = lasts.Max(),
+                Last = seriesLast,
                 Completion = Math.Min(1.0, played / (double)n),
                 Played = played > 0,
                 Episodes = played,
                 Plays = played,
-                Favorite = fav,
+                Favorite = prev?.Favorite ?? false,
+                Rating = prev?.Rating,
+                FavEpisodes = favEps,
+                Rewatch = Math.Min(1.0, eps.Count(e => e.PlayCount >= 2) / 3.0),
+                NewEpisodes = HistoryMath.NewSinceCaughtUp(lib.EpisodeAdded.GetValueOrDefault(sid), seriesLast, played),
             };
         }
 
-        // comme data.py : on ne garde que ce qui a une activité ou un favori
-        return inter.Where(kv => kv.Value.Last != 0 || kv.Value.Favorite).ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
+        foreach (var (sid, count) in favSeasons)
+        {
+            var id = sid.ToString("N");
+            if (lib.Titles.ContainsKey(id))
+            {
+                var x = inter.TryGetValue(id, out var p1) ? p1 : inter[id] = new Interaction { Title = id };
+                x.FavSeasons = count;
+            }
+        }
+
+        // comme data.py : on ne garde que ce qui a une activité, un favori (série, saison, épisode) ou une note
+        return inter.Where(kv => kv.Value.Last != 0 || kv.Value.Favorite || kv.Value.FavSeasons > 0 || kv.Value.FavEpisodes > 0 || kv.Value.Rating is not null)
+            .ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
     }
 
     /// <summary>Titres que le compte a le droit de voir (bibliothèques autorisées, contrôle parental), appliqué par Jellyfin.</summary>

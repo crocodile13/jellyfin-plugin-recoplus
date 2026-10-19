@@ -122,6 +122,32 @@ public class SeerrTests
     }
 
     [Fact]
+    public async Task ReadsWatchlistPagesAndSkipsUndatedEntries()
+    {
+        var fake = new Fake(r =>
+        {
+            Assert.True(r.RequestUri!.AbsolutePath.EndsWith("/api/v1/user/7/watchlist", StringComparison.Ordinal));
+            var page = int.Parse(System.Web.HttpUtility.ParseQueryString(r.RequestUri.Query)["page"]!, System.Globalization.CultureInfo.InvariantCulture);
+            return page == 1
+                ? Json(HttpStatusCode.OK, new
+                {
+                    page = 1, totalPages = 2, totalResults = 3,
+                    results = new object[]
+                    {
+                        new { id = 1, mediaType = "movie", tmdbId = 603, createdAt = "2026-10-01T10:00:00.000Z" },
+                        new { id = 2, mediaType = "tv", tmdbId = 1399 },                       // liste Plex : pas de date
+                    },
+                })
+                : Json(HttpStatusCode.OK, new { page = 2, totalPages = 2, results = new object[] { new { mediaType = "tv", tmdbId = 1396, createdAt = "2026-09-01T00:00:00Z" } } });
+        });
+        var cl = new SeerrClient(new HttpClient(fake), "http://seerr:5055", "k");
+        var w = await cl.WatchlistAsync(7, CancellationToken.None);
+        Assert.Equal(2, fake.Seen.Count);
+        Assert.Equal(new[] { "movie:603", "tv:1396" }, w.Select(x => x.MediaType + ":" + x.TmdbId).ToArray());
+        Assert.Equal(new DateTime(2026, 10, 1, 10, 0, 0, DateTimeKind.Utc), w[0].CreatedAt);
+    }
+
+    [Fact]
     public void RejectsBadConfiguration()
     {
         Assert.Throws<SeerrException>(() => new SeerrClient(new HttpClient(), "ftp://x", "k"));

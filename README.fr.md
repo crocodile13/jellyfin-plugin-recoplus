@@ -22,12 +22,17 @@ Tout est calculé en arrière-plan et gardé en cache, en mémoire et sur disque
   - Un film arrêté entre 5 % et 70 % et jamais repris pendant 30 jours est un abandon.
   - Un film regardé en deux fois n'en est pas un.
   - Une longue série lâchée après un ou deux épisodes est aussi un abandon.
-- **Les favoris** pèsent davantage.
+- **Les favoris** pèsent davantage, au niveau où ils ont été donnés : une série en favori compte pleinement, une saison en partie (0,6), des épisodes un peu (0,3, atteint à 3 épisodes) — aimer un épisode, ce n'est pas aimer la série.
+- **Ce que le compte a dit explicitement** prime sur ce que le visionnage laisse deviner, dans les deux sens : avis notés de Jellyfin Enhanced (1 à 5 étoiles), note ou pouce Jellyfin. Un titre masqué partout dans Jellyfin Enhanced (« pas intéressé ») n'est plus jamais proposé et fait descendre ce qui lui ressemble ; un masquage limité à une rangée d'accueil ou à des épisodes ne compte pas.
+- **La liste de suivi Seerr** compte comme une demande, plus faible (0,4) et aussi à court terme. Un titre seulement *voulu* (liste de suivi, demande ancienne, favori jamais regardé) reste proposable — c'est souvent le meilleur candidat.
+- **Nouvelle saison** d'une série rattrapée et aimée : en tête pendant 45 jours après l'arrivée des nouveaux épisodes (2 séries au plus).
 - **Les demandes Seerr** sont une intention déclarée *de court terme*.
   - Demi-vie de 21 jours, ignorée après 90 jours.
   - Dès que le titre est regardé, c'est ce visionnage qui compte.
   - Un titre demandé, arrivé et pas encore vu passe en tête pendant 30 jours.
-- **Le contenu.** Vecteurs TF-IDF sur genres, mots-clés, studios, acteurs principaux, réalisateurs, scénaristes, créateurs, décennie et type. Le goût du compte combine son profil d'ensemble et le titre aimé le plus proche.
+- **Le contenu.** Vecteurs TF-IDF sur genres, mots-clés, studios, acteurs principaux, réalisateurs, scénaristes, créateurs, décennie et type — et, en option, langue originale et pays de production. Le goût du compte combine son profil d'ensemble et le titre aimé le plus proche.
+- **En option, coupés par défaut** (aucun gain mesurable sur l'historique de référence ; le Calibrage peut les proposer sur le vôtre) : revisionnages, sortie *récente* (et non ajout récent), langue originale et pays. Le bonus de qualité peut utiliser la note de la communauté, celle des critiques, la meilleure des deux ou leur moyenne.
+- **Confiance dans les notes.** La note de la communauté est tirée vers 6,5 quand elle repose sur peu de votes (moyenne bayésienne, 150 votes fictifs ; nombre de votes TMDb lu via Seerr) : 9/10 sur 12 votes ≈ 6,7, sur 20 000 votes = 9. **Les avis du foyer** (Jellyfin Enhanced, autres comptes seulement) donnent un bonus réservé selon la même idée : 2 avis neutres fictifs, donc un seul 5 étoiles pèse peu et cinq avis concordants beaucoup.
 - **Les « vus ensemble » dans le foyer.** Co-occurrences entre titres avec rétrécissement (Ferrari Dacrema et al., 2019), pour qu'une seule personne qui regarde tout ne relie pas tous les titres entre eux.
 - **Le garde-fou.**
   - La nouveauté, la popularité dans le foyer et la note de la communauté sont des *bonus multiplicatifs réservés aux titres qui figurent déjà parmi les 60 premiers par goût*.
@@ -117,13 +122,16 @@ Chaque onglet montre l'essentiel ; les réglages avancés sont repliés. Survole
 
 ### Calibrage
 
-L'onglet Calibrage rejoue l'historique de votre serveur et essaie les réglages un par un, dans des bornes sûres. Il ne garde un changement que s'il améliore les *deux* moitiés de l'historique.
+L'onglet Calibrage rejoue l'historique de votre serveur : chaque fois qu'un compte a commencé un nouveau titre, **à quel rang** ce titre figurait-il dans la liste calculée juste avant, avec seulement ce qui était connu alors ?
 
-Il affiche ensuite le réglage actuel et le réglage proposé, l'intervalle de confiance du gain et un verdict.
+- **Mesure.** Gain de rang 1/log2(1 + rang) sur *tous* les candidats, pas seulement « dans le top 10 ou non » : bien plus de puissance statistique à historique égal.
+- **Cas.** Chaque adoption précédée d'au moins 2 autres. Chaque cas pèse selon l'historique déjà connu du compte (n/(n+3)), et les comptes sont équilibrés (1/√cas) pour qu'un gros spectateur ne décide pas seul.
+- **Recherche.** Un paramètre à la fois, dans des bornes sûres : grille de 5 points (échelle log pour les poids multiplicatifs, zéro essayé pour les facteurs facultatifs), puis affinage par section dorée autour du meilleur point ; choix discrets énumérés ; deux passes. Un changement n'est gardé que s'il améliore l'ensemble *et* ne perd sur aucune des deux moitiés des comptes. Le garde-fou de nouveauté n'est pas réglable.
+- **Validation.** Toute la recherche est refaite sur la moitié des comptes et mesurée sur l'autre (validation croisée à deux plis, par compte). Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap).
 
-- Rien n'est appliqué sans clic sur **Appliquer**, et le réglage précédent est gardé pour revenir en arrière.
-- Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables.
-- Il tourne comme une tâche planifiée, avec sa progression visible.
+Rien n'est appliqué sans clic sur **Appliquer** ; le réglage précédent est gardé pour revenir en arrière. Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables. Il tourne comme une tâche planifiée (10 à 20 minutes, sur la moitié des cœurs).
+
+Sur le foyer de référence (150 cas), la recherche trouve +13 % sur l'historique mais seulement +1 % en validation croisée, intervalle à cheval sur zéro : les valeurs par défaut restent, et le verdict est « déconseillé ». C'est le garde-fou qui fonctionne, pas un échec.
 
 ## Intégrations facultatives
 

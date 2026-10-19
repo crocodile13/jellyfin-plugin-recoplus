@@ -55,6 +55,21 @@ public sealed class Title
     /// <summary>Vrai si le titre n'est pas dans la bibliothèque (catalogue Jellyseerr).</summary>
     public bool External { get; init; }
 
+    /// <summary>Date de sortie (première diffusion), secondes Unix, ou null. À ne pas confondre avec l'ajout (Added).</summary>
+    public double? Released { get; init; }
+
+    /// <summary>Note des critiques (0-100, ex. Rotten Tomatoes), ou null.</summary>
+    public double? Critic { get; init; }
+
+    /// <summary>Pays de production, dans l'ordre des métadonnées.</summary>
+    public IReadOnlyList<string> Countries { get; init; } = Array.Empty<string>();
+
+    /// <summary>Langue originale (code ISO à deux lettres), ou null.</summary>
+    public string? Language { get; init; }
+
+    /// <summary>Nombre de votes derrière la note de la communauté (TMDb via Seerr), ou null si inconnu.</summary>
+    public int? Votes { get; set; }
+
     /// <summary>Copie (collections vides, à relier par Dataset.LinkCollections) : chaque calcul travaille sur ses propres objets.</summary>
     public Title Copy() => new()
     {
@@ -70,6 +85,11 @@ public sealed class Title
         Added = Added,
         EpisodeCount = EpisodeCount,
         External = External,
+        Released = Released,
+        Critic = Critic,
+        Countries = Countries,
+        Language = Language,
+        Votes = Votes,
     };
 }
 
@@ -103,6 +123,30 @@ public sealed class Interaction
     /// <summary>Demandé dans Jellyseerr (date de la demande, secondes Unix), 0 sinon.</summary>
     public double Requested { get; set; }
 
+    /// <summary>Ajouté à la liste de suivi Seerr (date, secondes Unix), 0 sinon.</summary>
+    public double Watchlisted { get; set; }
+
+    /// <summary>Revisionnage, 0..1 (film revu ; série : épisodes revus). Calculé à partir des nombres de lectures.</summary>
+    public double Rewatch { get; set; }
+
+    /// <summary>Saisons de cette série mises en favori (séries).</summary>
+    public int FavSeasons { get; set; }
+
+    /// <summary>Épisodes de cette série mis en favori (séries).</summary>
+    public int FavEpisodes { get; set; }
+
+    /// <summary>Note explicite du compte, ramenée à -1..+1 (avis, pouce), ou null.</summary>
+    public double? Rating { get; set; }
+
+    /// <summary>Masqué par le compte (« pas intéressé ») : signal négatif fort, jamais reproposé.</summary>
+    public bool Hidden { get; set; }
+
+    /// <summary>
+    /// Séries : épisodes arrivés dans la bibliothèque après le dernier visionnage d'une série rattrapée (sinon 0).
+    /// Information pour la mise en avant des nouvelles saisons ; le moteur ne s'en sert pas.
+    /// </summary>
+    public int NewEpisodes { get; set; }
+
     /// <summary>Copie indépendante.</summary>
     public Interaction Copy() => (Interaction)MemberwiseClone();
 }
@@ -121,6 +165,9 @@ public sealed class Dataset
 
     /// <summary>Instant de référence (secondes Unix).</summary>
     public double Now { get; init; }
+
+    /// <summary>Avis notés du foyer (Jellyfin Enhanced) : titre → compte → étoiles (1 à 5).</summary>
+    public Dictionary<string, Dictionary<string, double>> Reviews { get; init; } = new(StringComparer.Ordinal);
 
     /// <summary>Renseigne Title.Collections à partir de Collections (à appeler une fois après construction).</summary>
     public void LinkCollections()

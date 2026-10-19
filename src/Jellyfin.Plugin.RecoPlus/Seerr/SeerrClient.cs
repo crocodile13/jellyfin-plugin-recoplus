@@ -27,6 +27,9 @@ public sealed record SeerrUser(int Id, string JellyfinUserId, string Name);
 /// <summary>Demande Seerr.</summary>
 public sealed record SeerrRequest(int RequestedBy, string MediaType, int TmdbId, int RequestStatus, int MediaStatus, DateTime CreatedAt);
 
+/// <summary>Titre de la liste de suivi Seerr d'un compte.</summary>
+public sealed record SeerrWatch(string MediaType, int TmdbId, DateTime CreatedAt);
+
 /// <summary>Résultat d'une liste TMDb (recommandations / similaires).</summary>
 public sealed record SeerrResult(string MediaType, int TmdbId, string Name, bool Adult, int MediaStatus, double Vote, string? PosterPath, string? Date);
 
@@ -68,6 +71,18 @@ public sealed class SeerrDetails
     public int EpisodeCount { get; init; }
 
     public int? CollectionId { get; init; }
+
+    /// <summary>Nombre de votes TMDb (null : fiche lue par une ancienne version, à relire).</summary>
+    public int? VoteCount { get; init; }
+
+    /// <summary>Date de sortie ou de première diffusion (aaaa-mm-jj).</summary>
+    public string? ReleaseDate { get; init; }
+
+    /// <summary>Langue originale (ISO 639-1).</summary>
+    public string? OriginalLanguage { get; init; }
+
+    /// <summary>Pays de production (noms, comme Jellyfin).</summary>
+    public List<string> Countries { get; init; } = new();
 
     /// <summary>Classification par pays (ISO 3166-1) : « FR » → « 12 ».</summary>
     public Dictionary<string, string> Certifications { get; init; } = new(StringComparer.OrdinalIgnoreCase);
@@ -215,6 +230,36 @@ public sealed class SeerrClient
         return res;
     }
 
+    /// <summary>
+    /// Liste de suivi d'un compte Seerr (20 par page, au plus 25 pages). Les entrées sans date (liste Plex) sont
+    /// ignorées : une intention sans date ne peut pas vieillir.
+    /// </summary>
+    public async Task<List<SeerrWatch>> WatchlistAsync(int seerrUserId, CancellationToken ct)
+    {
+        var res = new List<SeerrWatch>();
+        for (int page = 1; page <= 25; page++)
+        {
+            var j = await Get($"api/v1/user/{seerrUserId}/watchlist?page={page}", ct).ConfigureAwait(false);
+            foreach (var r in Arr(j, "results"))
+            {
+                var type = Str(r, "mediaType");
+                int tmdb = Int(r, "tmdbId");
+                if (tmdb > 0 && (type == "movie" || type == "tv")
+                    && DateTime.TryParse(Str(r, "createdAt"), CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out var c))
+                {
+                    res.Add(new SeerrWatch(type, tmdb, c));
+                }
+            }
+
+            if (page >= Int(j, "totalPages"))
+            {
+                break;
+            }
+        }
+
+        return res;
+    }
+
     /// <summary>Recommandations ou titres similaires TMDb (page 1).</summary>
     public async Task<List<SeerrResult>> RelatedAsync(string mediaType, int tmdbId, string relation, string language, CancellationToken ct)
     {
@@ -294,6 +339,10 @@ public sealed class SeerrClient
             EpisodeCount = Int(d, "numberOfEpisodes"),
             CollectionId = coll,
             Certifications = certs,
+            VoteCount = d.TryGetProperty("voteCount", out var vc) && vc.ValueKind == JsonValueKind.Number && vc.TryGetInt32(out var vcn) ? vcn : null,
+            ReleaseDate = date.Length >= 10 ? date[..10] : null,
+            OriginalLanguage = Str(d, "originalLanguage") is { Length: > 0 } ol ? ol : null,
+            Countries = Arr(d, "productionCountries").Select(c => Str(c, "name")).Where(n => n.Length > 0).ToList(),
         };
     }
 

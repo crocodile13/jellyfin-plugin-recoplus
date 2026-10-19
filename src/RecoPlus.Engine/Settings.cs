@@ -12,6 +12,22 @@ public enum DecayKind
     Power
 }
 
+/// <summary>Note utilisée pour le bonus de qualité.</summary>
+public enum RatingSource
+{
+    /// <summary>Note de la communauté (TMDb, IMDb… selon les fournisseurs de métadonnées).</summary>
+    Community,
+
+    /// <summary>Note des critiques (Rotten Tomatoes…), à défaut celle de la communauté.</summary>
+    Critic,
+
+    /// <summary>La meilleure des deux.</summary>
+    Best,
+
+    /// <summary>La moyenne des deux disponibles.</summary>
+    Mean
+}
+
 /// <summary>Pondération des caractéristiques de contenu.</summary>
 public enum WeightingScheme
 {
@@ -72,6 +88,24 @@ public sealed class EngineSettings
     /// <summary>Au-delà de cet âge (jours), une demande jamais regardée ne compte plus du tout.</summary>
     public double RequestMaxDays { get; set; } = 90;
 
+    /// <summary>Poids d'un titre mis dans la liste de suivi Seerr (comme une demande, en plus faible).</summary>
+    public double WatchlistWeight { get; set; } = 0.4;
+
+    /// <summary>Part du bonus de favori pour une saison mise en favori (sans la série).</summary>
+    public double FavSeasonShare { get; set; } = 0.6;
+
+    /// <summary>Part du bonus de favori pour des épisodes mis en favori (atteinte à 3 épisodes).</summary>
+    public double FavEpisodeShare { get; set; } = 0.3;
+
+    /// <summary>Bonus d'un titre revu (film relu, épisodes revus). Coupé : aucun gain mesuré sur l'historique de référence.</summary>
+    public double RewatchBoost { get; set; }
+
+    /// <summary>Poids d'une note explicite du compte (avis Jellyfin Enhanced, note ou pouce Jellyfin), dans les deux sens.</summary>
+    public double RatingWeight { get; set; } = 1.0;
+
+    /// <summary>Poids négatif d'un titre masqué (« pas intéressé »).</summary>
+    public double HiddenWeight { get; set; } = 1.0;
+
     // ---- contenu
 
     /// <summary>Poids des genres.</summary>
@@ -100,6 +134,12 @@ public sealed class EngineSettings
 
     /// <summary>Poids du type (film / série).</summary>
     public double FeatKind { get; set; } = 0.6;
+
+    /// <summary>Poids des pays de production (0 = ignorés).</summary>
+    public double FeatCountry { get; set; }
+
+    /// <summary>Poids de la langue originale (0 = ignorée).</summary>
+    public double FeatLanguage { get; set; }
 
     /// <summary>Acteurs pris en compte (premiers du générique).</summary>
     public int Actors { get; set; } = 8;
@@ -159,6 +199,28 @@ public sealed class EngineSettings
     /// <summary>Accord TMDb : part des titres aimés dont TMDb recommande le candidat (mode étendu, bonus réservé).</summary>
     public double WTmdbAgreement { get; set; } = 0.5;
 
+    /// <summary>Sortie récente (date de sortie, pas d'ajout) : bonus réservé.</summary>
+    public double WRelease { get; set; }
+
+    /// <summary>Échelle de « sortie récente », en jours.</summary>
+    public double ReleaseDays { get; set; } = 365;
+
+    /// <summary>Note utilisée pour le bonus de qualité.</summary>
+    public RatingSource Rating { get; set; } = RatingSource.Community;
+
+    /// <summary>
+    /// Confiance dans la note de la communauté : moyenne bayésienne avec ce nombre de votes « fictifs » à 6,5 (IMDb
+    /// Top 250, TMDb). Une note de 9 sur 12 votes pèse peu ; sur 20 000, pleinement. 0 = note brute. Sans nombre de
+    /// votes connu, la note est prise telle quelle.
+    /// </summary>
+    public double RatingPriorVotes { get; set; } = 150;
+
+    /// <summary>Avis du foyer : bonus réservé des titres bien notés par les AUTRES comptes (Jellyfin Enhanced).</summary>
+    public double WHousehold { get; set; } = 0.3;
+
+    /// <summary>Confiance dans les avis du foyer : avis « fictifs » neutres (3 étoiles) ajoutés à la moyenne.</summary>
+    public double HouseholdPrior { get; set; } = 2;
+
     // ---- liste
 
     /// <summary>Pénalité de redondance (diversité).</summary>
@@ -200,6 +262,15 @@ public sealed class EngineSettings
         s.GateTop = (int)Clamp(s.GateTop, 5, 500);
         s.Mmr = Clamp(s.Mmr, 0, 2);
         s.SagaMax = (int)Clamp(s.SagaMax, 2, 100);
+        s.WatchlistWeight = Clamp(s.WatchlistWeight, 0, 2);
+        s.FavSeasonShare = Clamp(s.FavSeasonShare, 0, 1);
+        s.FavEpisodeShare = Clamp(s.FavEpisodeShare, 0, 1);
+        s.RewatchBoost = Clamp(s.RewatchBoost, 0, 3);
+        s.RatingWeight = Clamp(s.RatingWeight, 0, 3);
+        s.HiddenWeight = Clamp(s.HiddenWeight, 0, 3);
+        s.ReleaseDays = Clamp(s.ReleaseDays, 7, 3650);
+        s.RatingPriorVotes = Clamp(s.RatingPriorVotes, 0, 100_000);
+        s.HouseholdPrior = Clamp(s.HouseholdPrior, 0, 50);
         s.Bm25K1 = Clamp(s.Bm25K1, 0, 5);
         s.Bm25B = Clamp(s.Bm25B, 0, 1);
         foreach (var p in typeof(EngineSettings).GetProperties())

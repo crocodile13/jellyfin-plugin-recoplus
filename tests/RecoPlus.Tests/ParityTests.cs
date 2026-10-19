@@ -38,6 +38,11 @@ public class ParityTests
                 Community = t.GetProperty("community").ValueKind == JsonValueKind.Null ? null : t.GetProperty("community").GetDouble(),
                 Added = t.GetProperty("added").ValueKind == JsonValueKind.Null ? null : t.GetProperty("added").GetDouble(),
                 EpisodeCount = t.GetProperty("episodes").GetInt32(),
+                Released = NumOrNull(t, "released"),
+                Critic = NumOrNull(t, "critic"),
+                Countries = t.TryGetProperty("countries", out _) ? Strings(t, "countries") : Array.Empty<string>(),
+                Language = t.TryGetProperty("language", out var lg) && lg.ValueKind == JsonValueKind.String ? lg.GetString() : null,
+                Votes = NumOrNull(t, "votes") is double vo ? (int)vo : null,
             };
         }
 
@@ -58,6 +63,13 @@ public class ParityTests
                     Episodes = x.GetProperty("episodes").GetInt32(),
                     Plays = x.GetProperty("plays").GetInt32(),
                     Favorite = x.GetProperty("fav").GetBoolean(),
+                    Requested = NumOrNull(x, "requested") ?? 0,
+                    Watchlisted = NumOrNull(x, "watchlisted") ?? 0,
+                    Rewatch = NumOrNull(x, "rewatch") ?? 0,
+                    FavSeasons = (int)(NumOrNull(x, "fav_seasons") ?? 0),
+                    FavEpisodes = (int)(NumOrNull(x, "fav_episodes") ?? 0),
+                    Rating = NumOrNull(x, "rating"),
+                    Hidden = x.TryGetProperty("hidden", out var hd) && hd.GetBoolean(),
                 };
             }
 
@@ -70,19 +82,53 @@ public class ParityTests
             colls[c.Name] = c.Value.EnumerateArray().Select(x => x.GetString()!).ToList();
         }
 
-        var ds = new Dataset { Titles = titles, Users = users, Collections = colls, Now = d.GetProperty("now").GetDouble() };
+        var reviews = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
+        if (d.TryGetProperty("reviews", out var rv))
+        {
+            foreach (var t in rv.EnumerateObject())
+            {
+                reviews[t.Name] = t.Value.EnumerateObject().ToDictionary(x => x.Name, x => x.Value.GetDouble(), StringComparer.Ordinal);
+            }
+        }
+
+        var ds = new Dataset { Titles = titles, Users = users, Collections = colls, Now = d.GetProperty("now").GetDouble(), Reviews = reviews };
         ds.LinkCollections();
         return ds;
     }
 
     private static string[] Strings(JsonElement e, string name) => e.GetProperty(name).EnumerateArray().Select(x => x.GetString()!).ToArray();
 
+    private static double? NumOrNull(JsonElement e, string name)
+        => e.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.Number ? v.GetDouble() : null;
+
+    private static double Num(JsonElement e, string name, double fallback) => NumOrNull(e, name) ?? fallback;
+
     internal static EngineSettings Settings(JsonElement c)
     {
         var p = c.GetProperty("P");
         var w = c.GetProperty("W");
+        var feat = c.TryGetProperty("feat", out var fe) ? fe : default;
+        var d = new EngineSettings();
+        string rating = w.TryGetProperty("rating", out var rs) ? rs.GetString()! : "community";
         return new EngineSettings
         {
+            RequestWeight = Num(p, "request_weight", d.RequestWeight),
+            RequestHalfLifeDays = Num(p, "request_half_life", d.RequestHalfLifeDays),
+            RequestMaxDays = Num(p, "request_max_days", d.RequestMaxDays),
+            WatchlistWeight = Num(p, "watchlist_weight", d.WatchlistWeight),
+            FavSeasonShare = Num(p, "fav_season_share", d.FavSeasonShare),
+            FavEpisodeShare = Num(p, "fav_episode_share", d.FavEpisodeShare),
+            RewatchBoost = Num(p, "rewatch_boost", d.RewatchBoost),
+            RatingWeight = Num(p, "rating_weight", d.RatingWeight),
+            HiddenWeight = Num(p, "hidden_weight", d.HiddenWeight),
+            WRelease = Num(w, "release", d.WRelease),
+            ReleaseDays = Num(w, "release_days", d.ReleaseDays),
+            RatingPriorVotes = Num(w, "rating_prior_votes", d.RatingPriorVotes),
+            WHousehold = Num(w, "household", d.WHousehold),
+            HouseholdPrior = Num(w, "household_prior", d.HouseholdPrior),
+            Rating = rating switch { "critic" => RatingSource.Critic, "best" => RatingSource.Best, "mean" => RatingSource.Mean, _ => RatingSource.Community },
+            FeatCountry = feat.ValueKind == JsonValueKind.Object ? Num(feat, "n", 0) : 0,
+            FeatLanguage = feat.ValueKind == JsonValueKind.Object ? Num(feat, "l", 0) : 0,
             HalfLifeDays = p.GetProperty("half_life").GetDouble(),
             RecencyFloor = p.GetProperty("recency_floor").GetDouble(),
             FavoriteBoost = p.GetProperty("fav_boost").GetDouble(),
