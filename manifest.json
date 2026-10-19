@@ -11,9 +11,9 @@
         "version": "1.0.1.0",
         "changelog": "1.0.1 : historique lu en une seule requête légère (corrige la saturation mémoire de Jellyfin causée par les requêtes favoris par compte) ; demandes = signal de court terme, en tête seulement après une arrivée récente ; calculs visibles dans Tâches planifiées ; tests Seerr/webhook avec les valeurs saisies ; un seul bouton Enregistrer ; page réorganisée en onglets ; Jellyseerr → Seerr.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.1.0/RecoPlus_1.0.1.0.zip",
+        "checksum": "811fc6ac05b9de0b54e2ba0f9773db4b",
+        "timestamp": "2026-10-19T14:33:29Z"
       }
     ]
   }
