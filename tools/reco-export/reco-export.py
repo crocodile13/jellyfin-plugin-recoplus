@@ -35,7 +35,7 @@ from pathlib import Path
 
 VERSION = "1.0.3"
 PAGE = 400
-ITEM_FIELDS = "Genres,Tags,People,Studios,ProviderIds,DateCreated,OfficialRating,RunTimeTicks"
+ITEM_FIELDS = "Genres,Tags,People,Studios,ProviderIds,DateCreated,OfficialRating,RunTimeTicks,ProductionLocations"
 PEOPLE_KEEP = {"Actor": 15, "Director": 5, "Writer": 5, "Creator": 5, "Producer": 3, "Composer": 2}
 
 
@@ -111,6 +111,7 @@ def slim_item(it: dict) -> dict:
         "official": it.get("OfficialRating"), "runtime": it.get("RunTimeTicks"),
         "added": it.get("DateCreated"), "premiere": it.get("PremiereDate"),
         "tmdb": pid.get("Tmdb"), "imdb": pid.get("Imdb"), "parent": it.get("ParentId"),
+        "countries": it.get("ProductionLocations") or [],
     }
 
 
@@ -169,7 +170,7 @@ def export(api: Api, playback_db: Path | None, log=print) -> tuple[dict, dict]:
         seen = {}
         for flt in ("IsPlayed", "IsResumable", "IsFavorite"):
             for it in api.paged("/Items", userId=uid, Recursive="true", Filters=flt,
-                                IncludeItemTypes="Movie,Series,Episode", Fields="RunTimeTicks",
+                                IncludeItemTypes="Movie,Series,Season,Episode", Fields="RunTimeTicks",
                                 EnableImages="false"):
                 seen[it["Id"]] = slim_userdata(it)
         accounts.append({

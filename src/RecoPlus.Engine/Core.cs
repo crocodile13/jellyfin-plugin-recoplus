@@ -109,17 +109,38 @@ public static class Core
             }
         }
 
-        if (x.Favorite)
+        // Masqué (« pas intéressé ») : refus explicite, il l'emporte sur tout le reste.
+        if (x.Hidden)
         {
-            b = Math.Max(b, 0) + p.FavoriteBoost;
+            return -p.HiddenWeight;
         }
 
-        // Demande Seerr d'un titre jamais commencé : intention déclarée, de COURT terme (demi-vie propre, coupure).
-        // Dès que le titre est regardé, c'est ce visionnage (aimé, abandonné…) qui compte, plus la demande.
-        if (x.Requested > 0 && b == 0 && !x.Played && x.Episodes == 0 && x.Completion < p.Zap && !x.Favorite)
+        // Favori : la série entière compte pleinement ; une saison en partie ; des épisodes un peu (un épisode aimé
+        // n'est pas une série aimée), à concurrence de 3 épisodes.
+        double fav = FavoritePart(x, p);
+        if (fav > 0)
         {
-            double rage = Math.Max(0.0, (now - x.Requested) / Day);
-            return rage > p.RequestMaxDays ? 0.0 : p.RequestWeight * Math.Pow(0.5, rage / p.RequestHalfLifeDays);
+            b = Math.Max(b, 0) + (p.FavoriteBoost * fav);
+        }
+
+        // Revu : signal fort d'un titre aimé (ne rattrape pas un abandon).
+        if (x.Rewatch > 0 && b > 0)
+        {
+            b += p.RewatchBoost * Math.Min(1.0, x.Rewatch);
+        }
+
+        // Note explicite du compte : dans les deux sens, elle prime sur ce que le visionnage laisse deviner.
+        if (x.Rating is double r && r != 0)
+        {
+            r = Math.Clamp(r, -1.0, 1.0);
+            b = r > 0 ? Math.Max(b, 0) + (p.RatingWeight * r) : Math.Min(b, 0) + (p.RatingWeight * r);
+        }
+
+        // Demande Seerr ou liste de suivi d'un titre jamais commencé : intention déclarée, de COURT terme (demi-vie
+        // propre, coupure). Dès que le titre est regardé, c'est ce visionnage (aimé, abandonné…) qui compte.
+        if ((x.Requested > 0 || x.Watchlisted > 0) && b == 0 && !x.Played && x.Episodes == 0 && x.Completion < p.Zap && fav == 0)
+        {
+            return Math.Max(Intent(x.Requested, p.RequestWeight, now, p), Intent(x.Watchlisted, p.WatchlistWeight, now, p));
         }
 
         if (b > 0)
@@ -130,6 +151,29 @@ public static class Core
         }
 
         return b;
+    }
+
+    /// <summary>Part du bonus de favori (0..1) : série = 1, saison = FavSeasonShare, épisodes = FavEpisodeShare × min(1, n/3).</summary>
+    public static double FavoritePart(Interaction x, EngineSettings p)
+    {
+        if (x.Favorite)
+        {
+            return 1.0;
+        }
+
+        double s = (x.FavSeasons > 0 ? p.FavSeasonShare : 0.0) + (p.FavEpisodeShare * Math.Min(1.0, x.FavEpisodes / 3.0));
+        return Math.Min(1.0, s);
+    }
+
+    private static double Intent(double at, double weight, double now, EngineSettings p)
+    {
+        if (at <= 0)
+        {
+            return 0.0;
+        }
+
+        double age = Math.Max(0.0, (now - at) / Day);
+        return age > p.RequestMaxDays ? 0.0 : weight * Math.Pow(0.5, age / p.RequestHalfLifeDays);
     }
 
     /// <summary>Caractéristiques brutes d'un titre.</summary>
@@ -177,6 +221,21 @@ public static class Core
         }
 
         f["k:" + t.Kind] = p.FeatKind;
+
+        // facultatifs : absents du vecteur quand leur poids est nul (vecteurs identiques à ceux d'avant)
+        if (p.FeatCountry > 0)
+        {
+            foreach (var x in t.Countries.Take(3))
+            {
+                f["n:" + x] = p.FeatCountry;
+            }
+        }
+
+        if (p.FeatLanguage > 0 && !string.IsNullOrWhiteSpace(t.Language))
+        {
+            f["l:" + t.Language.Trim().ToLowerInvariant()] = p.FeatLanguage;
+        }
+
         return f;
     }
 

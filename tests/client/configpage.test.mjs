@@ -176,5 +176,27 @@ await test('le nom de la rangée suit le titre saisi, partout', async () => {
     assert.ok([...ui.querySelectorAll('.rp-tip')].every((t) => !t.getAttribute('aria-label').includes('{ROW}')));
 });
 
+await test('valeur hors curseur (calibrage) : affichée en entier et jamais modifiée sans action', async () => {
+    const c = JSON.parse(JSON.stringify(cfg));
+    Object.assign(c.Engine, { WCollab: 1.0, WRelease: 0, FeatLanguage: 0.75, FavEpisodeShare: 0.3 });
+    const { d, saved } = open(c);
+    await wait(50);
+    const r = d.getElementById('rp_e_WCollab');
+    assert.ok(Number(r.max) >= 3.33, 'curseur élargi : ' + r.max);
+    assert.equal(d.getElementById('rp_e_WRelease_on').checked, false, 'sortie récente coupée par défaut');
+    assert.match(d.getElementById('rp_e_FeatLanguage').closest('.rp-factor').querySelector('.rp-mult').textContent, /×1,50/);
+    d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
+    await wait(50);
+    assert.equal(saved[0].Engine.WCollab, 1.0, 'pas de troncature à ×3 ni d\'arrondi au pas du curseur');
+    assert.equal(saved[0].Engine.FeatLanguage, 0.75);
+    assert.equal(saved[0].Engine.WRelease, 0);
+    // activée par l'utilisateur : valeur de référence × force
+    const on = d.getElementById('rp_e_WRelease_on');
+    on.checked = true; on.dispatchEvent(new d.defaultView.Event('change'));
+    d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
+    await wait(50);
+    assert.equal(saved[1].Engine.WRelease, 1);
+});
+
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');
 process.exit(failures ? 1 : 0);

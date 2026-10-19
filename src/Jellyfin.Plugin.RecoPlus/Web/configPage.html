@@ -96,6 +96,7 @@
                 <div class="rp-pane" data-pane="general">
                     <div class="rp-box"><h3>Ce que Reco+ remplace</h3><p>Chaque interrupteur coupé rend la main à Jellyfin pour cette partie.</p><div class="rp-grid" data-fields="replace"></div></div>
                     <div class="rp-box"><h3>Rangée d'accueil</h3><p data-tpl="Avec Home Screen Sections : ajoutez aussi la section {ROW} dans sa configuration (bouton « Add Section »), à la place voulue. Le titre est celui de la rangée sur l'accueil."></p><div class="rp-grid" data-fields="hss"></div></div>
+                    <div class="rp-box"><h3>Ce que le compte a dit explicitement</h3><p>Sources de retours explicites, en plus de l'historique de lecture et des favoris (films, séries, saisons et épisodes).</p><div class="rp-grid" data-fields="sources"></div></div>
                     <div class="rp-box"><h3>Comptes ignorés</h3><p>Ces comptes n'ont pas de recommandations Reco+ (Jellyfin leur répond normalement) et leur historique ne compte pas pour le foyer : compte invité, de test, d'un enfant…</p><div data-fields="users"></div></div>
                     <details class="rp-adv"><summary>Réglages avancés <span>— fonctionnement</span></summary>
                         <div class="rp-box"><div class="rp-grid" data-fields="genadv"></div></div>
@@ -108,7 +109,7 @@
                     <div class="rp-box"><h3>Composition du haut de liste</h3><p data-tpl="Les 20 premiers titres : ceux de la rangée {ROW}."></p><div class="rp-grid" data-fields="mix"></div></div>
                     <div class="rp-box"><h3>Filtres</h3><p>Un titre filtré n'est jamais proposé. Un titre sans note ou sans année passe.</p><div class="rp-grid" data-fields="filters"></div><h4 class="rp-h4">Genres jamais proposés</h4><div data-fields="genres"></div></div>
                     <div class="rp-box"><h3>Diversité et sagas</h3><div class="rp-factors" data-fields="divers"></div><div class="rp-grid" data-fields="sagas"></div></div>
-                    <div class="rp-box"><h3>Demandes arrivées</h3><p>Un titre demandé dans Seerr, arrivé récemment et pas encore regardé passe en tête de la liste de ce compte.</p><div class="rp-grid" data-fields="pinned"></div></div>
+                    <div class="rp-box"><h3>En tête de liste</h3><p>Un titre demandé dans Seerr, arrivé récemment et pas encore regardé, et la nouvelle saison d'une série rattrapée et aimée passent devant tout le reste.</p><div class="rp-grid" data-fields="pinned"></div></div>
                     <details class="rp-adv"><summary>Réglages avancés <span>— taille des listes, sagas</span></summary>
                         <div class="rp-box"><div class="rp-grid" data-fields="listadv"></div></div>
                     </details>
@@ -199,7 +200,7 @@
             <div class="rp-pane" data-pane="calibrage">
                 <div class="rp-box">
                     <h3>Calibrage sur l'historique</h3>
-                    <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, le titre figurait-il dans les recommandations calculées juste avant ? Essaie des réglages du moteur un par un, dans des bornes sûres (garde-fou non réglable), et ne garde un changement que s'il améliore les deux moitiés de l'historique. Rien n'est appliqué sans votre clic. Les réglages de l'onglet Listes n'entrent pas en jeu. Quelques minutes de calcul ; visible aussi dans Tâches planifiées.</p>
+                    <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, à quel rang ce titre figurait-il dans les recommandations calculées juste avant, avec seulement ce qui était connu alors ? Chaque cas pèse selon l'historique déjà connu du compte, et les comptes sont équilibrés. La recherche règle chaque paramètre l'un après l'autre (grille puis affinage par section dorée, dans des bornes sûres ; garde-fou non réglable) et ne garde un changement que s'il améliore les deux moitiés des comptes. Elle est ensuite refaite sur une moitié des comptes et mesurée sur l'autre (validation croisée) : un réglage n'est recommandé que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir. Rien n'est appliqué sans votre clic ; les onglets Listes et Général n'entrent pas en jeu. Une vingtaine de minutes de calcul ; visible aussi dans Tâches planifiées.</p>
                     <div class="rp-row">
                         <button is="emby-button" type="button" class="raised" id="rpCalStart"><span>Lancer</span></button>
                         <button is="emby-button" type="button" class="raised" id="rpCalCancel"><span>Interrompre</span></button>
@@ -253,6 +254,9 @@
             ['HssSection', 'Rangée {ROW}', 'bool', 'Déclare la rangée auprès de Home Screen Sections. Il faut ensuite l\'ajouter dans la configuration de HSS (bouton « Add Section ») ; sa place se règle là-bas.', 0, 0, 0, 'hss', 'c'],
             ['HssSectionTitle', 'Titre de la rangée', 'text', 'Pris en compte au prochain démarrage de Jellyfin.', 0, 0, 0, 'hss', 'c'],
             ['ExcludedUsers', '', 'users', '', 0, 0, 0, 'users', 'c'],
+            ['UseJellyfinEnhanced', 'Masquages et avis de Jellyfin Enhanced', 'bool', 'Lit, sans rien modifier, les titres masqués partout (« pas intéressé ») et les avis notés de chaque compte. Sans Jellyfin Enhanced : rien n\'est lu.', 0, 0, 0, 'sources', 'c', 'activé'],
+            ['UseSeerrVotes', 'Nombre de votes TMDb (via Seerr)', 'bool', 'Lit le nombre de votes derrière chaque note, pour ne pas croire une note fondée sur une poignée de votes. Les fiches manquantes sont récupérées progressivement (150 par calcul complet, mises en cache 14 jours).', 0, 0, 0, 'sources', 'c', 'activé'],
+            ['UseSeerrWatchlist', 'Listes de suivi Seerr', 'bool', 'Lit la liste de suivi Seerr de chaque compte lié (une requête par compte au calcul complet).', 0, 0, 0, 'sources', 'c', 'activé'],
             ['SimilarPersonalization', 'Personnalisation de « Plus comme ceci »', 'num', '0 = pure ressemblance avec le titre affiché. 1 = surtout les goûts du compte. 0,25 : la fiche reste le sujet, les goûts départagent.', 0.05, 0, 1, 'genadv', 'c', '0,25'],
             ['DebounceSeconds', 'Recalcul d\'un compte après une lecture (s)', 'int', 'Délai avant de recalculer un compte qui vient de regarder quelque chose. Regroupe les lectures rapprochées (zapping, épisodes enchaînés).', 10, 10, 3600, 'genadv', 'c', '120'],
             ['ListSize', 'Taille de la liste par compte', 'int', 'Titres gardés par compte. Les pages qui en demandent davantage reçoivent la liste entière. Plus grand = un peu plus de mémoire et de disque.', 10, 20, 1000, 'genadv', 'c', '200'],
@@ -268,6 +272,8 @@
             ['Saga', 'Règle de saga', 'bool', 'Une seule entrée par saga, et c\'est le premier volet pas encore vu (pas le 4ᵉ quand on n\'a pas vu le 1ᵉʳ).', 0, 0, 0, 'sagas', 'e', 'activée'],
             ['PinnedRequests', 'Titres placés en tête', 'int', 'Nombre maximal de titres demandés, arrivés et pas encore vus mis tout en haut. 0 = jamais. Nécessite Seerr.', 1, 0, 20, 'pinned', 'c', '3'],
             ['PinnedMaxDays', 'Pendant (jours après l\'arrivée)', 'int', 'Au-delà, le titre redevient un titre comme les autres : c\'est une nouvelle, pas une liste permanente.', 1, 1, 365, 'pinned', 'c', '30'],
+            ['NewEpisodesPinned', 'Nouvelle saison d\'une série aimée', 'int', 'Nombre maximal de séries placées en tête quand de nouveaux épisodes arrivent alors que le compte avait tout vu et aimait la série. 0 = jamais.', 1, 0, 10, 'pinned', 'c', '2'],
+            ['NewEpisodesMaxDays', 'Pendant (jours après le dernier épisode arrivé)', 'int', 'Au-delà, la série n\'est plus mise en avant (« À suivre » de Jellyfin prend le relais).', 1, 1, 365, 'pinned', 'c', '45'],
             ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. La rangée {ROW} en montre 20.', 1, 5, 100, 'listadv', 'l', '20'],
             ['SagaMax', 'Au-delà : regroupement thématique', 'int', 'Une collection plus grande que ce nombre n\'est pas une saga mais un regroupement (« Films Marvel », « Ghibli ») : 2 entrées au plus, sans règle de premier volet.', 1, 2, 100, 'listadv', 'e', '12'],
 
@@ -276,6 +282,12 @@
             ['RequestWeight', 'Demandes Seerr', 'factor', 'Un titre demandé dans Seerr compte comme un goût déclaré tant qu\'il n\'est pas vu (signal de court terme, voir la demi-vie). Plus fort : ce que le compte demande pèse davantage dans ses recommandations. Coupé : les demandes sont ignorées (les titres arrivés restent en tête, réglage de l\'onglet Listes).', 0, 0, 3, 'fsig', 'e', '0,6', 0.6],
             ['AbandonWeight', 'Abandons', 'factor', 'Un titre commencé puis laissé (après la marge) compte en négatif. Plus fort : un abandon dit davantage « pas pour moi ». Coupé : les abandons sont ignorés.', 0, 0, 3, 'fsig', 'e', '0,5', 0.5],
             ['WNegative', 'Écarter ce qui ressemble aux abandons', 'factor', 'Pénalise les titres proches de ceux que le compte a abandonnés. Coupé : un abandon ne fait plus baisser les titres semblables.', 0, 0, 3, 'fsig', 'e', '0,6', 0.6],
+            ['FavSeasonShare', 'Saison en favori', 'factor', 'Une saison mise en favori (sans la série) compte comme cette part d\'un favori : on peut aimer une saison sans aimer toute la série.', 0, 0, 1.66, 'fsig', 'e', '0,6 du favori', 0.6],
+            ['FavEpisodeShare', 'Épisodes en favori', 'factor', 'Des épisodes mis en favori comptent comme cette part d\'un favori, atteinte à 3 épisodes : un épisode aimé n\'est pas une série aimée.', 0, 0, 3, 'fsig', 'e', '0,3 du favori', 0.3],
+            ['RewatchBoost', 'Revisionnages', 'factor', 'Un film revu (2 lectures : moitié, 3 et plus : plein) ou des épisodes revus (plein à 3) : signe d\'un titre adoré. Ne rattrape jamais un abandon. Coupé par défaut : aucun gain mesuré sur l\'historique de référence — le Calibrage peut le proposer sur le vôtre.', 0, 0, 3, 'fsig', 'e', 'coupé (×1 = 0,5)', 0.5],
+            ['RatingWeight', 'Notes et avis du compte', 'factor', 'Avis notés de Jellyfin Enhanced (1 à 5 étoiles, 3 = neutre) et note ou pouce Jellyfin. Dans les deux sens : une bonne note fait aimer même un titre arrêté, une mauvaise fait rejeter même un titre vu. Un avis prime sur la note Jellyfin.', 0, 0, 3, 'fsig', 'e', '1', 1],
+            ['HiddenWeight', 'Titres masqués (« pas intéressé »)', 'factor', 'Un titre masqué partout dans Jellyfin Enhanced n\'est jamais reproposé, et ce qui lui ressemble descend. Les masquages limités à une rangée d\'accueil ou d\'épisodes ne comptent pas.', 0, 0, 3, 'fsig', 'e', '1', 1],
+            ['WatchlistWeight', 'Liste de suivi Seerr', 'factor', 'Un titre ajouté à la liste de suivi Seerr compte comme une demande, en plus faible, et à court terme (même demi-vie, ignoré après le même délai).', 0, 0, 3, 'fsig', 'e', '0,4', 0.4],
             ['WMaxSim', 'Proche d\'un titre aimé', 'factor', 'Ressemblance avec LE titre aimé le plus proche : fait remonter ce qui prolonge un goût précis, même minoritaire (un seul film de Miyazaki vu et aimé suffit).', 0, 0, 3, 'fsim', 'e', '2', 2],
             ['WCentroid', 'Proche des goûts d\'ensemble', 'factor', 'Ressemblance avec l\'ensemble de ce que le compte aime : fait remonter ce qui correspond à ses goûts dominants.', 0, 0, 3, 'fsim', 'e', '1', 1],
             ['WCollab', 'Vus ensemble dans le foyer', 'factor', 'Fait remonter les titres souvent regardés par les mêmes personnes que les titres aimés du compte (filtrage collaboratif, prudent sur un petit foyer).', 0, 0, 3, 'fsim', 'e', '0,3', 0.3],
@@ -283,6 +295,8 @@
             ['WPopularity', 'Popularité dans le foyer', 'factor', 'Bonus des titres regardés par beaucoup de comptes du serveur, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
             ['WQuality', 'Note de la communauté', 'factor', 'Bonus des titres bien notés (TMDb/IMDb), uniquement s\'ils collent déjà aux goûts (garde-fou). Pour écarter les titres mal notés, utilisez plutôt le filtre « Note minimale » de l\'onglet Listes.', 0, 0, 3, 'fbonus', 'e', '0,1', 0.1],
             ['WTmdbAgreement', 'Accord TMDb (mode étendu)', 'factor', 'Bonus des titres hors bibliothèque que TMDb recommande à partir de plusieurs titres aimés, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
+            ['WRelease', 'Sortie récente', 'factor', 'Bonus des titres sortis récemment (date de sortie, pas d\'ajout à la bibliothèque), uniquement s\'ils collent déjà aux goûts. Coupé par défaut : non évalué sur un historique réel — le Calibrage peut le proposer.', 0, 0, 3, 'fbonus', 'e', 'coupé (×1 = 1)', 1],
+            ['WHousehold', 'Avis du foyer', 'factor', 'Bonus des titres bien notés par les AUTRES comptes (avis Jellyfin Enhanced), uniquement s\'ils collent déjà aux goûts. La confiance croît avec le nombre d\'avis : un seul 5 étoiles pèse peu, cinq avis concordants pleinement (voir « Avis neutres ajoutés »).', 0, 0, 3, 'fbonus', 'e', '0,3', 0.3],
             ['Mmr', 'Diversité', 'factor', 'Pénalise un titre trop proche de ceux déjà placés au-dessus (Maximal Marginal Relevance). Coupé : ordre pur des goûts, au risque de 5 films du même genre d\'affilée.', 0, 0, 3, 'divers', 'e', '0,3', 0.3],
             ['FeatGenre', 'Genres', 'factor', 'Poids des genres dans la ressemblance entre deux titres.', 0, 0, 3, 'contentadv', 'e', '1', 1],
             ['FeatTag', 'Mots-clés', 'factor', 'Poids des mots-clés (tags) dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,5', 0.5],
@@ -292,6 +306,8 @@
             ['FeatWriter', 'Scénaristes', 'factor', 'Poids des scénaristes dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,6', 0.6],
             ['FeatCreator', 'Créateurs (séries)', 'factor', 'Poids des créateurs de séries dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '1', 1],
             ['FeatDecade', 'Décennie', 'factor', 'Poids de la décennie de sortie dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,5', 0.5],
+            ['FeatLanguage', 'Langue originale', 'factor', 'Poids de la langue originale (TMDb) dans la ressemblance : sépare un anime en VO japonaise d\'une série française. Coupé par défaut : non évalué — le Calibrage peut le proposer.', 0, 0, 3, 'contentadv', 'e', 'coupé (×1 = 0,5)', 0.5],
+            ['FeatCountry', 'Pays de production', 'factor', 'Poids des pays de production (3 premiers) dans la ressemblance. Coupé par défaut : non évalué — le Calibrage peut le proposer.', 0, 0, 3, 'contentadv', 'e', 'coupé (×1 = 0,3)', 0.3],
             ['FeatKind', 'Film ou série', 'factor', 'Poids du type : plus fort, on recommande plutôt des films à qui regarde des films et des séries à qui regarde des séries.', 0, 0, 3, 'contentadv', 'e', '0,6', 0.6],
 
             // ---- Moteur
@@ -308,6 +324,10 @@
             ['SeriesAbandonEpisodes', 'Abandonnée si au plus … épisodes vus', 'int', 'Première condition d\'abandon d\'une série.', 1, 0, 20, 'seriesadv', 'e', '2'],
             ['SeriesAbandonFraction', '… et moins de cette part de la série', 'num', 'Deuxième condition (0-1).', 0.01, 0, 1, 'seriesadv', 'e', '0,1'],
             ['SeriesMinEpisodes', '… dans une série d\'au moins … épisodes', 'int', 'Troisième condition : on n\'abandonne pas une mini-série de 3 épisodes après 2.', 1, 1, 500, 'seriesadv', 'e', '6'],
+            ['Rating', 'Note utilisée pour le bonus de qualité', 'enum:Community=communauté (TMDb, IMDb…),Critic=critiques (Rotten Tomatoes…),Best=la meilleure des deux,Mean=la moyenne des deux', 'Note de la communauté : celle que fournissent les métadonnées (TMDb par défaut, IMDb avec OMDb). Critiques : à défaut, celle de la communauté. Un titre sans note est neutre (6,5/10).', 0, 0, 0, 'bonusadv', 'e', 'communauté'],
+            ['RatingPriorVotes', 'Confiance dans la note : votes fictifs', 'num', 'Moyenne bayésienne (méthode IMDb) : la note de la communauté est tirée vers 6,5 comme si ce nombre de votes à 6,5 s\'ajoutait. Une note de 9 sur 12 votes devient ≈ 6,7 ; sur 20 000 votes elle reste 9. Nécessite les votes TMDb (Seerr). 0 = note brute.', 10, 0, 100000, 'bonusadv', 'e', '150'],
+            ['HouseholdPrior', 'Avis du foyer : avis neutres ajoutés', 'num', 'Nombre d\'avis fictifs à 3 étoiles mêlés aux avis du foyer avant d\'en faire la moyenne : avec 2, un seul avis à 5 étoiles donne 3,7 ; cinq avis à 5 en donnent 4,4.', 0.5, 0, 50, 'bonusadv', 'e', '2'],
+            ['ReleaseDays', 'Échelle de « sortie récente » (jours)', 'num', 'Le bonus de sortie récente décroît sur cette durée après la sortie.', 1, 7, 3650, 'bonusadv', 'e', '365'],
             ['GateTop', 'Bonus réservés aux N premiers par goût', 'int', 'Garde-fou, toujours actif : seuls les N premiers titres par goût peuvent recevoir nouveauté, popularité et note. Un titre sans rapport avec le compte n\'est jamais poussé.', 5, 5, 500, 'bonusadv', 'e', '60'],
             ['FreshDays', 'Échelle de nouveauté (jours)', 'num', 'Le bonus de nouveauté décroît sur cette durée après l\'ajout.', 1, 1, 365, 'bonusadv', 'e', '45'],
             ['Weighting', 'Pondération du contenu', 'enum:TfIdf=TF-IDF,Bm25=BM25', 'TF-IDF : une caractéristique rare (un réalisateur) pèse plus qu\'une courante (« Drame »). BM25 : variante qui atténue les titres très décrits.', 0, 0, 0, 'contentnum', 'e', 'TF-IDF'],
@@ -397,8 +417,9 @@
             };
             row.__sync = sync;
             row.appendChild(lab); row.appendChild(range); row.appendChild(m); row.appendChild(tip(f));
-            lab.querySelector('input').addEventListener('change', sync);
-            range.addEventListener('input', sync);
+            // seule une action de l'utilisateur change la valeur enregistrée (le curseur arrondit au pas de 0,05)
+            lab.querySelector('input').addEventListener('change', function () { row.__touched = true; sync(); });
+            range.addEventListener('input', function () { row.__touched = true; sync(); });
             return row;
         }
 
@@ -478,7 +499,14 @@
                 if (f[2] === 'factor') {
                     var w = Number(v), on = isFinite(w) && w > 0;
                     $('#' + fid(f) + '_on').checked = on;
-                    e.value = String(on ? Math.min(f[6], Math.max(0.25, w / f[10])) : 1);
+                    var ratio = on ? w / f[10] : 1;
+                    // une valeur hors du curseur (calibrage, ancienne configuration) l'élargit : jamais tronquée en silence
+                    e.max = String(Math.max(f[6], Math.ceil(ratio * 20) / 20));
+                    e.min = String(Math.min(0.25, Math.floor(ratio * 20) / 20 || 0.25));
+                    e.value = String(on ? ratio : 1);
+                    var fr = e.closest('.rp-factor');
+                    fr.__orig = on ? w : 0;
+                    fr.__touched = false;
                     e.closest('.rp-factor').__sync();
                     return;
                 }
@@ -497,7 +525,9 @@
                 }
                 var e = $('#' + fid(f));
                 if (f[2] === 'factor') {
-                    dst[f[0]] = $('#' + fid(f) + '_on').checked ? Math.round(f[10] * parseFloat(e.value) * 10000) / 10000 : 0;
+                    var row = e.closest('.rp-factor');
+                    var on = $('#' + fid(f) + '_on').checked;
+                    dst[f[0]] = !on ? 0 : (!row.__touched && row.__orig > 0 ? row.__orig : Math.round(f[10] * parseFloat(e.value) * 10000) / 10000);
                     return;
                 }
                 if (f[2] === 'bool') { dst[f[0]] = e.checked; }
@@ -525,6 +555,7 @@
             k.appendChild(kpi('Dernier calcul d\'un compte', when(e.LastUserRun)));
             k.appendChild(kpi('Playback Reporting', e.PlaybackReporting));
             k.appendChild(kpi('Seerr', e.Seerr));
+            k.appendChild(kpi('Jellyfin Enhanced', e.JellyfinEnhanced || '—'));
             k.appendChild(kpi('Rangée d\'accueil', s.hss));
             if (e.LastError) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, 'Dernière erreur de calcul')); d.appendChild(el('span', {}, e.LastError)); al.appendChild(d); }
             var t = $('#rpChecks'); t.innerHTML = '';
@@ -541,11 +572,11 @@
             rep.innerHTML = '';
             if (cal.report) {
                 var r = cal.report, tb = el('table');
-                [['', 'Trouvé dans le top 10', 'top 20'], ['Réglage actuel', pct(r.current.hit10), pct(r.current.hit20)], ['Réglage proposé', pct(r.proposed.hit10), pct(r.proposed.hit20)]].forEach(function (row, i) {
+                [['', 'Qualité de classement', 'Trouvé dans le top 10', 'top 20'], ['Réglage actuel', (r.current.gain || 0).toFixed(4), pct(r.current.hit10), pct(r.current.hit20)], ['Réglage proposé', (r.proposed.gain || 0).toFixed(4), pct(r.proposed.hit10), pct(r.proposed.hit20)]].forEach(function (row, i) {
                     var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); tb.appendChild(tr);
                 });
                 rep.appendChild(tb);
-                rep.appendChild(el('p', { 'class': 'mute' }, r.current.events + ' cas sur ' + r.current.accounts + ' comptes ; écart top 10, intervalle de confiance à 95 % : [' + pts(r.ciLow) + ' ; ' + pts(r.ciHigh) + '].'));
+                rep.appendChild(el('p', { 'class': 'mute' }, r.current.events + ' cas sur ' + r.current.accounts + ' comptes. Qualité de classement = moyenne de 1/log2(1 + rang du titre adopté), pondérée (historique plus fourni = plus de poids, comptes équilibrés). Validation croisée par comptes : ' + (r.cvDelta >= 0 ? '+' : '') + (r.cvDelta || 0).toFixed(4) + ', intervalle de confiance à 95 % [' + (r.ciLow || 0).toFixed(4) + ' ; ' + (r.ciHigh || 0).toFixed(4) + '].'));
                 rep.appendChild(el('p', { 'class': r.recommended ? 'ok' : '' }, r.verdict));
                 if (r.steps && r.steps.length) {
                     var ul = el('ul'); r.steps.forEach(function (st) { ul.appendChild(el('li', {}, st.Parameter + ' → ' + st.Value)); });

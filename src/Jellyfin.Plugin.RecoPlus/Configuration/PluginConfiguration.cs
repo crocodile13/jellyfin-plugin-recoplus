@@ -77,6 +77,21 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Réglages du moteur.</summary>
     public EngineSettings Engine { get; set; } = new();
 
+    /// <summary>Nouveaux épisodes d'une série rattrapée et aimée placés en tête (0 = jamais).</summary>
+    public int NewEpisodesPinned { get; set; } = 2;
+
+    /// <summary>Pendant ce nombre de jours après l'arrivée du dernier épisode.</summary>
+    public int NewEpisodesMaxDays { get; set; } = 45;
+
+    /// <summary>Lire les masquages (« pas intéressé ») et les avis notés de Jellyfin Enhanced.</summary>
+    public bool UseJellyfinEnhanced { get; set; } = true;
+
+    /// <summary>Lire le nombre de votes TMDb dans les fiches Seerr (confiance dans les notes).</summary>
+    public bool UseSeerrVotes { get; set; } = true;
+
+    /// <summary>Lire les listes de suivi Seerr (intention, plus faible qu'une demande).</summary>
+    public bool UseSeerrWatchlist { get; set; } = true;
+
     /// <summary>Présentation des listes : filtres, hasard du jour, minimums de films et de séries.</summary>
     public ListOptions Lists { get; set; } = new();
 

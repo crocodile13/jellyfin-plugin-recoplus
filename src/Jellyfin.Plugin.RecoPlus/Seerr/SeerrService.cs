@@ -21,6 +21,9 @@ public sealed class SeerrSnapshot
     /// <summary>Compte Jellyfin (« N ») → demandes de ce compte.</summary>
     public Dictionary<string, List<SeerrRequest>> RequestsByUser { get; init; } = new(StringComparer.Ordinal);
 
+    /// <summary>Compte Jellyfin (« N ») → liste de suivi Seerr de ce compte.</summary>
+    public Dictionary<string, List<SeerrWatch>> WatchlistByUser { get; init; } = new(StringComparer.Ordinal);
+
     /// <summary>Clés « movie:123 » demandées (tous comptes), pour exclure du mode étendu ce qui est déjà en cours.</summary>
     public HashSet<string> Requested { get; init; } = new(StringComparer.Ordinal);
 
@@ -108,14 +111,35 @@ public sealed class SeerrService
                 }
             }
 
+            // listes de suivi : facultatives (version de Seerr sans cette route, droits) — un échec ne coupe rien d'autre
+            var watch = new Dictionary<string, List<SeerrWatch>>(StringComparer.Ordinal);
+            int watchErrors = 0;
+            foreach (var (jf, sid) in map)
+            {
+                try
+                {
+                    var w = await cl.WatchlistAsync(sid, ct).ConfigureAwait(false);
+                    if (w.Count > 0)
+                    {
+                        watch[jf] = w;
+                    }
+                }
+                catch (Exception ex) when (ex is SeerrException or HttpRequestException or JsonException || (ex is TaskCanceledException && !ct.IsCancellationRequested))
+                {
+                    watchErrors++;
+                }
+            }
+
             return Last = new SeerrSnapshot
             {
                 UserMap = map,
                 RequestsByUser = byUser,
+                WatchlistByUser = watch,
                 Requested = reqs.Where(r => r.RequestStatus is 1 or 2).Select(r => r.MediaType + ":" + r.TmdbId).ToHashSet(StringComparer.Ordinal),
                 Version = version,
                 Ok = true,
-                Status = $"connecté (v{version}) — {map.Count} comptes liés, {reqs.Count} demandes",
+                Status = $"connecté (v{version}) — {map.Count} comptes liés, {reqs.Count} demandes, {watch.Values.Sum(l => l.Count)} titres en liste de suivi"
+                    + (watchErrors > 0 ? $" ({watchErrors} listes illisibles)" : string.Empty),
             };
         }
         catch (Exception ex) when (ex is SeerrException or HttpRequestException or TaskCanceledException or JsonException)
@@ -182,11 +206,12 @@ public sealed class SeerrService
     }
 
     /// <summary>Fiche (cache 14 jours). Null si indisponible.</summary>
-    public async Task<SeerrDetails?> DetailsAsync(SeerrClient cl, string mediaType, int tmdbId, CancellationToken ct)
+    /// <param name="requireVotes">Relire une fiche en cache qui n'a pas encore le nombre de votes (ancienne version).</param>
+    public async Task<SeerrDetails?> DetailsAsync(SeerrClient cl, string mediaType, int tmdbId, CancellationToken ct, bool requireVotes = false)
     {
         EnsureLoaded();
         var key = mediaType + ":" + tmdbId;
-        if (_details.TryGetValue(key, out var d) && DateTime.UtcNow - d.FetchedAt < DetailsTtl)
+        if (_details.TryGetValue(key, out var d) && DateTime.UtcNow - d.FetchedAt < DetailsTtl && (!requireVotes || d.VoteCount is not null))
         {
             return d;
         }

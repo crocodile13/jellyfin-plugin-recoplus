@@ -24,12 +24,17 @@ Everything is computed in the background and cached in memory and on disk, so no
   - A movie stopped between 5 % and 70 % and never resumed for 30 days is an abandon.
   - A movie watched in two sittings is not.
   - A long series dropped after one or two episodes is an abandon too.
-- **Favourites** weigh more.
+- **Favourites** weigh more, at the level they were given: a favourite series counts fully, a favourite season partly (0.6), favourite episodes a little (0.3, reached at 3 episodes) — liking an episode is not liking the series.
+- **What the account said explicitly** wins over what viewing suggests, in both directions: Jellyfin Enhanced reviews (1–5 stars) and Jellyfin's rating or thumbs. Titles hidden everywhere in Jellyfin Enhanced ("not interested") are never suggested again and pull similar titles down; hides limited to a home row or to episodes do not count.
+- **Seerr watchlist** counts like a request, weaker (0.4) and just as short-term. A title that is only *wanted* (watchlist, old request, favourite never watched) stays a candidate — usually the best one.
+- **New season** of a series the account had caught up with and liked: placed at the top for 45 days after the new episodes arrive (up to 2 series).
 - **Seerr requests** are a *short-term* declared interest:
   - half-life 21 days, ignored after 90;
   - once the title is actually watched, what the account did with it counts instead;
   - a requested title that just arrived and is still unwatched is pinned at the top for 30 days.
-- **Content.** TF-IDF vectors over genres, keywords, studios, main actors, directors, writers, creators, decade and kind. The account's taste combines its overall profile with the closest title it liked.
+- **Content.** TF-IDF vectors over genres, keywords, studios, main actors, directors, writers, creators, decade and kind — plus, optionally, original language and production countries. The account's taste combines its overall profile with the closest title it liked.
+- **Optional, off by default** (no measurable gain on the reference history; Calibration can propose them on yours): rewatches, recent *release* (as opposed to recent addition), original language and countries. The quality bonus can use the community rating, the critics' rating, the better of the two or their mean.
+- **Confidence in ratings.** The community rating is pulled towards 6.5 when it rests on few votes (Bayesian average, 150 virtual votes; TMDb vote counts read through Seerr): 9/10 on 12 votes ≈ 6.7, on 20,000 votes = 9. **Household reviews** (Jellyfin Enhanced, other accounts only) are a reserved bonus with the same idea: 2 neutral virtual reviews, so one 5-star review weighs little and five matching reviews a lot.
 - **"Watched together" in the household.** Item-to-item co-occurrence with shrinkage (Ferrari Dacrema et al., 2019), so one person who watches everything does not link every title to every other one.
 - **Guard rail.** Freshness, household popularity and community rating are *multiplicative bonuses reserved for the titles that already rank among the account's top 60 by taste*.
   - A brand-new title the account has no affinity with gets no bonus at all.
@@ -114,14 +119,16 @@ Every tab shows the essential settings; advanced ones are folded away. Hover (or
 
 ### Calibration
 
-The Calibration tab replays your server's history and tries the settings one at a time, within safe bounds. It keeps a change only if it improves *both* halves of the history.
+The Calibration tab replays your server's history: every time an account started a new title, **at which rank** was that title in the list computed just before, using only what was known then?
 
-It then shows:
-- current vs proposed settings;
-- the confidence interval of the gain;
-- a verdict.
+- **Measure.** Rank gain 1/log2(1 + rank) over *all* candidates, not just "in the top 10 or not": far more statistical power from the same history.
+- **Cases.** Every adoption preceded by at least 2 others. Each case is weighted by how much history the account already had (n/(n+3)), and accounts are balanced (1/√cases) so a heavy viewer does not decide alone.
+- **Search.** One parameter at a time, within safe bounds: a 5-point grid (log scale for multiplicative weights, zero tried for optional factors), then golden-section refinement around the best point; discrete choices are enumerated; two passes. A change is kept only if it improves the whole *and* does not lose on either half of the accounts. The freshness guard rail cannot be tuned away.
+- **Validation.** The whole search is redone on half of the accounts and measured on the other half (two-fold cross-validation by account). A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero).
 
-Nothing is applied until you click **Apply**, and the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task, so its progress is visible in Scheduled Tasks.
+Nothing is applied until you click **Apply**; the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task (about 10–20 minutes, on half the CPU cores).
+
+On the reference household (150 cases) the search finds +13% in-sample but only +1% under cross-validation, CI spanning zero: the default settings stay, and so does the verdict "not recommended". That is the safeguard working, not a failure.
 
 ## Optional integrations
 

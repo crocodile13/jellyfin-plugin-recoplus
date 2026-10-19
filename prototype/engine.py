@@ -14,6 +14,8 @@ DEFAULTS = dict(
     series_full_eps=10, series_abandon_eps=2, series_abandon_frac=0.10, series_min_eps=6,
     decay="exp",                 # exp : 0,5^(âge/T0) ; power : (1 + âge/T0)^-1 (Larrain, Parra et al., RecSys 2015)
     shrink=10.0, min_common=2,   # collaboratif : rétrécissement et minimum de spectateurs communs
+    request_weight=0.6, request_half_life=21.0, request_max_days=90.0, watchlist_weight=0.4,
+    fav_season_share=0.6, fav_episode_share=0.3, rewatch_boost=0.0, rating_weight=1.0, hidden_weight=1.0,
 )
 
 
@@ -48,8 +50,20 @@ def signal(x: Interaction, kind: str, n_eps: int, now: float, P=DEFAULTS) -> flo
             base = -P["abandon_weight"]
         else:
             base = min(1.0, math.log1p(e) / math.log1p(P["series_full_eps"]))
-    if x.fav:
-        base = max(base, 0) + P["fav_boost"]
+    g = lambda k, d: P.get(k, DEFAULTS.get(k, d))
+    if x.hidden:                                         # « pas intéressé » : refus explicite
+        return -g("hidden_weight", 1.0)
+    fav = fav_part(x, P)
+    if fav > 0:
+        base = max(base, 0) + P["fav_boost"] * fav
+    if x.rewatch > 0 and base > 0:                       # revu : ne rattrape pas un abandon
+        base += g("rewatch_boost", 0.0) * min(1.0, x.rewatch)
+    if x.rating is not None and x.rating != 0:           # note explicite, dans les deux sens
+        r = max(-1.0, min(1.0, x.rating))
+        base = max(base, 0) + g("rating_weight", 1.0) * r if r > 0 else min(base, 0) + g("rating_weight", 1.0) * r
+    if (x.requested > 0 or x.watchlisted > 0) and base == 0 and not x.played and x.episodes == 0 \
+            and x.completion < P["zap"] and fav == 0:
+        return max(_intent(x.requested, g("request_weight", 0.6), now, P), _intent(x.watchlisted, g("watchlist_weight", 0.4), now, P))
     if base > 0:
         age = max(0.0, (now - (x.last or now)) / DAY)
         if P.get("decay") == "power":
@@ -60,8 +74,25 @@ def signal(x: Interaction, kind: str, n_eps: int, now: float, P=DEFAULTS) -> flo
     return base
 
 
+def fav_part(x, P=DEFAULTS) -> float:
+    """Part du bonus de favori : série 1 ; saison fav_season_share ; épisodes fav_episode_share × min(1, n/3)."""
+    if x.fav:
+        return 1.0
+    s = (P.get("fav_season_share", DEFAULTS["fav_season_share"]) if x.fav_seasons > 0 else 0.0) \
+        + P.get("fav_episode_share", DEFAULTS["fav_episode_share"]) * min(1.0, x.fav_episodes / 3.0)
+    return min(1.0, s)
+
+
+def _intent(at, weight, now, P):
+    if at <= 0:
+        return 0.0
+    age = max(0.0, (now - at) / DAY)
+    hl = P.get("request_half_life", DEFAULTS["request_half_life"])
+    return 0.0 if age > P.get("request_max_days", DEFAULTS["request_max_days"]) else weight * 0.5 ** (age / hl)
+
+
 # ---------------------------------------------------------------- contenu
-FEAT_W = dict(g=1.0, t=0.5, s=0.35, a=0.7, d=1.3, w=0.6, c=1.0, y=0.5, k=0.6)
+FEAT_W = dict(g=1.0, t=0.5, s=0.35, a=0.7, d=1.3, w=0.6, c=1.0, y=0.5, k=0.6, n=0.0, l=0.0)
 ACTORS = 8
 
 
@@ -76,6 +107,10 @@ def tokens(t) -> dict:
     for x in t.people.get("Creator") or []: f["c:" + x] = FEAT_W["c"]
     if t.year: f["y:%d" % (t.year // 10 * 10)] = FEAT_W["y"]
     f["k:" + t.kind] = FEAT_W["k"]
+    if FEAT_W["n"] > 0:                                   # facultatifs : absents quand leur poids est nul
+        for x in t.countries[:3]: f["n:" + x] = FEAT_W["n"]
+    if FEAT_W["l"] > 0 and t.language and t.language.strip():
+        f["l:" + t.language.strip().lower()] = FEAT_W["l"]
     return f
 
 
@@ -197,7 +232,38 @@ def rec_jellyfin(ctx, user, cands, k, seed=0):
 
 # --- moteur
 ENGINE_W = dict(centroid=1.0, maxsim=2.0, collab=0.3, pop=0.5, quality=0.1, neg=0.6, fresh=2.0, fresh_days=45.0,
-                gate="rank", gate_top=60)
+                gate="rank", gate_top=60, release=0.0, release_days=365.0, rating="community",
+                rating_prior_votes=150.0, household=0.3, household_prior=2.0)
+
+
+def household(ds, title, user, prior) -> float:
+    """Avis du foyer (sans ceux du compte), moyenne bayésienne avec `prior` avis neutres (3), ramenée à -1..+1."""
+    by = (ds.meta.get("reviews") or {}).get(title)
+    if not by:
+        return 0.0
+    vals = [s for u, s in by.items() if u != user]
+    if not vals:
+        return 0.0
+    return max(-1.0, min(1.0, ((sum(vals) + prior * 3.0) / (len(vals) + prior) - 3.0) / 2.0))
+
+
+def quality(t, src="community", prior_votes=0.0) -> float:
+    """Note sur 10 selon la source ; absente = 6,5. Une note nulle compte comme absente.
+    La note de la communauté est ramenée vers 6,5 si elle repose sur peu de votes (moyenne bayésienne)."""
+    comm = t.community if t.community else None
+    if comm is not None and prior_votes > 0 and t.votes is not None and t.votes >= 0:
+        comm = (t.votes * comm + prior_votes * 6.5) / (t.votes + prior_votes)
+    crit = t.critic / 10.0 if t.critic else None
+    if src == "critic":
+        v = crit if crit is not None else comm
+    elif src in ("best", "mean"):
+        if comm is None or crit is None:
+            v = crit if comm is None else comm
+        else:
+            v = max(comm, crit) if src == "best" else (comm + crit) / 2.0
+    else:
+        v = comm
+    return 6.5 if v is None else v
 MMR = 0.3
 
 
@@ -226,12 +292,15 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W):
         col = sum(s * ctx.cooc.get(t, {}).get(c, 0.0) for t, s in pos.items()) / tot
         neg_pen = max((s * dot(vec[t], v) for t, s in neg.items()), default=0.0)
         pop = math.log1p(others_pop[c]) / math.log1p(maxpop)
-        q = max(-1.0, min(1.0, ((T[c].community or 6.5) - 6.5) / 2.0))
+        q = max(-1.0, min(1.0, (quality(T[c], W.get("rating", "community"), W.get("rating_prior_votes", 150.0)) - 6.5) / 2.0))
+        hh = household(ctx.ds, c, user, W.get("household_prior", 2.0))
+        rel = T[c].released or 0
+        re_ = math.exp(-max(0.0, (ctx.now - rel) / DAY) / W.get("release_days", 365.0)) if rel else 0.0
         age = max(0.0, (ctx.now - (T[c].added or 0)) / DAY)
         fr = math.exp(-age / W["fresh_days"]) if T[c].added else 0.0
         taste = W["centroid"] * cen + W["maxsim"] * ms + W["collab"] * col - W["neg"] * neg_pen
         if W.get("gate") == "rank":
-            parts[c] = (taste, fr, pop, q)
+            parts[c] = (taste, fr, pop, q, re_, hh)
         elif W.get("gate"):
             # nouveauté et popularité ne comptent que pour ce qui correspond déjà aux goûts
             tp = max(taste, 0.0)
@@ -240,11 +309,12 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W):
             out[c] = taste + W["pop"] * pop + W["quality"] * q + W["fresh"] * fr
     if parts:
         out = gate_rank({c: p[0] for c, p in parts.items()}, {c: p[1] for c, p in parts.items()},
-                        {c: p[2] for c, p in parts.items()}, {c: p[3] for c, p in parts.items()}, W)
+                        {c: p[2] for c, p in parts.items()}, {c: p[3] for c, p in parts.items()}, W,
+                        {c: p[4] for c, p in parts.items()}, {c: p[5] for c, p in parts.items()})
     return out
 
 
-def gate_rank(taste, fr, pop, q, W):
+def gate_rank(taste, fr, pop, q, W, rel=None, hh=None):
     """Bonus (nouveauté, popularité, qualité) MULTIPLICATIFS et réservés au haut du classement par goût :
     un titre hors des `gate_top` meilleurs par goût n'en reçoit aucun, quelle que soit sa nouveauté."""
     order = sorted(taste, key=lambda c: -taste[c])
@@ -254,7 +324,9 @@ def gate_rank(taste, fr, pop, q, W):
     for c, t in taste.items():
         g = max(0.0, 1.0 - rank[c] / top)            # 1 au sommet, 0 au-delà de gate_top
         tp = max(t, 0.0)
-        out[c] = t + tp * g * (W["fresh"] * fr[c] + W["pop"] * pop[c] + W["quality"] * q[c])
+        out[c] = t + tp * g * (W["fresh"] * fr[c] + W["pop"] * pop[c] + W["quality"] * q[c] + 0.0
+                               + W.get("release", 0.0) * (rel[c] if rel else 0.0)
+                               + W.get("household", 0.3) * (hh[c] if hh else 0.0))
     return out
 
 

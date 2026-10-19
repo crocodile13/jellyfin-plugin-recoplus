@@ -30,6 +30,12 @@ public sealed class LibrarySnapshot
     /// <summary>Durée des films (ticks), pour l'avancement d'un film commencé.</summary>
     public Dictionary<Guid, long> Runtime { get; init; } = new();
 
+    /// <summary>Saison → série (favoris de saison).</summary>
+    public Dictionary<Guid, Guid> SeasonSeries { get; init; } = new();
+
+    /// <summary>Série → dates d'ajout de ses épisodes (secondes Unix, triées) : nouveaux épisodes depuis le dernier visionnage.</summary>
+    public Dictionary<Guid, double[]> EpisodeAdded { get; init; } = new();
+
     /// <summary>Date de construction (UTC).</summary>
     public DateTime BuiltAt { get; init; }
 }
@@ -107,6 +113,8 @@ public sealed class LibraryIndex
 
     private static string N(Guid g) => g.ToString("N");
 
+    private static double Unix(DateTime d) => new DateTimeOffset(DateTime.SpecifyKind(d, DateTimeKind.Utc)).ToUnixTimeMilliseconds() / 1000.0;
+
     private LibrarySnapshot Build()
     {
         var sw = System.Diagnostics.Stopwatch.StartNew();
@@ -124,12 +132,31 @@ public sealed class LibraryIndex
         });
         var epSeries = new Dictionary<Guid, Guid>();
         var epCount = new Dictionary<Guid, int>();
+        var epAdded = new Dictionary<Guid, List<double>>();
         foreach (var e in episodes.OfType<Episode>())
         {
             if (e.SeriesId != Guid.Empty)
             {
                 epSeries[e.Id] = e.SeriesId;
                 epCount[e.SeriesId] = epCount.GetValueOrDefault(e.SeriesId) + 1;
+                if (e.DateCreated != default)
+                {
+                    if (!epAdded.TryGetValue(e.SeriesId, out var l))
+                    {
+                        epAdded[e.SeriesId] = l = new List<double>();
+                    }
+
+                    l.Add(Unix(e.DateCreated));
+                }
+            }
+        }
+
+        var seasonSeries = new Dictionary<Guid, Guid>();
+        foreach (var se in _lib.GetItemList(new InternalItemsQuery { IncludeItemTypes = new[] { BaseItemKind.Season }, Recursive = true, IsVirtualItem = false }).OfType<Season>())
+        {
+            if (se.SeriesId != Guid.Empty)
+            {
+                seasonSeries[se.Id] = se.SeriesId;
             }
         }
 
@@ -183,6 +210,10 @@ public sealed class LibraryIndex
                 Community = it.CommunityRating,
                 Added = it.DateCreated == default ? null : new DateTimeOffset(DateTime.SpecifyKind(it.DateCreated, DateTimeKind.Utc)).ToUnixTimeSeconds(),
                 EpisodeCount = kind == TitleKind.Series ? epCount.GetValueOrDefault(it.Id) : 0,
+                Released = it.PremiereDate is { } pd && pd != default ? Unix(pd) : null,
+                Critic = it.CriticRating is float cr && cr > 0 ? cr : null,
+                Countries = it.ProductionLocations ?? Array.Empty<string>(),
+                Language = string.IsNullOrWhiteSpace(it.OriginalLanguage) ? null : it.OriginalLanguage,
             };
             var tmdb = it.GetProviderId(MetadataProvider.Tmdb);
             if (!string.IsNullOrEmpty(tmdb))
@@ -203,6 +234,16 @@ public sealed class LibraryIndex
 
         _log.LogInformation("Reco+ : bibliothèque indexée — {Titles} titres, {Eps} épisodes, {Colls} collections en {Ms} ms",
             titles.Count, episodes.Count, colls.Count, sw.ElapsedMilliseconds);
-        return new LibrarySnapshot { Titles = titles, Collections = colls, ByTmdb = byTmdb, EpisodeSeries = epSeries, Runtime = runtime, BuiltAt = DateTime.UtcNow };
+        return new LibrarySnapshot
+        {
+            Titles = titles,
+            Collections = colls,
+            ByTmdb = byTmdb,
+            EpisodeSeries = epSeries,
+            Runtime = runtime,
+            SeasonSeries = seasonSeries,
+            EpisodeAdded = epAdded.ToDictionary(kv => kv.Key, kv => kv.Value.OrderBy(x => x).ToArray()),
+            BuiltAt = DateTime.UtcNow,
+        };
     }
 }

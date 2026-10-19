@@ -201,8 +201,9 @@ public sealed class RecoController : ControllerBase
                 at = _calib.ReportAt,
                 report = _calib.Report is null ? null : new
                 {
-                    current = new { hit10 = _calib.Report.Current.Hit10, hit20 = _calib.Report.Current.Hit20, events = _calib.Report.Current.Events, accounts = _calib.Report.Current.Accounts },
-                    proposed = new { hit10 = _calib.Report.Proposed.Hit10, hit20 = _calib.Report.Proposed.Hit20 },
+                    current = new { hit10 = _calib.Report.Current.Hit10, hit20 = _calib.Report.Current.Hit20, gain = _calib.Report.Current.Gain, events = _calib.Report.Current.Events, accounts = _calib.Report.Current.Accounts },
+                    proposed = new { hit10 = _calib.Report.Proposed.Hit10, hit20 = _calib.Report.Proposed.Hit20, gain = _calib.Report.Proposed.Gain },
+                    cvDelta = _calib.Report.CvDelta,
                     ciLow = _calib.Report.DeltaCi.Low,
                     ciHigh = _calib.Report.DeltaCi.High,
                     recommended = _calib.Report.Recommended,

@@ -23,6 +23,12 @@ public sealed class UserDataRow
     public long Position { get; set; }
 
     public DateTime? LastPlayed { get; set; }
+
+    /// <summary>Note donnée dans Jellyfin (0-10), si un client en a enregistré une.</summary>
+    public double? Rating { get; set; }
+
+    /// <summary>Pouce Jellyfin (vrai = aime, faux = n'aime pas), si un client l'a enregistré.</summary>
+    public bool? Likes { get; set; }
 }
 
 /// <summary>
@@ -46,13 +52,14 @@ public sealed class UserDataReader
     {
         var sw = System.Diagnostics.Stopwatch.StartNew();
         using var ctx = _db.CreateDbContext();
-        var q = ctx.UserData.Where(u => u.Played || u.IsFavorite || u.PlaybackPositionTicks > 0 || u.LastPlayedDate != null);
+        var q = ctx.UserData.Where(u => u.Played || u.IsFavorite || u.PlaybackPositionTicks > 0 || u.LastPlayedDate != null
+            || u.Rating != null || u.Likes != null);
         if (onlyUser is Guid ou)
         {
             q = q.Where(u => u.UserId == ou);
         }
 
-        var rows = q.Select(u => new { u.UserId, u.ItemId, u.Played, u.IsFavorite, u.PlayCount, u.PlaybackPositionTicks, u.LastPlayedDate }).ToList();
+        var rows = q.Select(u => new { u.UserId, u.ItemId, u.Played, u.IsFavorite, u.PlayCount, u.PlaybackPositionTicks, u.LastPlayedDate, u.Rating, u.Likes }).ToList();
         var res = new Dictionary<Guid, Dictionary<Guid, UserDataRow>>();
         foreach (var r in rows)
         {
@@ -70,6 +77,8 @@ public sealed class UserDataReader
             row.Played |= r.Played;
             row.Favorite |= r.IsFavorite;
             row.PlayCount = Math.Max(row.PlayCount, r.PlayCount);
+            row.Rating ??= r.Rating;
+            row.Likes ??= r.Likes;
             if (r.LastPlayedDate is { } lp && (row.LastPlayed is null || lp > row.LastPlayed))
             {
                 row.LastPlayed = lp;

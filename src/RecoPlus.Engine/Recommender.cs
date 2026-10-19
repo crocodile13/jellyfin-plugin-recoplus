@@ -54,11 +54,59 @@ public sealed class Context
 }
 
 /// <summary>Détail d'un score (pour l'aperçu et le diagnostic).</summary>
-public readonly record struct ScoreParts(double Taste, double Fresh, double Popularity, double Quality, double Tmdb);
+public readonly record struct ScoreParts(double Taste, double Fresh, double Popularity, double Quality, double Tmdb, double Release = 0);
 
 /// <summary>Score et liste finale.</summary>
 public static class Recommender
 {
+    /// <summary>
+    /// Note sur 10 selon la source choisie ; absente = 6,5 (neutre). Une note nulle compte comme absente. La note de la
+    /// communauté est ramenée vers 6,5 d'autant plus qu'elle repose sur peu de votes (moyenne bayésienne, priorVotes).
+    /// </summary>
+    public static double Quality(Title t, RatingSource src, double priorVotes = 0)
+    {
+        double? comm = t.Community is double cm && cm != 0 ? cm : null;
+        if (comm is double c0 && priorVotes > 0 && t.Votes is int nv && nv >= 0)
+        {
+            comm = ((nv * c0) + (priorVotes * 6.5)) / (nv + priorVotes);
+        }
+
+        double? crit = t.Critic is double cr && cr != 0 ? cr / 10.0 : null;
+        double? v = src switch
+        {
+            RatingSource.Critic => crit ?? comm,
+            RatingSource.Best => comm is null ? crit : crit is null ? comm : Math.Max(comm.Value, crit.Value),
+            RatingSource.Mean => comm is null ? crit : crit is null ? comm : (comm.Value + crit.Value) / 2.0,
+            _ => comm,
+        };
+        return v ?? 6.5;
+    }
+
+    /// <summary>
+    /// Avis du foyer sur un titre, sans ceux du compte lui-même, ramenés à -1..+1 : moyenne bayésienne des étoiles avec
+    /// <paramref name="prior"/> avis neutres (3) — un seul avis 5 étoiles pèse peu, cinq avis concordants pleinement.
+    /// </summary>
+    public static double Household(Dataset ds, string title, string user, double prior)
+    {
+        if (!ds.Reviews.TryGetValue(title, out var by))
+        {
+            return 0.0;
+        }
+
+        double sum = 0;
+        int n = 0;
+        foreach (var (u, stars) in by)
+        {
+            if (!string.Equals(u, user, StringComparison.Ordinal))
+            {
+                sum += stars;
+                n++;
+            }
+        }
+
+        return n == 0 ? 0.0 : Math.Clamp((((sum + (prior * 3.0)) / (n + prior)) - 3.0) / 2.0, -1.0, 1.0);
+    }
+
     /// <summary>
     /// Score de chaque candidat. Le goût (profil, titre aimé le plus proche, vus ensemble, ressemblance aux abandons)
     /// décide seul de l'ordre ; nouveauté, popularité, qualité et accord TMDb sont des bonus multiplicatifs
@@ -67,7 +115,7 @@ public static class Recommender
     /// <param name="tmdbAgreement">Facultatif : candidat → part des titres aimés dont TMDb le recommande (mode étendu).</param>
     public static Dictionary<string, double> Score(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
         IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null,
-        Dictionary<string, ScoreParts>? parts = null)
+        Dictionary<string, ScoreParts>? parts = null, SimilarityIndex? sim = null)
     {
         var T = ctx.Ds.Titles;
         var sig = ctx.Sig.TryGetValue(user, out var su) ? su : new Dictionary<string, double>();
@@ -137,26 +185,71 @@ public static class Recommender
         var posVec = pos.Where(e => vec.ContainsKey(e.Key)).Select(e => (S: e.Value, V: vec[e.Key])).ToList();
         var negVec = neg.Where(e => vec.ContainsKey(e.Key)).Select(e => (S: e.Value, V: vec[e.Key])).ToList();
 
+        // avec l'index : mêmes calculs, produits scalaires lus dans des lignes précalculées
+        (double S, double[] R)[]? posRows = null, negRows = null;
+        if (sim is not null)
+        {
+            posRows = pos.Where(e => vec.ContainsKey(e.Key)).Select(e => (e.Value, sim.Row(e.Key)!)).ToArray();
+            negRows = neg.Where(e => vec.ContainsKey(e.Key)).Select(e => (e.Value, sim.Row(e.Key)!)).ToArray();
+            if (posRows.Any(r => r.R is null) || negRows.Any(r => r.R is null) || !ReferenceEquals(sim.Vectors, vec))
+            {
+                posRows = negRows = null; // budget mémoire de l'index atteint, ou autres vecteurs : calcul direct
+            }
+        }
+
         var taste = new double[cands.Count];
         var fr = new double[cands.Count];
         var pop = new double[cands.Count];
         var q = new double[cands.Count];
         var tm = new double[cands.Count];
+        var re = new double[cands.Count];
+        var hh = new double[cands.Count];
         for (int ci = 0; ci < cands.Count; ci++)
         {
             var c = cands[ci];
             var v = vec[c];
-            double cen = v.Dot(prof);
+            int col0 = sim?.Column(c) ?? -1;
+            double cen;
             double ms = 0;
-            if (posVec.Count > 0)
+            if (posRows is not null && negRows is not null && col0 >= 0)
             {
-                ms = double.NegativeInfinity;
-                foreach (var (s, pv) in posVec)
+                // prof·v = (Σ s·(t·v) − WNeg·Σ s·(n·v)) / |prof|
+                double dotv = 0;
+                foreach (var (s, r) in posRows)
                 {
-                    ms = Math.Max(ms, s * pv.Dot(v));
+                    dotv += s * r[col0];
                 }
 
-                ms /= maxPos;
+                foreach (var (s, r) in negRows)
+                {
+                    dotv -= w.WNegative * s * r[col0];
+                }
+
+                cen = dotv / pn;
+                if (posRows.Length > 0)
+                {
+                    ms = double.NegativeInfinity;
+                    foreach (var (s, r) in posRows)
+                    {
+                        ms = Math.Max(ms, s * r[col0]);
+                    }
+
+                    ms /= maxPos;
+                }
+            }
+            else
+            {
+                cen = v.Dot(prof);
+                if (posVec.Count > 0)
+                {
+                    ms = double.NegativeInfinity;
+                    foreach (var (s, pv) in posVec)
+                    {
+                        ms = Math.Max(ms, s * pv.Dot(v));
+                    }
+
+                    ms /= maxPos;
+                }
             }
 
             double col = 0;
@@ -170,7 +263,18 @@ public static class Recommender
 
             col /= tot;
             double negPen = 0;
-            if (negVec.Count > 0)
+            if (negRows is not null && col0 >= 0)
+            {
+                if (negRows.Length > 0)
+                {
+                    negPen = double.NegativeInfinity;
+                    foreach (var (s, r) in negRows)
+                    {
+                        negPen = Math.Max(negPen, s * r[col0]);
+                    }
+                }
+            }
+            else if (negVec.Count > 0)
             {
                 negPen = double.NegativeInfinity;
                 foreach (var (s, nv) in negVec)
@@ -181,8 +285,10 @@ public static class Recommender
 
             var tc = T[c];
             pop[ci] = Math.Log(1 + othersPop.GetValueOrDefault(c)) / Math.Log(1 + maxPop);
-            double comm = tc.Community is double cm && cm != 0 ? cm : 6.5;
-            q[ci] = Math.Clamp((comm - 6.5) / 2.0, -1.0, 1.0);
+            q[ci] = Math.Clamp((Quality(tc, w.Rating, w.RatingPriorVotes) - 6.5) / 2.0, -1.0, 1.0);
+            hh[ci] = Household(ctx.Ds, c, user, w.HouseholdPrior);
+            double rel = tc.Released ?? 0;
+            re[ci] = rel != 0 ? Math.Exp(-Math.Max(0.0, (ctx.Now - rel) / Core.Day) / w.ReleaseDays) : 0.0;
             double added = tc.Added ?? 0;
             fr[ci] = added != 0 ? Math.Exp(-Math.Max(0.0, (ctx.Now - added) / Core.Day) / w.FreshDays) : 0.0;
             tm[ci] = tmdbAgreement is not null && tmdbAgreement.TryGetValue(c, out var a) ? a : 0.0;
@@ -204,8 +310,8 @@ public static class Recommender
         {
             double g = Math.Max(0.0, 1.0 - ((double)rank[ci] / top));
             double tp = Math.Max(taste[ci], 0.0);
-            outp[cands[ci]] = taste[ci] + (tp * g * ((wf * fr[ci]) + (w.WPopularity * pop[ci]) + (w.WQuality * q[ci]) + (w.WTmdbAgreement * tm[ci])));
-            parts?.TryAdd(cands[ci], new ScoreParts(taste[ci], tp * g * wf * fr[ci], tp * g * w.WPopularity * pop[ci], tp * g * w.WQuality * q[ci], tp * g * w.WTmdbAgreement * tm[ci]));
+            outp[cands[ci]] = taste[ci] + (tp * g * ((wf * fr[ci]) + (w.WPopularity * pop[ci]) + (w.WQuality * q[ci]) + (w.WTmdbAgreement * tm[ci]) + (w.WRelease * re[ci]) + (w.WHousehold * hh[ci])));
+            parts?.TryAdd(cands[ci], new ScoreParts(taste[ci], tp * g * wf * fr[ci], tp * g * w.WPopularity * pop[ci], tp * g * w.WQuality * q[ci], tp * g * w.WTmdbAgreement * tm[ci], tp * g * w.WRelease * re[ci]));
         }
 
         return outp;
