@@ -8,6 +8,14 @@
     "category": "General",
     "versions": [
       {
+        "version": "1.0.2.0",
+        "changelog": "1.0.2 : mode étendu mélangé dans la rangée « Pour toi » de Home Screen Sections (un titre hors bibliothèque toutes les N cartes, réglable), avec les cartes, la fiche et le bouton Demander de Jellyfin Enhanced et l'état Seerr du moment ; sans HSS, rangée à part sans barre de défilement ; l'option « Sur l'accueil » est enfin respectée.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.1.0",
         "changelog": "1.0.1 : historique lu en une seule requête légère (corrige la saturation mémoire de Jellyfin causée par les requêtes favoris par compte) ; demandes = signal de court terme, en tête seulement après une arrivée récente ; calculs visibles dans Tâches planifiées ; tests Seerr/webhook avec les valeurs saisies ; un seul bouton Enregistrer ; page réorganisée en onglets ; Jellyseerr → Seerr.",
         "targetAbi": "12.2.0.0",

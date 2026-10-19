@@ -99,6 +99,9 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     /// <summary>État lisible.</summary>
     public static string State { get; private set; } = "non tenté";
 
+    /// <summary>La rangée « Pour toi » est déclarée auprès de Home Screen Sections.</summary>
+    public static bool Registered { get; private set; }
+
     /// <inheritdoc />
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -138,6 +141,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
                 resultsMethod = nameof(HssSectionHandler.GetResults),
             });
             register.Invoke(null, new[] { parse.Invoke(null, new object[] { payload }) });
+            Registered = true;
             State = $"rangée « {cfg.HssSectionTitle} » déclarée (à activer dans la configuration de Home Screen Sections)";
             _notifier.Clear("off-" + Feature.HomeScreenSection);
             _log.LogInformation("Reco+ : rangée Home Screen Sections déclarée");

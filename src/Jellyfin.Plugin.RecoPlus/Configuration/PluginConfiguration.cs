@@ -103,8 +103,14 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Candidats détaillés par compte (appels Seerr, mis en cache).</summary>
     public int ExtendedDetails { get; set; } = 60;
 
-    /// <summary>Affiche la rangée « À découvrir » sur l'accueil (script client).</summary>
+    /// <summary>
+    /// Titres hors bibliothèque sur l'accueil (script client) : mélangés dans la rangée « Pour toi » si Home Screen
+    /// Sections est présent, sinon rangée à part.
+    /// </summary>
     public bool ExtendedHomeRow { get; set; } = true;
+
+    /// <summary>Mélange dans « Pour toi » : un titre hors bibliothèque toutes les N cartes (2 = un sur deux).</summary>
+    public int ExtendedMixEvery { get; set; } = 3;
 
     /// <summary>Titre de la rangée du mode étendu.</summary>
     public string ExtendedTitle { get; set; } = "À découvrir pour toi";
