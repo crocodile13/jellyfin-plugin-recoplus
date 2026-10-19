@@ -11,9 +11,9 @@
         "version": "1.0.3.0",
         "changelog": "1.0.3 : page de configuration repensée — l'essentiel visible, l'avancé replié, une aide au survol (?) pour chaque réglage avec sa valeur par défaut ; chaque facteur de classement (favoris, demandes, abandons, ressemblances, vus ensemble, nouveauté, popularité, note, accord TMDb, diversité, caractéristiques de contenu) s'active ou se coupe et se règle en force (×0,25 à ×3) ; nouvel onglet Listes : part de hasard du jour, minimums de films et de séries, genres exclus, note et année minimales ; comptes ignorés ; mode étendu : mélange libre selon le classement du moteur ; le nom de la rangée suit son titre.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.3.0/RecoPlus_1.0.3.0.zip",
+        "checksum": "73e2ad07013e3637dd295b8685926e83",
+        "timestamp": "2026-10-19T15:57:36Z"
       },
       {
         "version": "1.0.2.0",
