@@ -1,0 +1,12 @@
+bin/
+obj/
+out/
+*.zip
+__pycache__/
+*.pyc
+*.pkl
+*.gcdump
+*.nettrace
+.vs/
+.idea/
+*.user

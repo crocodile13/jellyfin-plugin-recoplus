@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Jellyfin.Plugin.RecoPlus.Service;
+using MediaBrowser.Model.Tasks;
+
+namespace Jellyfin.Plugin.RecoPlus.Tasks;
+
+/// <summary>
+/// Recalcul complet de tous les comptes : chaque nuit, au démarrage, après des ajouts à la bibliothèque, après un
+/// changement de réglage, ou à la main (bouton de la page ou Tâches planifiées). Visible avec sa progression.
+/// </summary>
+public sealed class NightlyTask : IScheduledTask
+{
+    private readonly RecoService _reco;
+
+    public NightlyTask(RecoService reco) => _reco = reco;
+
+    /// <inheritdoc />
+    public string Name => "Recalcul des recommandations";
+
+    /// <inheritdoc />
+    public string Key => "RecoPlusNightly";
+
+    /// <inheritdoc />
+    public string Description => "Recalcule les recommandations de tous les comptes (bibliothèque, historiques, Seerr, mode étendu).";
+
+    /// <inheritdoc />
+    public string Category => "Reco+";
+
+    /// <inheritdoc />
+    public Task ExecuteAsync(IProgress<double> progress, CancellationToken cancellationToken)
+        => Plugin.Instance?.Configuration.Enabled == true ? _reco.ComputeAsync(null, cancellationToken, progress) : Task.CompletedTask;
+
+    /// <inheritdoc />
+    public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()
+    {
+        yield return new TaskTriggerInfo { Type = TaskTriggerInfoType.DailyTrigger, TimeOfDayTicks = new TimeSpan(4, 15, 0).Ticks };
+    }
+}
+
+/// <summary>Calibrage sur l'historique (manuel uniquement : aucun déclencheur par défaut).</summary>
+public sealed class CalibrationTask : IScheduledTask
+{
+    private readonly CalibrationService _calib;
+
+    public CalibrationTask(CalibrationService calib) => _calib = calib;
+
+    /// <inheritdoc />
+    public string Name => "Calibrage sur l'historique";
+
+    /// <inheritdoc />
+    public string Key => "RecoPlusCalibration";
+
+    /// <inheritdoc />
+    public string Description => "Rejoue l'historique pour proposer un réglage du moteur. N'applique rien : le résultat s'affiche sur la page du plugin.";
+
+    /// <inheritdoc />
+    public string Category => "Reco+";
+
+    /// <inheritdoc />
+    public Task ExecuteAsync(IProgress<double> progress, CancellationToken cancellationToken)
+        => Task.Run(() => _calib.Run(progress, cancellationToken), cancellationToken);
+
+    /// <inheritdoc />
+    public IEnumerable<TaskTriggerInfo> GetDefaultTriggers() => Array.Empty<TaskTriggerInfo>();
+}

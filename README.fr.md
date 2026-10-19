@@ -1,0 +1,176 @@
+# Reco+ — recommandations personnelles pour Jellyfin
+
+*[English version](README.md)*
+
+Reco+ remplace les recommandations de Jellyfin par des listes calculées sur **tout** l'historique de chaque compte. Il a été construit et testé pour **Jellyfin 12.2** uniquement.
+
+| Où | Jellyfin aujourd'hui | Avec Reco+ |
+|---|---|---|
+| `/Items/Suggestions` | du hasard | la liste classée du compte |
+| `/Movies/Recommendations` (onglet Suggestions, Media Bar…) | proche des 7 derniers films et de quelques favoris au hasard | catégories « Parce que tu as aimé X » tirées de tout l'historique |
+| « Plus comme ceci » (films) | recouvrement pondéré genres/mots-clés/personnes | ressemblance de contenu + un peu du goût du compte, volet suivant d'une saga d'abord |
+| « Plus comme ceci » (séries) | des séries **au hasard** partageant un genre ou un mot-clé | ressemblance de contenu, comme pour les films |
+| Home Screen Sections | — | rangée « Pour toi » (facultative) |
+| Hors bibliothèque | — | rangée « À découvrir » facultative, à partir du catalogue Seerr/TMDb, avec bouton *Demander* |
+
+Tout est calculé en arrière-plan et gardé en cache, en mémoire et sur disque : aucune page n'attend un calcul. Un compte dont la liste n'est pas encore prête reçoit la réponse normale de Jellyfin.
+
+## Ce que le moteur prend en compte
+
+- **Tout l'historique, avec décroissance.** Un titre vu il y a longtemps compte encore, mais moins. La demi-vie est de 90 jours (valeur MovieLens, Larrain, Parra et al., RecSys 2015).
+- **Les abandons comptent contre ce qui leur ressemble, avec une marge.**
+  - Un film arrêté entre 5 % et 70 % et jamais repris pendant 30 jours est un abandon.
+  - Un film regardé en deux fois n'en est pas un.
+  - Une longue série lâchée après un ou deux épisodes est aussi un abandon.
+- **Les favoris** pèsent davantage.
+- **Les demandes Seerr** sont une intention déclarée *de court terme*.
+  - Demi-vie de 21 jours, ignorée après 90 jours.
+  - Dès que le titre est regardé, c'est ce visionnage qui compte.
+  - Un titre demandé, arrivé et pas encore vu passe en tête pendant 30 jours.
+- **Le contenu.** Vecteurs TF-IDF sur genres, mots-clés, studios, acteurs principaux, réalisateurs, scénaristes, créateurs, décennie et type. Le goût du compte combine son profil d'ensemble et le titre aimé le plus proche.
+- **Les « vus ensemble » dans le foyer.** Co-occurrences entre titres avec rétrécissement (Ferrari Dacrema et al., 2019), pour qu'une seule personne qui regarde tout ne relie pas tous les titres entre eux.
+- **Le garde-fou.**
+  - La nouveauté, la popularité dans le foyer et la note de la communauté sont des *bonus multiplicatifs réservés aux titres qui figurent déjà parmi les 60 premiers par goût*.
+  - Un titre tout neuf sans aucun rapport avec le compte ne reçoit aucun bonus.
+  - Sans cette règle, les nouveautés étaient poussées à tout le monde : par exemple des animes ecchi récents à un compte qui ne regarde que du Ghibli.
+  - La règle n'est pas désactivable, et la nouveauté est plafonnée.
+- **La diversité.** Reclassement par Maximal Marginal Relevance (Carbonell & Goldstein, 1998).
+- **Les sagas.**
+  - Une seule entrée par saga, et c'est le premier volet pas encore vu, pas le 4ᵉ.
+  - Les grands regroupements thématiques ont au plus deux entrées.
+
+## Mesuré sur un vrai serveur (prudence avec ces chiffres)
+
+Le test : chaque fois qu'un compte a commencé un nouveau titre, ce titre figurait-il dans le top 10 calculé juste avant, avec seulement ce qui était connu à ce moment-là ? On compte 126 cas sur 11 comptes.
+
+| Méthode | Titre adopté dans le top 10 |
+|---|---|
+| Hasard (`/Items/Suggestions` de Jellyfin) | 2 % |
+| Recommandations de Jellyfin 12 (réplique fidèle) | 11 % |
+| **Reco+ (réglages par défaut)** | **18–19 %** |
+
+- Reco+ trouve le titre 13 fois où Jellyfin le rate, et le rate 4 fois où Jellyfin le trouve.
+- L'intervalle de confiance à 95 % du gain, calculé par tirage de comptes, va de **0 à +13 points**. Reco+ ne fait pas moins bien, mais avec si peu d'historique l'ampleur du gain reste incertaine.
+- Une variante sans garde-fou atteignait 32 %, uniquement en recommandant les nouveautés à tout le monde. Elle a été écartée.
+- La règle d'abandon des films n'a pas pu être validée : l'historique ne contenait que 4 films en cours.
+
+## Sécurité et robustesse
+
+- **Garde-fou de version.**
+  - Au démarrage, Reco+ vérifie la version de Jellyfin et chaque point d'accroche qu'il utilise : enregistrement des services, actions et paramètres des contrôleurs, plugins facultatifs.
+  - Une partie qui ne colle plus se coupe seule, et Jellyfin reprend son comportement normal pour elle. C'est aussi le cas d'une partie qui fait 5 erreurs en 10 minutes.
+  - Vous êtes prévenu par le journal d'activité de Jellyfin, par une bannière rouge sur la page du plugin et, en option, par un webhook (ntfy, Gotify, Discord ou JSON).
+- **Droits.**
+  - Toutes les listes passent par les règles d'accès de Jellyfin pour le compte (bibliothèques, contrôle parental).
+  - Un titre hors bibliothèque doit avoir une classification connue, au plus égale à la limite du compte. C'est plus strict que Jellyfin.
+- **Secrets.**
+  - La clé d'API Seerr, ainsi que l'URL et le jeton du webhook, sont stockés à part, dans un fichier en droits 600.
+  - Ils ne sont jamais renvoyés par l'API : la page affiche seulement « défini (…1234) ».
+- **Demandes à Seerr.**
+  - Elles sont faites *au nom de l'utilisateur*, avec ses droits, ses quotas et son approbation automatique.
+  - Rien n'est jamais demandé automatiquement.
+- **Léger pour le serveur.**
+  - L'historique est lu en une seule requête, en lecture seule.
+  - Un seul calcul tourne à la fois. Le recalcul complet est une tâche planifiée, avec sa progression visible.
+  - Un compte est recalculé 2 minutes après une lecture.
+  - La bibliothèque est réindexée après des ajouts, en regroupant les changements rapprochés.
+- **Cohabitation avec les autres plugins.**
+  - Le filtre des suggestions s'exécute au plus près de l'action, donc le filtre de contenu masqué de Jellyfin Enhanced s'applique toujours à sa réponse.
+  - Le script web est ajouté au moment de la requête, comme le fait Jellyfin Enhanced, sans écrire dans le dossier web.
+
+## Installation
+
+### Par le dépôt de plugins
+
+Tableau de bord → Extensions → Dépôts, ajouter :
+
+```
+https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/manifest.json
+```
+
+Puis installer **Reco+** depuis le catalogue et redémarrer Jellyfin.
+
+### À la main
+
+1. Télécharger `RecoPlus_<version>.zip` depuis les [releases](https://github.com/crocodile13/jellyfin-plugin-recoplus/releases).
+2. Vérifier son empreinte avec le fichier `.sha256` publié à côté.
+3. L'extraire dans `<config>/plugins/RecoPlus_<version>/`, avec l'utilisateur de Jellyfin comme propriétaire.
+4. Redémarrer Jellyfin.
+
+## Configuration
+
+Tableau de bord → Extensions → Reco+. La page est organisée en onglets :
+
+| Onglet | Contenu |
+|---|---|
+| État | vérifications de compatibilité, dernier calcul, comptes prêts |
+| Général | ce qui est remplacé, rangée Home Screen Sections, demandes en tête |
+| Moteur | réglages groupés ; les valeurs par défaut sont celles qui ont été évaluées |
+| Seerr | URL et clé, avec un bouton **Tester** qui utilise les valeurs saisies sans les enregistrer |
+| Mode étendu | titres hors bibliothèque |
+| Notifications | webhook, avec envoi de test |
+| Calibrage | voir ci-dessous |
+| Aperçu | ce que voit actuellement un compte |
+
+Un seul bouton **Enregistrer** sauvegarde à la fois les réglages et les secrets saisis.
+
+### Calibrage
+
+L'onglet Calibrage rejoue l'historique de votre serveur et essaie les réglages un par un, dans des bornes sûres. Il ne garde un changement que s'il améliore les *deux* moitiés de l'historique.
+
+Il affiche ensuite le réglage actuel et le réglage proposé, l'intervalle de confiance du gain et un verdict.
+
+- Rien n'est appliqué sans clic sur **Appliquer**, et le réglage précédent est gardé pour revenir en arrière.
+- Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables.
+- Il tourne comme une tâche planifiée, avec sa progression visible.
+
+## Intégrations facultatives
+
+| Plugin / service | Présent | Absent |
+|---|---|---|
+| Home Screen Sections | rangée « Pour toi » (à activer aussi dans HSS) | pas de rangée d'accueil, le reste marche |
+| Jellyfin Enhanced | les cartes du mode étendu ouvrent sa fiche détaillée | les cartes ouvrent la page Seerr |
+| Media Bar Enhanced | en profite automatiquement | — |
+| Playback Reporting | dates de premier lancement précises pour le calibrage | calibrage moins précis ; Reco+ relève lui-même les premiers lancements à partir de son installation |
+| Seerr (ex-Jellyseerr) | demandes comme signal, arrivées en tête, mode étendu | tout cela est coupé, le reste marche |
+| LocalRecs | signalé comme doublon | — |
+
+## Vie privée
+
+Rien ne sort du serveur, à deux exceptions près :
+- les appels à **votre** Seerr, si vous le configurez ;
+- en mode étendu, le client web charge les affiches depuis `image.tmdb.org`.
+
+## Développement
+
+```
+src/RecoPlus.Engine/          le moteur (.NET pur, sans dépendance à Jellyfin)
+src/Jellyfin.Plugin.RecoPlus/ intégration Jellyfin, Seerr, API, page et script web
+tests/RecoPlus.Tests/         tests unitaires + tests de parité avec le prototype Python
+prototype/                    moteur de référence en Python et évaluation hors ligne qui a servi à fixer les réglages
+tools/reco-export/            export pseudonymisé, en lecture seule, de l'historique d'un serveur, pour l'évaluation
+```
+
+Pour compiler et tester :
+
+```bash
+./build.sh
+# ou, sans SDK .NET local :
+docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/src" -w /src mcr.microsoft.com/dotnet/sdk:10.0 ./build.sh
+```
+
+Le moteur C# est vérifié pour reproduire exactement le prototype Python :
+- scores à 1e-9 près et listes identiques, sur un jeu synthétique que la CI régénère à chaque exécution (`prototype/golden.py`) ;
+- pendant le développement, 0 écart sur les 126 cas d'évaluation des données réelles.
+
+La CI compile et teste à chaque push. Quand une nouvelle version apparaît dans `manifest.json`, une release est publiée et le manifeste est complété automatiquement.
+
+## Limites
+
+- Construit pour Jellyfin 12.2. Les autres versions sont détectées et chaque point d'accroche est vérifié, mais elles ne sont pas testées.
+- Les valeurs par défaut ont été choisies sur un seul petit foyer (environ 16 comptes actifs). Utilisez le calibrage sur le vôtre.
+- La rangée du mode étendu est un script ajouté au client web (mise en page Modern testée). Les autres clients (TV, applications mobiles) reçoivent les recommandations remplacées, mais pas cette rangée.
+
+## Licence
+
+[GPL-3.0](LICENSE).

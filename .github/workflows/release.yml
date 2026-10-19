@@ -1,0 +1,80 @@
+name: Release
+
+# Publishes the version declared in manifest.json when no release exists for it yet:
+# build + tests, zip, GitHub release, then manifest.json (checksum, URL, date) is updated so that
+# the repository URL below can be added to Jellyfin as a plugin repository.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: v
+        run: |
+          VERSION=$(jq -r '.[0].versions[0].version' manifest.json)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release v$VERSION already exists, nothing to do."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-dotnet@v4
+        if: steps.v.outputs.exists == 'false'
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build, test and zip
+        if: steps.v.outputs.exists == 'false'
+        id: zip
+        run: |
+          ./build.sh
+          VERSION=${{ steps.v.outputs.version }}
+          ZIP="RecoPlus_${VERSION}.zip"
+          (cd "out/RecoPlus_${VERSION}" && zip -X -j "../../$ZIP" ./*)
+          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+          echo "md5=$(md5sum "$ZIP" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+          sha256sum "$ZIP" | tee "$ZIP.sha256"
+
+      - name: Create GitHub release
+        if: steps.v.outputs.exists == 'false'
+        run: |
+          VERSION=${{ steps.v.outputs.version }}
+          jq -r '.[0].versions[0].changelog' manifest.json > notes.md
+          gh release create "v$VERSION" "${{ steps.zip.outputs.zip }}" "${{ steps.zip.outputs.zip }}.sha256" \
+            --title "Reco+ $VERSION" --notes-file notes.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update manifest.json
+        if: steps.v.outputs.exists == 'false'
+        run: |
+          VERSION=${{ steps.v.outputs.version }}
+          URL="https://github.com/${{ github.repository }}/releases/download/v$VERSION/${{ steps.zip.outputs.zip }}"
+          TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          jq --arg v "$VERSION" --arg url "$URL" --arg md5 "${{ steps.zip.outputs.md5 }}" --arg t "$TIME" \
+            '.[0].versions |= map(if .version == $v then .sourceUrl = $url | .checksum = $md5 | .timestamp = $t else . end)' \
+            manifest.json > manifest.tmp && mv manifest.tmp manifest.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add manifest.json
+          git commit -m "manifest: v$VERSION (checksum, URL, date)"
+          git push

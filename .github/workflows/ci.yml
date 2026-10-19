@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Version consistency (meta.json, csproj, manifest.json)
+        run: |
+          META=$(jq -r .version meta.json)
+          CSPROJ=$(grep -oP '<Version>\K[^<]+' src/Jellyfin.Plugin.RecoPlus/Jellyfin.Plugin.RecoPlus.csproj)
+          MANIFEST=$(jq -r '.[0].versions[0].version' manifest.json)
+          echo "meta=$META csproj=$CSPROJ manifest=$MANIFEST"
+          test "$META" = "$CSPROJ" && test "$META" = "$MANIFEST"
+
+      - name: Regenerate reference data from the Python prototype
+        # The C# engine must reproduce the prototype exactly: regenerate the synthetic reference
+        # on this machine, then the C# parity tests below compare against it.
+        run: cd prototype && python golden.py ../tests/RecoPlus.Tests/golden.json
+
+      - name: Build, test and package
+        run: ./build.sh
+
+      - name: reco-export tests
+        run: cd tools/reco-export && python test_reco_export.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RecoPlus-build
+          path: out/
+          retention-days: 14

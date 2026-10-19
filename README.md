@@ -1,0 +1,174 @@
+# Reco+ — personal recommendations for Jellyfin
+
+*[Version française](README.fr.md)*
+
+Reco+ replaces Jellyfin's built-in recommendations with lists computed from each account's **whole** watch history.
+
+It has been built and tested against **Jellyfin 12.2** only.
+
+| Where | Jellyfin today | With Reco+ |
+|---|---|---|
+| `/Items/Suggestions` | random items | the account's ranked list |
+| `/Movies/Recommendations` ("Suggestions" tab, Media Bar…) | similar to the 7 last movies and a few random favourites | "Because you liked X" categories built from the whole history |
+| "More like this" (movies) | weighted overlap of genres/tags/people | content similarity + a bit of the account's taste, next saga volume first |
+| "More like this" (series) | **random** series sharing a genre or a tag | content similarity, same as movies |
+| Home Screen Sections | — | a "For you" row (optional) |
+| Outside the library | — | optional "To discover" row from the Seerr/TMDb catalogue, with a *Request* button |
+
+Everything is computed in the background and cached in memory and on disk, so no page ever waits for a computation. An account without a ready list simply gets Jellyfin's normal answer.
+
+## What the engine takes into account
+
+- **Whole history, with decay.** A title watched long ago still counts, but less. The half-life is 90 days, the MovieLens value reported by Larrain, Parra et al., RecSys 2015.
+- **Abandoned titles count against similar titles, with a margin.**
+  - A movie stopped between 5 % and 70 % and never resumed for 30 days is an abandon.
+  - A movie watched in two sittings is not.
+  - A long series dropped after one or two episodes is an abandon too.
+- **Favourites** weigh more.
+- **Seerr requests** are a *short-term* declared interest:
+  - half-life 21 days, ignored after 90;
+  - once the title is actually watched, what the account did with it counts instead;
+  - a requested title that just arrived and is still unwatched is pinned at the top for 30 days.
+- **Content.** TF-IDF vectors over genres, keywords, studios, main actors, directors, writers, creators, decade and kind. The account's taste combines its overall profile with the closest title it liked.
+- **"Watched together" in the household.** Item-to-item co-occurrence with shrinkage (Ferrari Dacrema et al., 2019), so one person who watches everything does not link every title to every other one.
+- **Guard rail.** Freshness, household popularity and community rating are *multiplicative bonuses reserved for the titles that already rank among the account's top 60 by taste*.
+  - A brand-new title the account has no affinity with gets no bonus at all.
+  - Without this rule, new arrivals were pushed to everyone — for example new fan-service anime to a Ghibli-only account.
+  - The rule cannot be switched off, and freshness is capped.
+- **Diversity.** The list is re-ranked with Maximal Marginal Relevance (Carbonell & Goldstein, 1998).
+- **Sagas.** At most one entry per saga, and it is the first volume not yet seen, not volume 4. Large thematic collections get at most two entries.
+
+## Measured on one real server (be careful with these numbers)
+
+Protocol: every time an account started a new title, would that title have been in the top 10 computed just before, using only what was known at that time? There are 126 such cases over 11 accounts.
+
+| Method | Adopted title in top 10 |
+|---|---|
+| Random (Jellyfin's `/Items/Suggestions`) | 2 % |
+| Jellyfin 12 recommendations (faithful replica) | 11 % |
+| **Reco+ (default settings)** | **18–19 %** |
+
+- Reco+ found the title 13 times where Jellyfin missed it, and missed it 4 times where Jellyfin found it.
+- The 95 % confidence interval of the gain, bootstrapped by account, goes from **0 to +13 points**: Reco+ is not worse, but with so little history the size of the gain is uncertain.
+- A variant without the guard rail scored 32 %, but only by recommending new arrivals to everyone; it was rejected.
+- The abandonment rule for movies could not be validated: only 4 movies were left in progress in that history.
+
+## Safety and robustness
+
+- **Version guard.** At start-up Reco+ checks the Jellyfin version and every hook it uses (service registration, controller actions and parameters, optional plugins).
+  - A part that no longer matches is disabled on its own, and Jellyfin's normal behaviour comes back for it.
+  - So is a part that throws 5 errors within 10 minutes.
+  - You are told through the Jellyfin activity log, a red banner on the plugin page, and optionally a webhook (ntfy, Gotify, Discord or generic JSON).
+- **Rights.** Every list goes through Jellyfin's own access rules for the account (libraries, parental rating).
+  - Titles outside the library must have a known certification no higher than the account's limit; this is stricter than Jellyfin.
+- **Secrets.** The Seerr API key and the webhook URL and token are stored in a separate file with mode 600.
+  - They are never returned by the API; the page only shows "set (…1234)".
+- **Requests to Seerr** are made *as the user*, with their own permissions, quotas and auto-approval.
+  - Nothing is ever requested automatically.
+- **Light on the server.**
+  - History is read in a single read-only query.
+  - One computation runs at a time.
+  - A full recompute is a scheduled task with visible progress.
+  - Each account is recomputed 2 minutes after playback.
+  - The library is re-indexed after additions (debounced).
+- **Other plugins.** It cooperates with them rather than racing them.
+  - The Suggestions filter runs innermost, so Jellyfin Enhanced's hidden-content filter still applies to its output.
+  - The web script is injected at request time, like Jellyfin Enhanced does, without writing to the web folder.
+
+## Installation
+
+### From the plugin repository
+
+In Dashboard → Plugins → Repositories, add:
+
+```
+https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/manifest.json
+```
+
+Then install **Reco+** from the catalogue and restart Jellyfin.
+
+### Manually
+
+1. Download `RecoPlus_<version>.zip` from the [releases](https://github.com/crocodile13/jellyfin-plugin-recoplus/releases).
+2. Check it against the published `.sha256`.
+3. Extract it into `<config>/plugins/RecoPlus_<version>/`, owned by the Jellyfin user.
+4. Restart Jellyfin.
+
+## Configuration
+
+Dashboard → Plugins → Reco+. The page has one tab per topic:
+
+| Tab | Content |
+|---|---|
+| State | compatibility checks, last computation, per-account readiness |
+| General | what to replace, Home Screen Sections row, pinned requests |
+| Engine | grouped settings; defaults are the evaluated ones |
+| Seerr | URL and key, with a **Test** button that uses the values typed in without saving them |
+| Extended mode | titles outside the library |
+| Notifications | webhook, with a test button |
+| Calibration | see below |
+| Preview | what an account currently gets |
+
+A single **Save** button stores both the settings and any secret you typed.
+
+### Calibration
+
+The Calibration tab replays your server's history and tries the settings one at a time, within safe bounds. It keeps a change only if it improves *both* halves of the history.
+
+It then shows:
+- current vs proposed settings;
+- the confidence interval of the gain;
+- a verdict.
+
+Nothing is applied until you click **Apply**, and the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task, so its progress is visible in Scheduled Tasks.
+
+## Optional integrations
+
+| Plugin / service | If present | If absent |
+|---|---|---|
+| Home Screen Sections | "For you" row (enable it in HSS settings too) | no home row; everything else works |
+| Jellyfin Enhanced | extended-mode cards open its detail modal | cards open the Seerr page |
+| Media Bar Enhanced | benefits automatically (it calls the replaced endpoints) | — |
+| Playback Reporting | precise first-play dates for calibration | calibration is less precise; Reco+ also records first plays itself from install time |
+| Seerr (formerly Jellyseerr) | requests as a signal, pinned arrivals, extended mode | all of this is off; the rest works |
+| LocalRecs | flagged as a duplicate | — |
+
+## Privacy
+
+Nothing leaves the server, with two exceptions:
+- calls to **your** Seerr instance, when you configure it;
+- in extended mode, the web client loads posters from `image.tmdb.org`.
+
+## Development
+
+```
+src/RecoPlus.Engine/         the engine (pure .NET, no Jellyfin dependency)
+src/Jellyfin.Plugin.RecoPlus/ Jellyfin integration, Seerr, API, web page and script
+tests/RecoPlus.Tests/        unit tests + parity tests against the Python prototype
+prototype/                   Python reference engine and the offline evaluation used to choose the defaults
+tools/reco-export/           read-only, pseudonymised export of a server's history for offline evaluation
+```
+
+To build and test:
+
+```bash
+./build.sh
+# or, without a local .NET SDK:
+docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$PWD:/src" -w /src mcr.microsoft.com/dotnet/sdk:10.0 ./build.sh
+```
+
+The C# engine is checked to reproduce the Python prototype exactly:
+- scores to 1e-9 and identical lists, on a synthetic dataset regenerated by CI on every run (`prototype/golden.py`);
+- 0 differences over 126 evaluation cases on real data, during development.
+
+CI builds and tests on every push. When `manifest.json` gets a new version, a release is published and the manifest is filled in automatically.
+
+## Limitations
+
+- Built for Jellyfin 12.2. Other versions are detected and each hook is checked, but they are not tested.
+- The defaults were chosen on a single, small household (about 16 active accounts). Use Calibration on yours.
+- The extended-mode home row is a script added to the web client (Modern layout tested). Other clients (TV, mobile apps) get the replaced endpoints but not this row.
+
+## License
+
+[GPL-3.0](LICENSE).

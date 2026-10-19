@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Reco+</title>
+</head>
+<body>
+<div id="RecoPlusConfigPage" data-role="page" class="page type-interior pluginConfigurationPage"
+     data-require="emby-input,emby-button,emby-select,emby-checkbox">
+    <div data-role="content">
+        <div class="content-primary">
+            <style>
+                #RecoPlusConfigPage { --rp-line: rgba(255,255,255,.09); --rp-soft: rgba(255,255,255,.04); --rp-mute: #9aa0a6; }
+                #RecoPlusConfigPage .rp-head { display: flex; align-items: baseline; gap: .8em; flex-wrap: wrap; margin: 1em 0 .2em; }
+                #RecoPlusConfigPage .rp-head h2 { margin: 0; }
+                #RecoPlusConfigPage .rp-sub { color: var(--rp-mute); font-size: .9em; margin: 0 0 1em; max-width: 60em; }
+                #RecoPlusConfigPage .rp-alert { background: #5c1414; border-left: 4px solid #e04848; padding: .7em 1em; border-radius: 4px; margin: .5em 0; }
+                #RecoPlusConfigPage .rp-alert b { display: block; }
+                #RecoPlusConfigPage .rp-tabs { display: flex; gap: .3em; flex-wrap: wrap; border-bottom: 1px solid var(--rp-line); margin: 1em 0; position: sticky; top: 0; z-index: 2; background: inherit; }
+                #RecoPlusConfigPage .rp-tab { background: none; border: none; color: inherit; padding: .7em 1em; cursor: pointer; border-bottom: 2px solid transparent; font: inherit; opacity: .75; }
+                #RecoPlusConfigPage .rp-tab.on { border-bottom-color: #00a4dc; opacity: 1; }
+                #RecoPlusConfigPage .rp-pane { display: none; }
+                #RecoPlusConfigPage .rp-pane.on { display: block; }
+                #RecoPlusConfigPage .rp-box { background: var(--rp-soft); border-radius: 8px; padding: 1em 1.2em; margin: 0 0 1em; }
+                #RecoPlusConfigPage .rp-box h3 { margin: 0 0 .3em; font-size: 1.05em; }
+                #RecoPlusConfigPage .rp-box > p { color: var(--rp-mute); font-size: .88em; margin: 0 0 .9em; }
+                #RecoPlusConfigPage .rp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 2em; }
+                #RecoPlusConfigPage details.rp-adv { margin-top: .6em; }
+                #RecoPlusConfigPage details.rp-adv summary { cursor: pointer; color: var(--rp-mute); margin: .3em 0 .8em; }
+                #RecoPlusConfigPage .rp-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .6em; margin-bottom: 1em; }
+                #RecoPlusConfigPage .rp-kpi { background: var(--rp-soft); border-radius: 8px; padding: .7em .9em; }
+                #RecoPlusConfigPage .rp-kpi span { display: block; color: var(--rp-mute); font-size: .8em; }
+                #RecoPlusConfigPage .rp-kpi b { font-size: 1.05em; }
+                #RecoPlusConfigPage table { border-collapse: collapse; width: 100%; }
+                #RecoPlusConfigPage td, #RecoPlusConfigPage th { padding: .45em .6em; border-bottom: 1px solid var(--rp-line); text-align: left; vertical-align: top; }
+                #RecoPlusConfigPage .ok { color: #5cc46a; } #RecoPlusConfigPage .ko { color: #ec6262; } #RecoPlusConfigPage .mute { color: var(--rp-mute); }
+                #RecoPlusConfigPage .rp-row { display: flex; gap: .6em; flex-wrap: wrap; align-items: center; margin-top: .6em; }
+                #RecoPlusConfigPage .rp-result { font-size: .9em; }
+                #RecoPlusConfigPage .rp-save { position: sticky; bottom: 0; padding: .8em 0; background: inherit; z-index: 2; }
+            </style>
+
+            <div class="rp-head"><h2>Reco+</h2><span class="mute" id="rpVersion"></span></div>
+            <p class="rp-sub">Recommandations personnelles à la place de celles de Jellyfin, calculées en arrière-plan et mises en cache : aucune page n'attend. Une partie qui ne colle plus à la version de Jellyfin se coupe seule et Jellyfin reprend son comportement normal pour elle.</p>
+            <div id="rpAlerts"></div>
+
+            <div class="rp-tabs">
+                <button type="button" class="rp-tab on" data-tab="etat">État</button>
+                <button type="button" class="rp-tab" data-tab="general">Général</button>
+                <button type="button" class="rp-tab" data-tab="moteur">Moteur</button>
+                <button type="button" class="rp-tab" data-tab="seerr">Seerr</button>
+                <button type="button" class="rp-tab" data-tab="etendu">Mode étendu</button>
+                <button type="button" class="rp-tab" data-tab="notif">Notifications</button>
+                <button type="button" class="rp-tab" data-tab="calibrage">Calibrage</button>
+                <button type="button" class="rp-tab" data-tab="apercu">Aperçu</button>
+            </div>
+
+            <!-- ÉTAT -->
+            <div class="rp-pane on" data-pane="etat">
+                <div class="rp-kpis" id="rpKpis"></div>
+                <div class="rp-box">
+                    <h3>Compatibilité et dépendances</h3>
+                    <table id="rpChecks"></table>
+                </div>
+                <div class="rp-row">
+                    <button is="emby-button" type="button" class="raised" id="rpRecompute"><span>Recalculer maintenant</span></button>
+                    <button is="emby-button" type="button" class="raised" id="rpRecheck"><span>Revérifier la compatibilité</span></button>
+                    <span class="mute rp-result">Les calculs complets et le calibrage apparaissent aussi dans Tableau de bord → Tâches planifiées (catégorie Reco+).</span>
+                </div>
+            </div>
+
+            <form id="rpForm">
+                <!-- GÉNÉRAL -->
+                <div class="rp-pane" data-pane="general">
+                    <div class="rp-box"><h3>Ce que Reco+ remplace</h3><p>Chaque interrupteur coupé rend la main à Jellyfin pour cette partie.</p><div class="rp-grid" data-fields="replace"></div></div>
+                    <div class="rp-box"><h3>Rangée d'accueil (Home Screen Sections)</h3><p>À activer aussi dans la configuration de Home Screen Sections.</p><div class="rp-grid" data-fields="hss"></div></div>
+                    <div class="rp-box"><h3>Demandes arrivées</h3><p>Un titre demandé dans Seerr, arrivé récemment et pas encore regardé passe en tête de la liste de ce compte.</p><div class="rp-grid" data-fields="pinned"></div></div>
+                    <details class="rp-adv"><summary>Réglages avancés</summary><div class="rp-box"><div class="rp-grid" data-fields="genadv"></div></div></details>
+                </div>
+
+                <!-- MOTEUR -->
+                <div class="rp-pane" data-pane="moteur">
+                    <p class="rp-sub">Valeurs par défaut = réglage retenu après évaluation sur l'historique de ce serveur. Le garde-fou (bonus de nouveauté et de popularité réservés aux titres qui collent déjà aux goûts du compte) est toujours actif ; la nouveauté est plafonnée à 4. Pour ajuster sur vos données, utilisez plutôt l'onglet Calibrage.</p>
+                    <div class="rp-box"><h3>Historique</h3><p>Combien un titre compte selon son ancienneté.</p><div class="rp-grid" data-fields="hist"></div></div>
+                    <div class="rp-box"><h3>Abandons</h3><p>Un titre commencé puis laissé compte en négatif, avec une marge : on peut regarder un film en deux fois.</p><div class="rp-grid" data-fields="abandon"></div></div>
+                    <div class="rp-box"><h3>Demandes Seerr</h3><p>Signal de court terme : dès que le titre est regardé, c'est ce visionnage qui compte.</p><div class="rp-grid" data-fields="req"></div></div>
+                    <div class="rp-box"><h3>Classement</h3><div class="rp-grid" data-fields="score"></div></div>
+                    <div class="rp-box"><h3>Liste affichée</h3><div class="rp-grid" data-fields="list"></div></div>
+                    <details class="rp-adv"><summary>Réglages avancés (contenu, « vus ensemble », séries)</summary><div class="rp-box"><div class="rp-grid" data-fields="engadv"></div></div></details>
+                    <div class="rp-row"><button is="emby-button" type="button" class="raised" id="rpEngineReset"><span>Remettre les réglages par défaut</span></button></div>
+                </div>
+
+                <!-- SEERR -->
+                <div class="rp-pane" data-pane="seerr">
+                    <div class="rp-box">
+                        <h3>Connexion à Seerr</h3>
+                        <p>Facultatif. Sans Seerr (ou s'il est injoignable), tout le reste fonctionne. La clé est stockée à part (fichier en droits 600) et n'est jamais renvoyée par l'API.</p>
+                        <div class="rp-grid" data-fields="seerr"></div>
+                        <div class="inputContainer">
+                            <label class="inputLabel" for="rpSeerrKey">Clé d'API — <span id="rpSeerrKeyState" class="mute">…</span></label>
+                            <input is="emby-input" type="password" id="rpSeerrKey" autocomplete="new-password" placeholder="laisser vide pour garder la clé enregistrée">
+                        </div>
+                        <div class="rp-row">
+                            <button is="emby-button" type="button" class="raised" id="rpSeerrTest"><span>Tester</span></button>
+                            <button is="emby-button" type="button" class="raised" id="rpSeerrKeyClear"><span>Effacer la clé enregistrée</span></button>
+                        </div>
+                        <div class="rp-result" id="rpSeerrTestResult"></div>
+                    </div>
+                </div>
+
+                <!-- ÉTENDU -->
+                <div class="rp-pane" data-pane="etendu">
+                    <div class="rp-box">
+                        <h3>Titres absents de la bibliothèque</h3>
+                        <p>À partir des recommandations TMDb des titres que chaque compte aime, triés par le même moteur et le même garde-fou. Rien n'est jamais demandé automatiquement. Classification parentale maximale du compte respectée (classification inconnue = exclu si une limite est fixée). Nécessite Seerr.</p>
+                        <div class="rp-grid" data-fields="ext"></div>
+                        <details class="rp-adv"><summary>Réglages avancés</summary><div class="rp-grid" data-fields="extadv"></div></details>
+                    </div>
+                </div>
+
+                <!-- NOTIFICATIONS -->
+                <div class="rp-pane" data-pane="notif">
+                    <div class="rp-box">
+                        <h3>Prévenir quand une partie se coupe</h3>
+                        <p>Toujours : journal d'activité de Jellyfin et bannière rouge sur cette page. En plus, si configuré : webhook. URL et jeton sont des secrets (un sujet ntfy en est un), stockés à part.</p>
+                        <div class="rp-grid" data-fields="notif"></div>
+                        <div class="inputContainer">
+                            <label class="inputLabel" for="rpHookUrl">URL — <span id="rpHookUrlState" class="mute">…</span></label>
+                            <input is="emby-input" type="password" id="rpHookUrl" autocomplete="off" placeholder="laisser vide pour garder l'URL enregistrée">
+                        </div>
+                        <div class="inputContainer">
+                            <label class="inputLabel" for="rpHookToken">Jeton (Gotify : clé d'application ; ntfy : jeton d'accès) — <span id="rpHookTokenState" class="mute">…</span></label>
+                            <input is="emby-input" type="password" id="rpHookToken" autocomplete="off" placeholder="laisser vide pour garder le jeton enregistré">
+                        </div>
+                        <div class="rp-row">
+                            <button is="emby-button" type="button" class="raised" id="rpHookTest"><span>Envoyer un test</span></button>
+                            <button is="emby-button" type="button" class="raised" id="rpHookClear"><span>Effacer URL et jeton enregistrés</span></button>
+                        </div>
+                        <div class="rp-result" id="rpHookTestResult"></div>
+                    </div>
+                </div>
+
+                <div class="rp-save" id="rpSaveBar">
+                    <button is="emby-button" type="submit" class="raised button-submit block"><span>Enregistrer</span></button>
+                </div>
+            </form>
+
+            <!-- CALIBRAGE -->
+            <div class="rp-pane" data-pane="calibrage">
+                <div class="rp-box">
+                    <h3>Calibrage sur l'historique</h3>
+                    <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, le titre figurait-il dans les recommandations calculées juste avant ? Essaie des réglages un par un, dans des bornes sûres (garde-fou non réglable), et ne garde un changement que s'il améliore les deux moitiés de l'historique. Rien n'est appliqué sans votre clic. Quelques minutes de calcul ; visible aussi dans Tâches planifiées.</p>
+                    <div class="rp-row">
+                        <button is="emby-button" type="button" class="raised" id="rpCalStart"><span>Lancer</span></button>
+                        <button is="emby-button" type="button" class="raised" id="rpCalCancel"><span>Interrompre</span></button>
+                        <span id="rpCalState" class="mute rp-result"></span>
+                    </div>
+                </div>
+                <div class="rp-box" id="rpCalReportBox" style="display:none">
+                    <h3>Résultat</h3>
+                    <div id="rpCalReport"></div>
+                    <div class="rp-row">
+                        <button is="emby-button" type="button" class="raised" id="rpCalApply"><span>Appliquer le réglage proposé</span></button>
+                        <button is="emby-button" type="button" class="raised" id="rpCalRollback"><span>Revenir au réglage précédent</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- APERÇU -->
+            <div class="rp-pane" data-pane="apercu">
+                <div class="rp-box">
+                    <h3>Ce que voit un compte</h3>
+                    <div class="rp-row">
+                        <select is="emby-select" id="rpPreviewUser"></select>
+                        <button is="emby-button" type="button" class="raised" id="rpPreviewBtn"><span>Afficher</span></button>
+                    </div>
+                    <div class="rp-grid" style="margin-top:1em">
+                        <div><h3>Bibliothèque</h3><ol id="rpPreviewList"></ol></div>
+                        <div><h3>Mode étendu</h3><ol id="rpPreviewExt"></ol></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        'use strict';
+        var pluginId = '6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8';
+        var page = document.querySelector('#RecoPlusConfigPage');
+        var timer = null;
+
+        // [clé, libellé, type, aide, pas, min, max, groupe, cible (c = configuration, e = moteur)]
+        var F = [
+            ['Enabled', 'Plugin actif', 'bool', 'Coupé : Jellyfin se comporte exactement comme sans le plugin.', 0, 0, 0, 'replace', 'c'],
+            ['OverrideMovieRecommendations', 'Recommandations de films', 'bool', 'Onglet Suggestions des films, Media Bar…', 0, 0, 0, 'replace', 'c'],
+            ['OverrideSuggestions', 'Suggestions', 'bool', 'Aujourd\'hui dans Jellyfin : du hasard.', 0, 0, 0, 'replace', 'c'],
+            ['OverrideSimilar', '« Plus comme ceci »', 'bool', 'Films et séries (Jellyfin : séries au hasard).', 0, 0, 0, 'replace', 'c'],
+            ['SimilarPersonalization', 'Personnalisation de « Plus comme ceci »', 'num', '0 = pure ressemblance, 1 = surtout les goûts du compte.', 0.05, 0, 1, 'replace', 'c'],
+            ['HssSection', 'Rangée « Pour toi »', 'bool', '', 0, 0, 0, 'hss', 'c'],
+            ['HssSectionTitle', 'Titre de la rangée', 'text', '', 0, 0, 0, 'hss', 'c'],
+            ['PinnedRequests', 'Nombre de titres placés en tête', 'int', '0 = jamais.', 1, 0, 20, 'pinned', 'c'],
+            ['PinnedMaxDays', 'Pendant (jours après l\'arrivée)', 'int', '', 1, 1, 365, 'pinned', 'c'],
+            ['ListSize', 'Taille de la liste par compte', 'int', '', 10, 20, 1000, 'genadv', 'c'],
+            ['DebounceSeconds', 'Recalcul d\'un compte après une lecture (s)', 'int', 'Regroupe les lectures rapprochées.', 10, 10, 3600, 'genadv', 'c'],
+            ['PlaybackReportingDbPath', 'Base Playback Reporting', 'text', 'Vide = détection automatique. Date précisément l\'historique pour le calibrage.', 0, 0, 0, 'genadv', 'c'],
+
+            ['HalfLifeDays', 'Demi-vie (jours)', 'num', 'Âge auquel un titre compte moitié moins. Référence MovieLens : 92 j.', 1, 7, 3650, 'hist', 'e'],
+            ['Decay', 'Forme', 'enum:Exponential=exponentielle,Power=puissance', '', 0, 0, 0, 'hist', 'e'],
+            ['RecencyFloor', 'Poids minimal d\'un titre ancien', 'num', '', 0.05, 0, 1, 'hist', 'e'],
+            ['FavoriteBoost', 'Bonus d\'un favori', 'num', '', 0.1, 0, 5, 'hist', 'e'],
+            ['MovieDone', 'Film « vu » au-delà de', 'num', 'Part du film (0-1).', 0.05, 0.3, 1, 'abandon', 'e'],
+            ['Zap', 'Simple zapping en dessous de', 'num', 'Part du film (0-1) : ni aimé ni abandonné.', 0.01, 0, 0.3, 'abandon', 'e'],
+            ['AbandonDays', 'Marge (jours sans reprise)', 'num', 'Avant cette durée, un titre commencé est « en cours », pas abandonné.', 1, 1, 365, 'abandon', 'e'],
+            ['AbandonWeight', 'Poids négatif d\'un abandon', 'num', '', 0.1, 0, 2, 'abandon', 'e'],
+            ['WNegative', 'Écart aux titres abandonnés', 'num', 'Pénalise ce qui ressemble à un abandon.', 0.1, 0, 10, 'abandon', 'e'],
+            ['RequestWeight', 'Poids d\'une demande', 'num', '', 0.1, 0, 2, 'req', 'e'],
+            ['RequestHalfLifeDays', 'Demi-vie d\'une demande (jours)', 'num', '', 1, 1, 365, 'req', 'e'],
+            ['RequestMaxDays', 'Ne compte plus après (jours)', 'num', '', 1, 1, 730, 'req', 'e'],
+            ['WMaxSim', 'Proche d\'un titre aimé', 'num', '', 0.1, 0, 10, 'score', 'e'],
+            ['WCentroid', 'Proche du profil d\'ensemble', 'num', '', 0.1, 0, 10, 'score', 'e'],
+            ['WCollab', '« Vus ensemble » dans le foyer', 'num', '', 0.1, 0, 10, 'score', 'e'],
+            ['WFresh', 'Nouveauté', 'num', 'Bonus réservé ; plafond 4.', 0.1, 0, 4, 'score', 'e'],
+            ['FreshDays', 'Échelle de nouveauté (jours)', 'num', '', 1, 1, 365, 'score', 'e'],
+            ['WPopularity', 'Popularité dans le foyer', 'num', 'Bonus réservé.', 0.1, 0, 10, 'score', 'e'],
+            ['WQuality', 'Note de la communauté', 'num', 'Bonus réservé.', 0.05, 0, 10, 'score', 'e'],
+            ['GateTop', 'Bonus réservés aux N premiers par goût', 'int', 'Garde-fou : un titre hors de ces N n\'a aucun bonus.', 5, 5, 500, 'score', 'e'],
+            ['Mmr', 'Diversité', 'num', '0,3 ≈ « rester pertinent » (Carbonell & Goldstein, 1998).', 0.05, 0, 2, 'list', 'e'],
+            ['Saga', 'Règle de saga', 'bool', 'Une seule entrée par saga, et le premier volet pas encore vu.', 0, 0, 0, 'list', 'e'],
+            ['SagaMax', 'Au-delà : regroupement thématique', 'int', 'Collection plus grande = 2 entrées au plus.', 1, 2, 100, 'list', 'e'],
+            ['Weighting', 'Pondération du contenu', 'enum:TfIdf=TF-IDF,Bm25=BM25', '', 0, 0, 0, 'engadv', 'e'],
+            ['Actors', 'Acteurs pris en compte', 'int', '', 1, 0, 30, 'engadv', 'e'],
+            ['Shrink', 'Rétrécissement de « vus ensemble »', 'num', '', 1, 0, 1000, 'engadv', 'e'],
+            ['MinCommon', 'Spectateurs communs minimum', 'int', '', 1, 1, 50, 'engadv', 'e'],
+            ['SeriesFullEpisodes', 'Épisodes pour qu\'une série compte pleinement', 'int', '', 1, 1, 200, 'engadv', 'e'],
+            ['SeriesAbandonEpisodes', 'Série abandonnée si au plus … épisodes vus', 'int', '', 1, 0, 20, 'engadv', 'e'],
+            ['SeriesAbandonFraction', '… et moins de cette part de la série', 'num', '', 0.01, 0, 1, 'engadv', 'e'],
+            ['SeriesMinEpisodes', '… dans une série d\'au moins … épisodes', 'int', '', 1, 1, 500, 'engadv', 'e'],
+            ['WTmdbAgreement', 'Accord TMDb (mode étendu)', 'num', 'Bonus réservé.', 0.1, 0, 10, 'engadv', 'e'],
+
+            ['SeerrEnabled', 'Utiliser Seerr', 'bool', '', 0, 0, 0, 'seerr', 'c'],
+            ['SeerrUrl', 'URL vue depuis le serveur Jellyfin', 'text', 'ex. http://jellyseerr:5055', 0, 0, 0, 'seerr', 'c'],
+            ['SeerrPublicUrl', 'URL publique (liens)', 'text', 'Vide = la même.', 0, 0, 0, 'seerr', 'c'],
+            ['SeerrLanguage', 'Langue TMDb', 'text', 'Celle des métadonnées de la bibliothèque (genres).', 0, 0, 0, 'seerr', 'c'],
+            ['RatingCountry', 'Pays des classifications', 'text', 'ex. FR', 0, 0, 0, 'seerr', 'c'],
+
+            ['ExtendedEnabled', 'Activer le mode étendu', 'bool', '', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedHomeRow', 'Rangée sur l\'accueil', 'bool', 'Script ajouté à l\'interface web (aucun fichier modifié).', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedTitle', 'Titre de la rangée', 'text', '', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedRequestButton', 'Bouton « Demander »', 'bool', 'Au nom de l\'utilisateur, avec ses droits et quotas Seerr.', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedCount', 'Titres proposés', 'int', '', 1, 1, 100, 'ext', 'c'],
+            ['ExtendedAnchors', 'Titres aimés servant de point de départ', 'int', '', 1, 1, 50, 'extadv', 'c'],
+            ['ExtendedDetails', 'Candidats détaillés par compte', 'int', 'Appels à Seerr, mis en cache 14 jours.', 5, 10, 300, 'extadv', 'c'],
+
+            ['Webhook', 'Type', 'enum:None=aucun,Ntfy=ntfy,Gotify=Gotify,Discord=Discord,Json=JSON générique', '', 0, 0, 0, 'notif', 'c']
+        ];
+
+        function el(tag, attrs, text) {
+            var e = document.createElement(tag);
+            Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+            if (text !== undefined && text !== null) { e.textContent = text; }
+            return e;
+        }
+        function $(s) { return page.querySelector(s); }
+        function fid(f) { return 'rp_' + f[8] + '_' + f[0]; }
+
+        function build() {
+            F.forEach(function (f) {
+                var host = page.querySelector('[data-fields="' + f[7] + '"]');
+                var id = fid(f), type = f[2], wrap;
+                if (type === 'bool') {
+                    wrap = el('div', { 'class': 'checkboxContainer checkboxContainer-withDescription' });
+                    var lab = el('label');
+                    lab.appendChild(el('input', { type: 'checkbox', is: 'emby-checkbox', id: id }));
+                    lab.appendChild(el('span', {}, f[1]));
+                    wrap.appendChild(lab);
+                } else if (type.indexOf('enum:') === 0) {
+                    wrap = el('div', { 'class': 'selectContainer' });
+                    wrap.appendChild(el('label', { 'class': 'selectLabel', 'for': id }, f[1]));
+                    var sel = el('select', { is: 'emby-select', id: id });
+                    type.substring(5).split(',').forEach(function (o) { var kv = o.split('='); sel.appendChild(el('option', { value: kv[0] }, kv[1])); });
+                    wrap.appendChild(sel);
+                } else {
+                    wrap = el('div', { 'class': 'inputContainer' });
+                    wrap.appendChild(el('label', { 'class': 'inputLabel', 'for': id }, f[1]));
+                    var a = { is: 'emby-input', id: id, type: type === 'text' ? 'text' : 'number' };
+                    if (type !== 'text') { a.step = f[4]; a.min = f[5]; a.max = f[6]; }
+                    wrap.appendChild(el('input', a));
+                }
+                if (f[3]) { wrap.appendChild(el('div', { 'class': 'fieldDescription' }, f[3])); }
+                host.appendChild(wrap);
+            });
+        }
+
+        function fill(cfg) {
+            F.forEach(function (f) {
+                var src = f[8] === 'e' ? (cfg.Engine || {}) : cfg, e = $('#' + fid(f)), v = src[f[0]];
+                if (f[2] === 'bool') { e.checked = !!v; } else { e.value = v === null || v === undefined ? '' : v; }
+            });
+        }
+
+        function read(cfg) {
+            cfg.Engine = cfg.Engine || {};
+            F.forEach(function (f) {
+                var dst = f[8] === 'e' ? cfg.Engine : cfg, e = $('#' + fid(f));
+                if (f[2] === 'bool') { dst[f[0]] = e.checked; }
+                else if (f[2] === 'int') { dst[f[0]] = parseInt(e.value, 10); }
+                else if (f[2] === 'num') { dst[f[0]] = parseFloat(String(e.value).replace(',', '.')); }
+                else { dst[f[0]] = String(e.value).trim(); }
+            });
+        }
+
+        function api(method, path, body) {
+            return ApiClient.ajax({ type: method, url: ApiClient.getUrl('RecoPlus/' + path), data: body ? JSON.stringify(body) : undefined, contentType: 'application/json', dataType: 'json' });
+        }
+        function pct(x) { return (x * 100).toFixed(1) + ' %'; }
+        function pts(x) { return (x >= 0 ? '+' : '') + (x * 100).toFixed(1) + ' pts'; }
+        function when(s) { return s ? new Date(s).toLocaleString() : 'jamais'; }
+        function kpi(label, value) { var d = el('div', { 'class': 'rp-kpi' }); d.appendChild(el('span', {}, label)); d.appendChild(el('b', {}, value)); return d; }
+
+        function renderStatus(s) {
+            $('#rpVersion').textContent = 'version ' + s.version;
+            var al = $('#rpAlerts'); al.innerHTML = '';
+            (s.alerts || []).forEach(function (a) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, '⚠ ' + a.Title)); d.appendChild(el('span', {}, a.Message)); al.appendChild(d); });
+            var e = s.engine || {}, k = $('#rpKpis'); k.innerHTML = '';
+            k.appendChild(kpi('Calcul complet', e.Running ? 'en cours…' : when(e.LastFullRun) + (e.LastFullRunSeconds ? ' (' + e.LastFullRunSeconds + ' s)' : '')));
+            k.appendChild(kpi('Comptes prêts', String(e.UsersWithRecs)));
+            k.appendChild(kpi('Dernier calcul d\'un compte', when(e.LastUserRun)));
+            k.appendChild(kpi('Playback Reporting', e.PlaybackReporting));
+            k.appendChild(kpi('Seerr', e.Seerr));
+            k.appendChild(kpi('Rangée d\'accueil', s.hss));
+            if (e.LastError) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, 'Dernière erreur de calcul')); d.appendChild(el('span', {}, e.LastError)); al.appendChild(d); }
+            var t = $('#rpChecks'); t.innerHTML = '';
+            (s.checks || []).forEach(function (c) { var tr = el('tr'); tr.appendChild(el('td', { 'class': c.ok ? 'ok' : 'ko' }, c.ok ? '✔' : '✖')); tr.appendChild(el('td', {}, c.check)); tr.appendChild(el('td', { 'class': 'mute' }, c.detail)); t.appendChild(tr); });
+            Object.keys(s.disabled || {}).forEach(function (n) { var tr = el('tr'); tr.appendChild(el('td', { 'class': 'ko' }, '⏻')); tr.appendChild(el('td', {}, 'Coupé : ' + n)); tr.appendChild(el('td', { 'class': 'mute' }, s.disabled[n])); t.appendChild(tr); });
+            $('#rpSeerrKeyState').textContent = s.secrets.seerrApiKey;
+            $('#rpHookUrlState').textContent = s.secrets.webhookUrl;
+            $('#rpHookTokenState').textContent = s.secrets.webhookToken;
+
+            var cal = s.calibration || {};
+            $('#rpCalState').textContent = cal.running ? ('en cours : ' + cal.progress + ' %') : (cal.error ? ('erreur : ' + cal.error) : (cal.at ? ('dernier résultat : ' + when(cal.at)) : 'jamais lancé'));
+            var box = $('#rpCalReportBox'), rep = $('#rpCalReport');
+            box.style.display = cal.report ? '' : 'none';
+            rep.innerHTML = '';
+            if (cal.report) {
+                var r = cal.report, tb = el('table');
+                [['', 'Trouvé dans le top 10', 'top 20'], ['Réglage actuel', pct(r.current.hit10), pct(r.current.hit20)], ['Réglage proposé', pct(r.proposed.hit10), pct(r.proposed.hit20)]].forEach(function (row, i) {
+                    var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); tb.appendChild(tr);
+                });
+                rep.appendChild(tb);
+                rep.appendChild(el('p', { 'class': 'mute' }, r.current.events + ' cas sur ' + r.current.accounts + ' comptes ; écart top 10, intervalle de confiance à 95 % : [' + pts(r.ciLow) + ' ; ' + pts(r.ciHigh) + '].'));
+                rep.appendChild(el('p', { 'class': r.recommended ? 'ok' : '' }, r.verdict));
+                if (r.steps && r.steps.length) {
+                    var ul = el('ul'); r.steps.forEach(function (st) { ul.appendChild(el('li', {}, st.Parameter + ' → ' + st.Value)); });
+                    rep.appendChild(el('div', { 'class': 'mute' }, 'Changements proposés :')); rep.appendChild(ul);
+                }
+            }
+            $('#rpCalApply').disabled = !(cal.report && !cal.running);
+            $('#rpCalRollback').disabled = !s.canRollback;
+
+            var sel = $('#rpPreviewUser'), cur = sel.value; sel.innerHTML = '';
+            (s.users || []).forEach(function (u) { sel.appendChild(el('option', { value: u.id }, u.name + (u.ready ? '' : ' (pas encore calculé)'))); });
+            if (cur) { sel.value = cur; }
+        }
+
+        function refresh() {
+            return api('GET', 'Status').then(renderStatus).catch(function () { $('#rpVersion').textContent = '(état indisponible)'; });
+        }
+        function load() {
+            Dashboard.showLoadingMsg();
+            ApiClient.getPluginConfiguration(pluginId).then(function (cfg) { fill(cfg); Dashboard.hideLoadingMsg(); });
+            refresh();
+        }
+        function say(id, ok, text) { var e = $('#' + id); e.className = 'rp-result ' + (ok === null ? 'mute' : (ok ? 'ok' : 'ko')); e.textContent = text; }
+
+        // onglets
+        page.querySelectorAll('.rp-tab').forEach(function (b) {
+            b.addEventListener('click', function () {
+                page.querySelectorAll('.rp-tab').forEach(function (x) { x.classList.toggle('on', x === b); });
+                page.querySelectorAll('.rp-pane').forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-pane') === b.getAttribute('data-tab')); });
+                var formTab = ['general', 'moteur', 'seerr', 'etendu', 'notif'].indexOf(b.getAttribute('data-tab')) >= 0;
+                $('#rpSaveBar').style.display = formTab ? '' : 'none';
+            });
+        });
+        $('#rpSaveBar').style.display = 'none';
+
+        build();
+
+        // Un seul « Enregistrer » : réglages + secrets saisis
+        $('#rpForm').addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            Dashboard.showLoadingMsg();
+            var secrets = [['SeerrApiKey', '#rpSeerrKey'], ['WebhookUrl', '#rpHookUrl'], ['WebhookToken', '#rpHookToken']]
+                .filter(function (p) { return $(p[1]).value; });
+            var chain = Promise.resolve();
+            secrets.forEach(function (p) { chain = chain.then(function () { return api('POST', 'Secret', { Name: p[0], Value: $(p[1]).value }); }); });
+            chain.then(function () { return ApiClient.getPluginConfiguration(pluginId); })
+                .then(function (cfg) { read(cfg); return ApiClient.updatePluginConfiguration(pluginId, cfg); })
+                .then(function (r) { secrets.forEach(function (p) { $(p[1]).value = ''; }); Dashboard.processPluginConfigurationUpdateResult(r); refresh(); })
+                .catch(function () { Dashboard.hideLoadingMsg(); Dashboard.alert('Enregistrement impossible.'); });
+            return false;
+        });
+
+        // Tests : avec ce qui est saisi, sans rien enregistrer
+        $('#rpSeerrTest').addEventListener('click', function () {
+            say('rpSeerrTestResult', null, 'test en cours…');
+            api('POST', 'TestSeerr', { Url: $('#rp_c_SeerrUrl').value, ApiKey: $('#rpSeerrKey').value })
+                .then(function (r) { say('rpSeerrTestResult', r.ok, (r.ok ? '✔ ' : '✖ ') + r.message + (r.ok ? ' — pensez à Enregistrer.' : '')); },
+                      function () { say('rpSeerrTestResult', false, '✖ échec de l\'appel'); });
+        });
+        $('#rpHookTest').addEventListener('click', function () {
+            say('rpHookTestResult', null, 'envoi…');
+            api('POST', 'TestWebhook', { Kind: $('#rp_c_Webhook').value, Url: $('#rpHookUrl').value, Token: $('#rpHookToken').value })
+                .then(function (r) { say('rpHookTestResult', r.message === 'envoyé', r.message); }, function () { say('rpHookTestResult', false, 'échec de l\'appel'); });
+        });
+        $('#rpSeerrKeyClear').addEventListener('click', function () {
+            if (confirm('Effacer la clé Seerr enregistrée ?')) { api('POST', 'Secret', { Name: 'SeerrApiKey', Value: '' }).then(refresh); }
+        });
+        $('#rpHookClear').addEventListener('click', function () {
+            if (confirm('Effacer l\'URL et le jeton enregistrés ?')) {
+                api('POST', 'Secret', { Name: 'WebhookUrl', Value: '' }).then(function () { return api('POST', 'Secret', { Name: 'WebhookToken', Value: '' }); }).then(refresh);
+            }
+        });
+
+        $('#rpRecompute').addEventListener('click', function () { api('POST', 'Recompute').then(refresh, refresh); });
+        $('#rpRecheck').addEventListener('click', function () { api('POST', 'Checks').then(refresh, refresh); });
+        $('#rpEngineReset').addEventListener('click', function () {
+            if (confirm('Remettre les réglages du moteur par défaut ? (l\'actuel est gardé pour revenir en arrière)')) { api('POST', 'Engine/Reset').then(load, load); }
+        });
+        $('#rpCalStart').addEventListener('click', function () { api('POST', 'Calibration/Start').then(refresh, refresh); });
+        $('#rpCalCancel').addEventListener('click', function () { api('POST', 'Calibration/Cancel').then(refresh, refresh); });
+        $('#rpCalApply').addEventListener('click', function () {
+            if (confirm('Appliquer le réglage proposé ? (l\'actuel est gardé pour revenir en arrière)')) { api('POST', 'Calibration/Apply').then(load, load); }
+        });
+        $('#rpCalRollback').addEventListener('click', function () { api('POST', 'Calibration/Rollback').then(load, load); });
+        $('#rpPreviewBtn').addEventListener('click', function () {
+            api('GET', 'Preview?userId=' + encodeURIComponent($('#rpPreviewUser').value)).then(function (r) {
+                var ol = $('#rpPreviewList'), ox = $('#rpPreviewExt'); ol.innerHTML = ''; ox.innerHTML = '';
+                (r.items || []).forEach(function (n) { ol.appendChild(el('li', {}, n)); });
+                if (!r.items || !r.items.length) { ol.appendChild(el('li', { 'class': 'mute' }, 'pas encore calculé')); }
+                (r.extended || []).forEach(function (n) { ox.appendChild(el('li', {}, n)); });
+                if (!r.extended || !r.extended.length) { ox.appendChild(el('li', { 'class': 'mute' }, 'désactivé ou vide')); }
+            });
+        });
+
+        page.addEventListener('pageshow', function () { load(); clearInterval(timer); timer = setInterval(refresh, 5000); });
+        page.addEventListener('pagehide', function () { clearInterval(timer); });
+    })();
+    </script>
+</div>
+</body>
+</html>

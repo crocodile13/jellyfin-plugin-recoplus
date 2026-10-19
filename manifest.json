@@ -1,0 +1,20 @@
+[
+  {
+    "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
+    "name": "Reco+",
+    "description": "Personal recommendations that replace Jellyfin's own: full watch history, abandoned titles counted negatively (with a margin), saga-aware lists, Seerr requests as a short-term signal, optional suggestions from outside the library, manual calibration on your own history. Precomputed and cached; parts that no longer match the Jellyfin version switch themselves off and notify.",
+    "overview": "Personal recommendations for Jellyfin 12, computed in the background from each account's history.",
+    "owner": "crocodile13",
+    "category": "General",
+    "versions": [
+      {
+        "version": "1.0.1.0",
+        "changelog": "1.0.1 : historique lu en une seule requête légère (corrige la saturation mémoire de Jellyfin causée par les requêtes favoris par compte) ; demandes = signal de court terme, en tête seulement après une arrivée récente ; calculs visibles dans Tâches planifiées ; tests Seerr/webhook avec les valeurs saisies ; un seul bouton Enregistrer ; page réorganisée en onglets ; Jellyseerr → Seerr.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      }
+    ]
+  }
+]
