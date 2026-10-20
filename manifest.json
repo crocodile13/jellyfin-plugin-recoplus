@@ -11,9 +11,9 @@
         "version": "1.0.4.0",
         "changelog": "1.0.4 : favoris au bon niveau (série, saison, épisodes) ; avis Jellyfin Enhanced et note ou pouce Jellyfin pris en compte dans les deux sens ; titres masqués jamais reproposés ; liste de suivi Seerr ; un titre seulement voulu reste proposable ; nouvelle saison d'une série aimée en tête ; confiance dans les notes selon le nombre de votes (moyenne bayésienne) ; avis du foyer ; calibrage refait : mesure par rang, cas pondérés, recherche par grille et section dorée, validation croisée par comptes, évaluations deux fois plus rapides et en parallèle ; en option (coupés par défaut) : revisionnages, sortie récente, note des critiques, langue originale et pays ; un curseur ne tronque plus une valeur venue du calibrage.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.4.0/RecoPlus_1.0.4.0.zip",
+        "checksum": "fddc67ab08e7b143fdb4810ba40cf391",
+        "timestamp": "2026-10-20T09:05:15Z"
       },
       {
         "version": "1.0.3.0",
