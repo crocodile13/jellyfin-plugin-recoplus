@@ -62,6 +62,13 @@ public sealed class SeerrService
     private volatile bool _loaded;
     private int _dirty;
 
+    // coupe-circuit : après quelques échecs d'affilée « Seerr ne répond pas » (délai dépassé, connexion refusée, erreur 5xx),
+    // plus aucun appel pendant quelques minutes, au lieu d'attendre 20 s par fiche ou liste (des centaines par calcul)
+    private const int MaxStrikes = 3;
+    private static readonly TimeSpan DownFor = TimeSpan.FromMinutes(5);
+    private int _strikes;
+    private long _downUntil;
+
     public SeerrService(IHttpClientFactory http, SecretStore secrets, ILogger<SeerrService> log)
     {
         _http = http;
@@ -139,6 +146,10 @@ public sealed class SeerrService
                 catch (Exception ex) when (ex is SeerrException or HttpRequestException or JsonException || (ex is TaskCanceledException && !ct.IsCancellationRequested))
                 {
                     watchErrors++;
+                    if (Unreachable(ex, ct))
+                    {
+                        break; // Seerr ne répond plus : inutile d'attendre 20 s par compte
+                    }
                 }
             }
 
@@ -250,6 +261,32 @@ public sealed class SeerrService
         }
     }
 
+    /// <summary>Seerr ne répond plus (coupe-circuit ouvert) : les appels sont sautés jusqu'à la fin du délai.</summary>
+    public bool Down => DateTime.UtcNow.Ticks < Interlocked.Read(ref _downUntil);
+
+    // Seerr injoignable ou en panne (pas une fiche introuvable ni une réponse illisible)
+    private static bool Unreachable(Exception ex, CancellationToken ct)
+        => ex is HttpRequestException || (ex is OperationCanceledException && !ct.IsCancellationRequested)
+            || ex is SeerrException { Status: >= System.Net.HttpStatusCode.InternalServerError };
+
+    private void Answered() => Interlocked.Exchange(ref _strikes, 0);
+
+    private void Failed(Exception ex, CancellationToken ct)
+    {
+        if (!Unreachable(ex, ct))
+        {
+            Answered(); // Seerr a répondu (404, JSON inattendu…) : il est joignable
+            return;
+        }
+
+        if (Interlocked.Increment(ref _strikes) >= MaxStrikes && !Down)
+        {
+            Interlocked.Exchange(ref _downUntil, (DateTime.UtcNow + DownFor).Ticks);
+            Interlocked.Exchange(ref _strikes, 0);
+            _log.LogWarning("Reco+ : Seerr ne répond plus ({Msg}) ; appels suspendus {Min} min, le calcul continue sans", ex.Message, DownFor.TotalMinutes);
+        }
+    }
+
     // délai dépassé chez Seerr (HttpClient) : un échec comme un autre, sauf si c'est le calcul qui est annulé
     private static bool Transient(Exception ex, CancellationToken ct)
         => ex is SeerrException or HttpRequestException or JsonException || (ex is OperationCanceledException && !ct.IsCancellationRequested);
@@ -281,7 +318,13 @@ public sealed class SeerrService
         await _throttle.WaitAsync(ct).ConfigureAwait(false);
         try
         {
+            if (Down)
+            {
+                return d;
+            }
+
             d = await cl.DetailsAsync(mediaType, tmdbId, Plugin.Instance!.Configuration.SeerrLanguage, ct).ConfigureAwait(false);
+            Answered();
             _details[key] = d;
             _failed.TryRemove(key, out _);
             Interlocked.Exchange(ref _dirty, 1);
@@ -289,6 +332,7 @@ public sealed class SeerrService
         }
         catch (Exception ex) when (Transient(ex, ct))
         {
+            Failed(ex, ct);
             _failed[key] = DateTime.UtcNow + (ex is SeerrException { Status: System.Net.HttpStatusCode.NotFound } ? MissingTtl : FailedTtl);
             _log.LogDebug("Reco+ : fiche {Key} indisponible ({Msg})", key, ex.Message);
             return null;
@@ -319,13 +363,20 @@ public sealed class SeerrService
                 await _throttle.WaitAsync(ct).ConfigureAwait(false);
                 try
                 {
+                    if (Down)
+                    {
+                        break;
+                    }
+
                     var items = await cl.RelatedAsync(mediaType, tmdbId, rel, Plugin.Instance!.Configuration.SeerrLanguage, page, ct).ConfigureAwait(false);
+                    Answered();
                     got = items.Count;
                     anyOk = true;
                     all.AddRange(items);
                 }
                 catch (Exception ex) when (Transient(ex, ct))
                 {
+                    Failed(ex, ct);
                     _log.LogDebug("Reco+ : {Rel} de {Key} (page {Page}) indisponible ({Msg})", rel, key, page, ex.Message);
                 }
                 finally
@@ -380,12 +431,19 @@ public sealed class SeerrService
         await _throttle.WaitAsync(ct).ConfigureAwait(false);
         try
         {
+            if (Down)
+            {
+                return new List<SeerrResult>();
+            }
+
             var items = await fetch(ct).ConfigureAwait(false);
+            Answered();
             _lists[key] = (DateTime.UtcNow, items);
             return items;
         }
         catch (Exception ex) when (Transient(ex, ct))
         {
+            Failed(ex, ct);
             _failed["l:" + key] = DateTime.UtcNow + (ex is SeerrException { Status: System.Net.HttpStatusCode.NotFound } ? MissingTtl : FailedTtl);
             _log.LogDebug("Reco+ : liste {Key} indisponible ({Msg})", key, ex.Message);
             return new List<SeerrResult>();

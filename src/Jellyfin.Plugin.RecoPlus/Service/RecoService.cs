@@ -609,7 +609,13 @@ public sealed class RecoService : IDisposable
             for (int i = 0; i < extTargets.Count; i++)
             {
                 ct.ThrowIfCancellationRequested();
-                extCands[extTargets[i].Id.ToString("N")] = await ExtendedCandidates(extTargets[i], ctx, lib, tmdbOf, seerr, cl, titles, colls, cfg, ct).ConfigureAwait(false);
+                var explored = await ExtendedCandidates(extTargets[i], ctx, lib, tmdbOf, seerr, cl, titles, colls, cfg, ct).ConfigureAwait(false);
+                if (_seerr.Down)
+                {
+                    break; // Seerr a lâché en route : ce compte et les suivants gardent leurs titres hors bibliothèque précédents
+                }
+
+                extCands[extTargets[i].Id.ToString("N")] = explored;
                 progress?.Report(40 + (20.0 * (i + 1) / extTargets.Count));
             }
 

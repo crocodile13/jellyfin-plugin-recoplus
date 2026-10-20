@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Service;
 
@@ -83,7 +84,7 @@ public sealed class UserRecs
     public List<ExternalRec> Extended { get; set; } = new();
 
     /// <summary>Bilan de la dernière exploration, par source (aperçu de la configuration).</summary>
-    public Dictionary<string, RecoPlus.Engine.SourceStat> Sources { get; set; } = new(StringComparer.Ordinal);
+    public Dictionary<string, SourceStat> Sources { get; set; } = new(StringComparer.Ordinal);
 
     /// <summary>Compte Jellyseerr lié (0 = aucun : pas de bouton Demander).</summary>
     public int SeerrUserId { get; set; }
