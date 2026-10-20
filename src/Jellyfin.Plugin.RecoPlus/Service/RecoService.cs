@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Database.Implementations.Entities;
 using Jellyfin.Plugin.RecoPlus.Data;
+using Jellyfin.Plugin.RecoPlus.Integration;
 using Jellyfin.Plugin.RecoPlus.Seerr;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Globalization;
@@ -58,6 +59,7 @@ public sealed class RecoService
     private readonly SemaphoreSlim _gate = new(1, 1);
     private readonly JellyfinEnhancedReader _je;
     private readonly ImpressionStore _impressions;
+    private readonly IServiceProvider _services;
     private readonly ConcurrentDictionary<string, UserRecs> _recs = new(StringComparer.Ordinal);
     private Dictionary<string, Dictionary<string, Interaction>> _lastHist = new(StringComparer.Ordinal);
     private IReadOnlyDictionary<(Guid, Guid), double>? _prCache;
@@ -65,8 +67,9 @@ public sealed class RecoService
     private bool _loaded;
 
     public RecoService(LibraryIndex index, UserHistory history, UserDataReader userData, PlaybackReportingReader pr, SeerrService seerr,
-        JellyfinEnhancedReader je, ImpressionStore impressions, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log)
+        JellyfinEnhancedReader je, ImpressionStore impressions, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log, IServiceProvider services)
     {
+        _services = services;
         _je = je;
         _impressions = impressions;
         _index = index;
@@ -551,6 +554,9 @@ public sealed class RecoService
 
             r.Pinned = pinned;
 
+            // rangées que HSS montre à ce compte : les autres ne « réservent » aucun titre
+            var rowOpts = RowOptionsOf(cfg, HomeScreenSectionsIntegration.EnabledFor(_services, u.Id));
+
             // montré sans être ouvert (seulement ce que le compte a vraiment vu à l'écran)
             var expo = cfg.TrackImpressions && s.WImpression > 0 ? _impressions.For(key, now) : null;
             if (cands.Count > 0)
@@ -570,7 +576,7 @@ public sealed class RecoService
                     // rangées d'accueil supplémentaires, sans doublons entre elles ni avec « Pour toi »
                     var shownSet = new HashSet<string>(shaped, StringComparer.Ordinal);
                     var ordered = shaped.Concat(pool.Where(id => !shownSet.Contains(id)).OrderByDescending(id => sc[id]).ThenBy(id => id, StringComparer.Ordinal)).ToList();
-                    var home = HomeRows.Allocate(ctx, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, RowOptionsOf(cfg));
+                    var home = HomeRows.Allocate(ctx, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, rowOpts);
                     var view = new SlotRecs
                     {
                         Ranked = shaped,
@@ -653,16 +659,32 @@ public sealed class RecoService
         return t => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UnixEpoch.AddSeconds(t), tz).Hour;
     }
 
-    /// <summary>Rangées d'accueil demandées dans la configuration.</summary>
-    internal static RowOptions RowOptionsOf(Configuration.PluginConfiguration cfg) => new()
+    /// <summary>
+    /// Rangées d'accueil à remplir pour un compte : celles que Home Screen Sections lui affiche (null = toutes, si HSS
+    /// ne dit rien). « Pour toi » est toujours remplie (Suggestions, mode étendu).
+    /// </summary>
+    internal static RowOptions RowOptionsOf(Configuration.PluginConfiguration cfg, HashSet<string>? shown)
     {
-        Size = Math.Clamp(cfg.RowSize, 5, 60),
-        Movies = cfg.RowMovies,
-        Series = cfg.RowSeries,
-        New = cfg.RowNew,
-        NewDays = Math.Clamp(cfg.RowNewDays, 1, 365),
-        Because = Math.Clamp(cfg.RowBecause, 0, 3),
-    };
+        bool On(string row) => shown is null || shown.Contains(row);
+        int because = 0;
+        for (int i = 1; i <= 3; i++)
+        {
+            if (On(HomeRows.ParceQue + i))
+            {
+                because = i;
+            }
+        }
+
+        return new RowOptions
+        {
+            Size = Math.Clamp(cfg.RowSize, 5, 60),
+            Movies = On(HomeRows.Films),
+            Series = On(HomeRows.Series),
+            New = On(HomeRows.Nouveautes),
+            NewDays = Math.Clamp(cfg.RowNewDays, 1, 365),
+            Because = because,
+        };
+    }
 
     /// <summary>Jeu de données pour le calibrage : bibliothèque + historiques complets (sans Seerr).</summary>
     public Dataset BuildCalibrationDataset()

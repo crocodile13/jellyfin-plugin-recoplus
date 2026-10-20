@@ -86,7 +86,7 @@ public sealed class CompatibilityGuard : IHostedService
             Feature.MovieRecommendations => c.OverrideMovieRecommendations,
             Feature.Suggestions => c.OverrideSuggestions,
             Feature.Similar => c.OverrideSimilar,
-            Feature.HomeScreenSection => c.HssSection,
+            Feature.HomeScreenSection => true,          // les rangées affichées se choisissent dans Home Screen Sections
             Feature.ClientScript => c.ExtendedEnabled && c.ExtendedHomeRow,
             _ => false,
         };

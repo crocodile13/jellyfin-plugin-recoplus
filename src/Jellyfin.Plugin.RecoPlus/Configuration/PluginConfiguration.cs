@@ -56,38 +56,26 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Part de personnalisation dans « Plus comme ceci » (0 = pure ressemblance).</summary>
     public double SimilarPersonalization { get; set; } = 0.25;
 
-    /// <summary>Ajoute la rangée « Pour toi » si Home Screen Sections est installé.</summary>
-    public bool HssSection { get; set; } = true;
-
-    /// <summary>Titre de la rangée Home Screen Sections.</summary>
+    /// <summary>
+    /// Titre de la rangée principale. Les rangées affichées, leur ordre et leur activation par compte se règlent dans
+    /// Home Screen Sections : Reco+ déclare toujours toutes ses rangées et ne fait que les remplir.
+    /// </summary>
     public string HssSectionTitle { get; set; } = "Pour toi";
 
     /// <summary>Titres par rangée d'accueil.</summary>
     public int RowSize { get; set; } = 20;
 
-    /// <summary>Rangée « Films pour toi » (Home Screen Sections).</summary>
-    public bool RowMovies { get; set; }
-
     /// <summary>Titre de la rangée des films.</summary>
     public string RowMoviesTitle { get; set; } = "Films pour toi";
 
-    /// <summary>Rangée « Séries pour toi ».</summary>
-    public bool RowSeries { get; set; }
-
     /// <summary>Titre de la rangée des séries.</summary>
     public string RowSeriesTitle { get; set; } = "Séries pour toi";
-
-    /// <summary>Rangée « Nouveautés pour toi » : arrivés récemment, classés selon le goût du compte.</summary>
-    public bool RowNew { get; set; }
 
     /// <summary>Titre de la rangée des nouveautés.</summary>
     public string RowNewTitle { get; set; } = "Nouveautés pour toi";
 
     /// <summary>« Nouveautés » : arrivés depuis ce nombre de jours.</summary>
     public int RowNewDays { get; set; } = 30;
-
-    /// <summary>Rangées « Parce que tu as aimé … » (0 à 3), chacune autour d'un titre aimé différent.</summary>
-    public int RowBecause { get; set; }
 
     /// <summary>Titre des rangées « Parce que … » ({titre} = le titre aimé).</summary>
     public string RowBecauseTitle { get; set; } = "Parce que tu as aimé {titre}";

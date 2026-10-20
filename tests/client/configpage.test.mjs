@@ -49,7 +49,7 @@ function fieldsOf(html) {
 }
 
 const cfg = {
-    Enabled: true, HssSection: true, SimilarPersonalization: 0.25, ExcludedUsers: ['bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'],
+    Enabled: true, SimilarPersonalization: 0.25, ExcludedUsers: ['bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'],
     Engine: { HalfLifeDays: 90, Mmr: 0.3, Saga: true, Decay: 'Exponential' },
     Lists: { Window: 20, RandomPercent: 0, MinMovies: 0, MinSeries: 0, ExcludedGenres: ['documentaire', 'Western'], MinCommunityRating: 0, MinYear: 0 },
 };
@@ -199,23 +199,22 @@ await test('valeur hors curseur (calibrage) : affichée en entier et jamais modi
 
 await test('1.0.5 : rangées, diversité, affichages — aller-retour', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
-    Object.assign(c, { RowBecause: 2, RowMovies: true, RowSeries: false, RowNew: true, RowSize: 20, RowBecauseTitle: 'Parce que tu as aimé {titre}', TrackImpressions: true });
+    Object.assign(c, { RowSize: 20, RowBecauseTitle: 'Parce que tu as aimé {titre}', TrackImpressions: true });
     Object.assign(c.Engine, { Diversity: 'Personalized', WImpression: 0.4, WShortTerm: 0, CalibrationStrength: 0.5 });
     const { d, saved } = open(c);
     await wait(50);
     assert.equal(d.getElementById('rp_e_Diversity').value, 'Personalized');
-    assert.equal(d.getElementById('rp_c_RowBecause').value, '2');
     assert.equal(d.getElementById('rp_e_WShortTerm_on').checked, false, 'goût du moment coupé par défaut');
     assert.ok(d.getElementById('rp_c_RowSize').closest('details.rp-adv'), 'taille des rangées : réglage avancé');
-    assert.ok(!d.getElementById('rp_c_RowBecause').closest('details.rp-adv'), 'nombre de rangées : réglage de base');
+    assert.ok(!d.getElementById('rp_c_RowBecauseTitle').closest('details.rp-adv'), 'titres : réglage de base');
     d.getElementById('rp_e_Diversity').value = 'Calibrated';
-    d.getElementById('rp_c_RowSeries').checked = true;
+    d.getElementById('rp_c_RowSeriesTitle').value = 'Séries à voir';
     d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
     await wait(50);
     const s = saved[0];
     assert.equal(s.Engine.Diversity, 'Calibrated');
-    assert.equal(s.RowSeries, true);
-    assert.equal(s.RowBecause, 2);
+    assert.equal(s.RowSeriesTitle, 'Séries à voir');
+    assert.ok(!('RowSeries' in s) && !('RowBecause' in s) && !('HssSection' in s), 'plus d\'interrupteurs de rangées : c\'est le rôle de HSS');
     assert.equal(s.Engine.WImpression, 0.4);
     assert.equal(s.Engine.WShortTerm, 0);
     assert.equal(s.TrackImpressions, true);
@@ -250,15 +249,14 @@ await test('calibrage : méthode enregistrée au changement, avertissement si l\
     assert.ok([...sel.options].some((o) => o.value === 'Neural'), 'réseau de neurones proposé');
 });
 
-await test('rangées d\'accueil : interrupteur et titre côte à côte, tous les titres au même endroit', async () => {
-    const { d } = open({ ...cfg, RowNew: true, RowNewTitle: 'Nouveautés pour vous', ExtendedTitle: 'À découvrir', RowBecause: 2 });
+await test('rangées d\'accueil : seulement les titres, tous au même endroit (le choix des rangées est celui de HSS)', async () => {
+    const { d } = open({ ...cfg, RowNewTitle: 'Nouveautés pour vous', ExtendedTitle: 'À découvrir' });
     await wait(50);
     const rows = d.querySelector('[data-fields="rows"]');
-    const ids = [...rows.querySelectorAll('input, select')].map((e) => e.id).filter((x) => !x.endsWith('_on'));
-    assert.deepEqual(ids, ['rp_c_HssSection', 'rp_c_HssSectionTitle', 'rp_c_RowNew', 'rp_c_RowNewTitle', 'rp_c_RowBecause', 'rp_c_RowBecauseTitle',
-        'rp_c_RowMovies', 'rp_c_RowMoviesTitle', 'rp_c_RowSeries', 'rp_c_RowSeriesTitle', 'rp_c_ExtendedTitle']);
+    const ids = [...rows.querySelectorAll('input, select')].map((e) => e.id);
+    assert.deepEqual(ids, ['rp_c_HssSectionTitle', 'rp_c_RowNewTitle', 'rp_c_RowBecauseTitle', 'rp_c_RowMoviesTitle', 'rp_c_RowSeriesTitle', 'rp_c_ExtendedTitle']);
     assert.ok(!rows.closest('details'), 'de base, pas replié');
-    assert.equal(d.getElementById('rp_c_RowBecause').value, '2');
+    assert.equal(d.getElementById('rp_c_RowNewTitle').value, 'Nouveautés pour vous');
     assert.equal(d.querySelectorAll('[id$="Title"]:not([data-fields="rows"] *)').length, 0, 'aucun titre de rangée ailleurs');
     assert.ok(!d.querySelector('.content-primary').textContent.includes('prochain démarrage'), 'plus de redémarrage à annoncer');
 });
