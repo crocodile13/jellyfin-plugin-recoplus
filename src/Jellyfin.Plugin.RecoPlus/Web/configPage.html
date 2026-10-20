@@ -237,7 +237,7 @@
             <div class="rp-pane" data-pane="apercu">
                 <div class="rp-box">
                     <h3>Ce que voit un compte</h3>
-                    <p>Liste actuellement servie (après filtres, hasard du jour et minimums). Après un Enregistrer, attendez la fin du recalcul.</p>
+                    <p>Liste actuellement servie (après filtres, hasard du jour et minimums). Après un Enregistrer, cliquez sur « Recalculer maintenant » (sinon chaque compte est recalculé à sa prochaine activité).</p>
                     <div class="rp-row">
                         <select is="emby-select" id="rpPreviewUser"></select>
                         <button is="emby-button" type="button" class="raised" id="rpPreviewBtn"><span>Afficher</span></button>
@@ -289,7 +289,8 @@
             ['TrackImpressions', 'Titres montrés sans être ouverts', 'bool', 'Le script de l\'accueil note les cartes d\'une rangée Reco+ restées au moins une seconde à l\'écran du compte connecté (onglet au premier plan), une fois par jour, et celles qu\'il ouvre. Rien n\'est compté pour une page jamais affichée, un calcul ou un autre compte. Sert au facteur « Montré sans être ouvert » (onglet Moteur).', 0, 0, 0, 'sources', 'c', 'activé'],
             ['UseSeerrWatchlist', 'Listes de suivi Seerr', 'bool', 'Lit la liste de suivi Seerr de chaque compte lié (une requête par compte au calcul complet).', 0, 0, 0, 'sources', 'c', 'activé'],
             ['SimilarPersonalization', 'Personnalisation de « Plus comme ceci »', 'num', '0 = pure ressemblance avec le titre affiché. 1 = surtout les goûts du compte. 0,25 : la fiche reste le sujet, les goûts départagent.', 0.05, 0, 1, 'genadv', 'c', '0,25'],
-            ['DebounceSeconds', 'Recalcul d\'un compte après une lecture (s)', 'int', 'Délai avant de recalculer un compte qui vient de regarder quelque chose. Regroupe les lectures rapprochées (zapping, épisodes enchaînés).', 10, 10, 3600, 'genadv', 'c', '120'],
+            ['DebounceSeconds', 'Recalcul d\'un compte après son activité (s)', 'int', 'Délai sans nouvelle action (lecture terminée, vu, favori, note) avant de recalculer le compte : chaque action repousse le recalcul, pour regrouper les actions rapprochées (zapping, épisodes enchaînés, plusieurs favoris d\'affilée).', 10, 10, 3600, 'genadv', 'c', '120'],
+            ['UserMinIntervalMinutes', 'Écart minimal entre deux recalculs d\'un compte (min)', 'int', 'Un compte n\'est jamais recalculé plus souvent que ça, même très actif. 0 = pas de limite. Le bouton « Recalculer maintenant » l\'ignore.', 5, 0, 1440, 'genadv', 'c', '15'],
             ['ListSize', 'Taille de la liste par compte', 'int', 'Titres gardés par compte. Les pages qui en demandent davantage reçoivent la liste entière. Plus grand = un peu plus de mémoire et de disque.', 10, 20, 1000, 'genadv', 'c', '200'],
             ['TimeZone', 'Fuseau horaire des visionnages', 'text', 'Identifiant IANA, ex. Europe/Paris. Sert à l\'heure de la journée. Vide = celui du serveur Jellyfin (souvent UTC dans un conteneur Docker sans TZ).', 0, 0, 0, 'genadv', 'c', 'celui du serveur'],
             ['PlaybackReportingDbPath', 'Base Playback Reporting', 'text', 'Vide = détection automatique. Sert à dater précisément le premier lancement de chaque titre, utile au calibrage.', 0, 0, 0, 'genadv', 'c', 'vide'],

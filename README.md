@@ -84,9 +84,9 @@ Protocol: every time an account started a new title, would that title have been 
 - **Light on the server.**
   - History is read in a single read-only query.
   - One computation runs at a time.
-  - A full recompute is a scheduled task with visible progress.
-  - Each account is recomputed 2 minutes after playback.
-  - The library is re-indexed after additions (debounced).
+  - A full recompute is a scheduled task with visible progress, run after library additions (at most once an hour), at startup only if no account has a list yet (an account without a list is computed alone), or by hand ("Recompute now"). No nightly run by default.
+  - Each account is recomputed once its activity calms down (2 minutes without a new playback end, watched mark, favourite or rating), and at most once every 15 minutes.
+  - Saving settings or applying a calibration does not recompute by itself: use "Recompute now", otherwise each account picks it up at its next activity.
 - **Other plugins.** It cooperates with them rather than racing them.
   - The Suggestions filter runs innermost, so Jellyfin Enhanced's hidden-content filter still applies to its output.
   - The web script is injected at request time, like Jellyfin Enhanced does, without writing to the web folder.

@@ -123,6 +123,13 @@ public sealed class RecoService
         return r;
     }
 
+    /// <summary>Comptes suivis par Reco+ (non ignorés), et ceux qui n'ont pas encore de liste (ni calculée, ni reprise du cache disque).</summary>
+    public (int Tracked, List<Guid> Missing) UsersWithoutRecs()
+    {
+        var tracked = _users.GetUsers().Where(u => !Excluded(u.Id.ToString("N"))).ToList();
+        return (tracked.Count, tracked.Where(u => For(u.Id) is null).Select(u => u.Id).ToList());
+    }
+
     /// <summary>Compte ignoré par Reco+ (réglage « Comptes ignorés ») : Jellyfin lui répond normalement partout.</summary>
     public static bool IsExcluded(Guid user) => Excluded(user.ToString("N"));
 

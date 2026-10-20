@@ -433,8 +433,7 @@ public sealed class RecoController : ControllerBase
         p.Configuration.PreviousEngine = p.Configuration.Engine.Clone();
         p.Configuration.Engine = rep.ProposedSettings.Sanitized();
         p.SaveConfiguration();
-        RecoWorker.Instance?.ScheduleAll(TimeSpan.Zero);
-        return Ok(new { message = "appliqué ; recalcul lancé" });
+        return Ok(new { message = "appliqué ; « Recalculer » pour tous les comptes maintenant, sinon chacun à sa prochaine activité" });
     }
 
     /// <summary>Revient au réglage précédent.</summary>
@@ -450,8 +449,7 @@ public sealed class RecoController : ControllerBase
 
         (p.Configuration.Engine, p.Configuration.PreviousEngine) = (p.Configuration.PreviousEngine, p.Configuration.Engine);
         p.SaveConfiguration();
-        RecoWorker.Instance?.ScheduleAll(TimeSpan.Zero);
-        return Ok(new { message = "réglage précédent restauré ; recalcul lancé" });
+        return Ok(new { message = "réglage précédent restauré ; « Recalculer » pour tous les comptes maintenant" });
     }
 
     /// <summary>Remet les réglages du moteur par défaut.</summary>
@@ -463,7 +461,6 @@ public sealed class RecoController : ControllerBase
         p.Configuration.PreviousEngine = p.Configuration.Engine.Clone();
         p.Configuration.Engine = new EngineSettings();
         p.SaveConfiguration();
-        RecoWorker.Instance?.ScheduleAll(TimeSpan.Zero);
-        return Ok(new { message = "réglages par défaut ; recalcul lancé" });
+        return Ok(new { message = "réglages par défaut ; « Recalculer » pour tous les comptes maintenant" });
     }
 }
