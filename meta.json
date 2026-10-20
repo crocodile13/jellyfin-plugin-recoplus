@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.21 : contenu de chaque rangée d'accueil au choix (onglet Mode étendu) — bibliothèque seule, Seerr seul ou mélange, pour « Pour toi », Nouveautés (titres sortis récemment), « Parce que tu as aimé … » (titres proches du titre aimé), Films et Séries ; le serveur compose chaque rangée : un titre hors bibliothèque ne va que dans une rangée, ceux de la bibliothèque qu'il remplace passent aux rangées suivantes, chaque rangée garde sa taille. L'interrupteur « Sur l'accueil » disparaît (repris automatiquement). Calcul des comptes en parallèle et nouveau réglage « Fils d'exécution » (calcul et calibrage ; 0 = la moitié des cœurs). Titres des rangées « Parce que … » et affichages aussi sans mode étendu. L'aperçu montre la rangée de chaque titre hors bibliothèque. Page de configuration : un réglage sans effet dans la configuration actuelle est grisé, avec la raison (au lieu d'être masqué).",
+  "changelog": "1.0.22 : calibrage plus fidèle — il utilise les mêmes données que les recommandations (demandes et listes de suivi Seerr, votes TMDb, avis et titres masqués de Jellyfin Enhanced ; comptes ignorés exclus ; rien n'est demandé à Seerr pendant le calibrage) et ne voit plus rien de la suite : un titre commencé avant mais fini après est vu en cours, une demande compte dès sa date ; un titre demandé ou mis en liste de suivi avant d'être regardé n'est plus compté comme un cas de classement. Nouveau bouton « Exporter le jeu de calibrage » (pseudonymisé, onglet Calibrage). Une demande faite depuis une carte Reco+ retire le titre pour de bon (elle ne le retirait que de la tranche horaire servie).",
   "description": "Recommandations personnelles à la place de celles de Jellyfin.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-20T00:00:00.0000000Z",
-  "version": "1.0.21.0",
+  "version": "1.0.22.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

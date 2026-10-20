@@ -254,6 +254,10 @@
                         <button is="emby-button" type="button" class="raised" id="rpCalCancel"><span>Interrompre</span></button>
                         <span id="rpCalState" class="mute rp-result"></span>
                     </div>
+                    <div class="rp-row">
+                        <button is="emby-button" type="button" class="raised" id="rpCalExport" title="Les données exactes du calibrage, pour les évaluer ailleurs. Comptes renommés u01, u02… (aucun nom ni identifiant) ; restent la bibliothèque et, par compte, ce qu'il a fait de chaque titre avec les dates."><span>Exporter le jeu de calibrage (pseudonymisé)</span></button>
+                        <span id="rpCalExportState" class="mute rp-result"></span>
+                    </div>
                 </div>
                 <div class="rp-box" id="rpCalReportBox" style="display:none">
                     <h3>Résultat</h3>
@@ -1043,6 +1047,20 @@
         });
         page.querySelector('.rp-tab[data-tab="calibrage"]').addEventListener('click', calLoad);
         $('#rpCalStart').addEventListener('click', function () { api('POST', 'Calibration/Start').then(refresh, refresh); });
+        // export : téléchargé avec le jeton de la session (un simple lien n'en aurait pas)
+        $('#rpCalExport').addEventListener('click', function () {
+            var st = $('#rpCalExportState'), b = $('#rpCalExport');
+            b.disabled = true;
+            st.textContent = 'préparation…';
+            ApiClient.ajax({ type: 'GET', url: ApiClient.getUrl('RecoPlus/Calibration/Export'), dataType: 'text' }).then(function (text) {
+                var url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+                var a = el('a', { href: url, download: 'reco-calibrage-' + new Date().toISOString().slice(0, 10) + '.json' });
+                document.body.appendChild(a); a.click(); a.remove();
+                setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+                st.textContent = 'téléchargé (' + Math.round(text.length / 1024) + ' Ko)';
+                b.disabled = false;
+            }, function () { st.textContent = 'échec de l\'export'; b.disabled = false; });
+        });
         $('#rpCalCancel').addEventListener('click', function () { api('POST', 'Calibration/Cancel').then(refresh, refresh); });
         $('#rpCalApply').addEventListener('click', function () {
             var msg = $('#rpCalApply').__recommended

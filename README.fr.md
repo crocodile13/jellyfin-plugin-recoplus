@@ -139,6 +139,8 @@ Chaque onglet montre l'essentiel ; les réglages avancés sont repliés. Survole
 
 L'onglet Calibrage rejoue l'historique de votre serveur : chaque fois qu'un compte a commencé un nouveau titre, **à quel rang** ce titre figurait-il dans la liste calculée juste avant, avec seulement ce qui était connu alors ?
 
+- **Données.** Exactement celles des recommandations : historique de lecture, demandes et listes de suivi Seerr, nombre de votes TMDb, avis et titres masqués de Jellyfin Enhanced ; comptes ignorés exclus. Rien n'est demandé à Seerr pendant un calibrage (dernier relevé et cache seulement).
+- **Sans connaître la suite.** Chaque cas ne voit que ce qui existait à ce moment : un titre commencé avant mais fini après est vu en cours, une demande compte dès sa date. Un titre demandé ou mis en liste de suivi avant d'être regardé n'est pas un cas : le compte l'avait trouvé seul (en vrai, il passe en tête à son arrivée, il n'est pas proposé).
 - **Mesure.** Gain de rang 1/log2(1 + rang) sur *tous* les candidats, pas seulement « dans le top 10 ou non » : bien plus de puissance statistique à historique égal.
 - **Cas.** Chaque titre commencé (date connue, hors marquage en masse) alors que le compte en avait déjà adopté au moins 2 ; un titre commencé sans être adopté (film arrêté, série à 1 ou 2 épisodes) compte à demi-poids. Chaque cas pèse selon l'historique déjà connu du compte (n/(n+3)), et les comptes sont équilibrés (1/√cas) pour qu'un gros spectateur ne décide pas seul.
 - **Méthodes.**
@@ -148,6 +150,8 @@ L'onglet Calibrage rejoue l'historique de votre serveur : chaque fois qu'un comp
   - *Automatique* (par défaut) : toutes, et garde celle qui se généralise le mieux.
   - La page indique, pour chaque méthode, si l'historique est **suffisant, limite ou insuffisant**.
 - **Validation.** Chaque méthode est refaite sur la moitié des comptes et mesurée sur l'autre (validation croisée à deux plis, par compte). Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap) et atteint au moins 1 % : en dessous, rien ne se verrait. Un changement minime d'un poids (moins de 0,02 ou de 3 %) n'est pas proposé : ce n'est que du bruit.
+
+Le jeu de calibrage peut être exporté, pseudonymisé (comptes renommés u01, u02…, ni nom ni identifiant), pour l'évaluer ailleurs : bouton **Exporter le jeu de calibrage**.
 
 Rien n'est appliqué sans clic sur **Appliquer** ; le réglage précédent est gardé pour revenir en arrière. Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables. Il tourne comme une tâche planifiée, sur la moitié des cœurs par défaut (réglage « Fils d'exécution », qui fixe aussi le nombre de comptes calculés en même temps).
 

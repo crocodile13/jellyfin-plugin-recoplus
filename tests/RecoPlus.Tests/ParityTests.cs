@@ -43,6 +43,7 @@ public class ParityTests
                 Countries = t.TryGetProperty("countries", out _) ? Strings(t, "countries") : Array.Empty<string>(),
                 Language = t.TryGetProperty("language", out var lg) && lg.ValueKind == JsonValueKind.String ? lg.GetString() : null,
                 Votes = NumOrNull(t, "votes") is double vo ? (int)vo : null,
+                External = t.TryGetProperty("external", out var ex) && ex.ValueKind == JsonValueKind.True,
             };
         }
 
@@ -93,7 +94,12 @@ public class ParityTests
             }
         }
 
-        var ds = new Dataset { Titles = titles, Users = users, Collections = colls, Now = d.GetProperty("now").GetDouble(), Reviews = reviews };
+        int shift = d.TryGetProperty("utc_offset_hours", out var off) && off.ValueKind == JsonValueKind.Number ? off.GetInt32() : 0;
+        var ds = new Dataset
+        {
+            Titles = titles, Users = users, Collections = colls, Now = d.GetProperty("now").GetDouble(), Reviews = reviews,
+            LocalHour = shift == 0 ? null : t => (int)((((t + (shift * 3600)) % 86400) + 86400) % 86400 / 3600),
+        };
         ds.LinkCollections();
         return ds;
     }

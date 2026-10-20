@@ -145,6 +145,19 @@ public sealed class RecoService : IDisposable
 
     private static EngineSettings Settings => (Plugin.Instance?.Configuration.Engine ?? new EngineSettings()).Sanitized();
 
+    /// <summary>
+    /// Retire un titre hors bibliothèque des propositions d'un compte (il vient d'être demandé) : dans la liste gardée,
+    /// pas seulement dans la vue de la tranche horaire servie.
+    /// </summary>
+    public void DropExtended(Guid user, string mediaType, int tmdbId)
+    {
+        if (_recs.TryGetValue(user.ToString("N"), out var r))
+        {
+            r.Extended = r.Extended.Where(e => !(e.MediaType == mediaType && e.TmdbId == tmdbId)).ToList();
+            Interlocked.Exchange(ref _dirty, 1);
+        }
+    }
+
     /// <summary>Résultat prêt pour un compte (null sinon).</summary>
     public UserRecs? For(Guid user)
     {
@@ -422,179 +435,8 @@ public sealed class RecoService : IDisposable
         _lastHist = hist.ToDictionary(kv => kv.Key, kv => kv.Value.ToDictionary(e => e.Key, e => e.Value.Copy(), StringComparer.Ordinal), StringComparer.Ordinal);
         progress?.Report(25);
 
-        // titres : copies de la bibliothèque (date d'ajout effective = min(ajout, premier contact connu))
-        var titles = lib.Titles.ToDictionary(kv => kv.Key, kv => kv.Value.Copy(), StringComparer.Ordinal);
-        foreach (var h in hist.Values)
-        {
-            foreach (var (tid, x) in h)
-            {
-                if (x.Start != 0 && titles.TryGetValue(tid, out var t) && (t.Added is null || x.Start < t.Added))
-                {
-                    t.Added = x.Start;
-                }
-            }
-        }
-
-        var colls = lib.Collections.ToDictionary(kv => kv.Key, kv => kv.Value.ToList(), StringComparer.Ordinal);
-        var tmdbOf = lib.ByTmdb.ToDictionary(kv => kv.Value, kv => kv.Key, StringComparer.Ordinal);
         var cl = seerr.Ok ? _seerr.Client() : null;
-
-        // confiance dans les notes : nombre de votes TMDb, lu dans les fiches Seerr en cache ; au calcul complet, on
-        // complète au plus 150 fiches manquantes (le cache se remplit en quelques nuits, sans charger Seerr)
-        if (cfg.UseSeerrVotes)
-        {
-            var keys = new List<(Title T, string Type, int Tmdb)>();
-            foreach (var (id, t) in titles)
-            {
-                var parts = !t.External && tmdbOf.TryGetValue(id, out var tk) ? tk.Split(':') : null;
-                if (parts is { Length: 2 } && int.TryParse(parts[1], out var tid))
-                {
-                    keys.Add((t, parts[0], tid));
-                }
-            }
-
-            // au plus 150 fiches manquantes par calcul complet, demandées en parallèle
-            if (only is null && seerr.Ok && cl is not null)
-            {
-                await Task.WhenAll(keys.Where(k => _seerr.CachedDetails(k.Type, k.Tmdb)?.VoteCount is null).Take(150)
-                    .Select(k => _seerr.DetailsAsync(cl, k.Type, k.Tmdb, ct, requireVotes: true))).ConfigureAwait(false);
-                _seerr.SaveCache();
-            }
-
-            foreach (var (t, type, tmdb) in keys)
-            {
-                if (_seerr.CachedDetails(type, tmdb)?.VoteCount is int v)
-                {
-                    t.Votes = v;
-                }
-            }
-        }
-
-        // demandes Seerr → signal (titre voulu) ; titres demandés absents → titres externes (profil seulement)
-        if (seerr.Ok && cl is not null)
-        {
-            // fiches des titres demandés hors bibliothèque : chargées en parallèle d'abord (ensuite lues dans le cache)
-            await Task.WhenAll(seerr.RequestsByUser.Where(kv => hist.ContainsKey(kv.Key)).SelectMany(kv => kv.Value)
-                .Where(r => r.RequestStatus != 3 && !lib.ByTmdb.ContainsKey(r.MediaType + ":" + r.TmdbId))
-                .DistinctBy(r => r.MediaType + ":" + r.TmdbId)
-                .Select(r => _seerr.DetailsAsync(cl, r.MediaType, r.TmdbId, ct))).ConfigureAwait(false);
-
-            foreach (var (jf, reqs) in seerr.RequestsByUser)
-            {
-                if (!hist.TryGetValue(jf, out var h))
-                {
-                    continue;
-                }
-
-                foreach (var r in reqs.Where(r => r.RequestStatus != 3)) // refusées ignorées
-                {
-                    var key = r.MediaType + ":" + r.TmdbId;
-                    string? id = lib.ByTmdb.TryGetValue(key, out var lid) ? lid : null;
-                    if (id is null)
-                    {
-                        var d = await _seerr.DetailsAsync(cl, r.MediaType, r.TmdbId, ct).ConfigureAwait(false);
-                        if (d is null || d.Adult)
-                        {
-                            continue;
-                        }
-
-                        id = "tmdb:" + key;
-                        if (!titles.ContainsKey(id))
-                        {
-                            titles[id] = ExternalTitle(d, id, colls);
-                        }
-                    }
-
-                    if (!h.TryGetValue(id, out var x))
-                    {
-                        h[id] = x = new Interaction { Title = id };
-                    }
-
-                    x.Requested = x.Requested == 0 ? Unix(r.CreatedAt) : Math.Min(x.Requested, Unix(r.CreatedAt));
-                }
-            }
-
-            // liste de suivi Seerr : intention plus faible qu'une demande, même traitement (titres de la bibliothèque,
-            // ou titres externes déjà connus — on n'interroge pas Seerr pour chaque titre suivi)
-            if (cfg.UseSeerrWatchlist)
-            {
-                foreach (var (jf, list) in seerr.WatchlistByUser)
-                {
-                    if (!hist.TryGetValue(jf, out var h))
-                    {
-                        continue;
-                    }
-
-                    foreach (var w in list)
-                    {
-                        var key = w.MediaType + ":" + w.TmdbId;
-                        string? id = lib.ByTmdb.TryGetValue(key, out var lid) ? lid : titles.ContainsKey("tmdb:" + key) ? "tmdb:" + key : null;
-                        if (id is null)
-                        {
-                            var d = _seerr.CachedDetails(w.MediaType, w.TmdbId);
-                            if (d is null || d.Adult)
-                            {
-                                continue;
-                            }
-
-                            id = "tmdb:" + key;
-                            titles[id] = ExternalTitle(d, id, colls);
-                        }
-
-                        if (!h.TryGetValue(id, out var x))
-                        {
-                            h[id] = x = new Interaction { Title = id };
-                        }
-
-                        double at = Unix(w.CreatedAt);
-                        x.Watchlisted = x.Watchlisted == 0 ? at : Math.Min(x.Watchlisted, at);
-                    }
-                }
-            }
-        }
-
-        // Jellyfin Enhanced : « pas intéressé » (masqué partout) et avis notés — ce que le compte a dit explicitement
-        var hiddenTmdb = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
-        var reviews = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
-        if (cfg.UseJellyfinEnhanced)
-        {
-            var fb = _je.ReadAll(users.Select(u => u.Id));
-            Status.JellyfinEnhanced = _je.State;
-            foreach (var (jf, f) in fb)
-            {
-                if (!hist.TryGetValue(jf, out var h))
-                {
-                    continue;
-                }
-
-                hiddenTmdb[jf] = f.HiddenTmdb;
-                Interaction Get(string id) => h.TryGetValue(id, out var x) ? x : h[id] = new Interaction { Title = id };
-                foreach (var id in f.HiddenItems.Where(titles.ContainsKey)
-                             .Concat(f.HiddenTmdb.Select(k => lib.ByTmdb.GetValueOrDefault(k)).OfType<string>()).Distinct())
-                {
-                    Get(id).Hidden = true;
-                }
-
-                foreach (var (k, stars) in f.Ratings)
-                {
-                    var id = lib.ByTmdb.TryGetValue(k, out var lid) ? lid : titles.ContainsKey("tmdb:" + k) ? "tmdb:" + k : null;
-                    if (id is not null)
-                    {
-                        Get(id).Rating = HistoryMath.ReviewRating(stars); // un avis prime sur la note ou le pouce Jellyfin
-                        if (!reviews.TryGetValue(id, out var by))
-                        {
-                            reviews[id] = by = new Dictionary<string, double>(StringComparer.Ordinal);
-                        }
-
-                        by[jf] = stars;                                    // avis du foyer, pour les autres comptes
-                    }
-                }
-            }
-        }
-        else
-        {
-            Status.JellyfinEnhanced = "désactivé";
-        }
+        var (titles, colls, tmdbOf, reviews, hiddenTmdb) = await Assemble(lib, hist, users, seerr, cl, only is null, cfg, ct).ConfigureAwait(false);
 
         double now = Unix(DateTime.UtcNow);
         var ds = new Dataset { Titles = titles, Users = hist, Collections = colls, Now = now, Reviews = reviews, LocalHour = LocalHourFunc(cfg) };
@@ -1015,18 +857,17 @@ public sealed class RecoService : IDisposable
         return placed;
     }
 
-    /// <summary>Jeu de données pour le calibrage : bibliothèque + historiques complets (sans Seerr).</summary>
-    public Dataset BuildCalibrationDataset()
+    /// <summary>
+    /// Données d'un calcul à partir des historiques : titres (copies, date d'ajout effective), sagas, votes TMDb (fiches
+    /// Seerr en cache, complétées au calcul complet), demandes et listes de suivi Seerr, masquages et avis de Jellyfin
+    /// Enhanced. Sans client Seerr (calibrage), rien n'est demandé à Seerr : seul le cache sert. Modifie les historiques.
+    /// </summary>
+    private async Task<(Dictionary<string, Title> Titles, Dictionary<string, List<string>> Colls, Dictionary<string, string> TmdbOf,
+        Dictionary<string, Dictionary<string, double>> Reviews, Dictionary<string, HashSet<string>> HiddenTmdb)> Assemble(LibrarySnapshot lib,
+        Dictionary<string, Dictionary<string, Interaction>> hist, IReadOnlyList<User> users, SeerrSnapshot seerr, SeerrClient? cl, bool full,
+        Configuration.PluginConfiguration cfg, CancellationToken ct)
     {
-        var lib = _index.Get();
-        var pr = PlaybackReporting(true);
-        var hist = new Dictionary<string, Dictionary<string, Interaction>>(StringComparer.Ordinal);
-        var rows = _userData.ReadAll();
-        foreach (var u in _users.GetUsers())
-        {
-            hist[u.Id.ToString("N")] = _history.Build(u.Id, rows.GetValueOrDefault(u.Id), lib, pr);
-        }
-
+        // titres : copies de la bibliothèque (date d'ajout effective = min(ajout, premier contact connu))
         var titles = lib.Titles.ToDictionary(kv => kv.Key, kv => kv.Value.Copy(), StringComparer.Ordinal);
         foreach (var h in hist.Values)
         {
@@ -1039,13 +880,198 @@ public sealed class RecoService : IDisposable
             }
         }
 
+        var colls = lib.Collections.ToDictionary(kv => kv.Key, kv => kv.Value.ToList(), StringComparer.Ordinal);
+        var tmdbOf = lib.ByTmdb.ToDictionary(kv => kv.Value, kv => kv.Key, StringComparer.Ordinal);
+
+        // confiance dans les notes : nombre de votes TMDb, lu dans les fiches Seerr en cache ; au calcul complet, on
+        // complète au plus 150 fiches manquantes (le cache se remplit en quelques nuits, sans charger Seerr)
+        if (cfg.UseSeerrVotes)
+        {
+            var keys = new List<(Title T, string Type, int Tmdb)>();
+            foreach (var (id, t) in titles)
+            {
+                var parts = !t.External && tmdbOf.TryGetValue(id, out var tk) ? tk.Split(':') : null;
+                if (parts is { Length: 2 } && int.TryParse(parts[1], out var tid))
+                {
+                    keys.Add((t, parts[0], tid));
+                }
+            }
+
+            // au plus 150 fiches manquantes par calcul complet, demandées en parallèle
+            if (full && seerr.Ok && cl is not null)
+            {
+                await Task.WhenAll(keys.Where(k => _seerr.CachedDetails(k.Type, k.Tmdb)?.VoteCount is null).Take(150)
+                    .Select(k => _seerr.DetailsAsync(cl, k.Type, k.Tmdb, ct, requireVotes: true))).ConfigureAwait(false);
+                _seerr.SaveCache();
+            }
+
+            foreach (var (t, type, tmdb) in keys)
+            {
+                if (_seerr.CachedDetails(type, tmdb)?.VoteCount is int v)
+                {
+                    t.Votes = v;
+                }
+            }
+        }
+
+        // demandes Seerr → signal (titre voulu) ; titres demandés absents → titres externes (profil seulement)
+        if (seerr.Ok)
+        {
+            // fiches des titres demandés hors bibliothèque : chargées en parallèle d'abord (ensuite lues dans le cache) ;
+            // sans client (calibrage) : le cache seul
+            await Task.WhenAll(cl is null ? Array.Empty<Task>() : seerr.RequestsByUser.Where(kv => hist.ContainsKey(kv.Key)).SelectMany(kv => kv.Value)
+                .Where(r => r.RequestStatus != 3 && !lib.ByTmdb.ContainsKey(r.MediaType + ":" + r.TmdbId))
+                .DistinctBy(r => r.MediaType + ":" + r.TmdbId)
+                .Select(r => (Task)_seerr.DetailsAsync(cl, r.MediaType, r.TmdbId, ct)).ToArray()).ConfigureAwait(false);
+
+            foreach (var (jf, reqs) in seerr.RequestsByUser)
+            {
+                if (!hist.TryGetValue(jf, out var h))
+                {
+                    continue;
+                }
+
+                foreach (var r in reqs.Where(r => r.RequestStatus != 3)) // refusées ignorées
+                {
+                    var key = r.MediaType + ":" + r.TmdbId;
+                    string? id = lib.ByTmdb.TryGetValue(key, out var lid) ? lid : null;
+                    if (id is null)
+                    {
+                        var d = cl is null ? _seerr.CachedDetails(r.MediaType, r.TmdbId) : await _seerr.DetailsAsync(cl, r.MediaType, r.TmdbId, ct).ConfigureAwait(false);
+                        if (d is null || d.Adult)
+                        {
+                            continue;
+                        }
+
+                        id = "tmdb:" + key;
+                        if (!titles.ContainsKey(id))
+                        {
+                            titles[id] = ExternalTitle(d, id, colls);
+                        }
+                    }
+
+                    if (!h.TryGetValue(id, out var x))
+                    {
+                        h[id] = x = new Interaction { Title = id };
+                    }
+
+                    x.Requested = x.Requested == 0 ? Unix(r.CreatedAt) : Math.Min(x.Requested, Unix(r.CreatedAt));
+                }
+            }
+
+            // liste de suivi Seerr : intention plus faible qu'une demande, même traitement (titres de la bibliothèque,
+            // ou titres externes déjà connus — on n'interroge pas Seerr pour chaque titre suivi)
+            if (cfg.UseSeerrWatchlist)
+            {
+                foreach (var (jf, list) in seerr.WatchlistByUser)
+                {
+                    if (!hist.TryGetValue(jf, out var h))
+                    {
+                        continue;
+                    }
+
+                    foreach (var w in list)
+                    {
+                        var key = w.MediaType + ":" + w.TmdbId;
+                        string? id = lib.ByTmdb.TryGetValue(key, out var lid) ? lid : titles.ContainsKey("tmdb:" + key) ? "tmdb:" + key : null;
+                        if (id is null)
+                        {
+                            var d = _seerr.CachedDetails(w.MediaType, w.TmdbId);
+                            if (d is null || d.Adult)
+                            {
+                                continue;
+                            }
+
+                            id = "tmdb:" + key;
+                            titles[id] = ExternalTitle(d, id, colls);
+                        }
+
+                        if (!h.TryGetValue(id, out var x))
+                        {
+                            h[id] = x = new Interaction { Title = id };
+                        }
+
+                        double at = Unix(w.CreatedAt);
+                        x.Watchlisted = x.Watchlisted == 0 ? at : Math.Min(x.Watchlisted, at);
+                    }
+                }
+            }
+        }
+
+        // Jellyfin Enhanced : « pas intéressé » (masqué partout) et avis notés — ce que le compte a dit explicitement
+        var hiddenTmdb = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+        var reviews = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
+        if (cfg.UseJellyfinEnhanced)
+        {
+            var fb = _je.ReadAll(users.Select(u => u.Id));
+            Status.JellyfinEnhanced = _je.State;
+            foreach (var (jf, f) in fb)
+            {
+                if (!hist.TryGetValue(jf, out var h))
+                {
+                    continue;
+                }
+
+                hiddenTmdb[jf] = f.HiddenTmdb;
+                Interaction Get(string id) => h.TryGetValue(id, out var x) ? x : h[id] = new Interaction { Title = id };
+                foreach (var id in f.HiddenItems.Where(titles.ContainsKey)
+                             .Concat(f.HiddenTmdb.Select(k => lib.ByTmdb.GetValueOrDefault(k)).OfType<string>()).Distinct())
+                {
+                    Get(id).Hidden = true;
+                }
+
+                foreach (var (k, stars) in f.Ratings)
+                {
+                    var id = lib.ByTmdb.TryGetValue(k, out var lid) ? lid : titles.ContainsKey("tmdb:" + k) ? "tmdb:" + k : null;
+                    if (id is not null)
+                    {
+                        Get(id).Rating = HistoryMath.ReviewRating(stars); // un avis prime sur la note ou le pouce Jellyfin
+                        if (!reviews.TryGetValue(id, out var by))
+                        {
+                            reviews[id] = by = new Dictionary<string, double>(StringComparer.Ordinal);
+                        }
+
+                        by[jf] = stars;                                    // avis du foyer, pour les autres comptes
+                    }
+                }
+            }
+        }
+        else
+        {
+            Status.JellyfinEnhanced = "désactivé";
+        }
+
+        return (titles, colls, tmdbOf, reviews, hiddenTmdb);
+    }
+
+    /// <summary>
+    /// Jeu de données pour le calibrage : les mêmes données que le calcul (comptes ignorés exclus, historiques complets,
+    /// demandes et listes de suivi Seerr, votes TMDb, masquages et avis de Jellyfin Enhanced), sans aucun appel à Seerr :
+    /// ce qui vient de Seerr est lu dans le dernier relevé et dans le cache des fiches.
+    /// </summary>
+    public async Task<Dataset> BuildCalibrationDatasetAsync(CancellationToken ct = default)
+    {
+        var cfg = Plugin.Instance!.Configuration;
+        var lib = _index.Get();
+        var pr = PlaybackReporting(true);
+        var users = _users.GetUsers().Where(u => !Excluded(u.Id.ToString("N"))).ToList();
+        var hist = new Dictionary<string, Dictionary<string, Interaction>>(StringComparer.Ordinal);
+        var rows = _userData.ReadAll();
+        foreach (var u in users)
+        {
+            hist[u.Id.ToString("N")] = _history.Build(u.Id, rows.GetValueOrDefault(u.Id), lib, pr).ToDictionary(kv => kv.Key, kv => kv.Value.Copy(), StringComparer.Ordinal);
+        }
+
+        var seerr = _seerr.Configured ? _seerr.Last : new SeerrSnapshot { Status = "désactivé ou non configuré" };
+        var (titles, colls, _, reviews, _) = await Assemble(lib, hist, users, seerr, null, false, cfg, ct).ConfigureAwait(false);
         var ds = new Dataset
         {
             Titles = titles,
             Users = hist,
-            Collections = lib.Collections.ToDictionary(kv => kv.Key, kv => kv.Value.ToList(), StringComparer.Ordinal),
+            Collections = colls,
+            Reviews = reviews,
             Now = Unix(DateTime.UtcNow),
-            LocalHour = LocalHourFunc(Plugin.Instance!.Configuration),
+            LocalHour = LocalHourFunc(cfg),
         };
         ds.LinkCollections();
         return ds;
