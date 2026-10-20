@@ -19,6 +19,7 @@
     var SECTION_PREFIX = 'RecoPlus';
     var SEEN_MS = 1000;
     var FLUSH_MS = 15000;
+    var JE_WAIT_MS = 6000;
     var TTL = 5 * 60 * 1000;
     var cache = { at: 0, user: null, data: null, pending: null };
 
@@ -73,7 +74,47 @@
         return Promise.all(ws).then(function () { return out; });
     }
 
-    function jeCards(items) {
+    // Attend Jellyfin Enhanced (il charge ses modules après coup) : jusqu'à 6 s, sinon cartes Reco+ (remplacées dès qu'il arrive)
+    function jeWait(ms) {
+        if (jeReady()) { return Promise.resolve(true); }
+        return new Promise(function (resolve) {
+            var t0 = Date.now();
+            var id = setInterval(function () {
+                if (jeReady() || Date.now() - t0 >= ms) { clearInterval(id); resolve(jeReady()); }
+            }, 250);
+        });
+    }
+
+    // ---- forme des cartes : celle de la rangée (HSS affiche les rangées de plugins en paysage)
+
+    function isTmdbPath(p) { return !!p && /^\/[A-Za-z0-9._-]+$/.test(p); }
+
+    function shapeOf(container) {
+        var ref = container && Array.prototype.find.call(container.children, function (c) { return c.classList && c.classList.contains('card') && !c.classList.contains(EXT); });
+        var m = ref && /(?:^|\s)overflow(\w+)Card(?:\s|$)/.exec(ref.className);
+        return m ? m[1] : 'Portrait';
+    }
+
+    // Met une carte (de Jellyfin Enhanced ou de Reco+) à la forme voulue ; en paysage, l'image de fond TMDb plutôt que l'affiche
+    function fitShape(card, shape, backdrop) {
+        if (!shape || shape === 'Portrait') { return card; }
+        card.classList.remove('overflowPortraitCard');
+        card.classList.add('overflow' + shape + 'Card');
+        var pad = card.querySelector('.cardPadder');
+        if (pad) { pad.classList.remove('cardPadder-overflowPortrait'); pad.classList.add('cardPadder-overflow' + shape); }
+        var img = card.querySelector('.cardImageContainer');
+        if (img && shape === 'Backdrop' && isTmdbPath(backdrop)) {
+            var url = 'https://image.tmdb.org/t/p/w780' + backdrop;
+            if (img.dataset && img.dataset.jePoster) { img.dataset.jePoster = url; } else { img.style.backgroundImage = 'url("' + url + '")'; }
+        } else if (img) {
+            img.style.backgroundSize = 'contain';   // pas d'image de fond : l'affiche entière, sans la rogner
+            img.style.backgroundRepeat = 'no-repeat';
+            img.style.backgroundPosition = 'center';
+        }
+        return card;
+    }
+
+    function jeCards(items, shape) {
         var j = je();
         return j.jellyseerrAPI.checkUserStatus().then(function (st) {
             if (!st || !st.active) { return null; }
@@ -91,7 +132,7 @@
                     c.setAttribute('data-rp-id', 'tmdb:' + (items[i].MediaType === 'tv' ? 'tv' : 'movie') + ':' + items[i].TmdbId);
                     c.__rpAfter = items[i].After;
                     if (items[i].Because) { c.title = 'Parce que tu as aimé ' + items[i].Because; }
-                    cards.push(c);
+                    cards.push(fitShape(c, shape, d.backdropPath || items[i].BackdropPath));
                 });
                 return cards;
             });
@@ -101,7 +142,7 @@
     // ---- cartes Reco+ (sans Jellyfin Enhanced)
 
     function poster(p) {
-        return p && /^\/[A-Za-z0-9._-]+$/.test(p) ? 'https://image.tmdb.org/t/p/w300' + p : '';
+        return isTmdbPath(p) ? 'https://image.tmdb.org/t/p/w300' + p : '';
     }
 
     function openItem(d, it) {
@@ -130,8 +171,8 @@
         });
     }
 
-    function ownCard(d, it) {
-        var c = el('div', 'card overflowPortraitCard card-hoverable ' + EXT);
+    function ownCard(d, it, shape) {
+        var c = el('div', 'card overflowPortraitCard card-hoverable ' + EXT + ' recoplus-own');
         c.setAttribute('data-rp-id', 'tmdb:' + (it.MediaType === 'tv' ? 'tv' : 'movie') + ':' + it.TmdbId);
         c.__rpAfter = it.After;
         var box = el('div', 'cardBox cardBox-bottompadded');
@@ -156,15 +197,18 @@
             box.appendChild(b);
         }
         c.appendChild(box);
-        return c;
+        return fitShape(c, shape, it.BackdropPath);
     }
 
-    function buildCards(d) {
+    function buildCards(d, shape) {
         var items = (d.items || []).slice();
         if (!items.length) { return Promise.resolve([]); }
-        var fallback = function () { return items.map(function (it) { return ownCard(d, it); }); };
-        if (!jeReady()) { return Promise.resolve(fallback()); }
-        return jeCards(items).then(function (c) { return c || fallback(); }, fallback);
+        var fallback = function () { return items.map(function (it) { return ownCard(d, it, shape); }); };
+        var wait = typeof window.__recoPlusJeWaitMs === 'number' ? window.__recoPlusJeWaitMs : JE_WAIT_MS;
+        return jeWait(wait).then(function (ok) {
+            if (!ok) { return fallback(); }
+            return jeCards(items, shape).then(function (c) { return c || fallback(); }, fallback);
+        });
     }
 
     // ---- mélange dans la rangée « Pour toi » (Home Screen Sections)
@@ -201,16 +245,24 @@
 
     function mix(container, d) {
         var isCard = function (c) { return c.classList.contains('card') && !c.classList.contains(EXT); };
+        // cartes Reco+ de secours alors que Jellyfin Enhanced est maintenant prêt : on refait le mélange avec les siennes
+        if (!container.__recoPlusBusy && container.querySelector('.recoplus-own') && jeReady() && !container.__recoPlusUpgraded) {
+            container.__recoPlusUpgraded = true;
+            Array.prototype.forEach.call(container.querySelectorAll('.' + EXT), function (c) { c.remove(); });
+            container.__recoPlusDoneFor = null;
+        }
         var first = Array.prototype.find.call(container.children, isCard);
         // déjà traitée pour ce rendu de HSS (même si aucun titre n'a trouvé sa place) : rien à refaire
         if (!first || container.__recoPlusBusy || container.__recoPlusDoneFor === first || container.querySelector('.' + EXT)) { return; }
         container.__recoPlusBusy = true;
-        buildCards(d).then(function (ext) {
+        buildCards(d, shapeOf(container)).then(function (ext) {
             container.__recoPlusBusy = false;
             if (!container.isConnected || container.querySelector('.' + EXT)) { return; }
             var lib = Array.prototype.filter.call(container.children, isCard);
             container.__recoPlusDoneFor = lib[0];
             if (!ext.length) { return; }
+            // cartes de secours : on repasse plus tard, au cas où Jellyfin Enhanced finirait de charger
+            if (ext[0].classList.contains('recoplus-own') && !container.__recoPlusUpgraded) { setTimeout(check, 10000); }
             if (d.mixMode === 'score') {
                 // libre : chaque titre après les `After` premiers titres de la bibliothèque (demandes en tête exclues)
                 var seq = freeOrder(lib, ext, d.skip);
@@ -226,7 +278,7 @@
     // ---- rangée à part (sans Home Screen Sections)
 
     function standalone(sections, d) {
-        buildCards(d).then(function (cards) {
+        buildCards(d, 'Portrait').then(function (cards) {
             if (!cards.length || document.getElementById(ROW_ID)) { return; }
             var sec = el('div', 'verticalSection');
             sec.id = ROW_ID;
@@ -364,6 +416,7 @@
     window.__recoPlusSlots = slots; // pour les tests
     window.__recoPlusFreeOrder = freeOrder;
     window.__recoPlusCardId = cardId;
+    window.__recoPlusFitShape = fitShape;
 
     var style = el('style');
     style.textContent = '#' + ROW_ID + ' .itemsContainer::-webkit-scrollbar{display:none}';

@@ -57,7 +57,7 @@ const cfg = {
 await test('chaque réglage de la page existe côté serveur (aucune faute de nom)', async () => {
     const f = fieldsOf(HTML);
     assert.ok(f.length > 60, 'champs lus : ' + f.length);
-    const missing = f.filter((x) => !PROPS[x.target].has(x.key)).map((x) => x.target + ':' + x.key);
+    const missing = f.filter((x) => x.type !== 'note' && !PROPS[x.target].has(x.key)).map((x) => x.target + ':' + x.key);
     assert.deepEqual(missing, []);
     const dup = f.map((x) => x.target + x.key).filter((k, i, a) => a.indexOf(k) !== i);
     assert.deepEqual(dup, []);
@@ -163,12 +163,11 @@ await test('le nom de la rangée suit le titre saisi, partout', async () => {
     c.HssSectionTitle = 'Contenu que vous devriez aimer';
     const { d } = open(c);
     await wait(50);
-    const label = d.getElementById('rp_c_HssSection').closest('label').textContent;
-    assert.equal(label, 'Rangée « Contenu que vous devriez aimer »');
+    assert.match(d.querySelector('[data-pane="listes"] .rp-sub').textContent, /« Contenu que vous devriez aimer »/);
     const input = d.getElementById('rp_c_HssSectionTitle');
     input.value = 'Pour vous';
     input.dispatchEvent(new d.defaultView.Event('input'));
-    assert.equal(d.getElementById('rp_c_HssSection').closest('label').textContent, 'Rangée « Pour vous »');
+    assert.match(d.querySelector('[data-pane="listes"] .rp-sub').textContent, /« Pour vous »/);
     assert.match(d.getElementById('rp_c_ExtendedMixMode').closest('.rp-field').querySelector('label').textContent, /« Pour vous »/);
     const ui = d.querySelector('.content-primary');
     assert.ok(!ui.textContent.includes('{ROW}'), 'modèle non remplacé');
@@ -245,10 +244,62 @@ await test('calibrage : méthode enregistrée au changement, avertissement si l\
     sel.dispatchEvent(new w.Event('change'));
     await wait(50);
     assert.equal(saved.at(-1).CalibrationMethod, 'Coordinate');
-    assert.match(d.getElementById('rpCalData').textContent, /^⚠ 70 cas pour 36 réglages/);
+    assert.match(d.getElementById('rpCalData').textContent, /^⚠ Historique actuel : 70 cas pour 36 réglages/);
     assert.match(d.getElementById('rpCalData').className, /ko/);
     assert.match([...sel.options].find((o) => o.value === 'ChoiceModel').textContent, /historique limite$/);
     assert.ok([...sel.options].some((o) => o.value === 'Neural'), 'réseau de neurones proposé');
+});
+
+await test('rangées d\'accueil : interrupteur et titre côte à côte, tous les titres au même endroit', async () => {
+    const { d } = open({ ...cfg, RowNew: true, RowNewTitle: 'Nouveautés pour vous', ExtendedTitle: 'À découvrir', RowBecause: 2 });
+    await wait(50);
+    const rows = d.querySelector('[data-fields="rows"]');
+    const ids = [...rows.querySelectorAll('input, select')].map((e) => e.id).filter((x) => !x.endsWith('_on'));
+    assert.deepEqual(ids, ['rp_c_HssSection', 'rp_c_HssSectionTitle', 'rp_c_RowNew', 'rp_c_RowNewTitle', 'rp_c_RowBecause', 'rp_c_RowBecauseTitle',
+        'rp_c_RowMovies', 'rp_c_RowMoviesTitle', 'rp_c_RowSeries', 'rp_c_RowSeriesTitle', 'rp_c_ExtendedTitle']);
+    assert.ok(!rows.closest('details'), 'de base, pas replié');
+    assert.equal(d.getElementById('rp_c_RowBecause').value, '2');
+    assert.equal(d.querySelectorAll('[id$="Title"]:not([data-fields="rows"] *)').length, 0, 'aucun titre de rangée ailleurs');
+    assert.ok(!d.querySelector('.content-primary').textContent.includes('prochain démarrage'), 'plus de redémarrage à annoncer');
+});
+
+await test('réglages sans objet masqués selon le mode, valeurs gardées', async () => {
+    const c = JSON.parse(JSON.stringify(cfg));
+    Object.assign(c, { ExtendedHomeRow: true, ExtendedMixMode: 'Score', ExtendedMixEvery: 4 });
+    Object.assign(c.Engine, { Diversity: 'Personalized', CalibrationStrength: 0.5, Weighting: 'TfIdf', WShortTerm: 0, SeriesByTime: true });
+    const { d, saved } = open(c);
+    await wait(50);
+    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-hidden');
+    assert.ok(hidden('rp_c_ExtendedMixEvery'), 'mélange libre : pas d\'intervalle');
+    assert.ok(hidden('rp_e_CalibrationStrength') && !hidden('rp_e_Mmr'));
+    assert.ok(hidden('rp_e_Bm25K1') && hidden('rp_e_ShortTermTitles') && hidden('rp_e_SeriesFullEpisodes') && !hidden('rp_e_SeriesFullHours'));
+    const sel = d.getElementById('rp_c_ExtendedMixMode'); sel.value = 'Interleave'; sel.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.ok(!hidden('rp_c_ExtendedMixEvery'));
+    const div = d.getElementById('rp_e_Diversity'); div.value = 'Calibrated'; div.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.ok(!hidden('rp_e_CalibrationStrength') && hidden('rp_e_Mmr'));
+    d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
+    await wait(50);
+    assert.equal(saved[0].ExtendedMixEvery, 4, 'valeur masquée gardée');
+    assert.equal(saved[0].Engine.Mmr, 0.3);
+});
+
+await test('calibrage : écarts en %, méthode sans changement signalée, application non recommandée confirmée à part', async () => {
+    const st = JSON.parse(JSON.stringify(status));
+    st.calibration = { running: true, progress: 21.6, at: '2026-10-20T12:00:00Z', report: {
+        current: { gain: 0.25, hit10: 0.2, hit20: 0.3, events: 155, accounts: 13 }, proposed: { gain: 0.251, hit10: 0.2, hit20: 0.3 },
+        cvDelta: 0.00075, ciLow: 0.0000, ciHigh: 0.002, recommended: false, verdict: 'négligeable', method: 'ChoiceModel', steps: [],
+        methods: [{ method: 'ChoiceModel', name: 'Modèle de choix appris', gain: 0.251, cvDelta: 0.00075, ciLow: 0, ciHigh: 0.002, sufficiency: 'suffisant', recommended: false, noChange: false },
+                  { method: 'Neural', name: 'Réseau de neurones (expérimental)', gain: 0.25, cvDelta: 0, ciLow: 0, ciHigh: 0, sufficiency: 'insuffisant', recommended: false, noChange: true }] } };
+    const { w, d } = open(cfg);
+    const ajax = w.ApiClient.ajax;
+    w.ApiClient.ajax = (o) => (o.url === '/RecoPlus/Status' ? Promise.resolve(st) : ajax(o));
+    w.document.querySelector('#RecoPlusConfigPage').dispatchEvent(new w.Event('pageshow'));
+    await wait(80);
+    const t = d.getElementById('rpCalReport').textContent;
+    assert.match(t, /calcul précédent/);
+    assert.match(t, /\+0,3 %/);
+    assert.match(t, /aucun changement appris/);
+    assert.ok(!/\+0\.0008/.test(t), 'pas de valeur brute');
 });
 
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');

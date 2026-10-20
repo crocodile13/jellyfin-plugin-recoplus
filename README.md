@@ -140,7 +140,7 @@ The Calibration tab replays your server's history: every time an account started
   - *Neural network* (experimental): a small non-linear correction (10 → 8 → 1, tanh, 96 parameters) learned on the score's ingredients and added to the engine; it starts at zero and regularisation pulls it back without evidence. Needs a lot of history (about 10 cases per parameter).
   - *Automatic* (default): runs all of them and keeps the one that generalises best.
   - The page shows, for each method, whether the history is **sufficient, borderline or insufficient**.
-- **Validation.** Each method is redone on half of the accounts and measured on the other half (two-fold cross-validation by account). A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero).
+- **Validation.** Each method is redone on half of the accounts and measured on the other half (two-fold cross-validation by account). A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero) and reaches at least 1%: below that nothing would be visible. A tiny change to a weight (under 0.02 or 3%) is not proposed: it is just noise.
 
 Nothing is applied until you click **Apply**; the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task, on half the CPU cores.
 
@@ -160,8 +160,8 @@ New features were measured the same way before choosing their defaults: weightin
 
 | Plugin / service | If present | If absent |
 |---|---|---|
-| Home Screen Sections | Reco+ rows (enable them in HSS settings too); "Because you liked …" titles are per account | no home row; everything else works |
-| Jellyfin Enhanced | extended mode uses its cards, detail modal and *Request* button, with the live Seerr status (if it is linked to Seerr) | Reco+ cards, opening the Seerr page, with Reco+'s own *Request* button |
+| Home Screen Sections | every Reco+ row is listed among its sections (add them in its settings); a row switched off in Reco+ stays empty; titles and switches apply without a restart; "Because you liked X" titles are per account in the web client ("Because you liked…" elsewhere); HSS shows plugin rows in landscape, and titles outside the library take the same shape | no home row; everything else works |
+| Jellyfin Enhanced | extended mode uses its cards, detail modal and *Request* button, with the live Seerr status (if it is linked to Seerr); Reco+ waits a few seconds for it on load and swaps its own cards for JE's as soon as it is ready | Reco+ cards, opening the Seerr page, with Reco+'s own *Request* button |
 | Media Bar Enhanced | benefits automatically (it calls the replaced endpoints) | — |
 | Playback Reporting | precise first-play dates for calibration | calibration is less precise; Reco+ also records first plays itself from install time |
 | Seerr (formerly Jellyseerr) | requests as a signal, pinned arrivals, extended mode | all of this is off; the rest works |

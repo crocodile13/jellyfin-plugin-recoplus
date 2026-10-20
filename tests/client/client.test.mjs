@@ -19,7 +19,7 @@ function ext(n) {
 }
 
 // Page d'accueil : une section « Reprendre », puis éventuellement la section HSS « Pour toi » avec `lib` cartes.
-function page({ hssCards = 0, data, je = null, io = null }) {
+function page({ hssCards = 0, data, je = null, io = null, jeWait = 0, shape = 'Portrait' }) {
     const dom = new JSDOM('<!doctype html><html><head></head><body><div id="indexPage"><div id="homeTab" class="tabContent" data-index="0"><div class="sections"></div></div></div></body></html>', { runScripts: 'outside-only', pretendToBeVisual: true });
     const w = dom.window;
     const calls = { getJSON: 0, posts: [] };
@@ -31,6 +31,7 @@ function page({ hssCards = 0, data, je = null, io = null }) {
     };
     if (je) { w.JellyfinEnhanced = je(w); }
     if (io) { w.IntersectionObserver = io; }
+    w.__recoPlusJeWaitMs = jeWait;
     const sections = w.document.querySelector('.sections');
     sections.innerHTML = '<div class="verticalSection ContinueWatchingNextUp section0"><div class="itemsContainer"><div class="card">r</div></div></div>';
     const fill = (n) => {
@@ -41,7 +42,7 @@ function page({ hssCards = 0, data, je = null, io = null }) {
             s.innerHTML = '<div is="emby-scroller"><div is="emby-itemscontainer" class="itemsContainer scrollSlider"></div></div>';
             sections.appendChild(s);
         }
-        s.querySelector('.itemsContainer').innerHTML = Array.from({ length: n }, (_, i) => `<div class="card" data-lib="${i}" data-id="${String(i).padStart(32, 'a')}">L${i}</div>`).join('');
+        s.querySelector('.itemsContainer').innerHTML = Array.from({ length: n }, (_, i) => `<div class="card overflow${shape}Card" data-lib="${i}" data-id="${String(i).padStart(32, 'a')}">L${i}</div>`).join('');
     };
     if (hssCards) { fill(hssCards); }
     w.eval(SCRIPT);
@@ -53,8 +54,8 @@ function jeStub({ active = true, userFound = true, status = {} } = {}) {
     return (w) => ({
         jellyseerrAPI: {
             checkUserStatus: () => Promise.resolve({ active, userFound }),
-            fetchMovieDetails: (id) => Promise.resolve(id === 1003 ? null : { id, title: 'M' + id, mediaInfo: status[id] ? { status: status[id] } : undefined }),
-            fetchTvShowDetails: (id) => Promise.resolve({ id, name: 'T' + id, mediaInfo: status[id] ? { status: status[id] } : undefined }),
+            fetchMovieDetails: (id) => Promise.resolve(id === 1003 ? null : { id, title: 'M' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }),
+            fetchTvShowDetails: (id) => Promise.resolve({ id, name: 'T' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }),
         },
         jellyseerrUI: {
             created: [],
@@ -63,6 +64,7 @@ function jeStub({ active = true, userFound = true, status = {} } = {}) {
                 const c = w.document.createElement('div');
                 c.className = 'card overflowPortraitCard jellyseerr-card';
                 c.dataset.tmdb = String(item.id);
+                c.innerHTML = '<div class="cardBox"><div class="cardScalable"><div class="cardPadder cardPadder-overflowPortrait"></div><div class="cardImageContainer" data-je-poster="https://image.tmdb.org/t/p/w400/p.jpg"></div></div></div>';
                 return c;
             },
         },
@@ -255,6 +257,48 @@ await test('identifiants de carte : Jellyfin (avec ou sans tirets) et TMDb seule
     assert.equal(p.w.__recoPlusCardId(mk({ 'data-id': '01234567-89ab-cdef-0123-456789abcdef' })), '0123456789abcdef0123456789abcdef');
     assert.equal(p.w.__recoPlusCardId(mk({ 'data-rp-id': 'tmdb:tv:42' })), 'tmdb:tv:42');
     assert.equal(p.w.__recoPlusCardId(mk({ 'data-id': '../../x' })), null);
+});
+
+await test('rangée en paysage (HSS) : cartes Jellyfin Enhanced au même format, avec l\'image de fond', async () => {
+    const p = page({ hssCards: 6, data: base, je: jeStub(), shape: 'Backdrop' });
+    await wait(700);
+    const ext = [...p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext')];
+    assert.ok(ext.length > 0);
+    ext.forEach((c) => {
+        assert.ok(c.classList.contains('overflowBackdropCard') && !c.classList.contains('overflowPortraitCard'));
+        assert.ok(c.querySelector('.cardPadder-overflowBackdrop'));
+        assert.match(c.querySelector('.cardImageContainer').dataset.jePoster, /^https:\/\/image\.tmdb\.org\/t\/p\/w780\/b\d+\.jpg$/);
+    });
+});
+
+await test('rangée en paysage sans Jellyfin Enhanced : cartes Reco+ au format de la rangée', async () => {
+    const items = ext(2).map((x, i) => ({ ...x, BackdropPath: i === 0 ? '/bd.jpg' : null }));
+    const p = page({ hssCards: 6, data: { ...base, items }, shape: 'Backdrop' });
+    await wait(700);
+    const c = [...p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext')];
+    assert.equal(c.length, 2);
+    assert.ok(c.every((x) => x.classList.contains('overflowBackdropCard')));
+    assert.match(c[0].querySelector('.cardImageContainer').style.backgroundImage, /w780\/bd\.jpg/);
+    assert.equal(c[1].querySelector('.cardImageContainer').style.backgroundSize, 'contain', 'sans image de fond : affiche entière');
+});
+
+await test('Jellyfin Enhanced chargé après coup : ses cartes remplacent celles de Reco+', async () => {
+    const p = page({ hssCards: 6, data: base, jeWait: 300 });
+    await wait(1000);
+    assert.ok(p.sections.querySelector('.RecoPlusPourToi .recoplus-own'), 'd\'abord les cartes de secours');
+    p.w.JellyfinEnhanced = jeStub()(p.w);
+    p.sections.appendChild(p.w.document.createElement('div'));   // l'accueil bouge : nouvelle vérification
+    await wait(1200);
+    assert.equal(p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-own').length, 0);
+    assert.ok(p.sections.querySelectorAll('.RecoPlusPourToi .jellyseerr-card').length > 0);
+});
+
+await test('Jellyfin Enhanced attendu quelques instants avant de se rabattre sur les cartes Reco+', async () => {
+    const p = page({ hssCards: 6, data: base, jeWait: 2000 });
+    setTimeout(() => { p.w.JellyfinEnhanced = jeStub()(p.w); }, 500);
+    await wait(1500);
+    assert.equal(p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-own').length, 0);
+    assert.ok(p.sections.querySelectorAll('.RecoPlusPourToi .jellyseerr-card').length > 0);
 });
 
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');

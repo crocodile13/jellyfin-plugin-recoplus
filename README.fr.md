@@ -143,7 +143,7 @@ L'onglet Calibrage rejoue l'historique de votre serveur : chaque fois qu'un comp
   - *Réseau de neurones* (expérimental) : petite correction non linéaire (10 → 8 → 1, tanh, 96 paramètres) apprise sur les ingrédients du score et ajoutée au moteur ; elle part de zéro et la régularisation l'y ramène sans preuve. Il faut beaucoup d'historique (environ 10 cas par paramètre).
   - *Automatique* (par défaut) : toutes, et garde celle qui se généralise le mieux.
   - La page indique, pour chaque méthode, si l'historique est **suffisant, limite ou insuffisant**.
-- **Validation.** Chaque méthode est refaite sur la moitié des comptes et mesurée sur l'autre (validation croisée à deux plis, par compte). Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap).
+- **Validation.** Chaque méthode est refaite sur la moitié des comptes et mesurée sur l'autre (validation croisée à deux plis, par compte). Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap) et atteint au moins 1 % : en dessous, rien ne se verrait. Un changement minime d'un poids (moins de 0,02 ou de 3 %) n'est pas proposé : ce n'est que du bruit.
 
 Rien n'est appliqué sans clic sur **Appliquer** ; le réglage précédent est gardé pour revenir en arrière. Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables. Il tourne comme une tâche planifiée, sur la moitié des cœurs.
 
@@ -163,8 +163,8 @@ Les nouveautés ont été mesurées de la même façon avant de fixer leurs vale
 
 | Plugin / service | Présent | Absent |
 |---|---|---|
-| Home Screen Sections | rangées Reco+ (à activer aussi dans HSS) ; les titres des rangées « Parce que tu as aimé … » sont propres à chaque compte | pas de rangée d'accueil, le reste marche |
-| Jellyfin Enhanced | le mode étendu utilise ses cartes, sa fiche et son bouton *Demander*, avec l'état Seerr du moment (s'il est relié à Seerr) | cartes Reco+, qui ouvrent la page Seerr, et bouton *Demander* de Reco+ |
+| Home Screen Sections | toutes les rangées Reco+ figurent dans sa liste de sections (à ajouter dans sa configuration) ; une rangée coupée dans Reco+ reste vide ; titres et interrupteurs sans redémarrage ; les titres « Parce que tu as aimé X » sont propres à chaque compte dans l'interface web (« Parce que tu as aimé… » ailleurs) ; HSS affiche les rangées de plugins en paysage, et les titres hors bibliothèque prennent le même format | pas de rangée d'accueil, le reste marche |
+| Jellyfin Enhanced | le mode étendu utilise ses cartes, sa fiche et son bouton *Demander*, avec l'état Seerr du moment (s'il est relié à Seerr) ; Reco+ l'attend quelques secondes au chargement et remplace ses propres cartes dès qu'il est prêt | cartes Reco+, qui ouvrent la page Seerr, et bouton *Demander* de Reco+ |
 | Media Bar Enhanced | en profite automatiquement | — |
 | Playback Reporting | dates de premier lancement précises pour le calibrage | calibrage moins précis ; Reco+ relève lui-même les premiers lancements à partir de son installation |
 | Seerr (ex-Jellyseerr) | demandes comme signal, arrivées en tête, mode étendu | tout cela est coupé, le reste marche |

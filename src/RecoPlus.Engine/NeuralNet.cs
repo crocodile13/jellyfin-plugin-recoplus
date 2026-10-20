@@ -232,11 +232,14 @@ public static class NeuralNet
         return bestTh.Select(x => Math.Round(x, 6)).ToArray();
     }
 
-    /// <summary>Réglages avec la correction apprise.</summary>
+    /// <summary>Vrai si la correction est nulle (poids de sortie tous nuls) : le réseau n'a rien appris.</summary>
+    public static bool IsZero(double[]? net) => net is null || net.Length != Size || net.Skip((Hidden * ChoiceModel.K) + Hidden).All(v => Math.Abs(v) < 1e-4);
+
+    /// <summary>Réglages avec la correction apprise (aucune si elle est nulle).</summary>
     public static EngineSettings With(EngineSettings s, double[] net)
     {
         var r = s.Clone();
-        r.Neural = net;
+        r.Neural = IsZero(net) ? null : net;
         r.WNeural = 1.0;
         return r.Sanitized();
     }

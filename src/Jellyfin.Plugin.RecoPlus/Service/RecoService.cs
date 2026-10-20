@@ -608,7 +608,7 @@ public sealed class RecoService
                 // mélange libre : bibliothèque et hors bibliothèque notés ensemble, chacun à sa place dans la rangée
                 if (cfg.ExtendedMixMode == Configuration.MixMode.Score && r.Ranked.Count > 0)
                 {
-                    var shown = r.Ranked.Take(Math.Max(0, 20 - r.Pinned.Count)).ToList();
+                    var shown = r.Ranked.Take(Math.Max(0, Math.Clamp(cfg.RowSize, 5, 60) - r.Pinned.Count)).ToList();
                     var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), s, ex.Agree, exposure: expo);
                     foreach (var (id, rec) in recs)
                     {
@@ -768,6 +768,7 @@ public sealed class RecoService
             Name = t.Name,
             Year = t.Year,
             PosterPath = d?.PosterPath,
+            BackdropPath = d?.BackdropPath,
             Overview = d?.Overview,
             Vote = t.Community ?? 0,
             Because = because.GetValueOrDefault(id, string.Empty),

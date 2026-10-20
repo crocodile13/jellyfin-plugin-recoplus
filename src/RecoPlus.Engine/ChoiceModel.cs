@@ -434,7 +434,9 @@ public static class ChoiceModel
         var r = s.Clone();
         for (int k = 0; k < K; k++)
         {
-            Weights[k].Set(r, Math.Round(w[k], 4));
+            // un écart minime (moins de 0,02 ou de 3 %) n'est que du bruit : la valeur de départ est gardée
+            double cur = Weights[k].Get(s);
+            Weights[k].Set(r, Math.Abs(w[k] - cur) < Math.Max(0.02, 0.03 * cur) ? cur : Math.Round(w[k], 3));
         }
 
         return r.Sanitized();

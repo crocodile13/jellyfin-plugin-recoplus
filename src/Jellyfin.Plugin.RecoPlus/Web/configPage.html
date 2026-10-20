@@ -46,6 +46,10 @@
                 #RecoPlusConfigPage .rp-factor.off .rp-mult { opacity: .5; }
                 #RecoPlusConfigPage .rp-factor .rp-tip { position: relative; }
                 @media (max-width: 600px) { #RecoPlusConfigPage .rp-factors { grid-template-columns: 1fr; } #RecoPlusConfigPage .rp-factor { grid-template-columns: 1fr 1fr 1.6em; } #RecoPlusConfigPage .rp-factor .rp-mult { grid-column: 1 / 3; } }
+                #RecoPlusConfigPage .rp-rows { display: grid; grid-template-columns: minmax(14em, 1fr) minmax(14em, 2fr); gap: 0 2em; align-items: end; max-width: 56em; }
+                #RecoPlusConfigPage .rp-note { margin-bottom: 1.2em; padding-top: 1.4em; font-weight: 600; }
+                #RecoPlusConfigPage .rp-hidden { display: none !important; }
+                @media (max-width: 600px) { #RecoPlusConfigPage .rp-rows { grid-template-columns: 1fr; } }
                 #RecoPlusConfigPage .rp-default { color: var(--rp-mute); font-size: .85em; margin-top: .4em; display: block; }
                 #RecoPlusConfigPage .rp-checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .1em 1em; max-height: 18em; overflow: auto; padding: .3em 0; }
                 #RecoPlusConfigPage .rp-checks label { display: flex; gap: .5em; align-items: center; cursor: pointer; padding: .2em 0; }
@@ -95,10 +99,10 @@
                 <!-- GÉNÉRAL -->
                 <div class="rp-pane" data-pane="general">
                     <div class="rp-box"><h3>Ce que Reco+ remplace</h3><p>Chaque interrupteur coupé rend la main à Jellyfin pour cette partie.</p><div class="rp-grid" data-fields="replace"></div></div>
-                    <div class="rp-box"><h3>Rangées d'accueil</h3><p data-tpl="Avec Home Screen Sections : chaque rangée cochée y est déclarée au démarrage de Jellyfin ; ajoutez-la ensuite dans sa configuration (bouton « Add Section »), à la place voulue. Un titre n'apparaît jamais dans deux rangées Reco+ ({ROW} d'abord, puis Nouveautés, « Parce que tu as aimé … », Films, Séries) ; les autres rangées de l'accueil ne sont pas concernées."></p><div class="rp-grid" data-fields="hss"></div></div>
+                    <div class="rp-box"><h3>Rangées d'accueil</h3><p>Avec Home Screen Sections, toutes les rangées Reco+ figurent dans sa liste de sections : ajoutez celles que vous voulez dans sa configuration (« Add Section »), à la place voulue. Une rangée coupée ici reste vide et n'est pas affichée. Un titre n'apparaît jamais dans deux rangées Reco+ (dans l'ordre de ce tableau) ; les autres rangées de l'accueil ne sont pas concernées. Titres et interrupteurs : effet immédiat, sans redémarrage.</p><div class="rp-rows" data-fields="rows"></div></div>
                     <div class="rp-box"><h3>Ce que le compte a dit explicitement</h3><p>Sources de retours explicites, en plus de l'historique de lecture et des favoris (films, séries, saisons et épisodes).</p><div class="rp-grid" data-fields="sources"></div></div>
                     <div class="rp-box"><h3>Comptes ignorés</h3><p>Ces comptes n'ont pas de recommandations Reco+ (Jellyfin leur répond normalement) et leur historique ne compte pas pour le foyer : compte invité, de test, d'un enfant…</p><div data-fields="users"></div></div>
-                    <details class="rp-adv"><summary>Réglages avancés <span>— titres et taille des rangées, fonctionnement</span></summary>
+                    <details class="rp-adv"><summary>Réglages avancés <span>— taille des rangées, nouveautés, fonctionnement</span></summary>
                         <div class="rp-box"><h3>Rangées d'accueil</h3><div class="rp-grid" data-fields="rowsadv"></div></div>
                         <div class="rp-box"><h3>Fonctionnement</h3><div class="rp-grid" data-fields="genadv"></div></div>
                     </details>
@@ -107,7 +111,7 @@
                 <!-- LISTES -->
                 <div class="rp-pane" data-pane="listes">
                     <p class="rp-sub" data-tpl="Ce qui est montré, sans changer le calcul des goûts : ces réglages s'appliquent après le classement (ils n'entrent ni dans l'évaluation ni dans le calibrage). Ils valent pour {ROW}, les Suggestions et le mode étendu ; « Plus comme ceci » n'est filtré que par les comptes ignorés."></p>
-                    <div class="rp-box"><h3>Composition du haut de liste</h3><p data-tpl="Les 20 premiers titres : ceux de la rangée {ROW}."></p><div class="rp-grid" data-fields="mix"></div></div>
+                    <div class="rp-box"><h3>Composition du haut de liste</h3><p data-tpl="Les premiers titres de la liste (« Haut de liste », 20 par défaut, comme la taille de la rangée {ROW})."></p><div class="rp-grid" data-fields="mix"></div></div>
                     <div class="rp-box"><h3>Filtres</h3><p>Un titre filtré n'est jamais proposé. Un titre sans note ou sans année passe.</p><div class="rp-grid" data-fields="filters"></div><h4 class="rp-h4">Genres jamais proposés</h4><div data-fields="genres"></div></div>
                     <div class="rp-box"><h3>Diversité et sagas</h3><p>Personnalisée (par défaut, la mieux évaluée) : la liste est aussi variée que ce que le compte regarde. Calibrée : la part de chaque genre suit celle de son historique. Fixe : la même pénalité de redondance pour tous.</p><div class="rp-grid" data-fields="diversmode"></div><div class="rp-factors" data-fields="divers"></div><div class="rp-grid" data-fields="sagas"></div></div>
                     <div class="rp-box"><h3>En tête de liste</h3><p>Un titre demandé dans Seerr, arrivé récemment et pas encore regardé, et la nouvelle saison d'une série rattrapée et aimée passent devant tout le reste.</p><div class="rp-grid" data-fields="pinned"></div></div>
@@ -202,7 +206,7 @@
             <div class="rp-pane" data-pane="calibrage">
                 <div class="rp-box">
                     <h3>Calibrage sur l'historique</h3>
-                    <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, à quel rang ce titre figurait-il dans les recommandations calculées juste avant, avec seulement ce qui était connu alors ? Chaque cas pèse selon l'historique déjà connu du compte, et les comptes sont équilibrés. Chaque méthode propose un réglage, puis est refaite sur une moitié des comptes et mesurée sur l'autre (validation croisée) : un réglage n'est recommandé que si son gain se retrouve, de façon sûre, chez des comptes qui n'ont pas servi à le choisir. Rien n'est appliqué sans votre clic ; les onglets Listes et Général n'entrent pas en jeu. Visible aussi dans Tâches planifiées.</p>
+                    <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, à quel rang ce titre figurait-il dans les recommandations calculées juste avant, avec seulement ce qui était connu alors ? Chaque cas pèse selon l'historique déjà connu du compte, et les comptes sont équilibrés. Chaque méthode propose un réglage, puis est refaite sur une moitié des comptes et mesurée sur l'autre (validation croisée) : un réglage n'est recommandé que si son gain se retrouve, de façon sûre et d'au moins 1 %, chez des comptes qui n'ont pas servi à le choisir (en dessous, rien ne se verrait). Rien n'est appliqué sans votre clic ; les onglets Listes et Général n'entrent pas en jeu. Visible aussi dans Tâches planifiées.</p>
                     <div class="rp-grid"><div class="rp-field"><div class="selectContainer">
                         <label class="selectLabel" for="rpCalMethod">Méthode</label>
                         <select is="emby-select" id="rpCalMethod">
@@ -239,7 +243,7 @@
                         <button is="emby-button" type="button" class="raised" id="rpPreviewBtn"><span>Afficher</span></button>
                     </div>
                     <div class="rp-grid" style="margin-top:1em">
-                        <div><h3>Bibliothèque</h3><ol id="rpPreviewList"></ol></div>
+                        <div><h3 data-tpl="Rangée {ROW}"></h3><ol id="rpPreviewList"></ol></div>
                         <div><h3>Mode étendu</h3><ol id="rpPreviewExt"></ol></div>
                     </div>
                     <div class="rp-grid" id="rpPreviewRows" style="margin-top:1em"></div>
@@ -264,18 +268,21 @@
             ['OverrideMovieRecommendations', 'Recommandations de films', 'bool', 'Onglet « Suggestions » des films, Media Bar, et tout ce qui appelle /Movies/Recommendations. Reco+ y met des catégories « Parce que tu as aimé X » tirées de tout l\'historique (Jellyfin : les 7 derniers films vus).', 0, 0, 0, 'replace', 'c'],
             ['OverrideSuggestions', 'Suggestions', 'bool', '/Items/Suggestions : chez Jellyfin, des titres au hasard. Reco+ y met la liste classée du compte.', 0, 0, 0, 'replace', 'c'],
             ['OverrideSimilar', '« Plus comme ceci »', 'bool', 'Sur la fiche d\'un film ou d\'une série. Jellyfin : recouvrement de genres et de personnes pour les films, séries au hasard. Reco+ : ressemblance de contenu, un peu des goûts du compte, et le volet suivant d\'une saga en premier.', 0, 0, 0, 'replace', 'c'],
-            ['HssSection', 'Rangée {ROW}', 'bool', 'Déclare la rangée auprès de Home Screen Sections. Il faut ensuite l\'ajouter dans la configuration de HSS (bouton « Add Section ») ; sa place se règle là-bas.', 0, 0, 0, 'hss', 'c'],
-            ['HssSectionTitle', 'Titre de la rangée', 'text', 'Pris en compte au prochain démarrage de Jellyfin.', 0, 0, 0, 'hss', 'c'],
-            ['RowBecause', 'Rangées « Parce que tu as aimé … »', 'int', 'De 0 à 3 rangées, chacune autour d\'un titre que le compte a aimé (les plus aimés et récents d\'abord, jamais deux d\'une même saga), avec les titres qui lui ressemblent le plus, un peu départagés par les goûts du compte. Le titre de la rangée est celui du titre aimé, propre à chaque compte. Une rangée sans assez de titres proches reste vide (HSS ne l\'affiche pas). Prise en compte au prochain démarrage de Jellyfin.', 1, 0, 3, 'hss', 'c', '0'],
-            ['RowNew', 'Rangée « Nouveautés pour toi »', 'bool', 'Les titres arrivés récemment, dans l\'ordre des goûts du compte (pas ceux déjà dans les autres rangées Reco+). Prise en compte au prochain démarrage de Jellyfin.', 0, 0, 0, 'hss', 'c', 'coupée'],
-            ['RowMovies', 'Rangée « Films pour toi »', 'bool', 'Les films suivants du classement du compte, après ceux des rangées au-dessus. Prise en compte au prochain démarrage de Jellyfin.', 0, 0, 0, 'hss', 'c', 'coupée'],
-            ['RowSeries', 'Rangée « Séries pour toi »', 'bool', 'Les séries suivantes du classement du compte, après celles des rangées au-dessus. Prise en compte au prochain démarrage de Jellyfin.', 0, 0, 0, 'hss', 'c', 'coupée'],
+            // Rangées d'accueil : une ligne par rangée, l'interrupteur et le titre côte à côte
+            ['HssSection', 'Rangée principale', 'bool', 'Le classement du compte : demandes arrivées et nouvelles saisons en tête, puis ses titres. Avec le mode étendu, les titres hors bibliothèque s\'y mélangent. Coupée : vide (Home Screen Sections ne l\'affiche pas).', 0, 0, 0, 'rows', 'c', 'activée'],
+            ['HssSectionTitle', 'Titre', 'text', 'Titre de la rangée principale. Partout ailleurs sur cette page, {ROW} désigne cette rangée.', 0, 0, 0, 'rows', 'c', 'Pour toi'],
+            ['RowNew', 'Nouveautés', 'bool', 'Les titres arrivés récemment (voir « Nouveautés : arrivées depuis » dans les réglages avancés), dans l\'ordre des goûts du compte, sans ceux des rangées au-dessus. Moins de 4 titres : vide.', 0, 0, 0, 'rows', 'c', 'coupée'],
+            ['RowNewTitle', 'Titre', 'text', 'Titre de la rangée des nouveautés.', 0, 0, 0, 'rows', 'c', 'Nouveautés pour toi'],
+            ['RowBecause', '« Parce que tu as aimé … »', 'enum:0=aucune,1=1 rangée,2=2 rangées,3=3 rangées', 'Chacune autour d\'un titre que le compte a aimé (les plus aimés et récents d\'abord, jamais deux d\'une même saga), avec les titres qui lui ressemblent le plus, sans ceux des rangées au-dessus. Moins de 6 titres proches : vide.', 0, 0, 0, 'rows', 'c', 'aucune'],
+            ['RowBecauseTitle', 'Titre', 'text', '{titre} est remplacé par le titre aimé, propre à chaque compte, dans l\'interface web. Les autres clients (TV, applications) affichent le titre sans lui (« Parce que tu as aimé… »).', 0, 0, 0, 'rows', 'c', 'Parce que tu as aimé {titre}'],
+            ['RowMovies', 'Films', 'bool', 'Les films suivants du classement du compte, sans ceux des rangées au-dessus.', 0, 0, 0, 'rows', 'c', 'coupée'],
+            ['RowMoviesTitle', 'Titre', 'text', 'Titre de la rangée des films.', 0, 0, 0, 'rows', 'c', 'Films pour toi'],
+            ['RowSeries', 'Séries', 'bool', 'Les séries suivantes du classement du compte, sans celles des rangées au-dessus.', 0, 0, 0, 'rows', 'c', 'coupée'],
+            ['RowSeriesTitle', 'Titre', 'text', 'Titre de la rangée des séries.', 0, 0, 0, 'rows', 'c', 'Séries pour toi'],
+            ['_ExtendedRowNote', 'Rangée à part du mode étendu', 'note', 'Seulement sans Home Screen Sections : les titres hors bibliothèque ont alors leur propre rangée, sous la première de l\'accueil. Avec HSS, ils se mélangent à la rangée principale et ce titre ne sert pas.', 0, 0, 0, 'rows', 'c'],
+            ['ExtendedTitle', 'Titre', 'text', 'Titre de la rangée à part du mode étendu (sans Home Screen Sections).', 0, 0, 0, 'rows', 'c', 'À découvrir pour toi'],
             ['RowSize', 'Titres par rangée', 'int', 'Pour chaque rangée Reco+, {ROW} comprise.', 1, 5, 60, 'rowsadv', 'c', '20'],
-            ['RowBecauseTitle', 'Titre des rangées « Parce que … »', 'text', '{titre} est remplacé par le titre aimé du compte.', 0, 0, 0, 'rowsadv', 'c', 'Parce que tu as aimé {titre}'],
-            ['RowNewTitle', 'Titre de la rangée des nouveautés', 'text', 'Pris en compte au prochain démarrage de Jellyfin.', 0, 0, 0, 'rowsadv', 'c', 'Nouveautés pour toi'],
-            ['RowNewDays', 'Nouveautés : arrivées depuis (jours)', 'int', 'Seuls les titres ajoutés depuis ce nombre de jours vont dans « Nouveautés pour toi » (au moins 4, sinon la rangée reste vide).', 1, 1, 365, 'rowsadv', 'c', '30'],
-            ['RowMoviesTitle', 'Titre de la rangée des films', 'text', 'Pris en compte au prochain démarrage de Jellyfin.', 0, 0, 0, 'rowsadv', 'c', 'Films pour toi'],
-            ['RowSeriesTitle', 'Titre de la rangée des séries', 'text', 'Pris en compte au prochain démarrage de Jellyfin.', 0, 0, 0, 'rowsadv', 'c', 'Séries pour toi'],
+            ['RowNewDays', 'Nouveautés : arrivées depuis (jours)', 'int', 'Seuls les titres ajoutés depuis ce nombre de jours vont dans la rangée des nouveautés.', 1, 1, 365, 'rowsadv', 'c', '30'],
             ['ExcludedUsers', '', 'users', '', 0, 0, 0, 'users', 'c'],
             ['UseJellyfinEnhanced', 'Masquages et avis de Jellyfin Enhanced', 'bool', 'Lit, sans rien modifier, les titres masqués partout (« pas intéressé ») et les avis notés de chaque compte. Sans Jellyfin Enhanced : rien n\'est lu.', 0, 0, 0, 'sources', 'c', 'activé'],
             ['UseSeerrVotes', 'Nombre de votes TMDb (via Seerr)', 'bool', 'Lit le nombre de votes derrière chaque note, pour ne pas croire une note fondée sur une poignée de votes. Les fiches manquantes sont récupérées progressivement (150 par calcul complet, mises en cache 14 jours).', 0, 0, 0, 'sources', 'c', 'activé'],
@@ -288,9 +295,9 @@
             ['PlaybackReportingDbPath', 'Base Playback Reporting', 'text', 'Vide = détection automatique. Sert à dater précisément le premier lancement de chaque titre, utile au calibrage.', 0, 0, 0, 'genadv', 'c', 'vide'],
 
             // ---- Listes
-            ['RandomPercent', 'Hasard (% du haut de liste)', 'int', 'Part des 20 premiers titres tirée au hasard parmi tout ce qui est proposable au compte (bibliothèques autorisées, non vus, filtres respectés), à des places elles aussi tirées. Le tirage change chaque jour et reste le même dans la journée. 0 = aucun hasard.', 5, 0, 50, 'mix', 'l', '0'],
-            ['MinMovies', 'Minimum de films', 'int', 'Dans les 20 premiers. S\'il en manque, les films les mieux classés remontent à la place des séries les moins bien classées. 0 = pas de minimum.', 1, 0, 20, 'mix', 'l', '0'],
-            ['MinSeries', 'Minimum de séries', 'int', 'Dans les 20 premiers. S\'il en manque, les séries les mieux classées remontent à la place des films les moins bien classés. 0 = pas de minimum. Si films + séries dépasse 20, partage au prorata.', 1, 0, 20, 'mix', 'l', '0'],
+            ['RandomPercent', 'Hasard (% du haut de liste)', 'int', 'Part du haut de liste (20 premiers titres par défaut) tirée au hasard parmi tout ce qui est proposable au compte (bibliothèques autorisées, non vus, filtres respectés), à des places elles aussi tirées. Le tirage change chaque jour et reste le même dans la journée. 0 = aucun hasard.', 5, 0, 50, 'mix', 'l', '0'],
+            ['MinMovies', 'Minimum de films', 'int', 'Dans le haut de liste. S\'il en manque, les films les mieux classés remontent à la place des séries les moins bien classées. 0 = pas de minimum.', 1, 0, 20, 'mix', 'l', '0'],
+            ['MinSeries', 'Minimum de séries', 'int', 'Dans le haut de liste. S\'il en manque, les séries les mieux classées remontent à la place des films les moins bien classés. 0 = pas de minimum. Si films + séries dépasse le haut de liste, partage au prorata.', 1, 0, 20, 'mix', 'l', '0'],
             ['MinCommunityRating', 'Note minimale de la communauté', 'num', 'Sur 10 (note TMDb/IMDb récupérée par Jellyfin). En dessous, jamais proposé. Un titre sans note passe. 0 = pas de filtre.', 0.5, 0, 10, 'filters', 'l', '0'],
             ['MinYear', 'Année de sortie minimale', 'int', 'Avant cette année, jamais proposé. Un titre sans année passe. 0 = pas de filtre.', 1, 0, 2100, 'filters', 'l', '0'],
             ['ExcludedGenres', '', 'genres', '', 0, 0, 0, 'genres', 'l'],
@@ -299,7 +306,7 @@
             ['PinnedMaxDays', 'Pendant (jours après l\'arrivée)', 'int', 'Au-delà, le titre redevient un titre comme les autres : c\'est une nouvelle, pas une liste permanente.', 1, 1, 365, 'pinned', 'c', '30'],
             ['NewEpisodesPinned', 'Nouvelle saison d\'une série aimée', 'int', 'Nombre maximal de séries placées en tête quand de nouveaux épisodes arrivent alors que le compte avait tout vu et aimait la série. 0 = jamais.', 1, 0, 10, 'pinned', 'c', '2'],
             ['NewEpisodesMaxDays', 'Pendant (jours après le dernier épisode arrivé)', 'int', 'Au-delà, la série n\'est plus mise en avant (« À suivre » de Jellyfin prend le relais).', 1, 1, 365, 'pinned', 'c', '45'],
-            ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. La rangée {ROW} en montre 20.', 1, 5, 100, 'listadv', 'l', '20'],
+            ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. Gardez-le égal aux « Titres par rangée » (onglet Général, 20 par défaut) pour qu\'ils portent exactement sur ce que montre {ROW}.', 1, 5, 100, 'listadv', 'l', '20'],
             ['SagaMax', 'Au-delà : regroupement thématique', 'int', 'Une collection plus grande que ce nombre n\'est pas une saga mais un regroupement (« Films Marvel », « Ghibli ») : 2 entrées au plus, sans règle de premier volet.', 1, 2, 100, 'listadv', 'e', '12'],
 
             // ---- Facteurs de classement : interrupteur + force (×0,25 à ×3 de la valeur évaluée ; coupé = 0)
@@ -389,7 +396,6 @@
             ['ExtendedMixEvery', '1 titre hors bibliothèque toutes les … cartes', 'int', 'Mélange à intervalle fixe seulement. 3 = deux titres de la bibliothèque puis un à découvrir. 2 = un sur deux.', 1, 2, 20, 'ext', 'c', '3'],
             ['ExtendedCount', 'Titres proposés', 'int', 'Nombre maximal de titres hors bibliothèque par compte.', 1, 1, 100, 'ext', 'c', '20'],
             ['ExtendedRequestButton', 'Bouton « Demander » de Reco+', 'bool', 'Utilisé seulement sans Jellyfin Enhanced. La demande est faite au nom de l\'utilisateur, avec ses droits et quotas Seerr.', 0, 0, 0, 'extadv', 'c', 'activé'],
-            ['ExtendedTitle', 'Titre de la rangée à part', 'text', 'Utilisé seulement sans Home Screen Sections.', 0, 0, 0, 'extadv', 'c'],
             ['ExtendedAnchors', 'Titres aimés servant de point de départ', 'int', 'Les N titres les plus aimés du compte dont on lit les recommandations TMDb.', 1, 1, 50, 'extadv', 'c', '15'],
             ['ExtendedDetails', 'Candidats détaillés par compte', 'int', 'Fiches demandées à Seerr pour départager les candidats (mises en cache 14 jours). Plus = meilleur choix, plus d\'appels.', 5, 10, 300, 'extadv', 'c', '60'],
 
@@ -472,6 +478,12 @@
                     host.appendChild(factorUi(f));
                     return;
                 }
+                if (type === 'note') {
+                    var n = el('div', { 'class': 'rp-field rp-note', id: id }, f[1]);
+                    n.appendChild(tip(f));
+                    host.appendChild(n);
+                    return;
+                }
                 if (type === 'bool') {
                     inner = el('div', { 'class': 'checkboxContainer' });
                     var lab = el('label');
@@ -498,6 +510,37 @@
             $('#rp_c_HssSectionTitle').addEventListener('input', applyTpl);
             applyTpl();
         }
+
+        // Réglages qui ne servent que dans certains cas : masqués sinon (leur valeur est gardée)
+        function v(id) { var e = $('#' + id); return e ? e.value : null; }
+        function on(id) { var e = $('#' + id); return !!(e && e.checked); }
+        var WHEN = {
+            c_ExtendedMixMode: function () { return on('rp_c_ExtendedHomeRow'); },
+            c_ExtendedMixEvery: function () { return on('rp_c_ExtendedHomeRow') && v('rp_c_ExtendedMixMode') !== 'Score'; },
+            c_RowNewDays: function () { return on('rp_c_RowNew'); },
+            c_TimeZone: function () { return on('rp_e_WTimeOfDay_on'); },
+            e_Mmr: function () { return v('rp_e_Diversity') !== 'Calibrated'; },
+            e_CalibrationStrength: function () { return v('rp_e_Diversity') === 'Calibrated'; },
+            e_SeriesFullHours: function () { return on('rp_e_SeriesByTime'); },
+            e_SeriesFullEpisodes: function () { return !on('rp_e_SeriesByTime'); },
+            e_Bm25K1: function () { return v('rp_e_Weighting') === 'Bm25'; },
+            e_Bm25B: function () { return v('rp_e_Weighting') === 'Bm25'; },
+            e_ShortTermTitles: function () { return on('rp_e_WShortTerm_on'); },
+            e_ImpressionDays: function () { return on('rp_e_WImpression_on'); },
+            e_ImpressionRecoveryDays: function () { return on('rp_e_WImpression_on'); },
+            e_ReleaseDays: function () { return on('rp_e_WRelease_on'); },
+            e_FreshDays: function () { return on('rp_e_WFresh_on'); },
+            e_HouseholdPrior: function () { return on('rp_e_WHousehold_on'); }
+        };
+        function applyWhen() {
+            Object.keys(WHEN).forEach(function (k) {
+                var e = $('#rp_' + k);
+                var box = e && e.closest('.rp-field');
+                if (box) { box.classList.toggle('rp-hidden', !WHEN[k]()); }
+            });
+        }
+        page.addEventListener('change', applyWhen);
+        page.addEventListener('input', applyWhen);
 
         // listes à cocher (comptes, genres) : construites quand les données arrivent, cochées d'après la configuration
         function checks(f, items, selected) {
@@ -531,7 +574,7 @@
         function fill(cfg) {
             lastCfg = cfg;
             F.forEach(function (f) {
-                if (f[2] === 'users' || f[2] === 'genres') { return; }
+                if (f[2] === 'users' || f[2] === 'genres' || f[2] === 'note') { return; }
                 var e = $('#' + fid(f)), v = src(cfg, f)[f[0]];
                 if (f[2] === 'factor') {
                     var w = Number(v), on = isFinite(w) && w > 0;
@@ -551,12 +594,14 @@
             });
             renderChecks();
             applyTpl();
+            applyWhen();
             $('#rpCalMethod').value = cfg.CalibrationMethod || 'Auto';
         }
 
         function read(cfg) {
             F.forEach(function (f) {
                 var dst = src(cfg, f);
+                if (f[2] === 'note') { return; }
                 if (f[2] === 'users' || f[2] === 'genres') {
                     dst[f[0]] = Array.prototype.map.call(page.querySelectorAll('#' + fid(f) + ' input:checked'), function (c) { return c.value; });
                     return;
@@ -569,6 +614,7 @@
                     return;
                 }
                 if (f[2] === 'bool') { dst[f[0]] = e.checked; }
+                else if (f[2].indexOf('enum:') === 0 && /^\d+$/.test(e.value)) { dst[f[0]] = parseInt(e.value, 10); }
                 else if (f[2] === 'int') { var i = parseInt(e.value, 10); dst[f[0]] = isNaN(i) ? 0 : i; }
                 else if (f[2] === 'num') { var n = parseFloat(String(e.value).replace(',', '.')); dst[f[0]] = isNaN(n) ? 0 : n; }
                 else { dst[f[0]] = String(e.value).trim(); }
@@ -609,19 +655,24 @@
             box.style.display = cal.report ? '' : 'none';
             rep.innerHTML = '';
             if (cal.report) {
-                var r = cal.report, tb = el('table');
-                [['', 'Qualité de classement', 'Trouvé dans le top 10', 'top 20'], ['Réglage actuel', (r.current.gain || 0).toFixed(4), pct(r.current.hit10), pct(r.current.hit20)], ['Réglage proposé', (r.proposed.gain || 0).toFixed(4), pct(r.proposed.hit10), pct(r.proposed.hit20)]].forEach(function (row, i) {
+                var r = cal.report, g0 = r.current.gain || 1;
+                var rel = function (x) { return ((x >= 0 ? '+' : '') + (100 * x / g0).toFixed(1) + ' %').replace('.', ','); };
+                if (cal.running) { rep.appendChild(el('p', { 'class': 'mute' }, 'Résultat du calcul précédent (' + when(cal.at) + ') : un nouveau calcul est en cours.')); }
+                var tb = el('table');
+                [['', 'Qualité de classement', 'Trouvé dans le top 10', 'top 20'],
+                 ['Réglage actuel', (r.current.gain || 0).toFixed(4), pct(r.current.hit10), pct(r.current.hit20)],
+                 ['Réglage proposé', (r.proposed.gain || 0).toFixed(4) + ' (' + rel((r.proposed.gain || 0) - (r.current.gain || 0)) + ')', pct(r.proposed.hit10), pct(r.proposed.hit20)]].forEach(function (row, i) {
                     var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); tb.appendChild(tr);
                 });
                 rep.appendChild(tb);
-                rep.appendChild(el('p', { 'class': 'mute' }, r.current.events + ' cas sur ' + r.current.accounts + ' comptes. Qualité de classement = moyenne de 1/log2(1 + rang du titre adopté), pondérée (historique plus fourni = plus de poids, comptes équilibrés). Validation croisée par comptes : ' + (r.cvDelta >= 0 ? '+' : '') + (r.cvDelta || 0).toFixed(4) + ', intervalle de confiance à 95 % [' + (r.ciLow || 0).toFixed(4) + ' ; ' + (r.ciHigh || 0).toFixed(4) + '].'));
+                rep.appendChild(el('p', { 'class': 'mute' }, r.current.events + ' cas sur ' + r.current.accounts + ' comptes au moment du calcul. Qualité de classement = moyenne de 1/log2(1 + rang du titre adopté), pondérée (historique plus fourni = plus de poids, comptes équilibrés). Tous les écarts sont relatifs au réglage actuel ; « validation croisée » = appris sur une moitié des comptes, mesuré sur l\'autre.'));
                 rep.appendChild(el('p', { 'class': r.recommended ? 'ok' : '' }, r.verdict));
-                if (r.methods && r.methods.length > 1) {
+                if (r.methods && r.methods.length) {
                     var mt = el('table');
-                    [['Méthode', 'Validation croisée', 'IC 95 %', 'Historique', '']].concat(r.methods.map(function (m) {
-                        var g = r.current.gain || 1;
-                        var sig = function (x) { return (x >= 0 ? '+' : '') + (100 * x / g).toFixed(1) + ' %'; };
-                        return [m.name, sig(m.cvDelta), '[' + sig(m.ciLow) + ' ; ' + sig(m.ciHigh) + ']', m.sufficiency, (m.method === r.method ? 'retenue' : '') + (m.recommended ? ' ✔' : '')];
+                    [['Méthode', 'Sur l\'historique', 'Validation croisée', 'IC 95 %', 'Historique', '']].concat(r.methods.map(function (m) {
+                        var tag = (m.method === r.method ? 'retenue' : '') + (m.recommended ? ' ✔' : '');
+                        if (m.noChange) { return [m.name, 'aucun changement appris', '—', '—', m.sufficiency, tag]; }
+                        return [m.name, rel((m.gain || 0) - (r.current.gain || 0)), rel(m.cvDelta), '[' + rel(m.ciLow) + ' ; ' + rel(m.ciHigh) + ']', m.sufficiency, tag];
                     })).forEach(function (row, i) { var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); mt.appendChild(tr); });
                     rep.appendChild(mt);
                 }
@@ -630,7 +681,8 @@
                     rep.appendChild(el('div', { 'class': 'mute' }, 'Changements proposés :')); rep.appendChild(ul);
                 }
             }
-            $('#rpCalApply').disabled = !(cal.report && !cal.running);
+            $('#rpCalApply').disabled = !(cal.report && !cal.running && !(cal.report.methods || []).every(function (m) { return m.noChange; }));
+            $('#rpCalApply').__recommended = !!(cal.report && cal.report.recommended);
             $('#rpCalRollback').disabled = !s.canRollback;
 
             var sel = $('#rpPreviewUser'), cur = sel.value; sel.innerHTML = '';
@@ -713,7 +765,7 @@
             if (!calData) { box.textContent = ''; return; }
             var d = (calData.methods || {})[m];
             box.className = 'rp-result ' + (d && d.level === 'suffisant' ? 'ok' : (d && d.level === 'limite' ? 'mute' : 'ko'));
-            box.textContent = d ? (d.level === 'suffisant' ? '✔ ' : '⚠ ') + d.message : '';
+            box.textContent = d ? (d.level === 'suffisant' ? '✔ ' : '⚠ ') + 'Historique actuel : ' + d.message : '';
             Array.prototype.forEach.call($('#rpCalMethod').options, function (o) {
                 var x = (calData.methods || {})[o.value];
                 o.textContent = o.textContent.replace(/ — historique .*$/, '') + (x ? ' — historique ' + x.level : '');
@@ -731,7 +783,10 @@
         $('#rpCalStart').addEventListener('click', function () { api('POST', 'Calibration/Start').then(refresh, refresh); });
         $('#rpCalCancel').addEventListener('click', function () { api('POST', 'Calibration/Cancel').then(refresh, refresh); });
         $('#rpCalApply').addEventListener('click', function () {
-            if (confirm('Appliquer le réglage proposé ? (l\'actuel est gardé pour revenir en arrière)')) { api('POST', 'Calibration/Apply').then(load, load); }
+            var msg = $('#rpCalApply').__recommended
+                ? 'Appliquer le réglage proposé ? (l\'actuel est gardé pour revenir en arrière)'
+                : 'Ce réglage n\'est PAS recommandé (gain absent, incertain ou négligeable). L\'appliquer quand même ? (l\'actuel est gardé pour revenir en arrière)';
+            if (confirm(msg)) { api('POST', 'Calibration/Apply').then(load, load); }
         });
         $('#rpCalRollback').addEventListener('click', function () { api('POST', 'Calibration/Rollback').then(load, load); });
         $('#rpPreviewBtn').addEventListener('click', function () {
