@@ -12,9 +12,9 @@
         "version": "1.0.6.0",
         "changelog": "1.0.6 : une série pèse selon le temps réellement regardé (durée de chaque épisode), plus seulement le nombre d'épisodes ; un titre marqué « vu » sans date, ou marqué en masse, compte comme un goût ancien au lieu d'être ignoré ou pris pour un choix récent ; les lectures d'anciens fichiers remplacés par Radarr/Sonarr (Playback Reporting) sont rattachées au titre actuel par son nom, ce qui rend sa vraie date de premier lancement ; calibrage : titres commencés sans être adoptés comptés à demi-poids, marquages en masse écartés, nouvelle méthode réseau de neurones (expérimental) comparée aux autres en automatique ; heure de la journée en option (une liste par tranche horaire, servie selon l'heure) ; fuseau horaire réglable.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.6.0/RecoPlus_1.0.6.0.zip",
+        "checksum": "12214a6d5a3415855f99f3d0af588586",
+        "timestamp": "2026-10-20T11:28:22Z"
       },
       {
         "version": "1.0.5.0",
