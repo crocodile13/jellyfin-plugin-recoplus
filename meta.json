@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.20 : mélange libre — la rangée « Pour toi » garde sa taille : chaque titre hors bibliothèque montré prend la place du titre de la bibliothèque le moins bien classé (la rangée s'allongeait d'autant, jusqu'à 60 cartes) ; nouveau réglage « titres hors bibliothèque au maximum » (0 = aucune limite, par défaut).",
+  "changelog": "1.0.21 : contenu de chaque rangée d'accueil au choix (onglet Mode étendu) — bibliothèque seule, Seerr seul ou mélange, pour « Pour toi », Nouveautés (titres sortis récemment), « Parce que tu as aimé … » (titres proches du titre aimé), Films et Séries ; le serveur compose chaque rangée : un titre hors bibliothèque ne va que dans une rangée, ceux de la bibliothèque qu'il remplace passent aux rangées suivantes, chaque rangée garde sa taille. L'interrupteur « Sur l'accueil » disparaît (repris automatiquement). Calcul des comptes en parallèle et nouveau réglage « Fils d'exécution » (calcul et calibrage ; 0 = la moitié des cœurs). Titres des rangées « Parce que … » et affichages aussi sans mode étendu. L'aperçu montre la rangée de chaque titre hors bibliothèque. Page de configuration : un réglage sans effet dans la configuration actuelle est grisé, avec la raison (au lieu d'être masqué).",
   "description": "Recommandations personnelles à la place de celles de Jellyfin.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-20T00:00:00.0000000Z",
-  "version": "1.0.20.0",
+  "version": "1.0.21.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

@@ -47,9 +47,12 @@ public sealed class ExternalRec
     /// <summary>Source d'exploration qui l'a apporté (related, saga, people, keyword, genre, cross, gems, studio, language, top).</summary>
     public string Source { get; set; } = string.Empty;
 
+    /// <summary>Rangée d'accueil où il est placé (identifiant de rangée, ex. « PourToi », « Films ») ; vide = aucune.</summary>
+    public string Row { get; set; } = string.Empty;
+
     /// <summary>
-    /// Mélange libre : nombre de titres de la bibliothèque (rangée « Pour toi », hors demandes en tête) que le moteur classe
-    /// devant celui-ci ; -1 = non calculé.
+    /// Nombre de titres de la bibliothèque qui le précèdent dans sa rangée (hors demandes en tête de « Pour toi ») ;
+    /// -1 = pas placé.
     /// </summary>
     public int After { get; set; } = -1;
 }
@@ -64,6 +67,9 @@ public sealed class SlotRecs
     public Dictionary<string, List<string>> Rows { get; set; } = new(StringComparer.Ordinal);
 
     public Dictionary<string, string> RowAnchors { get; set; } = new(StringComparer.Ordinal);
+
+    /// <summary>Composition des rangées avec titres hors bibliothèque (voir <see cref="UserRecs.Layouts"/>).</summary>
+    public Dictionary<string, List<string>> Layouts { get; set; } = new(StringComparer.Ordinal);
 }
 
 /// <summary>Résultat précalculé pour un compte.</summary>
@@ -98,6 +104,13 @@ public sealed class UserRecs
     /// <summary>Goût du compte pour chaque titre de la liste (personnalisation de « Plus comme ceci »).</summary>
     public Dictionary<string, double> Taste { get; set; } = new(StringComparer.Ordinal);
 
+    /// <summary>
+    /// Rangées d'accueil avec titres hors bibliothèque (identifiant de rangée → cartes dans l'ordre) : « » = la carte
+    /// suivante de la bibliothèque telle que Home Screen Sections l'affiche, « movie:123 » / « tv:123 » = un titre hors
+    /// bibliothèque. Rangée absente = bibliothèque seule.
+    /// </summary>
+    public Dictionary<string, List<string>> Layouts { get; set; } = new(StringComparer.Ordinal);
+
     /// <summary>Heure de la journée : listes par tranche horaire (0 nuit, 1 matin, 2 après-midi, 3 soirée), vide sinon.</summary>
     public Dictionary<int, SlotRecs> Slots { get; set; } = new();
 
@@ -109,6 +122,7 @@ public sealed class UserRecs
         c.Taste = v.Taste;
         c.Rows = v.Rows;
         c.RowAnchors = v.RowAnchors;
+        c.Layouts = v.Layouts.Count > 0 ? v.Layouts : Layouts;
         return c;
     }
 }

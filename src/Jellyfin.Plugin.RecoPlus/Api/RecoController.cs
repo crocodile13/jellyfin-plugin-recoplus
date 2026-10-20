@@ -139,11 +139,13 @@ public sealed class RecoController : ControllerBase
             // affichages comptés seulement si le compte reçoit des recommandations Reco+
             track = cfg.Enabled && cfg.TrackImpressions && (cfg.Engine?.WImpression ?? 0) > 0 && r is not null,
             enabled = on,
-            homeRow = on && cfg.ExtendedHomeRow && CompatibilityGuard.Allowed(Feature.ClientScript),
+            // sans Home Screen Sections : rangée à part si « Pour toi » reçoit des titres hors bibliothèque
+            homeRow = on && cfg.SourcePourToi != RowSource.Local && CompatibilityGuard.Allowed(Feature.ClientScript),
             hss,
-            mixMode = cfg.ExtendedMixMode == Configuration.MixMode.Score ? "score" : "interleave",
-            mixEvery = Math.Clamp(cfg.ExtendedMixEvery, 2, 20),
-            skip = Math.Min(r?.Pinned.Count ?? 0, Math.Clamp(cfg.RowSize, 5, 60)),
+            // avec HSS : composition de chaque rangée qui reçoit des titres hors bibliothèque (« » = carte de la bibliothèque)
+            layouts = on && hss ? (r?.Layouts ?? new Dictionary<string, List<string>>()).Where(kv => cfg.SourceOf(kv.Key) != RowSource.Local)
+                .ToDictionary(kv => HomeScreenSectionsIntegration.Prefix + kv.Key, kv => kv.Value, StringComparer.Ordinal) : new Dictionary<string, List<string>>(),
+            rowSize = Math.Clamp(cfg.RowSize, 5, 60),
             title = cfg.ExtendedTitle,
             canRequest = on && cfg.ExtendedRequestButton && (r?.SeerrUserId ?? 0) > 0,
             // adresse publique seulement : l'adresse interne de Seerr n'a rien à faire chez les utilisateurs
@@ -296,7 +298,19 @@ public sealed class RecoController : ControllerBase
     public ActionResult Preview([FromQuery] Guid userId)
     {
         var r = _reco.For(userId);
-        return Ok(new { items = _reco.Preview(userId), extended = r?.Extended.Take(10).Select(e => $"{e.Name} ({e.Year}) — {(string.IsNullOrEmpty(e.Reason) ? "parce que : " + e.Because : e.Reason)}"), rows = _reco.PreviewRows(userId), sources = r?.Sources, computedAt = r?.ComputedAt });
+        // rangée d'accueil de chaque titre hors bibliothèque (son titre tel que configuré)
+        var cfg = Plugin.Instance!.Configuration;
+        var names = HomeScreenSectionsIntegration.Sections(cfg).ToDictionary(x => x.Id, x => x.Title, StringComparer.Ordinal);
+        string RowOf(ExternalRec e) => e.Row.Length == 0 ? " · sur aucune rangée"
+            : " · rangée « " + (r?.RowAnchors.TryGetValue(e.Row, out var a) == true ? "Parce que : " + a : names.GetValueOrDefault(HomeScreenSectionsIntegration.Prefix + e.Row, e.Row)) + " »";
+        return Ok(new
+        {
+            items = _reco.Preview(userId),
+            extended = r?.Extended.Take(30).Select(e => $"{e.Name} ({e.Year}) — {(string.IsNullOrEmpty(e.Reason) ? "parce que : " + e.Because : e.Reason)}{(cfg.AnyExternalRow() ? RowOf(e) : string.Empty)}"),
+            rows = _reco.PreviewRows(userId),
+            sources = r?.Sources,
+            computedAt = r?.ComputedAt,
+        });
     }
 
     /// <summary>

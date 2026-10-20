@@ -49,7 +49,7 @@ function fieldsOf(html) {
 }
 
 const cfg = {
-    Enabled: true, SimilarPersonalization: 0.25, ExcludedUsers: ['bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'],
+    Enabled: true, SeerrEnabled: true, ExtendedEnabled: true, SourcePourToi: 'Mix', SimilarPersonalization: 0.25, ExcludedUsers: ['bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'],
     Engine: { HalfLifeDays: 90, Mmr: 0.3, Saga: true, Decay: 'Exponential' },
     Lists: { Window: 20, RandomPercent: 0, MinMovies: 0, MinSeries: 0, ExcludedGenres: ['documentaire', 'Western'], MinCommunityRating: 0, MinYear: 0 },
 };
@@ -168,7 +168,7 @@ await test('le nom de la rangée suit le titre saisi, partout', async () => {
     input.value = 'Pour vous';
     input.dispatchEvent(new d.defaultView.Event('input'));
     assert.match(d.querySelector('[data-pane="listes"] .rp-sub').textContent, /« Pour vous »/);
-    assert.match(d.getElementById('rp_c_ExtendedMixMode').closest('.rp-field').querySelector('label').textContent, /« Pour vous »/);
+    assert.match(d.getElementById('rp_c_SourcePourToi').closest('.rp-field').querySelector('label').textContent, /« Pour vous »/);
     const ui = d.querySelector('.content-primary');
     assert.ok(!ui.textContent.includes('{ROW}'), 'modèle non remplacé');
     assert.ok(!ui.textContent.includes('« Pour toi »'), 'nom codé en dur');
@@ -267,7 +267,7 @@ await test('réglages sans objet masqués selon le mode, valeurs gardées', asyn
     Object.assign(c.Engine, { Diversity: 'Personalized', CalibrationStrength: 0.5, Weighting: 'TfIdf', WShortTerm: 0, SeriesByTime: true });
     const { d, saved } = open(c);
     await wait(50);
-    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-hidden');
+    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
     assert.ok(hidden('rp_c_ExtendedMixEvery'), 'mélange libre : pas d\'intervalle');
     assert.ok(!hidden('rp_c_ExtendedMinFree'), 'mélange libre : minimum visible');
     assert.ok(hidden('rp_e_CalibrationStrength') && !hidden('rp_e_Mmr'));
@@ -282,6 +282,84 @@ await test('réglages sans objet masqués selon le mode, valeurs gardées', asyn
     assert.equal(saved[0].Engine.Mmr, 0.3);
 });
 
+await test('mode étendu : contenu de chaque rangée, titres des rangées à jour, réglages du mélange seulement s\'il sert', async () => {
+    const c = JSON.parse(JSON.stringify(cfg));
+    Object.assign(c, { SourcePourToi: 'Mix', SourceNouveautes: 'Local', SourceParceQue: 'Local', SourceFilms: 'Seerr', SourceSeries: 'Local', RowMoviesTitle: 'Mes films', RowNewReleasedDays: 200, ExtendedMixMode: 'Score' });
+    const { d, saved } = open(c);
+    await wait(50);
+    const box = d.querySelector('[data-fields="exthome"]');
+    const sel = [...box.querySelectorAll('select')].map((e) => e.id);
+    assert.deepEqual(sel, ['rp_c_SourcePourToi', 'rp_c_SourceNouveautes', 'rp_c_SourceParceQue', 'rp_c_SourceFilms', 'rp_c_SourceSeries']);
+    assert.deepEqual([...d.getElementById('rp_c_SourceFilms').options].map((o) => o.value), ['Local', 'Mix', 'Seerr']);
+    const label = (id) => d.getElementById(id).closest('.rp-field').querySelector('label').textContent;
+    assert.equal(label('rp_c_SourceFilms'), 'Rangée « Mes films »');
+    assert.equal(label('rp_c_SourceParceQue'), 'Rangées « Parce que tu as aimé… »');
+    const t = d.getElementById('rp_c_RowMoviesTitle'); t.value = 'Films à voir'; t.dispatchEvent(new d.defaultView.Event('input'));
+    assert.equal(label('rp_c_SourceFilms'), 'Rangée « Films à voir »');
+    assert.ok(!d.getElementById('rp_c_ExtendedHomeRow'), 'ancien interrupteur retiré');
+    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
+    const mixBox = () => d.getElementById('rpMixBox').classList.contains('rp-box-off');
+    assert.ok(!mixBox(), 'une rangée mélangée : réglages du mélange visibles');
+    assert.ok(hidden('rp_c_RowNewReleasedDays'), 'nouveautés en bibliothèque seule');
+    assert.ok(!hidden('rp_c_ExtendedTitle'), 'rangée à part possible');
+    const change = (id, v) => { const e = d.getElementById(id); e.value = v; e.dispatchEvent(new d.defaultView.Event('change', { bubbles: true })); };
+    change('rp_c_SourcePourToi', 'Local');
+    assert.ok(mixBox(), 'plus aucune rangée mélangée');
+    assert.ok(hidden('rp_c_ExtendedTitle') && hidden('rp_c__ExtendedRowNote'), 'pas de rangée à part');
+    change('rp_c_SourceNouveautes', 'Mix');
+    assert.ok(!mixBox() && !hidden('rp_c_RowNewReleasedDays'));
+    d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
+    await wait(50);
+    assert.equal(saved[0].SourcePourToi, 'Local');
+    assert.equal(saved[0].SourceNouveautes, 'Mix');
+    assert.equal(saved[0].SourceFilms, 'Seerr');
+    assert.equal(saved[0].RowNewReleasedDays, 200);
+});
+
+await test('réglages sans effet : grisés, désactivés, avec la raison (une fois par boîte si elle est commune)', async () => {
+    const c = JSON.parse(JSON.stringify(cfg));
+    Object.assign(c, { SeerrEnabled: false, SourcePourToi: 'Mix', TrackImpressions: true });
+    Object.assign(c.Engine, { WImpression: 0.5, WShortTerm: 0, ShortTermTitles: 5 });
+    const { d, saved } = open(c);
+    await wait(50);
+    const off = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
+    const why = (id) => d.getElementById(id).closest('.rp-field').getAttribute('data-why');
+    assert.ok(off('rp_c_ExtendedEnabled') && d.getElementById('rp_c_ExtendedEnabled').disabled);
+    assert.equal(why('rp_c_SourceFilms'), 'Seerr non utilisé (onglet Seerr)');
+    const box = d.querySelector('[data-fields="exthome"]').closest('.rp-box');
+    assert.ok(box.classList.contains('rp-box-off'));
+    assert.equal(box.querySelector('.rp-boxwhy').textContent, 'Sans effet : Seerr non utilisé (onglet Seerr).');
+    assert.ok(off('rp_e_RequestWeight'), 'demandes Seerr sans Seerr');
+    assert.ok(!off('rp_c_SeerrUrl'), 'la connexion reste réglable');
+    // facteur coupé : son réglage fin est grisé, avec le nom du facteur
+    assert.match(why('rp_e_ShortTermTitles'), /« Goût du moment » coupé/);
+    const fo = d.getElementById('rp_e_WShortTerm_on'); fo.checked = true; fo.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.ok(!off('rp_e_ShortTermTitles') && !d.getElementById('rp_e_ShortTermTitles').disabled);
+    // Seerr activé : tout se rallume
+    const se = d.getElementById('rp_c_SeerrEnabled'); se.checked = true; se.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.ok(!off('rp_c_SourceFilms') && !box.classList.contains('rp-box-off'));
+    // plugin coupé : tout est grisé sauf l'interrupteur
+    const en = d.getElementById('rp_c_Enabled'); en.checked = false; en.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.ok(!off('rp_c_Enabled') && off('rp_c_ListSize') && off('rp_e_HalfLifeDays'));
+    en.checked = true; en.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
+    await wait(50);
+    assert.equal(saved[0].Engine.ShortTermTitles, 5, 'valeur grisée puis rallumée gardée');
+    assert.equal(saved[0].SourcePourToi, 'Mix');
+});
+
+await test('fils d\'exécution réglables (0 = automatique)', async () => {
+    const { d, saved } = open({ ...cfg, Threads: 6 });
+    await wait(50);
+    const i = d.getElementById('rp_c_Threads');
+    assert.ok(i.closest('[data-fields="genadv"]'));
+    assert.equal(i.value, '6');
+    i.value = '0';
+    d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
+    await wait(50);
+    assert.equal(saved[0].Threads, 0);
+});
+
 await test('mode étendu : sources dans « Où chercher », réglages d\'une source masqués quand elle est coupée', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c, { ExtendedByGenre: false, ExtendedByPeople: true, ExtendedGenres: 7, ExtendedNoise: 0.3 });
@@ -291,7 +369,7 @@ await test('mode étendu : sources dans « Où chercher », réglages d\'une sou
     for (const k of ['ExtendedTopRated', 'ExtendedByGenre', 'ExtendedByKeyword', 'ExtendedSagas', 'ExtendedByPeople', 'ExtendedByStudio', 'ExtendedCrossings', 'ExtendedGems', 'ExtendedByLanguage', 'ExtendedNoise']) {
         assert.ok(box.querySelector('#rp_c_' + k), k + ' dans « Où chercher »');
     }
-    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-hidden');
+    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
     assert.ok(hidden('rp_c_ExtendedGenres') && !hidden('rp_c_ExtendedPeople'));
     const g = d.getElementById('rp_c_ExtendedByGenre'); g.checked = true; g.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
     assert.ok(!hidden('rp_c_ExtendedGenres'));
@@ -307,8 +385,9 @@ await test('mode étendu : réglages des pépites et croisements masqués quand 
     Object.assign(c, { ExtendedGems: false, ExtendedCrossings: true, ExtendedByLanguage: false, ExtendedGemMaxVotes: 300 });
     const { d, saved } = open(c);
     await wait(50);
-    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-hidden');
-    for (const k of ['ExtendedGemMinRating', 'ExtendedGemMinVotes', 'ExtendedGemMaxVotes', 'ExtendedGemGenres']) { assert.ok(hidden('rp_c_' + k), k); }
+    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
+    for (const k of ['ExtendedGemMinRating', 'ExtendedGemMaxVotes', 'ExtendedGemGenres']) { assert.ok(hidden('rp_c_' + k), k); }
+    assert.ok(!hidden('rp_c_ExtendedGemMinVotes'), 'sert aussi aux places découverte');
     assert.ok(!hidden('rp_c_ExtendedCrossingsMax'));
     assert.ok(!hidden('rp_c_ExtendedLanguageMinShare'), 'part des langues : sert aussi aux croisements');
     const g = d.getElementById('rp_c_ExtendedGems'); g.checked = true; g.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
@@ -332,7 +411,7 @@ await test('aperçu : tableau des sources, dans l\'ordre, « — » sans mélang
     await wait(50);
     const rows = [...d.querySelectorAll('#rpPreviewSources tr')].map((tr) => [...tr.children].map((c) => c.textContent));
     assert.deepEqual(rows, [
-        ['Source', 'Trouvés', 'Détaillés', 'Proposés', 'Dans la rangée'],
+        ['Source', 'Trouvés', 'Détaillés', 'Proposés', 'Sur l\'accueil'],
         ['Proches des titres aimés', '300', '60', '9', '—'],
         ['Pépites', '25', '12', '3', '—'],
         ['Les mieux notés', '40', '10', '1', '—'],

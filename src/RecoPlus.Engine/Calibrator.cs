@@ -276,8 +276,8 @@ public static class Calibrator
         var h10 = new bool[cases.Count];
         var h20 = new bool[cases.Count];
         var gain = new double[cases.Count];
-        // cas indépendants : en parallèle, sur la moitié des cœurs (Jellyfin garde de quoi servir les lectures)
-        var po = new System.Threading.Tasks.ParallelOptions { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount / 2), CancellationToken = ct };
+        // cas indépendants : en parallèle (réglage « Threads », par défaut la moitié des cœurs)
+        var po = new System.Threading.Tasks.ParallelOptions { MaxDegreeOfParallelism = Cpu.Degree, CancellationToken = ct };
         System.Threading.Tasks.Parallel.For(0, cases.Count, po, i =>
         {
             var (u, target, t0) = cases[i].Ev;

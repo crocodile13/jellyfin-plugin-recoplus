@@ -95,6 +95,114 @@ public class HomeRowsTests
     }
 
     [Fact]
+    public void FitRowKeepsTheRowSizeAndDropsWhatFallsOff()
+    {
+        // 5 titres de la bibliothèque ; hors bibliothèque après 0, 2, 2, 4 et non placé (5)
+        var (after, kept) = HomeRows.FitRow(new[] { 0, 2, 2, 4, 5 }, 5);
+        // rangée : E0 L0 L1 E1 E2 | L2 L3 E3 L4 coupés → 3 hors bibliothèque, 2 titres de la bibliothèque gardés
+        Assert.Equal(new[] { 0, 2, 2, 5, 5 }, after);
+        Assert.Equal(2, kept);
+
+        // rien de placé : la bibliothèque entière
+        var (a1, k1) = HomeRows.FitRow(new[] { 7, -1 }, 4);
+        Assert.Equal(new[] { 4, -1 }, a1);
+        Assert.Equal(4, k1);
+        // tout derrière les 2 premiers : 2 de la bibliothèque, puis les titres hors bibliothèque jusqu'à la taille
+        var (a2, k2) = HomeRows.FitRow(new[] { 2, 2, 2, 2 }, 4);
+        Assert.Equal(new[] { 2, 2, 4, 4 }, a2);
+        Assert.Equal(2, k2);
+    }
+
+    [Fact]
+    public void PlaceRowSeerrOnlyFillsTheRowWithOutsideTitles()
+    {
+        var (after, kept) = HomeRows.PlaceRow(new double[] { 5, 4, 3 }, new double[] { 1, 1, 1, 1 }, RowSource.Seerr, new MixOptions(), null, 3);
+        Assert.Equal(new[] { 0, 0, 0, 3 }, after);
+        Assert.Equal(0, kept);
+    }
+
+    [Fact]
+    public void PlaceRowLocalPlacesNothing()
+    {
+        var (after, kept) = HomeRows.PlaceRow(new double[] { 5, 4, 3 }, new double[] { 9 }, RowSource.Local, new MixOptions { Free = true }, null, 3);
+        Assert.Equal(new[] { 3 }, after);
+        Assert.Equal(3, kept);
+    }
+
+    [Fact]
+    public void PlaceRowInterleaveKeepsTheRowSize()
+    {
+        // 6 cartes, une sur trois hors bibliothèque : L L E L L E
+        var (after, kept) = HomeRows.PlaceRow(new double[] { 9, 8, 7, 6, 5, 4 }, new double[] { 1, 1, 1 }, RowSource.Mix, new MixOptions { Every = 3 }, null, 6);
+        Assert.Equal(new[] { 2, 4, 6 }, after);
+        Assert.Equal(4, kept);
+    }
+
+    [Fact]
+    public void PlaceRowFreeMixRanksTogetherAndKeepsTheSize()
+    {
+        // 9,5 devant tout ; 6,5 après 3 titres ; 1 derrière toute la rangée → non montré
+        var (after, kept) = HomeRows.PlaceRow(new double[] { 9, 8, 7, 6, 5 }, new double[] { 9.5, 6.5, 1 }, RowSource.Mix, new MixOptions { Free = true }, null, 5);
+        Assert.Equal(new[] { 0, 3, 5 }, after);
+        Assert.Equal(3, kept);
+        // places découverte : le troisième est placé de force
+        var (a2, k2) = HomeRows.PlaceRow(new double[] { 9, 8, 7, 6, 5, 4, 3, 2 }, new double[] { 9.5, 6.5, 1 }, RowSource.Mix, new MixOptions { Free = true, Discovery = 1 }, new[] { 2 }, 8);
+        Assert.Equal(new[] { 0, 3, 4 }, a2);
+        Assert.Equal(5, k2);
+    }
+
+    [Fact]
+    public void AllocateFreesTheTitlesPushedOutOfARow()
+    {
+        var (ctx, vec, cands, sc) = Setup();
+        var ordered = cands.OrderByDescending(c => sc[c]).ThenBy(c => c, StringComparer.Ordinal).ToList();
+        var o = new RowOptions { Size = 5, Movies = true, Series = true };
+        var plain = HomeRows.Allocate(ctx, vec, "u", ordered.Take(5).ToList(), ordered, sc, o);
+        // « Pour toi » ne garde que ses 2 premiers titres : les 3 suivants redeviennent libres pour les rangées suivantes
+        var res = HomeRows.Allocate(ctx, vec, "u", ordered.Take(5).ToList(), ordered, sc, o, (row, anchor, shown) => row == HomeRows.PourToi ? 2 : -1);
+        Assert.Equal(ordered.Take(2), res.Rows[HomeRows.PourToi].Take(2));
+        Assert.True(res.Rows[HomeRows.PourToi].Count <= 2 + HomeRows.Spare);
+        var shownElsewhere = res.Rows[HomeRows.Films].Take(5).Concat(res.Rows[HomeRows.Series].Take(5)).ToList();
+        var plainElsewhere = plain.Rows[HomeRows.Films].Take(5).Concat(plain.Rows[HomeRows.Series].Take(5)).ToList();
+        Assert.All(ordered.Skip(2).Take(3), id => Assert.Contains(id, shownElsewhere));
+        Assert.All(ordered.Skip(2).Take(3), id => Assert.DoesNotContain(id, plainElsewhere));
+        // le titre aimé est transmis pour les rangées « Parce que … »
+        string? seen = null;
+        HomeRows.Allocate(ctx, vec, "u", ordered.Take(5).ToList(), ordered, sc, new RowOptions { Size = 5, Because = 1 },
+            (row, anchor, shown) => { if (row == HomeRows.ParceQue + 1) { seen = anchor; } return -1; });
+        Assert.NotNull(seen);
+    }
+
+    [Fact]
+    public void ForkedContextsGiveTheSameListsInParallel()
+    {
+        var (ctx, vec, cands, _) = Setup();
+        var s = new EngineSettings();
+        List<string> One(Context c, int? slot, SimilarityIndex? idx)
+        {
+            c.Slot = slot;
+            var sc = Recommender.Score(c, vec, "u", cands, s);
+            return Recommender.Rank(c, vec, cands, sc, 20, s, "u", idx);
+        }
+
+        var expected = new[] { (int?)null, 0, 1, 2, 3 }.Select(sl => One(ctx.Fork(), sl, null)).ToList();
+        var idx = new SimilarityIndex(vec, 1_000_000);
+        var got = new List<string>[40];
+        System.Threading.Tasks.Parallel.For(0, got.Length, new System.Threading.Tasks.ParallelOptions { MaxDegreeOfParallelism = 8 },
+            i => got[i] = One(ctx.Fork(), i % 5 == 0 ? null : (i % 5) - 1, idx));
+        for (int i = 0; i < got.Length; i++)
+        {
+            Assert.Equal(expected[i % 5], got[i]);
+        }
+
+        Assert.Null(ctx.Slot);                       // le contexte d'origine n'est pas touché
+        Cpu.Threads = 3;
+        Assert.Equal(Math.Min(3, Environment.ProcessorCount), Cpu.Degree);
+        Cpu.Threads = 0;
+        Assert.Equal(Math.Max(1, Environment.ProcessorCount / 2), Cpu.Degree);
+    }
+
+    [Fact]
     public void CapPlacesKeepsTheBestRankedOutsideTitles()
     {
         Assert.Equal(new[] { 0, 3, 10, 10, 10, 10 }, HomeRows.CapPlaces(new[] { 0, 3, 5, 10, 2, 7 }, 10, 2));   // 2 premiers placés gardés

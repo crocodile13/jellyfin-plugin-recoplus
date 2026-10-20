@@ -43,29 +43,43 @@ public sealed class SimilarityIndex
     {
         lock (_rows)
         {
-            return RowLocked(id);
-        }
-    }
+            if (_rows.TryGetValue(id, out var known))
+            {
+                return known;
+            }
 
-    private double[]? RowLocked(string id)
-    {
-        if (_rows.TryGetValue(id, out var r))
-        {
-            return r;
+            if ((long)(_rows.Count + 1) * _cols.Length > _maxCells)
+            {
+                return null;
+            }
         }
 
-        if (!_vec.TryGetValue(id, out var v) || (long)(_rows.Count + 1) * _cols.Length > _maxCells)
+        if (!_vec.TryGetValue(id, out var v))
         {
             return null;
         }
 
-        r = new double[_cols.Length];
+        // calculée hors du verrou : les autres fils lisent les lignes déjà prêtes pendant ce temps
+        var r = new double[_cols.Length];
         for (int j = 0; j < _cols.Length; j++)
         {
             r[j] = v.Dot(_cols[j]);
         }
 
-        _rows[id] = r;
-        return r;
+        lock (_rows)
+        {
+            if (_rows.TryGetValue(id, out var other))
+            {
+                return other; // calculée en même temps par un autre fil : mêmes valeurs
+            }
+
+            if ((long)(_rows.Count + 1) * _cols.Length > _maxCells)
+            {
+                return r;
+            }
+
+            _rows[id] = r;
+            return r;
+        }
     }
 }
