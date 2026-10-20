@@ -12,9 +12,9 @@
         "version": "1.0.22.0",
         "changelog": "1.0.22 : calibrage plus fidèle — il utilise les mêmes données que les recommandations (demandes et listes de suivi Seerr, votes TMDb, avis et titres masqués de Jellyfin Enhanced ; comptes ignorés exclus ; rien n'est demandé à Seerr pendant le calibrage) et ne voit plus rien de la suite : un titre commencé avant mais fini après est vu en cours, une demande compte dès sa date ; un titre demandé ou mis en liste de suivi avant d'être regardé n'est plus compté comme un cas de classement. Nouveau bouton « Exporter le jeu de calibrage » (pseudonymisé, onglet Calibrage). Une demande faite depuis une carte Reco+ retire le titre pour de bon (elle ne le retirait que de la tranche horaire servie).",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.22.0/RecoPlus_1.0.22.0.zip",
+        "checksum": "6ef86f45496fac523cd137baa35b8e1b",
+        "timestamp": "2026-10-20T22:14:21Z"
       },
       {
         "version": "1.0.21.0",
