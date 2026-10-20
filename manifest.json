@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.11.0",
+        "changelog": "1.0.11 : plus de titres hors bibliothèque examinés — 30 titres aimés de départ au lieu de 15, 2 pages de recommandations et de titres similaires TMDb par titre (nouveau réglage), 150 fiches détaillées au lieu de 60, présélection par le goût pour les titres aimés qui les proposent ; le minimum de titres hors bibliothèque en mélange libre est désormais à 0 par défaut (le classement seul décide). Ces valeurs par défaut ne s'appliquent qu'aux réglages jamais enregistrés : à changer dans la page si besoin.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.10.0",
         "changelog": "1.0.10 : mélange libre — un minimum de titres hors bibliothèque montrés dans « Pour toi » (réglable, 3 par défaut) : si le classement commun n'en place aucun, les mieux classés sont répartis dans la rangée ; un titre dont Jellyfin Enhanced refuse la fiche au compte (403, contrôle parental ou droits Seerr) n'est plus montré en carte Reco+ ; script de l'accueil chargé avec le numéro de version dans l'URL, pour qu'un cache (nginx, navigateur) ne garde pas l'ancien après une mise à jour.",
         "targetAbi": "12.2.0.0",

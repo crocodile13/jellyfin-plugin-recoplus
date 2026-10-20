@@ -160,10 +160,13 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public int ExtendedCount { get; set; } = 20;
 
     /// <summary>Titres aimés utilisés comme points de départ dans le catalogue.</summary>
-    public int ExtendedAnchors { get; set; } = 15;
+    public int ExtendedAnchors { get; set; } = 30;
+
+    /// <summary>Pages de recommandations et de titres similaires TMDb lues par titre aimé (20 titres environ par page).</summary>
+    public int ExtendedPages { get; set; } = 2;
 
     /// <summary>Candidats détaillés par compte (appels Seerr, mis en cache).</summary>
-    public int ExtendedDetails { get; set; } = 60;
+    public int ExtendedDetails { get; set; } = 150;
 
     /// <summary>
     /// Titres hors bibliothèque sur l'accueil (script client) : mélangés dans la rangée « Pour toi » si Home Screen
@@ -181,7 +184,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// Mélange libre : nombre minimal de titres hors bibliothèque montrés dans « Pour toi » ; si le classement commun en
     /// place moins, les mieux classés sont ajoutés quand même, répartis dans la rangée (0 = classement seul).
     /// </summary>
-    public int ExtendedMinFree { get; set; } = 3;
+    public int ExtendedMinFree { get; set; }
 
     /// <summary>Titre de la rangée du mode étendu.</summary>
     public string ExtendedTitle { get; set; } = "À découvrir pour toi";

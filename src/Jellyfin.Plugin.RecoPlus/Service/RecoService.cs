@@ -882,11 +882,12 @@ public sealed class RecoService
         var key = u.Id.ToString("N");
         var sig = ctx.Sig.GetValueOrDefault(key) ?? new Dictionary<string, double>();
         var anchors = sig.Where(e => e.Value > 0).OrderByDescending(e => e.Value)
-            .Select(e => (Id: e.Key, Tmdb: tmdbOf.GetValueOrDefault(e.Key) ?? (e.Key.StartsWith("tmdb:", StringComparison.Ordinal) ? e.Key[5..] : null)))
+            .Select(e => (Id: e.Key, Tmdb: tmdbOf.GetValueOrDefault(e.Key) ?? (e.Key.StartsWith("tmdb:", StringComparison.Ordinal) ? e.Key[5..] : null), Weight: e.Value))
             .Where(a => a.Tmdb is not null)
-            .Take(Math.Clamp(cfg.ExtendedAnchors, 1, 50))
+            .Take(Math.Clamp(cfg.ExtendedAnchors, 1, 100))
             .ToList();
         var count = new Dictionary<string, int>(StringComparer.Ordinal);
+        var support = new Dictionary<string, double>(StringComparer.Ordinal);   // somme du goût pour les titres aimés qui le proposent
         var meta = new Dictionary<string, SeerrResult>(StringComparer.Ordinal);
         var because = new Dictionary<string, string>(StringComparer.Ordinal);
         var seen = ctx.Hist.GetValueOrDefault(key) ?? new Dictionary<string, Interaction>();
@@ -898,7 +899,7 @@ public sealed class RecoService
                 continue;
             }
 
-            foreach (var r in await _seerr.RelatedAsync(cl, p[0], tid, ct).ConfigureAwait(false))
+            foreach (var r in (await _seerr.RelatedAsync(cl, p[0], tid, Math.Clamp(cfg.ExtendedPages, 1, 5), ct).ConfigureAwait(false)).DistinctBy(x => x.MediaType + ":" + x.TmdbId))
             {
                 var k = r.MediaType + ":" + r.TmdbId;
                 if (r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Seen(seen, "tmdb:" + k))
@@ -907,13 +908,15 @@ public sealed class RecoService
                 }
 
                 count[k] = count.GetValueOrDefault(k) + 1;
+                support[k] = support.GetValueOrDefault(k) + a.Weight;
                 meta.TryAdd(k, r);
                 because.TryAdd("tmdb:" + k, titles.TryGetValue(a.Id, out var at) ? at.Name : string.Empty);
             }
         }
 
-        var top = count.OrderByDescending(kv => kv.Value).ThenByDescending(kv => meta[kv.Key].Vote).ThenBy(kv => kv.Key, StringComparer.Ordinal)
-            .Take(Math.Clamp(cfg.ExtendedDetails, 10, 300)).ToList();
+        // présélection avant les fiches détaillées : proposés par les titres les plus aimés, puis par le plus de titres aimés, puis les mieux notés
+        var top = count.OrderByDescending(kv => support[kv.Key]).ThenByDescending(kv => kv.Value).ThenByDescending(kv => meta[kv.Key].Vote).ThenBy(kv => kv.Key, StringComparer.Ordinal)
+            .Take(Math.Clamp(cfg.ExtendedDetails, 10, 500)).ToList();
         var ids = new List<string>();
         var agree = new Dictionary<string, double>(StringComparer.Ordinal);
         foreach (var (k, n) in top)
