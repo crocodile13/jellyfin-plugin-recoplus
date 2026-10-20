@@ -114,7 +114,8 @@
         return card;
     }
 
-    function jeCards(items, shape) {
+    // Cartes Jellyfin Enhanced ; un titre dont il ne peut pas lire la fiche Seerr (403, délai…) garde une carte Reco+
+    function jeCards(d, items, shape) {
         var j = je();
         return j.jellyseerrAPI.checkUserStatus().then(function (st) {
             if (!st || !st.active) { return null; }
@@ -123,16 +124,17 @@
                 return f(it.TmdbId);
             }).then(function (all) {
                 var cards = [];
-                all.forEach(function (d, i) {
-                    if (!d || !stillProposable(d)) { return; }
-                    var item = Object.assign({}, d, { mediaType: items[i].MediaType });
+                all.forEach(function (det, i) {
+                    if (!det) { cards.push(missCard(d, items[i], shape)); return; }
+                    if (!stillProposable(det)) { return; }
+                    var item = Object.assign({}, det, { mediaType: items[i].MediaType });
                     var c = j.jellyseerrUI.createJellyseerrCard(item, !!st.active, !!st.userFound);
-                    if (!c) { return; }
+                    if (!c) { cards.push(missCard(d, items[i], shape)); return; }
                     c.classList.add(EXT);
                     c.setAttribute('data-rp-id', 'tmdb:' + (items[i].MediaType === 'tv' ? 'tv' : 'movie') + ':' + items[i].TmdbId);
                     c.__rpAfter = items[i].After;
                     if (items[i].Because) { c.title = 'Parce que tu as aimé ' + items[i].Because; }
-                    cards.push(fitShape(c, shape, d.backdropPath || items[i].BackdropPath));
+                    cards.push(fitShape(c, shape, det.backdropPath || items[i].BackdropPath));
                 });
                 return cards;
             });
@@ -200,6 +202,14 @@
         return fitShape(c, shape, it.BackdropPath);
     }
 
+    // Carte Reco+ au milieu des cartes Jellyfin Enhanced : pas une carte « de secours » à remplacer quand il arrive
+    function missCard(d, it, shape) {
+        var c = ownCard(d, it, shape);
+        c.classList.remove('recoplus-own');
+        c.classList.add('recoplus-jemiss');
+        return c;
+    }
+
     function buildCards(d, shape) {
         var items = (d.items || []).slice();
         if (!items.length) { return Promise.resolve([]); }
@@ -207,7 +217,7 @@
         var wait = typeof window.__recoPlusJeWaitMs === 'number' ? window.__recoPlusJeWaitMs : JE_WAIT_MS;
         return jeWait(wait).then(function (ok) {
             if (!ok) { return fallback(); }
-            return jeCards(items, shape).then(function (c) { return c || fallback(); }, fallback);
+            return jeCards(d, items, shape).then(function (c) { return c || fallback(); }, fallback);
         });
     }
 

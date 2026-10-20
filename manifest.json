@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.9.0",
+        "changelog": "1.0.9 : mélange libre équitable — titres de la bibliothèque et hors bibliothèque comparés seulement sur ce qu'ils ont en commun (goût, note, sortie récente, affichages), sans « vus ensemble », nouveauté, popularité, avis du foyer ni accord TMDb que seul un côté peut avoir (avant, ils étaient souvent tous classés derrière la rangée entière et n’apparaissaient pas) ; quand Jellyfin Enhanced ne peut pas lire la fiche Seerr d'un titre (403, délai), ce titre garde une carte Reco+ au lieu de disparaître.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.8.0",
         "changelog": "1.0.8 : le choix des rangées d'accueil revient à Home Screen Sections — plus d'interrupteurs ni de nombre de rangées dans Reco+, qui ne règle que leurs titres ; Reco+ lit dans HSS les rangées affichées à chaque compte et ne remplit que celles-là (une rangée que le compte ne voit pas ne « réserve » plus de titres).",
         "targetAbi": "12.2.0.0",

@@ -124,7 +124,7 @@ Tableau de bord → Extensions → Reco+. La page est organisée en onglets :
 | Listes | ce qui est montré, appliqué après le classement : part de hasard du jour, minimums de films et de séries, genres exclus, note et année minimales, diversité (personnalisée, calibrée ou fixe), sagas, demandes en tête |
 | Moteur | chaque facteur de classement (favoris, demandes, abandons, ressemblances, vus ensemble, nouveauté, popularité, note, accord TMDb, caractéristiques de contenu) se coupe ou se règle en force (×0,25 à ×3) ; durées ; valeurs par défaut évaluées |
 | Seerr | URL et clé, avec un bouton **Tester** qui utilise les valeurs saisies sans les enregistrer |
-| Mode étendu | titres hors bibliothèque : activation ; mélangés dans la rangée d'accueil un toutes les N cartes, ou librement selon le classement commun du moteur |
+| Mode étendu | titres hors bibliothèque : activation ; mélangés dans la rangée d'accueil un toutes les N cartes, ou librement selon le classement commun du moteur (sur ce que les deux ont : goût, note, sortie récente) |
 | Notifications | webhook, avec envoi de test |
 | Calibrage | méthode (automatique, modèle de choix appris, recherche par curseurs) avec un avertissement si l'historique ne suffit pas ; voir ci-dessous |
 | Aperçu | ce que voit actuellement un compte, rangée par rangée |

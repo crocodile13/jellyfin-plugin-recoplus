@@ -611,11 +611,11 @@ public sealed class RecoService
                 var recs = extRanked.Select(id => (Id: id, Rec: ToExternalRec(id, titles, ex.Because))).Where(p => p.Rec is not null).ToList();
                 r.Extended = recs.Select(p => p.Rec!).ToList();
 
-                // mélange libre : bibliothèque et hors bibliothèque notés ensemble, chacun à sa place dans la rangée
+                // mélange libre : bibliothèque et hors bibliothèque notés ensemble sur ce qu'ils ont en commun, chacun à sa place dans la rangée
                 if (cfg.ExtendedMixMode == Configuration.MixMode.Score && r.Ranked.Count > 0)
                 {
                     var shown = r.Ranked.Take(Math.Max(0, Math.Clamp(cfg.RowSize, 5, 60) - r.Pinned.Count)).ToList();
-                    var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), s, ex.Agree, exposure: expo);
+                    var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), Recommender.Shared(s), exposure: expo);
                     foreach (var (id, rec) in recs)
                     {
                         var se = joint[id];
