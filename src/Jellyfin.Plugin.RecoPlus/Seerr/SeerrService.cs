@@ -237,7 +237,7 @@ public sealed class SeerrService
     /// <summary>Recommandations + similaires TMDb d'un titre, sur <paramref name="pages"/> pages chacune (cache 3 jours).</summary>
     public async Task<List<SeerrResult>> RelatedAsync(SeerrClient cl, string mediaType, int tmdbId, int pages, CancellationToken ct)
     {
-        pages = Math.Clamp(pages, 1, 5);
+        pages = Math.Clamp(pages, 1, 10);
         var key = mediaType + ":" + tmdbId + ":" + pages;
         if (_related.TryGetValue(key, out var r) && DateTime.UtcNow - r.At < RelatedTtl)
         {

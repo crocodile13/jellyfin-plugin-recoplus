@@ -126,7 +126,7 @@ public class SeerrTests
     {
         var fake = new Fake(r =>
         {
-            Assert.True(r.RequestUri!.AbsolutePath.EndsWith("/api/v1/user/7/watchlist", StringComparison.Ordinal));
+            Assert.EndsWith("/api/v1/user/7/watchlist", r.RequestUri!.AbsolutePath, StringComparison.Ordinal);
             var page = int.Parse(System.Web.HttpUtility.ParseQueryString(r.RequestUri.Query)["page"]!, System.Globalization.CultureInfo.InvariantCulture);
             return page == 1
                 ? Json(HttpStatusCode.OK, new

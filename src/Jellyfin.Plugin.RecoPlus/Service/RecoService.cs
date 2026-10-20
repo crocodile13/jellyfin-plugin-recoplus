@@ -884,7 +884,7 @@ public sealed class RecoService
         var anchors = sig.Where(e => e.Value > 0).OrderByDescending(e => e.Value)
             .Select(e => (Id: e.Key, Tmdb: tmdbOf.GetValueOrDefault(e.Key) ?? (e.Key.StartsWith("tmdb:", StringComparison.Ordinal) ? e.Key[5..] : null), Weight: e.Value))
             .Where(a => a.Tmdb is not null)
-            .Take(Math.Clamp(cfg.ExtendedAnchors, 1, 100))
+            .Take(Math.Clamp(cfg.ExtendedAnchors, 1, 500))
             .ToList();
         var count = new Dictionary<string, int>(StringComparer.Ordinal);
         var support = new Dictionary<string, double>(StringComparer.Ordinal);   // somme du goût pour les titres aimés qui le proposent
@@ -899,7 +899,7 @@ public sealed class RecoService
                 continue;
             }
 
-            foreach (var r in (await _seerr.RelatedAsync(cl, p[0], tid, Math.Clamp(cfg.ExtendedPages, 1, 5), ct).ConfigureAwait(false)).DistinctBy(x => x.MediaType + ":" + x.TmdbId))
+            foreach (var r in (await _seerr.RelatedAsync(cl, p[0], tid, Math.Clamp(cfg.ExtendedPages, 1, 10), ct).ConfigureAwait(false)).DistinctBy(x => x.MediaType + ":" + x.TmdbId))
             {
                 var k = r.MediaType + ":" + r.TmdbId;
                 if (r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Seen(seen, "tmdb:" + k))
@@ -916,7 +916,7 @@ public sealed class RecoService
 
         // présélection avant les fiches détaillées : proposés par les titres les plus aimés, puis par le plus de titres aimés, puis les mieux notés
         var top = count.OrderByDescending(kv => support[kv.Key]).ThenByDescending(kv => kv.Value).ThenByDescending(kv => meta[kv.Key].Vote).ThenBy(kv => kv.Key, StringComparer.Ordinal)
-            .Take(Math.Clamp(cfg.ExtendedDetails, 10, 500)).ToList();
+            .Take(Math.Clamp(cfg.ExtendedDetails, 10, 2000)).ToList();
         var ids = new List<string>();
         var agree = new Dictionary<string, double>(StringComparer.Ordinal);
         foreach (var (k, n) in top)
