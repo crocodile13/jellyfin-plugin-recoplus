@@ -12,9 +12,9 @@
         "version": "1.0.15.0",
         "changelog": "1.0.15 : exploration bien plus large du catalogue — en plus des recommandations des titres aimés : volets manquants des sagas, filmographies des réalisateurs, créateurs et scénaristes récurrents, et les mieux notés de TMDb tous genres, des genres, thèmes (mots-clés), studios et chaînes, langues d'origine préférés ; chaque source se coupe, se partage les fiches détaillées à parts équilibrées et affiche sa raison (« De … », « Dans la saga de … », « Bien noté en … ») ; pages tirées au hasard du jour et hasard du jour réglable sur le classement des titres hors bibliothèque ; places « découverte » en option ; note et votes minimaux réglables. Plus rapide : valeurs par défaut plus légères (30 titres de départ, 2 pages, 200 fiches) et exploration au recalcul complet seulement pour les comptes actifs depuis 30 jours. Contrôle parental aligné sur Jellyfin Enhanced (classification du pays seulement, titres non classés et étiquettes bloquées selon le compte) ; libellés de la page de réglages qui ne passent plus sous le « ? ».",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.15.0/RecoPlus_1.0.15.0.zip",
+        "checksum": "ddaa35fbe5172319cd6f8b485e8c613f",
+        "timestamp": "2026-10-20T15:36:41Z"
       },
       {
         "version": "1.0.14.0",
