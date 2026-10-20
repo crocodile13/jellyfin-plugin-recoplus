@@ -156,8 +156,14 @@ public class EngineTests
     {
         var g = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "golden.json"))).RootElement;
         var ds = ParityTests.LoadDataset(g.GetProperty("dataset"));
+        foreach (var u in ds.Users.Keys.OrderBy(k => k, StringComparer.Ordinal).Skip(2).ToList())
+        {
+            ds.Users.Remove(u);                                                 // deux comptes : trop peu de cas
+        }
+
+        Assert.InRange(Calibrator.Cases(ds).Count, 0, Calibrator.MinEvents - 1);
         var rep = Calibrator.Calibrate(ds, new EngineSettings());
-        Assert.False(rep.Recommended);                                          // 39 cas < 50
+        Assert.False(rep.Recommended);
         Assert.Contains("pas assez", rep.Verdict, StringComparison.Ordinal);
     }
 

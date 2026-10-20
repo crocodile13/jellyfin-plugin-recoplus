@@ -248,6 +248,7 @@ await test('calibrage : méthode enregistrée au changement, avertissement si l\
     assert.match(d.getElementById('rpCalData').textContent, /^⚠ 70 cas pour 36 réglages/);
     assert.match(d.getElementById('rpCalData').className, /ko/);
     assert.match([...sel.options].find((o) => o.value === 'ChoiceModel').textContent, /historique limite$/);
+    assert.ok([...sel.options].some((o) => o.value === 'Neural'), 'réseau de neurones proposé');
 });
 
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');

@@ -53,7 +53,8 @@ public class CalibrationTests
         Assert.True(cases.All(c => c.Prior >= Calibrator.MinPrior));
         Assert.Equal(1.0, cases.Average(c => c.Weight), 9);
         // à compte égal, un cas avec plus d'historique pèse plus
-        foreach (var g in cases.GroupBy(c => c.Ev.User))
+        Assert.Contains(cases, c => !c.Adopted);                                // commencés sans être adoptés : demi-poids
+        foreach (var g in cases.GroupBy(c => (c.Ev.User, c.Adopted)))
         {
             var o = g.OrderBy(c => c.Prior).ToList();
             for (int i = 1; i < o.Count; i++)

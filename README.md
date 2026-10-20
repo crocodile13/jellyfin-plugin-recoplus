@@ -40,12 +40,16 @@ Everything is computed in the background and cached in memory and on disk, so no
   - A brand-new title the account has no affinity with gets no bonus at all.
   - Without this rule, new arrivals were pushed to everyone — for example new fan-service anime to a Ghibli-only account.
   - The rule cannot be switched off, and freshness is capped.
+- **Watch time.** A series weighs by the hours actually watched (each episode's runtime; 45 min if unknown): 150 fifteen-minute episodes do not weigh as much as 150 forty-five-minute ones.
+- **Unknown dates.** A title marked watched without a date, or bulk-marked (at least 4 titles "started" less than 2 minutes apart), counts as an **old** taste — neither ignored nor mistaken for yesterday's favourite.
+- **Replaced files.** When Radarr or Sonarr upgrades a file, Jellyfin creates a new item and Playback Reporting keeps the plays under the old one: they are attached to the current title by name (when unique), restoring its real first-play date.
 - **Diversity, three modes.**
   - *Personalised* (default): the list is as varied as what the account likes. Several Maximal Marginal Relevance strengths (Carbonell & Goldstein, 1998) are tried and the list whose internal similarity is closest to that of the account's liked titles is kept: an eclectic viewer gets a varied list, a one-genre fan a focused one.
   - *Calibrated* (Steck, RecSys 2018): the share of each genre in the list follows the account's history (70% thrillers watched → about 70% suggested, not 100%).
   - *Fixed*: the same redundancy penalty for everyone (behaviour before 1.0.5).
 - **Shown but never opened.** A title that stayed on an account's screen for several days without being opened slowly sinks (at most 40% of its score), then recovers over time (30-day half-life). Only what the home-screen script saw **actually displayed to the signed-in account** counts: a card of a Reco+ row visible for at least one second, tab in the foreground, once per day. Opening the title resets its counter.
 - **Current taste, optional** (off by default): similarity to the last 5 liked titles, on top of long-term taste.
+- **Time of day, optional** (off by default): similarity to liked titles watched in the same time slot (night, morning, afternoon, evening); one list per slot is then computed and served according to the time of the request (configurable time zone).
 - **Sagas.** At most one entry per saga, and it is the first volume not yet seen, not volume 4. Large thematic collections get at most two entries.
 
 ## Measured on one real server (be careful with these numbers)
@@ -127,19 +131,28 @@ Every tab shows the essential settings; advanced ones are folded away. Hover (or
 The Calibration tab replays your server's history: every time an account started a new title, **at which rank** was that title in the list computed just before, using only what was known then?
 
 - **Measure.** Rank gain 1/log2(1 + rank) over *all* candidates, not just "in the top 10 or not": far more statistical power from the same history.
-- **Cases.** Every adoption preceded by at least 2 others. Each case is weighted by how much history the account already had (n/(n+3)), and accounts are balanced (1/√cases) so a heavy viewer does not decide alone.
+- **Cases.** Every title started (known date, bulk marks excluded) once the account had adopted at least 2; a title started but not adopted (stopped movie, series at 1–2 episodes) counts half. Each case is weighted by how much history the account already had (n/(n+3)), and accounts are balanced (1/√cases) so a heavy viewer does not decide alone.
 - **Methods.**
   - *Learned choice model*: in each case the account picked one title among all those it could have been offered; the 10 score weights that make these choices most likely are learned in one go (conditional logit, projected Newton, weights kept positive and bounded). L2 regularisation **towards the current settings** — without evidence nothing moves — with its strength chosen by cross-validation over accounts. Few parameters, so usable with a short history (about 10 cases per weight); about one minute.
   - *Coordinate search*: one parameter at a time within safe bounds, over 30+ settings (content and signals included): a 5-point grid (log scale for weights, zero tried for optional factors), then golden-section refinement; discrete choices enumerated (diversity mode included); two passes. A change is kept only if it improves the whole *and* does not lose on either half of the accounts. Needs much more history (about 20 cases per setting).
-  - *Automatic* (default): runs both and keeps the one that generalises best.
+  - *Neural network* (experimental): a small non-linear correction (10 → 8 → 1, tanh, 96 parameters) learned on the score's ingredients and added to the engine; it starts at zero and regularisation pulls it back without evidence. Needs a lot of history (about 10 cases per parameter).
+  - *Automatic* (default): runs all of them and keeps the one that generalises best.
   - The page shows, for each method, whether the history is **sufficient, borderline or insufficient**.
 - **Validation.** Each method is redone on half of the accounts and measured on the other half (two-fold cross-validation by account). A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero).
 
 Nothing is applied until you click **Apply**; the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task, on half the CPU cores.
 
-On the reference household (150 cases): coordinate search finds +12% in-sample but only +1.6% under cross-validation (95% CI [−3.3%; +5.9%], history "insufficient" for it); the learned choice model stays close to the current settings, +1.1% under cross-validation with a much narrower interval (95% CI [−0.4%; +4.8%], history "sufficient"). No setting is recommended, so the defaults stay. That is the safeguard working, not a failure. Run time: about 18 minutes in automatic mode (one of which for the choice model), on one core.
+On the reference household (144 cases over 13 accounts, once the 22 fake cases of a bulk mark are removed and started titles added at half weight):
 
-The 1.0.5 additions were measured the same way before choosing their defaults: personalised diversity gives +0.8% ranking quality over fixed diversity (95% CI [−0.1%; +2.4%]) and becomes the default; calibrated diversity is neutral at moderate strength and loses at high strength; current taste brings nothing on this history (the half-life already follows recent interests) and stays off. Titles shown but never opened cannot be measured this way (no display history before 1.0.5), so the default penalty is deliberately moderate.
+| Method | In-sample | Cross-validation (95% CI) | History |
+|---|---|---|---|
+| Coordinate search | +17.8% | −3.1% [−11.5; +8.0] | insufficient |
+| Learned choice model | −0.4% | +0.7% [−0.9; +4.5] | sufficient |
+| Neural network | 0% | −2.1% [−6.0; +2.5] | insufficient |
+
+Coordinate search is textbook overfitting: +18% on the cases used to tune it, −3% on unseen accounts. No method is recommended, so the defaults stay. That is the safeguard working, not a failure. Automatic mode takes about 23 minutes on one core (choice model: one minute; network: six).
+
+New features were measured the same way before choosing their defaults: weighting series by watch time does as well as counting episodes (letting very long series exceed 1 does worse, hence the cap at 1); time of day does worse (−0.7% to −3.8%: too few views per slot and account) and stays off; personalised diversity gives +0.8% ranking quality over fixed diversity (95% CI [−0.1%; +2.4%]) and becomes the default; calibrated diversity is neutral at moderate strength and loses at high strength; current taste brings nothing on this history (the half-life already follows recent interests) and stays off. Titles shown but never opened cannot be measured this way (no display history before 1.0.5), so the default penalty is deliberately moderate.
 
 ## Optional integrations
 

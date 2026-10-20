@@ -98,6 +98,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// </summary>
     public bool TrackImpressions { get; set; } = true;
 
+    /// <summary>Fuseau horaire des visionnages (identifiant IANA, ex. Europe/Paris) ; vide = celui du serveur.</summary>
+    public string TimeZone { get; set; } = string.Empty;
+
     /// <summary>Méthode du calibrage.</summary>
     public CalibrationMethod CalibrationMethod { get; set; } = CalibrationMethod.Auto;
 

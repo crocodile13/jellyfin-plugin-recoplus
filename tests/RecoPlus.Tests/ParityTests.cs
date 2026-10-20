@@ -70,6 +70,8 @@ public class ParityTests
                     FavEpisodes = (int)(NumOrNull(x, "fav_episodes") ?? 0),
                     Rating = NumOrNull(x, "rating"),
                     Hidden = x.TryGetProperty("hidden", out var hd) && hd.GetBoolean(),
+                    Hours = NumOrNull(x, "hours") ?? 0,
+                    Backfill = x.TryGetProperty("backfill", out var bf) && bf.GetBoolean(),
                 };
             }
 
@@ -129,6 +131,9 @@ public class ParityTests
             Rating = rating switch { "critic" => RatingSource.Critic, "best" => RatingSource.Best, "mean" => RatingSource.Mean, _ => RatingSource.Community },
             FeatCountry = feat.ValueKind == JsonValueKind.Object ? Num(feat, "n", 0) : 0,
             FeatLanguage = feat.ValueKind == JsonValueKind.Object ? Num(feat, "l", 0) : 0,
+            SeriesByTime = !p.TryGetProperty("series_by_time", out var sbt) || sbt.GetBoolean(),
+            SeriesFullHours = Num(p, "series_full_hours", d.SeriesFullHours),
+            SeriesMaxWeight = Num(p, "series_max_weight", d.SeriesMaxWeight),
             HalfLifeDays = p.GetProperty("half_life").GetDouble(),
             RecencyFloor = p.GetProperty("recency_floor").GetDouble(),
             FavoriteBoost = p.GetProperty("fav_boost").GetDouble(),
@@ -155,6 +160,7 @@ public class ParityTests
             Weighting = c.GetProperty("scheme").GetString() == "bm25" ? WeightingScheme.Bm25 : WeightingScheme.TfIdf,
             Mmr = c.GetProperty("mmr").GetDouble(),
             WShortTerm = Num(w, "short", 0),
+            WTimeOfDay = Num(w, "tod", 0),
             ShortTermTitles = (int)Num(w, "short_n", 5),
             WImpression = Num(w, "imp", d.WImpression),
             ImpressionDays = Num(w, "imp_days", d.ImpressionDays),
@@ -166,6 +172,8 @@ public class ParityTests
                 _ => DiversityMode.Fixed,
             },
             CalibrationStrength = Num(c, "cal", 0.5),
+            Neural = w.TryGetProperty("neural", out var nn) && nn.ValueKind == JsonValueKind.Array ? nn.EnumerateArray().Select(v => v.GetDouble()).ToArray() : null,
+            WNeural = Num(w, "w_neural", 1.0),
         };
     }
 

@@ -103,9 +103,15 @@ public static class Core
             {
                 b = -p.AbandonWeight;
             }
+            else if (p.SeriesByTime)
+            {
+                // temps regardé : 150 épisodes de 15 min ne pèsent pas autant que 150 de 45 min
+                double h = x.Hours > 0 ? x.Hours : e * DefaultEpisodeHours;
+                b = Math.Min(p.SeriesMaxWeight, Math.Log(1 + h) / Math.Log(1 + p.SeriesFullHours));
+            }
             else
             {
-                b = Math.Min(1.0, Math.Log(1 + e) / Math.Log(1 + p.SeriesFullEpisodes));
+                b = Math.Min(p.SeriesMaxWeight, Math.Log(1 + e) / Math.Log(1 + p.SeriesFullEpisodes));
             }
         }
 
@@ -147,10 +153,65 @@ public static class Core
         {
             double age = Math.Max(0.0, (now - last) / Day);
             double w = p.Decay == DecayKind.Power ? 1.0 / (1.0 + (age / p.HalfLifeDays)) : Math.Pow(0.5, age / p.HalfLifeDays);
-            b *= Math.Max(p.RecencyFloor, w);
+            b *= x.Backfill ? p.RecencyFloor : Math.Max(p.RecencyFloor, w); // date inconnue : un goût ancien
         }
 
         return b;
+    }
+
+    /// <summary>Durée supposée d'un épisode dont la durée est inconnue (heures).</summary>
+    public const double DefaultEpisodeHours = 0.75;
+
+    /// <summary>Marquage en masse : au moins ce nombre de titres « commencés » à moins de BulkGapSeconds d'écart.</summary>
+    public const int BulkMinTitles = 4;
+
+    /// <summary>Écart maximal (secondes) entre deux titres d'un marquage en masse.</summary>
+    public const double BulkGapSeconds = 120;
+
+    /// <summary>
+    /// Repère les titres dont la date est inconnue : vus sans aucune date, ou marqués « vus » en masse (au moins
+    /// BulkMinTitles titres vus « commencés » à moins de BulkGapSeconds les uns des autres — personne ne lance 4 films
+    /// en quelques minutes). Renvoie le nombre de titres marqués.
+    /// </summary>
+    public static int MarkBackfill(IEnumerable<Interaction> history)
+    {
+        var all = history.ToList();
+        int n = 0;
+        foreach (var x in all)
+        {
+            if ((x.Played || x.Episodes > 0) && x.Start == 0 && x.Last == 0 && !x.Backfill)
+            {
+                x.Backfill = true;
+                n++;
+            }
+        }
+
+        var seen = all.Where(x => (x.Played || x.Episodes > 0) && x.Start != 0).OrderBy(x => x.Start).ThenBy(x => x.Title, StringComparer.Ordinal).ToList();
+        int i = 0;
+        while (i < seen.Count)
+        {
+            int j = i;
+            while (j + 1 < seen.Count && seen[j + 1].Start - seen[j].Start <= BulkGapSeconds)
+            {
+                j++;
+            }
+
+            if (j - i + 1 >= BulkMinTitles)
+            {
+                for (int k = i; k <= j; k++)
+                {
+                    if (!seen[k].Backfill)
+                    {
+                        seen[k].Backfill = true;
+                        n++;
+                    }
+                }
+            }
+
+            i = j + 1;
+        }
+
+        return n;
     }
 
     /// <summary>Part du bonus de favori (0..1) : série = 1, saison = FavSeasonShare, épisodes = FavEpisodeShare × min(1, n/3).</summary>

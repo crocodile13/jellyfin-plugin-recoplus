@@ -20,7 +20,13 @@ public enum CalibrationMethod
     /// réglages actuels), comme on apprend « quel titre a été choisi parmi tous ceux proposables ». Peu de paramètres,
     /// donc utilisable avec moins d'historique.
     /// </summary>
-    ChoiceModel
+    ChoiceModel,
+
+    /// <summary>
+    /// Réseau de neurones (expérimental) : une petite correction non linéaire (10 → 8 → 1) apprise sur les ingrédients
+    /// du score et ajoutée au moteur, ramenée vers zéro sans preuve. 96 paramètres : il faut beaucoup d'historique.
+    /// </summary>
+    Neural
 }
 
 /// <summary>
@@ -52,9 +58,9 @@ public static class ChoiceModel
     /// <summary>Forces de régularisation essayées (× somme des poids des cas).</summary>
     public static IReadOnlyList<double> Kappas { get; } = new[] { 0.003, 0.01, 0.03, 0.1, 0.3 };
 
-    private const int K = 10;
+    internal const int K = 10;
 
-    private sealed class CaseData
+    internal sealed class CaseData
     {
         public required double[] X { get; init; }   // candidats × K, à plat
 
@@ -66,7 +72,7 @@ public static class ChoiceModel
     }
 
     /// <summary>Caractéristiques de chaque candidat de chaque cas, garde-fou figé selon les réglages <paramref name="s"/>.</summary>
-    private static List<CaseData> Build(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings s, CancellationToken ct)
+    internal static List<CaseData> Build(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings s, CancellationToken ct)
     {
         var res = new CaseData?[cases.Count];
         var po = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount / 2), CancellationToken = ct };
@@ -298,7 +304,7 @@ public static class ChoiceModel
         return w;
     }
 
-    private static double NewtonTau(List<CaseData> data, double[] w, double u)
+    internal static double NewtonTau(List<CaseData> data, double[] w, double u)
     {
         // a = X·W (sans τ) ; f(u) = Σ wᵢ (LSE(e^u a) − e^u a_cible)
         var a = data.Select(c =>
