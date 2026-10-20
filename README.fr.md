@@ -87,8 +87,9 @@ Le test : chaque fois qu'un compte a commencé un nouveau titre, ce titre figura
   - Rien n'est jamais demandé automatiquement.
 - **Léger pour le serveur.**
   - L'historique est lu en une seule requête, en lecture seule.
-  - Un seul calcul tourne à la fois. Le recalcul complet est une tâche planifiée, avec sa progression visible.
-  - Un compte est recalculé 2 minutes après une lecture.
+  - Un seul calcul tourne à la fois. Le recalcul complet est une tâche planifiée, avec sa progression visible, lancée après des ajouts à la bibliothèque (au plus une fois par heure), au démarrage seulement si aucun compte n'a de liste (un compte sans liste est calculé seul), ou à la main (« Recalculer maintenant »). Pas de recalcul nocturne par défaut.
+  - Un compte est recalculé une fois son activité calmée (2 minutes sans nouvelle fin de lecture, marque vu, favori ou note), et au plus une fois toutes les 15 minutes.
+  - Enregistrer les réglages ou appliquer un calibrage ne relance rien : « Recalculer maintenant », sinon chaque compte en profite à sa prochaine activité.
   - La bibliothèque est réindexée après des ajouts, en regroupant les changements rapprochés.
 - **Cohabitation avec les autres plugins.**
   - Le filtre des suggestions s'exécute au plus près de l'action, donc le filtre de contenu masqué de Jellyfin Enhanced s'applique toujours à sa réponse.

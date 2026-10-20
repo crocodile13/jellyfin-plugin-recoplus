@@ -15,19 +15,26 @@ using Microsoft.Extensions.Logging;
 namespace Jellyfin.Plugin.RecoPlus.Service;
 
 /// <summary>
-/// Planifie les recalculs : au démarrage, après chaque lecture (par compte, avec délai pour regrouper),
-/// après un ajout à la bibliothèque ou un changement de réglage (tous les comptes, via la tâche planifiée).
+/// Planifie les recalculs, sans réagir à tout : un compte est recalculé après son activité (lecture terminée, vu, favori,
+/// note), une fois l'activité calmée (délai regroupant les actions rapprochées) et au plus une fois par écart minimal ;
+/// tous les comptes après des ajouts à la bibliothèque (au plus une fois par heure). Au démarrage, seulement les comptes
+/// sans liste (tous d'un coup s'il n'y en a aucune). Enregistrer les réglages ou appliquer un calibrage ne relance rien :
+/// bouton « Recalculer ».
 /// </summary>
 public sealed class RecoWorker : BackgroundService
 {
     private static readonly TimeSpan LibraryDelay = TimeSpan.FromMinutes(10);
+    private static readonly TimeSpan LibraryMinGap = TimeSpan.FromHours(1);
     private readonly RecoService _reco;
     private readonly ILibraryManager _lib;
     private readonly IUserDataManager _userData;
     private readonly ITaskManager _tasks;
     private readonly ILogger<RecoWorker> _log;
     private readonly ConcurrentDictionary<Guid, DateTime> _dueUsers = new();
+    private readonly ConcurrentDictionary<Guid, DateTime> _lastUserRun = new();
     private DateTime? _dueAll;
+    private DateTime _lastLibraryRun = DateTime.MinValue;
+    private bool _libraryPending;
 
     public RecoWorker(RecoService reco, ILibraryManager lib, IUserDataManager userData, ITaskManager tasks, ILogger<RecoWorker> log)
     {
@@ -52,8 +59,19 @@ public sealed class RecoWorker : BackgroundService
             return;
         }
 
-        var delay = TimeSpan.FromSeconds(Math.Clamp(Plugin.Instance!.Configuration.DebounceSeconds, 10, 3600));
-        _dueUsers[user] = DateTime.UtcNow + delay;
+        var cfg = Plugin.Instance!.Configuration;
+        _dueUsers[user] = Due(DateTime.UtcNow, TimeSpan.FromSeconds(Math.Clamp(cfg.DebounceSeconds, 10, 3600)),
+            _lastUserRun.TryGetValue(user, out var last) ? last : (DateTime?)null, TimeSpan.FromMinutes(Math.Clamp(cfg.UserMinIntervalMinutes, 0, 1440)));
+    }
+
+    /// <summary>
+    /// Échéance d'un recalcul : <paramref name="quiet"/> après la dernière action (chaque nouvelle action repousse),
+    /// et jamais moins de <paramref name="minGap"/> après le recalcul précédent.
+    /// </summary>
+    internal static DateTime Due(DateTime now, TimeSpan quiet, DateTime? lastRun, TimeSpan minGap)
+    {
+        var due = now + quiet;
+        return lastRun is { } l && l + minGap > due ? l + minGap : due;
     }
 
     /// <summary>Demande un recalcul complet (regroupé).</summary>
@@ -68,14 +86,14 @@ public sealed class RecoWorker : BackgroundService
         _dueAll = _dueAll is { } d && d < due ? d : due;
     }
 
-    private void OnConfigChanged(object? sender, MediaBrowser.Model.Plugins.BasePluginConfiguration e)
-        => ScheduleAll(TimeSpan.FromSeconds(30));
-
     private void OnItemAdded(object? sender, ItemChangeEventArgs e)
     {
-        if (e.Item is Movie or Series)
+        if (e.Item is Movie or Series && Enabled)
         {
-            ScheduleAll(LibraryDelay);
+            // ajouts en rafale regroupés ; au plus un recalcul complet par heure pour cette raison
+            var due = Due(DateTime.UtcNow, LibraryDelay, _lastLibraryRun == DateTime.MinValue ? (DateTime?)null : _lastLibraryRun, LibraryMinGap);
+            _dueAll = _dueAll is { } d && d < due ? d : due;
+            _libraryPending = true;
         }
     }
 
@@ -94,17 +112,27 @@ public sealed class RecoWorker : BackgroundService
     {
         _lib.ItemAdded += OnItemAdded;
         _userData.UserDataSaved += OnUserData;
-        if (Plugin.Instance is not null)
-        {
-            Plugin.Instance.ConfigurationChanged += OnConfigChanged;
-        }
-
         try
         {
             await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken).ConfigureAwait(false);
             if (Enabled)
             {
-                ScheduleAll(TimeSpan.Zero);
+                // listes reprises du cache disque ; on ne calcule que celles qui manquent : tout d'un coup si aucune
+                // n'existe (première installation, cache perdu), sinon compte par compte (nouveau compte)
+                var (tracked, missing) = _reco.UsersWithoutRecs();
+                if (missing.Count > 0 && missing.Count == tracked)
+                {
+                    _log.LogInformation("Reco+ : aucune liste en cache, calcul de tous les comptes");
+                    ScheduleAll(TimeSpan.Zero);
+                }
+                else
+                {
+                    foreach (var u in missing)
+                    {
+                        _log.LogInformation("Reco+ : compte {User} sans liste, calcul de ce compte seulement", u);
+                        _dueUsers[u] = DateTime.UtcNow;
+                    }
+                }
             }
 
             while (!stoppingToken.IsCancellationRequested)
@@ -120,6 +148,12 @@ public sealed class RecoWorker : BackgroundService
                 {
                     _dueAll = null;
                     _dueUsers.Clear();
+                    if (_libraryPending)
+                    {
+                        _libraryPending = false;
+                        _lastLibraryRun = now;
+                    }
+
                     // calcul complet = tâche planifiée « Recalcul des recommandations » (visible, avec sa progression)
                     _log.LogInformation("Reco+ : recalcul de tous les comptes mis en file (Tâches planifiées)");
                     _tasks.QueueIfNotRunning<Tasks.NightlyTask>();
@@ -130,6 +164,7 @@ public sealed class RecoWorker : BackgroundService
                 {
                     if (due <= now && _dueUsers.TryRemove(u, out _))
                     {
+                        _lastUserRun[u] = DateTime.UtcNow;
                         await _reco.ComputeAsync(u, stoppingToken).ConfigureAwait(false);
                     }
                 }
@@ -142,10 +177,6 @@ public sealed class RecoWorker : BackgroundService
         {
             _lib.ItemAdded -= OnItemAdded;
             _userData.UserDataSaved -= OnUserData;
-            if (Plugin.Instance is not null)
-            {
-                Plugin.Instance.ConfigurationChanged -= OnConfigChanged;
-            }
         }
     }
 }

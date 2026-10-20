@@ -104,6 +104,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Délai avant recalcul d'un compte après une lecture (secondes).</summary>
     public int DebounceSeconds { get; set; } = 120;
 
+    /// <summary>Écart minimal entre deux recalculs d'un même compte, en minutes (0 = aucun).</summary>
+    public int UserMinIntervalMinutes { get; set; } = 15;
+
     /// <summary>Réglages du moteur.</summary>
     public EngineSettings Engine { get; set; } = new();
 

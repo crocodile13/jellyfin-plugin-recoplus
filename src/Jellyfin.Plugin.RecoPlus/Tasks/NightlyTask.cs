@@ -8,8 +8,9 @@ using MediaBrowser.Model.Tasks;
 namespace Jellyfin.Plugin.RecoPlus.Tasks;
 
 /// <summary>
-/// Recalcul complet de tous les comptes : chaque nuit, au démarrage, après des ajouts à la bibliothèque, après un
-/// changement de réglage, ou à la main (bouton de la page ou Tâches planifiées). Visible avec sa progression.
+/// Recalcul complet de tous les comptes : après des ajouts à la bibliothèque (au plus une fois par heure), au démarrage
+/// si aucun compte n'a de liste, ou à la main (bouton « Recalculer » de la page ou Tâches planifiées). Aucun
+/// déclencheur horaire par défaut (chaque compte actif est recalculé après son activité) ; on peut en ajouter un ici.
 /// </summary>
 public sealed class NightlyTask : IScheduledTask
 {
@@ -34,10 +35,7 @@ public sealed class NightlyTask : IScheduledTask
         => Plugin.Instance?.Configuration.Enabled == true ? _reco.ComputeAsync(null, cancellationToken, progress) : Task.CompletedTask;
 
     /// <inheritdoc />
-    public IEnumerable<TaskTriggerInfo> GetDefaultTriggers()
-    {
-        yield return new TaskTriggerInfo { Type = TaskTriggerInfoType.DailyTrigger, TimeOfDayTicks = new TimeSpan(4, 15, 0).Ticks };
-    }
+    public IEnumerable<TaskTriggerInfo> GetDefaultTriggers() => Array.Empty<TaskTriggerInfo>();
 }
 
 /// <summary>Calibrage sur l'historique (manuel uniquement : aucun déclencheur par défaut).</summary>
