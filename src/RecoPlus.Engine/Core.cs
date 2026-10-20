@@ -21,11 +21,53 @@ public sealed class SparseVector
         Values = arr.Select(e => e.Value).ToArray();
     }
 
+    // rangs des clés dans le vocabulaire commun d'un lot de vecteurs (même ordre que l'ordre ordinal des clés) : la
+    // fusion compare des entiers au lieu de chaînes, dans le même ordre, donc avec exactement le même résultat
+    private int[]? _ranks;
+    private object? _vocab;
+
+    /// <summary>Rattache le vecteur au vocabulaire trié d'un lot (rangs croissants comme les clés).</summary>
+    internal void UseVocabulary(object vocab, IReadOnlyDictionary<string, int> rank)
+    {
+        var r = new int[Keys.Length];
+        for (int i = 0; i < r.Length; i++)
+        {
+            r[i] = rank[Keys[i]];
+        }
+
+        (_ranks, _vocab) = (r, vocab);
+    }
+
     /// <summary>Produit scalaire.</summary>
     public double Dot(SparseVector o)
     {
         double s = 0;
         int i = 0, j = 0;
+        if (_vocab is not null && ReferenceEquals(_vocab, o._vocab))
+        {
+            int[] a = _ranks!, b = o._ranks!;
+            double[] va = Values, vb = o.Values;
+            while (i < a.Length && j < b.Length)
+            {
+                if (a[i] == b[j])
+                {
+                    s += va[i] * vb[j];
+                    i++;
+                    j++;
+                }
+                else if (a[i] < b[j])
+                {
+                    i++;
+                }
+                else
+                {
+                    j++;
+                }
+            }
+
+            return s;
+        }
+
         while (i < Keys.Length && j < o.Keys.Length)
         {
             int c = string.CompareOrdinal(Keys[i], o.Keys[j]);
@@ -348,6 +390,15 @@ public static class Core
             }
 
             vec[tid] = new SparseVector(v.Select(e => new KeyValuePair<string, double>(e.Key, e.Value / norm)));
+        }
+
+        // vocabulaire du lot, trié comme les clés : produits scalaires sur des entiers (même ordre, même résultat)
+        var vocab = vec.Values.SelectMany(x => x.Keys).Distinct(StringComparer.Ordinal).OrderBy(k => k, StringComparer.Ordinal)
+            .Select((k, i) => (k, i)).ToDictionary(x => x.k, x => x.i, StringComparer.Ordinal);
+        var tag = new object();
+        foreach (var x in vec.Values)
+        {
+            x.UseVocabulary(tag, vocab);
         }
 
         return vec;

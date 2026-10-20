@@ -11,6 +11,7 @@ using Jellyfin.Plugin.RecoPlus.Integration;
 using Jellyfin.Plugin.RecoPlus.Seerr;
 using Jellyfin.Plugin.RecoPlus.Service;
 using MediaBrowser.Common.Api;
+using MediaBrowser.Common.Configuration;
 using MediaBrowser.Controller.Library;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -74,10 +75,12 @@ public sealed class RecoController : ControllerBase
     private readonly IUserManager _users;
     private readonly System.Net.Http.IHttpClientFactory _httpFactory;
     private readonly ImpressionStore _impressions;
+    private readonly IApplicationPaths _paths;
 
     public RecoController(RecoService reco, SeerrService seerr, SecretStore secrets, Notifier notifier, CalibrationService calib, IUserManager users,
-        System.Net.Http.IHttpClientFactory httpFactory, ImpressionStore impressions)
+        System.Net.Http.IHttpClientFactory httpFactory, ImpressionStore impressions, IApplicationPaths paths)
     {
+        _paths = paths;
         _impressions = impressions;
         _httpFactory = httpFactory;
         _reco = reco;
@@ -143,7 +146,8 @@ public sealed class RecoController : ControllerBase
             skip = Math.Min(r?.Pinned.Count ?? 0, Math.Clamp(cfg.RowSize, 5, 60)),
             title = cfg.ExtendedTitle,
             canRequest = on && cfg.ExtendedRequestButton && (r?.SeerrUserId ?? 0) > 0,
-            seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? cfg.SeerrUrl.TrimEnd('/') : cfg.SeerrPublicUrl.TrimEnd('/'),
+            // adresse publique seulement : l'adresse interne de Seerr n'a rien à faire chez les utilisateurs
+            seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? string.Empty : cfg.SeerrPublicUrl.TrimEnd('/'),
             items = on ? (object)(r?.Extended ?? new List<ExternalRec>()) : Array.Empty<object>(),
         });
     }
@@ -293,6 +297,30 @@ public sealed class RecoController : ControllerBase
     {
         var r = _reco.For(userId);
         return Ok(new { items = _reco.Preview(userId), extended = r?.Extended.Take(10).Select(e => $"{e.Name} ({e.Year}) — {(string.IsNullOrEmpty(e.Reason) ? "parce que : " + e.Because : e.Reason)}"), rows = _reco.PreviewRows(userId), sources = r?.Sources, computedAt = r?.ComputedAt });
+    }
+
+    /// <summary>
+    /// Journal en temps réel (onglet Journal, mode développeur) : entrées écrites depuis le curseur dans le journal de
+    /// Jellyfin, de Reco+ seulement ou toutes, secrets masqués.
+    /// </summary>
+    [HttpGet("Logs")]
+    [Authorize(Policy = Policies.RequiresElevation)]
+    public ActionResult Logs([FromQuery] string? cursor, [FromQuery] bool all = false)
+    {
+        if (cursor is { Length: > 300 })
+        {
+            return BadRequest(new { message = "curseur invalide" });
+        }
+
+        try
+        {
+            var c = LogTail.Read(_paths.LogDirectoryPath, cursor, all);
+            return Ok(new { cursor = c.Cursor, file = c.File, entries = c.Entries.Select(e => new { t = e.Time, l = e.Level, c = e.Category, m = e.Message }) });
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return Ok(new { cursor, file = string.Empty, entries = Array.Empty<object>(), error = "journal illisible (" + ex.GetType().Name + ")" });
+        }
     }
 
     /// <summary>Recalcul complet immédiat (en arrière-plan).</summary>

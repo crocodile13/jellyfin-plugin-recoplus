@@ -80,6 +80,21 @@ public sealed class Notifier
 
     /// <summary>Envoie au webhook configuré (renvoie un message d'état, pour le bouton « tester »).</summary>
     /// <param name="kindOverride">Valeurs saisies non enregistrées (bouton « tester ») ; null = valeurs enregistrées.</param>
+    /// <summary>Texte d'en-tête HTTP : tel quel s'il est en ASCII, sinon encodé « =?UTF-8?B?…?= » (RFC 2047).</summary>
+    internal static string HeaderText(string s)
+    {
+        s = s.Replace('\r', ' ').Replace('\n', ' ');
+        foreach (var ch in s)
+        {
+            if (ch > 126 || ch < 32)
+            {
+                return "=?UTF-8?B?" + Convert.ToBase64String(Encoding.UTF8.GetBytes(s)) + "?=";
+            }
+        }
+
+        return s;
+    }
+
     public async Task<string> SendWebhookAsync(string title, string message, WebhookKind? kindOverride = null, string? urlOverride = null, string? tokenOverride = null)
     {
         var kind = kindOverride ?? Plugin.Instance?.Configuration.Webhook ?? WebhookKind.None;
@@ -102,7 +117,7 @@ public sealed class Notifier
             {
                 case WebhookKind.Ntfy:
                     req.Content = new StringContent(message, Encoding.UTF8, "text/plain");
-                    req.Headers.Add("Title", "Reco+ : " + title);
+                    req.Headers.Add("Title", HeaderText("Reco+ : " + title)); // accents : en-tête encodé (RFC 2047), compris par ntfy
                     req.Headers.Add("Priority", "high");
                     req.Headers.Add("Tags", "warning");
                     if (token is { } nt)

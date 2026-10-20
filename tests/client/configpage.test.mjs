@@ -31,7 +31,7 @@ function open(cfg, extra) {
     w.Dashboard = { showLoadingMsg() {}, hideLoadingMsg() {}, alert(m) { throw new Error(m); }, processPluginConfigurationUpdateResult() {} };
     w.ApiClient = {
         getUrl: (p) => '/' + p,
-        ajax: (o) => Promise.resolve(extra && extra[o.url.split('?')[0]] ? extra[o.url.split('?')[0]] : o.url === '/RecoPlus/Status' ? status : o.url === '/RecoPlus/Genres' ? ['Animation', 'Documentaire', 'Science-Fiction'] : {}),
+        ajax: (o) => Promise.resolve(extra && extra[o.url.split('?')[0]] !== undefined ? (typeof extra[o.url.split('?')[0]] === 'function' ? extra[o.url.split('?')[0]](o) : extra[o.url.split('?')[0]]) : o.url === '/RecoPlus/Status' ? status : o.url === '/RecoPlus/Genres' ? ['Animation', 'Documentaire', 'Science-Fiction'] : {}),
         getPluginConfiguration: () => Promise.resolve(JSON.parse(JSON.stringify(store))),
         updatePluginConfiguration: (id, c) => { saved.push(JSON.parse(JSON.stringify(c))); return Promise.resolve({}); },
     };
@@ -338,6 +338,52 @@ await test('aperçu : tableau des sources, dans l\'ordre, « — » sans mélang
         ['Les mieux notés', '40', '10', '1', '—'],
     ]);
     assert.ok(!d.getElementById('rpPreviewSourcesBox').classList.contains('rp-hidden'));
+});
+
+await test('mode développeur : Moteur, Calibrage, Journal et détail par source cachés par défaut, montrés à la demande', async () => {
+    const { d, w } = open(cfg);
+    await wait(50);
+    const page = d.getElementById('RecoPlusConfigPage');
+    const shown = (sel) => w.getComputedStyle(d.querySelector(sel)).display !== 'none';
+    assert.ok(!page.classList.contains('rp-devmode'));
+    for (const t of ['moteur', 'calibrage', 'journal']) { assert.ok(d.querySelector('.rp-tab[data-tab="' + t + '"]').classList.contains('rp-dev'), t); }
+    assert.ok(!d.querySelector('.rp-tab[data-tab="general"]').classList.contains('rp-dev'));
+    assert.ok(d.getElementById('rpPreviewSourcesBox').classList.contains('rp-dev'));
+    const dev = d.getElementById('rpDev');
+    dev.checked = true; dev.dispatchEvent(new w.Event('change', { bubbles: true }));
+    assert.ok(page.classList.contains('rp-devmode'));
+    d.querySelector('.rp-tab[data-tab="moteur"]').click();
+    assert.ok(d.querySelector('.rp-pane[data-pane="moteur"]').classList.contains('on'));
+    dev.checked = false; dev.dispatchEvent(new w.Event('change', { bubbles: true }));
+    assert.ok(d.querySelector('.rp-pane[data-pane="etat"]').classList.contains('on'), 'onglet caché quitté');
+    assert.ok(shown('.rp-tab[data-tab="general"]'));
+});
+
+await test('journal : entrées ajoutées en texte brut, curseur suivi, filtre de niveau', async () => {
+    const calls = [];
+    const chunks = [
+        { cursor: 'log_1.log|10', file: 'log_1.log', entries: [
+            { t: '18:00:00', l: 'INF', c: 'Jellyfin.Plugin.RecoPlus.Service.RecoWorker', m: 'Reco+ : recalcul <img src=x onerror=alert(1)>' },
+            { t: '18:00:01', l: 'ERR', c: 'Jellyfin.Plugin.RecoPlus.Service.RecoService', m: 'échec' } ] },
+        { cursor: 'log_1.log|20', file: 'log_1.log', entries: [{ t: '18:00:02', l: 'WRN', c: 'X.Y', m: 'attention' }] },
+    ];
+    const { d, w } = open(cfg, { '/RecoPlus/Logs': (o) => { calls.push(o.url); return o.url.includes('cursor=') ? chunks[1] : chunks[0]; } });
+    await wait(50);
+    const dev = d.getElementById('rpDev'); dev.checked = true; dev.dispatchEvent(new w.Event('change', { bubbles: true }));
+    d.querySelector('.rp-tab[data-tab="journal"]').click();
+    await wait(50);
+    const box = d.getElementById('rpLog');
+    assert.equal(box.querySelectorAll('img').length, 0, 'aucun HTML interprété');
+    assert.equal(box.children.length, 2);
+    assert.match(box.children[0].textContent, /RecoWorker Reco\+ : recalcul <img/);
+    d.querySelector('.rp-tab[data-tab="journal"]').click();
+    await wait(50);
+    assert.equal(box.children.length, 3);
+    const lvl = d.getElementById('rpLogLevel'); lvl.value = 'WRN'; lvl.dispatchEvent(new w.Event('change', { bubbles: true }));
+    const visible = [...box.children].filter((x) => !x.classList.contains('rp-hidden')).map((x) => x.querySelector('b').textContent.trim());
+    assert.deepEqual(visible, ['ERR', 'WRN']);
+    assert.match(d.getElementById('rpLogState').textContent, /log_1\.log — 3 entrées/);
+    assert.ok(calls[1].includes('cursor=log_1.log%7C10'), 'curseur renvoyé');
 });
 
 await test('calibrage : écarts en %, méthode sans changement signalée, application non recommandée confirmée à part', async () => {

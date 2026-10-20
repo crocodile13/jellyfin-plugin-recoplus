@@ -50,6 +50,13 @@
                 #RecoPlusConfigPage .rp-rows { display: grid; grid-template-columns: minmax(14em, 1fr) minmax(14em, 2fr); gap: 0 2em; align-items: end; max-width: 56em; }
                 #RecoPlusConfigPage .rp-note { margin-bottom: 1.2em; padding-top: 1.4em; font-weight: 600; }
                 #RecoPlusConfigPage .rp-hidden { display: none !important; }
+                #RecoPlusConfigPage:not(.rp-devmode) .rp-dev { display: none !important; }
+                #RecoPlusConfigPage .rp-devtoggle { margin-left: auto; align-self: center; font-size: .9em; opacity: .8; cursor: pointer; white-space: nowrap; }
+                #RecoPlusConfigPage .rp-log { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8em; line-height: 1.45; white-space: pre-wrap; word-break: break-word; max-height: 65vh; overflow: auto; padding: .6em; border: 1px solid var(--rp-line); border-radius: 6px; margin-top: .8em; }
+                #RecoPlusConfigPage .rp-logline { padding: .1em 0; border-bottom: 1px solid rgba(127,127,127,.12); }
+                #RecoPlusConfigPage .rp-logline.lv-WRN b { color: #e6a23c; } #RecoPlusConfigPage .rp-logline.lv-ERR b, #RecoPlusConfigPage .rp-logline.lv-FTL b { color: #ec6262; }
+                #RecoPlusConfigPage .rp-logline.lv-ERR, #RecoPlusConfigPage .rp-logline.lv-FTL { background: rgba(236,98,98,.08); }
+                #RecoPlusConfigPage .rp-log input, #RecoPlusConfigPage #rpLogFilter { font: inherit; }
                 @media (max-width: 600px) { #RecoPlusConfigPage .rp-rows { grid-template-columns: 1fr; } }
                 #RecoPlusConfigPage .rp-default { color: var(--rp-mute); font-size: .85em; margin-top: .4em; display: block; }
                 #RecoPlusConfigPage .rp-checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .1em 1em; max-height: 18em; overflow: auto; padding: .3em 0; }
@@ -74,12 +81,14 @@
                 <button type="button" class="rp-tab on" data-tab="etat">État</button>
                 <button type="button" class="rp-tab" data-tab="general">Général</button>
                 <button type="button" class="rp-tab" data-tab="listes">Listes</button>
-                <button type="button" class="rp-tab" data-tab="moteur">Moteur</button>
+                <button type="button" class="rp-tab rp-dev" data-tab="moteur">Moteur</button>
                 <button type="button" class="rp-tab" data-tab="seerr">Seerr</button>
                 <button type="button" class="rp-tab" data-tab="etendu">Mode étendu</button>
                 <button type="button" class="rp-tab" data-tab="notif">Notifications</button>
-                <button type="button" class="rp-tab" data-tab="calibrage">Calibrage</button>
+                <button type="button" class="rp-tab rp-dev" data-tab="calibrage">Calibrage</button>
                 <button type="button" class="rp-tab" data-tab="apercu">Aperçu</button>
+                <button type="button" class="rp-tab rp-dev" data-tab="journal">Journal</button>
+                <label class="rp-devtoggle" title="Montre les onglets Moteur, Calibrage et Journal, et le détail par source de l'aperçu. Réglage de ce navigateur."><input type="checkbox" id="rpDev"> Mode développeur</label>
             </div>
 
             <!-- ÉTAT -->
@@ -239,6 +248,27 @@
                 </div>
             </div>
 
+            <!-- JOURNAL (mode développeur) -->
+            <div class="rp-pane rp-dev" data-pane="journal">
+                <div class="rp-box">
+                    <h3>Journal en temps réel</h3>
+                    <p class="mute">Ce que Reco+ écrit dans le journal de Jellyfin, au fil de l'eau (niveau Information et au-dessus, réglé par Jellyfin). Les valeurs qui ressemblent à un secret (clé, jeton, mot de passe) sont masquées. Mis à jour toutes les 2 secondes tant que l'onglet est ouvert.</p>
+                    <div class="rp-row">
+                        <label><input type="checkbox" id="rpLogAll"> Tout Jellyfin</label>
+                        <select is="emby-select" id="rpLogLevel">
+                            <option value="">Tous les niveaux</option>
+                            <option value="WRN">Avertissements et erreurs</option>
+                            <option value="ERR">Erreurs seulement</option>
+                        </select>
+                        <input type="search" id="rpLogFilter" placeholder="Filtrer (texte)…" style="padding:.4em .6em">
+                        <button is="emby-button" type="button" class="raised" id="rpLogPause"><span>Pause</span></button>
+                        <button is="emby-button" type="button" class="raised" id="rpLogClear"><span>Effacer</span></button>
+                        <span id="rpLogState" class="mute rp-result"></span>
+                    </div>
+                    <div id="rpLog" class="rp-log" aria-live="off"></div>
+                </div>
+            </div>
+
             <!-- APERÇU -->
             <div class="rp-pane" data-pane="apercu">
                 <div class="rp-box">
@@ -253,7 +283,7 @@
                         <div><h3>Mode étendu</h3><ol id="rpPreviewExt"></ol></div>
                     </div>
                     <div class="rp-grid" id="rpPreviewRows" style="margin-top:1em"></div>
-                    <div id="rpPreviewSourcesBox" class="rp-hidden" style="margin-top:1em">
+                    <div id="rpPreviewSourcesBox" class="rp-hidden rp-dev" style="margin-top:1em">
                         <h3>Mode étendu : apport de chaque source</h3>
                         <p class="mute">Trouvés : titres absents, non demandés et non vus. Détaillés : retenus dans le budget de fiches et autorisés (contrôle parental, listes). Proposés : classés parmi les titres hors bibliothèque du compte. Dans la rangée : placés par le mélange libre.</p>
                         <table class="rp-table" id="rpPreviewSources"></table>
@@ -399,6 +429,7 @@
             ['SeerrUrl', 'URL vue depuis le serveur Jellyfin', 'text', 'Adresse que le serveur Jellyfin utilise pour joindre Seerr, ex. http://seerr:5055 sur un réseau Docker.', 0, 0, 0, 'seerr', 'c'],
             ['SeerrPublicUrl', 'URL publique (liens)', 'text', 'Adresse ouverte par les navigateurs des utilisateurs (liens vers Seerr). Vide = la même que ci-dessus.', 0, 0, 0, 'seerr', 'c'],
             ['SeerrLanguage', 'Langue TMDb', 'text', 'Doit être celle des métadonnées de la bibliothèque, pour que les genres se comparent (ex. fr).', 0, 0, 0, 'seerradv', 'c', 'fr'],
+            ['SeerrRate', 'Appels à Seerr par seconde', 'int', 'Rythme maximal des appels de Reco+ à Seerr pendant un calcul (2 en cours au plus). Seerr sert aussi les utilisateurs (fiches et demandes de Jellyfin Enhanced) : trop haut, il peut ne plus leur répondre pendant un calcul. Plus bas = calcul plus long. Les listes et fiches restent en cache (aussi après un redémarrage).', 1, 1, 50, 'seerradv', 'c', '8'],
             ['RatingCountry', 'Pays des classifications', 'text', 'Pays dont on lit la classification d\'âge des titres hors bibliothèque, pour le contrôle parental (ex. FR).', 0, 0, 0, 'seerradv', 'c', 'FR'],
 
             // ---- Mode étendu
@@ -778,6 +809,67 @@
         });
         $('#rpSaveBar').style.display = 'none';
 
+        // mode développeur : onglets Moteur, Calibrage, Journal et détail par source (réglage de ce navigateur)
+        function devStored() { try { return window.localStorage.getItem('recoplus.dev') === '1'; } catch (e) { return false; } }
+        function setDev(on) {
+            try { window.localStorage.setItem('recoplus.dev', on ? '1' : '0'); } catch (e) { /* navigation privée : pour cette page seulement */ }
+            page.classList.toggle('rp-devmode', on);
+            $('#rpDev').checked = on;
+            var cur = page.querySelector('.rp-tab.on');
+            if (!on && cur && cur.classList.contains('rp-dev')) { page.querySelector('.rp-tab[data-tab="etat"]').click(); }
+        }
+        $('#rpDev').addEventListener('change', function () { setDev($('#rpDev').checked); });
+        setDev(devStored());
+
+        // journal en temps réel
+        var LV = { VRB: 0, DBG: 1, INF: 2, WRN: 3, ERR: 4, FTL: 5 };
+        var logs = { cursor: null, all: false, paused: false, busy: false, timer: null };
+        function logVisible() {
+            var p = page.querySelector('.rp-pane[data-pane="journal"]');
+            return page.classList.contains('rp-devmode') && p && p.classList.contains('on') && document.visibilityState !== 'hidden';
+        }
+        function logFilter(d) {
+            var min = $('#rpLogLevel').value, q = $('#rpLogFilter').value.trim().toLowerCase();
+            d.classList.toggle('rp-hidden', !((!min || (LV[d.__lv] || 0) >= LV[min]) && (!q || d.__txt.indexOf(q) >= 0)));
+        }
+        function logRow(e) {
+            var d = el('div', { 'class': 'rp-logline lv-' + e.l });
+            var cat = String(e.c || ''), i = cat.lastIndexOf('.');
+            d.appendChild(el('span', { 'class': 'mute' }, e.t + ' '));
+            d.appendChild(el('b', {}, e.l + ' '));
+            d.appendChild(el('span', { 'class': 'mute' }, (i >= 0 ? cat.slice(i + 1) : cat) + ' '));
+            d.appendChild(document.createTextNode(String(e.m || '')));
+            d.__lv = e.l; d.__txt = (cat + ' ' + e.m).toLowerCase();
+            logFilter(d);
+            return d;
+        }
+        function logPoll() {
+            if (!logVisible() || logs.paused || logs.busy) { return; }
+            var all = $('#rpLogAll').checked;
+            if (all !== logs.all) { logs.all = all; logs.cursor = null; $('#rpLog').innerHTML = ''; }
+            logs.busy = true;
+            api('GET', 'Logs?all=' + all + (logs.cursor ? '&cursor=' + encodeURIComponent(logs.cursor) : '')).then(function (r) {
+                logs.busy = false;
+                if (all !== logs.all) { return; }
+                logs.cursor = r.cursor || logs.cursor;
+                var box = $('#rpLog'), stick = box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
+                (r.entries || []).forEach(function (e) { box.appendChild(logRow(e)); });
+                while (box.children.length > 2000) { box.removeChild(box.firstChild); }
+                if (stick) { box.scrollTop = box.scrollHeight; }
+                $('#rpLogState').textContent = r.error || (r.file ? r.file + ' — ' + box.children.length + ' entrées' : 'aucun fichier de journal');
+            }, function () { logs.busy = false; $('#rpLogState').textContent = 'journal indisponible'; });
+        }
+        function logRefilter() { Array.prototype.forEach.call($('#rpLog').children, logFilter); }
+        $('#rpLogLevel').addEventListener('change', logRefilter);
+        $('#rpLogFilter').addEventListener('input', logRefilter);
+        $('#rpLogPause').addEventListener('click', function () {
+            logs.paused = !logs.paused;
+            $('#rpLogPause').querySelector('span').textContent = logs.paused ? 'Reprendre' : 'Pause';
+            if (!logs.paused) { logPoll(); }
+        });
+        $('#rpLogClear').addEventListener('click', function () { $('#rpLog').innerHTML = ''; });
+        page.querySelector('.rp-tab[data-tab="journal"]').addEventListener('click', logPoll);
+
         build();
 
         // Un seul « Enregistrer » : réglages + secrets saisis
@@ -881,8 +973,8 @@
             });
         });
 
-        page.addEventListener('pageshow', function () { load(); clearInterval(timer); timer = setInterval(refresh, 5000); });
-        page.addEventListener('pagehide', function () { clearInterval(timer); });
+        page.addEventListener('pageshow', function () { load(); clearInterval(timer); timer = setInterval(refresh, 5000); clearInterval(logs.timer); logs.timer = setInterval(logPoll, 2000); });
+        page.addEventListener('pagehide', function () { clearInterval(timer); clearInterval(logs.timer); });
     })();
     </script>
 </div>

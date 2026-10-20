@@ -325,10 +325,13 @@ public sealed class RecoService : IDisposable
             {
                 Status.LastFullRun = DateTime.UtcNow;
                 Status.LastFullRunSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1);
+                _log.LogInformation("Reco+ : calcul complet terminé en {S:0.0} s — {N} comptes, {E} titres hors bibliothèque ; Seerr : {Seerr}",
+                    sw.Elapsed.TotalSeconds, Status.UsersWithRecs, Status.ExternalTitles, Status.Seerr);
             }
             else
             {
                 Status.LastUserRun = DateTime.UtcNow;
+                _log.LogInformation("Reco+ : compte {User} recalculé en {Ms} ms", _users.GetUserById(only.Value)?.Username ?? only.Value.ToString("N"), sw.ElapsedMilliseconds);
             }
 
             Status.LastError = null;
@@ -375,9 +378,10 @@ public sealed class RecoService : IDisposable
         var lo = cfg.Lists.Sanitized();
         progress?.Report(5);
 
-        // Seerr : relu à chaque calcul complet, réutilisé (30 min) pour un calcul d'un seul compte
+        // Seerr : relu à chaque calcul complet ; pour un calcul d'un seul compte, réutilisé s'il a moins de 30 min (sinon
+        // les demandes faites depuis ne seraient vues qu'au prochain calcul complet, qui n'a plus lieu chaque nuit)
         SeerrSnapshot seerr = _seerr.Last;
-        if (_seerr.Configured && (only is null || !seerr.Ok))
+        if (_seerr.Configured && (only is null || !seerr.Ok || DateTime.UtcNow - seerr.At > TimeSpan.FromMinutes(30)))
         {
             seerr = await _seerr.RefreshAsync(ct).ConfigureAwait(false);
         }
@@ -606,12 +610,17 @@ public sealed class RecoService : IDisposable
             }
 
             var extTargets = targets.Where(Active).ToList();
+            if (only is null)
+            {
+                _log.LogInformation("Reco+ : exploration Seerr pour {N} compte(s) actif(s) sur {T}", extTargets.Count, targets.Count);
+            }
             for (int i = 0; i < extTargets.Count; i++)
             {
                 ct.ThrowIfCancellationRequested();
                 var explored = await ExtendedCandidates(extTargets[i], ctx, lib, tmdbOf, seerr, cl, titles, colls, cfg, ct).ConfigureAwait(false);
                 if (_seerr.Down)
                 {
+                    _log.LogWarning("Reco+ : Seerr a lâché pendant l'exploration ; {N} compte(s) gardent leurs titres hors bibliothèque précédents", extTargets.Count - i);
                     break; // Seerr a lâché en route : ce compte et les suivants gardent leurs titres hors bibliothèque précédents
                 }
 
@@ -625,6 +634,9 @@ public sealed class RecoService : IDisposable
         Status.ExternalTitles = titles.Values.Count(t => t.External);
         ds.LinkCollections();
         var vec = Core.BuildVectors(titles, s);
+        // produits scalaires gardés le temps du calcul (classement avec diversité : ~10× plus rapide, mêmes listes) ;
+        // budget mémoire borné, au-delà calcul direct
+        var simIdx = new SimilarityIndex(vec, 8_000_000);
         progress?.Report(60);
 
         int done = 0;
@@ -672,7 +684,7 @@ public sealed class RecoService : IDisposable
                 {
                     ctx.Slot = slot;
                     var sc = Recommender.Score(ctx, vec, key, cands, s, exposure: expo);
-                    var ranked = Recommender.Rank(ctx, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s, key).Where(id => !pinned.Contains(id)).ToList();
+                    var ranked = Recommender.Rank(ctx, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s, key, simIdx).Where(id => !pinned.Contains(id)).ToList();
 
                     // présentation : hasard du jour et minimums films/séries (le classement par goût reste intact pour les catégories)
                     var pool = cands.Where(id => !pinned.Contains(id)).ToList();
@@ -715,7 +727,7 @@ public sealed class RecoService : IDisposable
                 double noise = double.IsFinite(cfg.ExtendedNoise) ? Math.Clamp(cfg.ExtendedNoise, 0, 1) : 0;
                 string noiseSeed = key + "|" + Exploration.Day(DateTime.UtcNow);
                 var sc = Exploration.Noisy(Recommender.Score(ctx, vec, key, extIds, s, ex.Agree, exposure: expo), noise, noiseSeed);
-                var extRanked = Recommender.Rank(ctx, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s, key);
+                var extRanked = Recommender.Rank(ctx, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s, key, simIdx);
                 var recs = extRanked.Select(id => (Id: id, Rec: ToExternalRec(id, titles, ex.Because, ex.Reasons))).Where(p => p.Rec is not null).ToList();
                 foreach (var p in recs)
                 {
@@ -750,9 +762,18 @@ public sealed class RecoService : IDisposable
             }
 
             // pas d'exploration pour ce compte (inactif, ou Seerr injoignable) : ses titres hors bibliothèque précédents restent
+            // (sans ce qui a changé depuis : vu, masqué, demandé, arrivé dans la bibliothèque, ou interdit au compte)
             if (cfg.ExtendedEnabled && !extCands.ContainsKey(key) && _recs.TryGetValue(key, out var prevRecs))
             {
-                r.Extended = prevRecs.Extended;
+                var policy = PolicyOf(u);
+                var country = string.IsNullOrWhiteSpace(cfg.RatingCountry) ? "US" : cfg.RatingCountry.Trim().ToUpperInvariant();
+                r.Extended = prevRecs.Extended.Where(e =>
+                {
+                    var k = e.MediaType + ":" + e.TmdbId;
+                    var d = _seerr.CachedDetails(e.MediaType, e.TmdbId);
+                    return !Seen(h, "tmdb:" + k) && !lib.ByTmdb.ContainsKey(k) && !seerr.Requested.Contains(k) && hid?.Contains(k) != true
+                           && (d is null || (d.MediaStatus is not (2 or 3 or 4 or 5 or 6) && ParentalAllowed(policy, d, country)));
+                }).ToList();
                 r.Sources = prevRecs.Sources;
             }
 

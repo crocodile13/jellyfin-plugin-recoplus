@@ -124,7 +124,10 @@ Dashboard → Plugins → Reco+. The page has one tab per topic:
 | Extended mode | titles outside the library: on/off; mixed into the home row one every N cards, or freely by the engine's joint ranking (on the signals both kinds of titles have: taste, rating, recent release), optionally with a minimum number of outside titles shown and "discovery" slots for the best-rated ones; sources (each can be switched off): recommendations and similar titles of liked titles, missing parts of sagas, works of recurring directors/creators/writers, the best-rated titles of TMDb overall, of the favourite genres, themes (keywords), studios/networks and original languages and of their crossings (genre × theme, genre × language), and little-known gems (highly rated, few votes), read at pages drawn at random each day; adjustable daily noise; the preview shows what each source brought; minimum rating and vote count; the Seerr exploration of a full recompute only runs for recently active accounts |
 | Notifications | webhook, with a test button |
 | Calibration | method (automatic, learned choice model, coordinate search) with a warning when the history is too short; see below |
-| Preview | what an account currently gets, row by row |
+| Preview | what an account currently gets, row by row (and, in developer mode, what each extended-mode source brought) |
+| Log | developer mode: Reco+'s log in real time (or all of Jellyfin's), filterable, secrets masked |
+
+The Engine, Calibration and Log tabs only show in **developer mode** (checkbox at the right of the tabs, remembered per browser).
 
 Every tab shows the essential settings; advanced ones are folded away. Hover (or tap) the **?** next to a setting for its help and default value. A single **Save** button stores both the settings and any secret you typed.
 
