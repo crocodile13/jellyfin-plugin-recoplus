@@ -20,6 +20,7 @@ rm -rf out && mkdir -p "$OUT"
 BIN=src/Jellyfin.Plugin.RecoPlus/bin/Release/net10.0
 cp "$BIN/Jellyfin.Plugin.RecoPlus.dll" "$BIN/RecoPlus.Engine.dll" "$OUT/"
 cp meta.json "$OUT/"
+cp assets/thumb.png "$OUT/"      # image du plugin dans Jellyfin (meta.json : imagePath)
 # garde-fou : aucune DLL de Jellyfin ni d'autre dépendance ne doit partir avec le plugin
 EXTRA=$(ls "$BIN"/*.dll | grep -v -e '/Jellyfin.Plugin.RecoPlus.dll$' -e '/RecoPlus.Engine.dll$' || true)
 [ -z "$EXTRA" ] || { echo "DLL inattendues dans la sortie : $EXTRA" >&2; exit 1; }

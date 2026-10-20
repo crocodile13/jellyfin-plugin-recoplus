@@ -6,6 +6,7 @@
     "overview": "Personal recommendations for Jellyfin 12, computed in the background from each account's history.",
     "owner": "crocodile13",
     "category": "General",
+    "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
         "version": "1.0.6.0",
