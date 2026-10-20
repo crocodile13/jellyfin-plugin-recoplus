@@ -55,6 +55,11 @@
             && typeof j.jellyseerrAPI.fetchMovieDetails === 'function' && typeof j.jellyseerrAPI.fetchTvShowDetails === 'function');
     }
 
+    // Pourquoi ce titre est proposé (raison donnée par le serveur ; anciennes réponses : le titre aimé d'origine)
+    function reasonOf(it) {
+        return it.Reason || (it.Because ? 'Parce que tu as aimé ' + it.Because : '');
+    }
+
     // Seerr : 2 en attente, 3 en cours, 4 partiellement disponible, 5 disponible, 6 sur liste noire
     function stillProposable(details) {
         var s = details && details.mediaInfo ? details.mediaInfo.status : 0;
@@ -148,7 +153,7 @@
                     c.classList.add(EXT);
                     c.setAttribute('data-rp-id', 'tmdb:' + (items[i].MediaType === 'tv' ? 'tv' : 'movie') + ':' + items[i].TmdbId);
                     c.__rpAfter = items[i].After;
-                    if (items[i].Because) { c.title = 'Parce que tu as aimé ' + items[i].Because; }
+                    if (reasonOf(items[i])) { c.title = reasonOf(items[i]); }
                     cards.push(fitShape(c, shape, det.backdropPath || items[i].BackdropPath));
                 });
                 return cards;
@@ -199,7 +204,7 @@
         img.style.cursor = 'pointer';
         var p = poster(it.PosterPath);
         if (p) { img.style.backgroundImage = 'url("' + p + '")'; }
-        img.title = it.Because ? ('Parce que tu as aimé ' + it.Because) : (it.Name || '');
+        img.title = reasonOf(it) || it.Name || '';
         img.addEventListener('click', function () { openItem(d, it); });
         sc.appendChild(img);
         box.appendChild(sc);

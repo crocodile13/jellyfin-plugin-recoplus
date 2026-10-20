@@ -30,12 +30,21 @@ public sealed record SeerrRequest(int RequestedBy, string MediaType, int TmdbId,
 /// <summary>Titre de la liste de suivi Seerr d'un compte.</summary>
 public sealed record SeerrWatch(string MediaType, int TmdbId, DateTime CreatedAt);
 
-/// <summary>Résultat d'une liste TMDb (recommandations / similaires).</summary>
-public sealed record SeerrResult(string MediaType, int TmdbId, string Name, bool Adult, int MediaStatus, double Vote, string? PosterPath, string? Date);
+/// <summary>Résultat d'une liste TMDb (recommandations, similaires, découverte, saga, filmographie).</summary>
+public sealed record SeerrResult(string MediaType, int TmdbId, string Name, bool Adult, int MediaStatus, double Vote, string? PosterPath, string? Date, int VoteCount = 0);
+
+/// <summary>Élément TMDb nommé (genre, mot-clé, personne, studio, chaîne).</summary>
+public sealed record SeerrRef(int Id, string Name);
 
 /// <summary>Fiche détaillée d'un titre TMDb (ce qu'il faut au moteur et au contrôle parental).</summary>
 public sealed class SeerrDetails
 {
+    /// <summary>Version du format de fiche : une fiche d'un format plus ancien est relue.</summary>
+    public const int CurrentFormat = 2;
+
+    /// <summary>Format de cette fiche (0 : écrite par une version antérieure à 1.0.15).</summary>
+    public int Format { get; init; }
+
     public required string MediaType { get; init; }
 
     public required int TmdbId { get; init; }
@@ -72,6 +81,18 @@ public sealed class SeerrDetails
     public int EpisodeCount { get; init; }
 
     public int? CollectionId { get; init; }
+
+    /// <summary>Genres avec leur identifiant TMDb (exploration par genre).</summary>
+    public List<SeerrRef> GenreRefs { get; init; } = new();
+
+    /// <summary>Mots-clés avec leur identifiant TMDb (exploration par thème).</summary>
+    public List<SeerrRef> KeywordRefs { get; init; } = new();
+
+    /// <summary>Réalisateurs, créateurs et scénaristes avec leur identifiant TMDb (exploration par auteur).</summary>
+    public List<SeerrRef> PeopleRefs { get; init; } = new();
+
+    /// <summary>Studios (films) ou chaînes (séries) avec leur identifiant TMDb (exploration par studio).</summary>
+    public List<SeerrRef> StudioRefs { get; init; } = new();
 
     /// <summary>Nombre de votes TMDb (null : fiche lue par une ancienne version, à relire).</summary>
     public int? VoteCount { get; init; }
@@ -265,18 +286,50 @@ public sealed class SeerrClient
     public async Task<List<SeerrResult>> RelatedAsync(string mediaType, int tmdbId, string relation, string language, int page, CancellationToken ct)
     {
         var j = await Get($"api/v1/{mediaType}/{tmdbId}/{relation}?page={Math.Clamp(page, 1, 10)}&language={Uri.EscapeDataString(language)}", ct).ConfigureAwait(false);
-        return Arr(j, "results").Select(r => new SeerrResult(
-                string.IsNullOrEmpty(Str(r, "mediaType")) ? mediaType : Str(r, "mediaType"),
-                Int(r, "id"),
-                Str(r, mediaType == "movie" ? "title" : "name"),
-                Bool(r, "adult"),
-                MediaStatusOf(r),
-                Dbl(r, "voteAverage"),
-                Str(r, "posterPath"),
-                Str(r, mediaType == "movie" ? "releaseDate" : "firstAirDate")))
-            .Where(r => r.TmdbId > 0)
-            .ToList();
+        return MapResults(Arr(j, "results"), mediaType);
     }
+
+    /// <summary>Titres d'une liste TMDb (publique pour les tests) ; la sorte de chaque titre vient du titre, sinon de la liste.</summary>
+    public static List<SeerrResult> MapResults(IEnumerable<JsonElement> items, string defaultType)
+        => items.Select(r =>
+            {
+                var type = Str(r, "mediaType") is { Length: > 0 } t ? t : defaultType;
+                bool movie = type == "movie";
+                return new SeerrResult(type, Int(r, "id"), Str(r, movie ? "title" : "name"), Bool(r, "adult"), MediaStatusOf(r),
+                    Dbl(r, "voteAverage"), Str(r, "posterPath"), Str(r, movie ? "releaseDate" : "firstAirDate"), Int(r, "voteCount"));
+            })
+            .Where(r => r.TmdbId > 0 && r.MediaType is "movie" or "tv")
+            .ToList();
+
+    /// <summary>
+    /// Découverte TMDb (films ou séries) : <paramref name="query"/> = paramètres Seerr (genre, keywords, studio, network,
+    /// sortBy, voteAverageGte, voteCountGte, language = langue ORIGINALE ou « all »…). Une page.
+    /// </summary>
+    public async Task<List<SeerrResult>> DiscoverAsync(string mediaType, IReadOnlyDictionary<string, string> query, int page, CancellationToken ct)
+    {
+        var qs = string.Join("&", query.Where(kv => !string.IsNullOrEmpty(kv.Value)).OrderBy(kv => kv.Key, StringComparer.Ordinal)
+            .Select(kv => Uri.EscapeDataString(kv.Key) + "=" + Uri.EscapeDataString(kv.Value)));
+        var j = await Get($"api/v1/discover/{(mediaType == "tv" ? "tv" : "movies")}?page={Math.Clamp(page, 1, 500)}" + (qs.Length > 0 ? "&" + qs : string.Empty), ct).ConfigureAwait(false);
+        return MapResults(Arr(j, "results"), mediaType == "tv" ? "tv" : "movie");
+    }
+
+    /// <summary>Films d'une saga TMDb, par date de sortie.</summary>
+    public async Task<List<SeerrResult>> CollectionAsync(int collectionId, CancellationToken ct)
+    {
+        var j = await Get($"api/v1/collection/{collectionId}", ct).ConfigureAwait(false);
+        return MapResults(Arr(j, "parts"), "movie");
+    }
+
+    /// <summary>Titres qu'une personne a réalisés, créés ou écrits (filmographie TMDb, sans ses rôles d'acteur).</summary>
+    public async Task<List<SeerrResult>> PersonWorksAsync(int personId, CancellationToken ct)
+    {
+        var j = await Get($"api/v1/person/{personId}/combined_credits", ct).ConfigureAwait(false);
+        return MapResults(Arr(j, "crew").Where(IsAuthorCredit), "movie").DistinctBy(r => r.MediaType + ":" + r.TmdbId).ToList();
+    }
+
+    /// <summary>Crédit d'auteur : réalisation, création, scénario (pas le reste de l'équipe technique).</summary>
+    public static bool IsAuthorCredit(JsonElement c)
+        => Str(c, "job") is "Director" or "Creator" or "Screenplay" or "Writer" or "Story" or "Novel" or "Original Story" or "Series Composition";
 
     /// <summary>Fiche détaillée.</summary>
     public async Task<SeerrDetails> DetailsAsync(string mediaType, int tmdbId, string language, CancellationToken ct)
@@ -299,7 +352,10 @@ public sealed class SeerrClient
         {
             foreach (var c in Arr(rel, "results"))
             {
-                var cert = Arr(c, "release_dates").Select(r => Str(r, "certification")).FirstOrDefault(x => x.Length > 0);
+                // comme Jellyfin Enhanced : la sortie en salle (type 3) d'abord, sinon la première classification
+                var dates = Arr(c, "release_dates").ToList();
+                var cert = dates.Where(r => Int(r, "type") == 3).Select(r => Str(r, "certification")).FirstOrDefault(x => x.Length > 0)
+                           ?? dates.Select(r => Str(r, "certification")).FirstOrDefault(x => x.Length > 0);
                 if (cert is not null)
                 {
                     certs[Str(c, "iso_3166_1")] = cert;
@@ -319,8 +375,16 @@ public sealed class SeerrClient
         }
 
         int? coll = movie && d.TryGetProperty("collection", out var co) && co.ValueKind == JsonValueKind.Object && Int(co, "id") > 0 ? Int(co, "id") : null;
+        static List<SeerrRef> Refs(IEnumerable<JsonElement> items)
+            => items.Select(g => new SeerrRef(Int(g, "id"), Str(g, "name"))).Where(r => r.Id > 0 && r.Name.Length > 0).DistinctBy(r => r.Id).ToList();
+        var authors = crew.Where(IsAuthorCredit).Concat(Arr(d, "createdBy"));
         return new SeerrDetails
         {
+            Format = SeerrDetails.CurrentFormat,
+            GenreRefs = Refs(Arr(d, "genres")),
+            KeywordRefs = Refs(Arr(d, "keywords")),
+            PeopleRefs = Refs(authors),
+            StudioRefs = Refs(movie ? Arr(d, "productionCompanies") : Arr(d, "networks")),
             MediaType = mediaType,
             TmdbId = tmdbId,
             Name = Str(d, movie ? "title" : "name"),

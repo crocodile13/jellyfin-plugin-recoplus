@@ -282,6 +282,26 @@ await test('réglages sans objet masqués selon le mode, valeurs gardées', asyn
     assert.equal(saved[0].Engine.Mmr, 0.3);
 });
 
+await test('mode étendu : sources dans « Où chercher », réglages d\'une source masqués quand elle est coupée', async () => {
+    const c = JSON.parse(JSON.stringify(cfg));
+    Object.assign(c, { ExtendedByGenre: false, ExtendedByPeople: true, ExtendedGenres: 7, ExtendedNoise: 0.3 });
+    const { d, saved } = open(c);
+    await wait(50);
+    const box = d.querySelector('[data-fields="extsrc"]');
+    for (const k of ['ExtendedTopRated', 'ExtendedByGenre', 'ExtendedByKeyword', 'ExtendedSagas', 'ExtendedByPeople', 'ExtendedByStudio', 'ExtendedByLanguage', 'ExtendedNoise']) {
+        assert.ok(box.querySelector('#rp_c_' + k), k + ' dans « Où chercher »');
+    }
+    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-hidden');
+    assert.ok(hidden('rp_c_ExtendedGenres') && !hidden('rp_c_ExtendedPeople'));
+    const g = d.getElementById('rp_c_ExtendedByGenre'); g.checked = true; g.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.ok(!hidden('rp_c_ExtendedGenres'));
+    d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
+    await wait(50);
+    assert.equal(saved[0].ExtendedGenres, 7);
+    assert.equal(saved[0].ExtendedNoise, 0.3);
+    assert.equal(saved[0].ExtendedByGenre, true);
+});
+
 await test('calibrage : écarts en %, méthode sans changement signalée, application non recommandée confirmée à part', async () => {
     const st = JSON.parse(JSON.stringify(status));
     st.calibration = { running: true, progress: 21.6, at: '2026-10-20T12:00:00Z', report: {

@@ -46,12 +46,17 @@ public sealed class SeerrService
     // fiche introuvable (404) : pas redemandée avant 7 jours ; autre échec (délai, erreur de Seerr) : avant 1 heure
     private static readonly TimeSpan MissingTtl = TimeSpan.FromDays(7);
     private static readonly TimeSpan FailedTtl = TimeSpan.FromHours(1);
+
+    // listes d'exploration : découverte 3 jours, sagas et filmographies 7 jours (elles bougent peu)
+    private static readonly TimeSpan DiscoverTtl = TimeSpan.FromDays(3);
+    private static readonly TimeSpan StableListTtl = TimeSpan.FromDays(7);
     private readonly IHttpClientFactory _http;
     private readonly SecretStore _secrets;
     private readonly ILogger<SeerrService> _log;
     private readonly ConcurrentDictionary<string, SeerrDetails> _details = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, (DateTime At, List<SeerrResult> Items)> _related = new(StringComparer.Ordinal);
-    private readonly ConcurrentDictionary<string, DateTime> _failed = new(StringComparer.Ordinal);   // fiche → réessai possible après
+    private readonly ConcurrentDictionary<string, DateTime> _failed = new(StringComparer.Ordinal);   // fiche ou liste → réessai possible après
+    private readonly ConcurrentDictionary<string, (DateTime At, List<SeerrResult> Items)> _lists = new(StringComparer.Ordinal);
     private readonly SemaphoreSlim _throttle = new(4);
     private readonly object _loadLock = new();
     private volatile bool _loaded;
@@ -218,6 +223,14 @@ public sealed class SeerrService
             }
         }
 
+        foreach (var (k, l) in _lists)
+        {
+            if (now - l.At > StableListTtl)
+            {
+                _lists.TryRemove(k, out _);
+            }
+        }
+
         if (Interlocked.Exchange(ref _dirty, 0) == 0)
         {
             return;
@@ -254,7 +267,8 @@ public sealed class SeerrService
     {
         EnsureLoaded();
         var key = mediaType + ":" + tmdbId;
-        if (_details.TryGetValue(key, out var d) && DateTime.UtcNow - d.FetchedAt < DetailsTtl && (!requireVotes || d.VoteCount is not null))
+        if (_details.TryGetValue(key, out var d) && DateTime.UtcNow - d.FetchedAt < DetailsTtl && d.Format >= SeerrDetails.CurrentFormat
+            && (!requireVotes || d.VoteCount is not null))
         {
             return d;
         }
@@ -333,5 +347,52 @@ public sealed class SeerrService
         }
 
         return all;
+    }
+
+    /// <summary>Une page de découverte TMDb (cache 3 jours, partagé entre les comptes).</summary>
+    public Task<List<SeerrResult>> DiscoverAsync(SeerrClient cl, string mediaType, IReadOnlyDictionary<string, string> query, int page, CancellationToken ct)
+        => CachedListAsync(
+            "d:" + mediaType + ":" + page + ":" + string.Join("&", query.OrderBy(kv => kv.Key, StringComparer.Ordinal).Select(kv => kv.Key + "=" + kv.Value)),
+            DiscoverTtl, c => cl.DiscoverAsync(mediaType, query, page, c), ct);
+
+    /// <summary>Films d'une saga TMDb (cache 7 jours).</summary>
+    public Task<List<SeerrResult>> CollectionAsync(SeerrClient cl, int collectionId, CancellationToken ct)
+        => CachedListAsync("c:" + collectionId, StableListTtl, c => cl.CollectionAsync(collectionId, c), ct);
+
+    /// <summary>Titres réalisés, créés ou écrits par une personne (cache 7 jours).</summary>
+    public Task<List<SeerrResult>> PersonWorksAsync(SeerrClient cl, int personId, CancellationToken ct)
+        => CachedListAsync("p:" + personId, StableListTtl, c => cl.PersonWorksAsync(personId, c), ct);
+
+    // liste en cache, sinon un appel (limité à 4 simultanés) ; un échec est mémorisé (404 : 7 jours, sinon 1 h) et donne une liste vide
+    private async Task<List<SeerrResult>> CachedListAsync(string key, TimeSpan ttl, Func<CancellationToken, Task<List<SeerrResult>>> fetch, CancellationToken ct)
+    {
+        var now = DateTime.UtcNow;
+        if (_lists.TryGetValue(key, out var hit) && now - hit.At < ttl)
+        {
+            return hit.Items;
+        }
+
+        if (_failed.TryGetValue("l:" + key, out var until) && until > now)
+        {
+            return new List<SeerrResult>();
+        }
+
+        await _throttle.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            var items = await fetch(ct).ConfigureAwait(false);
+            _lists[key] = (DateTime.UtcNow, items);
+            return items;
+        }
+        catch (Exception ex) when (Transient(ex, ct))
+        {
+            _failed["l:" + key] = DateTime.UtcNow + (ex is SeerrException { Status: System.Net.HttpStatusCode.NotFound } ? MissingTtl : FailedTtl);
+            _log.LogDebug("Reco+ : liste {Key} indisponible ({Msg})", key, ex.Message);
+            return new List<SeerrResult>();
+        }
+        finally
+        {
+            _throttle.Release();
+        }
     }
 }

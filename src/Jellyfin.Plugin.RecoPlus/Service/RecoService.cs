@@ -7,7 +7,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Jellyfin.Data;
+using Jellyfin.Data.Enums;
 using Jellyfin.Database.Implementations.Entities;
+using Jellyfin.Database.Implementations.Enums;
 using Jellyfin.Plugin.RecoPlus.Data;
 using Jellyfin.Plugin.RecoPlus.Integration;
 using Jellyfin.Plugin.RecoPlus.Seerr;
@@ -585,13 +588,29 @@ public sealed class RecoService : IDisposable
 
         // mode étendu : candidats TMDb des titres aimés de chaque compte ciblé
         var targets = only is null ? users : users.Where(u => u.Id == only).ToList();
-        var extCands = new Dictionary<string, (List<string> Ids, Dictionary<string, double> Agree, Dictionary<string, string> Because)>(StringComparer.Ordinal);
+        var extCands = new Dictionary<string, ExtCandidates>(StringComparer.Ordinal);
         if (cfg.ExtendedEnabled && seerr.Ok && cl is not null)
         {
-            foreach (var u in targets)
+            // au calcul complet, l'exploration Seerr (la partie longue) n'est refaite que pour les comptes actifs récemment ;
+            // les autres gardent leurs titres hors bibliothèque jusqu'à leur prochaine activité
+            int activeDays = Math.Clamp(cfg.ExtendedActiveDays, 0, 3650);
+            bool Active(Jellyfin.Database.Implementations.Entities.User u)
+            {
+                var k = u.Id.ToString("N");
+                if (only is not null || activeDays == 0 || !_recs.TryGetValue(k, out var prev) || prev.Extended.Count == 0)
+                {
+                    return true;
+                }
+
+                return hist.TryGetValue(k, out var h) && h.Values.Any(x => Math.Max(x.Last, x.Start) >= now - (activeDays * Core.Day));
+            }
+
+            var extTargets = targets.Where(Active).ToList();
+            for (int i = 0; i < extTargets.Count; i++)
             {
                 ct.ThrowIfCancellationRequested();
-                extCands[u.Id.ToString("N")] = await ExtendedCandidates(u, ctx, lib, tmdbOf, seerr, cl, titles, colls, cfg, ct).ConfigureAwait(false);
+                extCands[extTargets[i].Id.ToString("N")] = await ExtendedCandidates(extTargets[i], ctx, lib, tmdbOf, seerr, cl, titles, colls, cfg, ct).ConfigureAwait(false);
+                progress?.Report(40 + (20.0 * (i + 1) / extTargets.Count));
             }
 
             _seerr.SaveCache();
@@ -686,9 +705,12 @@ public sealed class RecoService : IDisposable
                 : new List<string>();
             if (extIds.Count > 0)
             {
-                var sc = Recommender.Score(ctx, vec, key, extIds, s, ex.Agree, exposure: expo);
+                // bruit du jour (réglable) : les titres de valeur proche changent de place d'un jour à l'autre
+                double noise = double.IsFinite(cfg.ExtendedNoise) ? Math.Clamp(cfg.ExtendedNoise, 0, 1) : 0;
+                string noiseSeed = key + "|" + Exploration.Day(DateTime.UtcNow);
+                var sc = Exploration.Noisy(Recommender.Score(ctx, vec, key, extIds, s, ex.Agree, exposure: expo), noise, noiseSeed);
                 var extRanked = Recommender.Rank(ctx, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s, key);
-                var recs = extRanked.Select(id => (Id: id, Rec: ToExternalRec(id, titles, ex.Because))).Where(p => p.Rec is not null).ToList();
+                var recs = extRanked.Select(id => (Id: id, Rec: ToExternalRec(id, titles, ex.Because, ex.Reasons))).Where(p => p.Rec is not null).ToList();
                 r.Extended = recs.Select(p => p.Rec!).ToList();
 
                 // mélange libre : bibliothèque et hors bibliothèque notés ensemble sur ce qu'ils ont en commun, chacun à sa place dans la rangée
@@ -696,12 +718,24 @@ public sealed class RecoService : IDisposable
                 {
                     var shown = r.Ranked.Take(Math.Max(0, Math.Clamp(cfg.RowSize, 5, 60) - r.Pinned.Count)).ToList();
                     var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), Recommender.Shared(s), exposure: expo);
-                    var places = HomeRows.FreePlaces(shown.Select(x => joint[x]).ToList(), recs.Select(p => joint[p.Id]).ToList(), Math.Clamp(cfg.ExtendedMinFree, 0, 20));
+                    var jointNoisy = Exploration.Noisy(joint, noise, noiseSeed);   // même bruit pour la place des titres hors bibliothèque
+                    var places = HomeRows.FreePlaces(shown.Select(x => joint[x]).ToList(), recs.Select(p => jointNoisy[p.Id]).ToList(), Math.Clamp(cfg.ExtendedMinFree, 0, 20));
+
+                    // places « découverte » : les mieux notés qui n'ont pas trouvé de place d'eux-mêmes
+                    places = HomeRows.ForcePlaces(places, shown.Count,
+                        Enumerable.Range(0, recs.Count).OrderByDescending(i => titles[recs[i].Id].Community ?? 0).ThenBy(i => i),
+                        Math.Clamp(cfg.ExtendedDiscoverySlots, 0, 10));
                     for (int i = 0; i < recs.Count; i++)
                     {
                         recs[i].Rec!.After = places[i];
                     }
                 }
+            }
+
+            // pas d'exploration pour ce compte (inactif, ou Seerr injoignable) : ses titres hors bibliothèque précédents restent
+            if (cfg.ExtendedEnabled && !extCands.ContainsKey(key) && _recs.TryGetValue(key, out var prevRecs))
+            {
+                r.Extended = prevRecs.Extended;
             }
 
             _recs[key] = r;
@@ -877,7 +911,7 @@ public sealed class RecoService : IDisposable
         return res;
     }
 
-    private ExternalRec? ToExternalRec(string id, Dictionary<string, Title> titles, Dictionary<string, string> because)
+    private ExternalRec? ToExternalRec(string id, Dictionary<string, Title> titles, Dictionary<string, string> because, Dictionary<string, string> reasons)
     {
         // id = "tmdb:movie:123"
         var parts = id.Split(':');
@@ -898,6 +932,7 @@ public sealed class RecoService : IDisposable
             BackdropPath = d?.BackdropPath,
             Vote = t.Community ?? 0,
             Because = because.GetValueOrDefault(id, string.Empty),
+            Reason = reasons.GetValueOrDefault(id, string.Empty),
         };
     }
 
@@ -946,56 +981,94 @@ public sealed class RecoService : IDisposable
         };
     }
 
-    private bool ParentalAllowed(User u, SeerrDetails d, string country)
+    /// <summary>Contrôle parental d'un compte, lu comme Jellyfin (et Jellyfin Enhanced) le lit.</summary>
+    private sealed record ParentalPolicy(int? Max, int? MaxSub, bool BlockUnratedMovies, bool BlockUnratedSeries, string[] Blocked, string[] Allowed);
+
+    private static ParentalPolicy PolicyOf(User u)
+    {
+        var unrated = u.GetPreferenceValues<UnratedItem>(PreferenceKind.BlockUnratedItems) ?? Array.Empty<UnratedItem>();
+        return new ParentalPolicy(u.MaxParentalRatingScore, u.MaxParentalRatingSubScore, unrated.Contains(UnratedItem.Movie), unrated.Contains(UnratedItem.Series),
+            u.GetPreference(PreferenceKind.BlockedTags) ?? Array.Empty<string>(), u.GetPreference(PreferenceKind.AllowedTags) ?? Array.Empty<string>());
+    }
+
+    /// <summary>
+    /// Titre hors bibliothèque autorisé pour le compte, avec les mêmes règles que Jellyfin Enhanced (qui refuse sinon la
+    /// fiche) : classification du pays choisi seulement, titre non classé autorisé sauf si le compte bloque les non classés
+    /// de cette sorte, deux plafonds si le compte a un sous-niveau, étiquettes bloquées / autorisées.
+    /// </summary>
+    private bool ParentalAllowed(ParentalPolicy p, SeerrDetails d, string country)
     {
         if (d.Adult)
         {
             return false;
         }
 
-        if (u.MaxParentalRatingScore is not int max)
+        int? score = null, sub = null;
+        if (d.Certifications.TryGetValue(country, out var cert) && !string.IsNullOrWhiteSpace(cert) && _loc.GetRatingScore(cert, country) is { } rs)
         {
-            return true;
+            (score, sub) = (rs.Score, rs.SubScore);
         }
 
-        string? cert = d.Certifications.TryGetValue(country, out var c) ? c : (d.Certifications.TryGetValue("US", out var us) ? us : null);
-        var cc = cert is not null && d.Certifications.ContainsKey(country) ? country : "US";
-        if (cert is null)
-        {
-            return false; // plus strict que Jellyfin : classification inconnue + limite fixée → exclu
-        }
-
-        var score = _loc.GetRatingScore(cert, cc);
-        if (score is null)
-        {
-            return false;
-        }
-
-        if (score.Score != max)
-        {
-            return score.Score < max;
-        }
-
-        return u.MaxParentalRatingSubScore is not int sub || (score.SubScore ?? 0) <= sub;
+        return Parental.IsAllowed(score, sub, d.MediaType == "tv" ? p.BlockUnratedSeries : p.BlockUnratedMovies, p.Max, p.MaxSub)
+               && Parental.TagsAllowed(d.Keywords, d.Genres, p.Blocked, p.Allowed);
     }
 
-    private async Task<(List<string> Ids, Dictionary<string, double> Agree, Dictionary<string, string> Because)> ExtendedCandidates(
+    private static readonly Dictionary<string, string> LanguageNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["ja"] = "japonais", ["ko"] = "coréen", ["zh"] = "chinois", ["cn"] = "cantonais", ["fr"] = "français", ["en"] = "anglais",
+        ["es"] = "espagnol", ["it"] = "italien", ["de"] = "allemand", ["pt"] = "portugais", ["hi"] = "hindi", ["ru"] = "russe",
+        ["sv"] = "suédois", ["da"] = "danois", ["no"] = "norvégien", ["pl"] = "polonais", ["tr"] = "turc", ["th"] = "thaï",
+    };
+
+    /// <summary>Candidats hors bibliothèque d'un compte : identifiants, accord TMDb, titre aimé d'origine et raison affichée.</summary>
+    private sealed record ExtCandidates(List<string> Ids, Dictionary<string, double> Agree, Dictionary<string, string> Because, Dictionary<string, string> Reasons);
+
+    /// <summary>
+    /// Candidats hors bibliothèque, de plusieurs sources fusionnées à parts équilibrées : recommandations et titres
+    /// similaires des titres aimés, volets manquants des sagas, filmographies des auteurs récurrents, et les mieux notés
+    /// des thèmes, genres, studios, langues préférés et de tout TMDb. Les listes triées par note sont lues à des pages
+    /// tirées au hasard du jour. Seuls les titres retenus ont une fiche détaillée ; le moteur les classe ensuite tous de la
+    /// même façon.
+    /// </summary>
+    private async Task<ExtCandidates> ExtendedCandidates(
         User u, Context ctx, LibrarySnapshot lib, Dictionary<string, string> tmdbOf, SeerrSnapshot seerr, SeerrClient cl,
         Dictionary<string, Title> titles, Dictionary<string, List<string>> colls, Configuration.PluginConfiguration cfg, CancellationToken ct)
     {
         var key = u.Id.ToString("N");
+        var day = Exploration.Day(DateTime.UtcNow);
         var sig = ctx.Sig.GetValueOrDefault(key) ?? new Dictionary<string, double>();
         var anchors = sig.Where(e => e.Value > 0).OrderByDescending(e => e.Value)
             .Select(e => (Id: e.Key, Tmdb: tmdbOf.GetValueOrDefault(e.Key) ?? (e.Key.StartsWith("tmdb:", StringComparison.Ordinal) ? e.Key[5..] : null), Weight: e.Value))
             .Where(a => a.Tmdb is not null)
             .Take(Math.Clamp(cfg.ExtendedAnchors, 1, 500))
             .ToList();
-        var count = new Dictionary<string, int>(StringComparer.Ordinal);
-        var support = new Dictionary<string, double>(StringComparer.Ordinal);   // somme du goût pour les titres aimés qui le proposent
-        var meta = new Dictionary<string, SeerrResult>(StringComparer.Ordinal);
-        var because = new Dictionary<string, string>(StringComparer.Ordinal);
         var seen = ctx.Hist.GetValueOrDefault(key) ?? new Dictionary<string, Interaction>();
-        // listes de tous les titres de départ en parallèle (Seerr est limité à 4 appels simultanés), traitées dans l'ordre
+        string AnchorName(string id) => titles.TryGetValue(id, out var at) ? at.Name : string.Empty;
+        bool Skip(SeerrResult r, string k)
+            => r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Seen(seen, "tmdb:" + k);
+
+        // pistes par source : titre → (score dans la source, raison) ; on garde la meilleure piste d'un titre dans une source
+        var bySource = new Dictionary<string, Dictionary<string, (double Score, string Reason)>>(StringComparer.Ordinal);
+        void Add(string source, SeerrResult r, double score, string reason)
+        {
+            var k = r.MediaType + ":" + r.TmdbId;
+            if (Skip(r, k))
+            {
+                return;
+            }
+
+            if (!bySource.TryGetValue(source, out var m))
+            {
+                bySource[source] = m = new Dictionary<string, (double, string)>(StringComparer.Ordinal);
+            }
+
+            if (!m.TryGetValue(k, out var cur) || score > cur.Score)
+            {
+                m[k] = (score, reason);
+            }
+        }
+
+        // 1) recommandations et similaires des titres aimés (en parallèle ; Seerr est limité à 4 appels simultanés)
         int pages = Math.Clamp(cfg.ExtendedPages, 1, 10);
         var related = await Task.WhenAll(anchors.Select(a =>
         {
@@ -1004,39 +1077,203 @@ public sealed class RecoService : IDisposable
                 ? _seerr.RelatedAsync(cl, p[0], tid, pages, ct)
                 : Task.FromResult(new List<SeerrResult>());
         })).ConfigureAwait(false);
+        var count = new Dictionary<string, int>(StringComparer.Ordinal);
+        var because = new Dictionary<string, string>(StringComparer.Ordinal);
         for (int ai = 0; ai < anchors.Count; ai++)
         {
             var a = anchors[ai];
             foreach (var r in related[ai].DistinctBy(x => x.MediaType + ":" + x.TmdbId))
             {
                 var k = r.MediaType + ":" + r.TmdbId;
-                if (r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Seen(seen, "tmdb:" + k))
+                if (Skip(r, k))
                 {
                     continue;
                 }
 
                 count[k] = count.GetValueOrDefault(k) + 1;
-                support[k] = support.GetValueOrDefault(k) + a.Weight;
-                meta.TryAdd(k, r);
-                because.TryAdd("tmdb:" + k, titles.TryGetValue(a.Id, out var at) ? at.Name : string.Empty);
+                because.TryAdd("tmdb:" + k, AnchorName(a.Id));
+                // proposé par les titres les plus aimés, par plusieurs titres aimés, puis le mieux noté (départage)
+                var cur = bySource.TryGetValue("related", out var rm) && rm.TryGetValue(k, out var c) ? c.Score : 0;
+                Add("related", r, cur + a.Weight + (r.Vote * 1e-4), string.Empty);
             }
         }
 
-        // présélection avant les fiches détaillées : proposés par les titres les plus aimés, puis par le plus de titres aimés, puis les mieux notés
-        var top = count.OrderByDescending(kv => support[kv.Key]).ThenByDescending(kv => kv.Value).ThenByDescending(kv => meta[kv.Key].Vote).ThenBy(kv => kv.Key, StringComparer.Ordinal)
-            .Take(Math.Clamp(cfg.ExtendedDetails, 10, 2000)).ToList();
-        var ids = new List<string>();
-        var agree = new Dictionary<string, double>(StringComparer.Ordinal);
-        var details = await Task.WhenAll(top.Select(kv =>
+        // 2) fiches des titres aimés : leurs genres, thèmes, auteurs, studios, langue et saga orientent l'exploration
+        bool needLiked = cfg.ExtendedByGenre || cfg.ExtendedByKeyword || cfg.ExtendedSagas || cfg.ExtendedByPeople || cfg.ExtendedByStudio || cfg.ExtendedByLanguage;
+        var likedDetails = needLiked
+            ? await Task.WhenAll(anchors.Select(a =>
+            {
+                var p = a.Tmdb!.Split(':');
+                return p.Length == 2 && int.TryParse(p[1], out var tid) ? _seerr.DetailsAsync(cl, p[0], tid, ct) : Task.FromResult<SeerrDetails?>(null);
+            })).ConfigureAwait(false)
+            : Array.Empty<SeerrDetails?>();
+        var liked = anchors.Zip(likedDetails).Where(x => x.Second is not null).Select(x => (A: x.First, D: x.Second!)).ToList();
+
+        var rated = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            var p = kv.Key.Split(':');
+            ["sortBy"] = "vote_average.desc",
+            ["voteAverageGte"] = Math.Clamp(cfg.ExtendedMinRating, 0, 10).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture),
+            ["voteCountGte"] = Math.Clamp(cfg.ExtendedMinVotes, 0, 1_000_000).ToString(System.Globalization.CultureInfo.InvariantCulture),
+            ["language"] = "all",                                  // langue d'ORIGINE : toutes (sauf la source « langues »)
+        };
+        int dPages = Math.Clamp(cfg.ExtendedDiscoverPages, 1, 10), depth = Math.Clamp(cfg.ExtendedDiscoverDepth, 1, 50);
+        var discoverJobs = new List<(string Source, string Type, Dictionary<string, string> Query, int Pages, double Weight, string Reason)>();
+        void Discover(string source, string type, Dictionary<string, string> extra, double weight, string reason, int? pagesOverride = null)
+        {
+            var q = new Dictionary<string, string>(rated, StringComparer.Ordinal);
+            foreach (var (k, v) in extra)
+            {
+                q[k] = v;
+            }
+
+            discoverJobs.Add((source, type, q, pagesOverride ?? dPages, weight, reason));
+        }
+
+        string[] types = { "movie", "tv" };
+        if (cfg.ExtendedTopRated)
+        {
+            var votes = Math.Clamp(cfg.ExtendedTopRatedMinVotes, 0, 1_000_000).ToString(System.Globalization.CultureInfo.InvariantCulture);
+            foreach (var t in types)
+            {
+                Discover("top", t, new Dictionary<string, string> { ["voteCountGte"] = votes }, 1, "Parmi les mieux notés", Math.Clamp(cfg.ExtendedTopRatedPages, 1, 10));
+            }
+        }
+
+        if (cfg.ExtendedByGenre && liked.Count > 0)
+        {
+            var names = liked.SelectMany(x => x.D.GenreRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
+            foreach (var (gid, w) in Exploration.Top(liked.Select(x => (x.D.GenreRefs.Select(g => g.Id), x.A.Weight)), 1, Math.Clamp(cfg.ExtendedGenres, 0, 20)))
+            {
+                foreach (var t in types)
+                {
+                    var ids = Exploration.GenreFor(gid, t).ToList();
+                    if (ids.Count > 0)
+                    {
+                        Discover("genre", t, new Dictionary<string, string> { ["genre"] = string.Join("|", ids) }, w, "Bien noté en " + names[gid].ToLowerInvariant());
+                    }
+                }
+            }
+        }
+
+        if (cfg.ExtendedByKeyword && liked.Count > 0)
+        {
+            var names = liked.SelectMany(x => x.D.KeywordRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
+            foreach (var (kid, w) in Exploration.Top(liked.Select(x => (x.D.KeywordRefs.Select(g => g.Id), x.A.Weight)), 2, Math.Clamp(cfg.ExtendedKeywords, 0, 50)))
+            {
+                foreach (var t in types)
+                {
+                    Discover("keyword", t, new Dictionary<string, string> { ["keywords"] = kid.ToString(System.Globalization.CultureInfo.InvariantCulture) }, w, "Sur le thème « " + names[kid] + " »");
+                }
+            }
+        }
+
+        if (cfg.ExtendedByStudio && liked.Count > 0)
+        {
+            int min = Math.Clamp(cfg.ExtendedStudioMinTitles, 1, 50), max = Math.Clamp(cfg.ExtendedStudios, 0, 30);
+            foreach (var t in types)
+            {
+                var mine = liked.Where(x => x.D.MediaType == t).ToList();
+                var names = mine.SelectMany(x => x.D.StudioRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
+                foreach (var (sid, w) in Exploration.Top(mine.Select(x => (x.D.StudioRefs.Select(g => g.Id), x.A.Weight)), min, max))
+                {
+                    var id = sid.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    Discover("studio", t, new Dictionary<string, string> { [t == "tv" ? "network" : "studio"] = id }, w, (t == "tv" ? "De la chaîne " : "Du studio ") + names[sid]);
+                }
+            }
+        }
+
+        if (cfg.ExtendedByLanguage && liked.Count > 0)
+        {
+            double total = liked.Sum(x => x.A.Weight);
+            foreach (var g in liked.Where(x => !string.IsNullOrEmpty(x.D.OriginalLanguage)).GroupBy(x => x.D.OriginalLanguage!.ToLowerInvariant()))
+            {
+                double share = g.Sum(x => x.A.Weight) / Math.Max(1e-9, total);
+                if (share * 100 >= Math.Clamp(cfg.ExtendedLanguageMinShare, 1, 100))
+                {
+                    var label = LanguageNames.TryGetValue(g.Key, out var ln) ? ln : g.Key;
+                    foreach (var t in types)
+                    {
+                        Discover("language", t, new Dictionary<string, string> { ["language"] = g.Key }, share, "Bien noté en " + label + " (version originale)");
+                    }
+                }
+            }
+        }
+
+        // listes de découverte : la page 1 et des pages tirées au hasard du jour (propres au compte), en parallèle
+        var jobPages = discoverJobs.Select((j, i) => (Job: j, Pages: Exploration.DailyPages($"{key}|{day}|{j.Source}|{j.Type}|{i}", j.Pages, depth))).ToList();
+        var lists = await Task.WhenAll(jobPages.Select(jp => Task.WhenAll(jp.Pages.Select(pg => _seerr.DiscoverAsync(cl, jp.Job.Type, jp.Job.Query, pg, ct))))).ConfigureAwait(false);
+        for (int ji = 0; ji < jobPages.Count; ji++)
+        {
+            var job = jobPages[ji].Job;
+            int rank = 0;
+            foreach (var r in lists[ji].SelectMany(l => l))
+            {
+                Add(job.Source, r, job.Weight / (1.0 + (0.05 * rank++)), job.Reason);
+            }
+        }
+
+        // sagas : volets manquants (ordre de sortie), avant les autres d'une même saga
+        if (cfg.ExtendedSagas)
+        {
+            var sagas = liked.Where(x => x.D.CollectionId is not null).GroupBy(x => x.D.CollectionId!.Value)
+                .Select(g => (Id: g.Key, Weight: g.Sum(x => x.A.Weight), Anchor: AnchorName(g.OrderByDescending(x => x.A.Weight).First().A.Id))).ToList();
+            var parts = await Task.WhenAll(sagas.Select(sg => _seerr.CollectionAsync(cl, sg.Id, ct))).ConfigureAwait(false);
+            for (int si = 0; si < sagas.Count; si++)
+            {
+                int rank = 0;
+                foreach (var r in parts[si])
+                {
+                    Add("saga", r, sagas[si].Weight / (1.0 + (0.1 * rank++)), "Dans la saga de " + sagas[si].Anchor);
+                }
+            }
+        }
+
+        // auteurs : réalisateurs, créateurs, scénaristes récurrents → le reste de leur filmographie
+        if (cfg.ExtendedByPeople && liked.Count > 0)
+        {
+            var names = liked.SelectMany(x => x.D.PeopleRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
+            var people = Exploration.Top(liked.Select(x => (x.D.PeopleRefs.Select(g => g.Id), x.A.Weight)), Math.Clamp(cfg.ExtendedPeopleMinTitles, 1, 50), Math.Clamp(cfg.ExtendedPeople, 0, 50));
+            var works = await Task.WhenAll(people.Select(pp => _seerr.PersonWorksAsync(cl, pp.Item, ct))).ConfigureAwait(false);
+            for (int pi = 0; pi < people.Count; pi++)
+            {
+                foreach (var r in works[pi])
+                {
+                    Add("people", r, people[pi].Weight * (0.5 + (r.Vote / 20.0)), "De " + names[people[pi].Item]);
+                }
+            }
+        }
+
+        // fusion à parts équilibrées (aucune source ne prend tout), puis fiches détaillées du budget seulement
+        static IReadOnlyList<string> Ordered(Dictionary<string, (double Score, string Reason)>? m)
+            => m is null ? Array.Empty<string>() : m.OrderByDescending(kv => kv.Value.Score).ThenBy(kv => kv.Key, StringComparer.Ordinal).Select(kv => kv.Key).ToList();
+        var sources = new List<Exploration.Source>
+        {
+            new("related", Ordered(bySource.GetValueOrDefault("related")), 3),
+            new("saga", Ordered(bySource.GetValueOrDefault("saga")), 2),
+            new("people", Ordered(bySource.GetValueOrDefault("people")), 2),
+            new("keyword", Ordered(bySource.GetValueOrDefault("keyword")), 1),
+            new("genre", Ordered(bySource.GetValueOrDefault("genre")), 1),
+            new("studio", Ordered(bySource.GetValueOrDefault("studio")), 1),
+            new("language", Ordered(bySource.GetValueOrDefault("language")), 1),
+            new("top", Ordered(bySource.GetValueOrDefault("top")), 1),
+        };
+        var merged = Exploration.Merge(sources, Math.Clamp(cfg.ExtendedDetails, 10, 2000));
+        var details = await Task.WhenAll(merged.Select(m =>
+        {
+            var p = m.Key.Split(':');
             return _seerr.DetailsAsync(cl, p[0], int.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture), ct);
         })).ConfigureAwait(false);
-        for (int ti = 0; ti < top.Count; ti++)
+
+        var policy = PolicyOf(u);
+        var country = string.IsNullOrWhiteSpace(cfg.RatingCountry) ? "US" : cfg.RatingCountry.Trim().ToUpperInvariant();
+        var ids = new List<string>();
+        var agree = new Dictionary<string, double>(StringComparer.Ordinal);
+        var reasons = new Dictionary<string, string>(StringComparer.Ordinal);
+        for (int i = 0; i < merged.Count; i++)
         {
-            var (k, n) = top[ti];
-            var d = details[ti];
-            if (d is null || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ParentalAllowed(u, d, cfg.RatingCountry))
+            var (k, source) = merged[i];
+            var d = details[i];
+            if (d is null || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ParentalAllowed(policy, d, country))
             {
                 continue;
             }
@@ -1048,10 +1285,13 @@ public sealed class RecoService : IDisposable
             }
 
             ids.Add(id);
-            agree[id] = n / (double)Math.Max(1, anchors.Count);
+            agree[id] = count.GetValueOrDefault(k) / (double)Math.Max(1, anchors.Count);
+            reasons[id] = source == "related"
+                ? (because.TryGetValue(id, out var b) && b.Length > 0 ? "Parce que tu as aimé " + b : string.Empty)
+                : bySource[source][k].Reason;
         }
 
-        return (ids, agree, because);
+        return new ExtCandidates(ids, agree, because, reasons);
     }
 
     /// <summary>Catégories « Parce que tu as aimé X » : chaque film recommandé va sous le titre aimé dont il est le plus proche.</summary>

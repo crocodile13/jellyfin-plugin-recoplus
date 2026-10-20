@@ -163,13 +163,90 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public int ExtendedCount { get; set; } = 20;
 
     /// <summary>Titres aimés utilisés comme points de départ dans le catalogue.</summary>
-    public int ExtendedAnchors { get; set; } = 60;
+    public int ExtendedAnchors { get; set; } = 30;
 
     /// <summary>Pages de recommandations et de titres similaires TMDb lues par titre aimé (20 titres environ par page).</summary>
-    public int ExtendedPages { get; set; } = 3;
+    public int ExtendedPages { get; set; } = 2;
 
     /// <summary>Candidats détaillés par compte (appels Seerr, mis en cache).</summary>
-    public int ExtendedDetails { get; set; } = 400;
+    public int ExtendedDetails { get; set; } = 200;
+
+    // exploration : d'autres sources de candidats que les recommandations des titres aimés
+
+    /// <summary>Source : les mieux notés de TMDb, tous genres (liste commune à tous les comptes).</summary>
+    public bool ExtendedTopRated { get; set; } = true;
+
+    /// <summary>« Les mieux notés » : nombre minimal de votes TMDb.</summary>
+    public int ExtendedTopRatedMinVotes { get; set; } = 1000;
+
+    /// <summary>« Les mieux notés » : pages lues par sorte (films, séries), la première et les autres tirées au hasard du jour.</summary>
+    public int ExtendedTopRatedPages { get; set; } = 2;
+
+    /// <summary>Source : les mieux notés des genres préférés du compte.</summary>
+    public bool ExtendedByGenre { get; set; } = true;
+
+    /// <summary>Genres préférés explorés.</summary>
+    public int ExtendedGenres { get; set; } = 5;
+
+    /// <summary>Source : les mieux notés des thèmes (mots-clés TMDb) récurrents dans les titres aimés.</summary>
+    public bool ExtendedByKeyword { get; set; } = true;
+
+    /// <summary>Thèmes explorés (présents dans au moins 2 titres aimés).</summary>
+    public int ExtendedKeywords { get; set; } = 10;
+
+    /// <summary>Source : volets manquants des sagas dont un titre est aimé.</summary>
+    public bool ExtendedSagas { get; set; } = true;
+
+    /// <summary>Source : titres des réalisateurs, créateurs et scénaristes récurrents dans les titres aimés.</summary>
+    public bool ExtendedByPeople { get; set; } = true;
+
+    /// <summary>Auteurs : présents dans au moins ce nombre de titres aimés.</summary>
+    public int ExtendedPeopleMinTitles { get; set; } = 2;
+
+    /// <summary>Auteurs explorés.</summary>
+    public int ExtendedPeople { get; set; } = 10;
+
+    /// <summary>Source : les mieux notés des studios (films) et chaînes (séries) récurrents dans les titres aimés.</summary>
+    public bool ExtendedByStudio { get; set; } = true;
+
+    /// <summary>Studios : présents dans au moins ce nombre de titres aimés.</summary>
+    public int ExtendedStudioMinTitles { get; set; } = 3;
+
+    /// <summary>Studios explorés.</summary>
+    public int ExtendedStudios { get; set; } = 5;
+
+    /// <summary>Source : les mieux notés dans les langues d'origine qui pèsent dans les titres aimés.</summary>
+    public bool ExtendedByLanguage { get; set; } = true;
+
+    /// <summary>Langues : part minimale (en %) des titres aimés.</summary>
+    public int ExtendedLanguageMinShare { get; set; } = 15;
+
+    /// <summary>Exploration : note TMDb minimale (genres, thèmes, studios, langues, mieux notés).</summary>
+    public double ExtendedMinRating { get; set; } = 7.5;
+
+    /// <summary>Exploration : nombre minimal de votes TMDb (genres, thèmes, studios, langues).</summary>
+    public int ExtendedMinVotes { get; set; } = 500;
+
+    /// <summary>Exploration : pages lues par recherche (la première, puis des pages tirées au hasard du jour).</summary>
+    public int ExtendedDiscoverPages { get; set; } = 2;
+
+    /// <summary>Exploration : profondeur du tirage (pages 2 à N), donc jusqu'où on va chercher sous le haut du classement.</summary>
+    public int ExtendedDiscoverDepth { get; set; } = 10;
+
+    /// <summary>
+    /// Bruit du jour sur le classement des titres hors bibliothèque (0 = aucun, 1 = fort) : les titres de valeur proche
+    /// changent de place d'un jour à l'autre.
+    /// </summary>
+    public double ExtendedNoise { get; set; } = 0.3;
+
+    /// <summary>
+    /// Recalcul complet : l'exploration Seerr n'est refaite que pour les comptes actifs depuis ce nombre de jours (0 = tous) ;
+    /// les autres gardent leurs titres hors bibliothèque jusqu'à leur prochaine activité.
+    /// </summary>
+    public int ExtendedActiveDays { get; set; } = 30;
+
+    /// <summary>Mélange libre : places « découverte » réservées aux titres hors bibliothèque les mieux notés (0 = aucune).</summary>
+    public int ExtendedDiscoverySlots { get; set; }
 
     /// <summary>
     /// Titres hors bibliothèque sur l'accueil (script client) : mélangés dans la rangée « Pour toi » si Home Screen

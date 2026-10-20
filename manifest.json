@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.15.0",
+        "changelog": "1.0.15 : exploration bien plus large du catalogue — en plus des recommandations des titres aimés : volets manquants des sagas, filmographies des réalisateurs, créateurs et scénaristes récurrents, et les mieux notés de TMDb tous genres, des genres, thèmes (mots-clés), studios et chaînes, langues d'origine préférés ; chaque source se coupe, se partage les fiches détaillées à parts équilibrées et affiche sa raison (« De … », « Dans la saga de … », « Bien noté en … ») ; pages tirées au hasard du jour et hasard du jour réglable sur le classement des titres hors bibliothèque ; places « découverte » en option ; note et votes minimaux réglables. Plus rapide : valeurs par défaut plus légères (30 titres de départ, 2 pages, 200 fiches) et exploration au recalcul complet seulement pour les comptes actifs depuis 30 jours. Contrôle parental aligné sur Jellyfin Enhanced (classification du pays seulement, titres non classés et étiquettes bloquées selon le compte) ; libellés de la page de réglages qui ne passent plus sous le « ? ».",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.14.0",
         "changelog": "1.0.14 : fiabilité et optimisations — un délai dépassé chez Seerr ne fait plus échouer le calcul ni ne coupe les recalculs automatiques ; « Plus comme ceci » fonctionne dès le démarrage (vecteurs construits à la demande) ; appels Seerr en parallèle (4 à la fois) au lieu d'un par un ; fiches introuvables mémorisées (404 : 7 jours, autre échec : 1 h) au lieu d'être redemandées à chaque calcul ; listes TMDb non mises en cache si Seerr ne répond pas ; caches écrits seulement s'ils ont changé (listes recalculées compte par compte : au plus toutes les 5 min et à l'arrêt) ; droits d'accès lus en identifiants seulement ; suggestions : seule la page demandée est relue ; fuseau horaire résolu une fois ; résumés des titres Seerr plus stockés ni envoyés. Sécurité : la clé Seerr et le jeton du webhook enregistrés ne sont envoyés qu'à l'URL enregistrée (boutons Tester).",
         "targetAbi": "12.2.0.0",
