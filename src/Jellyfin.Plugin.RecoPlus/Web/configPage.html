@@ -253,6 +253,11 @@
                         <div><h3>Mode étendu</h3><ol id="rpPreviewExt"></ol></div>
                     </div>
                     <div class="rp-grid" id="rpPreviewRows" style="margin-top:1em"></div>
+                    <div id="rpPreviewSourcesBox" class="rp-hidden" style="margin-top:1em">
+                        <h3>Mode étendu : apport de chaque source</h3>
+                        <p class="mute">Trouvés : titres absents, non demandés et non vus. Détaillés : retenus dans le budget de fiches et autorisés (contrôle parental, listes). Proposés : classés parmi les titres hors bibliothèque du compte. Dans la rangée : placés par le mélange libre.</p>
+                        <table class="rp-table" id="rpPreviewSources"></table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -422,6 +427,11 @@
             ['ExtendedStudioMinTitles', 'Studios : présents dans au moins … titres aimés', 'int', 'Studios pour les films, chaînes pour les séries.', 1, 1, 50, 'extadv', 'c', '3'],
             ['ExtendedStudios', 'Studios explorés', 'int', 'Par sorte (films, séries).', 1, 0, 30, 'extadv', 'c', '5'],
             ['ExtendedLanguageMinShare', 'Langues : part minimale des titres aimés (%)', 'int', 'Une langue d\'origine n\'est explorée que si elle pèse au moins cette part des titres aimés (ex. japonais pour beaucoup d\'anime).', 1, 1, 100, 'extadv', 'c', '15'],
+            ['ExtendedCrossingsMax', 'Croisements explorés', 'int', 'Par sorte (films, séries) : les N couples genre × thème ou genre × langue d\'origine les plus forts dans les titres aimés. Listes plus étroites : la moitié des votes minimum suffit.', 1, 0, 30, 'extadv', 'c', '6'],
+            ['ExtendedGemMinRating', 'Pépites : note TMDb minimale', 'num', 'Plus haute que pour les autres sources : avec peu de votes, une note est moins sûre.', 0.1, 0, 10, 'extadv', 'c', '7,8'],
+            ['ExtendedGemMinVotes', 'Pépites : votes TMDb minimum', 'int', 'En dessous, la note ne veut rien dire (amis du réalisateur, fans).', 10, 0, 100000, 'extadv', 'c', '50'],
+            ['ExtendedGemMaxVotes', 'Pépites : votes TMDb maximum', 'int', 'Au-dessus, le titre est déjà connu : il relève des autres sources.', 50, 0, 100000, 'extadv', 'c', '500'],
+            ['ExtendedGemGenres', 'Pépites : genres préférés explorés', 'int', 'En plus d\'une recherche tous genres, par sorte.', 1, 0, 20, 'extadv', 'c', '3'],
 
             // ---- Mode étendu : sources
             ['ExtendedTopRated', 'Les mieux notés, tous genres', 'bool', 'Les films et séries les mieux notés de TMDb (liste commune à tous les comptes, mise en cache) ; le moteur ne garde que ceux qui ressemblent aux goûts du compte.', 0, 0, 0, 'extsrc', 'c', 'activé'],
@@ -430,6 +440,8 @@
             ['ExtendedSagas', 'Volets manquants des sagas', 'bool', 'Les autres films des sagas dont un titre est aimé, absents de la bibliothèque.', 0, 0, 0, 'extsrc', 'c', 'activé'],
             ['ExtendedByPeople', 'Ses auteurs', 'bool', 'Réalisateurs, créateurs et scénaristes qui reviennent dans les titres aimés : le reste de leur filmographie.', 0, 0, 0, 'extsrc', 'c', 'activé'],
             ['ExtendedByStudio', 'Ses studios et chaînes', 'bool', 'Studios (films) et chaînes (séries) qui reviennent dans les titres aimés : leurs titres bien notés.', 0, 0, 0, 'extsrc', 'c', 'activé'],
+            ['ExtendedCrossings', 'Croisements de ses goûts', 'bool', 'Genre × thème (« drame » et « vengeance ») et genre × langue d\'origine (« animation » en japonais) : plus précis qu\'une piste seule, au cœur des goûts.', 0, 0, 0, 'extsrc', 'c', 'activé'],
+            ['ExtendedGems', 'Pépites peu connues', 'bool', 'Titres très bien notés mais avec peu de votes TMDb, que les listes des mieux notés ne montrent jamais : tous genres et genres préférés.', 0, 0, 0, 'extsrc', 'c', 'activé'],
             ['ExtendedByLanguage', 'Ses langues d\'origine', 'bool', 'Langues d\'origine qui pèsent dans les titres aimés : titres bien notés dans ces langues.', 0, 0, 0, 'extsrc', 'c', 'activé'],
             ['ExtendedNoise', 'Hasard du jour', 'num', 'Bruit ajouté chaque jour au classement des titres hors bibliothèque : 0 = toujours le même ordre, 0,3 = les titres de valeur proche changent de place, 1 = beaucoup de mouvement. Un titre nettement moins bon ne passe pas devant un très bon. Fixe pour la journée.', 0.05, 0, 1, 'extsrc', 'c', '0,3'],
 
@@ -438,6 +450,8 @@
         ];
 
         var genres = [], users = [];
+        var SOURCE_ORDER = ['related', 'saga', 'people', 'cross', 'keyword', 'gems', 'genre', 'studio', 'language', 'top'];
+        var SOURCE_NAMES = { related: 'Proches des titres aimés', saga: 'Sagas', people: 'Auteurs', cross: 'Croisements', keyword: 'Thèmes', gems: 'Pépites', genre: 'Genres', studio: 'Studios et chaînes', language: 'Langues d\'origine', top: 'Les mieux notés' };
 
         function el(tag, attrs, text) {
             var e = document.createElement(tag);
@@ -561,7 +575,12 @@
             c_ExtendedPeople: function () { return on('rp_c_ExtendedByPeople'); },
             c_ExtendedStudioMinTitles: function () { return on('rp_c_ExtendedByStudio'); },
             c_ExtendedStudios: function () { return on('rp_c_ExtendedByStudio'); },
-            c_ExtendedLanguageMinShare: function () { return on('rp_c_ExtendedByLanguage'); },
+            c_ExtendedLanguageMinShare: function () { return on('rp_c_ExtendedByLanguage') || on('rp_c_ExtendedCrossings'); },
+            c_ExtendedCrossingsMax: function () { return on('rp_c_ExtendedCrossings'); },
+            c_ExtendedGemMinRating: function () { return on('rp_c_ExtendedGems'); },
+            c_ExtendedGemMinVotes: function () { return on('rp_c_ExtendedGems'); },
+            c_ExtendedGemMaxVotes: function () { return on('rp_c_ExtendedGems'); },
+            c_ExtendedGemGenres: function () { return on('rp_c_ExtendedGems'); },
             c_TimeZone: function () { return on('rp_e_WTimeOfDay_on'); },
             e_Mmr: function () { return v('rp_e_Diversity') !== 'Calibrated'; },
             e_CalibrationStrength: function () { return v('rp_e_Diversity') === 'Calibrated'; },
@@ -847,6 +866,18 @@
                     d.appendChild(o); rr.appendChild(d);
                 });
                 if (!r.extended || !r.extended.length) { ox.appendChild(el('li', { 'class': 'mute' }, 'désactivé ou vide')); }
+                var st = r.sources || {}, tb = $('#rpPreviewSources'), keys = Object.keys(st);
+                tb.innerHTML = '';
+                $('#rpPreviewSourcesBox').classList.toggle('rp-hidden', !keys.length);
+                if (keys.length) {
+                    var head = el('tr'); ['Source', 'Trouvés', 'Détaillés', 'Proposés', 'Dans la rangée'].forEach(function (h) { head.appendChild(el('th', {}, h)); }); tb.appendChild(head);
+                    SOURCE_ORDER.filter(function (k) { return st[k]; }).concat(keys.filter(function (k) { return SOURCE_ORDER.indexOf(k) < 0; })).forEach(function (k) {
+                        var s = st[k], tr = el('tr');
+                        [SOURCE_NAMES[k] || k, s.Found, s.Detailed, s.Proposed, s.Placed === null || s.Placed === undefined ? '—' : s.Placed]
+                            .forEach(function (x) { tr.appendChild(el('td', {}, String(x))); });
+                        tb.appendChild(tr);
+                    });
+                }
             });
         });
 

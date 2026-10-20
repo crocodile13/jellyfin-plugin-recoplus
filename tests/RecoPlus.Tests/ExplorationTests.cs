@@ -84,6 +84,38 @@ public class ExplorationTests
     }
 
     [Fact]
+    public void PairsKeepTheStrongestCrossings()
+    {
+        var g = new (int, double)[] { (18, 3.0), (16, 2.0), (35, 0.5) };
+        var k = new (string, double)[] { ("ja", 2.0), ("ko", 1.0), ("xx", 0.0) };
+        var p = Exploration.Pairs(g, k, 3);
+        Assert.Equal(new[] { (18, "ja"), (16, "ja"), (18, "ko") }, p.Select(x => (x.A, x.B)));
+        Assert.Equal(6.0, p[0].Weight, 9);
+        Assert.DoesNotContain(Exploration.Pairs(g, k, 100), x => x.B == "xx");               // poids nul : écarté
+        Assert.Empty(Exploration.Pairs(g, Array.Empty<(string, double)>(), 5));
+        Assert.Equal(2, Exploration.Pairs(new (int, double)[] { (1, 1), (2, 1) }, new (int, double)[] { (9, 1) }, 5).Count);
+        Assert.Equal(1, Exploration.Pairs(new (int, double)[] { (1, 1), (2, 1) }, new (int, double)[] { (9, 1) }, 5)[0].A); // égalité : ordre des listes
+    }
+
+    [Fact]
+    public void StatsCountEachStepPerSource()
+    {
+        var st = Exploration.Stats(
+            new Dictionary<string, int> { ["related"] = 40, ["gems"] = 12 },
+            new[] { "related", "related", "gems", "saga" },
+            new[] { "related", "saga" },
+            new[] { "saga" });
+        Assert.Equal(40, st["related"].Found);
+        Assert.Equal(2, st["related"].Detailed);
+        Assert.Equal(1, st["related"].Proposed);
+        Assert.Equal(0, st["related"].Placed);
+        Assert.Equal(1, st["saga"].Placed);
+        Assert.Equal(0, st["saga"].Found);
+        Assert.Equal(0, st["gems"].Proposed);
+        Assert.Null(Exploration.Stats(new Dictionary<string, int> { ["top"] = 3 }, Array.Empty<string>(), Array.Empty<string>(), null)["top"].Placed);
+    }
+
+    [Fact]
     public void GenresMapBetweenMoviesAndSeries()
     {
         Assert.Equal(new[] { 16 }, Exploration.GenreFor(16, "tv"));

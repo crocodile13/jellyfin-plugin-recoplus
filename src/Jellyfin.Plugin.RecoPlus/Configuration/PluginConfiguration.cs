@@ -221,6 +221,27 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Langues : part minimale (en %) des titres aimés.</summary>
     public int ExtendedLanguageMinShare { get; set; } = 15;
 
+    /// <summary>Source : croisements des pistes les plus fortes (genre × thème, genre × langue d'origine).</summary>
+    public bool ExtendedCrossings { get; set; } = true;
+
+    /// <summary>Croisements explorés (par sorte : films, séries).</summary>
+    public int ExtendedCrossingsMax { get; set; } = 6;
+
+    /// <summary>Source : pépites, titres très bien notés mais peu connus (peu de votes), dans les genres préférés.</summary>
+    public bool ExtendedGems { get; set; } = true;
+
+    /// <summary>Pépites : note TMDb minimale (plus haute : peu de votes, note moins sûre).</summary>
+    public double ExtendedGemMinRating { get; set; } = 7.8;
+
+    /// <summary>Pépites : votes TMDb minimum (en dessous, la note ne veut rien dire).</summary>
+    public int ExtendedGemMinVotes { get; set; } = 50;
+
+    /// <summary>Pépites : votes TMDb maximum (au-dessus, le titre est déjà connu).</summary>
+    public int ExtendedGemMaxVotes { get; set; } = 500;
+
+    /// <summary>Pépites : genres préférés explorés (en plus d'une recherche tous genres).</summary>
+    public int ExtendedGemGenres { get; set; } = 3;
+
     /// <summary>Exploration : note TMDb minimale (genres, thèmes, studios, langues, mieux notés).</summary>
     public double ExtendedMinRating { get; set; } = 7.5;
 

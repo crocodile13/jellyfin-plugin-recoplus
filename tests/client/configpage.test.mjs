@@ -23,7 +23,7 @@ async function test(name, fn) {
 const users = [{ id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', name: 'alice', ready: true }, { id: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', name: 'bob', ready: false }];
 const status = { version: '1.0.3.0', engine: { UsersWithRecs: 1 }, alerts: [], checks: [], disabled: {}, hss: 'ok', secrets: { seerrApiKey: 'non défini', webhookUrl: 'non défini', webhookToken: 'non défini' }, calibration: {}, canRollback: false, users };
 
-function open(cfg) {
+function open(cfg, extra) {
     const dom = new JSDOM(HTML, { runScripts: 'outside-only', pretendToBeVisual: true });
     const w = dom.window;
     const saved = [];
@@ -31,7 +31,7 @@ function open(cfg) {
     w.Dashboard = { showLoadingMsg() {}, hideLoadingMsg() {}, alert(m) { throw new Error(m); }, processPluginConfigurationUpdateResult() {} };
     w.ApiClient = {
         getUrl: (p) => '/' + p,
-        ajax: (o) => Promise.resolve(o.url === '/RecoPlus/Status' ? status : o.url === '/RecoPlus/Genres' ? ['Animation', 'Documentaire', 'Science-Fiction'] : {}),
+        ajax: (o) => Promise.resolve(extra && extra[o.url.split('?')[0]] ? extra[o.url.split('?')[0]] : o.url === '/RecoPlus/Status' ? status : o.url === '/RecoPlus/Genres' ? ['Animation', 'Documentaire', 'Science-Fiction'] : {}),
         getPluginConfiguration: () => Promise.resolve(JSON.parse(JSON.stringify(store))),
         updatePluginConfiguration: (id, c) => { saved.push(JSON.parse(JSON.stringify(c))); return Promise.resolve({}); },
     };
@@ -288,7 +288,7 @@ await test('mode étendu : sources dans « Où chercher », réglages d\'une sou
     const { d, saved } = open(c);
     await wait(50);
     const box = d.querySelector('[data-fields="extsrc"]');
-    for (const k of ['ExtendedTopRated', 'ExtendedByGenre', 'ExtendedByKeyword', 'ExtendedSagas', 'ExtendedByPeople', 'ExtendedByStudio', 'ExtendedByLanguage', 'ExtendedNoise']) {
+    for (const k of ['ExtendedTopRated', 'ExtendedByGenre', 'ExtendedByKeyword', 'ExtendedSagas', 'ExtendedByPeople', 'ExtendedByStudio', 'ExtendedCrossings', 'ExtendedGems', 'ExtendedByLanguage', 'ExtendedNoise']) {
         assert.ok(box.querySelector('#rp_c_' + k), k + ' dans « Où chercher »');
     }
     const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-hidden');
@@ -300,6 +300,44 @@ await test('mode étendu : sources dans « Où chercher », réglages d\'une sou
     assert.equal(saved[0].ExtendedGenres, 7);
     assert.equal(saved[0].ExtendedNoise, 0.3);
     assert.equal(saved[0].ExtendedByGenre, true);
+});
+
+await test('mode étendu : réglages des pépites et croisements masqués quand la source est coupée', async () => {
+    const c = JSON.parse(JSON.stringify(cfg));
+    Object.assign(c, { ExtendedGems: false, ExtendedCrossings: true, ExtendedByLanguage: false, ExtendedGemMaxVotes: 300 });
+    const { d, saved } = open(c);
+    await wait(50);
+    const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-hidden');
+    for (const k of ['ExtendedGemMinRating', 'ExtendedGemMinVotes', 'ExtendedGemMaxVotes', 'ExtendedGemGenres']) { assert.ok(hidden('rp_c_' + k), k); }
+    assert.ok(!hidden('rp_c_ExtendedCrossingsMax'));
+    assert.ok(!hidden('rp_c_ExtendedLanguageMinShare'), 'part des langues : sert aussi aux croisements');
+    const g = d.getElementById('rp_c_ExtendedGems'); g.checked = true; g.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.ok(!hidden('rp_c_ExtendedGemMaxVotes'));
+    d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
+    await wait(50);
+    assert.equal(saved[0].ExtendedGemMaxVotes, 300);
+    assert.equal(saved[0].ExtendedGems, true);
+});
+
+await test('aperçu : tableau des sources, dans l\'ordre, « — » sans mélange libre, masqué sans exploration', async () => {
+    const preview = { items: ['A'], extended: ['X (2001) — Pépite peu connue'], rows: {}, sources: {
+        top: { Found: 40, Detailed: 10, Proposed: 1, Placed: null },
+        related: { Found: 300, Detailed: 60, Proposed: 9, Placed: null },
+        gems: { Found: 25, Detailed: 12, Proposed: 3, Placed: null },
+    } };
+    const { d } = open(cfg, { '/RecoPlus/Preview': preview });
+    await wait(50);
+    assert.ok(d.getElementById('rpPreviewSourcesBox').classList.contains('rp-hidden'));
+    d.getElementById('rpPreviewBtn').click();
+    await wait(50);
+    const rows = [...d.querySelectorAll('#rpPreviewSources tr')].map((tr) => [...tr.children].map((c) => c.textContent));
+    assert.deepEqual(rows, [
+        ['Source', 'Trouvés', 'Détaillés', 'Proposés', 'Dans la rangée'],
+        ['Proches des titres aimés', '300', '60', '9', '—'],
+        ['Pépites', '25', '12', '3', '—'],
+        ['Les mieux notés', '40', '10', '1', '—'],
+    ]);
+    assert.ok(!d.getElementById('rpPreviewSourcesBox').classList.contains('rp-hidden'));
 });
 
 await test('calibrage : écarts en %, méthode sans changement signalée, application non recommandée confirmée à part', async () => {

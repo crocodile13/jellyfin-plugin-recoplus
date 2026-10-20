@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.16.0",
+        "changelog": "1.0.16 : mode étendu — deux nouvelles sources : croisements de ses goûts (genre × thème, genre × langue d'origine : « Bien noté en drame, thème « vengeance » », « Bien noté en animation, en japonais ») et pépites peu connues (très bien notées mais peu de votes TMDb, tous genres et genres préférés ; note et votes min./max. réglables) ; l'aperçu de la configuration montre l'apport de chaque source pour un compte (titres trouvés, détaillés, proposés, placés dans la rangée).",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.15.0",
         "changelog": "1.0.15 : exploration bien plus large du catalogue — en plus des recommandations des titres aimés : volets manquants des sagas, filmographies des réalisateurs, créateurs et scénaristes récurrents, et les mieux notés de TMDb tous genres, des genres, thèmes (mots-clés), studios et chaînes, langues d'origine préférés ; chaque source se coupe, se partage les fiches détaillées à parts équilibrées et affiche sa raison (« De … », « Dans la saga de … », « Bien noté en … ») ; pages tirées au hasard du jour et hasard du jour réglable sur le classement des titres hors bibliothèque ; places « découverte » en option ; note et votes minimaux réglables. Plus rapide : valeurs par défaut plus légères (30 titres de départ, 2 pages, 200 fiches) et exploration au recalcul complet seulement pour les comptes actifs depuis 30 jours. Contrôle parental aligné sur Jellyfin Enhanced (classification du pays seulement, titres non classés et étiquettes bloquées selon le compte) ; libellés de la page de réglages qui ne passent plus sous le « ? ».",
         "targetAbi": "12.2.0.0",
