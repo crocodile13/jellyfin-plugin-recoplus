@@ -122,15 +122,16 @@ await test('aucun doublon quand la page change, réinsertion quand HSS recharge 
     assert.equal(p.calls.getJSON, 1, 'réponse serveur gardée en cache');
 });
 
-await test('mélange libre : chaque titre à la place du classement commun, rien au-delà de la rangée', async () => {
+await test('mélange libre : chaque titre à la place du classement commun, la rangée garde sa taille', async () => {
     const items = ext(5).map((it, i) => ({ ...it, After: [0, 3, 3, 9, -1][i] }));
     const p = page({ hssCards: 6, data: { ...base, mixMode: 'score', skip: 1, items }, je: jeStub() });
     await wait(700);
-    // 1 demande en tête, puis : 1000 devant tout, 1001 et 1002 (dans cet ordre) après 3 titres, 1003 (après 9) et 1004 (non calculé) absents
-    assert.deepEqual(p.row(), ['L', 'E:1000', 'L', 'L', 'L', 'E:1001', 'E:1002', 'L', 'L']);
+    // 1 demande en tête, puis : 1000 devant tout, 1001 et 1002 (dans cet ordre) après 3 titres, 1003 (après 9) et 1004
+    // (non calculé) absents ; 6 cartes comme la rangée de HSS : 1002 et les 2 derniers titres de la bibliothèque sortent
+    assert.deepEqual(p.row(), ['L', 'E:1000', 'L', 'L', 'L', 'E:1001']);
     p.sections.appendChild(p.w.document.createElement('div'));
     await wait(700);
-    assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 3, 'pas de doublon');
+    assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 2, 'pas de doublon');
 });
 
 await test('rien ne trouve sa place : la rangée n\'est plus retraitée à chaque changement de page', async () => {
@@ -317,7 +318,7 @@ await test('Jellyfin Enhanced refuse toutes les fiches Seerr (403) : cartes Reco
     const items = ext(8).map((it, i) => ({ ...it, After: i < 2 ? 1 : 40 }));
     const p = page({ hssCards: 6, data: { ...base, mixMode: 'score', items }, je: jeStub({ fail }) });
     await wait(700);
-    assert.deepEqual(p.row(), ['L', 'E:1000', 'E:1001', 'L', 'L', 'L', 'L', 'L']);
+    assert.deepEqual(p.row(), ['L', 'E:1000', 'E:1001', 'L', 'L', 'L']);   // 6 cartes, comme la rangée de HSS
     assert.equal(p.w.JellyfinEnhanced.jellyseerrUI.created.length, 0);
     const before = p.sections.querySelector('.recoplus-ext');
     p.sections.appendChild(p.w.document.createElement('div'));

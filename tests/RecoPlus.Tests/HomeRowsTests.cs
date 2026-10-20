@@ -95,6 +95,14 @@ public class HomeRowsTests
     }
 
     [Fact]
+    public void CapPlacesKeepsTheBestRankedOutsideTitles()
+    {
+        Assert.Equal(new[] { 0, 3, 10, 10, 10, 10 }, HomeRows.CapPlaces(new[] { 0, 3, 5, 10, 2, 7 }, 10, 2));   // 2 premiers placés gardés
+        Assert.Equal(new[] { 10, 10 }, HomeRows.CapPlaces(new[] { 1, 4 }, 10, 0));
+        Assert.Equal(new[] { 1, -1, 4 }, HomeRows.CapPlaces(new[] { 1, -1, 4 }, 10, 5));                     // -1 (non calculé) intact
+    }
+
+    [Fact]
     public void OnlyRequestedRowsAndEmptyBecauseRowsWhenNothingFits()
     {
         var (ctx, vec, cands, sc) = Setup();
