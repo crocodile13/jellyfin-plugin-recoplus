@@ -12,9 +12,9 @@
         "version": "1.0.18.0",
         "changelog": "1.0.18 : places « découverte » : les titres sont départagés par une note TMDb fiable (moyenne bayésienne : un 8,8 sur 4 votes ne passe plus devant un 8,4 sur 20 000) et doivent avoir au moins autant de votes que les pépites (50 par défaut).",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.18.0/RecoPlus_1.0.18.0.zip",
+        "checksum": "a32c95e35fcb40035a86c9325483e3c1",
+        "timestamp": "2026-10-20T17:30:42Z"
       },
       {
         "version": "1.0.17.0",
