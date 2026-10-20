@@ -152,7 +152,7 @@ public class SignalTests
     {
         var t = new Title { Id = "x", Kind = TitleKind.Series, Language = " JA ", Countries = new[] { "Japan", "France", "Korea", "Taiwan" } };
         var off = Core.Tokens(t, S);
-        Assert.False(off.Keys.Any(k => k.StartsWith("l:", StringComparison.Ordinal) || k.StartsWith("n:", StringComparison.Ordinal)));
+        Assert.DoesNotContain(off.Keys, k => k.StartsWith("l:", StringComparison.Ordinal) || k.StartsWith("n:", StringComparison.Ordinal));
         var on = Core.Tokens(t, new EngineSettings { FeatLanguage = 0.5, FeatCountry = 0.3 });
         Assert.Equal(0.5, on["l:ja"]);
         Assert.Equal(new[] { "n:France", "n:Japan", "n:Korea" }, on.Keys.Where(k => k.StartsWith("n:", StringComparison.Ordinal)).OrderBy(k => k, StringComparer.Ordinal).ToArray());
