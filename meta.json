@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.9 : mélange libre équitable — titres de la bibliothèque et hors bibliothèque comparés seulement sur ce qu'ils ont en commun (goût, note, sortie récente, affichages), sans « vus ensemble », nouveauté, popularité, avis du foyer ni accord TMDb que seul un côté peut avoir (avant, ils étaient souvent tous classés derrière la rangée entière et n’apparaissaient pas) ; quand Jellyfin Enhanced ne peut pas lire la fiche Seerr d'un titre (403, délai), ce titre garde une carte Reco+ au lieu de disparaître.",
+  "changelog": "1.0.10 : mélange libre — un minimum de titres hors bibliothèque montrés dans « Pour toi » (réglable, 3 par défaut) : si le classement commun n'en place aucun, les mieux classés sont répartis dans la rangée ; un titre dont Jellyfin Enhanced refuse la fiche au compte (403, contrôle parental ou droits Seerr) n'est plus montré en carte Reco+ ; script de l'accueil chargé avec le numéro de version dans l'URL, pour qu'un cache (nginx, navigateur) ne garde pas l'ancien après une mise à jour.",
   "description": "Recommandations personnelles à la place de celles de Jellyfin.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-20T00:00:00.0000000Z",
-  "version": "1.0.9.0",
+  "version": "1.0.10.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

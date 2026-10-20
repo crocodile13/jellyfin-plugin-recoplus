@@ -177,6 +177,12 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Mélange dans « Pour toi » : un titre hors bibliothèque toutes les N cartes (2 = un sur deux).</summary>
     public int ExtendedMixEvery { get; set; } = 3;
 
+    /// <summary>
+    /// Mélange libre : nombre minimal de titres hors bibliothèque montrés dans « Pour toi » ; si le classement commun en
+    /// place moins, les mieux classés sont ajoutés quand même, répartis dans la rangée (0 = classement seul).
+    /// </summary>
+    public int ExtendedMinFree { get; set; } = 3;
+
     /// <summary>Titre de la rangée du mode étendu.</summary>
     public string ExtendedTitle { get; set; } = "À découvrir pour toi";
 

@@ -269,10 +269,11 @@ await test('réglages sans objet masqués selon le mode, valeurs gardées', asyn
     await wait(50);
     const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-hidden');
     assert.ok(hidden('rp_c_ExtendedMixEvery'), 'mélange libre : pas d\'intervalle');
+    assert.ok(!hidden('rp_c_ExtendedMinFree'), 'mélange libre : minimum visible');
     assert.ok(hidden('rp_e_CalibrationStrength') && !hidden('rp_e_Mmr'));
     assert.ok(hidden('rp_e_Bm25K1') && hidden('rp_e_ShortTermTitles') && hidden('rp_e_SeriesFullEpisodes') && !hidden('rp_e_SeriesFullHours'));
     const sel = d.getElementById('rp_c_ExtendedMixMode'); sel.value = 'Interleave'; sel.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
-    assert.ok(!hidden('rp_c_ExtendedMixEvery'));
+    assert.ok(!hidden('rp_c_ExtendedMixEvery') && hidden('rp_c_ExtendedMinFree'));
     const div = d.getElementById('rp_e_Diversity'); div.value = 'Calibrated'; div.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
     assert.ok(!hidden('rp_e_CalibrationStrength') && hidden('rp_e_Mmr'));
     d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));

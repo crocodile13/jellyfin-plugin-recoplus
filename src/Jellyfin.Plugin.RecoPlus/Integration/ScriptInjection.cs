@@ -17,6 +17,9 @@ namespace Jellyfin.Plugin.RecoPlus.Integration;
 public sealed class ScriptInjection : IStartupFilter
 {
     private const string Marker = "RecoPlus/client.js";
+
+    // version dans l'URL : un cache devant Jellyfin (ou celui du navigateur) ne peut pas garder l'ancien script après une mise à jour
+    private static readonly string Version = Uri.EscapeDataString(typeof(Plugin).Assembly.GetName().Version?.ToString() ?? "0");
     private readonly ILogger<ScriptInjection> _log;
 
     public ScriptInjection(ILogger<ScriptInjection> log) => _log = log;
@@ -74,7 +77,7 @@ public sealed class ScriptInjection : IStartupFilter
             int close = page.LastIndexOf("</body>", StringComparison.OrdinalIgnoreCase);
             if (close >= 0 && page.IndexOf(Marker, StringComparison.Ordinal) < 0)
             {
-                page = page[..close] + "<script defer src=\"../" + Marker + "\"></script>\n" + page[close..];
+                page = page[..close] + "<script defer src=\"../" + Marker + "?v=" + Version + "\"></script>\n" + page[close..];
             }
         }
         catch (Exception ex)

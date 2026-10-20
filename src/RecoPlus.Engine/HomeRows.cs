@@ -150,4 +150,37 @@ public static class HomeRows
 
         return new Result(rows, anchors);
     }
+
+    /// <summary>
+    /// Mélange libre : place de chaque titre hors bibliothèque dans la rangée « Pour toi » = nombre de titres de la
+    /// bibliothèque mieux notés que lui (une place égale au nombre de titres montrés = derrière toute la rangée, non montré).
+    /// Si moins de <paramref name="minShown"/> titres hors bibliothèque trouvent une place, les mieux classés de ceux qui
+    /// n'en ont pas sont ajoutés quand même, répartis régulièrement dans la rangée (jamais plus loin que leur propre place).
+    /// </summary>
+    /// <param name="lib">Score commun de chaque titre de la bibliothèque montré, dans l'ordre de la rangée.</param>
+    /// <param name="ext">Score commun de chaque titre hors bibliothèque, du mieux au moins bien classé.</param>
+    /// <param name="minShown">Nombre minimal de titres hors bibliothèque montrés (0 = classement seul).</param>
+    public static int[] FreePlaces(IReadOnlyList<double> lib, IReadOnlyList<double> ext, int minShown)
+    {
+        int n = lib.Count;
+        var after = ext.Select(e => lib.Count(x => x > e)).ToArray();
+        if (n == 0)
+        {
+            return after;
+        }
+
+        int missing = Math.Min(Math.Max(0, minShown), ext.Count) - after.Count(a => a < n);
+        if (missing <= 0)
+        {
+            return after;
+        }
+
+        var forced = Enumerable.Range(0, ext.Count).Where(i => after[i] >= n).Take(missing).ToList();
+        for (int j = 0; j < forced.Count; j++)
+        {
+            after[forced[j]] = Math.Clamp((int)Math.Round((j + 1.0) * n / (forced.Count + 1), MidpointRounding.AwayFromZero), 0, n - 1);
+        }
+
+        return after;
+    }
 }
