@@ -12,9 +12,9 @@
         "version": "1.0.12.0",
         "changelog": "1.0.12 : valeurs par défaut exhaustives pour les titres hors bibliothèque — 60 titres aimés de départ (jusqu'à 500), 3 pages de recommandations et de titres similaires TMDb par titre (jusqu'à 10), 400 fiches détaillées (jusqu'à 2000) ; premier calcul plus long, ensuite en cache (listes 3 jours, fiches 14 jours). Ces valeurs par défaut ne s'appliquent qu'aux réglages jamais enregistrés : à changer dans la page si besoin.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.12.0/RecoPlus_1.0.12.0.zip",
+        "checksum": "b49b3eca7a80aa3b99538ecb41fcd480",
+        "timestamp": "2026-10-20T14:18:25Z"
       },
       {
         "version": "1.0.11.0",
