@@ -359,6 +359,16 @@ public sealed class RecoService : IDisposable
     internal static bool Seen(IReadOnlyDictionary<string, Interaction> h, string id)
         => h.TryGetValue(id, out var x) && (x.Hidden || x.Last != 0 || x.Played || x.Episodes > 0 || x.Completion > 0 || x.Rating is < 0);
 
+    /// <summary>
+    /// Déjà connu du compte, donc pas à recommander : vu ou écarté (<see cref="Seen"/>), et — sauf si la configuration
+    /// le demande — ce qu'il a déjà marqué : noté (un avis ou un pouce, c'est un titre vu), en favori (titre, saison ou
+    /// épisode), en liste de suivi ou demandé. Recommander, c'est faire découvrir ; ce que le compte sait déjà vouloir
+    /// voir, il le trouve dans ses listes. Ces marques restent des signaux de goût pour tout le reste.
+    /// </summary>
+    internal static bool Known(IReadOnlyDictionary<string, Interaction> h, string id, bool proposeMarked)
+        => Seen(h, id) || (!proposeMarked && h.TryGetValue(id, out var x)
+            && (x.Rating is not null || x.Favorite || x.FavSeasons > 0 || x.FavEpisodes > 0 || x.Watchlisted > 0 || x.Requested > 0));
+
     private static double Unix(DateTime d) => new DateTimeOffset(DateTime.SpecifyKind(d, DateTimeKind.Utc)).ToUnixTimeMilliseconds() / 1000.0;
 
     private async Task ComputeCore(Guid? only, CancellationToken ct, IProgress<double>? progress)
@@ -646,7 +656,7 @@ public sealed class RecoService : IDisposable
             var key = u.Id.ToString("N");
             var h = hist[key];
             var accessible = _history.Accessible(u);
-            var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !Seen(h, id) && ListPolicy.Allows(ct0, lo))
+            var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !Known(h, id, cfg.ProposeMarked) && ListPolicy.Allows(ct0, lo))
                 .OrderBy(id => id, StringComparer.Ordinal).ToList();
             var r = new UserRecs { ComputedAt = DateTime.UtcNow, SeerrUserId = seerr.UserMap.GetValueOrDefault(key) };
 
@@ -776,7 +786,7 @@ public sealed class RecoService : IDisposable
                 {
                     var k = e.MediaType + ":" + e.TmdbId;
                     var d = _seerr.CachedDetails(e.MediaType, e.TmdbId);
-                    return !Seen(h, "tmdb:" + k) && !lib.ByTmdb.ContainsKey(k) && !seerr.Requested.Contains(k) && hid?.Contains(k) != true
+                    return !Known(h, "tmdb:" + k, cfg.ProposeMarked) && !lib.ByTmdb.ContainsKey(k) && !seerr.Requested.Contains(k) && hid?.Contains(k) != true
                            && (d is null || (d.MediaStatus is not (2 or 3 or 4 or 5 or 6) && ParentalAllowed(policy, d, country)));
                 }).ToList();
                 r.Sources = prevRecs.Sources;
@@ -1090,8 +1100,13 @@ public sealed class RecoService : IDisposable
             .ToList();
         var seen = ctx.Hist.GetValueOrDefault(key) ?? new Dictionary<string, Interaction>();
         string AnchorName(string id) => titles.TryGetValue(id, out var at) ? at.Name : string.Empty;
+        // toutes sources : une note TMDb ne veut rien dire avec une poignée de votes (courts métrages, avant-premières,
+        // titres pas encore sortis notés par quelques fans)
+        int minVotesAll = Math.Clamp(cfg.ExtendedMinVotesAll, 0, 1_000_000);
+        string today = DateTime.UtcNow.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
         bool Skip(SeerrResult r, string k)
-            => r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Seen(seen, "tmdb:" + k);
+            => r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Known(seen, "tmdb:" + k, cfg.ProposeMarked)
+               || (r.VoteCount > 0 && r.VoteCount < minVotesAll);   // peu de votes connus dès la liste : pas la peine d'en demander la fiche
 
         // pistes par source : titre → (score dans la source, raison) ; on garde la meilleure piste d'un titre dans une source
         var bySource = new Dictionary<string, Dictionary<string, (double Score, string Reason)>>(StringComparer.Ordinal);
@@ -1383,7 +1398,9 @@ public sealed class RecoService : IDisposable
         {
             var (k, source) = merged[i];
             var d = details[i];
-            if (d is null || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ParentalAllowed(policy, d, country))
+            if (d is null || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ParentalAllowed(policy, d, country)
+                || (d.VoteCount ?? 0) < minVotesAll
+                || d.ReleaseDate is null || string.CompareOrdinal(d.ReleaseDate, today) > 0)   // pas encore sorti
             {
                 continue;
             }

@@ -28,7 +28,7 @@ Everything is computed in the background and cached in memory and on disk, so no
   - A long series dropped after one or two episodes is an abandon too.
 - **Favourites** weigh more, at the level they were given: a favourite series counts fully, a favourite season partly (0.6), favourite episodes a little (0.3, reached at 3 episodes) — liking an episode is not liking the series.
 - **What the account said explicitly** wins over what viewing suggests, in both directions: Jellyfin Enhanced reviews (1–5 stars) and Jellyfin's rating or thumbs. Titles hidden everywhere in Jellyfin Enhanced ("not interested") are never suggested again and pull similar titles down; hides limited to a home row or to episodes do not count.
-- **Seerr watchlist** counts like a request, weaker (0.4) and just as short-term. A title that is only *wanted* (watchlist, old request, favourite never watched) stays a candidate — usually the best one.
+- **Seerr watchlist** counts like a request, weaker (0.4) and just as short-term. These marks feed the taste profile, but the marked title itself is not recommended: a rated (review, thumbs up) or favourite title has been seen, and what the account already knows it wants (watchlist, request) is already in its lists — recommending means discovering (setting: "Also propose what the account has already marked").
 - **New season** of a series the account had caught up with and liked: placed at the top for 45 days after the new episodes arrive (up to 2 series).
 - **Seerr requests** are a *short-term* declared interest:
   - half-life 21 days, ignored after 90;
