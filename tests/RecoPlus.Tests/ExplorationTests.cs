@@ -116,6 +116,17 @@ public class ExplorationTests
     }
 
     [Fact]
+    public void ConfidentRatingDistrustsFewVotes()
+    {
+        Assert.InRange(Exploration.ConfidentRating(8.8, 4), 7.0, 7.05);                       // CHOPPER's : 4 votes
+        Assert.InRange(Exploration.ConfidentRating(8.5, 20000), 8.45, 8.5);                   // classique reconnu
+        Assert.True(Exploration.ConfidentRating(8.0, 3000) > Exploration.ConfidentRating(9.2, 10));
+        Assert.Equal(7.0, Exploration.ConfidentRating(null, 100));
+        Assert.Equal(7.0, Exploration.ConfidentRating(9.0, null));
+        Assert.Equal(7.0, Exploration.ConfidentRating(9.0, 0));
+    }
+
+    [Fact]
     public void GenresMapBetweenMoviesAndSeries()
     {
         Assert.Equal(new[] { 16 }, Exploration.GenreFor(16, "tv"));
