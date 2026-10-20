@@ -78,23 +78,26 @@ def synth(seed=7):
     reviews = {}
     for tid in rng.sample(ids, 25):
         reviews[tid] = {f"u{u}": rng.choice([1.0, 2.5, 3.0, 4.0, 5.0]) for u in rng.sample(range(7), rng.randint(1, 4))}
+    exposure = {}
+    for u in range(5):
+        exposure[f"u{u}"] = {tid: (rng.choice([1, 2, 5, 14]), now - rng.uniform(0, 60) * DAY) for tid in rng.sample(ids, 12)}
     ds = Dataset(titles, users, {"now": now, "colls": {c: [k for k in v if k in titles] for c, v in colls.items()},
-                                 "reviews": reviews})
+                                 "reviews": reviews, "exposure": exposure})
     return ds
 
 
-def run(ds, P, W, scheme, mmr, k=12, feat=None):
+def run(ds, P, W, scheme, mmr, k=12, feat=None, div="fixed", cal=0.5):
     EN.WEIGHTING["scheme"] = scheme
     saved = dict(EN.FEAT_W)
     EN.FEAT_W.update(feat or {})
     try:
-        return _run(ds, P, W, scheme, mmr, k)
+        return _run(ds, P, W, scheme, mmr, k, div, cal)
     finally:
         EN.FEAT_W.clear()
         EN.FEAT_W.update(saved)
 
 
-def _run(ds, P, W, scheme, mmr, k=12):
+def _run(ds, P, W, scheme, mmr, k=12, div="fixed", cal=0.5):
     vec = EN.build_vectors(ds.titles)
     ctx = EN.Context(ds, ds.meta["now"], ds.users, P)
     out = {"signals": ctx.sig, "cooc": {i: r for i, r in list(ctx.cooc.items())[:10]}, "vectors": {}, "users": {}}
@@ -102,8 +105,8 @@ def _run(ds, P, W, scheme, mmr, k=12):
         out["vectors"][tid] = vec[tid]
     for u in ds.users:
         cands = [t for t in ds.titles if t not in ds.users[u]]
-        sc = EN.score_engine(ctx, vec, u, cands, W)
-        lst = EN.rec_engine(ctx, vec, u, cands, k, W, mmr=mmr, saga=True, sc=sc)
+        sc = EN.score_engine(ctx, vec, u, cands, W, expo=ds.meta["exposure"].get(u))
+        lst = EN.rec_engine(ctx, vec, u, cands, k, W, mmr=mmr, saga=True, sc=sc, div=div, cal_strength=cal)
         out["users"][u] = {"cands": cands, "scores": sc, "list": lst}
     return out
 
@@ -113,6 +116,7 @@ def dump_ds(ds):
         "now": ds.meta["now"],
         "collections": ds.meta["colls"],
         "reviews": ds.meta.get("reviews", {}),
+        "exposure": {u: {t: list(e) for t, e in ex.items()} for u, ex in ds.meta.get("exposure", {}).items()},
         "titles": [dict(id=t.id, kind=t.kind, name=t.name, year=t.year, genres=t.genres, tags=t.tags, studios=t.studios,
                         people=t.people, community=t.community, added=t.added, episodes=t.n_episodes,
                         released=t.released, critic=t.critic, countries=t.countries, language=t.language, votes=t.votes)
@@ -144,11 +148,19 @@ if __name__ == "__main__":
                                                                              rating_prior_votes=0.0, household=0.0),
          "bm25", 0.0, dict(l=0.5)),
     ]
+    variants += [
+        ("goût du moment + affichages + diversité personnalisée", base_P, dict(base_W, short=0.8, short_n=3, imp=0.6, imp_days=3.0,
+                                                                                  imp_recovery=20.0), "tfidf", 0.4, {}, "personalized"),
+        ("diversité calibrée (genres)", base_P, dict(base_W, imp=0.0), "tfidf", 0.3, {}, "calibrated", 0.4),
+        ("diversité calibrée forte + bm25", base_P, dict(base_W, short=0.3), "bm25", 0.3, {}, "calibrated", 0.9),
+    ]
     for v in variants:
         name, P, W, scheme, mmr = v[:5]
         feat = v[5] if len(v) > 5 else {}
-        cases.append({"name": name, "P": P, "W": W, "scheme": scheme, "mmr": mmr, "feat": feat,
-                      "expected": run(ds, P, W, scheme, mmr, feat=feat)})
+        div = v[6] if len(v) > 6 else "fixed"
+        cal = v[7] if len(v) > 7 else 0.5
+        cases.append({"name": name, "P": P, "W": W, "scheme": scheme, "mmr": mmr, "feat": feat, "div": div, "cal": cal,
+                      "expected": run(ds, P, W, scheme, mmr, feat=feat, div=div, cal=cal)})
     EN.WEIGHTING["scheme"] = "tfidf"
     # évaluation temporelle de référence (réglage par défaut, liste intégrée MMR + saga, k = 20)
     from evaluate import events, snapshot

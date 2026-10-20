@@ -65,6 +65,43 @@ public sealed class CalibrationReport
 
     /// <summary>Écart de qualité en validation croisée par comptes (proposé appris sans le compte − actuel).</summary>
     public double CvDelta { get; init; }
+
+    /// <summary>Méthode retenue.</summary>
+    public CalibrationMethod Method { get; init; }
+
+    /// <summary>Résultat de chaque méthode essayée.</summary>
+    public List<MethodResult> Methods { get; init; } = new();
+}
+
+/// <summary>Résultat d'une méthode de calibrage.</summary>
+public sealed class MethodResult
+{
+    /// <summary>Méthode.</summary>
+    public CalibrationMethod Method { get; init; }
+
+    /// <summary>Nom affiché.</summary>
+    public string Name { get; init; } = string.Empty;
+
+    /// <summary>Réglage proposé (appris sur tout l'historique).</summary>
+    public required EngineSettings Settings { get; init; }
+
+    /// <summary>Score du réglage proposé sur tout l'historique.</summary>
+    public required EvalResult Result { get; init; }
+
+    /// <summary>Changements proposés.</summary>
+    public List<CalibrationStep> Steps { get; init; } = new();
+
+    /// <summary>Écart en validation croisée par comptes.</summary>
+    public double CvDelta { get; init; }
+
+    /// <summary>IC95 de cet écart.</summary>
+    public (double Low, double High) Ci { get; init; }
+
+    /// <summary>Historique suffisant, limite ou insuffisant pour cette méthode.</summary>
+    public string Sufficiency { get; init; } = string.Empty;
+
+    /// <summary>Gain sûr et généralisable.</summary>
+    public bool Recommended { get; set; }
 }
 
 /// <summary>
@@ -123,7 +160,7 @@ public static class Calibrator
             var seen = hist[u];
             var cands = ds.Titles.Values.Where(t => !t.External && !seen.ContainsKey(t.Id) && (t.Added ?? 0) <= t0).Select(t => t.Id).ToList();
             var sc = Recommender.Score(ctx, vec, u, cands, s);
-            var list = Recommender.Rank(ctx, vec, cands, sc, 20, s);
+            var list = Recommender.Rank(ctx, vec, cands, sc, 20, s, u);
             int r = list.IndexOf(target);
             h10[i] = r >= 0 && r < 10;
             h20[i] = r >= 0 && r < 20;
@@ -224,9 +261,9 @@ public static class Calibrator
             var hist = Snapshot(ds, t0 - 1);
             var ctx = new Context(ds, t0 - 1, hist, s);
             var seen = hist[u];
-            var cands = ds.Titles.Values.Where(t => !t.External && !seen.ContainsKey(t.Id) && (t.Added ?? 0) <= t0).Select(t => t.Id).ToList();
+            var cands = Candidates(ds, seen, t0);
             var sc = Recommender.Score(ctx, vec, u, cands, s, sim: sim);
-            var list = Recommender.Rank(ctx, vec, cands, sc, 20, s);
+            var list = Recommender.Rank(ctx, vec, cands, sc, 20, s, u, sim);
             int r = list.IndexOf(target);
             int rank;
             if (r >= 0)
@@ -263,8 +300,21 @@ public static class Calibrator
         };
     }
 
+    /// <summary>Candidats d'un cas : titres de la bibliothèque pas encore commencés et déjà arrivés à T0.</summary>
+    public static List<string> Candidates(Dataset ds, IReadOnlyDictionary<string, Interaction> seen, double t0)
+        => ds.Titles.Values.Where(t => !t.External && !seen.ContainsKey(t.Id) && (t.Added ?? 0) <= t0).Select(t => t.Id).ToList();
+
+    /// <summary>Deux moitiés par COMPTE (alternées par nombre de cas) : un gain doit tenir sur des personnes différentes.</summary>
+    public static Dictionary<string, int> Folds(IReadOnlyList<Case> cases)
+    {
+        var users = cases.GroupBy(c => c.Ev.User).OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key).ToList();
+        return users.Select((u, k) => (u, k % 2)).ToDictionary(x => x.u, x => x.Item2, StringComparer.Ordinal);
+    }
+
     /// <summary>Un paramètre continu exploré : bornes sûres, échelle (log pour les poids multiplicatifs), zéro essayé ou non.</summary>
-    public sealed record Knob(string Name, Func<EngineSettings, double> Get, Action<EngineSettings, double> Set, double Lo, double Hi, bool Log, bool Integer, bool TryZero);
+    /// <param name="When">Facultatif : le réglage n'a d'effet que si cette condition est vraie (sinon il n'est pas exploré).</param>
+    public sealed record Knob(string Name, Func<EngineSettings, double> Get, Action<EngineSettings, double> Set, double Lo, double Hi, bool Log, bool Integer, bool TryZero,
+        Func<EngineSettings, bool>? When = null);
 
     /// <summary>Un choix discret exploré.</summary>
     public sealed record Choice(string Name, object[] Values, Func<EngineSettings, object> Get, Action<EngineSettings, object> Set);
@@ -284,13 +334,17 @@ public static class Calibrator
         new("Revisionnages", s => s.RewatchBoost, (s, v) => s.RewatchBoost = v, 0.05, 1.5, true, false, true),
         new("Notes et avis du compte", s => s.RatingWeight, (s, v) => s.RatingWeight = v, 0.1, 2, true, false, true),
         new("Nouveauté", s => s.WFresh, (s, v) => s.WFresh = v, 0.1, EngineSettings.FreshCeiling, true, false, true),
-        new("Échelle de nouveauté (jours)", s => s.FreshDays, (s, v) => s.FreshDays = v, 10, 180, true, false, false),
+        new("Échelle de nouveauté (jours)", s => s.FreshDays, (s, v) => s.FreshDays = v, 10, 180, true, false, false, s => s.WFresh > 0),
         new("Popularité", s => s.WPopularity, (s, v) => s.WPopularity = v, 0.05, 2, true, false, true),
         new("Note", s => s.WQuality, (s, v) => s.WQuality = v, 0.02, 1.5, true, false, true),
         new("Sortie récente", s => s.WRelease, (s, v) => s.WRelease = v, 0.05, 2, true, false, true),
-        new("Échelle de sortie récente (jours)", s => s.ReleaseDays, (s, v) => s.ReleaseDays = v, 60, 1500, true, false, false),
+        new("Échelle de sortie récente (jours)", s => s.ReleaseDays, (s, v) => s.ReleaseDays = v, 60, 1500, true, false, false, s => s.WRelease > 0),
         new("Bonus réservés aux N premiers", s => s.GateTop, (s, v) => s.GateTop = (int)Math.Round(v), 20, 150, true, true, false),
-        new("Diversité", s => s.Mmr, (s, v) => s.Mmr = v, 0.02, 1, true, false, true),
+        new("Diversité", s => s.Mmr, (s, v) => s.Mmr = v, 0.02, 1, true, false, true, s => s.Diversity != DiversityMode.Calibrated),
+        new("Force de la diversité calibrée", s => s.CalibrationStrength, (s, v) => s.CalibrationStrength = v, 0.05, 0.8, false, false, false, s => s.Diversity == DiversityMode.Calibrated),
+        new("Goût du moment", s => s.WShortTerm, (s, v) => s.WShortTerm = v, 0.05, 2, true, false, true),
+        new("Titres du goût du moment", s => s.ShortTermTitles, (s, v) => s.ShortTermTitles = (int)Math.Round(v), 2, 15, true, true, false, s => s.WShortTerm > 0),
+        new("Avis du foyer", s => s.WHousehold, (s, v) => s.WHousehold = v, 0.05, 2, true, false, true),
         new("Genres", s => s.FeatGenre, (s, v) => s.FeatGenre = v, 0.25, 3, true, false, false),
         new("Mots-clés", s => s.FeatTag, (s, v) => s.FeatTag = v, 0.05, 2, true, false, true),
         new("Studios", s => s.FeatStudio, (s, v) => s.FeatStudio = v, 0.05, 2, true, false, true),
@@ -308,6 +362,7 @@ public static class Calibrator
         new("Décroissance", new object[] { DecayKind.Exponential, DecayKind.Power }, s => s.Decay, (s, v) => s.Decay = (DecayKind)v),
         new("Pondération du contenu", new object[] { WeightingScheme.TfIdf, WeightingScheme.Bm25 }, s => s.Weighting, (s, v) => s.Weighting = (WeightingScheme)v),
         new("Note utilisée", new object[] { RatingSource.Community, RatingSource.Critic, RatingSource.Best, RatingSource.Mean }, s => s.Rating, (s, v) => s.Rating = (RatingSource)v),
+        new("Diversité", new object[] { DiversityMode.Fixed, DiversityMode.Personalized, DiversityMode.Calibrated }, s => s.Diversity, (s, v) => s.Diversity = (DiversityMode)v),
     };
 
     /// <summary>Clé des vecteurs : seuls ces réglages changent le contenu des vecteurs.</summary>
@@ -333,9 +388,7 @@ public static class Calibrator
             _sims = sims;
             _tick = tick;
             _ct = ct;
-            // deux moitiés par COMPTE (alternées par nombre de cas) : un gain doit tenir sur des personnes différentes
-            var users = cases.GroupBy(c => c.Ev.User).OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key).ToList();
-            var side = users.Select((u, k) => (u, k % 2)).ToDictionary(x => x.u, x => x.Item2, StringComparer.Ordinal);
+            var side = Folds(cases);
             _halves = new[]
             {
                 Enumerable.Range(0, cases.Count).Where(i => side[cases[i].Ev.User] == 0).ToArray(),
@@ -403,6 +456,11 @@ public static class Calibrator
 
                 foreach (var k in Knobs)
                 {
+                    if (k.When is not null && !k.When(best))
+                    {
+                        continue;
+                    }
+
                     var (s, r, moved) = Tune(k, best, bestRes, refine);
                     if (moved)
                     {
@@ -497,18 +555,43 @@ public static class Calibrator
         }
     }
 
+    /// <summary>Historique nécessaire à une méthode : niveau (« suffisant », « limite », « insuffisant ») et explication.</summary>
+    public static (string Level, string Message) Sufficiency(CalibrationMethod m, int cases)
+    {
+        // règle usuelle : 10 à 20 cas par paramètre réglé
+        (int Params, int Good, int Min) need = m switch
+        {
+            CalibrationMethod.ChoiceModel => (ChoiceModel.Weights.Count, ChoiceModel.Weights.Count * 10, ChoiceModel.Weights.Count * 5),
+            CalibrationMethod.Coordinate => (Knobs.Count + Choices.Count, (Knobs.Count + Choices.Count) * 20, (Knobs.Count + Choices.Count) * 6),
+            _ => (ChoiceModel.Weights.Count, ChoiceModel.Weights.Count * 10, MinEvents),
+        };
+        if (cases < MinEvents || cases < need.Min)
+        {
+            return ("insuffisant", $"{cases} cas pour {need.Params} réglages : pas assez d'historique, le calibrage ne proposera rien de fiable (il faut au moins {Math.Max(MinEvents, need.Min)} cas, idéalement {need.Good}).");
+        }
+
+        return cases < need.Good
+            ? ("limite", $"{cases} cas pour {need.Params} réglages : juste assez pour essayer, mais un gain devra être net pour être recommandé (idéalement {need.Good} cas).")
+            : ("suffisant", $"{cases} cas pour {need.Params} réglages : historique suffisant.");
+    }
+
     /// <summary>
-    /// Calibrage : recherche sur tout l'historique (proposition), puis validation croisée par comptes — on règle sur la
-    /// moitié des comptes et on mesure sur l'autre — pour savoir si le gain se généralise. Rien n'est appliqué ici.
+    /// Calibrage : chaque méthode retenue propose un réglage appris sur tout l'historique, puis est jugée en validation
+    /// croisée par comptes (apprise sur une moitié des comptes, mesurée sur l'autre). En automatique, on garde la méthode
+    /// qui se généralise le mieux. Un réglage n'est recommandé que si ce gain hors échantillon est sûr (IC95 &gt; 0).
+    /// Rien n'est appliqué ici.
     /// </summary>
     public static CalibrationReport Calibrate(Dataset ds, EngineSettings current, IProgress<double>? progress = null, CancellationToken ct = default,
-        int passes = 2, int refine = 4)
+        int passes = 2, int refine = 4, CalibrationMethod method = CalibrationMethod.Auto)
     {
         current = current.Sanitized();
         var cases = Cases(ds);
         var sims = new Dictionary<string, SimilarityIndex>(StringComparer.Ordinal);
+        bool coord = method is CalibrationMethod.Auto or CalibrationMethod.Coordinate;
+        bool choice = method is CalibrationMethod.Auto or CalibrationMethod.ChoiceModel;
         int perRun = (Choices.Sum(c => c.Values.Length) + (Knobs.Count * (7 + refine * 2))) * passes;
-        int budget = perRun * 2, done = 0; // passe complète + validation croisée (deux moitiés, chacune moitié moins chère)
+        int perChoice = (ChoiceModel.Kappas.Count * 2) + 2;
+        int budget = (coord ? perRun * 2 : 0) + (choice ? perChoice * 3 : 0) + 1, done = 0;
         void Tick() => progress?.Report(Math.Min(99.0, 100.0 * ++done / budget));
 
         var full = new Search(ds, cases, sims, Tick, ct);
@@ -522,70 +605,119 @@ public static class Calibrator
                 ProposedSettings = current,
                 Steps = new List<CalibrationStep>(),
                 Recommended = false,
+                Method = method,
                 Verdict = $"Seulement {cases.Count} cas exploitables (minimum {MinEvents}) : pas assez d'historique pour proposer un réglage fiable.",
             };
         }
 
-        var (best, bestRes) = full.Run(current, passes, refine);
-
-        // validation croisée par comptes : réglé sur une moitié, mesuré sur l'autre
-        var users = cases.GroupBy(c => c.Ev.User).OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key).ToList();
-        var fold = users.Select((u, k) => (u, k % 2)).ToDictionary(x => x.u, x => x.Item2, StringComparer.Ordinal);
-        var oof = new double[cases.Count];   // gain du réglage appris sans ce compte
+        var fold = Folds(cases);
         var baseG = cur.PerEventGain;
-        for (int f = 0; f < 2; f++)
+        var results = new List<MethodResult>();
+
+        // une méthode = (réglage proposé sur tout l'historique, réglage appris sur une partie des cas)
+        MethodResult Judge(CalibrationMethod m, string name, EngineSettings proposed, List<CalibrationStep> steps, Func<List<Case>, EngineSettings> learnOn)
         {
-            var train = cases.Where(c => fold[c.Ev.User] == f).ToList();
-            var testIdx = Enumerable.Range(0, cases.Count).Where(i => fold[cases[i].Ev.User] != f).ToList();
-            if (train.Count < 10 || testIdx.Count == 0)
+            var res = full.Eval(proposed);
+            var oof = new double[cases.Count];
+            Array.Copy(baseG, oof, oof.Length);
+            for (int f = 0; f < 2; f++)
             {
-                continue;
+                var train = cases.Where(c => fold[c.Ev.User] == f).ToList();
+                var testIdx = Enumerable.Range(0, cases.Count).Where(i => fold[cases[i].Ev.User] != f).ToList();
+                if (train.Count < 10 || testIdx.Count == 0)
+                {
+                    continue;
+                }
+
+                var learned = learnOn(train);
+                var r = new Search(ds, testIdx.Select(i => cases[i]).ToList(), sims, Tick, ct).Eval(learned);
+                for (int k = 0; k < testIdx.Count; k++)
+                {
+                    oof[testIdx[k]] = r.PerEventGain[k];
+                }
             }
 
-            var (learned, _) = new Search(ds, train, sims, Tick, ct).Run(current, passes, refine);
-            var test = testIdx.Select(i => cases[i]).ToList();
-            var r = new Search(ds, test, sims, Tick, ct).Eval(learned);
-            for (int k = 0; k < testIdx.Count; k++)
+            var all = Enumerable.Range(0, cases.Count).ToList();
+            return new MethodResult
             {
-                oof[testIdx[k]] = r.PerEventGain[k];
-            }
+                Method = m,
+                Name = name,
+                Settings = proposed,
+                Result = res,
+                Steps = steps,
+                CvDelta = Weighted(cases, all, i => oof[i] - baseG[i]),
+                Ci = BootstrapDelta(cases, oof, baseG),
+                Sufficiency = Sufficiency(m, cases.Count).Level,
+            };
         }
 
-        double W(IEnumerable<int> idx, Func<int, double> f)
+        if (coord)
         {
-            double sw = 0, s = 0;
-            foreach (var i in idx)
-            {
-                sw += cases[i].Weight;
-                s += cases[i].Weight * f(i);
-            }
-
-            return sw > 0 ? s / sw : 0;
+            var (best, _) = full.Run(current, passes, refine);
+            results.Add(Judge(CalibrationMethod.Coordinate, "Recherche par curseurs", best, full.Steps.ToList(),
+                train => new Search(ds, train, sims, Tick, ct).Run(current, passes, refine).S));
         }
 
-        var all = Enumerable.Range(0, cases.Count).ToList();
-        double cvDelta = W(all, i => oof[i] - baseG[i]);
-        var ci = BootstrapDelta(cases, oof, baseG);
+        if (choice)
+        {
+            // un seul jeu de vecteurs : le modèle de choix n'apprend que les poids du score, pas le contenu
+            var vk = VecKey(current);
+            if (!sims.TryGetValue(vk, out var sim))
+            {
+                sims[vk] = sim = new SimilarityIndex(Core.BuildVectors(ds.Titles, current));
+            }
+
+            var kappa = ChoiceModel.SelectKappa(ds, sim, cases, current, Tick, ct);
+            var learned = ChoiceModel.Learn(ds, sim, cases, current, kappa, ct);
+            Tick();
+            var steps = ChoiceModel.Weights.Where(w => Math.Abs(w.Get(learned) - w.Get(current)) >= 1e-3)
+                .Select(w => new CalibrationStep(w.Name, w.Get(learned).ToString("0.###", System.Globalization.CultureInfo.InvariantCulture), 0, 0, true)).ToList();
+            results.Add(Judge(CalibrationMethod.ChoiceModel, "Modèle de choix appris", learned, steps,
+                train => ChoiceModel.Learn(ds, sim, train, current, ChoiceModel.SelectKappa(ds, sim, train, current, Tick, ct), ct)));
+        }
+
         progress?.Report(100);
-        bool improved = bestRes.Gain > cur.Gain + 1e-9;
-        bool recommended = improved && cvDelta > 0 && ci.Low > 0;
-        string pct(double x) => (x * 100).ToString("+0.0;-0.0", System.Globalization.CultureInfo.InvariantCulture) + " %";
+        foreach (var r in results)
+        {
+            r.Recommended = r.Result.Gain > cur.Gain + 1e-9 && r.CvDelta > 0 && r.Ci.Low > 0;
+        }
+
+        // la méthode retenue : recommandée d'abord, puis meilleure généralisation (validation croisée)
+        var pick = results.OrderByDescending(r => r.Recommended).ThenByDescending(r => r.CvDelta).First();
+        string Pct(double x) => (x * 100).ToString("+0.0;-0.0", System.Globalization.CultureInfo.InvariantCulture) + " %";
+        double rel(double x) => x / Math.Max(cur.Gain, 1e-9);
+        bool improved = pick.Result.Gain > cur.Gain + 1e-9;
+        string who = results.Count > 1 ? $"{pick.Name} (la meilleure des {results.Count} méthodes) : " : string.Empty;
         string verdict = !improved
-            ? "Aucun réglage ne fait mieux que l'actuel sur les deux moitiés des comptes : on garde l'actuel."
-            : recommended
-                ? $"Gain probable et qui se généralise : réglé sur une moitié des comptes, il fait mieux sur l'autre ({pct(cvDelta / Math.Max(cur.Gain, 1e-9))} de qualité de classement, IC95 [{pct(ci.Low / Math.Max(cur.Gain, 1e-9))} ; {pct(ci.High / Math.Max(cur.Gain, 1e-9))}])."
-                : $"Gain sur cet historique ({pct((bestRes.Gain - cur.Gain) / Math.Max(cur.Gain, 1e-9))}), mais il ne se généralise pas d'une moitié des comptes à l'autre (validation croisée {pct(cvDelta / Math.Max(cur.Gain, 1e-9))}) : application déconseillée.";
+            ? who + "aucun réglage ne fait mieux que l'actuel : on garde l'actuel."
+            : pick.Recommended
+                ? who + $"gain probable et qui se généralise : appris sur une moitié des comptes, il fait mieux sur l'autre ({Pct(rel(pick.CvDelta))} de qualité de classement, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}])."
+                : who + $"gain sur cet historique ({Pct(rel(pick.Result.Gain - cur.Gain))}), mais il ne se généralise pas d'une moitié des comptes à l'autre (validation croisée {Pct(rel(pick.CvDelta))}, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}]) : application déconseillée.";
         return new CalibrationReport
         {
             Current = cur,
-            Proposed = bestRes,
-            ProposedSettings = best,
-            DeltaCi = ci,
-            Steps = full.Steps,
-            Recommended = recommended,
+            Proposed = pick.Result,
+            ProposedSettings = pick.Settings,
+            DeltaCi = pick.Ci,
+            Steps = pick.Steps,
+            Recommended = pick.Recommended,
             Verdict = verdict,
-            CvDelta = cvDelta,
+            CvDelta = pick.CvDelta,
+            Method = pick.Method,
+            Methods = results,
         };
+    }
+
+    private static double Weighted(IReadOnlyList<Case> cases, IEnumerable<int> idx, Func<int, double> f)
+    {
+        double sw = 0, s = 0;
+        foreach (var i in idx)
+        {
+            sw += cases[i].Weight;
+            s += cases[i].Weight * f(i);
+        }
+
+        return sw > 0 ? s / sw : 0;
     }
 
     /// <summary>IC95 de l'écart pondéré moyen (a − b), bootstrap en tirant des comptes.</summary>

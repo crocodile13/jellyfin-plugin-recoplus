@@ -267,7 +267,7 @@ def quality(t, src="community", prior_votes=0.0) -> float:
 MMR = 0.3
 
 
-def score_engine(ctx, vec, user, cands, W=ENGINE_W):
+def score_engine(ctx, vec, user, cands, W=ENGINE_W, expo=None):
     T = ctx.ds.titles
     sig = ctx.sig[user]
     pos = {t: s for t, s in sig.items() if s > 0}
@@ -281,6 +281,17 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W):
             prof[f] -= W["neg"] * s * x
     pn = math.sqrt(sum(x * x for x in prof.values())) or 1.0
     prof = {f: x / pn for f, x in prof.items()}
+    # goût du moment : les `short_n` derniers titres aimés (dernière activité), profil des seuls aimés
+    wst = W.get("short", 0.0)
+    hist = ctx.hist.get(user, {})
+    short = sorted(pos, key=lambda t: (-(hist[t].last if t in hist else 0), t))[: int(W.get("short_n", 5))] if wst > 0 else []
+    stp = defaultdict(float)
+    for t in short:
+        for f, x in vec[t].items():
+            stp[f] += pos[t] * x
+    stn = math.sqrt(sum(x * x for x in stp.values())) or 1.0
+    stp = {f: x / stn for f, x in stp.items()}
+    expo = expo or {}
     tot = sum(pos.values()) or 1.0
     others_pop = Counter(t for u, s in ctx.pos.items() if u != user for t in s)
     maxpop = max(others_pop.values(), default=1)
@@ -298,7 +309,8 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W):
         re_ = math.exp(-max(0.0, (ctx.now - rel) / DAY) / W.get("release_days", 365.0)) if rel else 0.0
         age = max(0.0, (ctx.now - (T[c].added or 0)) / DAY)
         fr = math.exp(-age / W["fresh_days"]) if T[c].added else 0.0
-        taste = W["centroid"] * cen + W["maxsim"] * ms + W["collab"] * col - W["neg"] * neg_pen
+        st = dot(stp, v) if short else 0.0
+        taste = W["centroid"] * cen + W["maxsim"] * ms + W["collab"] * col - W["neg"] * neg_pen + wst * st
         if W.get("gate") == "rank":
             parts[c] = (taste, fr, pop, q, re_, hh)
         elif W.get("gate"):
@@ -311,7 +323,20 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W):
         out = gate_rank({c: p[0] for c, p in parts.items()}, {c: p[1] for c, p in parts.items()},
                         {c: p[2] for c, p in parts.items()}, {c: p[3] for c, p in parts.items()}, W,
                         {c: p[4] for c, p in parts.items()}, {c: p[5] for c, p in parts.items()})
+    for c in out:
+        if c in expo:
+            out[c] -= impression_penalty(expo[c], ctx.now, W) * abs(out[c])
     return out
+
+
+def impression_penalty(e, now, W) -> float:
+    """Part retirée du score d'un titre montré sans être ouvert (jours d'affichage, dernier affichage)."""
+    days, last = e
+    w = W.get("imp", 0.4)
+    if w <= 0 or days <= 0:
+        return 0.0
+    age = max(0.0, (now - last) / DAY)
+    return w * (1.0 - math.exp(-days / W.get("imp_days", 7.0))) * 0.5 ** (age / W.get("imp_recovery", 30.0))
 
 
 def gate_rank(taste, fr, pop, q, W, rel=None, hh=None):
@@ -343,22 +368,115 @@ def franchise(T, colls, t):
     return best
 
 
-def rec_engine(ctx, vec, user, cands, k, W=ENGINE_W, mmr=0.0, saga=True, sc=None):
-    """Classement + diversité (MMR) + règle de saga :
-    - une seule entrée par saga (deux par regroupement thématique) ;
-    - pour une saga, on propose le premier volet pas encore vu, pas un volet au milieu."""
+PERSONAL_FACTORS = (1.0, 0.5, 2.0, 0.0, 4.0)
+SHOWN_FOR_VARIETY = 20
+
+
+def history_similarity(ctx, vec, user):
+    """Ressemblance moyenne (pondérée) entre les 30 titres aimés les plus forts ; None s'il y en a moins de 3."""
+    sig = ctx.sig.get(user, {})
+    pos = sorted(((t, s) for t, s in sig.items() if s > 0 and t in vec), key=lambda e: (-e[1], e[0]))[:30]
+    if len(pos) < 3:
+        return None
+    num = den = 0.0
+    for i in range(len(pos)):
+        for j in range(i + 1, len(pos)):
+            ww = pos[i][1] * pos[j][1]
+            num += ww * dot(vec[pos[i][0]], vec[pos[j][0]])
+            den += ww
+    return num / den if den > 0 else None
+
+
+def list_similarity(vec, l):
+    s, n = 0.0, 0
+    for i in range(len(l)):
+        for j in range(i + 1, len(l)):
+            s += dot(vec[l[i]], vec[l[j]])
+            n += 1
+    return s / n if n else 0.0
+
+
+def genre_distribution(ctx, user):
+    p, tot = defaultdict(float), 0.0
+    for t, s in sorted(ctx.sig.get(user, {}).items()):
+        tt = ctx.ds.titles.get(t)
+        if s <= 0 or tt is None or not tt.genres:
+            continue
+        gs = list(dict.fromkeys(tt.genres))
+        for g in gs:
+            p[g] += s / len(gs)
+        tot += s
+    return {g: v / tot for g, v in p.items()}
+
+
+class MmrPicker:
+    def __init__(self, sc, vec, lam):
+        self.sc, self.vec, self.lam, self.pen = sc, vec, lam, {}
+
+    def pick(self, pool):
+        bi, bv = 0, -math.inf
+        for i, c in enumerate(pool):
+            val = self.sc[c] - self.lam * self.pen.get(c, 0.0)
+            if val > bv:
+                bi, bv = i, val
+        return bi
+
+    def added(self, t, pool):
+        if self.lam <= 0:
+            return
+        for c in pool:
+            s = dot(self.vec[c], self.vec[t])
+            if c not in self.pen or s > self.pen[c]:
+                self.pen[c] = s
+
+
+class CalibratedPicker:
+    """Steck (RecSys 2018) : (1 − λ) score normalisé − λ KL(p ‖ (1 − α) q + α p)."""
+    ALPHA = 0.01
+
+    def __init__(self, sc, titles, p, lam, pool):
+        self.sc, self.titles, self.p, self.lam = sc, titles, p, lam
+        self.genres = sorted(p)
+        self.q, self.n = defaultdict(float), 0
+        self.min = min((sc[c] for c in pool), default=0.0)
+        self.span = max((sc[c] for c in pool), default=0.0) - self.min
+
+    def kl(self, extra):
+        eg = list(dict.fromkeys(extra.genres)) if extra is not None else []
+        n = self.n + (1 if eg else 0)
+        kl = 0.0
+        for g in self.genres:
+            q = self.q.get(g, 0.0) + (1.0 / len(eg) if g in eg else 0.0)
+            q = q / n if n > 0 else 0.0
+            pg = self.p[g]
+            kl += pg * math.log(pg / ((1 - self.ALPHA) * q + self.ALPHA * pg))
+        return kl
+
+    def pick(self, pool):
+        bi, bv = 0, -math.inf
+        for i, c in enumerate(pool):
+            sn = (self.sc[c] - self.min) / self.span if self.span > 0 else 0.0
+            val = (1 - self.lam) * sn - self.lam * self.kl(self.titles[c])
+            if val > bv:
+                bi, bv = i, val
+        return bi
+
+    def added(self, t, pool):
+        gs = list(dict.fromkeys(self.titles[t].genres))
+        if not gs:
+            return
+        self.n += 1
+        for g in gs:
+            self.q[g] += 1.0 / len(gs)
+
+
+def _greedy(ctx, vec, cands, pool, k, saga, picker):
     T = ctx.ds.titles
-    if sc is None:
-        sc = score_engine(ctx, vec, user, cands, W)
-    ranked = sorted(cands, key=lambda c: -sc[c])
-    if mmr <= 0 and not saga:
-        return ranked[:k]
     colls = ctx.ds.meta.get("colls", {})
     cset = set(cands)
-    pool, out, used = ranked[: k * 8], [], Counter()
+    pool, out, used = list(pool), [], Counter()
     while pool and len(out) < k:
-        best = max(pool, key=lambda c: sc[c] - mmr * max((dot(vec[c], vec[o]) for o in out), default=0.0))
-        pool.remove(best)
+        best = pool.pop(picker.pick(pool))
         if saga:
             fr = franchise(T, colls, best)
             if fr:
@@ -373,4 +491,33 @@ def rec_engine(ctx, vec, user, cands, k, W=ENGINE_W, mmr=0.0, saga=True, sc=None
                 used[cid] += 1
         if best not in out:
             out.append(best)
+            picker.added(best, pool)
     return out
+
+
+def rec_engine(ctx, vec, user, cands, k, W=ENGINE_W, mmr=0.0, saga=True, sc=None, div="fixed", cal_strength=0.5):
+    """Classement + diversité + règle de saga :
+    - une seule entrée par saga (deux par regroupement thématique) ;
+    - pour une saga, on propose le premier volet pas encore vu, pas un volet au milieu ;
+    - diversité fixe (MMR), personnalisée (la variété de la liste suit celle de l'historique) ou calibrée (genres)."""
+    if sc is None:
+        sc = score_engine(ctx, vec, user, cands, W)
+    ranked = sorted(cands, key=lambda c: -sc[c])
+    if div == "fixed" and mmr <= 0 and not saga:
+        return ranked[:k]
+    pool = ranked[: k * 8]
+    if div == "personalized":
+        target = history_similarity(ctx, vec, user)
+        if target is not None:
+            best, gap = None, math.inf
+            for f in PERSONAL_FACTORS:
+                l = _greedy(ctx, vec, cands, pool, k, saga, MmrPicker(sc, vec, mmr * f))
+                g = abs(list_similarity(vec, l[:SHOWN_FOR_VARIETY]) - target)
+                if g < gap - 1e-12:
+                    best, gap = l, g
+            return best
+    if div == "calibrated":
+        p = genre_distribution(ctx, user)
+        if p:
+            return _greedy(ctx, vec, cands, pool, k, saga, CalibratedPicker(sc, ctx.ds.titles, p, cal_strength, pool))
+    return _greedy(ctx, vec, cands, pool, k, saga, MmrPicker(sc, vec, mmr))

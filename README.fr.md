@@ -10,7 +10,7 @@ Reco+ remplace les recommandations de Jellyfin par des listes calculées sur **t
 | `/Movies/Recommendations` (onglet Suggestions, Media Bar…) | proche des 7 derniers films et de quelques favoris au hasard | catégories « Parce que tu as aimé X » tirées de tout l'historique |
 | « Plus comme ceci » (films) | recouvrement pondéré genres/mots-clés/personnes | ressemblance de contenu + un peu du goût du compte, volet suivant d'une saga d'abord |
 | « Plus comme ceci » (séries) | des séries **au hasard** partageant un genre ou un mot-clé | ressemblance de contenu, comme pour les films |
-| Home Screen Sections | — | rangée « Pour toi » (facultative) |
+| Home Screen Sections | — | rangée « Pour toi », et au choix « Nouveautés pour toi », jusqu'à trois « Parce que tu as aimé … », « Films pour toi », « Séries pour toi » — jamais un titre dans deux de ces rangées |
 | Hors bibliothèque | — | facultatif : titres du catalogue Seerr/TMDb **mélangés dans la rangée « Pour toi »**, avec les cartes et le bouton *Demander* de Jellyfin Enhanced |
 
 Tout est calculé en arrière-plan et gardé en cache, en mémoire et sur disque : aucune page n'attend un calcul. Un compte dont la liste n'est pas encore prête reçoit la réponse normale de Jellyfin.
@@ -39,7 +39,12 @@ Tout est calculé en arrière-plan et gardé en cache, en mémoire et sur disque
   - Un titre tout neuf sans aucun rapport avec le compte ne reçoit aucun bonus.
   - Sans cette règle, les nouveautés étaient poussées à tout le monde : par exemple des animes ecchi récents à un compte qui ne regarde que du Ghibli.
   - La règle n'est pas désactivable, et la nouveauté est plafonnée.
-- **La diversité.** Reclassement par Maximal Marginal Relevance (Carbonell & Goldstein, 1998).
+- **La diversité, au choix.**
+  - *Personnalisée* (par défaut) : la liste est aussi variée que ce que le compte aime. Plusieurs forces de Maximal Marginal Relevance (Carbonell & Goldstein, 1998) sont essayées ; on garde la liste dont la ressemblance interne est la plus proche de celle de ses titres aimés. Un éclectique reçoit une liste variée, le fan d'un seul genre une liste resserrée.
+  - *Calibrée* (Steck, RecSys 2018) : la part de chaque genre dans la liste suit celle de l'historique (70 % de thrillers vus → environ 70 % proposés, pas 100 %).
+  - *Fixe* : la même pénalité de redondance pour tous (comportement d'avant la 1.0.5).
+- **Montré sans être ouvert.** Un titre resté plusieurs jours à l'écran d'un compte sans qu'il l'ouvre descend progressivement (au plus 40 % de son score), puis remonte avec le temps (demi-vie de 30 jours). Ne compte que ce que le script de l'accueil a vu **réellement affiché au compte connecté** : carte d'une rangée Reco+ visible au moins une seconde, onglet au premier plan, une fois par jour. Ouvrir le titre remet son compteur à zéro.
+- **Goût du moment, en option** (coupé par défaut) : ressemblance avec les 5 derniers titres aimés, en plus des goûts de toujours.
 - **Les sagas.**
   - Une seule entrée par saga, et c'est le premier volet pas encore vu, pas le 4ᵉ.
   - Les grands regroupements thématiques ont au plus deux entrées.
@@ -109,14 +114,14 @@ Tableau de bord → Extensions → Reco+. La page est organisée en onglets :
 | Onglet | Contenu |
 |---|---|
 | État | vérifications de compatibilité, dernier calcul, comptes prêts |
-| Général | ce qui est remplacé, rangée Home Screen Sections, comptes ignorés |
-| Listes | ce qui est montré, appliqué après le classement : part de hasard du jour, minimums de films et de séries, genres exclus, note et année minimales, diversité, sagas, demandes en tête |
+| Général | ce qui est remplacé, rangées Home Screen Sections, sources (dont les titres montrés sans être ouverts), comptes ignorés |
+| Listes | ce qui est montré, appliqué après le classement : part de hasard du jour, minimums de films et de séries, genres exclus, note et année minimales, diversité (personnalisée, calibrée ou fixe), sagas, demandes en tête |
 | Moteur | chaque facteur de classement (favoris, demandes, abandons, ressemblances, vus ensemble, nouveauté, popularité, note, accord TMDb, caractéristiques de contenu) se coupe ou se règle en force (×0,25 à ×3) ; durées ; valeurs par défaut évaluées |
 | Seerr | URL et clé, avec un bouton **Tester** qui utilise les valeurs saisies sans les enregistrer |
 | Mode étendu | titres hors bibliothèque : activation ; mélangés dans la rangée d'accueil un toutes les N cartes, ou librement selon le classement commun du moteur |
 | Notifications | webhook, avec envoi de test |
-| Calibrage | voir ci-dessous |
-| Aperçu | ce que voit actuellement un compte |
+| Calibrage | méthode (automatique, modèle de choix appris, recherche par curseurs) avec un avertissement si l'historique ne suffit pas ; voir ci-dessous |
+| Aperçu | ce que voit actuellement un compte, rangée par rangée |
 
 Chaque onglet montre l'essentiel ; les réglages avancés sont repliés. Survolez (ou touchez) le **?** à côté d'un réglage pour son aide et sa valeur par défaut. Un seul bouton **Enregistrer** sauvegarde à la fois les réglages et les secrets saisis.
 
@@ -126,18 +131,24 @@ L'onglet Calibrage rejoue l'historique de votre serveur : chaque fois qu'un comp
 
 - **Mesure.** Gain de rang 1/log2(1 + rang) sur *tous* les candidats, pas seulement « dans le top 10 ou non » : bien plus de puissance statistique à historique égal.
 - **Cas.** Chaque adoption précédée d'au moins 2 autres. Chaque cas pèse selon l'historique déjà connu du compte (n/(n+3)), et les comptes sont équilibrés (1/√cas) pour qu'un gros spectateur ne décide pas seul.
-- **Recherche.** Un paramètre à la fois, dans des bornes sûres : grille de 5 points (échelle log pour les poids multiplicatifs, zéro essayé pour les facteurs facultatifs), puis affinage par section dorée autour du meilleur point ; choix discrets énumérés ; deux passes. Un changement n'est gardé que s'il améliore l'ensemble *et* ne perd sur aucune des deux moitiés des comptes. Le garde-fou de nouveauté n'est pas réglable.
-- **Validation.** Toute la recherche est refaite sur la moitié des comptes et mesurée sur l'autre (validation croisée à deux plis, par compte). Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap).
+- **Méthodes.**
+  - *Modèle de choix appris* : à chaque cas, le compte a choisi un titre parmi tous ceux proposables ; on apprend d'un coup les 10 poids du score qui rendent ces choix les plus probables (logit conditionnel, Newton projeté, poids positifs et bornés). Régularisation L2 **vers les réglages actuels** — sans preuve, rien ne bouge — dont la force est choisie par validation croisée par comptes. Peu de paramètres : utilisable avec peu d'historique (environ 10 cas par poids), une minute de calcul.
+  - *Recherche par curseurs* : un paramètre à la fois, dans des bornes sûres, plus de 30 réglages (contenu et signaux compris) : grille de 5 points (échelle log pour les poids, zéro essayé pour les facteurs facultatifs), puis affinage par section dorée ; choix discrets énumérés (dont la diversité) ; deux passes. Un changement n'est gardé que s'il améliore l'ensemble *et* ne perd sur aucune des deux moitiés des comptes. Il faut beaucoup plus d'historique (environ 20 cas par réglage).
+  - *Automatique* (par défaut) : les deux, et garde celle qui se généralise le mieux.
+  - La page indique, pour chaque méthode, si l'historique est **suffisant, limite ou insuffisant**.
+- **Validation.** Chaque méthode est refaite sur la moitié des comptes et mesurée sur l'autre (validation croisée à deux plis, par compte). Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap).
 
-Rien n'est appliqué sans clic sur **Appliquer** ; le réglage précédent est gardé pour revenir en arrière. Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables. Il tourne comme une tâche planifiée (10 à 20 minutes, sur la moitié des cœurs).
+Rien n'est appliqué sans clic sur **Appliquer** ; le réglage précédent est gardé pour revenir en arrière. Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables. Il tourne comme une tâche planifiée, sur la moitié des cœurs.
 
-Sur le foyer de référence (150 cas), la recherche trouve +13 % sur l'historique mais seulement +1 % en validation croisée, intervalle à cheval sur zéro : les valeurs par défaut restent, et le verdict est « déconseillé ». C'est le garde-fou qui fonctionne, pas un échec.
+Sur le foyer de référence (150 cas) : la recherche par curseurs trouve +12 % sur l'historique, mais seulement +1,6 % en validation croisée (IC95 [−3,3 % ; +5,9 %], historique « insuffisant » pour elle) ; le modèle de choix appris, lui, reste presque sur les valeurs actuelles, +1,1 % en validation croisée avec un intervalle bien plus étroit (IC95 [−0,4 % ; +4,8 %], historique « suffisant »). Aucun réglage n'est donc recommandé et les valeurs par défaut restent. C'est le garde-fou qui fonctionne, pas un échec. Durée : environ 18 minutes en automatique (dont une pour le modèle de choix), sur un cœur.
+
+Les nouveautés de la 1.0.5 ont été mesurées de la même façon avant de fixer leurs valeurs par défaut : la diversité personnalisée fait +0,8 % de qualité de classement par rapport à la diversité fixe (IC95 [−0,1 % ; +2,4 %]) et devient la valeur par défaut ; la diversité calibrée est neutre à force modérée et perd à force élevée ; le goût du moment n'apporte rien sur cet historique (la demi-vie suit déjà les envies récentes) et reste coupé. Les titres montrés sans être ouverts ne peuvent pas être mesurés ainsi (aucun historique d'affichage avant la 1.0.5) : la pénalité par défaut est volontairement modérée.
 
 ## Intégrations facultatives
 
 | Plugin / service | Présent | Absent |
 |---|---|---|
-| Home Screen Sections | rangée « Pour toi » (à activer aussi dans HSS) | pas de rangée d'accueil, le reste marche |
+| Home Screen Sections | rangées Reco+ (à activer aussi dans HSS) ; les titres des rangées « Parce que tu as aimé … » sont propres à chaque compte | pas de rangée d'accueil, le reste marche |
 | Jellyfin Enhanced | le mode étendu utilise ses cartes, sa fiche et son bouton *Demander*, avec l'état Seerr du moment (s'il est relié à Seerr) | cartes Reco+, qui ouvrent la page Seerr, et bouton *Demander* de Reco+ |
 | Media Bar Enhanced | en profite automatiquement | — |
 | Playback Reporting | dates de premier lancement précises pour le calibrage | calibrage moins précis ; Reco+ relève lui-même les premiers lancements à partir de son installation |
@@ -145,6 +156,8 @@ Sur le foyer de référence (150 cas), la recherche trouve +13 % sur l'historiqu
 | LocalRecs | signalé comme doublon | — |
 
 ## Vie privée
+
+Les titres montrés sans être ouverts restent sur le serveur (fichier du plugin, un an au plus) et ne servent qu'au classement du compte concerné ; l'interrupteur « Titres montrés sans être ouverts » les coupe.
 
 Rien ne sort du serveur, à deux exceptions près :
 - les appels à **votre** Seerr, si vous le configurez ;

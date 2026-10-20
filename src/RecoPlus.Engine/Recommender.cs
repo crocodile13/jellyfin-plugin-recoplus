@@ -108,57 +108,115 @@ public static class Recommender
     }
 
     /// <summary>
-    /// Score de chaque candidat. Le goût (profil, titre aimé le plus proche, vus ensemble, ressemblance aux abandons)
-    /// décide seul de l'ordre ; nouveauté, popularité, qualité et accord TMDb sont des bonus multiplicatifs
-    /// réservés aux GateTop premiers par goût (garde-fou toujours actif).
+    /// Composantes brutes du score de chaque candidat (avant pondération) : profil, titre aimé le plus proche, vus
+    /// ensemble, ressemblance aux abandons, goût du moment, puis les bases des bonus réservés.
     /// </summary>
-    /// <param name="tmdbAgreement">Facultatif : candidat → part des titres aimés dont TMDb le recommande (mode étendu).</param>
-    public static Dictionary<string, double> Score(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
-        IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null,
-        Dictionary<string, ScoreParts>? parts = null, SimilarityIndex? sim = null)
+    public sealed class Components
+    {
+        internal Components(int n)
+        {
+            Cen = new double[n];
+            Ms = new double[n];
+            Col = new double[n];
+            Neg = new double[n];
+            St = new double[n];
+            Fr = new double[n];
+            Pop = new double[n];
+            Q = new double[n];
+            Tm = new double[n];
+            Re = new double[n];
+            Hh = new double[n];
+        }
+
+        /// <summary>Proximité au profil moyen.</summary>
+        public double[] Cen { get; }
+
+        /// <summary>Proximité au titre aimé le plus proche.</summary>
+        public double[] Ms { get; }
+
+        /// <summary>Vus ensemble.</summary>
+        public double[] Col { get; }
+
+        /// <summary>Ressemblance au titre abandonné le plus proche.</summary>
+        public double[] Neg { get; }
+
+        /// <summary>Proximité au goût du moment.</summary>
+        public double[] St { get; }
+
+        /// <summary>Nouveauté (0..1).</summary>
+        public double[] Fr { get; }
+
+        /// <summary>Popularité dans le foyer (0..1).</summary>
+        public double[] Pop { get; }
+
+        /// <summary>Note (-1..1).</summary>
+        public double[] Q { get; }
+
+        /// <summary>Accord TMDb (0..1).</summary>
+        public double[] Tm { get; }
+
+        /// <summary>Sortie récente (0..1).</summary>
+        public double[] Re { get; }
+
+        /// <summary>Avis du foyer (-1..1).</summary>
+        public double[] Hh { get; }
+    }
+
+    /// <summary>Calcule les composantes brutes (le profil moyen dépend de WNegative, le reste non).</summary>
+    public static Components Compute(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
+        IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null, SimilarityIndex? sim = null)
     {
         var T = ctx.Ds.Titles;
         var sig = ctx.Sig.TryGetValue(user, out var su) ? su : new Dictionary<string, double>();
         var pos = sig.Where(e => e.Value > 0).ToList();
         var neg = sig.Where(e => e.Value < 0).Select(e => new KeyValuePair<string, double>(e.Key, -e.Value)).ToList();
 
-        var prof = new Dictionary<string, double>(StringComparer.Ordinal);
-        foreach (var (t, s) in pos)
+        static (Dictionary<string, double> V, double N) Profile(IEnumerable<(double S, SparseVector V)> plus, IEnumerable<(double S, SparseVector V)> minus)
         {
-            if (!vec.TryGetValue(t, out var v))
+            var p = new Dictionary<string, double>(StringComparer.Ordinal);
+            foreach (var (s, v) in plus)
             {
-                continue;
+                for (int i = 0; i < v.Keys.Length; i++)
+                {
+                    p[v.Keys[i]] = p.GetValueOrDefault(v.Keys[i]) + (s * v.Values[i]);
+                }
             }
 
-            for (int i = 0; i < v.Keys.Length; i++)
+            foreach (var (s, v) in minus)
             {
-                prof[v.Keys[i]] = prof.GetValueOrDefault(v.Keys[i]) + (s * v.Values[i]);
-            }
-        }
-
-        foreach (var (t, s) in neg)
-        {
-            if (!vec.TryGetValue(t, out var v))
-            {
-                continue;
+                for (int i = 0; i < v.Keys.Length; i++)
+                {
+                    p[v.Keys[i]] = p.GetValueOrDefault(v.Keys[i]) - (s * v.Values[i]);
+                }
             }
 
-            for (int i = 0; i < v.Keys.Length; i++)
+            double n = Math.Sqrt(p.Values.Sum(x => x * x));
+            if (n == 0)
             {
-                prof[v.Keys[i]] = prof.GetValueOrDefault(v.Keys[i]) - (w.WNegative * s * v.Values[i]);
+                n = 1.0;
             }
+
+            foreach (var k in p.Keys.ToList())
+            {
+                p[k] /= n;
+            }
+
+            return (p, n);
         }
 
-        double pn = Math.Sqrt(prof.Values.Sum(x => x * x));
-        if (pn == 0)
-        {
-            pn = 1.0;
-        }
+        var posVec = pos.Where(e => vec.ContainsKey(e.Key)).Select(e => (S: e.Value, V: vec[e.Key])).ToList();
+        var negVec = neg.Where(e => vec.ContainsKey(e.Key)).Select(e => (S: e.Value, V: vec[e.Key])).ToList();
+        var (prof, pn) = Profile(posVec, negVec.Select(e => (w.WNegative * e.S, e.V)));
 
-        foreach (var k in prof.Keys.ToList())
-        {
-            prof[k] /= pn;
-        }
+        // goût du moment : les ShortTermTitles derniers titres aimés (dernière activité), profil des seuls aimés
+        var hist = ctx.Hist.TryGetValue(user, out var hu) ? hu : null;
+        var shortIds = w.WShortTerm > 0
+            ? pos.Where(e => vec.ContainsKey(e.Key))
+                .OrderByDescending(e => hist is not null && hist.TryGetValue(e.Key, out var x) ? x.Last : 0)
+                .ThenBy(e => e.Key, StringComparer.Ordinal)
+                .Take(w.ShortTermTitles).ToList()
+            : new List<KeyValuePair<string, double>>();
+        var (stProf, stn) = Profile(shortIds.Select(e => (e.Value, vec[e.Key])), Enumerable.Empty<(double, SparseVector)>());
 
         double tot = pos.Sum(e => e.Value);
         if (tot == 0)
@@ -182,36 +240,28 @@ public static class Recommender
         }
 
         int maxPop = othersPop.Count > 0 ? othersPop.Values.Max() : 1;
-        var posVec = pos.Where(e => vec.ContainsKey(e.Key)).Select(e => (S: e.Value, V: vec[e.Key])).ToList();
-        var negVec = neg.Where(e => vec.ContainsKey(e.Key)).Select(e => (S: e.Value, V: vec[e.Key])).ToList();
 
         // avec l'index : mêmes calculs, produits scalaires lus dans des lignes précalculées
-        (double S, double[] R)[]? posRows = null, negRows = null;
-        if (sim is not null)
+        (double S, double[] R)[]? posRows = null, negRows = null, stRows = null;
+        if (sim is not null && ReferenceEquals(sim.Vectors, vec))
         {
             posRows = pos.Where(e => vec.ContainsKey(e.Key)).Select(e => (e.Value, sim.Row(e.Key)!)).ToArray();
             negRows = neg.Where(e => vec.ContainsKey(e.Key)).Select(e => (e.Value, sim.Row(e.Key)!)).ToArray();
-            if (posRows.Any(r => r.R is null) || negRows.Any(r => r.R is null) || !ReferenceEquals(sim.Vectors, vec))
+            stRows = shortIds.Select(e => (e.Value, sim.Row(e.Key)!)).ToArray();
+            if (posRows.Any(r => r.R is null) || negRows.Any(r => r.R is null) || stRows.Any(r => r.R is null))
             {
-                posRows = negRows = null; // budget mémoire de l'index atteint, ou autres vecteurs : calcul direct
+                posRows = negRows = stRows = null; // budget mémoire de l'index atteint : calcul direct
             }
         }
 
-        var taste = new double[cands.Count];
-        var fr = new double[cands.Count];
-        var pop = new double[cands.Count];
-        var q = new double[cands.Count];
-        var tm = new double[cands.Count];
-        var re = new double[cands.Count];
-        var hh = new double[cands.Count];
+        var c = new Components(cands.Count);
         for (int ci = 0; ci < cands.Count; ci++)
         {
-            var c = cands[ci];
-            var v = vec[c];
-            int col0 = sim?.Column(c) ?? -1;
-            double cen;
-            double ms = 0;
-            if (posRows is not null && negRows is not null && col0 >= 0)
+            var id = cands[ci];
+            var v = vec[id];
+            int col0 = sim?.Column(id) ?? -1;
+            double cen, ms = 0, negPen = 0, st = 0;
+            if (posRows is not null && negRows is not null && stRows is not null && col0 >= 0)
             {
                 // prof·v = (Σ s·(t·v) − WNeg·Σ s·(n·v)) / |prof|
                 double dotv = 0;
@@ -236,6 +286,26 @@ public static class Recommender
 
                     ms /= maxPos;
                 }
+
+                if (negRows.Length > 0)
+                {
+                    negPen = double.NegativeInfinity;
+                    foreach (var (s, r) in negRows)
+                    {
+                        negPen = Math.Max(negPen, s * r[col0]);
+                    }
+                }
+
+                if (stRows.Length > 0)
+                {
+                    double d = 0;
+                    foreach (var (s, r) in stRows)
+                    {
+                        d += s * r[col0];
+                    }
+
+                    st = d / stn;
+                }
             }
             else
             {
@@ -250,68 +320,117 @@ public static class Recommender
 
                     ms /= maxPos;
                 }
+
+                if (negVec.Count > 0)
+                {
+                    negPen = double.NegativeInfinity;
+                    foreach (var (s, nv) in negVec)
+                    {
+                        negPen = Math.Max(negPen, s * nv.Dot(v));
+                    }
+                }
+
+                if (shortIds.Count > 0)
+                {
+                    st = v.Dot(stProf);
+                }
             }
 
             double col = 0;
             foreach (var (t, s) in pos)
             {
-                if (ctx.Cooc.TryGetValue(t, out var row) && row.TryGetValue(c, out var cv))
+                if (ctx.Cooc.TryGetValue(t, out var row) && row.TryGetValue(id, out var cv))
                 {
                     col += s * cv;
                 }
             }
 
-            col /= tot;
-            double negPen = 0;
-            if (negRows is not null && col0 >= 0)
-            {
-                if (negRows.Length > 0)
-                {
-                    negPen = double.NegativeInfinity;
-                    foreach (var (s, r) in negRows)
-                    {
-                        negPen = Math.Max(negPen, s * r[col0]);
-                    }
-                }
-            }
-            else if (negVec.Count > 0)
-            {
-                negPen = double.NegativeInfinity;
-                foreach (var (s, nv) in negVec)
-                {
-                    negPen = Math.Max(negPen, s * nv.Dot(v));
-                }
-            }
-
-            var tc = T[c];
-            pop[ci] = Math.Log(1 + othersPop.GetValueOrDefault(c)) / Math.Log(1 + maxPop);
-            q[ci] = Math.Clamp((Quality(tc, w.Rating, w.RatingPriorVotes) - 6.5) / 2.0, -1.0, 1.0);
-            hh[ci] = Household(ctx.Ds, c, user, w.HouseholdPrior);
+            var tc = T[id];
+            c.Cen[ci] = cen;
+            c.Ms[ci] = ms;
+            c.Col[ci] = col / tot;
+            c.Neg[ci] = negPen;
+            c.St[ci] = st;
+            c.Pop[ci] = Math.Log(1 + othersPop.GetValueOrDefault(id)) / Math.Log(1 + maxPop);
+            c.Q[ci] = Math.Clamp((Quality(tc, w.Rating, w.RatingPriorVotes) - 6.5) / 2.0, -1.0, 1.0);
+            c.Hh[ci] = Household(ctx.Ds, id, user, w.HouseholdPrior);
             double rel = tc.Released ?? 0;
-            re[ci] = rel != 0 ? Math.Exp(-Math.Max(0.0, (ctx.Now - rel) / Core.Day) / w.ReleaseDays) : 0.0;
+            c.Re[ci] = rel != 0 ? Math.Exp(-Math.Max(0.0, (ctx.Now - rel) / Core.Day) / w.ReleaseDays) : 0.0;
             double added = tc.Added ?? 0;
-            fr[ci] = added != 0 ? Math.Exp(-Math.Max(0.0, (ctx.Now - added) / Core.Day) / w.FreshDays) : 0.0;
-            tm[ci] = tmdbAgreement is not null && tmdbAgreement.TryGetValue(c, out var a) ? a : 0.0;
-            taste[ci] = (w.WCentroid * cen) + (w.WMaxSim * ms) + (w.WCollab * col) - (w.WNegative * negPen);
+            c.Fr[ci] = added != 0 ? Math.Exp(-Math.Max(0.0, (ctx.Now - added) / Core.Day) / w.FreshDays) : 0.0;
+            c.Tm[ci] = tmdbAgreement is not null && tmdbAgreement.TryGetValue(id, out var a) ? a : 0.0;
         }
 
-        // garde-fou : bonus réservés au haut du classement par goût (rang stable, ordre des candidats en cas d'égalité)
-        var order = Enumerable.Range(0, cands.Count).OrderByDescending(i => taste[i]).ToArray();
-        var rank = new int[cands.Count];
+        return c;
+    }
+
+    /// <summary>Goût d'un candidat : seul juge de l'ordre avant les bonus.</summary>
+    public static double Taste(Components c, int i, EngineSettings w)
+        => (w.WCentroid * c.Cen[i]) + (w.WMaxSim * c.Ms[i]) + (w.WCollab * c.Col[i]) - (w.WNegative * c.Neg[i]) + (w.WShortTerm * c.St[i]);
+
+    /// <summary>Rang de chaque candidat par goût (stable : ordre des candidats en cas d'égalité) et facteur de garde-fou.</summary>
+    public static double[] Gate(double[] taste, int gateTop)
+    {
+        var order = Enumerable.Range(0, taste.Length).OrderByDescending(i => taste[i]).ToArray();
+        var g = new double[taste.Length];
+        int top = Math.Max(1, gateTop);
         for (int r = 0; r < order.Length; r++)
         {
-            rank[order[r]] = r;
+            g[order[r]] = Math.Max(0.0, 1.0 - ((double)r / top));
         }
 
-        int top = Math.Max(1, w.GateTop);
+        return g;
+    }
+
+    /// <summary>
+    /// Part retirée du score d'un titre montré sans être ouvert : 1 − e^(−jours/ImpressionDays), effacée de moitié
+    /// toutes les ImpressionRecoveryDays depuis le dernier affichage ; × WImpression.
+    /// </summary>
+    public static double ImpressionPenalty(Exposure e, double now, EngineSettings w)
+    {
+        if (w.WImpression <= 0 || e.Days <= 0)
+        {
+            return 0.0;
+        }
+
+        double age = Math.Max(0.0, (now - e.Last) / Core.Day);
+        return w.WImpression * (1.0 - Math.Exp(-e.Days / w.ImpressionDays)) * Math.Pow(0.5, age / w.ImpressionRecoveryDays);
+    }
+
+    /// <summary>
+    /// Score de chaque candidat. Le goût (profil, titre aimé le plus proche, vus ensemble, ressemblance aux abandons,
+    /// goût du moment) décide seul de l'ordre ; nouveauté, popularité, qualité, accord TMDb, sortie récente et avis du
+    /// foyer sont des bonus multiplicatifs réservés aux GateTop premiers par goût (garde-fou toujours actif). Enfin, un
+    /// titre déjà montré sans être ouvert perd une part de son score.
+    /// </summary>
+    /// <param name="tmdbAgreement">Facultatif : candidat → part des titres aimés dont TMDb le recommande (mode étendu).</param>
+    /// <param name="exposure">Facultatif : affichages sans ouverture, par titre.</param>
+    public static Dictionary<string, double> Score(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
+        IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null,
+        Dictionary<string, ScoreParts>? parts = null, SimilarityIndex? sim = null, IReadOnlyDictionary<string, Exposure>? exposure = null)
+    {
+        var c = Compute(ctx, vec, user, cands, w, tmdbAgreement, sim);
+        var taste = new double[cands.Count];
+        for (int i = 0; i < taste.Length; i++)
+        {
+            taste[i] = Taste(c, i, w);
+        }
+
+        var gate = Gate(taste, w.GateTop);
         double wf = Math.Min(w.WFresh, EngineSettings.FreshCeiling);
         var outp = new Dictionary<string, double>(cands.Count, StringComparer.Ordinal);
         for (int ci = 0; ci < cands.Count; ci++)
         {
-            double g = Math.Max(0.0, 1.0 - ((double)rank[ci] / top));
+            double g = gate[ci];
             double tp = Math.Max(taste[ci], 0.0);
-            outp[cands[ci]] = taste[ci] + (tp * g * ((wf * fr[ci]) + (w.WPopularity * pop[ci]) + (w.WQuality * q[ci]) + (w.WTmdbAgreement * tm[ci]) + (w.WRelease * re[ci]) + (w.WHousehold * hh[ci])));
-            parts?.TryAdd(cands[ci], new ScoreParts(taste[ci], tp * g * wf * fr[ci], tp * g * w.WPopularity * pop[ci], tp * g * w.WQuality * q[ci], tp * g * w.WTmdbAgreement * tm[ci], tp * g * w.WRelease * re[ci]));
+            double sc = taste[ci] + (tp * g * ((wf * c.Fr[ci]) + (w.WPopularity * c.Pop[ci]) + (w.WQuality * c.Q[ci]) + (w.WTmdbAgreement * c.Tm[ci]) + (w.WRelease * c.Re[ci]) + (w.WHousehold * c.Hh[ci])));
+            if (exposure is not null && exposure.TryGetValue(cands[ci], out var ex))
+            {
+                sc -= ImpressionPenalty(ex, ctx.Now, w) * Math.Abs(sc);
+            }
+
+            outp[cands[ci]] = sc;
+            parts?.TryAdd(cands[ci], new ScoreParts(taste[ci], tp * g * wf * c.Fr[ci], tp * g * w.WPopularity * c.Pop[ci], tp * g * w.WQuality * c.Q[ci], tp * g * w.WTmdbAgreement * c.Tm[ci], tp * g * w.WRelease * c.Re[ci]));
         }
 
         return outp;
@@ -334,33 +453,187 @@ public static class Recommender
     }
 
     /// <summary>
-    /// Classement + diversité (MMR) + règle de saga : une seule entrée par saga (deux par regroupement thématique),
-    /// et pour une saga le premier volet pas encore vu plutôt qu'un volet au milieu.
+    /// Classement + diversité + règle de saga : une seule entrée par saga (deux par regroupement thématique), et pour une
+    /// saga le premier volet pas encore vu plutôt qu'un volet au milieu. La diversité suit <see cref="EngineSettings.Diversity"/>
+    /// (fixe, personnalisée ou calibrée) quand le compte est donné, sinon elle est fixe.
     /// </summary>
+    /// <param name="sim">Facultatif : index des produits scalaires (mêmes vecteurs), pour aller plus vite.</param>
     public static List<string> Rank(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, IReadOnlyList<string> cands,
-        IReadOnlyDictionary<string, double> sc, int k, EngineSettings w)
+        IReadOnlyDictionary<string, double> sc, int k, EngineSettings w, string? user = null, SimilarityIndex? sim = null)
     {
-        var T = ctx.Ds.Titles;
+        var dot = Dotter(vec, sim);
         var ranked = Enumerable.Range(0, cands.Count).OrderByDescending(i => sc[cands[i]]).Select(i => cands[i]).ToList();
-        if (w.Mmr <= 0 && !w.Saga)
+        var mode = user is null ? DiversityMode.Fixed : w.Diversity;
+        if (mode == DiversityMode.Fixed && w.Mmr <= 0 && !w.Saga)
         {
             return ranked.Take(k).ToList();
         }
 
-        var cset = new HashSet<string>(cands, StringComparer.Ordinal);
         var pool = ranked.Take(k * 8).ToList();
-        var outp = new List<string>();
-        var outSet = new HashSet<string>(StringComparer.Ordinal);
-        var used = new Dictionary<string, int>(StringComparer.Ordinal);
-        // pénalité de redondance courante par élément du pool (max des similarités avec la sortie)
-        var pen = new Dictionary<string, double>(StringComparer.Ordinal);
-        while (pool.Count > 0 && outp.Count < k)
+        if (mode == DiversityMode.Personalized && HistorySimilarity(ctx, vec, user!) is double target)
+        {
+            // plusieurs forces de diversité ; on garde la liste dont la ressemblance interne est la plus proche de celle
+            // de l'historique du compte (à égalité, la force de base)
+            List<string>? best = null;
+            double bestGap = double.PositiveInfinity;
+            foreach (var f in PersonalFactors)
+            {
+                var l = Greedy(ctx, cands, pool, k, w, new MmrPicker(sc, dot, w.Mmr * f));
+                double gap = Math.Abs(ListSimilarity(dot, l.Take(ShownForVariety).ToList()) - target);
+                if (gap < bestGap - 1e-12)
+                {
+                    (best, bestGap) = (l, gap);
+                }
+            }
+
+            return best!;
+        }
+
+        if (mode == DiversityMode.Calibrated && GenreDistribution(ctx, user!) is { Count: > 0 } p)
+        {
+            return Greedy(ctx, cands, pool, k, w, new CalibratedPicker(sc, ctx.Ds.Titles, p, w.CalibrationStrength, pool));
+        }
+
+        return Greedy(ctx, cands, pool, k, w, new MmrPicker(sc, dot, w.Mmr));
+    }
+
+    /// <summary>Produit scalaire entre deux titres : lu dans l'index s'il porte sur ces vecteurs, calculé sinon (même valeur).</summary>
+    private static Func<string, string, double> Dotter(IReadOnlyDictionary<string, SparseVector> vec, SimilarityIndex? sim)
+    {
+        if (sim is null || !ReferenceEquals(sim.Vectors, vec))
+        {
+            return (a, b) => vec[a].Dot(vec[b]);
+        }
+
+        return (a, b) =>
+        {
+            int c = sim.Column(b);
+            return c >= 0 && sim.Row(a) is { } r ? r[c] : vec[a].Dot(vec[b]);
+        };
+    }
+
+    /// <summary>Diversité personnalisée : la variété se juge sur le début de la liste, celui qui est affiché.</summary>
+    public const int ShownForVariety = 20;
+
+    /// <summary>Forces essayées par la diversité personnalisée (multiples de Mmr), la force de base d'abord.</summary>
+    internal static readonly double[] PersonalFactors = { 1.0, 0.5, 2.0, 0.0, 4.0 };
+
+    /// <summary>
+    /// Ressemblance moyenne entre les titres aimés du compte (les 30 plus forts), pondérée par leurs signaux ; null s'il
+    /// en a moins de 3 (pas de quoi juger de sa variété).
+    /// </summary>
+    public static double? HistorySimilarity(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user)
+    {
+        if (!ctx.Sig.TryGetValue(user, out var sig))
+        {
+            return null;
+        }
+
+        var pos = sig.Where(e => e.Value > 0 && vec.ContainsKey(e.Key)).OrderByDescending(e => e.Value).ThenBy(e => e.Key, StringComparer.Ordinal)
+            .Take(30).Select(e => (S: e.Value, V: vec[e.Key])).ToList();
+        if (pos.Count < 3)
+        {
+            return null;
+        }
+
+        double num = 0, den = 0;
+        for (int i = 0; i < pos.Count; i++)
+        {
+            for (int j = i + 1; j < pos.Count; j++)
+            {
+                double ww = pos[i].S * pos[j].S;
+                num += ww * pos[i].V.Dot(pos[j].V);
+                den += ww;
+            }
+        }
+
+        return den > 0 ? num / den : null;
+    }
+
+    /// <summary>Ressemblance moyenne entre les titres d'une liste.</summary>
+    public static double ListSimilarity(IReadOnlyDictionary<string, SparseVector> vec, IReadOnlyList<string> l)
+        => ListSimilarity((a, b) => vec[a].Dot(vec[b]), l);
+
+    private static double ListSimilarity(Func<string, string, double> dot, IReadOnlyList<string> l)
+    {
+        double s = 0;
+        int n = 0;
+        for (int i = 0; i < l.Count; i++)
+        {
+            for (int j = i + 1; j < l.Count; j++)
+            {
+                s += dot(l[i], l[j]);
+                n++;
+            }
+        }
+
+        return n == 0 ? 0 : s / n;
+    }
+
+    /// <summary>Répartition des genres de ce que le compte aime (chaque titre réparti entre ses genres, pondéré par son signal).</summary>
+    public static Dictionary<string, double> GenreDistribution(Context ctx, string user)
+    {
+        var p = new Dictionary<string, double>(StringComparer.Ordinal);
+        if (!ctx.Sig.TryGetValue(user, out var sig))
+        {
+            return p;
+        }
+
+        double tot = 0;
+        foreach (var (t, s) in sig.OrderBy(e => e.Key, StringComparer.Ordinal))
+        {
+            if (s <= 0 || !ctx.Ds.Titles.TryGetValue(t, out var tt) || tt.Genres.Count == 0)
+            {
+                continue;
+            }
+
+            var gs = tt.Genres.Distinct(StringComparer.Ordinal).ToList();
+            foreach (var g in gs)
+            {
+                p[g] = p.GetValueOrDefault(g) + (s / gs.Count);
+            }
+
+            tot += s;
+        }
+
+        foreach (var g in p.Keys.ToList())
+        {
+            p[g] /= tot;
+        }
+
+        return p;
+    }
+
+    /// <summary>Choix glouton du titre suivant d'une liste.</summary>
+    private interface IPicker
+    {
+        int Pick(List<string> pool);
+
+        void Added(string id, List<string> pool);
+    }
+
+    /// <summary>MMR : score − λ × ressemblance maximale avec la liste déjà formée.</summary>
+    private sealed class MmrPicker : IPicker
+    {
+        private readonly IReadOnlyDictionary<string, double> _sc;
+        private readonly Func<string, string, double> _dot;
+        private readonly double _l;
+        private readonly Dictionary<string, double> _pen = new(StringComparer.Ordinal);
+
+        public MmrPicker(IReadOnlyDictionary<string, double> sc, Func<string, string, double> dot, double lambda)
+        {
+            _sc = sc;
+            _dot = dot;
+            _l = lambda;
+        }
+
+        public int Pick(List<string> pool)
         {
             int bi = 0;
             double bv = double.NegativeInfinity;
             for (int i = 0; i < pool.Count; i++)
             {
-                double val = sc[pool[i]] - (w.Mmr * (pen.TryGetValue(pool[i], out var pv) ? pv : 0.0));
+                double val = _sc[pool[i]] - (_l * (_pen.TryGetValue(pool[i], out var pv) ? pv : 0.0));
                 if (val > bv)
                 {
                     bv = val;
@@ -368,6 +641,122 @@ public static class Recommender
                 }
             }
 
+            return bi;
+        }
+
+        public void Added(string id, List<string> pool)
+        {
+            if (_l <= 0)
+            {
+                return;
+            }
+
+            foreach (var c in pool)
+            {
+                double s = _dot(id, c);
+                if (!_pen.TryGetValue(c, out var cur) || s > cur)
+                {
+                    _pen[c] = s;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Calibrée (Steck, RecSys 2018) : (1 − λ) × score normalisé − λ × KL(p ‖ q̃), p = genres de l'historique,
+    /// q̃ = (1 − α) q(liste) + α p, α = 0,01.
+    /// </summary>
+    private sealed class CalibratedPicker : IPicker
+    {
+        private const double Alpha = 0.01;
+        private readonly IReadOnlyDictionary<string, double> _sc;
+        private readonly IReadOnlyDictionary<string, Title> _titles;
+        private readonly Dictionary<string, double> _p;
+        private readonly string[] _genres;
+        private readonly double _l;
+        private readonly double _min;
+        private readonly double _span;
+        private readonly Dictionary<string, double> _q = new(StringComparer.Ordinal);
+        private int _n;
+
+        public CalibratedPicker(IReadOnlyDictionary<string, double> sc, IReadOnlyDictionary<string, Title> titles, Dictionary<string, double> p, double lambda, List<string> pool)
+        {
+            _sc = sc;
+            _titles = titles;
+            _p = p;
+            _genres = p.Keys.OrderBy(g => g, StringComparer.Ordinal).ToArray();
+            _l = lambda;
+            _min = pool.Count > 0 ? pool.Min(c => sc[c]) : 0;
+            double max = pool.Count > 0 ? pool.Max(c => sc[c]) : 0;
+            _span = max - _min;
+        }
+
+        private double Kl(Title? extra)
+        {
+            var eg = extra is null ? null : extra.Genres.Distinct(StringComparer.Ordinal).ToList();
+            int n = _n + (eg is { Count: > 0 } ? 1 : 0);
+            double kl = 0;
+            foreach (var g in _genres)
+            {
+                double q = _q.GetValueOrDefault(g);
+                if (eg is { Count: > 0 } && eg.Contains(g, StringComparer.Ordinal))
+                {
+                    q += 1.0 / eg.Count;
+                }
+
+                q = n > 0 ? q / n : 0;
+                double pg = _p[g];
+                kl += pg * Math.Log(pg / (((1 - Alpha) * q) + (Alpha * pg)));
+            }
+
+            return kl;
+        }
+
+        public int Pick(List<string> pool)
+        {
+            int bi = 0;
+            double bv = double.NegativeInfinity;
+            for (int i = 0; i < pool.Count; i++)
+            {
+                double sn = _span > 0 ? (_sc[pool[i]] - _min) / _span : 0;
+                double val = ((1 - _l) * sn) - (_l * Kl(_titles[pool[i]]));
+                if (val > bv)
+                {
+                    bv = val;
+                    bi = i;
+                }
+            }
+
+            return bi;
+        }
+
+        public void Added(string id, List<string> pool)
+        {
+            var gs = _titles[id].Genres.Distinct(StringComparer.Ordinal).ToList();
+            if (gs.Count == 0)
+            {
+                return;
+            }
+
+            _n++;
+            foreach (var g in gs)
+            {
+                _q[g] = _q.GetValueOrDefault(g) + (1.0 / gs.Count);
+            }
+        }
+    }
+
+    private static List<string> Greedy(Context ctx, IReadOnlyList<string> cands, List<string> poolIn, int k, EngineSettings w, IPicker picker)
+    {
+        var T = ctx.Ds.Titles;
+        var cset = new HashSet<string>(cands, StringComparer.Ordinal);
+        var pool = poolIn.ToList();
+        var outp = new List<string>();
+        var outSet = new HashSet<string>(StringComparer.Ordinal);
+        var used = new Dictionary<string, int>(StringComparer.Ordinal);
+        while (pool.Count > 0 && outp.Count < k)
+        {
+            int bi = picker.Pick(pool);
             var best = pool[bi];
             pool.RemoveAt(bi);
             if (w.Saga)
@@ -413,18 +802,7 @@ public static class Recommender
             if (outSet.Add(best))
             {
                 outp.Add(best);
-                if (w.Mmr > 0)
-                {
-                    var bvVec = vec[best];
-                    foreach (var c in pool)
-                    {
-                        double s = vec[c].Dot(bvVec);
-                        if (!pen.TryGetValue(c, out var cur) || s > cur)
-                        {
-                            pen[c] = s;
-                        }
-                    }
-                }
+                picker.Added(best, pool);
             }
         }
 

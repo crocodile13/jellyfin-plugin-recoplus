@@ -1,4 +1,8 @@
-/* Reco+ — titres hors bibliothèque (mode étendu) sur l'accueil de l'interface web.
+/* Reco+ — script de l'accueil de l'interface web.
+   - Rangées « Parce que tu as aimé … » : le titre générique déclaré à Home Screen Sections est remplacé par celui du compte.
+   - Affichages : une carte d'une rangée Reco+ visible au moins une seconde, onglet au premier plan, compte connecté,
+     est notée « vue » (une fois par jour) ; une carte ouverte est notée « ouverte ». Rien d'autre n'est envoyé.
+   Titres hors bibliothèque (mode étendu) :
    - Home Screen Sections présent : les titres sont mélangés DANS la rangée « Pour toi » (ordre et place décidés par HSS).
    - Jellyfin Enhanced présent et relié à Seerr : cartes, fiche et bouton « Demander » de Jellyfin Enhanced, avec l'état
      Seerr du moment (un titre demandé ou arrivé entre-temps n'est plus proposé).
@@ -12,6 +16,9 @@
     var ROW_ID = 'recoplus-extended-row';
     var EXT = 'recoplus-ext';
     var HSS_SECTION = 'RecoPlusPourToi';
+    var SECTION_PREFIX = 'RecoPlus';
+    var SEEN_MS = 1000;
+    var FLUSH_MS = 15000;
     var TTL = 5 * 60 * 1000;
     var cache = { at: 0, user: null, data: null, pending: null };
 
@@ -81,6 +88,7 @@
                     var c = j.jellyseerrUI.createJellyseerrCard(item, !!st.active, !!st.userFound);
                     if (!c) { return; }
                     c.classList.add(EXT);
+                    c.setAttribute('data-rp-id', 'tmdb:' + (items[i].MediaType === 'tv' ? 'tv' : 'movie') + ':' + items[i].TmdbId);
                     c.__rpAfter = items[i].After;
                     if (items[i].Because) { c.title = 'Parce que tu as aimé ' + items[i].Because; }
                     cards.push(c);
@@ -124,6 +132,7 @@
 
     function ownCard(d, it) {
         var c = el('div', 'card overflowPortraitCard card-hoverable ' + EXT);
+        c.setAttribute('data-rp-id', 'tmdb:' + (it.MediaType === 'tv' ? 'tv' : 'movie') + ':' + it.TmdbId);
         c.__rpAfter = it.After;
         var box = el('div', 'cardBox cardBox-bottompadded');
         var sc = el('div', 'cardScalable');
@@ -238,6 +247,97 @@
         return document.querySelector('#homeTab .sections, #indexPage .tabContent[data-index="0"] .sections');
     }
 
+    // ---- titres des rangées « Parce que tu as aimé … »
+
+    function renameRows(d) {
+        var t = d && d.rowTitles;
+        if (!t) { return; }
+        Object.keys(t).forEach(function (id) {
+            if (!/^RecoPlus[A-Za-z0-9]+$/.test(id)) { return; }
+            var h = document.querySelector('.verticalSection.' + id + ' .sectionTitle');
+            if (h && h.textContent !== t[id]) { h.textContent = t[id]; }
+        });
+    }
+
+    // ---- affichages (vu à l'écran / ouvert)
+
+    var track = { on: false, day: '', sent: {}, shown: [], opened: [], timers: new WeakMap(), io: null };
+
+    function today() { return new Date().toISOString().slice(0, 10); }
+
+    function cardId(card) {
+        var id = card.getAttribute('data-rp-id') || card.getAttribute('data-id') || '';
+        return /^(?:[0-9a-fA-F]{32}|[0-9a-fA-F-]{36}|tmdb:(?:movie|tv):[0-9]{1,9})$/.test(id) ? id.replace(/-/g, '').toLowerCase() : null;
+    }
+
+    function recoSection(node) {
+        var s = node && node.closest ? node.closest('.verticalSection') : null;
+        if (!s) { return null; }
+        if (s.id === ROW_ID) { return s; }
+        for (var i = 0; i < s.classList.length; i++) {
+            if (s.classList[i].indexOf(SECTION_PREFIX) === 0) { return s; }
+        }
+        return null;
+    }
+
+    function markShown(card) {
+        var id = cardId(card);
+        if (!id) { return; }
+        var d = today();
+        if (track.day !== d) { track.day = d; track.sent = {}; }
+        if (track.sent[id]) { return; }
+        track.sent[id] = true;
+        track.shown.push(id);
+    }
+
+    function flush() {
+        var a = api();
+        if (!a || !track.on || (!track.shown.length && !track.opened.length)) { return; }
+        var body = { Shown: track.shown.splice(0, 100), Opened: track.opened.splice(0, 100) };
+        a.ajax({ type: 'POST', url: a.getUrl('RecoPlus/Impressions'), data: JSON.stringify(body), contentType: 'application/json' })
+            .then(null, function () { /* perdu : sans importance */ });
+    }
+
+    function observer() {
+        if (track.io || typeof IntersectionObserver !== 'function') { return track.io; }
+        track.io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                var card = e.target;
+                var t = track.timers.get(card);
+                if (t) { clearTimeout(t); track.timers.delete(card); }
+                if (e.isIntersecting && e.intersectionRatio >= 0.5) {
+                    track.timers.set(card, setTimeout(function () {
+                        track.timers.delete(card);
+                        if (document.visibilityState === 'visible' && card.isConnected) { markShown(card); }
+                    }, SEEN_MS));
+                }
+            });
+        }, { threshold: [0, 0.5, 1] });
+        return track.io;
+    }
+
+    function watchCards() {
+        if (!track.on) { return; }
+        var io = observer();
+        if (!io) { return; }
+        var cards = document.querySelectorAll('.verticalSection[class*="' + SECTION_PREFIX + '"] .card, #' + ROW_ID + ' .card');
+        Array.prototype.forEach.call(cards, function (c) {
+            if (c.__rpObserved || !recoSection(c)) { return; }
+            c.__rpObserved = true;
+            io.observe(c);
+        });
+    }
+
+    document.addEventListener('click', function (ev) {
+        if (!track.on) { return; }
+        var card = ev.target && ev.target.closest ? ev.target.closest('.card') : null;
+        if (!card || !recoSection(card)) { return; }
+        var id = cardId(card);
+        if (id) { track.opened.push(id); flush(); }
+    }, true);
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') { flush(); } });
+    setInterval(flush, FLUSH_MS);
+
     var busy = false;
     function check() {
         if (busy) { return; }
@@ -246,7 +346,11 @@
         busy = true;
         load().then(function (d) {
             busy = false;
-            if (!d || !d.homeRow || !d.items || !d.items.length) { return; }
+            if (!d) { return; }
+            renameRows(d);
+            track.on = !!d.track;
+            watchCards();
+            if (!d.homeRow || !d.items || !d.items.length) { return; }
             if (d.hss) {
                 var c = document.querySelector('.verticalSection.' + HSS_SECTION + ' .itemsContainer');
                 if (c) { mix(c, d); }
@@ -259,6 +363,7 @@
 
     window.__recoPlusSlots = slots; // pour les tests
     window.__recoPlusFreeOrder = freeOrder;
+    window.__recoPlusCardId = cardId;
 
     var style = el('style');
     style.textContent = '#' + ROW_ID + ' .itemsContainer::-webkit-scrollbar{display:none}';

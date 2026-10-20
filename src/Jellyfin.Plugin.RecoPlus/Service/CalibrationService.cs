@@ -48,6 +48,19 @@ public sealed class CalibrationService
     /// <summary>Interrompt.</summary>
     public void Cancel() => _tasks.CancelIfRunning<CalibrationTask>();
 
+    private (int N, DateTime At) _cases = (-1, DateTime.MinValue);
+
+    /// <summary>Nombre de cas d'évaluation disponibles (relu au plus toutes les 10 minutes).</summary>
+    public int CaseCount()
+    {
+        if (_cases.N < 0 || DateTime.UtcNow - _cases.At > TimeSpan.FromMinutes(10))
+        {
+            _cases = (Calibrator.Cases(_reco.BuildCalibrationDataset()).Count, DateTime.UtcNow);
+        }
+
+        return _cases.N;
+    }
+
     /// <summary>Corps de la tâche.</summary>
     public void Run(IProgress<double> progress, CancellationToken ct)
     {
@@ -57,7 +70,8 @@ public sealed class CalibrationService
             progress.Report(1);
             var ds = _reco.BuildCalibrationDataset();
             var cur = Plugin.Instance!.Configuration.Engine;
-            Report = Calibrator.Calibrate(ds, cur, new Progress<double>(p => progress.Report(Math.Max(1, p))), ct);
+            Report = Calibrator.Calibrate(ds, cur, new Progress<double>(p => progress.Report(Math.Max(1, p))), ct,
+                method: Plugin.Instance!.Configuration.CalibrationMethod);
             ReportAt = DateTime.UtcNow;
             _log.LogInformation("Reco+ : calibrage terminé — {Verdict}", Report.Verdict);
         }

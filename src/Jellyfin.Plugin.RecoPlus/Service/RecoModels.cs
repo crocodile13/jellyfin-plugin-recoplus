@@ -66,6 +66,12 @@ public sealed class UserRecs
     /// <summary>Compte Jellyseerr lié (0 = aucun : pas de bouton Demander).</summary>
     public int SeerrUserId { get; set; }
 
+    /// <summary>Rangées d'accueil supplémentaires (identifiant → titres), sans doublons entre elles ni avec « Pour toi ».</summary>
+    public Dictionary<string, List<string>> Rows { get; set; } = new(StringComparer.Ordinal);
+
+    /// <summary>Rangées « Parce que … » : titre aimé de chacune.</summary>
+    public Dictionary<string, string> RowAnchors { get; set; } = new(StringComparer.Ordinal);
+
     /// <summary>Goût du compte pour chaque titre de la liste (personnalisation de « Plus comme ceci »).</summary>
     public Dictionary<string, double> Taste { get; set; } = new(StringComparer.Ordinal);
 }

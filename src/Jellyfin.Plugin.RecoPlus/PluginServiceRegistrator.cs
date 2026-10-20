@@ -31,6 +31,9 @@ public sealed class PluginServiceRegistrator : IPluginServiceRegistrator
         services.AddSingleton(sp => new JellyfinEnhancedReader(
             System.IO.Path.Combine(sp.GetRequiredService<MediaBrowser.Common.Configuration.IApplicationPaths>().PluginsPath, "configurations", "Jellyfin.Plugin.JellyfinEnhanced"),
             sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<JellyfinEnhancedReader>>()));
+        services.AddSingleton(sp => new ImpressionStore(
+            () => Plugin.Instance is null ? null : System.IO.Path.Combine(Plugin.Instance.DataFolderPath, "affichages.json"),
+            sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<ImpressionStore>>()));
         services.AddSingleton<SeerrService>();
         services.AddSingleton<RecoService>();
         services.AddSingleton<CalibrationService>();
