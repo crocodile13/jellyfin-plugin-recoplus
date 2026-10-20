@@ -745,9 +745,14 @@ public sealed class RecoService : IDisposable
                     var jointNoisy = Exploration.Noisy(joint, noise, noiseSeed);   // même bruit pour la place des titres hors bibliothèque
                     var places = HomeRows.FreePlaces(shown.Select(x => joint[x]).ToList(), recs.Select(p => jointNoisy[p.Id]).ToList(), Math.Clamp(cfg.ExtendedMinFree, 0, 20));
 
-                    // places « découverte » : les mieux notés qui n'ont pas trouvé de place d'eux-mêmes
+                    // places « découverte » : les mieux notés qui n'ont pas trouvé de place d'eux-mêmes ; note fiable
+                    // (moyenne bayésienne) et votes minimum des pépites, sinon un 9,2 sur 4 votes passe devant tout
+                    int discoveryVotes = Math.Clamp(cfg.ExtendedGemMinVotes, 0, 1_000_000);
                     places = HomeRows.ForcePlaces(places, shown.Count,
-                        Enumerable.Range(0, recs.Count).OrderByDescending(i => titles[recs[i].Id].Community ?? 0).ThenBy(i => i),
+                        Enumerable.Range(0, recs.Count)
+                            .Where(i => (titles[recs[i].Id].Votes ?? 0) >= discoveryVotes)
+                            .OrderByDescending(i => Exploration.ConfidentRating(titles[recs[i].Id].Community, titles[recs[i].Id].Votes))
+                            .ThenBy(i => i),
                         Math.Clamp(cfg.ExtendedDiscoverySlots, 0, 10));
                     for (int i = 0; i < recs.Count; i++)
                     {

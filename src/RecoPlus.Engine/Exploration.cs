@@ -163,6 +163,21 @@ public static class Exploration
     }
 
     /// <summary>
+    /// Note fiable pour comparer des titres à la note TMDb : moyenne bayésienne, la note ramenée vers
+    /// <paramref name="prior"/> tant que le titre a peu de votes (poids <paramref name="m"/> votes fictifs). Un 8,8 sur
+    /// 4 votes vaut ~7,0 ; un 8,5 sur 20 000 votes reste ~8,5. Sans nombre de votes connu : la moyenne a priori.
+    /// </summary>
+    public static double ConfidentRating(double? rating, int? votes, double prior = 7.0, double m = 300)
+    {
+        if (rating is not double r || !(r > 0) || votes is not int v || v <= 0)
+        {
+            return prior;
+        }
+
+        return ((v * r) + (m * prior)) / (v + m);
+    }
+
+    /// <summary>
     /// Croisements de deux pistes (genre × thème, genre × langue…) : les <paramref name="max"/> couples dont le produit
     /// des poids est le plus fort (à égalité, l'ordre des listes). Explore ce qui est au cœur des goûts, plus précis
     /// qu'une piste seule.
