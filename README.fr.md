@@ -163,7 +163,7 @@ Les nouveautés ont été mesurées de la même façon avant de fixer leurs vale
 
 | Plugin / service | Présent | Absent |
 |---|---|---|
-| Home Screen Sections | toutes les rangées Reco+ figurent dans sa liste de sections (à ajouter dans sa configuration) ; une rangée coupée dans Reco+ reste vide ; titres et interrupteurs sans redémarrage ; les titres « Parce que tu as aimé X » sont propres à chaque compte dans l'interface web (« Parce que tu as aimé… » ailleurs) ; HSS affiche les rangées de plugins en paysage, et les titres hors bibliothèque prennent le même format | pas de rangée d'accueil, le reste marche |
+| Home Screen Sections | toutes les rangées Reco+ figurent dans sa liste de sections : c'est lui qui décide lesquelles afficher, dans quel ordre et pour quels comptes (Reco+ ne règle que leurs titres, sans redémarrage, et ne remplit que les rangées que HSS montre à chaque compte) ; les titres « Parce que tu as aimé X » sont propres à chaque compte dans l'interface web (« Parce que tu as aimé… » ailleurs) ; HSS affiche les rangées de plugins en paysage, et les titres hors bibliothèque prennent le même format | pas de rangée d'accueil, le reste marche |
 | Jellyfin Enhanced | le mode étendu utilise ses cartes, sa fiche et son bouton *Demander*, avec l'état Seerr du moment (s'il est relié à Seerr) ; Reco+ l'attend quelques secondes au chargement et remplace ses propres cartes dès qu'il est prêt | cartes Reco+, qui ouvrent la page Seerr, et bouton *Demander* de Reco+ |
 | Media Bar Enhanced | en profite automatiquement | — |
 | Playback Reporting | dates de premier lancement précises pour le calibrage | calibrage moins précis ; Reco+ relève lui-même les premiers lancements à partir de son installation |

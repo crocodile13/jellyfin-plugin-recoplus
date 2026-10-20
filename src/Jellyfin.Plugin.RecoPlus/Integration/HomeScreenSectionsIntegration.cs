@@ -64,8 +64,6 @@ public sealed class HssSectionHandler
     /// <summary>Troisième rangée « Parce que tu as aimé … ».</summary>
     public QueryResult<BaseItemDto> GetBecause3(HssPayload payload) => Row(payload, HomeRows.ParceQue + 3);
 
-    private static bool RowEnabledFor(Configuration.PluginConfiguration cfg, string row) => HomeScreenSectionsIntegration.RowEnabled(cfg, row);
-
     private QueryResult<BaseItemDto> Row(HssPayload payload, string row)
     {
         try
@@ -76,9 +74,9 @@ public sealed class HssSectionHandler
             }
 
             var cfg = Plugin.Instance?.Configuration;
-            if (cfg is null || !RowEnabledFor(cfg, row))
+            if (cfg is null || !cfg.Enabled)
             {
-                return new QueryResult<BaseItemDto>();   // rangée coupée dans Reco+ : vide, HSS ne l'affiche pas
+                return new QueryResult<BaseItemDto>();
             }
 
             var user = _users.GetUserById(payload.UserId);
@@ -130,8 +128,8 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     public const string Prefix = "RecoPlus";
 
     /// <summary>
-    /// Toutes les rangées Reco+, toujours déclarées (identifiant, titre affiché, méthode) : elles figurent ainsi dans la
-    /// liste de Home Screen Sections sans redémarrage. Une rangée coupée dans Reco+ reste vide, et HSS ne l'affiche pas.
+    /// Toutes les rangées Reco+, toujours déclarées (identifiant, titre affiché, méthode) : elles figurent dans la liste
+    /// de Home Screen Sections, où l'on choisit lesquelles afficher, dans quel ordre et pour quels comptes.
     /// </summary>
     public static List<(string Id, string Title, string Method)> Sections(Configuration.PluginConfiguration cfg)
     {
@@ -157,16 +155,32 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
         return t.Contains("{titre}", StringComparison.Ordinal) ? t.Replace("{titre}", "…", StringComparison.Ordinal).Replace(" …", "…", StringComparison.Ordinal) : t;
     }
 
-    /// <summary>Rangée active dans Reco+ (identifiant de rangée, sans le préfixe).</summary>
-    public static bool RowEnabled(Configuration.PluginConfiguration cfg, string row) => cfg.Enabled && row switch
+    /// <summary>
+    /// Rangées Reco+ que Home Screen Sections affiche à un compte (ses réglages, ou ceux par défaut de l'administrateur),
+    /// lues par réflexion ; null si HSS est absent ou d'une forme inattendue (on remplit alors toutes les rangées).
+    /// Sert à ne pas « réserver » des titres pour une rangée que le compte ne voit pas.
+    /// </summary>
+    public static HashSet<string>? EnabledFor(IServiceProvider sp, Guid user)
     {
-        HomeRows.PourToi => cfg.HssSection,
-        HomeRows.Nouveautes => cfg.RowNew,
-        HomeRows.Films => cfg.RowMovies,
-        HomeRows.Series => cfg.RowSeries,
-        _ when row.StartsWith(HomeRows.ParceQue, StringComparison.Ordinal) && int.TryParse(row.AsSpan(HomeRows.ParceQue.Length), out var n) => n >= 1 && n <= Math.Clamp(cfg.RowBecause, 0, 3),
-        _ => false,
-    };
+        try
+        {
+            var asm = AssemblyLoadContext.All.SelectMany(c => c.Assemblies).FirstOrDefault(a => a.GetName().Name == "Jellyfin.Plugin.HomeScreenSections");
+            var t = asm?.GetType("Jellyfin.Plugin.HomeScreenSections.Library.IHomeScreenManager");
+            var mgr = t is null ? null : sp.GetService(t);
+            var get = t?.GetMethod("GetUserSettings", new[] { typeof(Guid) });
+            var settings = mgr is null || get is null ? null : get.Invoke(mgr, new object[] { user });
+            if (settings?.GetType().GetProperty("EnabledSections")?.GetValue(settings) is not System.Collections.IEnumerable list)
+            {
+                return null;
+            }
+
+            return list.OfType<string>().Where(x => x.StartsWith(Prefix, StringComparison.Ordinal)).Select(x => x[Prefix.Length..]).ToHashSet(StringComparer.Ordinal);
+        }
+        catch (Exception ex) when (ex is TargetInvocationException or InvalidOperationException or InvalidCastException or ArgumentException or MissingMethodException)
+        {
+            return null;
+        }
+    }
 
     private readonly ILogger<HomeScreenSectionsIntegration> _log;
     private readonly Notifier _notifier;
@@ -252,12 +266,9 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
             }
 
             Registered = true;
-            var on = sections.Where(x => RowEnabled(cfg, x.Id[Prefix.Length..])).Select(x => "« " + x.Title + " »").ToList();
-            State = on.Count == 0
-                ? "aucune rangée active (déclarées à Home Screen Sections, mais vides)"
-                : $"actives : {string.Join(", ", on)} — à ajouter dans la configuration de Home Screen Sections";
+            State = $"{sections.Count} rangées déclarées ({string.Join(", ", sections.Select(x => "« " + x.Title + " »").Distinct())}) — à choisir et ordonner dans la configuration de Home Screen Sections";
             _notifier.Clear("off-" + Feature.HomeScreenSection);
-            _log.LogInformation("Reco+ : {N} rangées déclarées à Home Screen Sections ({On} actives)", sections.Count, on.Count);
+            _log.LogInformation("Reco+ : {N} rangées déclarées à Home Screen Sections", sections.Count);
         }
         catch (Exception ex)
         {

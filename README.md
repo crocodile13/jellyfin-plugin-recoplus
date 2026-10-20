@@ -160,7 +160,7 @@ New features were measured the same way before choosing their defaults: weightin
 
 | Plugin / service | If present | If absent |
 |---|---|---|
-| Home Screen Sections | every Reco+ row is listed among its sections (add them in its settings); a row switched off in Reco+ stays empty; titles and switches apply without a restart; "Because you liked X" titles are per account in the web client ("Because you liked…" elsewhere); HSS shows plugin rows in landscape, and titles outside the library take the same shape | no home row; everything else works |
+| Home Screen Sections | every Reco+ row is listed among its sections: HSS decides which ones are shown, in which order and to whom (Reco+ only sets their titles, without a restart, and fills only the rows HSS shows to each account); "Because you liked X" titles are per account in the web client ("Because you liked…" elsewhere); HSS shows plugin rows in landscape, and titles outside the library take the same shape | no home row; everything else works |
 | Jellyfin Enhanced | extended mode uses its cards, detail modal and *Request* button, with the live Seerr status (if it is linked to Seerr); Reco+ waits a few seconds for it on load and swaps its own cards for JE's as soon as it is ready | Reco+ cards, opening the Seerr page, with Reco+'s own *Request* button |
 | Media Bar Enhanced | benefits automatically (it calls the replaced endpoints) | — |
 | Playback Reporting | precise first-play dates for calibration | calibration is less precise; Reco+ also records first plays itself from install time |

@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.8.0",
+        "changelog": "1.0.8 : le choix des rangées d'accueil revient à Home Screen Sections — plus d'interrupteurs ni de nombre de rangées dans Reco+, qui ne règle que leurs titres ; Reco+ lit dans HSS les rangées affichées à chaque compte et ne remplit que celles-là (une rangée que le compte ne voit pas ne « réserve » plus de titres).",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.7.0",
         "changelog": "1.0.7 : toutes les rangées Reco+ sont déclarées à Home Screen Sections dès le démarrage et mises à jour à chaque enregistrement (titres et interrupteurs sans redémarrage ; une rangée coupée reste vide) ; titres hors bibliothèque au format de la rangée (paysage dans HSS, avec l'image de fond TMDb) ; cartes et bouton Demander de Jellyfin Enhanced dès qu'il est prêt (attendu quelques secondes, puis les cartes Reco+ de secours sont remplacées) ; page de configuration : un seul tableau « Rangées d'accueil » avec chaque interrupteur et son titre, réglages sans objet masqués selon le mode, textes corrigés ; calibrage : écarts en %, résultat précédent signalé pendant un calcul, méthode sans changement signalée, changements minimes écartés, un réglage n'est recommandé qu'avec au moins 1 % de gain sûr.",
         "targetAbi": "12.2.0.0",

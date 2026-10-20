@@ -120,7 +120,7 @@ public sealed class RecoController : ControllerBase
 
         var r = _reco.For(me.Value);
         bool on = cfg.Enabled && cfg.ExtendedEnabled && _seerr.Configured;
-        bool hss = cfg.HssSection && HomeScreenSectionsIntegration.Registered && CompatibilityGuard.Allowed(Feature.HomeScreenSection);
+        bool hss = HomeScreenSectionsIntegration.Registered && CompatibilityGuard.Allowed(Feature.HomeScreenSection);
         string tpl = string.IsNullOrWhiteSpace(cfg.RowBecauseTitle) ? "Parce que tu as aimé {titre}" : cfg.RowBecauseTitle.Trim();
         // titre de chaque rangée Reco+ tel que configuré (effet immédiat dans le client web), et pour les rangées
         // « Parce que … » le titre aimé de ce compte

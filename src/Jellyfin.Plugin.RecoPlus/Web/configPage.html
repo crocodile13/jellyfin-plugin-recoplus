@@ -99,7 +99,7 @@
                 <!-- GÉNÉRAL -->
                 <div class="rp-pane" data-pane="general">
                     <div class="rp-box"><h3>Ce que Reco+ remplace</h3><p>Chaque interrupteur coupé rend la main à Jellyfin pour cette partie.</p><div class="rp-grid" data-fields="replace"></div></div>
-                    <div class="rp-box"><h3>Rangées d'accueil</h3><p>Avec Home Screen Sections, toutes les rangées Reco+ figurent dans sa liste de sections : ajoutez celles que vous voulez dans sa configuration (« Add Section »), à la place voulue. Une rangée coupée ici reste vide et n'est pas affichée. Un titre n'apparaît jamais dans deux rangées Reco+ (dans l'ordre de ce tableau) ; les autres rangées de l'accueil ne sont pas concernées. Titres et interrupteurs : effet immédiat, sans redémarrage.</p><div class="rp-rows" data-fields="rows"></div></div>
+                    <div class="rp-box"><h3>Rangées d'accueil</h3><p>Quelles rangées afficher, dans quel ordre et pour quels comptes : cela se règle dans Home Screen Sections, où toutes les rangées Reco+ figurent (« Add Section »). Ici, seulement leurs titres (effet immédiat). Reco+ ne remplit que les rangées que HSS montre à chaque compte, et un titre n'y apparaît jamais deux fois (dans l'ordre de ce tableau) ; les autres rangées de l'accueil ne sont pas concernées.</p><div class="rp-rows" data-fields="rows"></div></div>
                     <div class="rp-box"><h3>Ce que le compte a dit explicitement</h3><p>Sources de retours explicites, en plus de l'historique de lecture et des favoris (films, séries, saisons et épisodes).</p><div class="rp-grid" data-fields="sources"></div></div>
                     <div class="rp-box"><h3>Comptes ignorés</h3><p>Ces comptes n'ont pas de recommandations Reco+ (Jellyfin leur répond normalement) et leur historique ne compte pas pour le foyer : compte invité, de test, d'un enfant…</p><div data-fields="users"></div></div>
                     <details class="rp-adv"><summary>Réglages avancés <span>— taille des rangées, nouveautés, fonctionnement</span></summary>
@@ -269,15 +269,15 @@
             ['OverrideSuggestions', 'Suggestions', 'bool', '/Items/Suggestions : chez Jellyfin, des titres au hasard. Reco+ y met la liste classée du compte.', 0, 0, 0, 'replace', 'c'],
             ['OverrideSimilar', '« Plus comme ceci »', 'bool', 'Sur la fiche d\'un film ou d\'une série. Jellyfin : recouvrement de genres et de personnes pour les films, séries au hasard. Reco+ : ressemblance de contenu, un peu des goûts du compte, et le volet suivant d\'une saga en premier.', 0, 0, 0, 'replace', 'c'],
             // Rangées d'accueil : une ligne par rangée, l'interrupteur et le titre côte à côte
-            ['HssSection', 'Rangée principale', 'bool', 'Le classement du compte : demandes arrivées et nouvelles saisons en tête, puis ses titres. Avec le mode étendu, les titres hors bibliothèque s\'y mélangent. Coupée : vide (Home Screen Sections ne l\'affiche pas).', 0, 0, 0, 'rows', 'c', 'activée'],
+            ['_RowMain', 'Rangée principale', 'note', 'Le classement du compte : demandes arrivées et nouvelles saisons en tête, puis ses titres. Avec le mode étendu, les titres hors bibliothèque s\'y mélangent.', 0, 0, 0, 'rows', 'c'],
             ['HssSectionTitle', 'Titre', 'text', 'Titre de la rangée principale. Partout ailleurs sur cette page, {ROW} désigne cette rangée.', 0, 0, 0, 'rows', 'c', 'Pour toi'],
-            ['RowNew', 'Nouveautés', 'bool', 'Les titres arrivés récemment (voir « Nouveautés : arrivées depuis » dans les réglages avancés), dans l\'ordre des goûts du compte, sans ceux des rangées au-dessus. Moins de 4 titres : vide.', 0, 0, 0, 'rows', 'c', 'coupée'],
+            ['_RowNew', 'Nouveautés', 'note', 'Les titres arrivés récemment (voir « Nouveautés : arrivées depuis » dans les réglages avancés), dans l\'ordre des goûts du compte, sans ceux des rangées au-dessus. Moins de 4 titres : vide.', 0, 0, 0, 'rows', 'c'],
             ['RowNewTitle', 'Titre', 'text', 'Titre de la rangée des nouveautés.', 0, 0, 0, 'rows', 'c', 'Nouveautés pour toi'],
-            ['RowBecause', '« Parce que tu as aimé … »', 'enum:0=aucune,1=1 rangée,2=2 rangées,3=3 rangées', 'Chacune autour d\'un titre que le compte a aimé (les plus aimés et récents d\'abord, jamais deux d\'une même saga), avec les titres qui lui ressemblent le plus, sans ceux des rangées au-dessus. Moins de 6 titres proches : vide.', 0, 0, 0, 'rows', 'c', 'aucune'],
+            ['_RowBecause', '« Parce que tu as aimé … » (1 à 3)', 'note', 'Jusqu\'à trois rangées dans Home Screen Sections, chacune autour d\'un titre que le compte a aimé (les plus aimés et récents d\'abord, jamais deux d\'une même saga), avec les titres qui lui ressemblent le plus, sans ceux des rangées au-dessus. Moins de 6 titres proches : vide.', 0, 0, 0, 'rows', 'c'],
             ['RowBecauseTitle', 'Titre', 'text', '{titre} est remplacé par le titre aimé, propre à chaque compte, dans l\'interface web. Les autres clients (TV, applications) affichent le titre sans lui (« Parce que tu as aimé… »).', 0, 0, 0, 'rows', 'c', 'Parce que tu as aimé {titre}'],
-            ['RowMovies', 'Films', 'bool', 'Les films suivants du classement du compte, sans ceux des rangées au-dessus.', 0, 0, 0, 'rows', 'c', 'coupée'],
+            ['_RowMovies', 'Films', 'note', 'Les films suivants du classement du compte, sans ceux des rangées au-dessus.', 0, 0, 0, 'rows', 'c'],
             ['RowMoviesTitle', 'Titre', 'text', 'Titre de la rangée des films.', 0, 0, 0, 'rows', 'c', 'Films pour toi'],
-            ['RowSeries', 'Séries', 'bool', 'Les séries suivantes du classement du compte, sans celles des rangées au-dessus.', 0, 0, 0, 'rows', 'c', 'coupée'],
+            ['_RowSeries', 'Séries', 'note', 'Les séries suivantes du classement du compte, sans celles des rangées au-dessus.', 0, 0, 0, 'rows', 'c'],
             ['RowSeriesTitle', 'Titre', 'text', 'Titre de la rangée des séries.', 0, 0, 0, 'rows', 'c', 'Séries pour toi'],
             ['_ExtendedRowNote', 'Rangée à part du mode étendu', 'note', 'Seulement sans Home Screen Sections : les titres hors bibliothèque ont alors leur propre rangée, sous la première de l\'accueil. Avec HSS, ils se mélangent à la rangée principale et ce titre ne sert pas.', 0, 0, 0, 'rows', 'c'],
             ['ExtendedTitle', 'Titre', 'text', 'Titre de la rangée à part du mode étendu (sans Home Screen Sections).', 0, 0, 0, 'rows', 'c', 'À découvrir pour toi'],
@@ -517,7 +517,6 @@
         var WHEN = {
             c_ExtendedMixMode: function () { return on('rp_c_ExtendedHomeRow'); },
             c_ExtendedMixEvery: function () { return on('rp_c_ExtendedHomeRow') && v('rp_c_ExtendedMixMode') !== 'Score'; },
-            c_RowNewDays: function () { return on('rp_c_RowNew'); },
             c_TimeZone: function () { return on('rp_e_WTimeOfDay_on'); },
             e_Mmr: function () { return v('rp_e_Diversity') !== 'Calibrated'; },
             e_CalibrationStrength: function () { return v('rp_e_Diversity') === 'Calibrated'; },
