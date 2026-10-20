@@ -62,6 +62,8 @@ class T(unittest.TestCase):
         db.execute("CREATE TABLE PlaybackActivity (DateCreated TEXT, UserId TEXT, ItemId TEXT, ItemType TEXT, ItemName TEXT, PlaybackMethod TEXT, ClientName TEXT, DeviceName TEXT, PlayDuration INT)")
         db.execute("INSERT INTO PlaybackActivity VALUES ('2026-10-01 20:00', ?, ?, 'Movie', 'Film 1', 'DirectPlay', 'Firefox', 'PC d’Alice', 5400)",
                    ("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", MOVIES[0]["Id"]))
+        db.execute("INSERT INTO PlaybackActivity VALUES ('2026-09-01 20:00', ?, 'ffffffffffffffffffffffffffffffff', 'Movie', 'Film remplacé', 'DirectPlay', 'Firefox', 'PC d’Alice', 4000)",
+                   ("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",))
         db.commit(); db.close()
     def tearDown(self): self.srv.shutdown()
 
@@ -84,7 +86,8 @@ class T(unittest.TestCase):
         m0 = next(i for i in a1["items"] if i["id"] == MOVIES[0]["Id"])
         self.assertTrue(m0["fav"])                                                     # dernier filtre lu l'emporte
         self.assertEqual(d["accounts"][1]["user"], "u02"); self.assertTrue(d["accounts"][1]["disabled"])
-        self.assertEqual(d["sessions"], [{"at": "2026-10-01 20:00", "user": "u01", "id": MOVIES[0]["Id"], "type": "Movie", "secs": 5400}])
+        self.assertEqual(d["sessions"], [{"at": "2026-10-01 20:00", "user": "u01", "id": MOVIES[0]["Id"], "type": "Movie", "secs": 5400},
+                                         {"at": "2026-09-01 20:00", "user": "u01", "id": "f" * 32, "type": "Movie", "secs": 4000, "name": "Film remplacé"}])
         for bad in (KEY, U1, U2, "alice", "PC d’Alice", "Firefox"):
             self.assertNotIn(bad.encode(), raw, bad)
         mp = json.loads((self.tmp / "out" / "correspondance-comptes.json").read_text())

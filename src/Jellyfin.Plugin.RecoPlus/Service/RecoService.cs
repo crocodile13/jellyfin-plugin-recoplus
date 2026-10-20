@@ -102,7 +102,22 @@ public sealed class RecoService
             return null; // compte exclu : Jellyfin répond normalement, effet immédiat
         }
 
-        return _recs.TryGetValue(key, out var r) ? r : null;
+        if (!_recs.TryGetValue(key, out var r))
+        {
+            return null;
+        }
+
+        // heure de la journée : la liste de la tranche horaire de la demande
+        if (r.Slots.Count == 4 && Plugin.Instance is { } pl)
+        {
+            int slot = LocalHourFunc(pl.Configuration)(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0) / 6;
+            if (r.Slots.TryGetValue(slot, out var v))
+            {
+                return r.WithSlot(v);
+            }
+        }
+
+        return r;
     }
 
     /// <summary>Compte ignoré par Reco+ (réglage « Comptes ignorés ») : Jellyfin lui répond normalement partout.</summary>
@@ -192,7 +207,21 @@ public sealed class RecoService
         return _prCache;
     }
 
-    private Dictionary<(Guid, Guid), double> ReadPr(out string status) => _pr.FirstStarts(out status);
+    // anciens lancements rattachés au titre actuel (fichiers remplacés par Radarr/Sonarr) : il faut la bibliothèque
+    private Dictionary<(Guid, Guid), double> ReadPr(out string status)
+    {
+        var rows = _pr.FirstStarts(out status);
+        var lib = _index.Get();
+        var movies = HistoryMath.NameIndex(lib.Titles.Values.Where(t => t.Kind == TitleKind.Movie && !t.External).Select(t => (Guid.ParseExact(t.Id, "N"), t.Name)));
+        var series = HistoryMath.NameIndex(lib.Titles.Values.Where(t => t.Kind == TitleKind.Series && !t.External).Select(t => (Guid.ParseExact(t.Id, "N"), t.Name)));
+        var map = HistoryMath.MapPlaybackStarts(rows, g => lib.Titles.ContainsKey(g.ToString("N")) || lib.EpisodeSeries.ContainsKey(g), movies, series, out var remapped);
+        if (remapped > 0)
+        {
+            status += $", {remapped} lectures d'anciens fichiers rattachées";
+        }
+
+        return map;
+    }
 
     /// <summary>
     /// Recalcule. `only` = un compte (après une lecture) ; null = tous (nuit, changement de bibliothèque).
@@ -467,7 +496,7 @@ public sealed class RecoService
         }
 
         double now = Unix(DateTime.UtcNow);
-        var ds = new Dataset { Titles = titles, Users = hist, Collections = colls, Now = now, Reviews = reviews };
+        var ds = new Dataset { Titles = titles, Users = hist, Collections = colls, Now = now, Reviews = reviews, LocalHour = LocalHourFunc(cfg) };
         var ctx = new Context(ds, now, hist, s);
         progress?.Report(40);
 
@@ -526,21 +555,43 @@ public sealed class RecoService
             var expo = cfg.TrackImpressions && s.WImpression > 0 ? _impressions.For(key, now) : null;
             if (cands.Count > 0)
             {
-                var sc = Recommender.Score(ctx, vec, key, cands, s, exposure: expo);
-                var ranked = Recommender.Rank(ctx, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s, key).Where(id => !pinned.Contains(id)).ToList();
+                // heure de la journée : une liste par tranche horaire, servie selon l'heure de la demande
+                var slots = s.WTimeOfDay > 0 ? new int?[] { 0, 1, 2, 3 } : new int?[] { null };
+                foreach (var slot in slots)
+                {
+                    ctx.Slot = slot;
+                    var sc = Recommender.Score(ctx, vec, key, cands, s, exposure: expo);
+                    var ranked = Recommender.Rank(ctx, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s, key).Where(id => !pinned.Contains(id)).ToList();
 
-                // présentation : hasard du jour et minimums films/séries (le classement par goût reste intact pour les catégories)
-                var pool = cands.Where(id => !pinned.Contains(id)).ToList();
-                r.Ranked = ListPolicy.Shape(ranked, pool, id => titles.TryGetValue(id, out var kt) ? (TitleKind?)kt.Kind : null, lo, ListPolicy.Seed(key, DateTime.UtcNow));
-                r.Taste = r.Ranked.ToDictionary(id => id, id => Math.Round(sc[id], 5), StringComparer.Ordinal);
-                r.MovieCategories = Categories(ctx, vec, key, ranked, titles);
+                    // présentation : hasard du jour et minimums films/séries (le classement par goût reste intact pour les catégories)
+                    var pool = cands.Where(id => !pinned.Contains(id)).ToList();
+                    var shaped = ListPolicy.Shape(ranked, pool, id => titles.TryGetValue(id, out var kt) ? (TitleKind?)kt.Kind : null, lo, ListPolicy.Seed(key, DateTime.UtcNow));
 
-                // rangées d'accueil supplémentaires, sans doublons entre elles ni avec « Pour toi »
-                var shownSet = new HashSet<string>(r.Ranked, StringComparer.Ordinal);
-                var ordered = r.Ranked.Concat(pool.Where(id => !shownSet.Contains(id)).OrderByDescending(id => sc[id]).ThenBy(id => id, StringComparer.Ordinal)).ToList();
-                var home = HomeRows.Allocate(ctx, vec, key, r.Pinned.Concat(r.Ranked).ToList(), ordered, sc, RowOptionsOf(cfg));
-                r.Rows = home.Rows;
-                r.RowAnchors = home.Anchors;
+                    // rangées d'accueil supplémentaires, sans doublons entre elles ni avec « Pour toi »
+                    var shownSet = new HashSet<string>(shaped, StringComparer.Ordinal);
+                    var ordered = shaped.Concat(pool.Where(id => !shownSet.Contains(id)).OrderByDescending(id => sc[id]).ThenBy(id => id, StringComparer.Ordinal)).ToList();
+                    var home = HomeRows.Allocate(ctx, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, RowOptionsOf(cfg));
+                    var view = new SlotRecs
+                    {
+                        Ranked = shaped,
+                        Taste = shaped.ToDictionary(id => id, id => Math.Round(sc[id], 5), StringComparer.Ordinal),
+                        Rows = home.Rows,
+                        RowAnchors = home.Anchors,
+                    };
+                    if (slot is int sl)
+                    {
+                        r.Slots[sl] = view;
+                    }
+
+                    if (slot is null || slot == ctx.Ds.HourOf(now) / 6)
+                    {
+                        // vue par défaut (et seule vue sans heure de la journée)
+                        (r.Ranked, r.Taste, r.Rows, r.RowAnchors) = (view.Ranked, view.Taste, view.Rows, view.RowAnchors);
+                        r.MovieCategories = Categories(ctx, vec, key, ranked, titles);
+                    }
+                }
+
+                ctx.Slot = null;
             }
 
             var hid = hiddenTmdb.GetValueOrDefault(key);
@@ -575,6 +626,31 @@ public sealed class RecoService
         Library = lib;
         Status.UsersWithRecs = _recs.Count;
         Persist();
+    }
+
+    /// <summary>Fuseau des heures de visionnage : celui de la configuration (identifiant IANA), sinon celui du serveur.</summary>
+    internal static TimeZoneInfo Zone(Configuration.PluginConfiguration cfg)
+    {
+        if (!string.IsNullOrWhiteSpace(cfg.TimeZone))
+        {
+            try
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById(cfg.TimeZone.Trim());
+            }
+            catch (Exception ex) when (ex is TimeZoneNotFoundException or InvalidTimeZoneException)
+            {
+                // fuseau inconnu : celui du serveur
+            }
+        }
+
+        return TimeZoneInfo.Local;
+    }
+
+    /// <summary>Heure locale d'un instant (secondes Unix), selon le fuseau configuré.</summary>
+    internal static Func<double, int> LocalHourFunc(Configuration.PluginConfiguration cfg)
+    {
+        var tz = Zone(cfg);
+        return t => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UnixEpoch.AddSeconds(t), tz).Hour;
     }
 
     /// <summary>Rangées d'accueil demandées dans la configuration.</summary>
@@ -618,6 +694,7 @@ public sealed class RecoService
             Users = hist,
             Collections = lib.Collections.ToDictionary(kv => kv.Key, kv => kv.Value.ToList(), StringComparer.Ordinal),
             Now = Unix(DateTime.UtcNow),
+            LocalHour = LocalHourFunc(Plugin.Instance!.Configuration),
         };
         ds.LinkCollections();
         return ds;

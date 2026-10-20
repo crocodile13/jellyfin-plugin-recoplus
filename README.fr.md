@@ -22,6 +22,9 @@ Tout est calculé en arrière-plan et gardé en cache, en mémoire et sur disque
   - Un film arrêté entre 5 % et 70 % et jamais repris pendant 30 jours est un abandon.
   - Un film regardé en deux fois n'en est pas un.
   - Une longue série lâchée après un ou deux épisodes est aussi un abandon.
+- **Le temps regardé.** Une série pèse selon les heures réellement regardées (durée de chaque épisode ; 45 min si inconnue) : 150 épisodes de 15 min ne pèsent pas autant que 150 de 45 min.
+- **Les dates inconnues.** Un titre marqué « vu » sans date, ou marqué en masse (au moins 4 titres « commencés » à moins de 2 minutes d'écart), compte comme un goût **ancien** — ni ignoré, ni pris pour un coup de cœur d'hier.
+- **Les fichiers remplacés.** Quand Radarr ou Sonarr remplace un fichier par une meilleure version, Jellyfin crée un nouvel élément et Playback Reporting garde les lectures sous l'ancien : elles sont rattachées au titre actuel par son nom (s'il est unique), ce qui lui rend sa vraie date de premier lancement.
 - **Les favoris** pèsent davantage, au niveau où ils ont été donnés : une série en favori compte pleinement, une saison en partie (0,6), des épisodes un peu (0,3, atteint à 3 épisodes) — aimer un épisode, ce n'est pas aimer la série.
 - **Ce que le compte a dit explicitement** prime sur ce que le visionnage laisse deviner, dans les deux sens : avis notés de Jellyfin Enhanced (1 à 5 étoiles), note ou pouce Jellyfin. Un titre masqué partout dans Jellyfin Enhanced (« pas intéressé ») n'est plus jamais proposé et fait descendre ce qui lui ressemble ; un masquage limité à une rangée d'accueil ou à des épisodes ne compte pas.
 - **La liste de suivi Seerr** compte comme une demande, plus faible (0,4) et aussi à court terme. Un titre seulement *voulu* (liste de suivi, demande ancienne, favori jamais regardé) reste proposable — c'est souvent le meilleur candidat.
@@ -45,6 +48,7 @@ Tout est calculé en arrière-plan et gardé en cache, en mémoire et sur disque
   - *Fixe* : la même pénalité de redondance pour tous (comportement d'avant la 1.0.5).
 - **Montré sans être ouvert.** Un titre resté plusieurs jours à l'écran d'un compte sans qu'il l'ouvre descend progressivement (au plus 40 % de son score), puis remonte avec le temps (demi-vie de 30 jours). Ne compte que ce que le script de l'accueil a vu **réellement affiché au compte connecté** : carte d'une rangée Reco+ visible au moins une seconde, onglet au premier plan, une fois par jour. Ouvrir le titre remet son compteur à zéro.
 - **Goût du moment, en option** (coupé par défaut) : ressemblance avec les 5 derniers titres aimés, en plus des goûts de toujours.
+- **Heure de la journée, en option** (coupée par défaut) : ressemblance avec les titres aimés regardés dans la même tranche horaire (nuit, matin, après-midi, soirée) ; une liste est alors calculée par tranche et servie selon l'heure de la demande (fuseau réglable).
 - **Les sagas.**
   - Une seule entrée par saga, et c'est le premier volet pas encore vu, pas le 4ᵉ.
   - Les grands regroupements thématiques ont au plus deux entrées.
@@ -130,19 +134,28 @@ Chaque onglet montre l'essentiel ; les réglages avancés sont repliés. Survole
 L'onglet Calibrage rejoue l'historique de votre serveur : chaque fois qu'un compte a commencé un nouveau titre, **à quel rang** ce titre figurait-il dans la liste calculée juste avant, avec seulement ce qui était connu alors ?
 
 - **Mesure.** Gain de rang 1/log2(1 + rang) sur *tous* les candidats, pas seulement « dans le top 10 ou non » : bien plus de puissance statistique à historique égal.
-- **Cas.** Chaque adoption précédée d'au moins 2 autres. Chaque cas pèse selon l'historique déjà connu du compte (n/(n+3)), et les comptes sont équilibrés (1/√cas) pour qu'un gros spectateur ne décide pas seul.
+- **Cas.** Chaque titre commencé (date connue, hors marquage en masse) alors que le compte en avait déjà adopté au moins 2 ; un titre commencé sans être adopté (film arrêté, série à 1 ou 2 épisodes) compte à demi-poids. Chaque cas pèse selon l'historique déjà connu du compte (n/(n+3)), et les comptes sont équilibrés (1/√cas) pour qu'un gros spectateur ne décide pas seul.
 - **Méthodes.**
   - *Modèle de choix appris* : à chaque cas, le compte a choisi un titre parmi tous ceux proposables ; on apprend d'un coup les 10 poids du score qui rendent ces choix les plus probables (logit conditionnel, Newton projeté, poids positifs et bornés). Régularisation L2 **vers les réglages actuels** — sans preuve, rien ne bouge — dont la force est choisie par validation croisée par comptes. Peu de paramètres : utilisable avec peu d'historique (environ 10 cas par poids), une minute de calcul.
   - *Recherche par curseurs* : un paramètre à la fois, dans des bornes sûres, plus de 30 réglages (contenu et signaux compris) : grille de 5 points (échelle log pour les poids, zéro essayé pour les facteurs facultatifs), puis affinage par section dorée ; choix discrets énumérés (dont la diversité) ; deux passes. Un changement n'est gardé que s'il améliore l'ensemble *et* ne perd sur aucune des deux moitiés des comptes. Il faut beaucoup plus d'historique (environ 20 cas par réglage).
-  - *Automatique* (par défaut) : les deux, et garde celle qui se généralise le mieux.
+  - *Réseau de neurones* (expérimental) : petite correction non linéaire (10 → 8 → 1, tanh, 96 paramètres) apprise sur les ingrédients du score et ajoutée au moteur ; elle part de zéro et la régularisation l'y ramène sans preuve. Il faut beaucoup d'historique (environ 10 cas par paramètre).
+  - *Automatique* (par défaut) : toutes, et garde celle qui se généralise le mieux.
   - La page indique, pour chaque méthode, si l'historique est **suffisant, limite ou insuffisant**.
 - **Validation.** Chaque méthode est refaite sur la moitié des comptes et mesurée sur l'autre (validation croisée à deux plis, par compte). Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap).
 
 Rien n'est appliqué sans clic sur **Appliquer** ; le réglage précédent est gardé pour revenir en arrière. Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables. Il tourne comme une tâche planifiée, sur la moitié des cœurs.
 
-Sur le foyer de référence (150 cas) : la recherche par curseurs trouve +12 % sur l'historique, mais seulement +1,6 % en validation croisée (IC95 [−3,3 % ; +5,9 %], historique « insuffisant » pour elle) ; le modèle de choix appris, lui, reste presque sur les valeurs actuelles, +1,1 % en validation croisée avec un intervalle bien plus étroit (IC95 [−0,4 % ; +4,8 %], historique « suffisant »). Aucun réglage n'est donc recommandé et les valeurs par défaut restent. C'est le garde-fou qui fonctionne, pas un échec. Durée : environ 18 minutes en automatique (dont une pour le modèle de choix), sur un cœur.
+Sur le foyer de référence (144 cas sur 13 comptes, une fois les 22 faux cas d'un marquage en masse écartés et les titres commencés ajoutés à demi-poids) :
 
-Les nouveautés de la 1.0.5 ont été mesurées de la même façon avant de fixer leurs valeurs par défaut : la diversité personnalisée fait +0,8 % de qualité de classement par rapport à la diversité fixe (IC95 [−0,1 % ; +2,4 %]) et devient la valeur par défaut ; la diversité calibrée est neutre à force modérée et perd à force élevée ; le goût du moment n'apporte rien sur cet historique (la demi-vie suit déjà les envies récentes) et reste coupé. Les titres montrés sans être ouverts ne peuvent pas être mesurés ainsi (aucun historique d'affichage avant la 1.0.5) : la pénalité par défaut est volontairement modérée.
+| Méthode | Sur l'historique | Validation croisée (IC 95 %) | Historique |
+|---|---|---|---|
+| Recherche par curseurs | +17,8 % | −3,1 % [−11,5 ; +8,0] | insuffisant |
+| Modèle de choix appris | −0,4 % | +0,7 % [−0,9 ; +4,5] | suffisant |
+| Réseau de neurones | 0 % | −2,1 % [−6,0 ; +2,5] | insuffisant |
+
+La recherche par curseurs est l'exemple type du surapprentissage : +18 % sur les cas qui ont servi à régler, −3 % sur des comptes neufs. Aucune méthode n'est recommandée et les valeurs par défaut restent. C'est le garde-fou qui fonctionne, pas un échec. Durée en automatique : environ 23 minutes sur un cœur (modèle de choix : une minute ; réseau : six).
+
+Les nouveautés ont été mesurées de la même façon avant de fixer leurs valeurs par défaut : le poids des séries selon le temps regardé fait aussi bien que le compte d'épisodes (et le laisser dépasser 1 pour les très grosses séries fait moins bien, d'où le plafond à 1) ; l'heure de la journée fait moins bien (−0,7 à −3,8 % : trop peu de visionnages par tranche et par compte) et reste coupée ; la diversité personnalisée fait +0,8 % de qualité de classement par rapport à la diversité fixe (IC95 [−0,1 % ; +2,4 %]) et devient la valeur par défaut ; la diversité calibrée est neutre à force modérée et perd à force élevée ; le goût du moment n'apporte rien sur cet historique (la demi-vie suit déjà les envies récentes) et reste coupé. Les titres montrés sans être ouverts ne peuvent pas être mesurés ainsi (aucun historique d'affichage avant la 1.0.5) : la pénalité par défaut est volontairement modérée.
 
 ## Intégrations facultatives
 

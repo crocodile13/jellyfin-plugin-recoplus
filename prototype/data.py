@@ -67,6 +67,8 @@ class Interaction:
     fav_episodes: int = 0         # épisodes en favori (séries)
     rating: float | None = None   # note explicite -1..+1
     hidden: bool = False          # masqué (« pas intéressé »)
+    hours: float = 0.0            # séries : heures regardées (0 = inconnu)
+    backfill: bool = False        # date inconnue (vu sans date, marqué en masse)
 
 
 @dataclass
@@ -102,14 +104,34 @@ def load(path: str) -> Dataset:
             if k in titles:
                 titles[k].colls.append(c["id"])
     ep_series = {}
+    ep_hours = defaultdict(list)
     for e in d["episodes"]:
         ep_series[e["id"]] = e["series"]
         if e["series"] in titles:
             titles[e["series"]].n_episodes += 1
-    # premier contact par (utilisateur, titre) depuis les sessions Playback Reporting
+        if e.get("runtime"):
+            ep_hours[e["series"]].append(e["runtime"] / 36e9)
+    mean_hours = {k: sum(v) / len(v) for k, v in ep_hours.items()}
+    # premier contact par (utilisateur, titre) depuis les sessions Playback Reporting ; un ancien fichier (remplacé par
+    # Radarr/Sonarr, nouvel identifiant) est rattaché au titre actuel par son nom, s'il est unique (comme le plugin)
+    def norm(n):
+        import unicodedata
+        n = unicodedata.normalize("NFD", (n or "").strip())
+        return " ".join("".join(c for c in n if unicodedata.category(c) != "Mn").lower().split())
+    by_name = {}
+    for t in titles.values():
+        k = (t.kind, norm(t.name))
+        by_name[k] = None if k in by_name else t.id
+    import re
+    ep_re = re.compile(r"^(?P<series>.+?) - s\d+e\d+(?: - .*)?$")
     first_seen = {}
     for s in d.get("sessions", []):
         tid = ep_series.get(s["id"], s["id"])
+        if tid not in titles and s.get("name"):
+            if s["type"] == "Movie":
+                tid = by_name.get(("Movie", norm(s["name"]))) or tid
+            elif s["type"] == "Episode" and (m := ep_re.match(s["name"])):
+                tid = by_name.get(("Series", norm(m.group("series")))) or tid
         t = ts(s["at"])
         if t and tid in titles:
             k = (s["user"], tid)
@@ -145,20 +167,24 @@ def load(path: str) -> Dataset:
             played = [e for e in eps if e["played"]]
             lasts = [ts(e["last"]) for e in eps if e.get("last")]
             lasts = [v for v in lasts if v]
-            if not lasts:
+            if not lasts and not played:
                 continue
             n = max(titles[sid].n_episodes, 1)
             prev = inter.get(sid)
-            start = first_seen.get((a["user"], sid), min(lasts))
-            inter[sid] = Interaction(sid, start, max(lasts), min(1.0, len(played) / n), bool(played),
+            start = first_seen.get((a["user"], sid), min(lasts)) if lasts else 0
+            hours = sum((e.get("runtime") or 0) / 36e9 or mean_hours.get(sid, 0.75) for e in played)
+            inter[sid] = Interaction(sid, start, max(lasts) if lasts else 0, min(1.0, len(played) / n), bool(played),
                                      episodes=len(played), plays=len(played), fav=bool(prev and prev.fav),
                                      rating=prev.rating if prev else None,
                                      fav_episodes=sum(1 for e in eps if e.get("fav")),
-                                     rewatch=min(1.0, sum(1 for e in eps if (e.get("plays") or 0) >= 2) / 3.0))
+                                     rewatch=min(1.0, sum(1 for e in eps if (e.get("plays") or 0) >= 2) / 3.0),
+                                     hours=hours)
         for sid, n in fav_seasons.items():
             inter.setdefault(sid, Interaction(sid, 0, 0, 0, False)).fav_seasons = n
         users[a["user"]] = {k: v for k, v in inter.items()
-                            if v.last or v.fav or v.rating is not None or v.fav_seasons or v.fav_episodes}
+                            if v.last or v.played or v.episodes or v.fav or v.rating is not None or v.fav_seasons or v.fav_episodes}
+        from engine import mark_backfill
+        mark_backfill(users[a["user"]])
     # Date d'ajout effective : un titre remplacé ou rescanné garde sa première apparition connue
     for h in users.values():
         for tid, x in h.items():

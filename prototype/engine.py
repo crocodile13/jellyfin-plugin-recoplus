@@ -16,7 +16,34 @@ DEFAULTS = dict(
     shrink=10.0, min_common=2,   # collaboratif : rétrécissement et minimum de spectateurs communs
     request_weight=0.6, request_half_life=21.0, request_max_days=90.0, watchlist_weight=0.4,
     fav_season_share=0.6, fav_episode_share=0.3, rewatch_boost=0.0, rating_weight=1.0, hidden_weight=1.0,
+    series_by_time=True, series_full_hours=7.5, series_max_weight=1.0,   # séries : poids selon le temps regardé
 )
+
+DEFAULT_EPISODE_HOURS = 0.75     # durée supposée d'un épisode de durée inconnue
+BULK_MIN_TITLES, BULK_GAP = 4, 120.0
+
+
+def mark_backfill(h: dict) -> int:
+    """Date inconnue : vu sans aucune date, ou marqué « vu » en masse (≥ 4 titres à moins de 2 min d'écart)."""
+    n = 0
+    xs = list(h.values())
+    for x in xs:
+        if (x.played or x.episodes > 0) and not x.start and not x.last and not x.backfill:
+            x.backfill = True
+            n += 1
+    seen = sorted((x for x in xs if (x.played or x.episodes > 0) and x.start), key=lambda x: (x.start, x.title))
+    i = 0
+    while i < len(seen):
+        j = i
+        while j + 1 < len(seen) and seen[j + 1].start - seen[j].start <= BULK_GAP:
+            j += 1
+        if j - i + 1 >= BULK_MIN_TITLES:
+            for k in range(i, j + 1):
+                if not seen[k].backfill:
+                    seen[k].backfill = True
+                    n += 1
+        i = j + 1
+    return n
 
 
 def auto_half_life(hist: dict, floor=30.0, default=90.0, min_gaps=20) -> float:
@@ -48,8 +75,11 @@ def signal(x: Interaction, kind: str, n_eps: int, now: float, P=DEFAULTS) -> flo
         elif (e <= P["series_abandon_eps"] and x.completion < P["series_abandon_frac"]
               and n_eps >= P["series_min_eps"] and idle >= P["abandon_days"]):
             base = -P["abandon_weight"]
+        elif P.get("series_by_time", True):
+            h = x.hours if x.hours > 0 else e * DEFAULT_EPISODE_HOURS
+            base = min(P.get("series_max_weight", 1.0), math.log1p(h) / math.log1p(P.get("series_full_hours", 7.5)))
         else:
-            base = min(1.0, math.log1p(e) / math.log1p(P["series_full_eps"]))
+            base = min(P.get("series_max_weight", 1.0), math.log1p(e) / math.log1p(P["series_full_eps"]))
     g = lambda k, d: P.get(k, DEFAULTS.get(k, d))
     if x.hidden:                                         # « pas intéressé » : refus explicite
         return -g("hidden_weight", 1.0)
@@ -70,7 +100,7 @@ def signal(x: Interaction, kind: str, n_eps: int, now: float, P=DEFAULTS) -> flo
             w = 1.0 / (1.0 + age / P["half_life"])
         else:
             w = 0.5 ** (age / P["half_life"])
-        base *= max(P["recency_floor"], w)
+        base *= P["recency_floor"] if x.backfill else max(P["recency_floor"], w)   # date inconnue : goût ancien
     return base
 
 
@@ -292,10 +322,26 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W, expo=None):
     stn = math.sqrt(sum(x * x for x in stp.values())) or 1.0
     stp = {f: x / stn for f, x in stp.items()}
     expo = expo or {}
+    # heure de la journée : titres aimés regardés dans la même tranche que maintenant
+    tod = {}
+    if W.get("tod", 0.0) > 0:
+        slot = hour_of(ctx.now) // 6
+        acc = defaultdict(float)
+        for t, sv in pos.items():
+            x = hist.get(t)
+            if x is None or x.backfill:
+                continue
+            m = (0.5 if x.start and hour_of(x.start) // 6 == slot else 0.0) + \
+                (0.5 if x.last and x.last <= ctx.now and hour_of(x.last) // 6 == slot else 0.0)
+            if m > 0:
+                for f, val in vec[t].items():
+                    acc[f] += sv * m * val
+        tn = math.sqrt(sum(v * v for v in acc.values())) or 1.0
+        tod = {f: v / tn for f, v in acc.items()}
     tot = sum(pos.values()) or 1.0
     others_pop = Counter(t for u, s in ctx.pos.items() if u != user for t in s)
     maxpop = max(others_pop.values(), default=1)
-    out, parts = {}, {}
+    out, parts, feats = {}, {}, {}
     for c in cands:
         v = vec[c]
         cen = dot(prof, v)
@@ -310,9 +356,11 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W, expo=None):
         age = max(0.0, (ctx.now - (T[c].added or 0)) / DAY)
         fr = math.exp(-age / W["fresh_days"]) if T[c].added else 0.0
         st = dot(stp, v) if short else 0.0
-        taste = W["centroid"] * cen + W["maxsim"] * ms + W["collab"] * col - W["neg"] * neg_pen + wst * st
+        taste = W["centroid"] * cen + W["maxsim"] * ms + W["collab"] * col - W["neg"] * neg_pen + wst * st \
+            + (W.get("tod", 0.0) * dot(tod, v) if tod else 0.0)
         if W.get("gate") == "rank":
             parts[c] = (taste, fr, pop, q, re_, hh)
+            feats[c] = (cen, ms, col, -neg_pen, st)
         elif W.get("gate"):
             # nouveauté et popularité ne comptent que pour ce qui correspond déjà aux goûts
             tp = max(taste, 0.0)
@@ -323,10 +371,40 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W, expo=None):
         out = gate_rank({c: p[0] for c, p in parts.items()}, {c: p[1] for c, p in parts.items()},
                         {c: p[2] for c, p in parts.items()}, {c: p[3] for c, p in parts.items()}, W,
                         {c: p[4] for c, p in parts.items()}, {c: p[5] for c, p in parts.items()})
+    net = W.get("neural")
+    if parts and net and W.get("w_neural", 1.0) > 0:
+        # correction apprise (réseau 10 → 8 → 1) sur les 10 ingrédients, garde-fou compris
+        order = sorted(parts, key=lambda c: -parts[c][0])
+        top = max(1, int(W.get("gate_top", 60)))
+        rank = {c: i for i, c in enumerate(order)}
+        for c, p in parts.items():
+            b = max(p[0], 0.0) * max(0.0, 1.0 - rank[c] / top)
+            x = list(feats[c]) + [b * p[1], b * p[2], b * p[3], b * p[4], b * p[5]]
+            out[c] += W.get("w_neural", 1.0) * residual(net, x)
     for c in out:
         if c in expo:
             out[c] -= impression_penalty(expo[c], ctx.now, W) * abs(out[c])
     return out
+
+
+def hour_of(t) -> int:
+    """Heure UTC d'un instant (le plugin utilise l'heure locale du serveur)."""
+    return int((t % 86400) // 3600)
+
+
+NEURAL_HIDDEN = 8
+
+
+def residual(net, x) -> float:
+    """Réseau 10 → 8 → 1 (tanh) : [poids d'entrée 8×10, biais 8, poids de sortie 8]."""
+    K, H = len(x), NEURAL_HIDDEN
+    r = 0.0
+    for h in range(H):
+        a = net[H * K + h]
+        for k in range(K):
+            a += net[h * K + k] * x[k]
+        r += net[H * K + H + h] * math.tanh(a)
+    return r
 
 
 def impression_penalty(e, now, W) -> float:

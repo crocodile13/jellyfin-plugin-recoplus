@@ -110,7 +110,7 @@ public sealed class UserHistory
 
             var lasts = eps.Select(e => Unix(e.LastPlayed)).Where(v => v != 0).ToList();
             int favEps = eps.Count(e => e.Favorite);
-            if (lasts.Count == 0)
+            if (lasts.Count == 0 && !eps.Any(e => e.Played))
             {
                 if (favEps > 0)
                 {
@@ -135,11 +135,11 @@ public sealed class UserHistory
             }
 
             inter.TryGetValue(id, out var prev);
-            double seriesLast = lasts.Max();
+            double seriesLast = lasts.Count > 0 ? lasts.Max() : 0;   // 0 : épisodes marqués vus sans date
             inter[id] = new Interaction
             {
                 Title = id,
-                Start = first == 0 ? lasts.Min() : first,
+                Start = first == 0 ? (lasts.Count > 0 ? lasts.Min() : 0) : first,
                 Last = seriesLast,
                 Completion = Math.Min(1.0, played / (double)n),
                 Played = played > 0,
@@ -149,6 +149,8 @@ public sealed class UserHistory
                 Rating = prev?.Rating,
                 FavEpisodes = favEps,
                 Rewatch = Math.Min(1.0, eps.Count(e => e.PlayCount >= 2) / 3.0),
+                Hours = HistoryMath.WatchedHours(eps.Where(e => e.Played).Select(e => lib.Runtime.TryGetValue(e.ItemId, out var rt) ? (long?)rt : null),
+                    lib.SeriesMeanHours.TryGetValue(sid, out var mh) ? mh : (double?)null),
                 NewEpisodes = HistoryMath.NewSinceCaughtUp(lib.EpisodeAdded.GetValueOrDefault(sid), seriesLast, played),
             };
         }
@@ -163,9 +165,13 @@ public sealed class UserHistory
             }
         }
 
-        // comme data.py : on ne garde que ce qui a une activité, un favori (série, saison, épisode) ou une note
-        return inter.Where(kv => kv.Value.Last != 0 || kv.Value.Favorite || kv.Value.FavSeasons > 0 || kv.Value.FavEpisodes > 0 || kv.Value.Rating is not null)
+        // comme data.py : on garde ce qui a une activité, un visionnage (même sans date), un favori (série, saison,
+        // épisode) ou une note ; puis les dates inconnues (vu sans date, marquage en masse) sont repérées
+        var kept = inter.Where(kv => kv.Value.Last != 0 || kv.Value.Played || kv.Value.Episodes > 0 || kv.Value.Favorite || kv.Value.FavSeasons > 0
+                                     || kv.Value.FavEpisodes > 0 || kv.Value.Rating is not null)
             .ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
+        Core.MarkBackfill(kept.Values);
+        return kept;
     }
 
     /// <summary>Titres que le compte a le droit de voir (bibliothèques autorisées, contrôle parental), appliqué par Jellyfin.</summary>

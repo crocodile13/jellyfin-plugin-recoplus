@@ -24,7 +24,7 @@ def adopted(x, kind):
 def events(ds):
     ev = []
     for u, h in ds.users.items():
-        ad = sorted((x for x in h.values() if adopted(x, ds.titles[x.title].kind)), key=lambda x: x.start)
+        ad = sorted((x for x in h.values() if adopted(x, ds.titles[x.title].kind) and not x.backfill), key=lambda x: x.start)
         for i, x in enumerate(ad):
             if i >= MIN_TRAIN and x.start:
                 ev.append((u, x.title, x.start))
@@ -32,7 +32,7 @@ def events(ds):
 
 
 def snapshot(ds, now):
-    return {u: {t: x for t, x in h.items() if x.start and x.start < now} for u, h in ds.users.items()}
+    return {u: {t: x for t, x in h.items() if x.backfill or (x.start and x.start < now)} for u, h in ds.users.items()}
 
 
 def run(ds, methods, verbose=False):

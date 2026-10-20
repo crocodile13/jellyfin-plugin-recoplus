@@ -46,6 +46,18 @@ public sealed class ExternalRec
     public int After { get; set; } = -1;
 }
 
+/// <summary>Listes d'un compte pour une tranche horaire (heure de la journée).</summary>
+public sealed class SlotRecs
+{
+    public List<string> Ranked { get; set; } = new();
+
+    public Dictionary<string, double> Taste { get; set; } = new(StringComparer.Ordinal);
+
+    public Dictionary<string, List<string>> Rows { get; set; } = new(StringComparer.Ordinal);
+
+    public Dictionary<string, string> RowAnchors { get; set; } = new(StringComparer.Ordinal);
+}
+
 /// <summary>Résultat précalculé pour un compte.</summary>
 public sealed class UserRecs
 {
@@ -74,6 +86,20 @@ public sealed class UserRecs
 
     /// <summary>Goût du compte pour chaque titre de la liste (personnalisation de « Plus comme ceci »).</summary>
     public Dictionary<string, double> Taste { get; set; } = new(StringComparer.Ordinal);
+
+    /// <summary>Heure de la journée : listes par tranche horaire (0 nuit, 1 matin, 2 après-midi, 3 soirée), vide sinon.</summary>
+    public Dictionary<int, SlotRecs> Slots { get; set; } = new();
+
+    /// <summary>Copie servant les listes d'une tranche horaire (le reste est partagé, rien n'est modifié).</summary>
+    public UserRecs WithSlot(SlotRecs v)
+    {
+        var c = (UserRecs)MemberwiseClone();
+        c.Ranked = v.Ranked;
+        c.Taste = v.Taste;
+        c.Rows = v.Rows;
+        c.RowAnchors = v.RowAnchors;
+        return c;
+    }
 }
 
 /// <summary>Tout le cache persistant.</summary>

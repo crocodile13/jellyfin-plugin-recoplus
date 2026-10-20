@@ -147,6 +147,15 @@ public sealed class Interaction
     /// </summary>
     public int NewEpisodes { get; set; }
 
+    /// <summary>Séries : heures regardées (somme des durées des épisodes vus), 0 si inconnu (estimé d'après les épisodes).</summary>
+    public double Hours { get; set; }
+
+    /// <summary>
+    /// Date inconnue : marqué « vu » sans date, ou marqué en masse (plusieurs titres en quelques minutes). Compte comme
+    /// un goût ancien (poids minimal d'un titre ancien), connu depuis toujours pour le calibrage, jamais comme un choix à prédire.
+    /// </summary>
+    public bool Backfill { get; set; }
+
     /// <summary>Copie indépendante.</summary>
     public Interaction Copy() => (Interaction)MemberwiseClone();
 }
@@ -174,6 +183,12 @@ public sealed class Dataset
 
     /// <summary>Avis notés du foyer (Jellyfin Enhanced) : titre → compte → étoiles (1 à 5).</summary>
     public Dictionary<string, Dictionary<string, double>> Reviews { get; init; } = new(StringComparer.Ordinal);
+
+    /// <summary>Heure locale (0-23) d'un instant en secondes Unix ; null = heure UTC.</summary>
+    public Func<double, int>? LocalHour { get; set; }
+
+    /// <summary>Heure locale d'un instant.</summary>
+    public int HourOf(double t) => LocalHour?.Invoke(t) ?? (int)(((t % 86400) + 86400) % 86400 / 3600);
 
     /// <summary>Renseigne Title.Collections à partir de Collections (à appeler une fois après construction).</summary>
     public void LinkCollections()

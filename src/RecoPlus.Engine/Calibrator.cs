@@ -124,7 +124,7 @@ public static class Calibrator
         var ev = new List<EvalEvent>();
         foreach (var (u, h) in ds.Users)
         {
-            var ad = h.Values.Where(x => ds.Titles.TryGetValue(x.Title, out var t) && !t.External && Adopted(x, t.Kind))
+            var ad = h.Values.Where(x => !x.Backfill && ds.Titles.TryGetValue(x.Title, out var t) && !t.External && Adopted(x, t.Kind))
                 .OrderBy(x => x.Start).ToList();
             for (int i = 0; i < ad.Count; i++)
             {
@@ -142,7 +142,7 @@ public static class Calibrator
     public static Dictionary<string, Dictionary<string, Interaction>> Snapshot(Dataset ds, double now)
         => ds.Users.ToDictionary(
             kv => kv.Key,
-            kv => kv.Value.Where(e => e.Value.Start != 0 && e.Value.Start < now).ToDictionary(e => e.Key, e => e.Value, StringComparer.Ordinal),
+            kv => kv.Value.Where(e => e.Value.Backfill || (e.Value.Start != 0 && e.Value.Start < now)).ToDictionary(e => e.Key, e => e.Value, StringComparer.Ordinal),
             StringComparer.Ordinal);
 
     /// <summary>Évalue un réglage.</summary>
@@ -216,30 +216,47 @@ public static class Calibrator
     public const int MinPrior = 2;
 
     /// <summary>Un cas du calibrage : l'événement, le nombre de titres adoptés avant lui, son poids.</summary>
-    public readonly record struct Case(EvalEvent Ev, int Prior, double Weight);
+    public readonly record struct Case(EvalEvent Ev, int Prior, double Weight, bool Adopted = true);
+
+    /// <summary>Poids d'un cas « commencé sans être adopté » (film arrêté, série à 1 ou 2 épisodes) : un clic, pas un choix confirmé.</summary>
+    public const double StartedWeight = 0.5;
+
+    private static bool Started(Interaction x, TitleKind k) => k == TitleKind.Movie ? x.Played || x.Completion >= 0.05 : x.Episodes >= 1;
 
     /// <summary>
-    /// Cas du calibrage : chaque adoption précédée d'au moins <see cref="MinPrior"/> autres. Poids = confiance dans
-    /// l'historique (n / (n + 3) : un compte qui démarre compte moins) × équilibre entre comptes (1 / √cas du compte :
-    /// un gros spectateur ne décide pas seul). Poids ramenés à une moyenne de 1.
+    /// Cas du calibrage : chaque titre commencé (date connue, hors marquage en masse) alors que le compte avait déjà
+    /// adopté au moins <see cref="MinPrior"/> titres (ceux de date inconnue comptent comme connus depuis toujours).
+    /// Poids = confiance dans l'historique (n / (n + 3) : un compte qui démarre compte moins) × équilibre entre comptes
+    /// (1 / √cas du compte : un gros spectateur ne décide pas seul) × <see cref="StartedWeight"/> pour un titre commencé
+    /// mais pas adopté. Poids ramenés à une moyenne de 1.
     /// </summary>
     public static List<Case> Cases(Dataset ds)
     {
-        var raw = new List<(EvalEvent Ev, int Prior)>();
+        var raw = new List<(EvalEvent Ev, int Prior, double W)>();
         foreach (var (u, h) in ds.Users)
         {
-            var ad = h.Values.Where(x => ds.Titles.TryGetValue(x.Title, out var t) && !t.External && Adopted(x, t.Kind) && x.Start != 0)
+            int prior = h.Values.Count(x => x.Backfill && ds.Titles.TryGetValue(x.Title, out var t) && !t.External && Adopted(x, t.Kind));
+            var started = h.Values.Where(x => !x.Backfill && x.Start != 0 && ds.Titles.TryGetValue(x.Title, out var t) && !t.External && Started(x, t.Kind))
                 .OrderBy(x => x.Start).ThenBy(x => x.Title, StringComparer.Ordinal).ToList();
-            for (int i = MinPrior; i < ad.Count; i++)
+            foreach (var x in started)
             {
-                raw.Add((new EvalEvent(u, ad[i].Title, ad[i].Start), i));
+                bool adopted = Adopted(x, ds.Titles[x.Title].Kind);
+                if (prior >= MinPrior)
+                {
+                    raw.Add((new EvalEvent(u, x.Title, x.Start), prior, adopted ? 1.0 : StartedWeight));
+                }
+
+                if (adopted)
+                {
+                    prior++;
+                }
             }
         }
 
         var perUser = raw.GroupBy(r => r.Ev.User).ToDictionary(g => g.Key, g => g.Count(), StringComparer.Ordinal);
-        var w = raw.Select(r => r.Prior / (r.Prior + 3.0) / Math.Sqrt(perUser[r.Ev.User])).ToArray();
+        var w = raw.Select(r => r.W * r.Prior / (r.Prior + 3.0) / Math.Sqrt(perUser[r.Ev.User])).ToArray();
         double mean = w.Length == 0 ? 1 : w.Average();
-        return raw.Select((r, i) => new Case(r.Ev, r.Prior, w[i] / mean)).ToList();
+        return raw.Select((r, i) => new Case(r.Ev, r.Prior, w[i] / mean, r.W >= 1.0)).ToList();
     }
 
     /// <summary>
@@ -343,6 +360,7 @@ public static class Calibrator
         new("Diversité", s => s.Mmr, (s, v) => s.Mmr = v, 0.02, 1, true, false, true, s => s.Diversity != DiversityMode.Calibrated),
         new("Force de la diversité calibrée", s => s.CalibrationStrength, (s, v) => s.CalibrationStrength = v, 0.05, 0.8, false, false, false, s => s.Diversity == DiversityMode.Calibrated),
         new("Goût du moment", s => s.WShortTerm, (s, v) => s.WShortTerm = v, 0.05, 2, true, false, true),
+        new("Heure de la journée", s => s.WTimeOfDay, (s, v) => s.WTimeOfDay = v, 0.05, 2, true, false, true),
         new("Titres du goût du moment", s => s.ShortTermTitles, (s, v) => s.ShortTermTitles = (int)Math.Round(v), 2, 15, true, true, false, s => s.WShortTerm > 0),
         new("Avis du foyer", s => s.WHousehold, (s, v) => s.WHousehold = v, 0.05, 2, true, false, true),
         new("Genres", s => s.FeatGenre, (s, v) => s.FeatGenre = v, 0.25, 3, true, false, false),
@@ -563,6 +581,7 @@ public static class Calibrator
         {
             CalibrationMethod.ChoiceModel => (ChoiceModel.Weights.Count, ChoiceModel.Weights.Count * 10, ChoiceModel.Weights.Count * 5),
             CalibrationMethod.Coordinate => (Knobs.Count + Choices.Count, (Knobs.Count + Choices.Count) * 20, (Knobs.Count + Choices.Count) * 6),
+            CalibrationMethod.Neural => (NeuralNet.Size, NeuralNet.Size * 10, NeuralNet.Size * 3),
             _ => (ChoiceModel.Weights.Count, ChoiceModel.Weights.Count * 10, MinEvents),
         };
         if (cases < MinEvents || cases < need.Min)
@@ -589,9 +608,11 @@ public static class Calibrator
         var sims = new Dictionary<string, SimilarityIndex>(StringComparer.Ordinal);
         bool coord = method is CalibrationMethod.Auto or CalibrationMethod.Coordinate;
         bool choice = method is CalibrationMethod.Auto or CalibrationMethod.ChoiceModel;
+        bool neural = method is CalibrationMethod.Auto or CalibrationMethod.Neural;
         int perRun = (Choices.Sum(c => c.Values.Length) + (Knobs.Count * (7 + refine * 2))) * passes;
         int perChoice = (ChoiceModel.Kappas.Count * 2) + 2;
-        int budget = (coord ? perRun * 2 : 0) + (choice ? perChoice * 3 : 0) + 1, done = 0;
+        int perNeural = (NeuralNet.Kappas.Count * 2) + 2;
+        int budget = (coord ? perRun * 2 : 0) + (choice ? perChoice * 3 : 0) + (neural ? perNeural * 3 : 0) + 1, done = 0;
         void Tick() => progress?.Report(Math.Min(99.0, 100.0 * ++done / budget));
 
         var full = new Search(ds, cases, sims, Tick, ct);
@@ -674,6 +695,25 @@ public static class Calibrator
                 .Select(w => new CalibrationStep(w.Name, w.Get(learned).ToString("0.###", System.Globalization.CultureInfo.InvariantCulture), 0, 0, true)).ToList();
             results.Add(Judge(CalibrationMethod.ChoiceModel, "Modèle de choix appris", learned, steps,
                 train => ChoiceModel.Learn(ds, sim, train, current, ChoiceModel.SelectKappa(ds, sim, train, current, Tick, ct), ct)));
+        }
+
+        if (neural)
+        {
+            var vk = VecKey(current);
+            if (!sims.TryGetValue(vk, out var sim))
+            {
+                sims[vk] = sim = new SimilarityIndex(Core.BuildVectors(ds.Titles, current));
+            }
+
+            var kappa = NeuralNet.SelectKappa(ds, sim, cases, current, Tick, ct);
+            var learned = NeuralNet.With(current, NeuralNet.Train(ds, sim, cases, current, kappa, ct));
+            Tick();
+            var steps = new List<CalibrationStep>
+            {
+                new("Correction apprise (réseau de neurones)", $"{NeuralNet.Size} paramètres, régularisation {kappa.ToString(System.Globalization.CultureInfo.InvariantCulture)}", 0, 0, true),
+            };
+            results.Add(Judge(CalibrationMethod.Neural, "Réseau de neurones (expérimental)", learned, steps,
+                train => NeuralNet.With(current, NeuralNet.Train(ds, sim, train, current, NeuralNet.SelectKappa(ds, sim, train, current, Tick, ct), ct))));
         }
 
         progress?.Report(100);

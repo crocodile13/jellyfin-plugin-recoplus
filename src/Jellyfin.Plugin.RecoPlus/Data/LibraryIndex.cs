@@ -27,8 +27,11 @@ public sealed class LibrarySnapshot
     /// <summary>Épisode → série, pour agréger l'historique.</summary>
     public required Dictionary<Guid, Guid> EpisodeSeries { get; init; }
 
-    /// <summary>Durée des films (ticks), pour l'avancement d'un film commencé.</summary>
+    /// <summary>Durée des films et des épisodes (ticks) : avancement d'un film commencé, temps regardé d'une série.</summary>
     public Dictionary<Guid, long> Runtime { get; init; } = new();
+
+    /// <summary>Série → durée moyenne connue d'un épisode (heures), pour les épisodes de durée inconnue.</summary>
+    public Dictionary<Guid, double> SeriesMeanHours { get; init; } = new();
 
     /// <summary>Saison → série (favoris de saison).</summary>
     public Dictionary<Guid, Guid> SeasonSeries { get; init; } = new();
@@ -133,12 +136,22 @@ public sealed class LibraryIndex
         var epSeries = new Dictionary<Guid, Guid>();
         var epCount = new Dictionary<Guid, int>();
         var epAdded = new Dictionary<Guid, List<double>>();
+        var runtime = new Dictionary<Guid, long>();
+        var epHours = new Dictionary<Guid, (double Sum, int N)>();
         foreach (var e in episodes.OfType<Episode>())
         {
             if (e.SeriesId != Guid.Empty)
             {
                 epSeries[e.Id] = e.SeriesId;
                 epCount[e.SeriesId] = epCount.GetValueOrDefault(e.SeriesId) + 1;
+                if (e.RunTimeTicks is > 0)
+                {
+                    // durée de chaque épisode : poids d'une série selon le temps réellement regardé
+                    runtime[e.Id] = e.RunTimeTicks.Value;
+                    var (sum, n) = epHours.GetValueOrDefault(e.SeriesId);
+                    epHours[e.SeriesId] = (sum + (e.RunTimeTicks.Value / 36_000_000_000.0), n + 1);
+                }
+
                 if (e.DateCreated != default)
                 {
                     if (!epAdded.TryGetValue(e.SeriesId, out var l))
@@ -161,7 +174,6 @@ public sealed class LibraryIndex
         }
 
         var titles = new Dictionary<string, Title>(StringComparer.Ordinal);
-        var runtime = new Dictionary<Guid, long>();
         var byTmdb = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var it in items)
         {
@@ -241,6 +253,7 @@ public sealed class LibraryIndex
             ByTmdb = byTmdb,
             EpisodeSeries = epSeries,
             Runtime = runtime,
+            SeriesMeanHours = epHours.ToDictionary(kv => kv.Key, kv => kv.Value.Sum / kv.Value.N),
             SeasonSeries = seasonSeries,
             EpisodeAdded = epAdded.ToDictionary(kv => kv.Key, kv => kv.Value.OrderBy(x => x).ToArray()),
             BuiltAt = DateTime.UtcNow,

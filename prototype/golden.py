@@ -67,6 +67,7 @@ def synth(seed=7):
                 h[tid] = Interaction(tid, start, last, min(1.0, eps / n), eps > 0, episodes=eps, plays=eps,
                                      fav=rng.random() < 0.15)
                 h[tid].fav_seasons = rng.choice([0, 0, 0, 1, 2])
+                h[tid].hours = rng.choice([0.0, 0.0, eps * 0.4, eps * 0.75, eps * 1.1])
                 h[tid].fav_episodes = rng.choice([0, 0, 1, 2, 5])
                 h[tid].rewatch = rng.choice([0.0, 0.0, 0.34, 1.0])
             x = h[tid]
@@ -75,6 +76,13 @@ def synth(seed=7):
             x.requested = rng.choice([0.0] * 8 + [now - rng.uniform(0, 120) * DAY])
             x.watchlisted = rng.choice([0.0] * 8 + [now - rng.uniform(0, 120) * DAY])
         users[f"u{u}"] = h
+    # un marquage en masse : 5 films « commencés » à quelques secondes d'intervalle
+    bulk = [t for t in ids if titles[t].kind == "Movie" and t not in users["u0"]][:5]
+    for k, t in enumerate(bulk):
+        users["u0"][t] = Interaction(t, now - 300 * DAY + 20 * k, now - 300 * DAY + 20 * k, 1.0, True, plays=1)
+    users["u1"][ids[-1] if titles[ids[-1]].kind == "Movie" else ids[-2]] = Interaction(ids[-1] if titles[ids[-1]].kind == "Movie" else ids[-2], 0, 0, 1.0, True, plays=1)
+    for h in users.values():
+        EN.mark_backfill(h)
     reviews = {}
     for tid in rng.sample(ids, 25):
         reviews[tid] = {f"u{u}": rng.choice([1.0, 2.5, 3.0, 4.0, 5.0]) for u in rng.sample(range(7), rng.randint(1, 4))}
@@ -124,7 +132,7 @@ def dump_ds(ds):
         "users": {u: [dict(title=x.title, start=x.start, last=x.last, completion=x.completion, played=x.played,
                            episodes=x.episodes, plays=x.plays, fav=x.fav, requested=x.requested, watchlisted=x.watchlisted,
                            rewatch=x.rewatch, fav_seasons=x.fav_seasons, fav_episodes=x.fav_episodes, rating=x.rating,
-                           hidden=x.hidden) for x in h.values()] for u, h in ds.users.items()},
+                           hidden=x.hidden, hours=x.hours, backfill=x.backfill) for x in h.values()] for u, h in ds.users.items()},
     }
 
 
@@ -137,10 +145,11 @@ if __name__ == "__main__":
         ("défaut", base_P, base_W, "tfidf", EN.MMR),
         ("puissance+bm25+sans rétrécissement", dict(base_P, decay="power", shrink=0.0, min_common=1, half_life=200),
          dict(base_W, fresh=1, gate_top=15, quality=0.7), "bm25", 0.0),
-        ("abandons marqués", dict(base_P, abandon_days=10, abandon_weight=1.2, fav_boost=0.4),
+        ("abandons marqués", dict(base_P, abandon_days=10, abandon_weight=1.2, fav_boost=0.4, series_by_time=False, series_max_weight=1.4),
          dict(base_W, neg=1.5, centroid=0.5, collab=1.0), "tfidf", 0.8),
         ("signaux explicites + sortie + critiques + langue/pays",
          dict(base_P, fav_season_share=0.8, fav_episode_share=0.45, rewatch_boost=1.2, rating_weight=1.5, hidden_weight=2.0,
+              series_full_hours=4.0, series_max_weight=2.0,
               watchlist_weight=0.9, request_weight=0.3, request_half_life=10.0, request_max_days=60.0),
          dict(base_W, release=1.3, release_days=200.0, rating="best", quality=0.8, household=1.1, household_prior=0.5,
               rating_prior_votes=40.0), "tfidf", 0.3, dict(n=0.4, l=0.9)),
@@ -149,9 +158,12 @@ if __name__ == "__main__":
          "bm25", 0.0, dict(l=0.5)),
     ]
     variants += [
-        ("goût du moment + affichages + diversité personnalisée", base_P, dict(base_W, short=0.8, short_n=3, imp=0.6, imp_days=3.0,
+        ("goût du moment + affichages + diversité personnalisée", base_P, dict(base_W, short=0.8, short_n=3, imp=0.6, imp_days=3.0, tod=0.7,
                                                                                   imp_recovery=20.0), "tfidf", 0.4, {}, "personalized"),
         ("diversité calibrée (genres)", base_P, dict(base_W, imp=0.0), "tfidf", 0.3, {}, "calibrated", 0.4),
+        ("correction apprise (réseau)", base_P, dict(base_W, w_neural=0.8,
+                                                     neural=[round(random.Random(3).uniform(-1.5, 1.5), 4) for _ in range(96)]),
+         "tfidf", 0.3, {}, "fixed"),
         ("diversité calibrée forte + bm25", base_P, dict(base_W, short=0.3), "bm25", 0.3, {}, "calibrated", 0.9),
     ]
     for v in variants:

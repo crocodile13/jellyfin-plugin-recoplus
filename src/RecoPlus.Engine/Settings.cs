@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace RecoPlus.Engine;
 
@@ -83,8 +84,17 @@ public sealed class EngineSettings
     /// <summary>Poids négatif d'un abandon (valeur positive, appliquée en négatif).</summary>
     public double AbandonWeight { get; set; } = 0.5;
 
-    /// <summary>Épisodes vus pour qu'une série compte « pleinement ».</summary>
+    /// <summary>Épisodes vus pour qu'une série compte « pleinement » (si l'on compte en épisodes).</summary>
     public int SeriesFullEpisodes { get; set; } = 10;
+
+    /// <summary>Poids d'une série selon le temps regardé (durée réelle des épisodes) plutôt que le nombre d'épisodes.</summary>
+    public bool SeriesByTime { get; set; } = true;
+
+    /// <summary>Heures regardées pour qu'une série compte « pleinement » (poids 1).</summary>
+    public double SeriesFullHours { get; set; } = 7.5;
+
+    /// <summary>Poids maximal d'une série très regardée (au-delà de 1 : une série de 100 heures pèse plus qu'une de 8).</summary>
+    public double SeriesMaxWeight { get; set; } = 1.0;
 
     /// <summary>Une série est abandonnée si au plus ce nombre d'épisodes a été vu…</summary>
     public int SeriesAbandonEpisodes { get; set; } = 2;
@@ -246,6 +256,12 @@ public sealed class EngineSettings
     /// </summary>
     public double WShortTerm { get; set; }
 
+    /// <summary>
+    /// Heure de la journée : proximité aux titres aimés que le compte a regardés dans la même tranche horaire (nuit,
+    /// matin, après-midi, soirée) que maintenant. On ne regarde pas la même chose à 8 h et à 23 h.
+    /// </summary>
+    public double WTimeOfDay { get; set; }
+
     /// <summary>Nombre de derniers titres aimés qui forment le goût du moment.</summary>
     public int ShortTermTitles { get; set; } = 5;
 
@@ -260,6 +276,15 @@ public sealed class EngineSettings
 
     /// <summary>Demi-vie de l'oubli (jours) : la pénalité s'efface d'autant après le dernier affichage.</summary>
     public double ImpressionRecoveryDays { get; set; } = 30;
+
+    /// <summary>
+    /// Correction apprise par le calibrage « réseau de neurones » : petit réseau (10 → 8 → 1, tanh) ajouté au score,
+    /// à partir des 10 ingrédients du score. Vide = aucune correction (par défaut). Voir <see cref="NeuralNet"/>.
+    /// </summary>
+    public double[]? Neural { get; set; }
+
+    /// <summary>Force de la correction apprise (0 = coupée, 1 = telle qu'apprise).</summary>
+    public double WNeural { get; set; } = 1.0;
 
     // ---- liste
 
@@ -332,6 +357,13 @@ public sealed class EngineSettings
         }
 
         s.ShortTermTitles = (int)Clamp(s.ShortTermTitles, 1, 30);
+        s.WNeural = Clamp(s.WNeural, 0, 2);
+        if (s.Neural is not null && (s.Neural.Length != NeuralNet.Size || s.Neural.Any(v => !double.IsFinite(v) || Math.Abs(v) > 100)))
+        {
+            s.Neural = null; // réseau corrompu ou d'une autre forme : ignoré
+        }
+        s.SeriesFullHours = Clamp(s.SeriesFullHours, 0.5, 500);
+        s.SeriesMaxWeight = Clamp(s.SeriesMaxWeight, 1, 3);
         s.WImpression = Clamp(s.WImpression, 0, 0.9);
         s.ImpressionDays = Clamp(s.ImpressionDays, 1, 90);
         s.ImpressionRecoveryDays = Clamp(s.ImpressionRecoveryDays, 1, 365);

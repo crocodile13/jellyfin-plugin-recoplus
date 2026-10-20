@@ -157,4 +157,61 @@ public class SignalTests
         Assert.Equal(0.5, on["l:ja"]);
         Assert.Equal(new[] { "n:France", "n:Japan", "n:Korea" }, on.Keys.Where(k => k.StartsWith("n:", StringComparison.Ordinal)).OrderBy(k => k, StringComparer.Ordinal).ToArray());
     }
+
+    [Fact]
+    public void SeriesWeightFollowsWatchTime()
+    {
+        var anime = Series(150); anime.Hours = 150 * 0.25;
+        var drama = Series(150); drama.Hours = 150 * 0.75;
+        var short3 = Series(10); short3.Hours = 10 * 0.25;
+        var big = new EngineSettings { SeriesMaxWeight = 2 };
+        Assert.True(Core.Signal(anime, TitleKind.Series, 200, Now, big) < Core.Signal(drama, TitleKind.Series, 200, Now, big), "150 × 15 min < 150 × 45 min");
+        Assert.True(Sig(short3) < Sig(Series(10)), "10 épisodes de 15 min < 10 de 45 min (durée inconnue = 45 min)");
+        Assert.Equal(Sig(anime), Sig(drama));                                            // plafonnées à 1 par défaut
+        var byEp = new EngineSettings { SeriesByTime = false };
+        Assert.Equal(Core.Signal(anime, TitleKind.Series, 200, Now, byEp), Core.Signal(drama, TitleKind.Series, 200, Now, byEp));
+    }
+
+    [Fact]
+    public void UnknownDatesCountAsOldTastesAndBulkMarksAreDetected()
+    {
+        var h = new List<Interaction>
+        {
+            new() { Title = "nodate", Played = true, Completion = 1 },
+            new() { Title = "real", Played = true, Completion = 1, Start = Now - (10 * Core.Day), Last = Now - (10 * Core.Day) },
+        };
+        for (int i = 0; i < 5; i++)
+        {
+            h.Add(new Interaction { Title = "bulk" + i, Played = true, Completion = 1, Start = Now - (100 * Core.Day) + (20 * i), Last = Now - (100 * Core.Day) + (20 * i) });
+        }
+
+        h.Add(new Interaction { Title = "three", Played = true, Completion = 1, Start = Now - (50 * Core.Day), Last = Now - (50 * Core.Day) });
+        h.Add(new Interaction { Title = "three2", Played = true, Completion = 1, Start = Now - (50 * Core.Day) + 60, Last = Now - (50 * Core.Day) + 60 });
+        Assert.Equal(6, Core.MarkBackfill(h));
+        Assert.True(h.Single(x => x.Title == "nodate").Backfill);
+        Assert.All(h.Where(x => x.Title.StartsWith("bulk", StringComparison.Ordinal)), x => Assert.True(x.Backfill));
+        Assert.False(h.Single(x => x.Title == "real").Backfill);
+        Assert.False(h.Single(x => x.Title == "three").Backfill);                       // 2 titres rapprochés : pas un marquage en masse
+        var nd = h.Single(x => x.Title == "nodate");
+        Assert.Equal(S.RecencyFloor, Sig(nd, TitleKind.Movie), 12);                       // goût ancien, pas tout frais
+    }
+
+    [Fact]
+    public void BackfillMatchesThePrototype()
+    {
+        var g = System.Text.Json.JsonDocument.Parse(System.IO.File.ReadAllText(System.IO.Path.Combine(AppContext.BaseDirectory, "golden.json"))).RootElement;
+        var ds = ParityTests.LoadDataset(g.GetProperty("dataset"));
+        foreach (var h in ds.Users.Values)
+        {
+            var want = h.Values.Select(x => x.Backfill).ToArray();
+            Assert.Contains(true, want.Concat(new[] { true }));
+            foreach (var x in h.Values)
+            {
+                x.Backfill = false;
+            }
+
+            Core.MarkBackfill(h.Values);
+            Assert.Equal(want, h.Values.Select(x => x.Backfill).ToArray());
+        }
+    }
 }

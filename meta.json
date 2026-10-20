@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.5 : plusieurs rangées d'accueil Home Screen Sections sans doublons entre elles (Nouveautés pour toi, jusqu'à trois « Parce que tu as aimé … » autour de titres aimés différents, Films pour toi, Séries pour toi) ; titres montrés sans être ouverts : comptés seulement quand la rangée est vraiment à l'écran du compte connecté, ils descendent puis reviennent avec le temps ; diversité au choix — personnalisée (par défaut, suit la variété de chaque compte), calibrée sur les genres de l'historique (Steck) ou fixe ; goût du moment (derniers titres aimés), en option ; calibrage au choix — modèle de choix appris (logit conditionnel régularisé, une minute), recherche par curseurs, ou automatique (garde la méthode qui se généralise le mieux), avec un avertissement quand l'historique ne suffit pas ; aperçu des rangées par compte ; réglages avancés repliés sur chaque onglet.",
+  "changelog": "1.0.6 : une série pèse selon le temps réellement regardé (durée de chaque épisode), plus seulement le nombre d'épisodes ; un titre marqué « vu » sans date, ou marqué en masse, compte comme un goût ancien au lieu d'être ignoré ou pris pour un choix récent ; les lectures d'anciens fichiers remplacés par Radarr/Sonarr (Playback Reporting) sont rattachées au titre actuel par son nom, ce qui rend sa vraie date de premier lancement ; calibrage : titres commencés sans être adoptés comptés à demi-poids, marquages en masse écartés, nouvelle méthode réseau de neurones (expérimental) comparée aux autres en automatique ; heure de la journée en option (une liste par tranche horaire, servie selon l'heure) ; fuseau horaire réglable.",
   "description": "Recommandations personnelles à la place de celles de Jellyfin.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "name": "Reco+",
@@ -8,7 +8,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-20T00:00:00.0000000Z",
-  "version": "1.0.5.0",
+  "version": "1.0.6.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

@@ -51,6 +51,12 @@ public sealed class Context
 
     /// <summary>Similarité « vus ensemble ».</summary>
     public Dictionary<string, Dictionary<string, double>> Cooc { get; }
+
+    /// <summary>Tranche horaire imposée (0-3) pour le terme « heure de la journée » ; null = celle de Now.</summary>
+    public int? Slot { get; set; }
+
+    /// <summary>Tranche horaire du calcul.</summary>
+    public int CurrentSlot => Slot ?? Recommender.Slot(Ds.HourOf(Now));
 }
 
 /// <summary>Détail d'un score (pour l'aperçu et le diagnostic).</summary>
@@ -126,7 +132,11 @@ public static class Recommender
             Tm = new double[n];
             Re = new double[n];
             Hh = new double[n];
+            Tod = new double[n];
         }
+
+        /// <summary>Proximité aux titres aimés regardés dans la même tranche horaire.</summary>
+        public double[] Tod { get; }
 
         /// <summary>Proximité au profil moyen.</summary>
         public double[] Cen { get; }
@@ -217,6 +227,29 @@ public static class Recommender
                 .Take(w.ShortTermTitles).ToList()
             : new List<KeyValuePair<string, double>>();
         var (stProf, stn) = Profile(shortIds.Select(e => (e.Value, vec[e.Key])), Enumerable.Empty<(double, SparseVector)>());
+
+        // heure de la journée : titres aimés regardés dans la même tranche que maintenant (début ou dernière lecture)
+        var todProf = new Dictionary<string, double>(StringComparer.Ordinal);
+        if (w.WTimeOfDay > 0 && hist is not null)
+        {
+            int slot = ctx.CurrentSlot;
+            var inSlot = new List<(double, SparseVector)>();
+            foreach (var (t, sv) in pos)
+            {
+                if (!vec.TryGetValue(t, out var tv) || !hist.TryGetValue(t, out var x) || x.Backfill)
+                {
+                    continue;
+                }
+
+                double m = (x.Start != 0 && Slot(ctx.Ds.HourOf(x.Start)) == slot ? 0.5 : 0) + (x.Last != 0 && x.Last <= ctx.Now && Slot(ctx.Ds.HourOf(x.Last)) == slot ? 0.5 : 0);
+                if (m > 0)
+                {
+                    inSlot.Add((sv * m, tv));
+                }
+            }
+
+            todProf = Profile(inSlot, Enumerable.Empty<(double, SparseVector)>()).V;
+        }
 
         double tot = pos.Sum(e => e.Value);
         if (tot == 0)
@@ -351,6 +384,7 @@ public static class Recommender
             c.Col[ci] = col / tot;
             c.Neg[ci] = negPen;
             c.St[ci] = st;
+            c.Tod[ci] = todProf.Count > 0 ? v.Dot(todProf) : 0;
             c.Pop[ci] = Math.Log(1 + othersPop.GetValueOrDefault(id)) / Math.Log(1 + maxPop);
             c.Q[ci] = Math.Clamp((Quality(tc, w.Rating, w.RatingPriorVotes) - 6.5) / 2.0, -1.0, 1.0);
             c.Hh[ci] = Household(ctx.Ds, id, user, w.HouseholdPrior);
@@ -366,7 +400,10 @@ public static class Recommender
 
     /// <summary>Goût d'un candidat : seul juge de l'ordre avant les bonus.</summary>
     public static double Taste(Components c, int i, EngineSettings w)
-        => (w.WCentroid * c.Cen[i]) + (w.WMaxSim * c.Ms[i]) + (w.WCollab * c.Col[i]) - (w.WNegative * c.Neg[i]) + (w.WShortTerm * c.St[i]);
+        => (w.WCentroid * c.Cen[i]) + (w.WMaxSim * c.Ms[i]) + (w.WCollab * c.Col[i]) - (w.WNegative * c.Neg[i]) + (w.WShortTerm * c.St[i]) + (w.WTimeOfDay * c.Tod[i]);
+
+    /// <summary>Tranche horaire : 0 nuit (0-6 h), 1 matin (6-12 h), 2 après-midi (12-18 h), 3 soirée (18-24 h).</summary>
+    public static int Slot(int hour) => Math.Clamp(hour, 0, 23) / 6;
 
     /// <summary>Rang de chaque candidat par goût (stable : ordre des candidats en cas d'égalité) et facteur de garde-fou.</summary>
     public static double[] Gate(double[] taste, int gateTop)
@@ -419,11 +456,30 @@ public static class Recommender
         var gate = Gate(taste, w.GateTop);
         double wf = Math.Min(w.WFresh, EngineSettings.FreshCeiling);
         var outp = new Dictionary<string, double>(cands.Count, StringComparer.Ordinal);
+        var feat = new double[ChoiceModel.K];
         for (int ci = 0; ci < cands.Count; ci++)
         {
             double g = gate[ci];
             double tp = Math.Max(taste[ci], 0.0);
             double sc = taste[ci] + (tp * g * ((wf * c.Fr[ci]) + (w.WPopularity * c.Pop[ci]) + (w.WQuality * c.Q[ci]) + (w.WTmdbAgreement * c.Tm[ci]) + (w.WRelease * c.Re[ci]) + (w.WHousehold * c.Hh[ci])));
+            if (w.Neural is { Length: NeuralNet.Size } net && w.WNeural > 0)
+            {
+                // correction apprise (calibrage « réseau de neurones ») sur les 10 ingrédients du score
+                double b = tp * g;
+                var x = feat;
+                x[0] = c.Cen[ci];
+                x[1] = c.Ms[ci];
+                x[2] = c.Col[ci];
+                x[3] = -c.Neg[ci];
+                x[4] = c.St[ci];
+                x[5] = b * c.Fr[ci];
+                x[6] = b * c.Pop[ci];
+                x[7] = b * c.Q[ci];
+                x[8] = b * c.Re[ci];
+                x[9] = b * c.Hh[ci];
+                sc += w.WNeural * NeuralNet.Residual(net, x);
+            }
+
             if (exposure is not null && exposure.TryGetValue(cands[ci], out var ex))
             {
                 sc -= ImpressionPenalty(ex, ctx.Now, w) * Math.Abs(sc);

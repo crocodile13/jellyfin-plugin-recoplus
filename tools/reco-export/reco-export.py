@@ -15,7 +15,9 @@ Contenu exporté :
     favoris avec leurs données de lecture (vu, nombre de lectures, position,
     pourcentage, date de dernière lecture, favori) ;
   * facultatif : historique des sessions (date, élément, durée), sans nom
-    d'appareil ni de client.
+    d'appareil ni de client ; pour un film ou un épisode qui n'est plus dans la
+    bibliothèque (fichier remplacé par Radarr/Sonarr), son nom, pour le rattacher
+    au titre actuel.
 Jamais exportés : noms et identifiants des comptes, adresses, appareils, clé API.
 Aucune écriture dans Jellyfin (requêtes GET uniquement)."""
 from __future__ import annotations
@@ -33,7 +35,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 PAGE = 400
 ITEM_FIELDS = "Genres,Tags,People,Studios,ProviderIds,DateCreated,OfficialRating,RunTimeTicks,ProductionLocations"
 PEOPLE_KEEP = {"Actor": 15, "Director": 5, "Writer": 5, "Creator": 5, "Producer": 3, "Composer": 2}
@@ -186,16 +188,19 @@ def export(api: Api, playback_db: Path | None, log=print) -> tuple[dict, dict]:
         db = sqlite3.connect(uri, uri=True)
         try:
             cols = {r[1] for r in db.execute("PRAGMA table_info(PlaybackActivity)")}
-            need = {"DateCreated", "UserId", "ItemId", "ItemType", "PlayDuration"}
+            need = {"DateCreated", "UserId", "ItemId", "ItemType", "ItemName", "PlayDuration"}
             if not need <= cols:
                 raise SystemExit(f"{playback_db} : table PlaybackActivity inattendue ({sorted(cols)})")
             norm = {k.replace("-", "").lower(): v for k, v in pseudo.items()}
-            for dc, uid, iid, typ, dur in db.execute(
-                    "SELECT DateCreated, UserId, ItemId, ItemType, PlayDuration FROM PlaybackActivity"):
+            known = {i["id"] for i in items} | {e["id"] for e in episodes}
+            for dc, uid, iid, typ, name, dur in db.execute(
+                    "SELECT DateCreated, UserId, ItemId, ItemType, ItemName, PlayDuration FROM PlaybackActivity"):
                 pu = norm.get(str(uid).replace("-", "").lower())
                 if pu:
-                    sessions.append({"at": dc, "user": pu, "id": str(iid).replace("-", ""), "type": typ,
-                                     "secs": dur})
+                    s = {"at": dc, "user": pu, "id": str(iid).replace("-", "").lower(), "type": typ, "secs": dur}
+                    if typ in ("Movie", "Episode") and s["id"] not in known and name:
+                        s["name"] = name          # ancien fichier : le nom permet de retrouver le titre actuel
+                    sessions.append(s)
         finally:
             db.close()
         log(f"  {len(sessions)} sessions de lecture (Playback Reporting)")
