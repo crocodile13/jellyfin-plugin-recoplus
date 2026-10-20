@@ -12,6 +12,54 @@ public class CalibrationTests
     private static Dataset Golden() => ParityTests.LoadDataset(JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "golden.json"))).RootElement.GetProperty("dataset"));
 
     [Fact]
+    public void SnapshotSeesNothingFromTheFuture()
+    {
+        Title T(string id, TitleKind k) => new() { Id = id, Kind = k, Name = id, Genres = new[] { "g" }, Tags = Array.Empty<string>() };
+        var titles = new[] { T("m", TitleKind.Movie), T("s", TitleKind.Series), T("r", TitleKind.Movie), T("f", TitleKind.Movie) }.ToDictionary(t => t.Id);
+        var h = new System.Collections.Generic.Dictionary<string, Interaction>
+        {
+            // film commencé à 100, fini à 300 (favori, revu)
+            ["m"] = new() { Title = "m", Start = 100, Last = 300, Played = true, Completion = 1, Rewatch = 1, Favorite = true },
+            // demandé à 150, jamais regardé
+            ["r"] = new() { Title = "r", Requested = 150 },
+            // demandé à 400 et regardé à 450
+            ["f"] = new() { Title = "f", Requested = 400, Start = 450, Last = 460, Played = true, Completion = 1 },
+            ["s"] = new() { Title = "s", Start = 50, Last = 90, Episodes = 4 },
+        };
+        var ds = new Dataset { Titles = titles, Users = new() { ["u"] = h }, Now = 1000 };
+
+        var at200 = Calibrator.Snapshot(ds, 200)["u"];
+        Assert.False(at200["m"].Played);                    // en cours à 200
+        Assert.Equal(200, at200["m"].Last);
+        Assert.Equal(0, at200["m"].Rewatch);
+        Assert.Equal(150, at200["r"].Requested);           // la demande existe déjà
+        Assert.False(at200.ContainsKey("f"));              // ni demandé ni commencé à 200
+        Assert.Same(h["s"], at200["s"]);                   // rien de postérieur : tel quel
+        Assert.True(h["m"].Played);                         // l'historique d'origine n'est pas touché
+
+        var at420 = Calibrator.Snapshot(ds, 420)["u"];
+        Assert.Equal(400, at420["f"].Requested);           // demandé, pas encore regardé
+        Assert.False(at420["f"].Played);
+        Assert.Equal(0, at420["f"].Start);
+        var at100 = Calibrator.Snapshot(ds, 120)["u"];
+        Assert.False(at100.ContainsKey("r"));
+        Assert.True(at100.ContainsKey("m"));
+    }
+
+    [Fact]
+    public void TitlesWantedBeforeBeingWatchedAreNotRankingCases()
+    {
+        var ds = Golden();
+        var cases = Calibrator.Cases(ds);
+        Assert.NotEmpty(cases);
+        var first = cases[0].Ev;
+        ds.Users[first.User][first.Target].Requested = first.T0 - 10;
+        var after = Calibrator.Cases(ds);
+        Assert.DoesNotContain(after, c => c.Ev.User == first.User && c.Ev.Target == first.Target);
+        Assert.DoesNotContain(Calibrator.Events(ds), e => e.User == first.User && e.Target == first.Target);
+    }
+
+    [Fact]
     public void IndexedScoreEqualsDirectScore()
     {
         var ds = Golden();

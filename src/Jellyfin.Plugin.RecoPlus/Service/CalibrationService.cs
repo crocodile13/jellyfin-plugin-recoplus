@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Jellyfin.Plugin.RecoPlus.Tasks;
 using MediaBrowser.Model.Tasks;
 using Microsoft.Extensions.Logging;
@@ -55,24 +56,25 @@ public sealed class CalibrationService
     {
         if (_cases.N < 0 || DateTime.UtcNow - _cases.At > TimeSpan.FromMinutes(10))
         {
-            _cases = (Calibrator.Cases(_reco.BuildCalibrationDataset()).Count, DateTime.UtcNow);
+            // aucun appel réseau (Seerr : cache seul) : se termine sans attente réelle
+            _cases = (Calibrator.Cases(_reco.BuildCalibrationDatasetAsync().GetAwaiter().GetResult()).Count, DateTime.UtcNow);
         }
 
         return _cases.N;
     }
 
     /// <summary>Corps de la tâche.</summary>
-    public void Run(IProgress<double> progress, CancellationToken ct)
+    public async Task RunAsync(IProgress<double> progress, CancellationToken ct)
     {
         Error = null;
         try
         {
             progress.Report(1);
-            var ds = _reco.BuildCalibrationDataset();
+            var ds = await _reco.BuildCalibrationDatasetAsync(ct).ConfigureAwait(false);
             var cur = Plugin.Instance!.Configuration.Engine;
             Cpu.Threads = Plugin.Instance.Configuration.Threads;
-            Report = Calibrator.Calibrate(ds, cur, new Progress<double>(p => progress.Report(Math.Max(1, p))), ct,
-                method: Plugin.Instance!.Configuration.CalibrationMethod);
+            var method = Plugin.Instance.Configuration.CalibrationMethod;
+            Report = await Task.Run(() => Calibrator.Calibrate(ds, cur, new Progress<double>(p => progress.Report(Math.Max(1, p))), ct, method: method), ct).ConfigureAwait(false);
             ReportAt = DateTime.UtcNow;
             _log.LogInformation("Reco+ : calibrage terminé — {Verdict}", Report.Verdict);
         }

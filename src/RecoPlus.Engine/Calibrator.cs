@@ -124,6 +124,12 @@ public static class Calibrator
 
     private static bool Adopted(Interaction x, TitleKind k) => k == TitleKind.Movie ? x.Played : x.Episodes >= 3;
 
+    /// <summary>
+    /// Titre déjà voulu avant d'être commencé (demandé ou en liste de suivi) : le compte l'avait trouvé seul ; en vrai, il
+    /// n'est pas proposé (déjà connu) mais placé en tête à son arrivée. Ce n'est pas un choix de classement : pas un cas.
+    /// </summary>
+    private static bool WantedBefore(Interaction x) => (x.Requested > 0 && x.Requested < x.Start) || (x.Watchlisted > 0 && x.Watchlisted < x.Start);
+
     /// <summary>Cas d'évaluation (ordre stable : comptes puis dates).</summary>
     public static List<EvalEvent> Events(Dataset ds)
     {
@@ -134,7 +140,7 @@ public static class Calibrator
                 .OrderBy(x => x.Start).ToList();
             for (int i = 0; i < ad.Count; i++)
             {
-                if (i >= MinTrain && ad[i].Start != 0)
+                if (i >= MinTrain && ad[i].Start != 0 && !WantedBefore(ad[i]))
                 {
                     ev.Add(new EvalEvent(u, ad[i].Title, ad[i].Start));
                 }
@@ -144,12 +150,60 @@ public static class Calibrator
         return ev;
     }
 
-    /// <summary>Historique connu juste avant `now`.</summary>
+    /// <summary>
+    /// Historique connu juste avant <paramref name="now"/>, sans rien de postérieur : un titre commencé avant mais
+    /// continué après est vu tel qu'il était (en cours : dernière activité ramenée à <paramref name="now"/>, film pas
+    /// encore fini) ; une demande ou une liste de suivi compte dès sa date, même sans visionnage ; plus tard, elle
+    /// n'existe pas encore. (Favoris et notes n'ont pas de date : gardés tels quels pour un titre déjà commencé.)
+    /// </summary>
     public static Dictionary<string, Dictionary<string, Interaction>> Snapshot(Dataset ds, double now)
-        => ds.Users.ToDictionary(
-            kv => kv.Key,
-            kv => kv.Value.Where(e => e.Value.Backfill || (e.Value.Start != 0 && e.Value.Start < now)).ToDictionary(e => e.Key, e => e.Value, StringComparer.Ordinal),
-            StringComparer.Ordinal);
+    {
+        var res = new Dictionary<string, Dictionary<string, Interaction>>(ds.Users.Count, StringComparer.Ordinal);
+        foreach (var (u, h) in ds.Users)
+        {
+            var m = new Dictionary<string, Interaction>(StringComparer.Ordinal);
+            foreach (var (k, x) in h)
+            {
+                bool started = x.Backfill || (x.Start != 0 && x.Start < now);
+                bool asked = x.Requested > 0 && x.Requested < now, listed = x.Watchlisted > 0 && x.Watchlisted < now;
+                if (!started && !asked && !listed)
+                {
+                    continue;
+                }
+
+                bool ongoing = started && !x.Backfill && x.Last > now;
+                if (started && !ongoing && (x.Requested == 0 || asked) && (x.Watchlisted == 0 || listed))
+                {
+                    m[k] = x; // rien de postérieur : tel quel
+                    continue;
+                }
+
+                var c = x.Copy();
+                if (!started)
+                {
+                    // seulement voulu à cette date : rien du visionnage ni de l'avis qui viendront
+                    (c.Start, c.Last, c.Completion, c.Played, c.Episodes, c.Plays, c.Rewatch, c.Hours) = (0, 0, 0, false, 0, 0, 0, 0);
+                    (c.Favorite, c.FavSeasons, c.FavEpisodes, c.Rating, c.Hidden) = (false, 0, 0, null, false);
+                }
+                else if (ongoing)
+                {
+                    c.Last = now;
+                    if (ds.Titles.TryGetValue(k, out var t) && t.Kind == TitleKind.Movie)
+                    {
+                        (c.Played, c.Completion, c.Rewatch) = (false, 0, 0); // film en cours à cette date
+                    }
+                }
+
+                c.Requested = asked ? x.Requested : 0;
+                c.Watchlisted = listed ? x.Watchlisted : 0;
+                m[k] = c;
+            }
+
+            res[u] = m;
+        }
+
+        return res;
+    }
 
     /// <summary>Évalue un réglage.</summary>
     public static EvalResult Evaluate(Dataset ds, IReadOnlyDictionary<string, SparseVector> vec, IReadOnlyList<EvalEvent> ev,
@@ -247,7 +301,7 @@ public static class Calibrator
             foreach (var x in started)
             {
                 bool adopted = Adopted(x, ds.Titles[x.Title].Kind);
-                if (prior >= MinPrior)
+                if (prior >= MinPrior && !WantedBefore(x))
                 {
                     raw.Add((new EvalEvent(u, x.Title, x.Start), prior, adopted ? 1.0 : StartedWeight));
                 }

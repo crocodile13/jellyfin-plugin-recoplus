@@ -348,6 +348,26 @@ await test('réglages sans effet : grisés, désactivés, avec la raison (une fo
     assert.equal(saved[0].SourcePourToi, 'Mix');
 });
 
+await test('export du jeu de calibrage : téléchargé avec la session, en JSON', async () => {
+    const calls = [];
+    const { w, d } = open(cfg, { '/RecoPlus/Calibration/Export': (o) => { calls.push(o); return '{"format":"reco-plus-calibration-1"}'; } });
+    const made = [];
+    w.URL.createObjectURL = (b) => { made.push(b); return 'blob:x'; };
+    w.URL.revokeObjectURL = () => {};
+    let clicked = null;
+    w.HTMLAnchorElement.prototype.click = function () { clicked = this.getAttribute('download'); };
+    await wait(50);
+    d.getElementById('rpCalExport').click();
+    await wait(50);
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0].type, 'GET');
+    assert.equal(calls[0].dataType, 'text');
+    assert.equal(made.length, 1);
+    assert.equal(made[0].type, 'application/json');
+    assert.match(clicked, /^reco-calibrage-\d{4}-\d{2}-\d{2}\.json$/);
+    assert.match(d.getElementById('rpCalExportState').textContent, /téléchargé/);
+});
+
 await test('fils d\'exécution réglables (0 = automatique)', async () => {
     const { d, saved } = open({ ...cfg, Threads: 6 });
     await wait(50);

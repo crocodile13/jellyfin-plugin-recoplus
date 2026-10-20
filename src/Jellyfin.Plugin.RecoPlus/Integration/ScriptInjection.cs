@@ -10,9 +10,9 @@ using Microsoft.Extensions.Logging;
 namespace Jellyfin.Plugin.RecoPlus.Integration;
 
 /// <summary>
-/// Ajoute la balise du script client (rangée du mode étendu) à index.html au moment de la requête, sans écrire dans
-/// le dossier web (même méthode que Jellyfin Enhanced). Inactif tant que le mode étendu et sa rangée ne sont pas
-/// activés. Toute erreur : la page d'origine est servie telle quelle.
+/// Ajoute la balise du script client (titres des rangées « Parce que … », affichages, titres hors bibliothèque) à
+/// index.html au moment de la requête, sans écrire dans le dossier web (même méthode que Jellyfin Enhanced). Inactif
+/// plugin coupé. Toute erreur : la page d'origine est servie telle quelle.
 /// </summary>
 public sealed class ScriptInjection : IStartupFilter
 {

@@ -135,6 +135,8 @@ Every tab shows the essential settings; advanced ones are folded away. Hover (or
 
 The Calibration tab replays your server's history: every time an account started a new title, **at which rank** was that title in the list computed just before, using only what was known then?
 
+- **Data.** Exactly what the recommendations use: watch history, Seerr requests and watchlists, TMDb vote counts, Jellyfin Enhanced reviews and hidden titles; ignored accounts left out. Nothing is asked from Seerr during a calibration (last snapshot and cache only).
+- **No hindsight.** Each case only sees what existed at that moment: a title started before but finished after is seen in progress, a request counts from its date. A title requested or watchlisted before being watched is not a case: the account found it alone (in real use it is pinned on arrival, not recommended).
 - **Measure.** Rank gain 1/log2(1 + rank) over *all* candidates, not just "in the top 10 or not": far more statistical power from the same history.
 - **Cases.** Every title started (known date, bulk marks excluded) once the account had adopted at least 2; a title started but not adopted (stopped movie, series at 1–2 episodes) counts half. Each case is weighted by how much history the account already had (n/(n+3)), and accounts are balanced (1/√cases) so a heavy viewer does not decide alone.
 - **Methods.**
@@ -144,6 +146,8 @@ The Calibration tab replays your server's history: every time an account started
   - *Automatic* (default): runs all of them and keeps the one that generalises best.
   - The page shows, for each method, whether the history is **sufficient, borderline or insufficient**.
 - **Validation.** Each method is redone on half of the accounts and measured on the other half (two-fold cross-validation by account). A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero) and reaches at least 1%: below that nothing would be visible. A tiny change to a weight (under 0.02 or 3%) is not proposed: it is just noise.
+
+The calibration data can be exported, pseudonymised (accounts renamed u01, u02…, no names or IDs), to evaluate it elsewhere: **Export the calibration data** button.
 
 Nothing is applied until you click **Apply**; the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task, on half the CPU cores by default ("Threads" setting, which also sets how many accounts are computed at the same time).
 

@@ -59,7 +59,7 @@ public sealed class CalibrationTask : IScheduledTask
 
     /// <inheritdoc />
     public Task ExecuteAsync(IProgress<double> progress, CancellationToken cancellationToken)
-        => Task.Run(() => _calib.Run(progress, cancellationToken), cancellationToken);
+        => _calib.RunAsync(progress, cancellationToken);
 
     /// <inheritdoc />
     public IEnumerable<TaskTriggerInfo> GetDefaultTriggers() => Array.Empty<TaskTriggerInfo>();

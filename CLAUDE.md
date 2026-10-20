@@ -39,6 +39,9 @@ partielle en comparant les diagnostics avant/après le changement (seuls les nou
 - `TreatWarningsAsErrors` : un avertissement casse la CI.
 - Dans l'espace de noms `Jellyfin.Plugin.RecoPlus`, `RecoPlus.Engine.X` se résout mal (CS0234) : utiliser
   `using RecoPlus.Engine;`.
+- Calibrage : mêmes données que le calcul (`RecoService.Assemble`, Seerr en cache seulement) ; `Calibrator.Snapshot` ne
+  laisse rien passer du futur. Le bouton « Exporter le jeu de calibrage » produit le format lu par
+  `ParityTests.LoadDataset` (banc d'essai hors serveur).
 - Le moteur reste déterministe (mêmes entrées → mêmes listes) ; `golden.json` vérifie la parité au 1e-9.
 - Calcul parallèle : un `Context` par fil (`ctx.Fork()`, seule la tranche horaire est propre au fil) ; rien de
   modifiable partagé entre comptes ; les appels Jellyfin/HSS se font avant la boucle parallèle.

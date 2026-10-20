@@ -215,7 +215,7 @@ public sealed class RecoController : ControllerBase
         try
         {
             var id = await _seerr.Client().RequestAsync(r.SeerrUserId, body.MediaType, body.TmdbId, ct).ConfigureAwait(false);
-            r.Extended = r.Extended.Where(e => !(e.MediaType == body.MediaType && e.TmdbId == body.TmdbId)).ToList();
+            _reco.DropExtended(me.Value, body.MediaType, body.TmdbId);
             return Ok(new { requestId = id, message = "demandé" });
         }
         catch (SeerrException ex)
@@ -473,6 +473,22 @@ public sealed class RecoController : ControllerBase
                 return new { level, message };
             }),
         });
+    }
+
+    /// <summary>
+    /// Jeu de calibrage pseudonymisé (comptes u01, u02…), pour l'évaluer hors du serveur : exactement les données du
+    /// calibrage. Lecture seule ; Seerr n'est pas interrogé (dernier relevé et cache).
+    /// </summary>
+    [HttpGet("Calibration/Export")]
+    [Authorize(Policy = Policies.RequiresElevation)]
+    public async Task<ActionResult> ExportCalibration(CancellationToken ct)
+    {
+        var ds = await _reco.BuildCalibrationDatasetAsync(ct).ConfigureAwait(false);
+        var ms = new MemoryStream();
+        Data.CalibrationExport.Write(ds, ms);
+        ms.Position = 0;
+        Response.Headers.CacheControl = "no-store";
+        return File(ms, "application/json", "reco-calibrage-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmm", System.Globalization.CultureInfo.InvariantCulture) + ".json");
     }
 
     /// <summary>Interrompt le calibrage.</summary>
