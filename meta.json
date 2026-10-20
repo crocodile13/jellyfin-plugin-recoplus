@@ -3,6 +3,7 @@
   "changelog": "1.0.6 : une série pèse selon le temps réellement regardé (durée de chaque épisode), plus seulement le nombre d'épisodes ; un titre marqué « vu » sans date, ou marqué en masse, compte comme un goût ancien au lieu d'être ignoré ou pris pour un choix récent ; les lectures d'anciens fichiers remplacés par Radarr/Sonarr (Playback Reporting) sont rattachées au titre actuel par son nom, ce qui rend sa vraie date de premier lancement ; calibrage : titres commencés sans être adoptés comptés à demi-poids, marquages en masse écartés, nouvelle méthode réseau de neurones (expérimental) comparée aux autres en automatique ; heure de la journée en option (une liste par tranche horaire, servie selon l'heure) ; fuseau horaire réglable.",
   "description": "Recommandations personnelles à la place de celles de Jellyfin.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
+  "imagePath": "thumb.png",
   "name": "Reco+",
   "overview": "Recommandations personnelles (historique complet, abandons, sagas, demandes Seerr, mode étendu).",
   "owner": "crocodile13",

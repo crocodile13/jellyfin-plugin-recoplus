@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-labelledby="t">
+  <title id="t">Reco+</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d2342"/>
+      <stop offset="1" stop-color="#0f1324"/>
+    </linearGradient>
+    <linearGradient id="front" x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#ff5e62"/>
+    </linearGradient>
+    <linearGradient id="left" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3fe0c5"/>
+      <stop offset="1" stop-color="#1e9e9a"/>
+    </linearGradient>
+    <linearGradient id="right" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a497ff"/>
+      <stop offset="1" stop-color="#6a5ae0"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- affiches en éventail : la rangée de recommandations -->
+  <g filter="url(#shadow)">
+    <rect x="186" y="118" width="164" height="240" rx="26" fill="url(#left)" transform="rotate(-16 268 400)"/>
+    <rect x="162" y="118" width="164" height="240" rx="26" fill="url(#right)" transform="rotate(16 244 400)"/>
+    <rect x="174" y="104" width="164" height="252" rx="28" fill="url(#front)"/>
+  </g>
+  <!-- le « + » -->
+  <g fill="#fff">
+    <rect x="235" y="176" width="42" height="132" rx="21"/>
+    <rect x="190" y="221" width="132" height="42" rx="21"/>
+  </g>
+  <!-- éclat -->
+  <path fill="#fff" d="M368 92 C372 118 380 126 406 130 C380 134 372 142 368 168 C364 142 356 134 330 130 C356 126 364 118 368 92 Z"/>
+  <circle cx="404" cy="190" r="9" fill="#fff" opacity="0.85"/>
+  <!-- rangée de points : la suite de la liste -->
+  <g fill="#ffffff" opacity="0.55">
+    <circle cx="210" cy="420" r="11"/>
+    <circle cx="256" cy="420" r="11"/>
+    <circle cx="302" cy="420" r="11"/>
+  </g>
+</svg>

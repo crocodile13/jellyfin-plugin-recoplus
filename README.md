@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo.svg" width="144" alt="Reco+ logo"></p>
+
 # Reco+ — personal recommendations for Jellyfin
 
 *[Version française](README.fr.md)*
