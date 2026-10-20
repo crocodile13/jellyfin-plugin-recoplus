@@ -398,6 +398,24 @@ public static class Recommender
         return c;
     }
 
+    /// <summary>
+    /// Réglages pour comparer des titres de la bibliothèque à des titres hors bibliothèque (mélange libre) : seulement les
+    /// ingrédients que les deux ont (profil, titre aimé le plus proche, abandons, goût du moment, heure, qualité, sortie
+    /// récente, affichages). Vus ensemble, nouveauté, popularité, foyer et accord TMDb n'existent que d'un côté et
+    /// fausseraient la comparaison ; la correction apprise s'appuie sur eux et est donc mise de côté aussi.
+    /// </summary>
+    public static EngineSettings Shared(EngineSettings w)
+    {
+        var r = w.Clone();
+        r.WCollab = 0;
+        r.WFresh = 0;
+        r.WPopularity = 0;
+        r.WHousehold = 0;
+        r.WTmdbAgreement = 0;
+        r.Neural = null;
+        return r.Sanitized();
+    }
+
     /// <summary>Goût d'un candidat : seul juge de l'ordre avant les bonus.</summary>
     public static double Taste(Components c, int i, EngineSettings w)
         => (w.WCentroid * c.Cen[i]) + (w.WMaxSim * c.Ms[i]) + (w.WCollab * c.Col[i]) - (w.WNegative * c.Neg[i]) + (w.WShortTerm * c.St[i]) + (w.WTimeOfDay * c.Tod[i]);

@@ -46,16 +46,18 @@ function page({ hssCards = 0, data, je = null, io = null, jeWait = 0, shape = 'P
     };
     if (hssCards) { fill(hssCards); }
     w.eval(SCRIPT);
-    const row = () => Array.from(sections.querySelectorAll('.RecoPlusPourToi .itemsContainer > *')).map((c) => (c.classList.contains('recoplus-ext') ? 'E:' + (c.dataset.tmdb || c.textContent.split('Ext ')[1]?.split(/\D/)[0]) : 'L'));
+    const row = () => Array.from(sections.querySelectorAll('.RecoPlusPourToi .itemsContainer > *')).map((c) => (c.classList.contains('recoplus-ext') ? 'E:' + (c.getAttribute('data-rp-id') || '').split(':').pop() : 'L'));
     return { w, sections, calls, fill, row };
 }
 
-function jeStub({ active = true, userFound = true, status = {} } = {}) {
+// fail : 'null' (fiche introuvable, comme JE après un 403) ou 'reject' (erreur remontée), pour chaque titre listé
+function jeStub({ active = true, userFound = true, status = {}, fail = { 1003: 'null' } } = {}) {
+    const answer = (id, d) => (fail[id] === 'reject' ? Promise.reject(new Error('HTTP 403')) : Promise.resolve(fail[id] === 'null' ? null : d));
     return (w) => ({
         jellyseerrAPI: {
             checkUserStatus: () => Promise.resolve({ active, userFound }),
-            fetchMovieDetails: (id) => Promise.resolve(id === 1003 ? null : { id, title: 'M' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }),
-            fetchTvShowDetails: (id) => Promise.resolve({ id, name: 'T' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }),
+            fetchMovieDetails: (id) => answer(id, { id, title: 'M' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }),
+            fetchTvShowDetails: (id) => answer(id, { id, name: 'T' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }),
         },
         jellyseerrUI: {
             created: [],
@@ -88,8 +90,11 @@ await test('positions : un hors bibliothèque toutes les 3 cartes, après les é
 await test('HSS + Jellyfin Enhanced : cartes JE mélangées, titres demandés/disponibles écartés', async () => {
     const p = page({ hssCards: 10, data: base, je: jeStub({ status: { 1001: 2, 1004: 5 } }) });
     await wait(700);
-    // 1001 (en attente) et 1004 (disponible) écartés, 1003 sans fiche écarté → 1000, 1002, 1005, 1006, 1007
-    assert.deepEqual(p.row(), ['L', 'L', 'E:1000', 'L', 'L', 'E:1002', 'L', 'L', 'E:1005', 'L', 'L', 'E:1006', 'L', 'L', 'E:1007']);
+    // 1001 (en attente) et 1004 (disponible) écartés ; 1003 sans fiche JE gardé (carte Reco+) → 1000, 1002, 1003, 1005, 1006
+    assert.deepEqual(p.row(), ['L', 'L', 'E:1000', 'L', 'L', 'E:1002', 'L', 'L', 'E:1003', 'L', 'L', 'E:1005', 'L', 'L', 'E:1006']);
+    const miss = p.sections.querySelector('[data-rp-id="tmdb:movie:1003"]');
+    assert.ok(miss.classList.contains('recoplus-jemiss') && !miss.classList.contains('recoplus-own'));
+    assert.ok(miss.querySelector('button'), 'bouton Demander de Reco+');
     const created = p.w.JellyfinEnhanced.jellyseerrUI.created;
     assert.equal(created[0].item.mediaType, 'movie');
     assert.equal(created.find((c) => c.item.id === 1002).item.mediaType, 'tv');
@@ -299,6 +304,20 @@ await test('Jellyfin Enhanced attendu quelques instants avant de se rabattre sur
     await wait(1500);
     assert.equal(p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-own').length, 0);
     assert.ok(p.sections.querySelectorAll('.RecoPlusPourToi .jellyseerr-card').length > 0);
+});
+
+await test('Jellyfin Enhanced refuse toutes les fiches Seerr (403) : cartes Reco+ à leur place, sans boucle', async () => {
+    const fail = Object.fromEntries(ext(8).map((x, i) => [x.TmdbId, i % 2 ? 'reject' : 'null']));
+    const items = ext(8).map((it, i) => ({ ...it, After: i < 2 ? 1 : 40 }));
+    const p = page({ hssCards: 6, data: { ...base, mixMode: 'score', items }, je: jeStub({ fail }) });
+    await wait(700);
+    assert.deepEqual(p.row(), ['L', 'E:1000', 'E:1001', 'L', 'L', 'L', 'L', 'L']);
+    assert.equal(p.w.JellyfinEnhanced.jellyseerrUI.created.length, 0);
+    const before = p.sections.querySelector('.recoplus-ext');
+    p.sections.appendChild(p.w.document.createElement('div'));
+    await wait(700);
+    assert.equal(p.sections.querySelector('.recoplus-ext'), before, 'cartes gardées : pas de remplacement en boucle');
+    assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 2);
 });
 
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');

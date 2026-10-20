@@ -99,6 +99,47 @@ public class EngineTests
     }
 
     [Fact]
+    public void SharedSettingsCompareLibraryAndExternalTitlesFairly()
+    {
+        // « lib » et « ext » ont le même contenu ; « lib » est en plus neuf, vu par d'autres et vu avec un titre aimé :
+        // des avantages qu'un titre hors bibliothèque ne peut pas avoir.
+        var titles = new Dictionary<string, Title>(StringComparer.Ordinal);
+        for (int i = 0; i < 30; i++)
+        {
+            titles[$"f{i}"] = T($"f{i}", TitleKind.Movie, new[] { i % 2 == 0 ? "Western" : "Polar", "Histoire" });
+        }
+
+        titles["a"] = T("a", TitleKind.Movie, new[] { "Drame", "Guerre" });
+        titles["lib"] = T("lib", TitleKind.Movie, new[] { "Drame", "Guerre" }, added: Now - 3600);
+        titles["ext"] = T("ext", TitleKind.Movie, new[] { "Drame", "Guerre" });
+        Interaction Seen(string t) => new() { Title = t, Played = true, Completion = 1, Last = Now - Core.Day, Start = Now - Core.Day };
+        var users = new Dictionary<string, Dictionary<string, Interaction>> { ["u"] = new(StringComparer.Ordinal) { ["a"] = Seen("a") } };
+        for (int k = 0; k < 4; k++)
+        {
+            users[$"o{k}"] = new(StringComparer.Ordinal) { ["a"] = Seen("a"), ["lib"] = Seen("lib") };
+        }
+
+        var ds = new Dataset { Titles = titles, Users = users, Now = Now };
+        ds.LinkCollections();
+        var s = new EngineSettings { GateTop = 60, Neural = new double[NeuralNet.Size] };
+        var vec = Core.BuildVectors(titles, s);
+        var cands = new List<string> { "lib", "ext" };
+        var agree = new Dictionary<string, double> { ["ext"] = 1.0 };
+
+        var all = Recommender.Score(new Context(ds, Now, ds.Users, s), vec, "u", cands, s, agree);
+        Assert.True(all["lib"] > all["ext"] + 1e-6, "score complet : les bonus propres à la bibliothèque l'emportent");
+
+        var shared = Recommender.Shared(s);
+        var fair = Recommender.Score(new Context(ds, Now, ds.Users, shared), vec, "u", cands, shared, agree);
+        Assert.Equal(fair["lib"], fair["ext"], 9);
+        Assert.True(fair["ext"] > 0);
+        Assert.Equal((0.0, 0.0, 0.0, 0.0, 0.0), (shared.WCollab, shared.WFresh, shared.WPopularity, shared.WHousehold, shared.WTmdbAgreement));
+        Assert.Null(shared.Neural);
+        Assert.Equal((s.WCentroid, s.WMaxSim, s.WQuality, s.WRelease, s.WImpression), (shared.WCentroid, shared.WMaxSim, shared.WQuality, shared.WRelease, shared.WImpression));
+        Assert.NotNull(s.Neural);                                               // l'original n'est pas touché
+    }
+
+    [Fact]
     public void SagaProposesFirstUnseenVolumeOnce()
     {
         var titles = new Dictionary<string, Title>(StringComparer.Ordinal);
