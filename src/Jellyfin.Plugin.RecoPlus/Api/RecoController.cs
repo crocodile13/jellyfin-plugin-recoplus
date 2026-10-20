@@ -340,7 +340,14 @@ public sealed class RecoController : ControllerBase
     [Authorize(Policy = Policies.RequiresElevation)]
     public async Task<ActionResult> TestSeerr([FromBody] SeerrTestBody body, CancellationToken ct)
     {
-        var url = string.IsNullOrWhiteSpace(body.Url) ? Plugin.Instance!.Configuration.SeerrUrl : body.Url.Trim();
+        var saved = Plugin.Instance!.Configuration.SeerrUrl;
+        var url = string.IsNullOrWhiteSpace(body.Url) ? saved : body.Url.Trim();
+        // la clé enregistrée ne part que vers l'URL enregistrée : un secret n'est jamais envoyé à une adresse saisie
+        if (string.IsNullOrWhiteSpace(body.ApiKey) && !SameUrl(url, saved))
+        {
+            return Ok(new { ok = false, message = "nouvelle URL : saisissez aussi la clé (la clé enregistrée n'est envoyée qu'à l'URL enregistrée)" });
+        }
+
         var key = string.IsNullOrWhiteSpace(body.ApiKey) ? _secrets.Get(SecretStore.SeerrApiKey) : body.ApiKey.Trim();
         if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(key))
         {
@@ -373,7 +380,24 @@ public sealed class RecoController : ControllerBase
     [HttpPost("TestWebhook")]
     [Authorize(Policy = Policies.RequiresElevation)]
     public async Task<ActionResult> TestWebhook([FromBody] WebhookTestBody body)
-        => Ok(new { message = await _notifier.SendWebhookAsync("test", "Notification de test de Reco+.", body.Kind, body.Url, body.Token).ConfigureAwait(false) });
+    {
+        // le jeton enregistré ne part que vers l'URL enregistrée
+        if (string.IsNullOrWhiteSpace(body.Token) && !string.IsNullOrWhiteSpace(body.Url) && _secrets.Get(SecretStore.WebhookToken) is not null
+            && !SameUrl(body.Url, _secrets.Get(SecretStore.WebhookUrl)))
+        {
+            return Ok(new { message = "nouvelle URL : saisissez aussi le jeton (le jeton enregistré n'est envoyé qu'à l'URL enregistrée)" });
+        }
+
+        return Ok(new { message = await _notifier.SendWebhookAsync("test", "Notification de test de Reco+.", body.Kind, body.Url, body.Token).ConfigureAwait(false) });
+    }
+
+    /// <summary>Même adresse (casse de l'hôte, barre finale et espaces ignorés).</summary>
+    internal static bool SameUrl(string? a, string? b)
+    {
+        static string? Norm(string? u)
+            => Uri.TryCreate(u?.Trim().TrimEnd('/'), UriKind.Absolute, out var x) ? x.GetLeftPart(UriPartial.Path).TrimEnd('/').ToLowerInvariant() : null;
+        return Norm(a) is { } na && na == Norm(b);
+    }
 
     /// <summary>Lance le calibrage.</summary>
     [HttpPost("Calibration/Start")]

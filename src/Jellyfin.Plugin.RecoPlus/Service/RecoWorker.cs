@@ -165,7 +165,15 @@ public sealed class RecoWorker : BackgroundService
                     if (due <= now && _dueUsers.TryRemove(u, out _))
                     {
                         _lastUserRun[u] = DateTime.UtcNow;
-                        await _reco.ComputeAsync(u, stoppingToken).ConfigureAwait(false);
+                        try
+                        {
+                            await _reco.ComputeAsync(u, stoppingToken).ConfigureAwait(false);
+                        }
+                        catch (Exception ex) when (!stoppingToken.IsCancellationRequested)
+                        {
+                            // jamais d'arrêt du planificateur pour un calcul raté : l'erreur est dans l'état du moteur
+                            _log.LogError(ex, "Reco+ : échec du recalcul d'un compte");
+                        }
                     }
                 }
             }

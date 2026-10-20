@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.13 : recalculs plus sobres — plus de recalcul nocturne par défaut (tâche « Recalcul des recommandations » sans déclencheur), ni au démarrage (seuls les comptes sans liste sont calculés, un par un ; tous d'un coup seulement s'il n'y a aucune liste), ni à l'enregistrement des réglages, ni à l'application d'un calibrage (bouton « Recalculer maintenant », sinon chaque compte à sa prochaine activité) ; un compte est recalculé une fois son activité calmée, chaque action repoussant le délai, et au plus une fois toutes les 15 minutes (nouveau réglage) ; les ajouts à la bibliothèque relancent un recalcul complet au plus une fois par heure.",
+  "changelog": "1.0.14 : fiabilité et optimisations — un délai dépassé chez Seerr ne fait plus échouer le calcul ni ne coupe les recalculs automatiques ; « Plus comme ceci » fonctionne dès le démarrage (vecteurs construits à la demande) ; appels Seerr en parallèle (4 à la fois) au lieu d'un par un ; fiches introuvables mémorisées (404 : 7 jours, autre échec : 1 h) au lieu d'être redemandées à chaque calcul ; listes TMDb non mises en cache si Seerr ne répond pas ; caches écrits seulement s'ils ont changé (listes recalculées compte par compte : au plus toutes les 5 min et à l'arrêt) ; droits d'accès lus en identifiants seulement ; suggestions : seule la page demandée est relue ; fuseau horaire résolu une fois ; résumés des titres Seerr plus stockés ni envoyés. Sécurité : la clé Seerr et le jeton du webhook enregistrés ne sont envoyés qu'à l'URL enregistrée (boutons Tester).",
   "description": "Recommandations personnelles à la place de celles de Jellyfin.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-20T00:00:00.0000000Z",
-  "version": "1.0.13.0",
+  "version": "1.0.14.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

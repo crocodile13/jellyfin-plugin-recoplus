@@ -55,8 +55,6 @@ public sealed class SeerrDetails
     /// <summary>Image de fond TMDb (cartes en paysage).</summary>
     public string? BackdropPath { get; init; }
 
-    public string? Overview { get; init; }
-
     public List<string> Genres { get; init; } = new();
 
     public List<string> Keywords { get; init; } = new();
@@ -332,7 +330,6 @@ public sealed class SeerrClient
             Vote = Dbl(d, "voteAverage"),
             PosterPath = Str(d, "posterPath"),
             BackdropPath = Str(d, "backdropPath") is { Length: > 0 } bp ? bp : null,
-            Overview = Str(d, "overview"),
             Genres = Arr(d, "genres").Select(g => Str(g, "name")).Where(n => n.Length > 0).ToList(),
             Keywords = Arr(d, "keywords").Select(g => Str(g, "name")).Where(n => n.Length > 0).ToList(),
             Studios = (movie ? Arr(d, "productionCompanies") : Arr(d, "networks")).Select(g => Str(g, "name")).Where(n => n.Length > 0).ToList(),
