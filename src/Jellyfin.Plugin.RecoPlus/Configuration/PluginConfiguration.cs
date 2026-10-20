@@ -299,6 +299,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// </summary>
     public int ExtendedMinFree { get; set; }
 
+    /// <summary>Mélange libre : titres hors bibliothèque au plus dans la rangée (hors places découverte) ; 0 = aucune limite.</summary>
+    public int ExtendedMaxFree { get; set; }
+
     /// <summary>Titre de la rangée du mode étendu.</summary>
     public string ExtendedTitle { get; set; } = "À découvrir pour toi";
 

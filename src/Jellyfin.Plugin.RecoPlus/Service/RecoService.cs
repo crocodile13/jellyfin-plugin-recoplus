@@ -754,6 +754,10 @@ public sealed class RecoService : IDisposable
                     var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), Recommender.Shared(s), exposure: expo);
                     var jointNoisy = Exploration.Noisy(joint, noise, noiseSeed);   // même bruit pour la place des titres hors bibliothèque
                     var places = HomeRows.FreePlaces(shown.Select(x => joint[x]).ToList(), recs.Select(p => jointNoisy[p.Id]).ToList(), Math.Clamp(cfg.ExtendedMinFree, 0, 20));
+                    if (cfg.ExtendedMaxFree > 0)
+                    {
+                        places = HomeRows.CapPlaces(places, shown.Count, Math.Min(cfg.ExtendedMaxFree, 60));
+                    }
 
                     // places « découverte » : les mieux notés qui n'ont pas trouvé de place d'eux-mêmes ; note fiable
                     // (moyenne bayésienne) et votes minimum des pépites, sinon un 9,2 sur 4 votes passe devant tout

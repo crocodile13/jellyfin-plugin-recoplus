@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.20.0",
+        "changelog": "1.0.20 : mélange libre — la rangée « Pour toi » garde sa taille : chaque titre hors bibliothèque montré prend la place du titre de la bibliothèque le moins bien classé (la rangée s'allongeait d'autant, jusqu'à 60 cartes) ; nouveau réglage « titres hors bibliothèque au maximum » (0 = aucune limite, par défaut).",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.19.0",
         "changelog": "1.0.19 : recommander, c'est faire découvrir — un titre noté (avis, pouce), en favori, en liste de suivi ou demandé n'est plus proposé (il restait en tête indéfiniment) ; il compte toujours pour les goûts (réglage « Proposer aussi ce que le compte a déjà marqué », coupé par défaut). Une rangée « Parce que tu as aimé X » ne contient plus X. Titres hors bibliothèque : au moins 50 votes TMDb toutes sources (réglable ; courts métrages, avant-premières et titres confidentiels écartés) et titres pas encore sortis écartés.",
         "targetAbi": "12.2.0.0",

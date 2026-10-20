@@ -256,7 +256,8 @@
     }
 
     // Ordre final du mélange libre : un titre hors bibliothèque classé derrière n titres de la bibliothèque vient juste
-    // après le n-ième ; classé derrière toute la rangée, il n'est pas montré (c'est le classement, rien de plus).
+    // après le n-ième ; classé derrière toute la rangée, il n'est pas montré (c'est le classement, rien de plus). La
+    // rangée garde sa taille : chaque titre hors bibliothèque montré prend la place du titre le moins bien classé.
     function freeOrder(lib, ext, skip) {
         skip = Math.max(0, skip | 0);
         var byAfter = {};
@@ -270,7 +271,7 @@
             if (i >= skip) { (byAfter[i - skip] || []).forEach(function (c) { seq.push(c); }); }
             seq.push(l);
         });
-        return seq;
+        return seq.slice(0, lib.length);
     }
 
     function mix(container, d) {
@@ -296,6 +297,7 @@
             if (d.mixMode === 'score') {
                 // libre : chaque titre après les `After` premiers titres de la bibliothèque (demandes en tête exclues)
                 var seq = freeOrder(lib, ext, d.skip);
+                lib.forEach(function (l) { if (seq.indexOf(l) < 0) { l.remove(); } });   // poussés hors de la rangée
                 seq.forEach(function (n) { container.appendChild(n); });
                 return;
             }

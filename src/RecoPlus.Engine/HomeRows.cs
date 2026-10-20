@@ -179,6 +179,25 @@ public static class HomeRows
     }
 
     /// <summary>
+    /// Au plus <paramref name="max"/> titres hors bibliothèque dans la rangée : les mieux classés (ordre des indices)
+    /// gardent leur place, les autres passent derrière la rangée. Garde la bibliothèque présente même quand
+    /// l'exploration trouve beaucoup de titres mieux classés.
+    /// </summary>
+    public static int[] CapPlaces(int[] after, int libCount, int max)
+    {
+        int kept = 0;
+        for (int i = 0; i < after.Length; i++)
+        {
+            if (after[i] >= 0 && after[i] < libCount && kept++ >= Math.Max(0, max))
+            {
+                after[i] = libCount;
+            }
+        }
+
+        return after;
+    }
+
+    /// <summary>
     /// Place de force jusqu'à <paramref name="count"/> titres hors bibliothèque qui n'ont pas de place (place ≥
     /// <paramref name="libCount"/>), pris dans l'ordre <paramref name="order"/>, répartis régulièrement dans la rangée.
     /// </summary>
