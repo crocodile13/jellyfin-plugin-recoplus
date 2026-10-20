@@ -42,13 +42,20 @@ public sealed class SeerrService
 {
     private static readonly TimeSpan DetailsTtl = TimeSpan.FromDays(14);
     private static readonly TimeSpan RelatedTtl = TimeSpan.FromDays(3);
+
+    // fiche introuvable (404) : pas redemandée avant 7 jours ; autre échec (délai, erreur de Seerr) : avant 1 heure
+    private static readonly TimeSpan MissingTtl = TimeSpan.FromDays(7);
+    private static readonly TimeSpan FailedTtl = TimeSpan.FromHours(1);
     private readonly IHttpClientFactory _http;
     private readonly SecretStore _secrets;
     private readonly ILogger<SeerrService> _log;
     private readonly ConcurrentDictionary<string, SeerrDetails> _details = new(StringComparer.Ordinal);
     private readonly ConcurrentDictionary<string, (DateTime At, List<SeerrResult> Items)> _related = new(StringComparer.Ordinal);
+    private readonly ConcurrentDictionary<string, DateTime> _failed = new(StringComparer.Ordinal);   // fiche → réessai possible après
     private readonly SemaphoreSlim _throttle = new(4);
-    private bool _loaded;
+    private readonly object _loadLock = new();
+    private volatile bool _loaded;
+    private int _dirty;
 
     public SeerrService(IHttpClientFactory http, SecretStore secrets, ILogger<SeerrService> log)
     {
@@ -161,30 +168,61 @@ public sealed class SeerrService
             return;
         }
 
-        _loaded = true;
-        try
+        lock (_loadLock)
         {
-            var f = Path.Combine(CacheDir, "fiches.json");
-            if (File.Exists(f))
+            if (_loaded)
             {
-                foreach (var d in JsonSerializer.Deserialize<List<SeerrDetails>>(File.ReadAllText(f)) ?? new())
+                return;
+            }
+
+            try
+            {
+                var f = Path.Combine(CacheDir, "fiches.json");
+                if (File.Exists(f))
                 {
-                    if (DateTime.UtcNow - d.FetchedAt < DetailsTtl)
+                    foreach (var d in JsonSerializer.Deserialize<List<SeerrDetails>>(File.ReadAllText(f)) ?? new())
                     {
-                        _details[d.MediaType + ":" + d.TmdbId] = d;
+                        if (DateTime.UtcNow - d.FetchedAt < DetailsTtl)
+                        {
+                            _details[d.MediaType + ":" + d.TmdbId] = d;
+                        }
                     }
                 }
             }
-        }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
-        {
-            _log.LogWarning("Reco+ : cache des fiches Seerr illisible, repart de zéro");
+            catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
+            {
+                _log.LogWarning("Reco+ : cache des fiches Seerr illisible, repart de zéro");
+            }
+
+            _loaded = true;
         }
     }
 
-    /// <summary>Sauvegarde le cache des fiches.</summary>
+    /// <summary>Sauvegarde le cache des fiches, seulement s'il a changé (fiches expirées retirées au passage).</summary>
     public void SaveCache()
     {
+        var now = DateTime.UtcNow;
+        foreach (var (k, d) in _details)
+        {
+            if (now - d.FetchedAt >= DetailsTtl && _details.TryRemove(k, out _))
+            {
+                Interlocked.Exchange(ref _dirty, 1);
+            }
+        }
+
+        foreach (var (k, until) in _failed)
+        {
+            if (until <= now)
+            {
+                _failed.TryRemove(k, out _);
+            }
+        }
+
+        if (Interlocked.Exchange(ref _dirty, 0) == 0)
+        {
+            return;
+        }
+
         try
         {
             Directory.CreateDirectory(CacheDir);
@@ -194,9 +232,14 @@ public sealed class SeerrService
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
+            Interlocked.Exchange(ref _dirty, 1);
             _log.LogWarning(ex, "Reco+ : écriture du cache Seerr impossible");
         }
     }
+
+    // délai dépassé chez Seerr (HttpClient) : un échec comme un autre, sauf si c'est le calcul qui est annulé
+    private static bool Transient(Exception ex, CancellationToken ct)
+        => ex is SeerrException or HttpRequestException or JsonException || (ex is OperationCanceledException && !ct.IsCancellationRequested);
 
     /// <summary>Fiche déjà en cache (sans appel réseau), ou null.</summary>
     public SeerrDetails? CachedDetails(string mediaType, int tmdbId)
@@ -216,15 +259,23 @@ public sealed class SeerrService
             return d;
         }
 
+        if (_failed.TryGetValue(key, out var until) && until > DateTime.UtcNow)
+        {
+            return d; // échec récent : pas de nouvel appel (fiche en cache sans votes, ou rien)
+        }
+
         await _throttle.WaitAsync(ct).ConfigureAwait(false);
         try
         {
             d = await cl.DetailsAsync(mediaType, tmdbId, Plugin.Instance!.Configuration.SeerrLanguage, ct).ConfigureAwait(false);
             _details[key] = d;
+            _failed.TryRemove(key, out _);
+            Interlocked.Exchange(ref _dirty, 1);
             return d;
         }
-        catch (Exception ex) when (ex is SeerrException or HttpRequestException or JsonException)
+        catch (Exception ex) when (Transient(ex, ct))
         {
+            _failed[key] = DateTime.UtcNow + (ex is SeerrException { Status: System.Net.HttpStatusCode.NotFound } ? MissingTtl : FailedTtl);
             _log.LogDebug("Reco+ : fiche {Key} indisponible ({Msg})", key, ex.Message);
             return null;
         }
@@ -245,6 +296,7 @@ public sealed class SeerrService
         }
 
         var all = new List<SeerrResult>();
+        bool anyOk = false;
         foreach (var rel in new[] { "recommendations", "similar" })
         {
             for (int page = 1; page <= pages; page++)
@@ -255,9 +307,10 @@ public sealed class SeerrService
                 {
                     var items = await cl.RelatedAsync(mediaType, tmdbId, rel, Plugin.Instance!.Configuration.SeerrLanguage, page, ct).ConfigureAwait(false);
                     got = items.Count;
+                    anyOk = true;
                     all.AddRange(items);
                 }
-                catch (Exception ex) when (ex is SeerrException or HttpRequestException or JsonException)
+                catch (Exception ex) when (Transient(ex, ct))
                 {
                     _log.LogDebug("Reco+ : {Rel} de {Key} (page {Page}) indisponible ({Msg})", rel, key, page, ex.Message);
                 }
@@ -273,7 +326,12 @@ public sealed class SeerrService
             }
         }
 
-        _related[key] = (DateTime.UtcNow, all);
+        // tout a échoué (Seerr injoignable) : rien en cache, on réessaiera au prochain calcul
+        if (anyOk)
+        {
+            _related[key] = (DateTime.UtcNow, all);
+        }
+
         return all;
     }
 }

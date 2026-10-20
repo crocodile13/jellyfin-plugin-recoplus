@@ -13,6 +13,7 @@ using MediaBrowser.Model.Querying;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Integration;
 
@@ -116,19 +117,25 @@ public sealed class SuggestionsFilter : IAsyncActionFilter, IOrderedFilter
 
         int start = Math.Max(0, Arg<int?>(c, "startIndex") ?? 0);
         int limit = Math.Clamp(Arg<int?>(c, "limit") ?? 20, 1, 500);
-        var ordered = r.Pinned.Concat(r.Ranked).Distinct().Select(x => Guid.ParseExact(x, "N")).ToArray();
-        var q = new InternalItemsQuery(user)
+        var kinds = types.Length > 0 ? types : new[] { BaseItemKind.Movie, BaseItemKind.Series };
+        var lib = _reco.Library;
+        bool Wanted(string id) => types.Length == 0 || lib is null || !lib.Titles.TryGetValue(id, out var t)
+            || Array.IndexOf(types, t.Kind == TitleKind.Movie ? BaseItemKind.Movie : BaseItemKind.Series) >= 0;
+        var ordered = r.Pinned.Concat(r.Ranked).Distinct().Where(Wanted).Select(x => Guid.ParseExact(x, "N")).ToArray();
+
+        // la liste a été calculée sur les titres accessibles au compte : on ne relit que la page demandée (plus une marge
+        // pour un titre retiré ou devenu inaccessible depuis), pas toute la liste ; le total compte les identifiants
+        int margin = Math.Max(10, limit / 2);
+        var window = ordered.Skip(start).Take(limit + margin).ToArray();
+        var allowed = window.Length == 0 ? new Dictionary<Guid, BaseItem>() : _lib.GetItemList(new InternalItemsQuery(user)
         {
-            ItemIds = ordered,
-            IncludeItemTypes = types.Length > 0 ? types : new[] { BaseItemKind.Movie, BaseItemKind.Series },
+            ItemIds = window,
+            IncludeItemTypes = kinds,
             Recursive = true,
             IsVirtualItem = false,
-        };
-        var allowed = _lib.GetItemList(q).ToDictionary(i => i.Id);
-        var list = ordered.Where(allowed.ContainsKey).Select(x => allowed[x]).ToList();
-        var page = list.Skip(start).Take(limit).ToList();
-        var opts = new DtoOptions();
-        var dtos = _dto.GetBaseItemDtos(page, opts, user);
-        return new QueryResult<BaseItemDto>(start, list.Count, dtos);
+        }).ToDictionary(i => i.Id);
+        var page = window.Where(allowed.ContainsKey).Select(x => allowed[x]).Take(limit).ToList();
+        var dtos = _dto.GetBaseItemDtos(page, new DtoOptions(), user);
+        return new QueryResult<BaseItemDto>(start, page.Count < limit ? start + page.Count : ordered.Length, dtos);
     }
 }

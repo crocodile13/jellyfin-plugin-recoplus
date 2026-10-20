@@ -35,8 +35,6 @@ public sealed class ExternalRec
     /// <summary>Image de fond TMDb (cartes en paysage dans les rangées Home Screen Sections).</summary>
     public string? BackdropPath { get; set; }
 
-    public string? Overview { get; set; }
-
     public double Vote { get; set; }
 
     /// <summary>Titre aimé qui a amené celui-ci (« parce que tu as aimé … »).</summary>

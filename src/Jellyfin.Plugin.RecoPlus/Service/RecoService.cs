@@ -46,8 +46,10 @@ public sealed class EngineStatus
 /// Calcule les recommandations (en arrière-plan, un seul calcul à la fois) et les sert depuis un cache mémoire + disque :
 /// aucune page n'attend un calcul. Un compte sans résultat prêt reçoit la réponse normale de Jellyfin.
 /// </summary>
-public sealed class RecoService
+public sealed class RecoService : IDisposable
 {
+    private static (string Id, TimeZoneInfo Zone)? _zone;   // fuseau configuré, résolu une fois
+
     private readonly LibraryIndex _index;
     private readonly UserHistory _history;
     private readonly UserDataReader _userData;
@@ -64,7 +66,13 @@ public sealed class RecoService
     private Dictionary<string, Dictionary<string, Interaction>> _lastHist = new(StringComparer.Ordinal);
     private IReadOnlyDictionary<(Guid, Guid), double>? _prCache;
     private DateTime _prAt;
-    private bool _loaded;
+    private readonly object _loadLock = new();
+    private readonly object _vecLock = new();
+    private readonly Timer _flush;
+    private volatile bool _loaded;
+    private int _dirty;
+    private IReadOnlyDictionary<string, SparseVector>? _vectors;
+    private LibrarySnapshot? _library;
 
     public RecoService(LibraryIndex index, UserHistory history, UserDataReader userData, PlaybackReportingReader pr, SeerrService seerr,
         JellyfinEnhancedReader je, ImpressionStore impressions, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log, IServiceProvider services)
@@ -80,16 +88,55 @@ public sealed class RecoService
         _users = users;
         _loc = loc;
         _log = log;
+        // listes recalculées compte par compte : écrites sur disque au plus toutes les 5 minutes (et à l'arrêt)
+        _flush = new Timer(_ => Flush(), null, TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(5));
     }
 
     /// <summary>État courant.</summary>
     public EngineStatus Status { get; } = new();
 
-    /// <summary>Vecteurs de contenu du dernier calcul (pour « Plus comme ceci »).</summary>
-    public IReadOnlyDictionary<string, SparseVector>? Vectors { get; private set; }
+    /// <summary>
+    /// Vecteurs de contenu (pour « Plus comme ceci ») : ceux du dernier calcul, sinon construits à la demande depuis la
+    /// bibliothèque (après un redémarrage, sans attendre un calcul). Null seulement si la bibliothèque est illisible.
+    /// </summary>
+    public IReadOnlyDictionary<string, SparseVector>? Vectors
+    {
+        get
+        {
+            if (_vectors is { } v)
+            {
+                return v;
+            }
 
-    /// <summary>Instantané de la bibliothèque du dernier calcul.</summary>
-    public LibrarySnapshot? Library { get; private set; }
+            lock (_vecLock)
+            {
+                if (_vectors is null)
+                {
+                    try
+                    {
+                        var lib = _index.Get();
+                        (_library, _vectors) = (lib, Core.BuildVectors(lib.Titles, Settings));
+                    }
+                    catch (Exception ex) when (ex is not OutOfMemoryException)
+                    {
+                        _log.LogWarning("Reco+ : vecteurs de contenu indisponibles ({Msg})", ex.Message);
+                    }
+                }
+
+                return _vectors;
+            }
+        }
+    }
+
+    /// <summary>Instantané de la bibliothèque des vecteurs ci-dessus.</summary>
+    public LibrarySnapshot? Library
+    {
+        get
+        {
+            _ = Vectors; // construits ensemble
+            return _library;
+        }
+    }
 
     private static string CachePath => Path.Combine(Plugin.Instance!.DataFolderPath, "recommandations.json");
 
@@ -144,28 +191,53 @@ public sealed class RecoService
             return;
         }
 
-        _loaded = true;
-        try
+        lock (_loadLock)
         {
-            if (File.Exists(CachePath))
+            if (_loaded)
             {
-                var f = JsonSerializer.Deserialize<RecsFile>(File.ReadAllText(CachePath));
-                if (f?.Format == 1)
-                {
-                    foreach (var (u, r) in f.Users)
-                    {
-                        _recs[u] = r;
-                    }
+                return;
+            }
 
-                    Status.UsersWithRecs = _recs.Count;
-                    _log.LogInformation("Reco+ : {N} listes rechargées depuis le cache disque", _recs.Count);
+            try
+            {
+                if (File.Exists(CachePath))
+                {
+                    var f = JsonSerializer.Deserialize<RecsFile>(File.ReadAllText(CachePath));
+                    if (f?.Format == 1)
+                    {
+                        foreach (var (u, r) in f.Users)
+                        {
+                            _recs.TryAdd(u, r);
+                        }
+
+                        Status.UsersWithRecs = _recs.Count;
+                        _log.LogInformation("Reco+ : {N} listes rechargées depuis le cache disque", _recs.Count);
+                    }
                 }
             }
+            catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
+            {
+                _log.LogWarning("Reco+ : cache disque illisible ({Type}), il sera recalculé", ex.GetType().Name);
+            }
+
+            _loaded = true;
         }
-        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
+    }
+
+    /// <summary>Écrit les listes sur disque si elles ont changé depuis la dernière écriture.</summary>
+    public void Flush()
+    {
+        if (Interlocked.Exchange(ref _dirty, 0) == 1)
         {
-            _log.LogWarning("Reco+ : cache disque illisible ({Type}), il sera recalculé", ex.GetType().Name);
+            Persist();
         }
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _flush.Dispose();
+        Flush();
     }
 
     private void Persist()
@@ -183,6 +255,7 @@ public sealed class RecoService
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
+            Interlocked.Exchange(ref _dirty, 1);
             _log.LogWarning(ex, "Reco+ : écriture du cache impossible");
         }
     }
@@ -257,7 +330,7 @@ public sealed class RecoService
 
             Status.LastError = null;
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (ct.IsCancellationRequested)
         {
             throw;
         }
@@ -352,42 +425,42 @@ public sealed class RecoService
         // complète au plus 150 fiches manquantes (le cache se remplit en quelques nuits, sans charger Seerr)
         if (cfg.UseSeerrVotes)
         {
-            int fetched = 0;
+            var keys = new List<(Title T, string Type, int Tmdb)>();
             foreach (var (id, t) in titles)
             {
-                if (t.External || !tmdbOf.TryGetValue(id, out var tk))
+                var parts = !t.External && tmdbOf.TryGetValue(id, out var tk) ? tk.Split(':') : null;
+                if (parts is { Length: 2 } && int.TryParse(parts[1], out var tid))
                 {
-                    continue;
-                }
-
-                var parts = tk.Split(':');
-                if (parts.Length != 2 || !int.TryParse(parts[1], out var tid))
-                {
-                    continue;
-                }
-
-                var d = _seerr.CachedDetails(parts[0], tid);
-                if (d?.VoteCount is null && only is null && seerr.Ok && cl is not null && fetched < 150)
-                {
-                    fetched++;
-                    d = await _seerr.DetailsAsync(cl, parts[0], tid, ct, requireVotes: true).ConfigureAwait(false);
-                }
-
-                if (d?.VoteCount is int v)
-                {
-                    t.Votes = v;
+                    keys.Add((t, parts[0], tid));
                 }
             }
 
-            if (fetched > 0)
+            // au plus 150 fiches manquantes par calcul complet, demandées en parallèle
+            if (only is null && seerr.Ok && cl is not null)
             {
+                await Task.WhenAll(keys.Where(k => _seerr.CachedDetails(k.Type, k.Tmdb)?.VoteCount is null).Take(150)
+                    .Select(k => _seerr.DetailsAsync(cl, k.Type, k.Tmdb, ct, requireVotes: true))).ConfigureAwait(false);
                 _seerr.SaveCache();
+            }
+
+            foreach (var (t, type, tmdb) in keys)
+            {
+                if (_seerr.CachedDetails(type, tmdb)?.VoteCount is int v)
+                {
+                    t.Votes = v;
+                }
             }
         }
 
         // demandes Seerr → signal (titre voulu) ; titres demandés absents → titres externes (profil seulement)
         if (seerr.Ok && cl is not null)
         {
+            // fiches des titres demandés hors bibliothèque : chargées en parallèle d'abord (ensuite lues dans le cache)
+            await Task.WhenAll(seerr.RequestsByUser.Where(kv => hist.ContainsKey(kv.Key)).SelectMany(kv => kv.Value)
+                .Where(r => r.RequestStatus != 3 && !lib.ByTmdb.ContainsKey(r.MediaType + ":" + r.TmdbId))
+                .DistinctBy(r => r.MediaType + ":" + r.TmdbId)
+                .Select(r => _seerr.DetailsAsync(cl, r.MediaType, r.TmdbId, ct))).ConfigureAwait(false);
+
             foreach (var (jf, reqs) in seerr.RequestsByUser)
             {
                 if (!hist.TryGetValue(jf, out var h))
@@ -635,14 +708,39 @@ public sealed class RecoService
             progress?.Report(60 + (40.0 * ++done / Math.Max(1, targets.Count)));
         }
 
-        Vectors = vec;
-        Library = lib;
+        lock (_vecLock)
+        {
+            (_library, _vectors) = (lib, vec);
+        }
+
         Status.UsersWithRecs = _recs.Count;
-        Persist();
+        if (only is null)
+        {
+            Interlocked.Exchange(ref _dirty, 0);
+            Persist();
+        }
+        else
+        {
+            Interlocked.Exchange(ref _dirty, 1);
+        }
     }
 
     /// <summary>Fuseau des heures de visionnage : celui de la configuration (identifiant IANA), sinon celui du serveur.</summary>
     internal static TimeZoneInfo Zone(Configuration.PluginConfiguration cfg)
+    {
+        var id = cfg.TimeZone?.Trim() ?? string.Empty;
+        var cached = _zone;
+        if (cached is not null && cached.Value.Id == id)
+        {
+            return cached.Value.Zone;
+        }
+
+        var z = FindZone(cfg);
+        _zone = (id, z);
+        return z;
+    }
+
+    private static TimeZoneInfo FindZone(Configuration.PluginConfiguration cfg)
     {
         if (!string.IsNullOrWhiteSpace(cfg.TimeZone))
         {
@@ -798,7 +896,6 @@ public sealed class RecoService
             Year = t.Year,
             PosterPath = d?.PosterPath,
             BackdropPath = d?.BackdropPath,
-            Overview = d?.Overview,
             Vote = t.Community ?? 0,
             Because = because.GetValueOrDefault(id, string.Empty),
         };
@@ -898,15 +995,19 @@ public sealed class RecoService
         var meta = new Dictionary<string, SeerrResult>(StringComparer.Ordinal);
         var because = new Dictionary<string, string>(StringComparer.Ordinal);
         var seen = ctx.Hist.GetValueOrDefault(key) ?? new Dictionary<string, Interaction>();
-        foreach (var a in anchors)
+        // listes de tous les titres de départ en parallèle (Seerr est limité à 4 appels simultanés), traitées dans l'ordre
+        int pages = Math.Clamp(cfg.ExtendedPages, 1, 10);
+        var related = await Task.WhenAll(anchors.Select(a =>
         {
             var p = a.Tmdb!.Split(':');
-            if (p.Length != 2 || !int.TryParse(p[1], out var tid))
-            {
-                continue;
-            }
-
-            foreach (var r in (await _seerr.RelatedAsync(cl, p[0], tid, Math.Clamp(cfg.ExtendedPages, 1, 10), ct).ConfigureAwait(false)).DistinctBy(x => x.MediaType + ":" + x.TmdbId))
+            return p.Length == 2 && int.TryParse(p[1], out var tid)
+                ? _seerr.RelatedAsync(cl, p[0], tid, pages, ct)
+                : Task.FromResult(new List<SeerrResult>());
+        })).ConfigureAwait(false);
+        for (int ai = 0; ai < anchors.Count; ai++)
+        {
+            var a = anchors[ai];
+            foreach (var r in related[ai].DistinctBy(x => x.MediaType + ":" + x.TmdbId))
             {
                 var k = r.MediaType + ":" + r.TmdbId;
                 if (r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Seen(seen, "tmdb:" + k))
@@ -926,10 +1027,15 @@ public sealed class RecoService
             .Take(Math.Clamp(cfg.ExtendedDetails, 10, 2000)).ToList();
         var ids = new List<string>();
         var agree = new Dictionary<string, double>(StringComparer.Ordinal);
-        foreach (var (k, n) in top)
+        var details = await Task.WhenAll(top.Select(kv =>
         {
-            var p = k.Split(':');
-            var d = await _seerr.DetailsAsync(cl, p[0], int.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture), ct).ConfigureAwait(false);
+            var p = kv.Key.Split(':');
+            return _seerr.DetailsAsync(cl, p[0], int.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture), ct);
+        })).ConfigureAwait(false);
+        for (int ti = 0; ti < top.Count; ti++)
+        {
+            var (k, n) = top[ti];
+            var d = details[ti];
             if (d is null || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ParentalAllowed(u, d, cfg.RatingCountry))
             {
                 continue;

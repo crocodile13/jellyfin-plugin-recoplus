@@ -176,12 +176,12 @@ public sealed class UserHistory
 
     /// <summary>Titres que le compte a le droit de voir (bibliothèques autorisées, contrôle parental), appliqué par Jellyfin.</summary>
     public HashSet<string> Accessible(User user)
-        => _lib.GetItemList(new InternalItemsQuery(user)
+        => _lib.GetItemIds(new InternalItemsQuery(user)                      // identifiants seulement : pas d'objets complets
             {
                 IncludeItemTypes = new[] { BaseItemKind.Movie, BaseItemKind.Series },
                 Recursive = true,
                 IsVirtualItem = false,
             })
-            .Select(i => i.Id.ToString("N"))
+            .Select(i => i.ToString("N"))
             .ToHashSet(StringComparer.Ordinal);
 }
