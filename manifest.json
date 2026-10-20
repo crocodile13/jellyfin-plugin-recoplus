@@ -12,9 +12,9 @@
         "version": "1.0.20.0",
         "changelog": "1.0.20 : mélange libre — la rangée « Pour toi » garde sa taille : chaque titre hors bibliothèque montré prend la place du titre de la bibliothèque le moins bien classé (la rangée s'allongeait d'autant, jusqu'à 60 cartes) ; nouveau réglage « titres hors bibliothèque au maximum » (0 = aucune limite, par défaut).",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.20.0/RecoPlus_1.0.20.0.zip",
+        "checksum": "3ad2d4eae9dfa19af28d0ec371a50d53",
+        "timestamp": "2026-10-20T18:09:39Z"
       },
       {
         "version": "1.0.19.0",
