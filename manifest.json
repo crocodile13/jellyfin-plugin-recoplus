@@ -12,9 +12,9 @@
         "version": "1.0.11.0",
         "changelog": "1.0.11 : plus de titres hors bibliothèque examinés — 30 titres aimés de départ au lieu de 15, 2 pages de recommandations et de titres similaires TMDb par titre (nouveau réglage), 150 fiches détaillées au lieu de 60, présélection par le goût pour les titres aimés qui les proposent ; le minimum de titres hors bibliothèque en mélange libre est désormais à 0 par défaut (le classement seul décide). Ces valeurs par défaut ne s'appliquent qu'aux réglages jamais enregistrés : à changer dans la page si besoin.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.11.0/RecoPlus_1.0.11.0.zip",
+        "checksum": "45fde2ccbd3f75941860a3f09a748f17",
+        "timestamp": "2026-10-20T14:11:40Z"
       },
       {
         "version": "1.0.10.0",
