@@ -12,9 +12,9 @@
         "version": "1.0.16.0",
         "changelog": "1.0.16 : mode étendu — deux nouvelles sources : croisements de ses goûts (genre × thème, genre × langue d'origine : « Bien noté en drame, thème « vengeance » », « Bien noté en animation, en japonais ») et pépites peu connues (très bien notées mais peu de votes TMDb, tous genres et genres préférés ; note et votes min./max. réglables) ; l'aperçu de la configuration montre l'apport de chaque source pour un compte (titres trouvés, détaillés, proposés, placés dans la rangée). Seerr qui ne répond plus ne bloque plus le calcul : après 3 échecs d'affilée (délai dépassé, connexion refusée, erreur 5xx), plus aucun appel pendant 5 min, les comptes gardent leurs titres hors bibliothèque précédents.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.16.0/RecoPlus_1.0.16.0.zip",
+        "checksum": "d4fa60e5035417b29ddc1bc01eb6c2e8",
+        "timestamp": "2026-10-20T15:50:36Z"
       },
       {
         "version": "1.0.15.0",
