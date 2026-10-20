@@ -234,10 +234,11 @@ public sealed class SeerrService
         }
     }
 
-    /// <summary>Recommandations + similaires TMDb d'un titre (cache 3 jours).</summary>
-    public async Task<List<SeerrResult>> RelatedAsync(SeerrClient cl, string mediaType, int tmdbId, CancellationToken ct)
+    /// <summary>Recommandations + similaires TMDb d'un titre, sur <paramref name="pages"/> pages chacune (cache 3 jours).</summary>
+    public async Task<List<SeerrResult>> RelatedAsync(SeerrClient cl, string mediaType, int tmdbId, int pages, CancellationToken ct)
     {
-        var key = mediaType + ":" + tmdbId;
+        pages = Math.Clamp(pages, 1, 5);
+        var key = mediaType + ":" + tmdbId + ":" + pages;
         if (_related.TryGetValue(key, out var r) && DateTime.UtcNow - r.At < RelatedTtl)
         {
             return r.Items;
@@ -246,18 +247,29 @@ public sealed class SeerrService
         var all = new List<SeerrResult>();
         foreach (var rel in new[] { "recommendations", "similar" })
         {
-            await _throttle.WaitAsync(ct).ConfigureAwait(false);
-            try
+            for (int page = 1; page <= pages; page++)
             {
-                all.AddRange(await cl.RelatedAsync(mediaType, tmdbId, rel, Plugin.Instance!.Configuration.SeerrLanguage, ct).ConfigureAwait(false));
-            }
-            catch (Exception ex) when (ex is SeerrException or HttpRequestException or JsonException)
-            {
-                _log.LogDebug("Reco+ : {Rel} de {Key} indisponible ({Msg})", rel, key, ex.Message);
-            }
-            finally
-            {
-                _throttle.Release();
+                int got = 0;
+                await _throttle.WaitAsync(ct).ConfigureAwait(false);
+                try
+                {
+                    var items = await cl.RelatedAsync(mediaType, tmdbId, rel, Plugin.Instance!.Configuration.SeerrLanguage, page, ct).ConfigureAwait(false);
+                    got = items.Count;
+                    all.AddRange(items);
+                }
+                catch (Exception ex) when (ex is SeerrException or HttpRequestException or JsonException)
+                {
+                    _log.LogDebug("Reco+ : {Rel} de {Key} (page {Page}) indisponible ({Msg})", rel, key, page, ex.Message);
+                }
+                finally
+                {
+                    _throttle.Release();
+                }
+
+                if (got == 0)
+                {
+                    break; // page vide ou en échec : pas de page suivante
+                }
             }
         }
 

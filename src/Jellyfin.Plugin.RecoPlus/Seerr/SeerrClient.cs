@@ -263,10 +263,10 @@ public sealed class SeerrClient
         return res;
     }
 
-    /// <summary>Recommandations ou titres similaires TMDb (page 1).</summary>
-    public async Task<List<SeerrResult>> RelatedAsync(string mediaType, int tmdbId, string relation, string language, CancellationToken ct)
+    /// <summary>Recommandations ou titres similaires TMDb (une page de résultats, 20 titres environ).</summary>
+    public async Task<List<SeerrResult>> RelatedAsync(string mediaType, int tmdbId, string relation, string language, int page, CancellationToken ct)
     {
-        var j = await Get($"api/v1/{mediaType}/{tmdbId}/{relation}?page=1&language={Uri.EscapeDataString(language)}", ct).ConfigureAwait(false);
+        var j = await Get($"api/v1/{mediaType}/{tmdbId}/{relation}?page={Math.Clamp(page, 1, 10)}&language={Uri.EscapeDataString(language)}", ct).ConfigureAwait(false);
         return Arr(j, "results").Select(r => new SeerrResult(
                 string.IsNullOrEmpty(Str(r, "mediaType")) ? mediaType : Str(r, "mediaType"),
                 Int(r, "id"),
