@@ -116,7 +116,7 @@ public static class HomeRows
                 }
 
                 var av = vec[a];
-                var near = ordered.Where(id => !used.Contains(id))
+                var near = ordered.Where(id => id != a && !used.Contains(id))     // jamais le titre aimé dans sa propre rangée
                     .Select(id => (Id: id, Sim: av.Dot(vec[id])))
                     .Where(x => x.Sim >= MinSimilarity)
                     .OrderByDescending(x => (0.7 * x.Sim) + (0.3 * (span > 0 ? (sc[x.Id] - min) / span : 0)))

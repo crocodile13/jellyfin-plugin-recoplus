@@ -95,6 +95,12 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Nombre de titres demandés, arrivés et pas encore vus, placés en tête.</summary>
     public int PinnedRequests { get; set; } = 3;
 
+    /// <summary>
+    /// Proposer aussi ce que le compte a déjà marqué sans l'avoir lu : noté, en favori, en liste de suivi, demandé. Non
+    /// par défaut : une note ou un favori, c'est un titre vu ; une liste de suivi, c'est déjà une liste.
+    /// </summary>
+    public bool ProposeMarked { get; set; }
+
     /// <summary>Un titre demandé n'est placé en tête que pendant ce nombre de jours après son arrivée.</summary>
     public int PinnedMaxDays { get; set; } = 30;
 
@@ -235,6 +241,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>Pépites : note TMDb minimale (plus haute : peu de votes, note moins sûre).</summary>
     public double ExtendedGemMinRating { get; set; } = 7.8;
+
+    /// <summary>Titres hors bibliothèque, toutes sources : votes TMDb minimum (et titres pas encore sortis écartés).</summary>
+    public int ExtendedMinVotesAll { get; set; } = 50;
 
     /// <summary>Pépites : votes TMDb minimum (en dessous, la note ne veut rien dire).</summary>
     public int ExtendedGemMinVotes { get; set; } = 50;

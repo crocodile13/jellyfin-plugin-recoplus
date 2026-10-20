@@ -76,6 +76,25 @@ public class HomeRowsTests
     }
 
     [Fact]
+    public void ABecauseRowNeverContainsItsOwnAnchor()
+    {
+        var (ctx, vec, cands, sc) = Setup();
+        // titres aimés encore proposables (noté sans lecture, option « proposer ce qui est marqué ») : ils ne doivent
+        // jamais ouvrir la rangée « Parce que tu as aimé » dont ils sont le titre de départ
+        var withAnchors = cands.Concat(new[] { "001", "101", "201" }).ToList();
+        var full = new Dictionary<string, double>(sc) { ["001"] = 9, ["101"] = 9, ["201"] = 9 };
+        var ordered = withAnchors.OrderByDescending(c => full[c]).ThenBy(c => c, StringComparer.Ordinal).ToList();
+        var pourToi = ordered.Where(c => !c.EndsWith("01", StringComparison.Ordinal)).Take(5).ToList();
+        var r = HomeRows.Allocate(ctx, vec, "u", pourToi, ordered, full, new RowOptions { Size = 10, Because = 3 });
+        Assert.NotEmpty(r.Anchors);
+        foreach (var (row, name) in r.Anchors)
+        {
+            var anchor = ctx.Ds.Titles.Values.Single(t => t.Name == name).Id;
+            Assert.DoesNotContain(anchor, r.Rows[row]);
+        }
+    }
+
+    [Fact]
     public void OnlyRequestedRowsAndEmptyBecauseRowsWhenNothingFits()
     {
         var (ctx, vec, cands, sc) = Setup();

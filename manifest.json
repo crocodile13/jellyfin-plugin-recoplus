@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.19.0",
+        "changelog": "1.0.19 : recommander, c'est faire découvrir — un titre noté (avis, pouce), en favori, en liste de suivi ou demandé n'est plus proposé (il restait en tête indéfiniment) ; il compte toujours pour les goûts (réglage « Proposer aussi ce que le compte a déjà marqué », coupé par défaut). Une rangée « Parce que tu as aimé X » ne contient plus X. Titres hors bibliothèque : au moins 50 votes TMDb toutes sources (réglable ; courts métrages, avant-premières et titres confidentiels écartés) et titres pas encore sortis écartés.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.18.0",
         "changelog": "1.0.18 : places « découverte » : les titres sont départagés par une note TMDb fiable (moyenne bayésienne : un 8,8 sur 4 votes ne passe plus devant un 8,4 sur 20 000) et doivent avoir au moins autant de votes que les pépites (50 par défaut).",
         "targetAbi": "12.2.0.0",
