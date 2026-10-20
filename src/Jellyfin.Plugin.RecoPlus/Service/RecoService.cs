@@ -703,7 +703,7 @@ public sealed class RecoService : IDisposable
             var extIds = extCands.TryGetValue(key, out var ex)
                 ? ex.Ids.Where(id => ListPolicy.Allows(titles[id], lo) && (hid is null || !hid.Contains(id.StartsWith("tmdb:", StringComparison.Ordinal) ? id[5..] : id))).ToList()
                 : new List<string>();
-            if (extIds.Count > 0)
+            if (ex is not null && extIds.Count > 0)
             {
                 // bruit du jour (réglable) : les titres de valeur proche changent de place d'un jour à l'autre
                 double noise = double.IsFinite(cfg.ExtendedNoise) ? Math.Clamp(cfg.ExtendedNoise, 0, 1) : 0;
@@ -1146,10 +1146,10 @@ public sealed class RecoService : IDisposable
             {
                 foreach (var t in types)
                 {
-                    var ids = Exploration.GenreFor(gid, t).ToList();
-                    if (ids.Count > 0)
+                    var genreIds = Exploration.GenreFor(gid, t).ToList();
+                    if (genreIds.Count > 0)
                     {
-                        Discover("genre", t, new Dictionary<string, string> { ["genre"] = string.Join("|", ids) }, w, "Bien noté en " + names[gid].ToLowerInvariant());
+                        Discover("genre", t, new Dictionary<string, string> { ["genre"] = string.Join("|", genreIds) }, w, "Bien noté en " + names[gid].ToLowerInvariant());
                     }
                 }
             }
