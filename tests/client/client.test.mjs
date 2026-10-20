@@ -19,14 +19,20 @@ function ext(n) {
 }
 
 // Page d'accueil : une section « Reprendre », puis éventuellement la section HSS « Pour toi » avec `lib` cartes.
-function page({ hssCards = 0, data, je = null, io = null, jeWait = 0, shape = 'Portrait' }) {
+// jeHttp : statut HTTP renvoyé par le proxy Seerr de Jellyfin Enhanced pour une fiche (200 par défaut)
+function page({ hssCards = 0, data, je = null, io = null, jeWait = 0, shape = 'Portrait', jeHttp = {} }) {
     const dom = new JSDOM('<!doctype html><html><head></head><body><div id="indexPage"><div id="homeTab" class="tabContent" data-index="0"><div class="sections"></div></div></div></body></html>', { runScripts: 'outside-only', pretendToBeVisual: true });
     const w = dom.window;
-    const calls = { getJSON: 0, posts: [] };
+    const calls = { getJSON: 0, posts: [], je: [] };
     w.ApiClient = {
         getCurrentUserId: () => 'u1',
         getUrl: (p) => '/' + p,
-        getJSON: () => { calls.getJSON++; return Promise.resolve(JSON.parse(JSON.stringify(data))); },
+        getJSON: (url) => {
+            const m = /JellyfinEnhanced\/jellyseerr\/(tv|movie)\/(\d+)$/.exec(url);
+            if (m) { calls.je.push(url); const st = jeHttp[m[2]] || 200; return st === 200 ? Promise.resolve({}) : Promise.reject({ status: st }); }
+            calls.getJSON++;
+            return Promise.resolve(JSON.parse(JSON.stringify(data)));
+        },
         ajax: (o) => { calls.posts.push(o); return Promise.resolve({}); },
     };
     if (je) { w.JellyfinEnhanced = je(w); }
@@ -318,6 +324,16 @@ await test('Jellyfin Enhanced refuse toutes les fiches Seerr (403) : cartes Reco
     await wait(700);
     assert.equal(p.sections.querySelector('.recoplus-ext'), before, 'cartes gardées : pas de remplacement en boucle');
     assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 2);
+});
+
+await test('fiche refusée au compte par Jellyfin Enhanced (403, contrôle parental) : titre écarté, pas de carte Reco+', async () => {
+    const fail = { 1000: 'null', 1001: 'null', 1002: 'reject' };
+    const p = page({ hssCards: 10, data: { ...base, items: ext(4) }, je: jeStub({ fail }), jeHttp: { 1000: 403, 1001: 504, 1002: 403 } });
+    await wait(700);
+    // 1000 et 1002 refusés (403) → écartés ; 1001 (délai) → carte Reco+ ; 1003 → carte JE
+    assert.deepEqual(p.row().filter((x) => x !== 'L'), ['E:1001', 'E:1003']);
+    assert.ok(p.sections.querySelector('[data-rp-id="tmdb:movie:1001"]').classList.contains('recoplus-jemiss'));
+    assert.equal(p.calls.je.length, 3, 'raison du refus lue seulement pour les fiches manquantes');
 });
 
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');

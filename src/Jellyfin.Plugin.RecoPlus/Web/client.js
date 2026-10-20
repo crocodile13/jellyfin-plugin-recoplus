@@ -114,7 +114,15 @@
         return card;
     }
 
-    // Cartes Jellyfin Enhanced ; un titre dont il ne peut pas lire la fiche Seerr (403, délai…) garde une carte Reco+
+    // Fiche refusée par Jellyfin Enhanced pour ce compte (403 : contrôle parental, droits Seerr) : le titre n'est pas montré.
+    // Autre échec (délai, erreur de Seerr) : il garde une carte Reco+.
+    function jeRefused(it) {
+        var a = api();
+        return a.getJSON(a.getUrl('JellyfinEnhanced/jellyseerr/' + (it.MediaType === 'tv' ? 'tv' : 'movie') + '/' + encodeURIComponent(it.TmdbId)))
+            .then(function () { return false; }, function (e) { return !!e && e.status === 403; });
+    }
+
+    // Cartes Jellyfin Enhanced ; un titre dont il ne peut pas lire la fiche garde une carte Reco+, sauf s'il est refusé au compte
     function jeCards(d, items, shape) {
         var j = je();
         return j.jellyseerrAPI.checkUserStatus().then(function (st) {
@@ -123,9 +131,16 @@
                 var f = it.MediaType === 'tv' ? j.jellyseerrAPI.fetchTvShowDetails : j.jellyseerrAPI.fetchMovieDetails;
                 return f(it.TmdbId);
             }).then(function (all) {
+                var refused = {};
+                var checks = all.map(function (det, i) {
+                    return det ? null : jeRefused(items[i]).then(function (r) { refused[i] = r; });
+                });
+                return Promise.all(checks).then(function () { return { all: all, refused: refused }; });
+            }).then(function (res) {
+                var all = res.all;
                 var cards = [];
                 all.forEach(function (det, i) {
-                    if (!det) { cards.push(missCard(d, items[i], shape)); return; }
+                    if (!det) { if (!res.refused[i]) { cards.push(missCard(d, items[i], shape)); } return; }
                     if (!stillProposable(det)) { return; }
                     var item = Object.assign({}, det, { mediaType: items[i].MediaType });
                     var c = j.jellyseerrUI.createJellyseerrCard(item, !!st.active, !!st.userFound);

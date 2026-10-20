@@ -616,10 +616,10 @@ public sealed class RecoService
                 {
                     var shown = r.Ranked.Take(Math.Max(0, Math.Clamp(cfg.RowSize, 5, 60) - r.Pinned.Count)).ToList();
                     var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), Recommender.Shared(s), exposure: expo);
-                    foreach (var (id, rec) in recs)
+                    var places = HomeRows.FreePlaces(shown.Select(x => joint[x]).ToList(), recs.Select(p => joint[p.Id]).ToList(), Math.Clamp(cfg.ExtendedMinFree, 0, 20));
+                    for (int i = 0; i < recs.Count; i++)
                     {
-                        var se = joint[id];
-                        rec!.After = shown.Count(x => joint[x] > se);
+                        recs[i].Rec!.After = places[i];
                     }
                 }
             }

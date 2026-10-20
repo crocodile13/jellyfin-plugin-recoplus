@@ -149,4 +149,30 @@ public class HomeRowsTests
             Directory.Delete(dir, true);
         }
     }
+
+    [Fact]
+    public void FreePlacesFollowJointScore()
+    {
+        var lib = new[] { 0.9, 0.8, 0.7, 0.6, 0.5 };
+        Assert.Equal(new[] { 0, 2, 5, 5 }, HomeRows.FreePlaces(lib, new[] { 0.95, 0.75, 0.1, 0.0 }, 0));
+        Assert.Equal(new[] { 0, 2, 5, 5 }, HomeRows.FreePlaces(lib, new[] { 0.95, 0.75, 0.1, 0.0 }, 2));   // minimum déjà atteint
+        Assert.Equal(new[] { 0, 0 }, HomeRows.FreePlaces(Array.Empty<double>(), new[] { 0.3, 0.2 }, 3));    // rangée vide : rien à faire
+    }
+
+    [Fact]
+    public void FreePlacesGuaranteeMinimumSpreadOverTheRow()
+    {
+        var lib = Enumerable.Range(0, 17).Select(i => 1.0 - (i * 0.01)).ToArray();
+        var ext = Enumerable.Range(0, 20).Select(i => 0.5 - (i * 0.01)).ToArray();   // tous derrière la rangée
+        var a = HomeRows.FreePlaces(lib, ext, 3);
+        Assert.Equal(new[] { 4, 9, 13 }, a.Take(3));                                  // les 3 mieux classés, répartis
+        Assert.All(a.Skip(3), x => Assert.Equal(17, x));                               // les autres restent derrière
+        Assert.Equal(new[] { 9, 17 }, HomeRows.FreePlaces(lib, new[] { 0.5, 0.4 }, 1));
+
+        // un titre déjà placé compte dans le minimum ; le complément vient des suivants, dans l'ordre du classement
+        var mixed = HomeRows.FreePlaces(lib, new[] { 0.995, 0.5, 0.4, 0.3 }, 3);
+        Assert.Equal(new[] { 1, 6, 11, 17 }, mixed);
+        Assert.Equal(new[] { 8, 16 }, HomeRows.FreePlaces(lib.Take(16).ToArray(), new[] { 0.5, 0.4 }, 1));
+        Assert.Equal(new[] { 0 }, HomeRows.FreePlaces(new[] { 1.0 }, new[] { 0.5 }, 5));   // jamais au-delà de la rangée
+    }
 }
