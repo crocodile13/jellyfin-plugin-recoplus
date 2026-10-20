@@ -62,6 +62,45 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Titre de la rangée Home Screen Sections.</summary>
     public string HssSectionTitle { get; set; } = "Pour toi";
 
+    /// <summary>Titres par rangée d'accueil.</summary>
+    public int RowSize { get; set; } = 20;
+
+    /// <summary>Rangée « Films pour toi » (Home Screen Sections).</summary>
+    public bool RowMovies { get; set; }
+
+    /// <summary>Titre de la rangée des films.</summary>
+    public string RowMoviesTitle { get; set; } = "Films pour toi";
+
+    /// <summary>Rangée « Séries pour toi ».</summary>
+    public bool RowSeries { get; set; }
+
+    /// <summary>Titre de la rangée des séries.</summary>
+    public string RowSeriesTitle { get; set; } = "Séries pour toi";
+
+    /// <summary>Rangée « Nouveautés pour toi » : arrivés récemment, classés selon le goût du compte.</summary>
+    public bool RowNew { get; set; }
+
+    /// <summary>Titre de la rangée des nouveautés.</summary>
+    public string RowNewTitle { get; set; } = "Nouveautés pour toi";
+
+    /// <summary>« Nouveautés » : arrivés depuis ce nombre de jours.</summary>
+    public int RowNewDays { get; set; } = 30;
+
+    /// <summary>Rangées « Parce que tu as aimé … » (0 à 3), chacune autour d'un titre aimé différent.</summary>
+    public int RowBecause { get; set; }
+
+    /// <summary>Titre des rangées « Parce que … » ({titre} = le titre aimé).</summary>
+    public string RowBecauseTitle { get; set; } = "Parce que tu as aimé {titre}";
+
+    /// <summary>
+    /// Compter ce qui est montré sans être ouvert (seulement quand une rangée Reco+ est réellement à l'écran du compte
+    /// connecté) : un titre ignoré plusieurs jours descend, puis remonte avec le temps.
+    /// </summary>
+    public bool TrackImpressions { get; set; } = true;
+
+    /// <summary>Méthode du calibrage.</summary>
+    public CalibrationMethod CalibrationMethod { get; set; } = CalibrationMethod.Auto;
+
     /// <summary>Nombre de titres demandés, arrivés et pas encore vus, placés en tête.</summary>
     public int PinnedRequests { get; set; } = 3;
 

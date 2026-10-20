@@ -151,6 +151,12 @@ public sealed class Interaction
     public Interaction Copy() => (Interaction)MemberwiseClone();
 }
 
+/// <summary>
+/// Affichages d'un titre à un compte sans qu'il l'ouvre : nombre de jours distincts où il a été vu à l'écran (rangée
+/// effectivement affichée au compte connecté), dernier affichage (secondes Unix). Remis à zéro quand le titre est ouvert.
+/// </summary>
+public readonly record struct Exposure(int Days, double Last);
+
 /// <summary>Bibliothèque + historiques, figés à un instant.</summary>
 public sealed class Dataset
 {

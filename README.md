@@ -12,7 +12,7 @@ It has been built and tested against **Jellyfin 12.2** only.
 | `/Movies/Recommendations` ("Suggestions" tab, Media Bar…) | similar to the 7 last movies and a few random favourites | "Because you liked X" categories built from the whole history |
 | "More like this" (movies) | weighted overlap of genres/tags/people | content similarity + a bit of the account's taste, next saga volume first |
 | "More like this" (series) | **random** series sharing a genre or a tag | content similarity, same as movies |
-| Home Screen Sections | — | a "For you" row (optional) |
+| Home Screen Sections | — | a "For you" row and, optionally, "New for you", up to three "Because you liked …" rows, "Movies for you", "Series for you" — a title never appears in two of these rows |
 | Outside the library | — | optional: titles from the Seerr/TMDb catalogue **mixed into the "For you" row**, with Jellyfin Enhanced's cards and *Request* button |
 
 Everything is computed in the background and cached in memory and on disk, so no page ever waits for a computation. An account without a ready list simply gets Jellyfin's normal answer.
@@ -40,7 +40,12 @@ Everything is computed in the background and cached in memory and on disk, so no
   - A brand-new title the account has no affinity with gets no bonus at all.
   - Without this rule, new arrivals were pushed to everyone — for example new fan-service anime to a Ghibli-only account.
   - The rule cannot be switched off, and freshness is capped.
-- **Diversity.** The list is re-ranked with Maximal Marginal Relevance (Carbonell & Goldstein, 1998).
+- **Diversity, three modes.**
+  - *Personalised* (default): the list is as varied as what the account likes. Several Maximal Marginal Relevance strengths (Carbonell & Goldstein, 1998) are tried and the list whose internal similarity is closest to that of the account's liked titles is kept: an eclectic viewer gets a varied list, a one-genre fan a focused one.
+  - *Calibrated* (Steck, RecSys 2018): the share of each genre in the list follows the account's history (70% thrillers watched → about 70% suggested, not 100%).
+  - *Fixed*: the same redundancy penalty for everyone (behaviour before 1.0.5).
+- **Shown but never opened.** A title that stayed on an account's screen for several days without being opened slowly sinks (at most 40% of its score), then recovers over time (30-day half-life). Only what the home-screen script saw **actually displayed to the signed-in account** counts: a card of a Reco+ row visible for at least one second, tab in the foreground, once per day. Opening the title resets its counter.
+- **Current taste, optional** (off by default): similarity to the last 5 liked titles, on top of long-term taste.
 - **Sagas.** At most one entry per saga, and it is the first volume not yet seen, not volume 4. Large thematic collections get at most two entries.
 
 ## Measured on one real server (be careful with these numbers)
@@ -106,14 +111,14 @@ Dashboard → Plugins → Reco+. The page has one tab per topic:
 | Tab | Content |
 |---|---|
 | State | compatibility checks, last computation, per-account readiness |
-| General | what to replace, Home Screen Sections row, ignored accounts |
-| Lists | what is shown, applied after ranking: share of daily randomness, minimum movies / series, excluded genres, minimum rating and year, diversity, sagas, pinned requests |
+| General | what to replace, Home Screen Sections rows, sources (including titles shown but never opened), ignored accounts |
+| Lists | what is shown, applied after ranking: share of daily randomness, minimum movies / series, excluded genres, minimum rating and year, diversity (personalised, calibrated or fixed), sagas, pinned requests |
 | Engine | every ranking factor (favourites, requests, abandons, similarities, watched together, freshness, popularity, rating, TMDb agreement, content features) can be switched off or made weaker/stronger (×0.25 to ×3); durations; defaults are the evaluated ones |
 | Seerr | URL and key, with a **Test** button that uses the values typed in without saving them |
 | Extended mode | titles outside the library: on/off; mixed into the home row one every N cards, or freely by the engine's joint ranking |
 | Notifications | webhook, with a test button |
-| Calibration | see below |
-| Preview | what an account currently gets |
+| Calibration | method (automatic, learned choice model, coordinate search) with a warning when the history is too short; see below |
+| Preview | what an account currently gets, row by row |
 
 Every tab shows the essential settings; advanced ones are folded away. Hover (or tap) the **?** next to a setting for its help and default value. A single **Save** button stores both the settings and any secret you typed.
 
@@ -123,18 +128,24 @@ The Calibration tab replays your server's history: every time an account started
 
 - **Measure.** Rank gain 1/log2(1 + rank) over *all* candidates, not just "in the top 10 or not": far more statistical power from the same history.
 - **Cases.** Every adoption preceded by at least 2 others. Each case is weighted by how much history the account already had (n/(n+3)), and accounts are balanced (1/√cases) so a heavy viewer does not decide alone.
-- **Search.** One parameter at a time, within safe bounds: a 5-point grid (log scale for multiplicative weights, zero tried for optional factors), then golden-section refinement around the best point; discrete choices are enumerated; two passes. A change is kept only if it improves the whole *and* does not lose on either half of the accounts. The freshness guard rail cannot be tuned away.
-- **Validation.** The whole search is redone on half of the accounts and measured on the other half (two-fold cross-validation by account). A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero).
+- **Methods.**
+  - *Learned choice model*: in each case the account picked one title among all those it could have been offered; the 10 score weights that make these choices most likely are learned in one go (conditional logit, projected Newton, weights kept positive and bounded). L2 regularisation **towards the current settings** — without evidence nothing moves — with its strength chosen by cross-validation over accounts. Few parameters, so usable with a short history (about 10 cases per weight); about one minute.
+  - *Coordinate search*: one parameter at a time within safe bounds, over 30+ settings (content and signals included): a 5-point grid (log scale for weights, zero tried for optional factors), then golden-section refinement; discrete choices enumerated (diversity mode included); two passes. A change is kept only if it improves the whole *and* does not lose on either half of the accounts. Needs much more history (about 20 cases per setting).
+  - *Automatic* (default): runs both and keeps the one that generalises best.
+  - The page shows, for each method, whether the history is **sufficient, borderline or insufficient**.
+- **Validation.** Each method is redone on half of the accounts and measured on the other half (two-fold cross-validation by account). A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero).
 
-Nothing is applied until you click **Apply**; the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task (about 10–20 minutes, on half the CPU cores).
+Nothing is applied until you click **Apply**; the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task, on half the CPU cores.
 
-On the reference household (150 cases) the search finds +13% in-sample but only +1% under cross-validation, CI spanning zero: the default settings stay, and so does the verdict "not recommended". That is the safeguard working, not a failure.
+On the reference household (150 cases): coordinate search finds +12% in-sample but only +1.6% under cross-validation (95% CI [−3.3%; +5.9%], history "insufficient" for it); the learned choice model stays close to the current settings, +1.1% under cross-validation with a much narrower interval (95% CI [−0.4%; +4.8%], history "sufficient"). No setting is recommended, so the defaults stay. That is the safeguard working, not a failure. Run time: about 18 minutes in automatic mode (one of which for the choice model), on one core.
+
+The 1.0.5 additions were measured the same way before choosing their defaults: personalised diversity gives +0.8% ranking quality over fixed diversity (95% CI [−0.1%; +2.4%]) and becomes the default; calibrated diversity is neutral at moderate strength and loses at high strength; current taste brings nothing on this history (the half-life already follows recent interests) and stays off. Titles shown but never opened cannot be measured this way (no display history before 1.0.5), so the default penalty is deliberately moderate.
 
 ## Optional integrations
 
 | Plugin / service | If present | If absent |
 |---|---|---|
-| Home Screen Sections | "For you" row (enable it in HSS settings too) | no home row; everything else works |
+| Home Screen Sections | Reco+ rows (enable them in HSS settings too); "Because you liked …" titles are per account | no home row; everything else works |
 | Jellyfin Enhanced | extended mode uses its cards, detail modal and *Request* button, with the live Seerr status (if it is linked to Seerr) | Reco+ cards, opening the Seerr page, with Reco+'s own *Request* button |
 | Media Bar Enhanced | benefits automatically (it calls the replaced endpoints) | — |
 | Playback Reporting | precise first-play dates for calibration | calibration is less precise; Reco+ also records first plays itself from install time |
@@ -142,6 +153,8 @@ On the reference household (150 cases) the search finds +13% in-sample but only 
 | LocalRecs | flagged as a duplicate | — |
 
 ## Privacy
+
+Titles shown but never opened stay on the server (a plugin file, one year at most) and only affect that account's ranking; the "Titles shown but never opened" switch turns this off.
 
 Nothing leaves the server, with two exceptions:
 - calls to **your** Seerr instance, when you configure it;

@@ -38,6 +38,25 @@ public enum WeightingScheme
     Bm25
 }
 
+/// <summary>Façon de varier la liste.</summary>
+public enum DiversityMode
+{
+    /// <summary>Pénalité de redondance fixe (MMR), la même pour tous les comptes.</summary>
+    Fixed,
+
+    /// <summary>
+    /// Personnalisée : la liste est aussi variée que ce que le compte regarde (ressemblance moyenne de ses titres
+    /// aimés) — un éclectique reçoit une liste variée, un spécialiste une liste resserrée.
+    /// </summary>
+    Personalized,
+
+    /// <summary>
+    /// Calibrée (Steck, RecSys 2018) : la répartition des genres de la liste suit celle de l'historique du compte
+    /// (70 % de thrillers vus → environ 70 % de thrillers proposés, pas 100 %).
+    /// </summary>
+    Calibrated
+}
+
 /// <summary>Tous les réglages du moteur. Valeurs par défaut = réglage retenu le 19/10/2026.</summary>
 public sealed class EngineSettings
 {
@@ -221,10 +240,37 @@ public sealed class EngineSettings
     /// <summary>Confiance dans les avis du foyer : avis « fictifs » neutres (3 étoiles) ajoutés à la moyenne.</summary>
     public double HouseholdPrior { get; set; } = 2;
 
+    /// <summary>
+    /// Goût du moment : proximité aux derniers titres aimés (profil court terme), en plus du profil de toujours.
+    /// Une période « séries coréennes » se voit tout de suite, sans effacer le reste.
+    /// </summary>
+    public double WShortTerm { get; set; }
+
+    /// <summary>Nombre de derniers titres aimés qui forment le goût du moment.</summary>
+    public int ShortTermTitles { get; set; } = 5;
+
+    /// <summary>
+    /// Montré sans être choisi : un titre vu à l'écran plusieurs jours sans être ouvert descend progressivement
+    /// (part maximale retirée de son score, 0 = coupé). Il remonte avec le temps.
+    /// </summary>
+    public double WImpression { get; set; } = 0.4;
+
+    /// <summary>Jours d'affichage pour atteindre environ les deux tiers de la pénalité.</summary>
+    public double ImpressionDays { get; set; } = 7;
+
+    /// <summary>Demi-vie de l'oubli (jours) : la pénalité s'efface d'autant après le dernier affichage.</summary>
+    public double ImpressionRecoveryDays { get; set; } = 30;
+
     // ---- liste
 
-    /// <summary>Pénalité de redondance (diversité).</summary>
+    /// <summary>Façon de varier la liste.</summary>
+    public DiversityMode Diversity { get; set; } = DiversityMode.Personalized;
+
+    /// <summary>Pénalité de redondance (diversité fixe ; base de la diversité personnalisée).</summary>
     public double Mmr { get; set; } = 0.3;
+
+    /// <summary>Diversité calibrée : force de l'alignement sur la répartition des genres de l'historique (0..1).</summary>
+    public double CalibrationStrength { get; set; } = 0.5;
 
     /// <summary>Une collection plus grande est un regroupement thématique, pas une saga.</summary>
     public int SagaMax { get; set; } = 12;
@@ -283,6 +329,16 @@ public sealed class EngineSettings
             {
                 p.SetValue(s, Clamp((double)p.GetValue(s)!, 0, 10));
             }
+        }
+
+        s.ShortTermTitles = (int)Clamp(s.ShortTermTitles, 1, 30);
+        s.WImpression = Clamp(s.WImpression, 0, 0.9);
+        s.ImpressionDays = Clamp(s.ImpressionDays, 1, 90);
+        s.ImpressionRecoveryDays = Clamp(s.ImpressionRecoveryDays, 1, 365);
+        s.CalibrationStrength = Clamp(s.CalibrationStrength, 0, 1);
+        if (!Enum.IsDefined(s.Diversity))
+        {
+            s.Diversity = DiversityMode.Fixed;
         }
 
         return s;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -14,6 +15,7 @@ using MediaBrowser.Model.Dto;
 using MediaBrowser.Model.Querying;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Integration;
 
@@ -25,7 +27,7 @@ public sealed class HssPayload
     public string? AdditionalData { get; set; }
 }
 
-/// <summary>Contenu de la rangée « Pour toi » (appelé par Home Screen Sections, instancié par son injecteur).</summary>
+/// <summary>Contenu des rangées Reco+ (appelé par Home Screen Sections, instancié par son injecteur).</summary>
 public sealed class HssSectionHandler
 {
     private readonly RecoService _reco;
@@ -41,8 +43,28 @@ public sealed class HssSectionHandler
         _dto = dto;
     }
 
-    /// <summary>Rangée : épinglés puis liste classée, 20 titres, droits du compte appliqués.</summary>
-    public QueryResult<BaseItemDto> GetResults(HssPayload payload)
+    /// <summary>« Pour toi » : épinglés puis liste classée, droits du compte appliqués.</summary>
+    public QueryResult<BaseItemDto> GetResults(HssPayload payload) => Row(payload, HomeRows.PourToi);
+
+    /// <summary>« Films pour toi ».</summary>
+    public QueryResult<BaseItemDto> GetMovies(HssPayload payload) => Row(payload, HomeRows.Films);
+
+    /// <summary>« Séries pour toi ».</summary>
+    public QueryResult<BaseItemDto> GetSeries(HssPayload payload) => Row(payload, HomeRows.Series);
+
+    /// <summary>« Nouveautés pour toi ».</summary>
+    public QueryResult<BaseItemDto> GetNew(HssPayload payload) => Row(payload, HomeRows.Nouveautes);
+
+    /// <summary>Première rangée « Parce que tu as aimé … ».</summary>
+    public QueryResult<BaseItemDto> GetBecause1(HssPayload payload) => Row(payload, HomeRows.ParceQue + 1);
+
+    /// <summary>Deuxième rangée « Parce que tu as aimé … ».</summary>
+    public QueryResult<BaseItemDto> GetBecause2(HssPayload payload) => Row(payload, HomeRows.ParceQue + 2);
+
+    /// <summary>Troisième rangée « Parce que tu as aimé … ».</summary>
+    public QueryResult<BaseItemDto> GetBecause3(HssPayload payload) => Row(payload, HomeRows.ParceQue + 3);
+
+    private QueryResult<BaseItemDto> Row(HssPayload payload, string row)
     {
         try
         {
@@ -58,7 +80,16 @@ public sealed class HssSectionHandler
                 return new QueryResult<BaseItemDto>();
             }
 
-            var ids = r.Pinned.Concat(r.Ranked).Distinct().Take(60).Select(x => Guid.ParseExact(x, "N")).ToArray();
+            int size = Math.Clamp(Plugin.Instance?.Configuration.RowSize ?? 20, 5, 60);
+            var src = row == HomeRows.PourToi && !r.Rows.ContainsKey(HomeRows.PourToi)
+                ? r.Pinned.Concat(r.Ranked)                                   // cache d'une version précédente
+                : r.Rows.GetValueOrDefault(row) ?? new List<string>();
+            var ids = src.Distinct().Take(size * 3).Select(x => Guid.ParseExact(x, "N")).ToArray();
+            if (ids.Length == 0)
+            {
+                return new QueryResult<BaseItemDto>();
+            }
+
             var allowed = _lib.GetItemList(new InternalItemsQuery(user)
             {
                 ItemIds = ids,
@@ -66,7 +97,7 @@ public sealed class HssSectionHandler
                 Recursive = true,
                 IsVirtualItem = false,
             }).ToDictionary(i => i.Id);
-            var items = ids.Where(allowed.ContainsKey).Select(x => allowed[x]).Take(20).ToList();
+            var items = ids.Where(allowed.ContainsKey).Select(x => allowed[x]).Take(size).ToList();
             var dtos = _dto.GetBaseItemDtos(items, new DtoOptions(), user);
             return new QueryResult<BaseItemDto>(0, dtos.Count, dtos);
         }
@@ -84,8 +115,39 @@ public sealed class HssSectionHandler
 /// </summary>
 public sealed class HomeScreenSectionsIntegration : BackgroundService
 {
-    /// <summary>Identifiant de la rangée.</summary>
+    /// <summary>Identifiant de la rangée « Pour toi ».</summary>
     public const string SectionId = "RecoPlusPourToi";
+
+    /// <summary>Préfixe des identifiants de section (l'identifiant de rangée suit).</summary>
+    public const string Prefix = "RecoPlus";
+
+    /// <summary>Sections à déclarer selon la configuration : (identifiant, titre affiché, méthode).</summary>
+    public static List<(string Id, string Title, string Method)> Sections(Configuration.PluginConfiguration cfg)
+    {
+        var l = new List<(string, string, string)> { (SectionId, cfg.HssSectionTitle, nameof(HssSectionHandler.GetResults)) };
+        if (cfg.RowNew)
+        {
+            l.Add((Prefix + HomeRows.Nouveautes, cfg.RowNewTitle, nameof(HssSectionHandler.GetNew)));
+        }
+
+        string because = (cfg.RowBecauseTitle ?? string.Empty).Replace("{titre}", "…", StringComparison.Ordinal).Trim();
+        for (int i = 1; i <= Math.Clamp(cfg.RowBecause, 0, 3); i++)
+        {
+            l.Add((Prefix + HomeRows.ParceQue + i, because.Length > 0 ? because : "Parce que tu as aimé…", "GetBecause" + i));
+        }
+
+        if (cfg.RowMovies)
+        {
+            l.Add((Prefix + HomeRows.Films, cfg.RowMoviesTitle, nameof(HssSectionHandler.GetMovies)));
+        }
+
+        if (cfg.RowSeries)
+        {
+            l.Add((Prefix + HomeRows.Series, cfg.RowSeriesTitle, nameof(HssSectionHandler.GetSeries)));
+        }
+
+        return l;
+    }
 
     private readonly ILogger<HomeScreenSectionsIntegration> _log;
     private readonly Notifier _notifier;
@@ -131,18 +193,25 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
                 throw new InvalidOperationException("PluginInterface.RegisterSection(JObject) introuvable");
             }
 
-            var payload = JsonSerializer.Serialize(new
+            var sections = Sections(cfg);
+            foreach (var (id, title, method) in sections)
             {
-                id = SectionId,
-                displayText = cfg.HssSectionTitle,
-                limit = 1,
-                resultsAssembly = typeof(HssSectionHandler).Assembly.FullName,
-                resultsClass = typeof(HssSectionHandler).FullName,
-                resultsMethod = nameof(HssSectionHandler.GetResults),
-            });
-            register.Invoke(null, new[] { parse.Invoke(null, new object[] { payload }) });
+                var payload = JsonSerializer.Serialize(new
+                {
+                    id,
+                    displayText = title,
+                    limit = 1,
+                    resultsAssembly = typeof(HssSectionHandler).Assembly.FullName,
+                    resultsClass = typeof(HssSectionHandler).FullName,
+                    resultsMethod = method,
+                });
+                register.Invoke(null, new[] { parse.Invoke(null, new object[] { payload }) });
+            }
+
             Registered = true;
-            State = $"rangée « {cfg.HssSectionTitle} » déclarée (à activer dans la configuration de Home Screen Sections)";
+            State = sections.Count == 1
+                ? $"rangée « {cfg.HssSectionTitle} » déclarée (à activer dans la configuration de Home Screen Sections)"
+                : $"{sections.Count} rangées déclarées : {string.Join(", ", sections.Select(x => "« " + x.Title + " »"))} (à activer dans la configuration de Home Screen Sections)";
             _notifier.Clear("off-" + Feature.HomeScreenSection);
             _log.LogInformation("Reco+ : rangée Home Screen Sections déclarée");
         }

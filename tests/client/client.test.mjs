@@ -19,7 +19,7 @@ function ext(n) {
 }
 
 // Page d'accueil : une section « Reprendre », puis éventuellement la section HSS « Pour toi » avec `lib` cartes.
-function page({ hssCards = 0, data, je = null }) {
+function page({ hssCards = 0, data, je = null, io = null }) {
     const dom = new JSDOM('<!doctype html><html><head></head><body><div id="indexPage"><div id="homeTab" class="tabContent" data-index="0"><div class="sections"></div></div></div></body></html>', { runScripts: 'outside-only', pretendToBeVisual: true });
     const w = dom.window;
     const calls = { getJSON: 0, posts: [] };
@@ -30,6 +30,7 @@ function page({ hssCards = 0, data, je = null }) {
         ajax: (o) => { calls.posts.push(o); return Promise.resolve({}); },
     };
     if (je) { w.JellyfinEnhanced = je(w); }
+    if (io) { w.IntersectionObserver = io; }
     const sections = w.document.querySelector('.sections');
     sections.innerHTML = '<div class="verticalSection ContinueWatchingNextUp section0"><div class="itemsContainer"><div class="card">r</div></div></div>';
     const fill = (n) => {
@@ -40,7 +41,7 @@ function page({ hssCards = 0, data, je = null }) {
             s.innerHTML = '<div is="emby-scroller"><div is="emby-itemscontainer" class="itemsContainer scrollSlider"></div></div>';
             sections.appendChild(s);
         }
-        s.querySelector('.itemsContainer').innerHTML = Array.from({ length: n }, (_, i) => `<div class="card" data-lib="${i}">L${i}</div>`).join('');
+        s.querySelector('.itemsContainer').innerHTML = Array.from({ length: n }, (_, i) => `<div class="card" data-lib="${i}" data-id="${String(i).padStart(32, 'a')}">L${i}</div>`).join('');
     };
     if (hssCards) { fill(hssCards); }
     w.eval(SCRIPT);
@@ -187,6 +188,73 @@ await test('affiche refusée si le chemin n\'est pas un chemin TMDb', async () =
     await wait(700);
     const img = p.sections.querySelector('.recoplus-ext .cardImageContainer');
     assert.equal(img.style.backgroundImage, '');
+});
+
+// IntersectionObserver simulé : les tests décident de ce qui est visible
+function ioStub() {
+    const all = [];
+    class IO {
+        constructor(cb) { this.cb = cb; this.els = []; all.push(this); }
+        observe(e) { this.els.push(e); }
+        unobserve() {}
+        disconnect() {}
+    }
+    IO.show = (el, ratio = 1) => all.forEach((o) => { if (o.els.includes(el)) { o.cb([{ target: el, isIntersecting: ratio > 0, intersectionRatio: ratio }]); } });
+    IO.watched = () => all.flatMap((o) => o.els);
+    return IO;
+}
+
+await test('rangées « Parce que tu as aimé … » renommées pour le compte', async () => {
+    const p = page({ data: { ...base, homeRow: false, rowTitles: { RecoPlusParceQue1: 'Parce que tu as aimé Dune', 'bad id': 'x' } } });
+    const s = p.w.document.createElement('div');
+    s.className = 'verticalSection RecoPlusParceQue1 section2';
+    s.innerHTML = '<div class="sectionTitleContainer"><h2 class="sectionTitle sectionTitle-cards">Parce que tu as aimé…</h2></div>';
+    p.sections.appendChild(s);
+    await wait(700);
+    assert.equal(s.querySelector('.sectionTitle').textContent, 'Parce que tu as aimé Dune');
+    assert.equal(s.querySelector('.sectionTitle').children.length, 0, 'texte seul, aucun HTML');
+});
+
+await test('affichages : carte visible au moins 1 s dans une rangée Reco+, une fois par jour ; ouverte = remise à zéro', async () => {
+    const IO = ioStub();
+    const p = page({ hssCards: 3, data: { ...base, homeRow: false, track: true }, io: IO });
+    await wait(700);
+    const other = p.sections.querySelector('.ContinueWatchingNextUp .card');
+    const cards = Array.from(p.sections.querySelectorAll('.RecoPlusPourToi .card'));
+    assert.equal(IO.watched().length, 3, 'seules les cartes Reco+ sont observées');
+    assert.ok(!IO.watched().includes(other));
+    IO.show(cards[0]);
+    IO.show(cards[1]);
+    await wait(300);
+    IO.show(cards[1], 0);          // sortie de l'écran avant 1 s : pas vue
+    await wait(900);
+    IO.show(cards[0], 0);
+    IO.show(cards[0]);             // revue le même jour : pas renvoyée
+    await wait(1100);
+    cards[2].dispatchEvent(new p.w.MouseEvent('click', { bubbles: true }));
+    await wait(20);
+    const posts = p.calls.posts.filter((o) => o.url === '/RecoPlus/Impressions');
+    assert.equal(posts.length, 1);
+    assert.deepEqual(JSON.parse(posts[0].data), { Shown: ['a'.repeat(31) + '0'], Opened: ['a'.repeat(31) + '2'] });
+});
+
+await test('affichages coupés : rien n\'est observé ni envoyé', async () => {
+    const IO = ioStub();
+    const p = page({ hssCards: 3, data: { ...base, homeRow: false, track: false }, io: IO });
+    await wait(700);
+    assert.equal(IO.watched().length, 0);
+    p.sections.querySelector('.RecoPlusPourToi .card').dispatchEvent(new p.w.MouseEvent('click', { bubbles: true }));
+    await wait(20);
+    assert.equal(p.calls.posts.length, 0);
+});
+
+await test('identifiants de carte : Jellyfin (avec ou sans tirets) et TMDb seulement', async () => {
+    const p = page({ data: { ...base, homeRow: false } });
+    const mk = (attrs) => { const c = p.w.document.createElement('div'); Object.entries(attrs).forEach(([k, v]) => c.setAttribute(k, v)); return c; };
+    assert.equal(p.w.__recoPlusCardId(mk({ 'data-id': '0123456789ABCDEF0123456789abcdef' })), '0123456789abcdef0123456789abcdef');
+    assert.equal(p.w.__recoPlusCardId(mk({ 'data-id': '01234567-89ab-cdef-0123-456789abcdef' })), '0123456789abcdef0123456789abcdef');
+    assert.equal(p.w.__recoPlusCardId(mk({ 'data-rp-id': 'tmdb:tv:42' })), 'tmdb:tv:42');
+    assert.equal(p.w.__recoPlusCardId(mk({ 'data-id': '../../x' })), null);
 });
 
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');

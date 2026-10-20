@@ -154,6 +154,18 @@ public class ParityTests
             GateTop = w.GetProperty("gate_top").GetInt32(),
             Weighting = c.GetProperty("scheme").GetString() == "bm25" ? WeightingScheme.Bm25 : WeightingScheme.TfIdf,
             Mmr = c.GetProperty("mmr").GetDouble(),
+            WShortTerm = Num(w, "short", 0),
+            ShortTermTitles = (int)Num(w, "short_n", 5),
+            WImpression = Num(w, "imp", d.WImpression),
+            ImpressionDays = Num(w, "imp_days", d.ImpressionDays),
+            ImpressionRecoveryDays = Num(w, "imp_recovery", d.ImpressionRecoveryDays),
+            Diversity = (c.TryGetProperty("div", out var dv) ? dv.GetString() : "fixed") switch
+            {
+                "personalized" => DiversityMode.Personalized,
+                "calibrated" => DiversityMode.Calibrated,
+                _ => DiversityMode.Fixed,
+            },
+            CalibrationStrength = Num(c, "cal", 0.5),
         };
     }
 
@@ -203,13 +215,16 @@ public class ParityTests
         foreach (var u in exp.GetProperty("users").EnumerateObject())
         {
             var cands = u.Value.GetProperty("cands").EnumerateArray().Select(x => x.GetString()!).ToList();
-            var sc = Recommender.Score(ctx, vec, u.Name, cands, s);
+            var expo = Golden.RootElement.GetProperty("dataset").TryGetProperty("exposure", out var ex) && ex.TryGetProperty(u.Name, out var eu)
+                ? eu.EnumerateObject().ToDictionary(e => e.Name, e => new Exposure(e.Value[0].GetInt32(), e.Value[1].GetDouble()), StringComparer.Ordinal)
+                : null;
+            var sc = Recommender.Score(ctx, vec, u.Name, cands, s, exposure: expo);
             foreach (var e in u.Value.GetProperty("scores").EnumerateObject())
             {
                 Assert.True(Math.Abs(e.Value.GetDouble() - sc[e.Name]) < Tol, $"{name}: score {u.Name}/{e.Name} {e.Value.GetDouble()} ≠ {sc[e.Name]}");
             }
 
-            var list = Recommender.Rank(ctx, vec, cands, sc, 12, s);
+            var list = Recommender.Rank(ctx, vec, cands, sc, 12, s, u.Name);
             var want = u.Value.GetProperty("list").EnumerateArray().Select(x => x.GetString()!).ToList();
             Assert.Equal(want, list);
         }

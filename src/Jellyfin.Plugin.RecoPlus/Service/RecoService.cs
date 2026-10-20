@@ -57,6 +57,7 @@ public sealed class RecoService
     private readonly ILogger<RecoService> _log;
     private readonly SemaphoreSlim _gate = new(1, 1);
     private readonly JellyfinEnhancedReader _je;
+    private readonly ImpressionStore _impressions;
     private readonly ConcurrentDictionary<string, UserRecs> _recs = new(StringComparer.Ordinal);
     private Dictionary<string, Dictionary<string, Interaction>> _lastHist = new(StringComparer.Ordinal);
     private IReadOnlyDictionary<(Guid, Guid), double>? _prCache;
@@ -64,9 +65,10 @@ public sealed class RecoService
     private bool _loaded;
 
     public RecoService(LibraryIndex index, UserHistory history, UserDataReader userData, PlaybackReportingReader pr, SeerrService seerr,
-        JellyfinEnhancedReader je, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log)
+        JellyfinEnhancedReader je, ImpressionStore impressions, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log)
     {
         _je = je;
+        _impressions = impressions;
         _index = index;
         _history = history;
         _userData = userData;
@@ -520,16 +522,25 @@ public sealed class RecoService
 
             r.Pinned = pinned;
 
+            // montré sans être ouvert (seulement ce que le compte a vraiment vu à l'écran)
+            var expo = cfg.TrackImpressions && s.WImpression > 0 ? _impressions.For(key, now) : null;
             if (cands.Count > 0)
             {
-                var sc = Recommender.Score(ctx, vec, key, cands, s);
-                var ranked = Recommender.Rank(ctx, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s).Where(id => !pinned.Contains(id)).ToList();
+                var sc = Recommender.Score(ctx, vec, key, cands, s, exposure: expo);
+                var ranked = Recommender.Rank(ctx, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s, key).Where(id => !pinned.Contains(id)).ToList();
 
                 // présentation : hasard du jour et minimums films/séries (le classement par goût reste intact pour les catégories)
                 var pool = cands.Where(id => !pinned.Contains(id)).ToList();
                 r.Ranked = ListPolicy.Shape(ranked, pool, id => titles.TryGetValue(id, out var kt) ? (TitleKind?)kt.Kind : null, lo, ListPolicy.Seed(key, DateTime.UtcNow));
                 r.Taste = r.Ranked.ToDictionary(id => id, id => Math.Round(sc[id], 5), StringComparer.Ordinal);
                 r.MovieCategories = Categories(ctx, vec, key, ranked, titles);
+
+                // rangées d'accueil supplémentaires, sans doublons entre elles ni avec « Pour toi »
+                var shownSet = new HashSet<string>(r.Ranked, StringComparer.Ordinal);
+                var ordered = r.Ranked.Concat(pool.Where(id => !shownSet.Contains(id)).OrderByDescending(id => sc[id]).ThenBy(id => id, StringComparer.Ordinal)).ToList();
+                var home = HomeRows.Allocate(ctx, vec, key, r.Pinned.Concat(r.Ranked).ToList(), ordered, sc, RowOptionsOf(cfg));
+                r.Rows = home.Rows;
+                r.RowAnchors = home.Anchors;
             }
 
             var hid = hiddenTmdb.GetValueOrDefault(key);
@@ -538,8 +549,8 @@ public sealed class RecoService
                 : new List<string>();
             if (extIds.Count > 0)
             {
-                var sc = Recommender.Score(ctx, vec, key, extIds, s, ex.Agree);
-                var extRanked = Recommender.Rank(ctx, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s);
+                var sc = Recommender.Score(ctx, vec, key, extIds, s, ex.Agree, exposure: expo);
+                var extRanked = Recommender.Rank(ctx, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s, key);
                 var recs = extRanked.Select(id => (Id: id, Rec: ToExternalRec(id, titles, ex.Because))).Where(p => p.Rec is not null).ToList();
                 r.Extended = recs.Select(p => p.Rec!).ToList();
 
@@ -547,7 +558,7 @@ public sealed class RecoService
                 if (cfg.ExtendedMixMode == Configuration.MixMode.Score && r.Ranked.Count > 0)
                 {
                     var shown = r.Ranked.Take(Math.Max(0, 20 - r.Pinned.Count)).ToList();
-                    var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), s, ex.Agree);
+                    var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), s, ex.Agree, exposure: expo);
                     foreach (var (id, rec) in recs)
                     {
                         var se = joint[id];
@@ -565,6 +576,17 @@ public sealed class RecoService
         Status.UsersWithRecs = _recs.Count;
         Persist();
     }
+
+    /// <summary>Rangées d'accueil demandées dans la configuration.</summary>
+    internal static RowOptions RowOptionsOf(Configuration.PluginConfiguration cfg) => new()
+    {
+        Size = Math.Clamp(cfg.RowSize, 5, 60),
+        Movies = cfg.RowMovies,
+        Series = cfg.RowSeries,
+        New = cfg.RowNew,
+        NewDays = Math.Clamp(cfg.RowNewDays, 1, 365),
+        Because = Math.Clamp(cfg.RowBecause, 0, 3),
+    };
 
     /// <summary>Jeu de données pour le calibrage : bibliothèque + historiques complets (sans Seerr).</summary>
     public Dataset BuildCalibrationDataset()
@@ -619,6 +641,36 @@ public sealed class RecoService
 
         string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? $"{t.Name}{(t.Kind == TitleKind.Series ? " (série)" : string.Empty)}" : id;
         return r.Pinned.Select(id => "📌 " + Name(id)).Concat(r.Ranked.Select(Name)).Take(n).ToList();
+    }
+
+    /// <summary>Aperçu des rangées d'accueil supplémentaires d'un compte : libellé → titres (page de configuration).</summary>
+    public Dictionary<string, List<string>> PreviewRows(Guid user)
+    {
+        var r = For(user);
+        var lib = Library ?? _index.Current;
+        var cfg = Plugin.Instance?.Configuration;
+        var res = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        if (r is null || cfg is null)
+        {
+            return res;
+        }
+
+        string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? $"{t.Name}{(t.Kind == TitleKind.Series ? " (série)" : string.Empty)}" : id;
+        string tpl = string.IsNullOrWhiteSpace(cfg.RowBecauseTitle) ? "Parce que tu as aimé {titre}" : cfg.RowBecauseTitle;
+        int size = Math.Clamp(cfg.RowSize, 5, 60);
+        foreach (var (row, ids) in r.Rows.Where(kv => kv.Key != HomeRows.PourToi))
+        {
+            string label = row switch
+            {
+                HomeRows.Films => cfg.RowMoviesTitle,
+                HomeRows.Series => cfg.RowSeriesTitle,
+                HomeRows.Nouveautes => cfg.RowNewTitle,
+                _ => r.RowAnchors.TryGetValue(row, out var a) ? tpl.Replace("{titre}", a, StringComparison.Ordinal) : row,
+            };
+            res[label] = ids.Take(size).Select(Name).ToList();
+        }
+
+        return res;
     }
 
     private ExternalRec? ToExternalRec(string id, Dictionary<string, Title> titles, Dictionary<string, string> because)

@@ -198,5 +198,57 @@ await test('valeur hors curseur (calibrage) : affichée en entier et jamais modi
     assert.equal(saved[1].Engine.WRelease, 1);
 });
 
+await test('1.0.5 : rangées, diversité, affichages — aller-retour', async () => {
+    const c = JSON.parse(JSON.stringify(cfg));
+    Object.assign(c, { RowBecause: 2, RowMovies: true, RowSeries: false, RowNew: true, RowSize: 20, RowBecauseTitle: 'Parce que tu as aimé {titre}', TrackImpressions: true });
+    Object.assign(c.Engine, { Diversity: 'Personalized', WImpression: 0.4, WShortTerm: 0, CalibrationStrength: 0.5 });
+    const { d, saved } = open(c);
+    await wait(50);
+    assert.equal(d.getElementById('rp_e_Diversity').value, 'Personalized');
+    assert.equal(d.getElementById('rp_c_RowBecause').value, '2');
+    assert.equal(d.getElementById('rp_e_WShortTerm_on').checked, false, 'goût du moment coupé par défaut');
+    assert.ok(d.getElementById('rp_c_RowSize').closest('details.rp-adv'), 'taille des rangées : réglage avancé');
+    assert.ok(!d.getElementById('rp_c_RowBecause').closest('details.rp-adv'), 'nombre de rangées : réglage de base');
+    d.getElementById('rp_e_Diversity').value = 'Calibrated';
+    d.getElementById('rp_c_RowSeries').checked = true;
+    d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
+    await wait(50);
+    const s = saved[0];
+    assert.equal(s.Engine.Diversity, 'Calibrated');
+    assert.equal(s.RowSeries, true);
+    assert.equal(s.RowBecause, 2);
+    assert.equal(s.Engine.WImpression, 0.4);
+    assert.equal(s.Engine.WShortTerm, 0);
+    assert.equal(s.TrackImpressions, true);
+});
+
+await test('chaque onglet de réglages : l\'avancé est replié par défaut', async () => {
+    const { d } = open(cfg);
+    await wait(50);
+    const panes = [...d.querySelectorAll('#rpForm .rp-pane')];
+    const withAdv = panes.filter((p) => p.querySelector('details.rp-adv'));
+    assert.ok(withAdv.length >= 5, 'onglets avec avancé : ' + withAdv.length);
+    withAdv.forEach((p) => p.querySelectorAll('details.rp-adv').forEach((x) => assert.equal(x.open, false)));
+});
+
+await test('calibrage : méthode enregistrée au changement, avertissement si l\'historique ne suffit pas', async () => {
+    const { w, d, saved } = open({ ...cfg, CalibrationMethod: 'Auto' });
+    const data = { cases: 70, methods: { Auto: { level: 'limite', message: '70 cas…' }, ChoiceModel: { level: 'limite', message: '70 cas pour 10 réglages' }, Coordinate: { level: 'insuffisant', message: '70 cas pour 36 réglages : pas assez' } } };
+    const ajax = w.ApiClient.ajax;
+    w.ApiClient.ajax = (o) => (o.url === '/RecoPlus/Calibration/Data' ? Promise.resolve(data) : ajax(o));
+    await wait(50);
+    assert.equal(d.getElementById('rpCalMethod').value, 'Auto');
+    d.querySelector('.rp-tab[data-tab="calibrage"]').click();
+    await wait(50);
+    const sel = d.getElementById('rpCalMethod');
+    sel.value = 'Coordinate';
+    sel.dispatchEvent(new w.Event('change'));
+    await wait(50);
+    assert.equal(saved.at(-1).CalibrationMethod, 'Coordinate');
+    assert.match(d.getElementById('rpCalData').textContent, /^⚠ 70 cas pour 36 réglages/);
+    assert.match(d.getElementById('rpCalData').className, /ko/);
+    assert.match([...sel.options].find((o) => o.value === 'ChoiceModel').textContent, /historique limite$/);
+});
+
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');
 process.exit(failures ? 1 : 0);

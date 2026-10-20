@@ -45,6 +45,14 @@ public sealed class WebhookTestBody
     public string? Token { get; set; }
 }
 
+/// <summary>Titres vus à l'écran / ouverts par le compte connecté (script de l'interface web).</summary>
+public sealed class ImpressionsBody
+{
+    public List<string>? Shown { get; set; }
+
+    public List<string>? Opened { get; set; }
+}
+
 /// <summary>Écriture d'un secret (jamais relu par l'API).</summary>
 public sealed class SecretBody
 {
@@ -65,10 +73,12 @@ public sealed class RecoController : ControllerBase
     private readonly CalibrationService _calib;
     private readonly IUserManager _users;
     private readonly System.Net.Http.IHttpClientFactory _httpFactory;
+    private readonly ImpressionStore _impressions;
 
     public RecoController(RecoService reco, SeerrService seerr, SecretStore secrets, Notifier notifier, CalibrationService calib, IUserManager users,
-        System.Net.Http.IHttpClientFactory httpFactory)
+        System.Net.Http.IHttpClientFactory httpFactory, ImpressionStore impressions)
     {
+        _impressions = impressions;
         _httpFactory = httpFactory;
         _reco = reco;
         _seerr = seerr;
@@ -111,8 +121,14 @@ public sealed class RecoController : ControllerBase
         var r = _reco.For(me.Value);
         bool on = cfg.Enabled && cfg.ExtendedEnabled && _seerr.Configured;
         bool hss = cfg.HssSection && HomeScreenSectionsIntegration.Registered && CompatibilityGuard.Allowed(Feature.HomeScreenSection);
+        string tpl = string.IsNullOrWhiteSpace(cfg.RowBecauseTitle) ? "Parce que tu as aimé {titre}" : cfg.RowBecauseTitle;
         return Ok(new
         {
+            // titres des rangées « Parce que tu as aimé … » de ce compte (le script remplace le titre générique)
+            rowTitles = r is null || !cfg.Enabled ? new Dictionary<string, string>() : r.RowAnchors.ToDictionary(
+                kv => HomeScreenSectionsIntegration.Prefix + kv.Key, kv => tpl.Replace("{titre}", kv.Value, StringComparison.Ordinal)),
+            // affichages comptés seulement si le compte reçoit des recommandations Reco+
+            track = cfg.Enabled && cfg.TrackImpressions && (cfg.Engine?.WImpression ?? 0) > 0 && r is not null,
             enabled = on,
             homeRow = on && cfg.ExtendedHomeRow && CompatibilityGuard.Allowed(Feature.ClientScript),
             hss,
@@ -124,6 +140,35 @@ public sealed class RecoController : ControllerBase
             seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? cfg.SeerrUrl.TrimEnd('/') : cfg.SeerrPublicUrl.TrimEnd('/'),
             items = on ? (object)(r?.Extended ?? new List<ExternalRec>()) : Array.Empty<object>(),
         });
+    }
+
+    /// <summary>
+    /// Ce que le compte connecté a vu à l'écran dans une rangée Reco+ (carte visible au moins une seconde) et ce qu'il a
+    /// ouvert. Rien n'est compté pour un autre compte : l'identité vient du jeton de session.
+    /// </summary>
+    [HttpPost("Impressions")]
+    [Authorize]
+    public ActionResult Impressions([FromBody] ImpressionsBody body)
+    {
+        var cfg = Plugin.Instance!.Configuration;
+        var me = CurrentUser;
+        if (me is null)
+        {
+            return Unauthorized();
+        }
+
+        if (!cfg.Enabled || !cfg.TrackImpressions || RecoService.IsExcluded(me.Value))
+        {
+            return NoContent();
+        }
+
+        if ((body.Shown?.Count ?? 0) > 500 || (body.Opened?.Count ?? 0) > 500)
+        {
+            return BadRequest(new { message = "trop de titres" });
+        }
+
+        _impressions.Record(me.Value.ToString("N"), body.Shown, body.Opened, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0);
+        return NoContent();
     }
 
     /// <summary>Demande un titre du mode étendu, au nom du compte connecté (ses droits et quotas Seerr).</summary>
@@ -210,6 +255,18 @@ public sealed class RecoController : ControllerBase
                     verdict = _calib.Report.Verdict,
                     steps = _calib.Report.Steps.Where(s => s.Kept),
                     settings = _calib.Report.ProposedSettings,
+                    method = _calib.Report.Method.ToString(),
+                    methods = _calib.Report.Methods.Select(m => new
+                    {
+                        method = m.Method.ToString(),
+                        name = m.Name,
+                        gain = m.Result.Gain,
+                        cvDelta = m.CvDelta,
+                        ciLow = m.Ci.Low,
+                        ciHigh = m.Ci.High,
+                        sufficiency = m.Sufficiency,
+                        recommended = m.Recommended,
+                    }),
                 },
             },
             canRollback = Plugin.Instance!.Configuration.PreviousEngine is not null,
@@ -228,7 +285,7 @@ public sealed class RecoController : ControllerBase
     public ActionResult Preview([FromQuery] Guid userId)
     {
         var r = _reco.For(userId);
-        return Ok(new { items = _reco.Preview(userId), extended = r?.Extended.Take(10).Select(e => $"{e.Name} ({e.Year}) — parce que : {e.Because}"), computedAt = r?.ComputedAt });
+        return Ok(new { items = _reco.Preview(userId), extended = r?.Extended.Take(10).Select(e => $"{e.Name} ({e.Year}) — parce que : {e.Because}"), rows = _reco.PreviewRows(userId), computedAt = r?.ComputedAt });
     }
 
     /// <summary>Recalcul complet immédiat (en arrière-plan).</summary>
@@ -323,6 +380,26 @@ public sealed class RecoController : ControllerBase
 
         _calib.Start();
         return Accepted();
+    }
+
+    /// <summary>
+    /// Historique disponible pour le calibrage : nombre de cas et, pour chaque méthode, s'il suffit (avertissement de la
+    /// page de configuration). Lecture de l'historique seulement, rien n'est calculé.
+    /// </summary>
+    [HttpGet("Calibration/Data")]
+    [Authorize(Policy = Policies.RequiresElevation)]
+    public ActionResult CalibrationData()
+    {
+        int n = _calib.CaseCount();
+        return Ok(new
+        {
+            cases = n,
+            methods = Enum.GetValues<CalibrationMethod>().ToDictionary(m => m.ToString(), m =>
+            {
+                var (level, message) = Calibrator.Sufficiency(m, n);
+                return new { level, message };
+            }),
+        });
     }
 
     /// <summary>Interrompt le calibrage.</summary>
