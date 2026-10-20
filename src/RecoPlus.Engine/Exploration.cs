@@ -162,6 +162,59 @@ public static class Exploration
             .Take(Math.Max(0, max)).Select(kv => (kv.Key, kv.Value.W)).ToList();
     }
 
+    /// <summary>
+    /// Croisements de deux pistes (genre × thème, genre × langue…) : les <paramref name="max"/> couples dont le produit
+    /// des poids est le plus fort (à égalité, l'ordre des listes). Explore ce qui est au cœur des goûts, plus précis
+    /// qu'une piste seule.
+    /// </summary>
+    public static List<(TA A, TB B, double Weight)> Pairs<TA, TB>(IReadOnlyList<(TA Item, double Weight)> a, IReadOnlyList<(TB Item, double Weight)> b, int max)
+    {
+        var res = new List<(TA, TB, double, int)>();
+        for (int i = 0; i < a.Count; i++)
+        {
+            for (int j = 0; j < b.Count; j++)
+            {
+                res.Add((a[i].Item, b[j].Item, a[i].Weight * b[j].Weight, (i * b.Count) + j));
+            }
+        }
+
+        return res.Where(p => p.Item3 > 0).OrderByDescending(p => p.Item3).ThenBy(p => p.Item4)
+            .Take(Math.Max(0, max)).Select(p => (p.Item1, p.Item2, p.Item3)).ToList();
+    }
+
+    /// <summary>
+    /// Bilan par source d'une exploration : titres trouvés (après exclusion des titres déjà là, demandés ou vus), détaillés
+    /// et autorisés (dans le budget de fiches), proposés (classés parmi les titres hors bibliothèque du compte) et placés
+    /// dans la rangée (mélange libre ; null sinon).
+    /// </summary>
+    public static Dictionary<string, SourceStat> Stats(
+        IReadOnlyDictionary<string, int> found, IEnumerable<string> detailed, IEnumerable<string> proposed, IEnumerable<string>? placed)
+    {
+        var res = new Dictionary<string, SourceStat>(StringComparer.Ordinal);
+        SourceStat Of(string s) => res.TryGetValue(s, out var x) ? x : res[s] = new SourceStat { Placed = placed is null ? null : 0 };
+        foreach (var (s, n) in found)
+        {
+            Of(s).Found = n;
+        }
+
+        foreach (var s in detailed)
+        {
+            Of(s).Detailed++;
+        }
+
+        foreach (var s in proposed)
+        {
+            Of(s).Proposed++;
+        }
+
+        foreach (var s in placed ?? Enumerable.Empty<string>())
+        {
+            Of(s).Placed = (Of(s).Placed ?? 0) + 1;
+        }
+
+        return res;
+    }
+
     // Genres TMDb : identifiants différents pour les films et les séries ; correspondances entre les deux
     private static readonly Dictionary<int, int[]> TvToMovie = new()
     {
@@ -203,6 +256,22 @@ public static class Exploration
 
         return TvToMovie.TryGetValue(genreId, out var m) ? m : Array.Empty<int>();
     }
+}
+
+/// <summary>Bilan d'une source d'exploration pour un compte (aperçu de la configuration).</summary>
+public sealed class SourceStat
+{
+    /// <summary>Titres trouvés par la source (hors titres déjà là, demandés ou vus).</summary>
+    public int Found { get; set; }
+
+    /// <summary>Titres retenus dans le budget de fiches, détaillés et autorisés (contrôle parental).</summary>
+    public int Detailed { get; set; }
+
+    /// <summary>Titres classés parmi les titres hors bibliothèque proposés au compte.</summary>
+    public int Proposed { get; set; }
+
+    /// <summary>Titres placés dans la rangée (mélange libre) ; null : mélange à intervalle fixe.</summary>
+    public int? Placed { get; set; }
 }
 
 /// <summary>

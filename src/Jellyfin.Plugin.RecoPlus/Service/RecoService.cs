@@ -711,7 +711,13 @@ public sealed class RecoService : IDisposable
                 var sc = Exploration.Noisy(Recommender.Score(ctx, vec, key, extIds, s, ex.Agree, exposure: expo), noise, noiseSeed);
                 var extRanked = Recommender.Rank(ctx, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s, key);
                 var recs = extRanked.Select(id => (Id: id, Rec: ToExternalRec(id, titles, ex.Because, ex.Reasons))).Where(p => p.Rec is not null).ToList();
+                foreach (var p in recs)
+                {
+                    p.Rec!.Source = ex.SourceOf.GetValueOrDefault(p.Id, string.Empty);
+                }
+
                 r.Extended = recs.Select(p => p.Rec!).ToList();
+                List<string>? placedFrom = null;
 
                 // mélange libre : bibliothèque et hors bibliothèque notés ensemble sur ce qu'ils ont en commun, chacun à sa place dans la rangée
                 if (cfg.ExtendedMixMode == Configuration.MixMode.Score && r.Ranked.Count > 0)
@@ -729,13 +735,19 @@ public sealed class RecoService : IDisposable
                     {
                         recs[i].Rec!.After = places[i];
                     }
+
+                    placedFrom = recs.Where(p => p.Rec!.After >= 0 && p.Rec!.After < shown.Count).Select(p => p.Rec!.Source).ToList();
                 }
+
+                // bilan par source (aperçu) : trouvés, détaillés et autorisés, proposés, placés dans la rangée
+                r.Sources = Exploration.Stats(ex.Found, extIds.Select(id => ex.SourceOf.GetValueOrDefault(id, string.Empty)), r.Extended.Select(e => e.Source), placedFrom);
             }
 
             // pas d'exploration pour ce compte (inactif, ou Seerr injoignable) : ses titres hors bibliothèque précédents restent
             if (cfg.ExtendedEnabled && !extCands.ContainsKey(key) && _recs.TryGetValue(key, out var prevRecs))
             {
                 r.Extended = prevRecs.Extended;
+                r.Sources = prevRecs.Sources;
             }
 
             _recs[key] = r;
@@ -1021,7 +1033,9 @@ public sealed class RecoService : IDisposable
     };
 
     /// <summary>Candidats hors bibliothèque d'un compte : identifiants, accord TMDb, titre aimé d'origine et raison affichée.</summary>
-    private sealed record ExtCandidates(List<string> Ids, Dictionary<string, double> Agree, Dictionary<string, string> Because, Dictionary<string, string> Reasons);
+    private sealed record ExtCandidates(
+        List<string> Ids, Dictionary<string, double> Agree, Dictionary<string, string> Because, Dictionary<string, string> Reasons,
+        Dictionary<string, string> SourceOf, Dictionary<string, int> Found);
 
     /// <summary>
     /// Candidats hors bibliothèque, de plusieurs sources fusionnées à parts équilibrées : recommandations et titres
@@ -1099,7 +1113,7 @@ public sealed class RecoService : IDisposable
         }
 
         // 2) fiches des titres aimés : leurs genres, thèmes, auteurs, studios, langue et saga orientent l'exploration
-        bool needLiked = cfg.ExtendedByGenre || cfg.ExtendedByKeyword || cfg.ExtendedSagas || cfg.ExtendedByPeople || cfg.ExtendedByStudio || cfg.ExtendedByLanguage;
+        bool needLiked = cfg.ExtendedByGenre || cfg.ExtendedByKeyword || cfg.ExtendedCrossings || cfg.ExtendedGems || cfg.ExtendedSagas || cfg.ExtendedByPeople || cfg.ExtendedByStudio || cfg.ExtendedByLanguage;
         var likedDetails = needLiked
             ? await Task.WhenAll(anchors.Select(a =>
             {
@@ -1139,30 +1153,97 @@ public sealed class RecoService : IDisposable
             }
         }
 
-        if (cfg.ExtendedByGenre && liked.Count > 0)
+        // pistes les plus fortes des titres aimés : genres, thèmes, langues d'origine (partagées par plusieurs sources)
+        var genreNames = liked.SelectMany(x => x.D.GenreRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name.ToLowerInvariant());
+        var keywordNames = liked.SelectMany(x => x.D.KeywordRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
+        int genreCount = Math.Max(cfg.ExtendedByGenre ? Math.Clamp(cfg.ExtendedGenres, 0, 20) : 0, Math.Max(cfg.ExtendedGems ? Math.Clamp(cfg.ExtendedGemGenres, 0, 20) : 0, cfg.ExtendedCrossings ? 5 : 0));
+        var topGenres = Exploration.Top(liked.Select(x => (x.D.GenreRefs.Select(g => g.Id), x.A.Weight)), 1, genreCount);
+        var topKeywords = Exploration.Top(liked.Select(x => (x.D.KeywordRefs.Select(g => g.Id), x.A.Weight)), 2, Math.Max(cfg.ExtendedByKeyword ? Math.Clamp(cfg.ExtendedKeywords, 0, 50) : 0, cfg.ExtendedCrossings ? 5 : 0));
+        double likedTotal = Math.Max(1e-9, liked.Sum(x => x.A.Weight));
+        var topLanguages = liked.Where(x => !string.IsNullOrEmpty(x.D.OriginalLanguage)).GroupBy(x => x.D.OriginalLanguage!.ToLowerInvariant())
+            .Select(g => (Item: g.Key, Weight: g.Sum(x => x.A.Weight) / likedTotal))
+            .Where(g => g.Weight * 100 >= Math.Clamp(cfg.ExtendedLanguageMinShare, 1, 100))
+            .OrderByDescending(g => g.Weight).ThenBy(g => g.Item, StringComparer.Ordinal).ToList();
+        string LanguageLabel(string code) => LanguageNames.TryGetValue(code, out var ln) ? ln : code;
+        string Inv(int v) => v.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+        if (cfg.ExtendedByGenre)
         {
-            var names = liked.SelectMany(x => x.D.GenreRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
-            foreach (var (gid, w) in Exploration.Top(liked.Select(x => (x.D.GenreRefs.Select(g => g.Id), x.A.Weight)), 1, Math.Clamp(cfg.ExtendedGenres, 0, 20)))
+            foreach (var (gid, w) in topGenres.Take(Math.Clamp(cfg.ExtendedGenres, 0, 20)))
             {
                 foreach (var t in types)
                 {
                     var genreIds = Exploration.GenreFor(gid, t).ToList();
                     if (genreIds.Count > 0)
                     {
-                        Discover("genre", t, new Dictionary<string, string> { ["genre"] = string.Join("|", genreIds) }, w, "Bien noté en " + names[gid].ToLowerInvariant());
+                        Discover("genre", t, new Dictionary<string, string> { ["genre"] = string.Join("|", genreIds) }, w, "Bien noté en " + genreNames[gid]);
                     }
                 }
             }
         }
 
-        if (cfg.ExtendedByKeyword && liked.Count > 0)
+        if (cfg.ExtendedByKeyword)
         {
-            var names = liked.SelectMany(x => x.D.KeywordRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
-            foreach (var (kid, w) in Exploration.Top(liked.Select(x => (x.D.KeywordRefs.Select(g => g.Id), x.A.Weight)), 2, Math.Clamp(cfg.ExtendedKeywords, 0, 50)))
+            foreach (var (kid, w) in topKeywords.Take(Math.Clamp(cfg.ExtendedKeywords, 0, 50)))
             {
                 foreach (var t in types)
                 {
-                    Discover("keyword", t, new Dictionary<string, string> { ["keywords"] = kid.ToString(System.Globalization.CultureInfo.InvariantCulture) }, w, "Sur le thème « " + names[kid] + " »");
+                    Discover("keyword", t, new Dictionary<string, string> { ["keywords"] = Inv(kid) }, w, "Sur le thème « " + keywordNames[kid] + " »");
+                }
+            }
+        }
+
+        // croisements : genre × thème et genre × langue d'origine (hors anglais, déjà majoritaire partout), listes plus
+        // étroites donc moins de votes exigés
+        if (cfg.ExtendedCrossings && topGenres.Count > 0)
+        {
+            static List<(T Item, double Weight)> Norm<T>(IEnumerable<(T Item, double Weight)> l)
+            {
+                var x = l.ToList();
+                double m = x.Count == 0 ? 1 : Math.Max(1e-9, x.Max(e => e.Weight));
+                return x.Select(e => (e.Item, e.Weight / m)).ToList();
+            }
+
+            int maxCross = Math.Clamp(cfg.ExtendedCrossingsMax, 0, 30);
+            var g5 = Norm(topGenres.Take(5));
+            var byKeyword = Exploration.Pairs(g5, Norm(topKeywords.Take(5)), maxCross)
+                .Select(p => (Genre: p.A, Extra: "keywords", Value: Inv(p.B), p.Weight, Reason: "Bien noté en " + genreNames[p.A] + ", thème « " + keywordNames[p.B] + " »"));
+            var byLanguage = Exploration.Pairs(g5, Norm(topLanguages.Where(l => l.Item != "en").Take(3)), maxCross)
+                .Select(p => (Genre: p.A, Extra: "language", Value: p.B, p.Weight, Reason: "Bien noté en " + genreNames[p.A] + ", en " + LanguageLabel(p.B) + " (version originale)"));
+            var votes = Inv(Math.Clamp(cfg.ExtendedMinVotes, 0, 1_000_000) / 2);
+            foreach (var c in byKeyword.Concat(byLanguage).OrderByDescending(c => c.Weight).Take(maxCross))
+            {
+                foreach (var t in types)
+                {
+                    var genreIds = Exploration.GenreFor(c.Genre, t).ToList();
+                    if (genreIds.Count > 0)
+                    {
+                        Discover("cross", t, new Dictionary<string, string> { ["genre"] = string.Join("|", genreIds), [c.Extra] = c.Value, ["voteCountGte"] = votes }, c.Weight, c.Reason);
+                    }
+                }
+            }
+        }
+
+        // pépites : très bien notées mais peu connues (peu de votes), tous genres et dans les genres préférés
+        if (cfg.ExtendedGems)
+        {
+            int lo = Math.Clamp(cfg.ExtendedGemMinVotes, 0, 1_000_000), hi = Math.Max(lo, Math.Clamp(cfg.ExtendedGemMaxVotes, 0, 1_000_000));
+            var gem = new Dictionary<string, string>
+            {
+                ["voteAverageGte"] = Math.Clamp(cfg.ExtendedGemMinRating, 0, 10).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture),
+                ["voteCountGte"] = Inv(lo),
+                ["voteCountLte"] = Inv(hi),
+            };
+            foreach (var t in types)
+            {
+                Discover("gems", t, gem, 1, "Pépite peu connue");
+                foreach (var (gid, w) in topGenres.Take(Math.Clamp(cfg.ExtendedGemGenres, 0, 20)))
+                {
+                    var genreIds = Exploration.GenreFor(gid, t).ToList();
+                    if (genreIds.Count > 0)
+                    {
+                        Discover("gems", t, new Dictionary<string, string>(gem) { ["genre"] = string.Join("|", genreIds) }, 1 + w, "Pépite peu connue en " + genreNames[gid]);
+                    }
                 }
             }
         }
@@ -1182,19 +1263,13 @@ public sealed class RecoService : IDisposable
             }
         }
 
-        if (cfg.ExtendedByLanguage && liked.Count > 0)
+        if (cfg.ExtendedByLanguage)
         {
-            double total = liked.Sum(x => x.A.Weight);
-            foreach (var g in liked.Where(x => !string.IsNullOrEmpty(x.D.OriginalLanguage)).GroupBy(x => x.D.OriginalLanguage!.ToLowerInvariant()))
+            foreach (var (code, share) in topLanguages)
             {
-                double share = g.Sum(x => x.A.Weight) / Math.Max(1e-9, total);
-                if (share * 100 >= Math.Clamp(cfg.ExtendedLanguageMinShare, 1, 100))
+                foreach (var t in types)
                 {
-                    var label = LanguageNames.TryGetValue(g.Key, out var ln) ? ln : g.Key;
-                    foreach (var t in types)
-                    {
-                        Discover("language", t, new Dictionary<string, string> { ["language"] = g.Key }, share, "Bien noté en " + label + " (version originale)");
-                    }
+                    Discover("language", t, new Dictionary<string, string> { ["language"] = code }, share, "Bien noté en " + LanguageLabel(code) + " (version originale)");
                 }
             }
         }
@@ -1251,7 +1326,9 @@ public sealed class RecoService : IDisposable
             new("related", Ordered(bySource.GetValueOrDefault("related")), 3),
             new("saga", Ordered(bySource.GetValueOrDefault("saga")), 2),
             new("people", Ordered(bySource.GetValueOrDefault("people")), 2),
+            new("cross", Ordered(bySource.GetValueOrDefault("cross")), 1),
             new("keyword", Ordered(bySource.GetValueOrDefault("keyword")), 1),
+            new("gems", Ordered(bySource.GetValueOrDefault("gems")), 1),
             new("genre", Ordered(bySource.GetValueOrDefault("genre")), 1),
             new("studio", Ordered(bySource.GetValueOrDefault("studio")), 1),
             new("language", Ordered(bySource.GetValueOrDefault("language")), 1),
@@ -1269,6 +1346,7 @@ public sealed class RecoService : IDisposable
         var ids = new List<string>();
         var agree = new Dictionary<string, double>(StringComparer.Ordinal);
         var reasons = new Dictionary<string, string>(StringComparer.Ordinal);
+        var sourceOf = new Dictionary<string, string>(StringComparer.Ordinal);
         for (int i = 0; i < merged.Count; i++)
         {
             var (k, source) = merged[i];
@@ -1285,13 +1363,15 @@ public sealed class RecoService : IDisposable
             }
 
             ids.Add(id);
+            sourceOf[id] = source;
             agree[id] = count.GetValueOrDefault(k) / (double)Math.Max(1, anchors.Count);
             reasons[id] = source == "related"
                 ? (because.TryGetValue(id, out var b) && b.Length > 0 ? "Parce que tu as aimé " + b : string.Empty)
                 : bySource[source][k].Reason;
         }
 
-        return new ExtCandidates(ids, agree, because, reasons);
+        var found = bySource.ToDictionary(kv => kv.Key, kv => kv.Value.Count, StringComparer.Ordinal);
+        return new ExtCandidates(ids, agree, because, reasons, sourceOf, found);
     }
 
     /// <summary>Catégories « Parce que tu as aimé X » : chaque film recommandé va sous le titre aimé dont il est le plus proche.</summary>

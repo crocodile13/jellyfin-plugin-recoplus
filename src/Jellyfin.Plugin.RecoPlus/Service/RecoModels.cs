@@ -43,6 +43,9 @@ public sealed class ExternalRec
     /// <summary>Pourquoi ce titre est proposé, en clair (« Parce que tu as aimé … », « De Hayao Miyazaki », « Bien noté en animation »…).</summary>
     public string Reason { get; set; } = string.Empty;
 
+    /// <summary>Source d'exploration qui l'a apporté (related, saga, people, keyword, genre, cross, gems, studio, language, top).</summary>
+    public string Source { get; set; } = string.Empty;
+
     /// <summary>
     /// Mélange libre : nombre de titres de la bibliothèque (rangée « Pour toi », hors demandes en tête) que le moteur classe
     /// devant celui-ci ; -1 = non calculé.
@@ -78,6 +81,9 @@ public sealed class UserRecs
 
     /// <summary>Mode étendu.</summary>
     public List<ExternalRec> Extended { get; set; } = new();
+
+    /// <summary>Bilan de la dernière exploration, par source (aperçu de la configuration).</summary>
+    public Dictionary<string, RecoPlus.Engine.SourceStat> Sources { get; set; } = new(StringComparer.Ordinal);
 
     /// <summary>Compte Jellyseerr lié (0 = aucun : pas de bouton Demander).</summary>
     public int SeerrUserId { get; set; }

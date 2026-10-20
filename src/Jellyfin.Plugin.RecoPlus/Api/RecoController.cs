@@ -292,7 +292,7 @@ public sealed class RecoController : ControllerBase
     public ActionResult Preview([FromQuery] Guid userId)
     {
         var r = _reco.For(userId);
-        return Ok(new { items = _reco.Preview(userId), extended = r?.Extended.Take(10).Select(e => $"{e.Name} ({e.Year}) — {(string.IsNullOrEmpty(e.Reason) ? "parce que : " + e.Because : e.Reason)}"), rows = _reco.PreviewRows(userId), computedAt = r?.ComputedAt });
+        return Ok(new { items = _reco.Preview(userId), extended = r?.Extended.Take(10).Select(e => $"{e.Name} ({e.Year}) — {(string.IsNullOrEmpty(e.Reason) ? "parce que : " + e.Because : e.Reason)}"), rows = _reco.PreviewRows(userId), sources = r?.Sources, computedAt = r?.ComputedAt });
     }
 
     /// <summary>Recalcul complet immédiat (en arrière-plan).</summary>
