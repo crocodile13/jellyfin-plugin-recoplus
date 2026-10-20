@@ -12,9 +12,9 @@
         "version": "1.0.19.0",
         "changelog": "1.0.19 : recommander, c'est faire découvrir — un titre noté (avis, pouce), en favori, en liste de suivi ou demandé n'est plus proposé (il restait en tête indéfiniment) ; il compte toujours pour les goûts (réglage « Proposer aussi ce que le compte a déjà marqué », coupé par défaut). Une rangée « Parce que tu as aimé X » ne contient plus X. Titres hors bibliothèque : au moins 50 votes TMDb toutes sources (réglable ; courts métrages, avant-premières et titres confidentiels écartés) et titres pas encore sortis écartés.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.19.0/RecoPlus_1.0.19.0.zip",
+        "checksum": "d4f9779bb87307e3c94423505b80a10b",
+        "timestamp": "2026-10-20T17:49:35Z"
       },
       {
         "version": "1.0.18.0",
