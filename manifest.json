@@ -12,9 +12,9 @@
         "version": "1.0.8.0",
         "changelog": "1.0.8 : le choix des rangées d'accueil revient à Home Screen Sections — plus d'interrupteurs ni de nombre de rangées dans Reco+, qui ne règle que leurs titres ; Reco+ lit dans HSS les rangées affichées à chaque compte et ne remplit que celles-là (une rangée que le compte ne voit pas ne « réserve » plus de titres).",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.8.0/RecoPlus_1.0.8.0.zip",
+        "checksum": "34c8d4b0a49b078ffeadcec82d5fb200",
+        "timestamp": "2026-10-20T13:22:51Z"
       },
       {
         "version": "1.0.7.0",
