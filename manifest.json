@@ -11,9 +11,9 @@
         "version": "1.0.5.0",
         "changelog": "1.0.5 : plusieurs rangées d'accueil Home Screen Sections sans doublons entre elles (Nouveautés pour toi, jusqu'à trois « Parce que tu as aimé … » autour de titres aimés différents, Films pour toi, Séries pour toi) ; titres montrés sans être ouverts : comptés seulement quand la rangée est vraiment à l'écran du compte connecté, ils descendent puis reviennent avec le temps ; diversité au choix — personnalisée (par défaut, suit la variété de chaque compte), calibrée sur les genres de l'historique (Steck) ou fixe ; goût du moment (derniers titres aimés), en option ; calibrage au choix — modèle de choix appris (logit conditionnel régularisé, une minute), recherche par curseurs, ou automatique (garde la méthode qui se généralise le mieux), avec un avertissement quand l'historique ne suffit pas ; aperçu des rangées par compte ; réglages avancés repliés sur chaque onglet.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.5.0/RecoPlus_1.0.5.0.zip",
+        "checksum": "597e56180e4cb39414e86feee4592c4a",
+        "timestamp": "2026-10-20T11:23:45Z"
       },
       {
         "version": "1.0.4.0",
