@@ -5,6 +5,7 @@ using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus;
 
@@ -21,6 +22,7 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
         : base(applicationPaths, xmlSerializer)
     {
         Instance = this;
+        Migrate();
     }
 
     /// <summary>Instance courante (null avant le chargement).</summary>
@@ -34,6 +36,33 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
 
     /// <inheritdoc />
     public override string Description => "Recommandations personnelles (historique complet, abandons, sagas, demandes Seerr, mode étendu) à la place de celles de Jellyfin.";
+
+    /// <summary>
+    /// Anciens réglages : « Sur l'accueil » coupé (avant 1.0.21) = aucune rangée avec des titres hors bibliothèque.
+    /// </summary>
+    private void Migrate()
+    {
+        var c = this.Configuration;
+        if (c.ExtendedHomeRow is not bool home)
+        {
+            return;
+        }
+
+        if (!home)
+        {
+            c.SourcePourToi = c.SourceNouveautes = c.SourceParceQue = c.SourceFilms = c.SourceSeries = RowSource.Local;
+        }
+
+        c.ExtendedHomeRow = null;
+        try
+        {
+            SaveConfiguration();
+        }
+        catch (Exception)
+        {
+            // gardé en mémoire ; réécrit au prochain enregistrement de la page de configuration
+        }
+    }
 
     /// <inheritdoc />
     public IEnumerable<PluginPageInfo> GetPages()

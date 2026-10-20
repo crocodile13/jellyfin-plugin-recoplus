@@ -50,20 +50,32 @@ function page({ hssCards = 0, data, je = null, io = null, jeWait = 0, shape = 'P
         }
         s.querySelector('.itemsContainer').innerHTML = Array.from({ length: n }, (_, i) => `<div class="card overflow${shape}Card" data-lib="${i}" data-id="${String(i).padStart(32, 'a')}">L${i}</div>`).join('');
     };
+    // autre section HSS (Films, Séries…) avec n cartes de la bibliothèque
+    const add = (cls, n) => {
+        const s = w.document.createElement('div');
+        s.className = 'verticalSection ' + cls + ' section9';
+        s.innerHTML = '<div is="emby-scroller"><div is="emby-itemscontainer" class="itemsContainer scrollSlider">'
+            + Array.from({ length: n }, (_, i) => `<div class="card overflowPortraitCard" data-id="${String(i).padStart(32, 'b')}">L${i}</div>`).join('') + '</div></div>';
+        sections.appendChild(s);
+        return s;
+    };
     if (hssCards) { fill(hssCards); }
     w.eval(SCRIPT);
-    const row = () => Array.from(sections.querySelectorAll('.RecoPlusPourToi .itemsContainer > *')).map((c) => (c.classList.contains('recoplus-ext') ? 'E:' + (c.getAttribute('data-rp-id') || '').split(':').pop() : 'L'));
-    return { w, sections, calls, fill, row };
+    const rowOf = (cls) => Array.from(sections.querySelectorAll('.' + cls + ' .itemsContainer > *')).map((c) => (c.classList.contains('recoplus-ext') ? 'E:' + (c.getAttribute('data-rp-id') || '').split(':').pop() : 'L'));
+    const row = () => rowOf('RecoPlusPourToi');
+    return { w, sections, calls, fill, row, rowOf, add };
 }
 
 // fail : 'null' (fiche introuvable, comme JE après un 403) ou 'reject' (erreur remontée), pour chaque titre listé
 function jeStub({ active = true, userFound = true, status = {}, fail = { 1003: 'null' } } = {}) {
     const answer = (id, d) => (fail[id] === 'reject' ? Promise.reject(new Error('HTTP 403')) : Promise.resolve(fail[id] === 'null' ? null : d));
+    const cnt = { n: 0 };
     return (w) => ({
         jellyseerrAPI: {
+            get fetched() { return cnt.n; },
             checkUserStatus: () => Promise.resolve({ active, userFound }),
-            fetchMovieDetails: (id) => answer(id, { id, title: 'M' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }),
-            fetchTvShowDetails: (id) => answer(id, { id, name: 'T' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }),
+            fetchMovieDetails: (id) => { cnt.n++; return answer(id, { id, title: 'M' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }); },
+            fetchTvShowDetails: (id) => { cnt.n++; return answer(id, { id, name: 'T' + id, backdropPath: '/b' + id + '.jpg', mediaInfo: status[id] ? { status: status[id] } : undefined }); },
         },
         jellyseerrUI: {
             created: [],
@@ -79,25 +91,34 @@ function jeStub({ active = true, userFound = true, status = {}, fail = { 1003: '
     });
 }
 
-const base = { enabled: true, homeRow: true, hss: true, mixEvery: 3, skip: 0, canRequest: true, title: 'À découvrir', seerrUrl: 'https://seerr.example', items: ext(8) };
+const keyOf = (it) => (it.MediaType === 'tv' ? 'tv' : 'movie') + ':' + it.TmdbId;
+// composition comme celle du serveur à intervalle fixe : la carte p (1, 2, …) est hors bibliothèque si p est un multiple de `every`
+function inter(size, items, every = 3) {
+    const out = [];
+    let e = 0;
+    for (let p = 1; p <= size; p++) { out.push(p % every === 0 && e < items.length ? keyOf(items[e++]) : ''); }
+    return out;
+}
+const pour = (layout) => ({ RecoPlusPourToi: layout });
+const base = { enabled: true, homeRow: true, hss: true, rowSize: 6, canRequest: true, title: 'À découvrir', seerrUrl: 'https://seerr.example', items: ext(8), layouts: pour(inter(6, ext(8))) };
 
-await test('positions : un hors bibliothèque toutes les 3 cartes, après les épinglés', async () => {
-    const { w } = page({ hssCards: 0, data: { ...base, homeRow: false } });
-    const slots = (...a) => Array.from(w.__recoPlusSlots(...a)); // tableau de la fenêtre jsdom → tableau Node
-    assert.deepEqual(slots(10, 99, 3, 0), [1, 3, 5, 7, 9]);
-    assert.deepEqual(slots(10, 2, 3, 0), [1, 3]);
-    assert.deepEqual(slots(10, 99, 3, 2), [3, 5, 7, 9]);
-    assert.deepEqual(slots(6, 99, 2, 0), [0, 1, 2, 3, 4, 5]);
-    assert.deepEqual(slots(6, 99, 1, 0), [0, 1, 2, 3, 4, 5], 'every < 2 ramené à 2');
-    assert.deepEqual(slots(0, 5, 3, 0), []);
-    assert.deepEqual(slots(3, 5, 3, 9), [], 'skip au-delà de la rangée');
+await test('composition : bibliothèque et hors bibliothèque dans l\'ordre du serveur, taille gardée', async () => {
+    const { w } = page({ data: { ...base, layouts: {} } });
+    const c = (lib, layout, have, size) => Array.from(w.__recoPlusCompose(lib, layout, Object.fromEntries(have.map((k) => [k, 'E:' + k])), size));
+    const lib = ['L0', 'L1', 'L2', 'L3', 'L4'];
+    assert.deepEqual(c(lib, ['', 'a', '', 'b'], ['a', 'b'], 4), ['L0', 'E:a', 'L1', 'E:b']);
+    assert.deepEqual(c(lib, ['', 'a', '', 'b'], ['b'], 4), ['L0', 'L1', 'E:b', 'L2'], 'titre écarté : la rangée se complète avec la bibliothèque');
+    assert.deepEqual(c(lib, ['a', 'b', 'c'], ['a', 'c'], 5), ['E:a', 'E:c'], 'Seerr seul : jamais complétée par la bibliothèque');
+    assert.deepEqual(c(['L0'], ['', '', 'a'], ['a'], 3), ['L0', 'E:a', ], 'moins de cartes de la bibliothèque que prévu (droits)');
+    assert.deepEqual(c(lib, ['', '', '', '', '', 'a'], ['a'], 3), ['L0', 'L1', 'L2'], 'jamais plus que la taille');
 });
 
 await test('HSS + Jellyfin Enhanced : cartes JE mélangées, titres demandés/disponibles écartés', async () => {
-    const p = page({ hssCards: 10, data: base, je: jeStub({ status: { 1001: 2, 1004: 5 } }) });
+    const items = ext(8);
+    const p = page({ hssCards: 10, data: { ...base, rowSize: 10, layouts: pour(inter(10, items, 2)) }, je: jeStub({ status: { 1001: 2, 1004: 5 } }) });
     await wait(700);
-    // 1001 (en attente) et 1004 (disponible) écartés ; 1003 sans fiche JE gardé (carte Reco+) → 1000, 1002, 1003, 1005, 1006
-    assert.deepEqual(p.row(), ['L', 'L', 'E:1000', 'L', 'L', 'E:1002', 'L', 'L', 'E:1003', 'L', 'L', 'E:1005', 'L', 'L', 'E:1006']);
+    // 1001 (en attente) et 1004 (disponible) écartés, remplacés par les titres suivants de la bibliothèque ; 1003 sans fiche JE gardé (carte Reco+)
+    assert.deepEqual(p.row(), ['L', 'E:1000', 'L', 'L', 'E:1002', 'L', 'E:1003', 'L', 'L', 'L']);
     const miss = p.sections.querySelector('[data-rp-id="tmdb:movie:1003"]');
     assert.ok(miss.classList.contains('recoplus-jemiss') && !miss.classList.contains('recoplus-own'));
     assert.ok(miss.querySelector('button'), 'bouton Demander de Reco+');
@@ -106,57 +127,85 @@ await test('HSS + Jellyfin Enhanced : cartes JE mélangées, titres demandés/di
     assert.equal(created.find((c) => c.item.id === 1002).item.mediaType, 'tv');
     assert.equal(created[0].a, true);
     assert.equal(created[0].u, true);
+    assert.equal(p.w.JellyfinEnhanced.jellyseerrAPI.fetched, 5, 'seulement les titres de la rangée');
 });
 
 await test('aucun doublon quand la page change, réinsertion quand HSS recharge la rangée', async () => {
     const p = page({ hssCards: 6, data: base, je: jeStub() });
     await wait(700);
     const n1 = p.sections.querySelectorAll('.recoplus-ext').length;
-    assert.equal(n1, 3);
+    assert.equal(n1, 2);
+    assert.equal(p.row().length, 6);
     p.sections.appendChild(p.w.document.createElement('div'));
     await wait(700);
     assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, n1);
     p.fill(6); // HSS réécrit la rangée
     await wait(700);
-    assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 3);
+    assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 2);
+    assert.equal(p.row().length, 6);
     assert.equal(p.calls.getJSON, 1, 'réponse serveur gardée en cache');
 });
 
-await test('mélange libre : chaque titre à la place du classement commun, la rangée garde sa taille', async () => {
-    const items = ext(5).map((it, i) => ({ ...it, After: [0, 3, 3, 9, -1][i] }));
-    const p = page({ hssCards: 6, data: { ...base, mixMode: 'score', skip: 1, items }, je: jeStub() });
+await test('mélange libre : chaque titre à la place décidée par le serveur, la rangée garde sa taille', async () => {
+    const p = page({ hssCards: 6, data: { ...base, layouts: pour(['', 'movie:1000', '', '', '', 'movie:1001']) }, je: jeStub() });
     await wait(700);
-    // 1 demande en tête, puis : 1000 devant tout, 1001 et 1002 (dans cet ordre) après 3 titres, 1003 (après 9) et 1004
-    // (non calculé) absents ; 6 cartes comme la rangée de HSS : 1002 et les 2 derniers titres de la bibliothèque sortent
     assert.deepEqual(p.row(), ['L', 'E:1000', 'L', 'L', 'L', 'E:1001']);
     p.sections.appendChild(p.w.document.createElement('div'));
     await wait(700);
     assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 2, 'pas de doublon');
 });
 
-await test('rien ne trouve sa place : la rangée n\'est plus retraitée à chaque changement de page', async () => {
-    const items = ext(2).map((it) => ({ ...it, After: 50 }));
-    const p = page({ hssCards: 4, data: { ...base, mixMode: 'score', items }, je: jeStub() });
+await test('rien à montrer : la rangée n\'est plus retraitée à chaque changement de page', async () => {
+    const items = ext(2);
+    const p = page({ hssCards: 4, data: { ...base, items, layouts: pour(['', '', 'movie:1000', 'movie:1001']) }, je: jeStub({ status: { 1000: 5, 1001: 5 } }) });
     await wait(700);
-    const n = p.w.JellyfinEnhanced.jellyseerrUI.created.length;
+    const n = p.w.JellyfinEnhanced.jellyseerrAPI.fetched;
+    assert.equal(n, 2);
     assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 0);
+    assert.equal(p.row().length, 4, 'bibliothèque intacte');
     p.sections.appendChild(p.w.document.createElement('div'));
     await wait(700);
-    assert.equal(p.w.JellyfinEnhanced.jellyseerrUI.created.length, n, 'cartes non reconstruites');
+    assert.equal(p.w.JellyfinEnhanced.jellyseerrAPI.fetched, n, 'fiches non relues');
     p.fill(4); // nouveau rendu HSS → nouvel essai
     await wait(700);
-    assert.ok(p.w.JellyfinEnhanced.jellyseerrUI.created.length > n);
+    assert.ok(p.w.JellyfinEnhanced.jellyseerrAPI.fetched > n);
 });
 
 await test('demandes arrivées en tête : jamais précédées d\'un titre hors bibliothèque', async () => {
-    const p = page({ hssCards: 6, data: { ...base, skip: 2 }, je: jeStub() });
+    const p = page({ hssCards: 6, data: { ...base, layouts: pour(['', '', '', '', 'movie:1000', '']) }, je: jeStub() });
     await wait(700);
-    assert.deepEqual(p.row().slice(0, 4), ['L', 'L', 'L', 'L']);
-    assert.equal(p.row()[4], 'E:1000');
+    assert.deepEqual(p.row(), ['L', 'L', 'L', 'L', 'E:1000', 'L']);
+});
+
+await test('plusieurs rangées : chacune reçoit ses titres, Seerr seul remplace la bibliothèque', async () => {
+    const items = ext(6);
+    const layouts = {
+        RecoPlusPourToi: ['', 'movie:1000', '', ''],
+        RecoPlusFilms: ['movie:1001', 'movie:1003', 'movie:1004'],   // Seerr seul
+        RecoPlusSeries: ['', 'tv:1002', '', 'tv:1005'],
+        'bad id': ['movie:1000'],
+    };
+    const p = page({ hssCards: 4, data: { ...base, rowSize: 4, items, layouts }, je: jeStub({ fail: {} }) });
+    p.add('RecoPlusFilms', 6);
+    p.add('RecoPlusSeries', 4);
+    p.add('RecoPlusNouveautes', 4);
+    await wait(900);
+    assert.deepEqual(p.row(), ['L', 'E:1000', 'L', 'L']);
+    assert.deepEqual(p.rowOf('RecoPlusFilms'), ['E:1001', 'E:1003', 'E:1004'], 'Seerr seul : plus aucune carte de la bibliothèque');
+    assert.deepEqual(p.rowOf('RecoPlusSeries'), ['L', 'E:1002', 'L', 'E:1005']);
+    assert.deepEqual(p.rowOf('RecoPlusNouveautes'), ['L', 'L', 'L', 'L'], 'rangée sans composition : intacte');
+    assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 6, 'chaque titre une seule fois');
+});
+
+await test('Seerr seul sans aucun titre montrable : la rangée garde la bibliothèque', async () => {
+    const items = ext(2);
+    const p = page({ hssCards: 3, data: { ...base, items, layouts: pour(['movie:1000', 'movie:1001']) }, je: jeStub({ status: { 1000: 5, 1001: 2 } }) });
+    await wait(700);
+    assert.deepEqual(p.row(), ['L', 'L', 'L']);
 });
 
 await test('sans Jellyfin Enhanced : cartes Reco+ avec bouton Demander', async () => {
-    const p = page({ hssCards: 4, data: base });
+    const p = page({ hssCards: 4, data: { ...base, layouts: pour(inter(4, ext(8), 2)) } });
     await wait(700);
     const cards = p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext');
     assert.equal(cards.length, 2);
@@ -170,7 +219,7 @@ await test('sans Jellyfin Enhanced : cartes Reco+ avec bouton Demander', async (
 });
 
 await test('Jellyfin Enhanced non relié à Seerr : cartes Reco+', async () => {
-    const p = page({ hssCards: 4, data: base, je: jeStub({ active: false }) });
+    const p = page({ hssCards: 4, data: { ...base, layouts: pour(inter(4, ext(8), 2)) }, je: jeStub({ active: false }) });
     await wait(700);
     const cards = p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext');
     assert.equal(cards.length, 2);
@@ -179,7 +228,7 @@ await test('Jellyfin Enhanced non relié à Seerr : cartes Reco+', async () => {
 });
 
 await test('sans Home Screen Sections : une seule rangée à part, sous la première', async () => {
-    const p = page({ data: { ...base, hss: false } });
+    const p = page({ data: { ...base, hss: false, layouts: {} } });
     await wait(700);
     p.sections.appendChild(p.w.document.createElement('div'));
     await wait(700);
@@ -190,15 +239,18 @@ await test('sans Home Screen Sections : une seule rangée à part, sous la premi
     assert.match(rows[0].querySelector('.itemsContainer').style.cssText, /scrollbar-width: none/);
 });
 
-await test('option « Sur l\'accueil » coupée : rien n\'est ajouté', async () => {
-    const p = page({ hssCards: 6, data: { ...base, homeRow: false }, je: jeStub() });
+await test('aucune rangée avec des titres hors bibliothèque : rien n\'est ajouté', async () => {
+    const p = page({ hssCards: 6, data: { ...base, homeRow: false, layouts: {} }, je: jeStub() });
     await wait(700);
     assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 0);
+    const q = page({ data: { ...base, hss: false, homeRow: false, layouts: {} } });
+    await wait(700);
+    assert.equal(q.sections.querySelectorAll('#recoplus-extended-row').length, 0, 'pas de rangée à part non plus');
 });
 
 await test('affiche refusée si le chemin n\'est pas un chemin TMDb', async () => {
     const items = [{ ...ext(1)[0], PosterPath: '/x.jpg") ; background:url(https://evil' }];
-    const p = page({ hssCards: 3, data: { ...base, items } });
+    const p = page({ hssCards: 3, data: { ...base, items, layouts: pour(inter(3, items, 2)) } });
     await wait(700);
     const img = p.sections.querySelector('.recoplus-ext .cardImageContainer');
     assert.equal(img.style.backgroundImage, '');
@@ -231,7 +283,7 @@ await test('rangées « Parce que tu as aimé … » renommées pour le compte',
 
 await test('affichages : carte visible au moins 1 s dans une rangée Reco+, une fois par jour ; ouverte = remise à zéro', async () => {
     const IO = ioStub();
-    const p = page({ hssCards: 3, data: { ...base, homeRow: false, track: true }, io: IO });
+    const p = page({ hssCards: 3, data: { ...base, homeRow: false, layouts: {}, track: true }, io: IO });
     await wait(700);
     const other = p.sections.querySelector('.ContinueWatchingNextUp .card');
     const cards = Array.from(p.sections.querySelectorAll('.RecoPlusPourToi .card'));
@@ -254,7 +306,7 @@ await test('affichages : carte visible au moins 1 s dans une rangée Reco+, une 
 
 await test('affichages coupés : rien n\'est observé ni envoyé', async () => {
     const IO = ioStub();
-    const p = page({ hssCards: 3, data: { ...base, homeRow: false, track: false }, io: IO });
+    const p = page({ hssCards: 3, data: { ...base, homeRow: false, layouts: {}, track: false }, io: IO });
     await wait(700);
     assert.equal(IO.watched().length, 0);
     p.sections.querySelector('.RecoPlusPourToi .card').dispatchEvent(new p.w.MouseEvent('click', { bubbles: true }));
@@ -285,7 +337,7 @@ await test('rangée en paysage (HSS) : cartes Jellyfin Enhanced au même format,
 
 await test('rangée en paysage sans Jellyfin Enhanced : cartes Reco+ au format de la rangée', async () => {
     const items = ext(2).map((x, i) => ({ ...x, BackdropPath: i === 0 ? '/bd.jpg' : null }));
-    const p = page({ hssCards: 6, data: { ...base, items }, shape: 'Backdrop' });
+    const p = page({ hssCards: 6, data: { ...base, items, layouts: pour(inter(6, items)) }, shape: 'Backdrop' });
     await wait(700);
     const c = [...p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext')];
     assert.equal(c.length, 2);
@@ -315,8 +367,8 @@ await test('Jellyfin Enhanced attendu quelques instants avant de se rabattre sur
 
 await test('Jellyfin Enhanced refuse toutes les fiches Seerr (403) : cartes Reco+ à leur place, sans boucle', async () => {
     const fail = Object.fromEntries(ext(8).map((x, i) => [x.TmdbId, i % 2 ? 'reject' : 'null']));
-    const items = ext(8).map((it, i) => ({ ...it, After: i < 2 ? 1 : 40 }));
-    const p = page({ hssCards: 6, data: { ...base, mixMode: 'score', items }, je: jeStub({ fail }) });
+    const items = ext(8);
+    const p = page({ hssCards: 6, data: { ...base, items, layouts: pour(['', 'movie:1000', 'movie:1001', '', '', '']) }, je: jeStub({ fail }) });
     await wait(700);
     assert.deepEqual(p.row(), ['L', 'E:1000', 'E:1001', 'L', 'L', 'L']);   // 6 cartes, comme la rangée de HSS
     assert.equal(p.w.JellyfinEnhanced.jellyseerrUI.created.length, 0);
@@ -329,7 +381,7 @@ await test('Jellyfin Enhanced refuse toutes les fiches Seerr (403) : cartes Reco
 
 await test('fiche refusée au compte par Jellyfin Enhanced (403, contrôle parental) : titre écarté, pas de carte Reco+', async () => {
     const fail = { 1000: 'null', 1001: 'null', 1002: 'reject' };
-    const p = page({ hssCards: 10, data: { ...base, items: ext(4) }, je: jeStub({ fail }), jeHttp: { 1000: 403, 1001: 504, 1002: 403 } });
+    const p = page({ hssCards: 10, data: { ...base, rowSize: 10, items: ext(4), layouts: pour(inter(10, ext(4), 2)) }, je: jeStub({ fail }), jeHttp: { 1000: 403, 1001: 504, 1002: 403 } });
     await wait(700);
     // 1000 et 1002 refusés (403) → écartés ; 1001 (délai) → carte Reco+ ; 1003 → carte JE
     assert.deepEqual(p.row().filter((x) => x !== 'L'), ['E:1001', 'E:1003']);
@@ -339,7 +391,7 @@ await test('fiche refusée au compte par Jellyfin Enhanced (403, contrôle paren
 
 await test('raison affichée : celle du serveur, sinon « Parce que tu as aimé … »', async () => {
     const items = ext(2).map((it, i) => ({ ...it, Reason: i === 0 ? 'De Hayao Miyazaki' : '' }));
-    const p = page({ hssCards: 4, data: { ...base, items } });
+    const p = page({ hssCards: 4, data: { ...base, items, layouts: pour(inter(4, items, 2)) } });
     await wait(700);
     const imgs = [...p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext .cardImageContainer')];
     assert.equal(imgs[0].title, 'De Hayao Miyazaki');

@@ -375,6 +375,7 @@ public sealed class RecoService : IDisposable
     {
         EnsureLoaded();
         var cfg = Plugin.Instance!.Configuration;
+        Cpu.Threads = cfg.Threads;
         var s = Settings;
         var lib = _index.Get();
         var pr = PlaybackReporting(only is null);
@@ -650,12 +651,17 @@ public sealed class RecoService : IDisposable
         progress?.Report(60);
 
         int done = 0;
-        foreach (var u in targets)
+        // droits d'accès et rangées Home Screen Sections de chaque compte : lus d'abord, un compte à la fois (bibliothèque
+        // de Jellyfin, autre plugin) ; ensuite les comptes sont calculés en parallèle (réglage « Threads »)
+        var prep = targets.Select(u => (U: u, Accessible: _history.Accessible(u), Rows: RowOptionsOf(cfg, HomeScreenSectionsIntegration.EnabledFor(_services, u.Id)))).ToList();
+        var po = new ParallelOptions { MaxDegreeOfParallelism = Cpu.Degree, CancellationToken = ct };
+        Parallel.ForEach(prep, po, job =>
         {
-            ct.ThrowIfCancellationRequested();
+            var u = job.U;
+            var uc = ctx.Fork(); // tranche horaire propre à ce calcul, le reste partagé (lecture seule)
             var key = u.Id.ToString("N");
             var h = hist[key];
-            var accessible = _history.Accessible(u);
+            var accessible = job.Accessible;
             var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !Known(h, id, cfg.ProposeMarked) && ListPolicy.Allows(ct0, lo))
                 .OrderBy(id => id, StringComparer.Ordinal).ToList();
             var r = new UserRecs { ComputedAt = DateTime.UtcNow, SeerrUserId = seerr.UserMap.GetValueOrDefault(key) };
@@ -671,7 +677,7 @@ public sealed class RecoService : IDisposable
             if (cfg.NewEpisodesPinned > 0)
             {
                 double newCut = now - (Math.Clamp(cfg.NewEpisodesMaxDays, 1, 365) * Core.Day);
-                var sig = ctx.Sig.GetValueOrDefault(key);
+                var sig = uc.Sig.GetValueOrDefault(key);
                 pinned.AddRange(h.Values
                     .Where(x => x.NewEpisodes > 0 && !x.Hidden && accessible.Contains(x.Title) && sig is not null && sig.GetValueOrDefault(x.Title) > 0
                         && Guid.TryParse(x.Title, out var sg) && lib.EpisodeAdded.TryGetValue(sg, out var ad) && ad.Length > 0 && ad[^1] >= newCut)
@@ -682,19 +688,20 @@ public sealed class RecoService : IDisposable
             r.Pinned = pinned;
 
             // rangées que HSS montre à ce compte : les autres ne « réservent » aucun titre
-            var rowOpts = RowOptionsOf(cfg, HomeScreenSectionsIntegration.EnabledFor(_services, u.Id));
+            var rowOpts = job.Rows;
 
             // montré sans être ouvert (seulement ce que le compte a vraiment vu à l'écran)
             var expo = cfg.TrackImpressions && s.WImpression > 0 ? _impressions.For(key, now) : null;
+            var views = new List<HomeView>();
             if (cands.Count > 0)
             {
                 // heure de la journée : une liste par tranche horaire, servie selon l'heure de la demande
                 var slots = s.WTimeOfDay > 0 ? new int?[] { 0, 1, 2, 3 } : new int?[] { null };
                 foreach (var slot in slots)
                 {
-                    ctx.Slot = slot;
-                    var sc = Recommender.Score(ctx, vec, key, cands, s, exposure: expo);
-                    var ranked = Recommender.Rank(ctx, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s, key, simIdx).Where(id => !pinned.Contains(id)).ToList();
+                    uc.Slot = slot;
+                    var sc = Recommender.Score(uc, vec, key, cands, s, exposure: expo);
+                    var ranked = Recommender.Rank(uc, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s, key, simIdx).Where(id => !pinned.Contains(id)).ToList();
 
                     // présentation : hasard du jour et minimums films/séries (le classement par goût reste intact pour les catégories)
                     var pool = cands.Where(id => !pinned.Contains(id)).ToList();
@@ -703,7 +710,7 @@ public sealed class RecoService : IDisposable
                     // rangées d'accueil supplémentaires, sans doublons entre elles ni avec « Pour toi »
                     var shownSet = new HashSet<string>(shaped, StringComparer.Ordinal);
                     var ordered = shaped.Concat(pool.Where(id => !shownSet.Contains(id)).OrderByDescending(id => sc[id]).ThenBy(id => id, StringComparer.Ordinal)).ToList();
-                    var home = HomeRows.Allocate(ctx, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, rowOpts);
+                    var home = HomeRows.Allocate(uc, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, rowOpts);
                     var view = new SlotRecs
                     {
                         Ranked = shaped,
@@ -711,20 +718,22 @@ public sealed class RecoService : IDisposable
                         Rows = home.Rows,
                         RowAnchors = home.Anchors,
                     };
+                    views.Add(new HomeView(slot, view, shaped, ordered, sc));
                     if (slot is int sl)
                     {
                         r.Slots[sl] = view;
                     }
 
-                    if (slot is null || slot == ctx.Ds.HourOf(now) / 6)
+                    if (slot is null || slot == uc.Ds.HourOf(now) / 6)
                     {
                         // vue par défaut (et seule vue sans heure de la journée)
                         (r.Ranked, r.Taste, r.Rows, r.RowAnchors) = (view.Ranked, view.Taste, view.Rows, view.RowAnchors);
-                        r.MovieCategories = Categories(ctx, vec, key, ranked, titles);
+                        r.MovieCategories = Categories(uc, vec, key, ranked, titles);
+                        views[^1].Default = true;
                     }
                 }
 
-                ctx.Slot = null;
+                uc.Slot = null;
             }
 
             var hid = hiddenTmdb.GetValueOrDefault(key);
@@ -736,8 +745,8 @@ public sealed class RecoService : IDisposable
                 // bruit du jour (réglable) : les titres de valeur proche changent de place d'un jour à l'autre
                 double noise = double.IsFinite(cfg.ExtendedNoise) ? Math.Clamp(cfg.ExtendedNoise, 0, 1) : 0;
                 string noiseSeed = key + "|" + Exploration.Day(DateTime.UtcNow);
-                var sc = Exploration.Noisy(Recommender.Score(ctx, vec, key, extIds, s, ex.Agree, exposure: expo), noise, noiseSeed);
-                var extRanked = Recommender.Rank(ctx, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s, key, simIdx);
+                var sc = Exploration.Noisy(Recommender.Score(uc, vec, key, extIds, s, ex.Agree, exposure: expo), noise, noiseSeed);
+                var extRanked = Recommender.Rank(uc, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s, key, simIdx);
                 var recs = extRanked.Select(id => (Id: id, Rec: ToExternalRec(id, titles, ex.Because, ex.Reasons))).Where(p => p.Rec is not null).ToList();
                 foreach (var p in recs)
                 {
@@ -747,33 +756,26 @@ public sealed class RecoService : IDisposable
                 r.Extended = recs.Select(p => p.Rec!).ToList();
                 List<string>? placedFrom = null;
 
-                // mélange libre : bibliothèque et hors bibliothèque notés ensemble sur ce qu'ils ont en commun, chacun à sa place dans la rangée
-                if (cfg.ExtendedMixMode == Configuration.MixMode.Score && r.Ranked.Count > 0)
+                // accueil : titres hors bibliothèque dans les rangées qui en reçoivent, pour chaque vue (tranche horaire)
+                if (cfg.AnyExternalRow() && views.Count > 0)
                 {
-                    var shown = r.Ranked.Take(Math.Max(0, Math.Clamp(cfg.RowSize, 5, 60) - r.Pinned.Count)).ToList();
-                    var joint = Recommender.Score(ctx, vec, key, shown.Concat(recs.Select(p => p.Id)).ToList(), Recommender.Shared(s), exposure: expo);
-                    var jointNoisy = Exploration.Noisy(joint, noise, noiseSeed);   // même bruit pour la place des titres hors bibliothèque
-                    var places = HomeRows.FreePlaces(shown.Select(x => joint[x]).ToList(), recs.Select(p => jointNoisy[p.Id]).ToList(), Math.Clamp(cfg.ExtendedMinFree, 0, 20));
-                    if (cfg.ExtendedMaxFree > 0)
+                    foreach (var hv in views)
                     {
-                        places = HomeRows.CapPlaces(places, shown.Count, Math.Min(cfg.ExtendedMaxFree, 60));
+                        uc.Slot = hv.Slot;
+                        var placed = PlaceExternals(uc, vec, key, r.Pinned, recs.Select(p => (p.Id, p.Rec!)).ToList(), hv, rowOpts, cfg, s, expo, noise, noiseSeed, titles, now);
+                        if (hv.Default)
+                        {
+                            (r.Rows, r.RowAnchors, r.Layouts) = (hv.View.Rows, hv.View.RowAnchors, hv.View.Layouts);
+                            foreach (var (rec, row, after) in placed)
+                            {
+                                (rec.Row, rec.After) = (row, after);
+                            }
+
+                            placedFrom = placed.Select(x => x.Rec.Source).ToList();
+                        }
                     }
 
-                    // places « découverte » : les mieux notés qui n'ont pas trouvé de place d'eux-mêmes ; note fiable
-                    // (moyenne bayésienne) et votes minimum des pépites, sinon un 9,2 sur 4 votes passe devant tout
-                    int discoveryVotes = Math.Clamp(cfg.ExtendedGemMinVotes, 0, 1_000_000);
-                    places = HomeRows.ForcePlaces(places, shown.Count,
-                        Enumerable.Range(0, recs.Count)
-                            .Where(i => (titles[recs[i].Id].Votes ?? 0) >= discoveryVotes)
-                            .OrderByDescending(i => Exploration.ConfidentRating(titles[recs[i].Id].Community, titles[recs[i].Id].Votes))
-                            .ThenBy(i => i),
-                        Math.Clamp(cfg.ExtendedDiscoverySlots, 0, 10));
-                    for (int i = 0; i < recs.Count; i++)
-                    {
-                        recs[i].Rec!.After = places[i];
-                    }
-
-                    placedFrom = recs.Where(p => p.Rec!.After >= 0 && p.Rec!.After < shown.Count).Select(p => p.Rec!.Source).ToList();
+                    uc.Slot = null;
                 }
 
                 // bilan par source (aperçu) : trouvés, détaillés et autorisés, proposés, placés dans la rangée
@@ -794,11 +796,14 @@ public sealed class RecoService : IDisposable
                            && (d is null || (d.MediaStatus is not (2 or 3 or 4 or 5 or 6) && ParentalAllowed(policy, d, country)));
                 }).ToList();
                 r.Sources = prevRecs.Sources;
+                // leur place dans les rangées aussi (une rangée recalculée depuis se recompose sans ce qui a disparu)
+                var still = r.Extended.Select(e => e.MediaType + ":" + e.TmdbId).ToHashSet(StringComparer.Ordinal);
+                r.Layouts = prevRecs.Layouts.ToDictionary(kv => kv.Key, kv => kv.Value.Where(t => t.Length == 0 || still.Contains(t)).ToList(), StringComparer.Ordinal);
             }
 
             _recs[key] = r;
-            progress?.Report(60 + (40.0 * ++done / Math.Max(1, targets.Count)));
-        }
+            progress?.Report(60 + (40.0 * Interlocked.Increment(ref done) / Math.Max(1, targets.Count)));
+        });
 
         lock (_vecLock)
         {
@@ -881,6 +886,133 @@ public sealed class RecoService : IDisposable
             NewDays = Math.Clamp(cfg.RowNewDays, 1, 365),
             Because = because,
         };
+    }
+
+    /// <summary>Une vue des rangées d'accueil (tranche horaire) et ce qui a servi à la calculer.</summary>
+    private sealed class HomeView(int? slot, SlotRecs view, List<string> shaped, List<string> ordered, Dictionary<string, double> sc)
+    {
+        public int? Slot { get; } = slot;
+
+        public SlotRecs View { get; } = view;
+
+        public List<string> Shaped { get; } = shaped;
+
+        public List<string> Ordered { get; } = ordered;
+
+        public Dictionary<string, double> Sc { get; } = sc;
+
+        public bool Default { get; set; }
+    }
+
+    /// <summary>
+    /// Titres hors bibliothèque sur l'accueil : chaque rangée reçoit ceux qui lui vont (Films : films, Séries : séries,
+    /// Nouveautés : sortis récemment, « Parce que … » : proches du titre aimé, « Pour toi » : tous), selon le contenu
+    /// choisi (Seerr seul ou mélange) ; un titre ne va que dans une rangée. La répartition des rangées est refaite : les
+    /// titres de la bibliothèque sortis d'une rangée passent aux suivantes. Met à jour la vue (rangées et composition) et
+    /// renvoie les titres placés, leur rangée et leur place.
+    /// </summary>
+    private static List<(ExternalRec Rec, string Row, int After)> PlaceExternals(Context ctx, IReadOnlyDictionary<string, SparseVector> vec,
+        string key, List<string> pinned, List<(string Id, ExternalRec Rec)> recs, HomeView hv, RowOptions rowOpts,
+        Configuration.PluginConfiguration cfg, EngineSettings s, IReadOnlyDictionary<string, Exposure>? expo, double noise, string noiseSeed,
+        IReadOnlyDictionary<string, Title> titles, double now)
+    {
+        int size = Math.Clamp(cfg.RowSize, 5, 60);
+        // score commun (ce que bibliothèque et hors bibliothèque ont en commun), même bruit du jour pour les titres hors bibliothèque
+        var joint = Recommender.Score(ctx, vec, key, hv.Ordered.Concat(recs.Select(p => p.Id)).Distinct().ToList(), Recommender.Shared(s), exposure: expo);
+        var jointExt = Exploration.Noisy(recs.ToDictionary(p => p.Id, p => joint[p.Id], StringComparer.Ordinal), noise, noiseSeed);
+        double Key(string id) => jointExt.TryGetValue(id, out var e) ? e : joint.GetValueOrDefault(id);
+
+        var mix = new MixOptions
+        {
+            Free = cfg.ExtendedMixMode == Configuration.MixMode.Score,
+            Every = Math.Clamp(cfg.ExtendedMixEvery, 2, 20),
+            MinFree = Math.Clamp(cfg.ExtendedMinFree, 0, 20),
+            MaxFree = Math.Clamp(cfg.ExtendedMaxFree, 0, 60),
+            Discovery = Math.Clamp(cfg.ExtendedDiscoverySlots, 0, 10),
+        };
+        int discoveryVotes = Math.Clamp(cfg.ExtendedGemMinVotes, 0, 1_000_000);
+        double releasedCut = now - (Math.Clamp(cfg.RowNewReleasedDays, 1, 3650) * Core.Day);
+        var taken = new HashSet<int>();
+        var placed = new List<(ExternalRec, string, int)>();
+        var layouts = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        var pinnedSet = new HashSet<string>(pinned, StringComparer.Ordinal);
+
+        int Fit(string row, string? anchor, IReadOnlyList<string> shown)
+        {
+            var source = cfg.SourceOf(row);
+            if (source == RowSource.Local)
+            {
+                return -1;
+            }
+
+            // demandes et nouvelles saisons en tête de « Pour toi » : jamais déplacées
+            int skip = row == HomeRows.PourToi ? shown.TakeWhile(pinnedSet.Contains).Count() : 0;
+            var lib = shown.Skip(skip).ToList();
+            bool Fits(Title t) => row switch
+            {
+                HomeRows.Films => t.Kind == TitleKind.Movie,
+                HomeRows.Series => t.Kind == TitleKind.Series,
+                HomeRows.Nouveautes => (t.Released ?? 0) >= releasedCut && t.Released <= now,
+                _ => true,
+            };
+            var cand = Enumerable.Range(0, recs.Count).Where(i => !taken.Contains(i) && titles.TryGetValue(recs[i].Id, out var t) && Fits(t)).ToList();
+
+            // clé de classement : celle de la rangée (« Parce que … » : surtout la ressemblance avec le titre aimé)
+            Func<string, double> rank = Key;
+            if (anchor is not null && vec.TryGetValue(anchor, out var av))
+            {
+                double Sim(string id) => vec.TryGetValue(id, out var v) ? av.Dot(v) : 0;
+                cand = cand.Where(i => Sim(recs[i].Id) >= HomeRows.MinSimilarity).ToList();
+                var all = lib.Concat(cand.Select(i => recs[i].Id)).Select(Key).ToList();
+                double min = all.Count > 0 ? all.Min() : 0, span = all.Count > 0 ? all.Max() - min : 0;
+                rank = id => (0.7 * Sim(id)) + (0.3 * (span > 0 ? (Key(id) - min) / span : 0));
+            }
+
+            if (cand.Count == 0)
+            {
+                return -1; // rien pour cette rangée : la bibliothèque seule
+            }
+
+            cand = cand.OrderByDescending(i => rank(recs[i].Id)).ThenBy(i => i).ToList();
+            // places découverte : les mieux notés (note fiable, votes minimum des pépites), sinon un 9,2 sur 4 votes passe devant tout
+            var discovery = Enumerable.Range(0, cand.Count)
+                .Where(j => (titles[recs[cand[j]].Id].Votes ?? 0) >= discoveryVotes)
+                .OrderByDescending(j => Exploration.ConfidentRating(titles[recs[cand[j]].Id].Community, titles[recs[cand[j]].Id].Votes))
+                .ThenBy(j => j);
+            var (after, kept) = HomeRows.PlaceRow(lib.Select(rank).ToList(), cand.Select(i => rank(recs[i].Id)).ToList(), source, mix, discovery, size - skip);
+            var mine = source == RowSource.Seerr
+                ? Enumerable.Range(0, Math.Min(cand.Count, size - skip)).ToList()
+                : Enumerable.Range(0, cand.Count).Where(j => after[j] < lib.Count).ToList();
+            if (mine.Count == 0)
+            {
+                return -1;
+            }
+
+            // composition : demandes en tête, puis bibliothèque et hors bibliothèque dans l'ordre des places
+            var layout = Enumerable.Repeat(string.Empty, skip).ToList();
+            for (int l = 0; l <= kept; l++)
+            {
+                foreach (var j in mine.Where(j => after[j] == l))
+                {
+                    var rec = recs[cand[j]].Rec;
+                    layout.Add(rec.MediaType + ":" + rec.TmdbId);
+                    taken.Add(cand[j]);
+                    placed.Add((rec, row, l));
+                }
+
+                if (l < kept)
+                {
+                    layout.Add(string.Empty);
+                }
+            }
+
+            layouts[row] = layout;
+            return skip + kept;
+        }
+
+        var home = HomeRows.Allocate(ctx, vec, key, pinned.Concat(hv.Shaped).ToList(), hv.Ordered, hv.Sc, rowOpts, Fit);
+        (hv.View.Rows, hv.View.RowAnchors, hv.View.Layouts) = (home.Rows, home.Anchors, layouts);
+        return placed;
     }
 
     /// <summary>Jeu de données pour le calibrage : bibliothèque + historiques complets (sans Seerr).</summary>

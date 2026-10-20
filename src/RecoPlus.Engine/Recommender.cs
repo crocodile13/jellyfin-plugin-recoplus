@@ -31,6 +31,18 @@ public sealed class Context
         Cooc = Core.ItemCooc(Pos.Values, p.Shrink, p.MinCommon);
     }
 
+    private Context(Context c)
+    {
+        (Ds, Now, P, Hist, Sig, Pos, Cooc) = (c.Ds, c.Now, c.P, c.Hist, c.Sig, c.Pos, c.Cooc);
+        Slot = c.Slot;
+    }
+
+    /// <summary>
+    /// Copie qui partage tout (en lecture seule) sauf la tranche horaire : un calcul par fil d'exécution, sans refaire
+    /// signaux ni « vus ensemble ».
+    /// </summary>
+    public Context Fork() => new(this);
+
     /// <summary>Jeu de données.</summary>
     public Dataset Ds { get; }
 

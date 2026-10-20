@@ -15,7 +15,7 @@ It has been built and tested against **Jellyfin 12.2** only.
 | "More like this" (movies) | weighted overlap of genres/tags/people | content similarity + a bit of the account's taste, next saga volume first |
 | "More like this" (series) | **random** series sharing a genre or a tag | content similarity, same as movies |
 | Home Screen Sections | — | a "For you" row and, optionally, "New for you", up to three "Because you liked …" rows, "Movies for you", "Series for you" — a title never appears in two of these rows |
-| Outside the library | — | optional: titles from the Seerr/TMDb catalogue **mixed into the "For you" row**, with Jellyfin Enhanced's cards and *Request* button |
+| Outside the library | — | optional: titles from the Seerr/TMDb catalogue **in the home rows of your choice** (library only, Seerr only or mixed, per row), with Jellyfin Enhanced's cards and *Request* button |
 
 Everything is computed in the background and cached in memory and on disk, so no page ever waits for a computation. An account without a ready list simply gets Jellyfin's normal answer.
 
@@ -121,7 +121,7 @@ Dashboard → Plugins → Reco+. The page has one tab per topic:
 | Lists | what is shown, applied after ranking: share of daily randomness, minimum movies / series, excluded genres, minimum rating and year, diversity (personalised, calibrated or fixed), sagas, pinned requests |
 | Engine | every ranking factor (favourites, requests, abandons, similarities, watched together, freshness, popularity, rating, TMDb agreement, content features) can be switched off or made weaker/stronger (×0.25 to ×3); durations; defaults are the evaluated ones |
 | Seerr | URL and key, with a **Test** button that uses the values typed in without saving them |
-| Extended mode | titles outside the library: on/off; mixed into the home row one every N cards, or freely by the engine's joint ranking (on the signals both kinds of titles have: taste, rating, recent release), optionally with a minimum number of outside titles shown and "discovery" slots for the best-rated ones; sources (each can be switched off): recommendations and similar titles of liked titles, missing parts of sagas, works of recurring directors/creators/writers, the best-rated titles of TMDb overall, of the favourite genres, themes (keywords), studios/networks and original languages and of their crossings (genre × theme, genre × language), and little-known gems (highly rated, few votes), read at pages drawn at random each day; adjustable daily noise; the preview shows what each source brought; minimum rating and vote count; the Seerr exploration of a full recompute only runs for recently active accounts |
+| Extended mode | titles outside the library: on/off; content of each home row (library only, Seerr only, or mixed — each outside title goes to one row only, the library titles it replaces move down to the next rows, every row keeps its size); mixed one every N cards, or freely by the engine's joint ranking (on the signals both kinds of titles have: taste, rating, recent release), optionally with a minimum number of outside titles shown and "discovery" slots for the best-rated ones; sources (each can be switched off): recommendations and similar titles of liked titles, missing parts of sagas, works of recurring directors/creators/writers, the best-rated titles of TMDb overall, of the favourite genres, themes (keywords), studios/networks and original languages and of their crossings (genre × theme, genre × language), and little-known gems (highly rated, few votes), read at pages drawn at random each day; adjustable daily noise; the preview shows what each source brought; minimum rating and vote count; the Seerr exploration of a full recompute only runs for recently active accounts |
 | Notifications | webhook, with a test button |
 | Calibration | method (automatic, learned choice model, coordinate search) with a warning when the history is too short; see below |
 | Preview | what an account currently gets, row by row (and, in developer mode, what each extended-mode source brought) |
@@ -145,7 +145,7 @@ The Calibration tab replays your server's history: every time an account started
   - The page shows, for each method, whether the history is **sufficient, borderline or insufficient**.
 - **Validation.** Each method is redone on half of the accounts and measured on the other half (two-fold cross-validation by account). A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero) and reaches at least 1%: below that nothing would be visible. A tiny change to a weight (under 0.02 or 3%) is not proposed: it is just noise.
 
-Nothing is applied until you click **Apply**; the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task, on half the CPU cores.
+Nothing is applied until you click **Apply**; the previous settings are kept for rollback. It refuses to propose anything with fewer than 50 usable cases. It runs as a scheduled task, on half the CPU cores by default ("Threads" setting, which also sets how many accounts are computed at the same time).
 
 On the reference household (144 cases over 13 accounts, once the 22 fake cases of a bulk mark are removed and started titles added at half weight):
 
@@ -165,7 +165,7 @@ New features were measured the same way before choosing their defaults: weightin
 |---|---|---|
 | Home Screen Sections | every Reco+ row is listed among its sections: HSS decides which ones are shown, in which order and to whom (Reco+ only sets their titles, without a restart, and fills only the rows HSS shows to each account); "Because you liked X" titles are per account in the web client ("Because you liked…" elsewhere); HSS shows plugin rows in landscape, and titles outside the library take the same shape | no home row; everything else works |
 | Jellyfin Enhanced | extended mode uses its cards, detail modal and *Request* button, with the live Seerr status (if it is linked to Seerr); Reco+ waits a few seconds for it on load and swaps its own cards for JE's as soon as it is ready | Reco+ cards, opening the Seerr page, with Reco+'s own *Request* button |
-| Media Bar Enhanced | benefits automatically (it calls the replaced endpoints) | — |
+| Media Bar Enhanced | with its "Personalized Recommendations" option on, shows Reco+ recommendations (it calls the replaced endpoints; library titles only) | — |
 | Playback Reporting | precise first-play dates for calibration | calibration is less precise; Reco+ also records first plays itself from install time |
 | Seerr (formerly Jellyseerr) | requests as a signal, pinned arrivals, extended mode | all of this is off; the rest works |
 | LocalRecs | flagged as a duplicate | — |
@@ -206,7 +206,7 @@ CI builds and tests on every push. When `manifest.json` gets a new version, a re
 
 - Built for Jellyfin 12.2. Other versions are detected and each hook is checked, but they are not tested.
 - The defaults were chosen on a single, small household (about 16 active accounts). Use Calibration on yours.
-- Titles outside the library are added by a script in the web client (Modern layout tested): mixed into the Home Screen Sections "For you" row, or as a separate row without HSS. Other clients (TV, mobile apps) get the library recommendations only.
+- Titles outside the library are added by a script in the web client (Modern layout tested): placed in the Home Screen Sections rows as composed by the server, or as a separate row without HSS. Other clients (TV, mobile apps) get the library recommendations only.
 
 ## License
 

@@ -3,7 +3,8 @@
    - Affichages : une carte d'une rangée Reco+ visible au moins une seconde, onglet au premier plan, compte connecté,
      est notée « vue » (une fois par jour) ; une carte ouverte est notée « ouverte ». Rien d'autre n'est envoyé.
    Titres hors bibliothèque (mode étendu) :
-   - Home Screen Sections présent : les titres sont mélangés DANS la rangée « Pour toi » (ordre et place décidés par HSS).
+   - Home Screen Sections présent : chaque rangée Reco+ qui en reçoit (réglage par rangée : Seerr seul ou mélange) est
+     recomposée selon le serveur, qui a décidé de la place de chaque titre ; la rangée garde sa taille.
    - Jellyfin Enhanced présent et relié à Seerr : cartes, fiche et bouton « Demander » de Jellyfin Enhanced, avec l'état
      Seerr du moment (un titre demandé ou arrivé entre-temps n'est plus proposé).
    - Sinon : cartes Reco+ (demande via /RecoPlus/Request), et sans HSS une rangée à part, sous la première.
@@ -15,7 +16,6 @@
 
     var ROW_ID = 'recoplus-extended-row';
     var EXT = 'recoplus-ext';
-    var HSS_SECTION = 'RecoPlusPourToi';
     var SECTION_PREFIX = 'RecoPlus';
     var SEEN_MS = 1000;
     var FLUSH_MS = 15000;
@@ -230,8 +230,8 @@
         return c;
     }
 
-    function buildCards(d, shape) {
-        var items = (d.items || []).slice();
+    function buildCards(d, shape, subset) {
+        var items = (subset || d.items || []).slice();
         if (!items.length) { return Promise.resolve([]); }
         var fallback = function () { return items.map(function (it) { return ownCard(d, it, shape); }); };
         var wait = typeof window.__recoPlusJeWaitMs === 'number' ? window.__recoPlusJeWaitMs : JE_WAIT_MS;
@@ -241,69 +241,53 @@
         });
     }
 
-    // ---- mélange dans la rangée « Pour toi » (Home Screen Sections)
+    // ---- rangées Home Screen Sections avec titres hors bibliothèque
 
-    // Positions des titres hors bibliothèque : après `skip` cartes de tête, un toutes les `every` cartes.
-    function slots(libCount, extCount, every, skip) {
-        var out = [];
-        var step = Math.max(2, every | 0) - 1;
-        var n = 0;
-        for (var i = Math.max(0, skip | 0); i < libCount && out.length < extCount; i++) {
-            n++;
-            if (n % step === 0) { out.push(i); }
-        }
-        return out;
+    function keyOf(it) { return (it.MediaType === 'tv' ? 'tv' : 'movie') + ':' + it.TmdbId; }
+
+    // Ordre final d'une rangée : « » = la carte suivante de la bibliothèque, « movie:123 » = ce titre hors bibliothèque
+    // (absent s'il a été écarté). Une rangée qui garde des titres de la bibliothèque se complète avec les suivants si un
+    // titre hors bibliothèque manque ; une rangée Seerr seule, non. Jamais plus de `size` cartes.
+    function compose(lib, layout, byKey, size) {
+        var seq = [], li = 0, hasLib = false;
+        layout.forEach(function (t) {
+            if (!t) { hasLib = true; if (li < lib.length) { seq.push(lib[li++]); } return; }
+            if (byKey[t]) { seq.push(byKey[t]); }
+        });
+        while (hasLib && seq.length < size && li < lib.length) { seq.push(lib[li++]); }
+        return seq.slice(0, Math.max(0, size | 0));
     }
 
-    // Ordre final du mélange libre : un titre hors bibliothèque classé derrière n titres de la bibliothèque vient juste
-    // après le n-ième ; classé derrière toute la rangée, il n'est pas montré (c'est le classement, rien de plus). La
-    // rangée garde sa taille : chaque titre hors bibliothèque montré prend la place du titre le moins bien classé.
-    function freeOrder(lib, ext, skip) {
-        skip = Math.max(0, skip | 0);
-        var byAfter = {};
-        ext.forEach(function (c) {
-            var a = c.__rpAfter;
-            if (typeof a !== 'number' || a < 0) { return; }
-            (byAfter[a] = byAfter[a] || []).push(c);
-        });
-        var seq = [];
-        lib.forEach(function (l, i) {
-            if (i >= skip) { (byAfter[i - skip] || []).forEach(function (c) { seq.push(c); }); }
-            seq.push(l);
-        });
-        return seq.slice(0, lib.length);
-    }
-
-    function mix(container, d) {
+    function mix(container, d, layout) {
         var isCard = function (c) { return c.classList.contains('card') && !c.classList.contains(EXT); };
-        // cartes Reco+ de secours alors que Jellyfin Enhanced est maintenant prêt : on refait le mélange avec les siennes
+        // cartes Reco+ de secours alors que Jellyfin Enhanced est maintenant prêt : on refait la rangée avec les siennes
         if (!container.__recoPlusBusy && container.querySelector('.recoplus-own') && jeReady() && !container.__recoPlusUpgraded) {
             container.__recoPlusUpgraded = true;
             Array.prototype.forEach.call(container.querySelectorAll('.' + EXT), function (c) { c.remove(); });
+            (container.__recoPlusLib || []).forEach(function (l) { container.appendChild(l); });
             container.__recoPlusDoneFor = null;
         }
         var first = Array.prototype.find.call(container.children, isCard);
         // déjà traitée pour ce rendu de HSS (même si aucun titre n'a trouvé sa place) : rien à refaire
         if (!first || container.__recoPlusBusy || container.__recoPlusDoneFor === first || container.querySelector('.' + EXT)) { return; }
+        var wanted = {};
+        layout.forEach(function (t) { if (t) { wanted[t] = true; } });
+        var items = (d.items || []).filter(function (it) { return wanted[keyOf(it)]; });
         container.__recoPlusBusy = true;
-        buildCards(d, shapeOf(container)).then(function (ext) {
+        buildCards(d, shapeOf(container), items).then(function (ext) {
             container.__recoPlusBusy = false;
             if (!container.isConnected || container.querySelector('.' + EXT)) { return; }
             var lib = Array.prototype.filter.call(container.children, isCard);
             container.__recoPlusDoneFor = lib[0];
+            container.__recoPlusLib = lib;
             if (!ext.length) { return; }
             // cartes de secours : on repasse plus tard, au cas où Jellyfin Enhanced finirait de charger
             if (ext[0].classList.contains('recoplus-own') && !container.__recoPlusUpgraded) { setTimeout(check, 10000); }
-            if (d.mixMode === 'score') {
-                // libre : chaque titre après les `After` premiers titres de la bibliothèque (demandes en tête exclues)
-                var seq = freeOrder(lib, ext, d.skip);
-                lib.forEach(function (l) { if (seq.indexOf(l) < 0) { l.remove(); } });   // poussés hors de la rangée
-                seq.forEach(function (n) { container.appendChild(n); });
-                return;
-            }
-            // insertion de la fin vers le début : les positions calculées restent valables
-            var at = slots(lib.length, ext.length, d.mixEvery, d.skip);
-            for (var k = at.length - 1; k >= 0; k--) { lib[at[k]].after(ext[k]); }
+            var byKey = {};
+            ext.forEach(function (c) { byKey[(c.getAttribute('data-rp-id') || '').replace(/^tmdb:/, '')] = c; });
+            var seq = compose(lib, layout, byKey, d.rowSize || lib.length);
+            lib.forEach(function (l) { if (seq.indexOf(l) < 0) { l.remove(); } });   // sortis de la rangée
+            seq.forEach(function (n) { container.appendChild(n); });
         }, function () { container.__recoPlusBusy = false; });
     }
 
@@ -434,19 +418,22 @@
             renameRows(d);
             track.on = !!d.track;
             watchCards();
-            if (!d.homeRow || !d.items || !d.items.length) { return; }
+            if (!d.enabled || !d.items || !d.items.length) { return; }
             if (d.hss) {
-                var c = document.querySelector('.verticalSection.' + HSS_SECTION + ' .itemsContainer');
-                if (c) { mix(c, d); }
-            } else if (!document.getElementById(ROW_ID)) {
+                Object.keys(d.layouts || {}).forEach(function (id) {
+                    var layout = d.layouts[id];
+                    if (!/^RecoPlus[A-Za-z0-9]+$/.test(id) || !Array.isArray(layout)) { return; }
+                    var c = document.querySelector('.verticalSection.' + id + ' .itemsContainer');
+                    if (c) { mix(c, d, layout); }
+                });
+            } else if (d.homeRow && !document.getElementById(ROW_ID)) {
                 var s = homeSections();
                 if (s && s.children.length) { standalone(s, d); }
             }
         }, function () { busy = false; });
     }
 
-    window.__recoPlusSlots = slots; // pour les tests
-    window.__recoPlusFreeOrder = freeOrder;
+    window.__recoPlusCompose = compose; // pour les tests
     window.__recoPlusCardId = cardId;
     window.__recoPlusFitShape = fitShape;
 

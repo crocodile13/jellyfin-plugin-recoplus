@@ -13,7 +13,7 @@ Reco+ remplace les recommandations de Jellyfin par des listes calculées sur **t
 | « Plus comme ceci » (films) | recouvrement pondéré genres/mots-clés/personnes | ressemblance de contenu + un peu du goût du compte, volet suivant d'une saga d'abord |
 | « Plus comme ceci » (séries) | des séries **au hasard** partageant un genre ou un mot-clé | ressemblance de contenu, comme pour les films |
 | Home Screen Sections | — | rangée « Pour toi », et au choix « Nouveautés pour toi », jusqu'à trois « Parce que tu as aimé … », « Films pour toi », « Séries pour toi » — jamais un titre dans deux de ces rangées |
-| Hors bibliothèque | — | facultatif : titres du catalogue Seerr/TMDb **mélangés dans la rangée « Pour toi »**, avec les cartes et le bouton *Demander* de Jellyfin Enhanced |
+| Hors bibliothèque | — | facultatif : titres du catalogue Seerr/TMDb **dans les rangées d'accueil de votre choix** (bibliothèque seule, Seerr seul ou mélange, rangée par rangée), avec les cartes et le bouton *Demander* de Jellyfin Enhanced |
 
 Tout est calculé en arrière-plan et gardé en cache, en mémoire et sur disque : aucune page n'attend un calcul. Un compte dont la liste n'est pas encore prête reçoit la réponse normale de Jellyfin.
 
@@ -125,7 +125,7 @@ Tableau de bord → Extensions → Reco+. La page est organisée en onglets :
 | Listes | ce qui est montré, appliqué après le classement : part de hasard du jour, minimums de films et de séries, genres exclus, note et année minimales, diversité (personnalisée, calibrée ou fixe), sagas, demandes en tête |
 | Moteur | chaque facteur de classement (favoris, demandes, abandons, ressemblances, vus ensemble, nouveauté, popularité, note, accord TMDb, caractéristiques de contenu) se coupe ou se règle en force (×0,25 à ×3) ; durées ; valeurs par défaut évaluées |
 | Seerr | URL et clé, avec un bouton **Tester** qui utilise les valeurs saisies sans les enregistrer |
-| Mode étendu | titres hors bibliothèque : activation ; mélangés dans la rangée d'accueil un toutes les N cartes, ou librement selon le classement commun du moteur (sur ce que les deux ont : goût, note, sortie récente), avec en option un minimum de titres hors bibliothèque montrés et des places « découverte » pour les mieux notés ; sources (chacune se coupe) : recommandations et titres similaires des titres aimés, volets manquants des sagas, filmographies des réalisateurs, créateurs et scénaristes récurrents, les mieux notés de TMDb tous genres, des genres, thèmes (mots-clés), studios et chaînes, langues d'origine préférés et de leurs croisements (genre × thème, genre × langue), et des pépites peu connues (très bien notées, peu de votes), lus à des pages tirées au hasard chaque jour ; hasard du jour réglable ; l'aperçu montre l'apport de chaque source ; note et nombre de votes minimaux ; au recalcul complet, l'exploration Seerr n'est refaite que pour les comptes actifs récemment |
+| Mode étendu | titres hors bibliothèque : activation ; contenu de chaque rangée d'accueil (bibliothèque seule, Seerr seul ou mélange — un titre hors bibliothèque ne va que dans une rangée, les titres de la bibliothèque qu'il remplace passent aux rangées suivantes, chaque rangée garde sa taille) ; mélange un toutes les N cartes, ou libre selon le classement commun du moteur (sur ce que les deux ont : goût, note, sortie récente), avec en option un minimum de titres hors bibliothèque montrés et des places « découverte » pour les mieux notés ; sources (chacune se coupe) : recommandations et titres similaires des titres aimés, volets manquants des sagas, filmographies des réalisateurs, créateurs et scénaristes récurrents, les mieux notés de TMDb tous genres, des genres, thèmes (mots-clés), studios et chaînes, langues d'origine préférés et de leurs croisements (genre × thème, genre × langue), et des pépites peu connues (très bien notées, peu de votes), lus à des pages tirées au hasard chaque jour ; hasard du jour réglable ; l'aperçu montre l'apport de chaque source ; note et nombre de votes minimaux ; au recalcul complet, l'exploration Seerr n'est refaite que pour les comptes actifs récemment |
 | Notifications | webhook, avec envoi de test |
 | Calibrage | méthode (automatique, modèle de choix appris, recherche par curseurs) avec un avertissement si l'historique ne suffit pas ; voir ci-dessous |
 | Aperçu | ce que voit actuellement un compte, rangée par rangée (et, en mode développeur, l'apport de chaque source du mode étendu) |
@@ -149,7 +149,7 @@ L'onglet Calibrage rejoue l'historique de votre serveur : chaque fois qu'un comp
   - La page indique, pour chaque méthode, si l'historique est **suffisant, limite ou insuffisant**.
 - **Validation.** Chaque méthode est refaite sur la moitié des comptes et mesurée sur l'autre (validation croisée à deux plis, par compte). Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap) et atteint au moins 1 % : en dessous, rien ne se verrait. Un changement minime d'un poids (moins de 0,02 ou de 3 %) n'est pas proposé : ce n'est que du bruit.
 
-Rien n'est appliqué sans clic sur **Appliquer** ; le réglage précédent est gardé pour revenir en arrière. Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables. Il tourne comme une tâche planifiée, sur la moitié des cœurs.
+Rien n'est appliqué sans clic sur **Appliquer** ; le réglage précédent est gardé pour revenir en arrière. Il refuse de proposer quoi que ce soit avec moins de 50 cas exploitables. Il tourne comme une tâche planifiée, sur la moitié des cœurs par défaut (réglage « Fils d'exécution », qui fixe aussi le nombre de comptes calculés en même temps).
 
 Sur le foyer de référence (144 cas sur 13 comptes, une fois les 22 faux cas d'un marquage en masse écartés et les titres commencés ajoutés à demi-poids) :
 
@@ -169,7 +169,7 @@ Les nouveautés ont été mesurées de la même façon avant de fixer leurs vale
 |---|---|---|
 | Home Screen Sections | toutes les rangées Reco+ figurent dans sa liste de sections : c'est lui qui décide lesquelles afficher, dans quel ordre et pour quels comptes (Reco+ ne règle que leurs titres, sans redémarrage, et ne remplit que les rangées que HSS montre à chaque compte) ; les titres « Parce que tu as aimé X » sont propres à chaque compte dans l'interface web (« Parce que tu as aimé… » ailleurs) ; HSS affiche les rangées de plugins en paysage, et les titres hors bibliothèque prennent le même format | pas de rangée d'accueil, le reste marche |
 | Jellyfin Enhanced | le mode étendu utilise ses cartes, sa fiche et son bouton *Demander*, avec l'état Seerr du moment (s'il est relié à Seerr) ; Reco+ l'attend quelques secondes au chargement et remplace ses propres cartes dès qu'il est prêt | cartes Reco+, qui ouvrent la page Seerr, et bouton *Demander* de Reco+ |
-| Media Bar Enhanced | en profite automatiquement | — |
+| Media Bar Enhanced | avec son option « Personalized Recommendations » activée, montre les recommandations Reco+ (il appelle les points d'entrée remplacés ; bibliothèque seulement) | — |
 | Playback Reporting | dates de premier lancement précises pour le calibrage | calibrage moins précis ; Reco+ relève lui-même les premiers lancements à partir de son installation |
 | Seerr (ex-Jellyseerr) | demandes comme signal, arrivées en tête, mode étendu | tout cela est coupé, le reste marche |
 | LocalRecs | signalé comme doublon | — |
@@ -210,7 +210,7 @@ La CI compile et teste à chaque push. Quand une nouvelle version apparaît dans
 
 - Construit pour Jellyfin 12.2. Les autres versions sont détectées et chaque point d'accroche est vérifié, mais elles ne sont pas testées.
 - Les valeurs par défaut ont été choisies sur un seul petit foyer (environ 16 comptes actifs). Utilisez le calibrage sur le vôtre.
-- Les titres hors bibliothèque sont ajoutés par un script du client web (mise en page Modern testée) : mélangés dans la rangée « Pour toi » de Home Screen Sections, ou en rangée à part sans HSS. Les autres clients (TV, applications mobiles) ne reçoivent que les recommandations de la bibliothèque.
+- Les titres hors bibliothèque sont ajoutés par un script du client web (mise en page Modern testée) : placés dans les rangées de Home Screen Sections telles que le serveur les compose, ou en rangée à part sans HSS. Les autres clients (TV, applications mobiles) ne reçoivent que les recommandations de la bibliothèque.
 
 ## Licence
 

@@ -75,7 +75,7 @@ public static class ChoiceModel
     internal static List<CaseData> Build(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings s, CancellationToken ct)
     {
         var res = new CaseData?[cases.Count];
-        var po = new ParallelOptions { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount / 2), CancellationToken = ct };
+        var po = new ParallelOptions { MaxDegreeOfParallelism = Cpu.Degree, CancellationToken = ct };
         Parallel.For(0, cases.Count, po, i =>
         {
             var (u, target, t0) = cases[i].Ev;

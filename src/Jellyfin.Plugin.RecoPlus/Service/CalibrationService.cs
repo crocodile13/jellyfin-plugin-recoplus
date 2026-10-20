@@ -70,6 +70,7 @@ public sealed class CalibrationService
             progress.Report(1);
             var ds = _reco.BuildCalibrationDataset();
             var cur = Plugin.Instance!.Configuration.Engine;
+            Cpu.Threads = Plugin.Instance.Configuration.Threads;
             Report = Calibrator.Calibrate(ds, cur, new Progress<double>(p => progress.Report(Math.Max(1, p))), ct,
                 method: Plugin.Instance!.Configuration.CalibrationMethod);
             ReportAt = DateTime.UtcNow;

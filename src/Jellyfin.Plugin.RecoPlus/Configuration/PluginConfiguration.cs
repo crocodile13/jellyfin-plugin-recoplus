@@ -4,7 +4,7 @@ using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Configuration;
 
-/// <summary>Mélange des titres hors bibliothèque dans « Pour toi ».</summary>
+/// <summary>Mélange des titres hors bibliothèque dans les rangées mélangées.</summary>
 public enum MixMode
 {
     /// <summary>Un titre hors bibliothèque toutes les N cartes.</summary>
@@ -278,35 +278,80 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// </summary>
     public int ExtendedActiveDays { get; set; } = 30;
 
-    /// <summary>Mélange libre : places « découverte » réservées aux titres hors bibliothèque les mieux notés (0 = aucune).</summary>
+    /// <summary>Mélange libre : places « découverte » par rangée mélangée, pour les titres hors bibliothèque les mieux notés (0 = aucune).</summary>
     public int ExtendedDiscoverySlots { get; set; }
 
     /// <summary>
-    /// Titres hors bibliothèque sur l'accueil (script client) : mélangés dans la rangée « Pour toi » si Home Screen
-    /// Sections est présent, sinon rangée à part.
+    /// Ancien interrupteur « Sur l'accueil » (avant 1.0.21), lu une fois pour la migration : coupé, toutes les rangées
+    /// passent en bibliothèque seule. Remplacé par le contenu de chaque rangée.
     /// </summary>
-    public bool ExtendedHomeRow { get; set; } = true;
+    public bool? ExtendedHomeRow { get; set; }
 
-    /// <summary>Mélange dans « Pour toi » : à intervalle fixe, ou libre (classement commun du moteur).</summary>
+    /// <summary>N'écrit pas l'ancien interrupteur une fois migré.</summary>
+    public bool ShouldSerializeExtendedHomeRow() => ExtendedHomeRow.HasValue;
+
+    /// <summary>
+    /// Contenu de la rangée « Pour toi » : bibliothèque, titres hors bibliothèque (Seerr) ou les deux mélangés. Sans
+    /// Home Screen Sections, décide de la rangée à part du mode étendu.
+    /// </summary>
+    public RowSource SourcePourToi { get; set; } = RowSource.Mix;
+
+    /// <summary>Contenu de la rangée « Nouveautés » (hors bibliothèque : sortis récemment).</summary>
+    public RowSource SourceNouveautes { get; set; } = RowSource.Local;
+
+    /// <summary>Contenu des rangées « Parce que tu as aimé … » (hors bibliothèque : proches du titre aimé).</summary>
+    public RowSource SourceParceQue { get; set; } = RowSource.Local;
+
+    /// <summary>Contenu de la rangée « Films ».</summary>
+    public RowSource SourceFilms { get; set; } = RowSource.Local;
+
+    /// <summary>Contenu de la rangée « Séries ».</summary>
+    public RowSource SourceSeries { get; set; } = RowSource.Local;
+
+    /// <summary>Nouveautés hors bibliothèque : sortis depuis ce nombre de jours.</summary>
+    public int RowNewReleasedDays { get; set; } = 365;
+
+    /// <summary>Rangées mélangées : à intervalle fixe, ou libre (classement commun du moteur).</summary>
     public MixMode ExtendedMixMode { get; set; } = MixMode.Interleave;
 
-    /// <summary>Mélange dans « Pour toi » : un titre hors bibliothèque toutes les N cartes (2 = un sur deux).</summary>
+    /// <summary>Mélange à intervalle fixe : un titre hors bibliothèque toutes les N cartes (2 = un sur deux).</summary>
     public int ExtendedMixEvery { get; set; } = 3;
 
     /// <summary>
-    /// Mélange libre : nombre minimal de titres hors bibliothèque montrés dans « Pour toi » ; si le classement commun en
-    /// place moins, les mieux classés sont ajoutés quand même, répartis dans la rangée (0 = classement seul).
+    /// Mélange libre : nombre minimal de titres hors bibliothèque montrés par rangée mélangée ; si le classement commun
+    /// en place moins, les mieux classés sont ajoutés quand même, répartis dans la rangée (0 = classement seul).
     /// </summary>
     public int ExtendedMinFree { get; set; }
 
-    /// <summary>Mélange libre : titres hors bibliothèque au plus dans la rangée (hors places découverte) ; 0 = aucune limite.</summary>
+    /// <summary>Mélange libre : titres hors bibliothèque au plus par rangée mélangée (hors places découverte) ; 0 = aucune limite.</summary>
     public int ExtendedMaxFree { get; set; }
 
-    /// <summary>Titre de la rangée du mode étendu.</summary>
+    /// <summary>Titre de la rangée à part du mode étendu (sans Home Screen Sections).</summary>
     public string ExtendedTitle { get; set; } = "À découvrir pour toi";
+
+    /// <summary>Contenu choisi pour une rangée (« ParceQue1 » à « ParceQue3 » partagent le leur).</summary>
+    public RowSource SourceOf(string row) => row switch
+    {
+        HomeRows.PourToi => SourcePourToi,
+        HomeRows.Nouveautes => SourceNouveautes,
+        HomeRows.Films => SourceFilms,
+        HomeRows.Series => SourceSeries,
+        _ when row.StartsWith(HomeRows.ParceQue, System.StringComparison.Ordinal) => SourceParceQue,
+        _ => RowSource.Local,
+    };
+
+    /// <summary>Au moins une rangée reçoit des titres hors bibliothèque.</summary>
+    public bool AnyExternalRow() => SourcePourToi != RowSource.Local || SourceNouveautes != RowSource.Local
+        || SourceParceQue != RowSource.Local || SourceFilms != RowSource.Local || SourceSeries != RowSource.Local;
 
     /// <summary>Bouton « Demander » (la demande est faite au nom de l'utilisateur, avec ses droits et quotas Seerr).</summary>
     public bool ExtendedRequestButton { get; set; } = true;
+
+    /// <summary>
+    /// Fils d'exécution des calculs parallèles (comptes calculés en même temps, calibrage) ; 0 = automatique (la moitié
+    /// des cœurs), au plus le nombre de cœurs.
+    /// </summary>
+    public int Threads { get; set; }
 
     // ---- notifications
 

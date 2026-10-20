@@ -87,7 +87,7 @@ public sealed class CompatibilityGuard : IHostedService
             Feature.Suggestions => c.OverrideSuggestions,
             Feature.Similar => c.OverrideSimilar,
             Feature.HomeScreenSection => true,          // les rangées affichées se choisissent dans Home Screen Sections
-            Feature.ClientScript => c.ExtendedEnabled && c.ExtendedHomeRow,
+            Feature.ClientScript => true,               // titres des rangées « Parce que … », affichages, mode étendu
             _ => false,
         };
     }
@@ -217,7 +217,7 @@ public sealed class CompatibilityGuard : IHostedService
         var jfe = Opt("Jellyfin.Plugin.JellyfinEnhanced");
         Checks.Add(("Jellyfin Enhanced", jfe.Length > 0, jfe.Length > 0 ? $"présent ({jfe}) : le mode étendu utilise ses cartes, sa fiche et ses demandes (s'il est relié à Seerr)" : "absent : le mode étendu utilise les cartes Reco+ et ouvre la page Seerr"));
         var mbe = Opt("Jellyfin.Plugin.MediaBarEnhanced");
-        Checks.Add(("Media Bar Enhanced", true, mbe.Length > 0 ? $"présent ({mbe}) : profite automatiquement des recommandations" : "absent"));
+        Checks.Add(("Media Bar Enhanced", true, mbe.Length > 0 ? $"présent ({mbe}) : avec « Personalized Recommendations » activé dans Media Bar Enhanced, il montre les recommandations Reco+ (bibliothèque seulement)" : "absent"));
         var lr = asm.FirstOrDefault(a => a.Name?.Contains("LocalRecs", StringComparison.OrdinalIgnoreCase) == true);
         if (lr is not null)
         {

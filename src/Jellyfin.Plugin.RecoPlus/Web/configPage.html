@@ -50,6 +50,13 @@
                 #RecoPlusConfigPage .rp-rows { display: grid; grid-template-columns: minmax(14em, 1fr) minmax(14em, 2fr); gap: 0 2em; align-items: end; max-width: 56em; }
                 #RecoPlusConfigPage .rp-note { margin-bottom: 1.2em; padding-top: 1.4em; font-weight: 600; }
                 #RecoPlusConfigPage .rp-hidden { display: none !important; }
+                /* réglage sans effet dans la configuration actuelle : grisé, raison dessous (ou une fois en tête de boîte) */
+                #RecoPlusConfigPage .rp-off > :not(.rp-why):not(.rp-tip) { opacity: .4; }
+                #RecoPlusConfigPage .rp-off input, #RecoPlusConfigPage .rp-off select { cursor: not-allowed; }
+                #RecoPlusConfigPage .rp-why { font-size: .8em; color: var(--rp-mute); font-style: italic; margin: -.9em 0 1em; }
+                #RecoPlusConfigPage .rp-factor > .rp-why { grid-column: 1 / -1; margin: 0; }
+                #RecoPlusConfigPage .rp-box-off .rp-why { display: none; }
+                #RecoPlusConfigPage .rp-boxwhy { font-style: italic; color: #e6a23c !important; }
                 #RecoPlusConfigPage:not(.rp-devmode) .rp-dev { display: none !important; }
                 #RecoPlusConfigPage .rp-devtoggle { margin-left: auto; align-self: center; font-size: .9em; opacity: .8; cursor: pointer; white-space: nowrap; }
                 #RecoPlusConfigPage .rp-log { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8em; line-height: 1.45; white-space: pre-wrap; word-break: break-word; max-height: 65vh; overflow: auto; padding: .6em; border: 1px solid var(--rp-line); border-radius: 6px; margin-top: .8em; }
@@ -181,6 +188,16 @@
                         <div class="rp-grid" data-fields="ext"></div>
                     </div>
                     <div class="rp-box">
+                        <h3>Sur l'accueil : contenu de chaque rangée</h3>
+                        <p>Pour chaque rangée Reco+ : la bibliothèque seule, les titres hors bibliothèque seuls (Seerr), ou les deux mélangés. Un titre hors bibliothèque ne va que dans une rangée, celle du haut d'abord ; les titres de la bibliothèque qu'il remplace passent aux rangées suivantes. Chaque rangée garde sa taille. Seerr seul : dans l'interface web seulement (les applications TV gardent la bibliothèque), et la rangée garde la bibliothèque tant qu'aucun titre hors bibliothèque ne lui va. Avec Jellyfin Enhanced relié à Seerr : ses cartes, sa fiche et son bouton Demander.</p>
+                        <div class="rp-grid" data-fields="exthome"></div>
+                    </div>
+                    <div class="rp-box" id="rpMixBox">
+                        <h3>Mélange</h3>
+                        <p>Pour les rangées réglées sur « mélange ».</p>
+                        <div class="rp-grid" data-fields="extmix"></div>
+                    </div>
+                    <div class="rp-box">
                         <h3>Où chercher</h3>
                         <p>Sources des titres proposés, en plus des recommandations des titres aimés. Chacune apporte sa part, puis le moteur les classe toutes de la même façon, selon les goûts du compte.</p>
                         <div class="rp-grid" data-fields="extsrc"></div>
@@ -285,7 +302,7 @@
                     <div class="rp-grid" id="rpPreviewRows" style="margin-top:1em"></div>
                     <div id="rpPreviewSourcesBox" class="rp-hidden rp-dev" style="margin-top:1em">
                         <h3>Mode étendu : apport de chaque source</h3>
-                        <p class="mute">Trouvés : titres absents, non demandés et non vus. Détaillés : retenus dans le budget de fiches et autorisés (contrôle parental, listes). Proposés : classés parmi les titres hors bibliothèque du compte. Dans la rangée : placés par le mélange libre.</p>
+                        <p class="mute">Trouvés : titres absents, non demandés et non vus. Détaillés : retenus dans le budget de fiches et autorisés (contrôle parental, listes). Proposés : classés parmi les titres hors bibliothèque du compte. Sur l'accueil : placés dans une rangée d'accueil.</p>
                         <table class="rp-table" id="rpPreviewSources"></table>
                     </div>
                 </div>
@@ -310,7 +327,7 @@
             ['OverrideSuggestions', 'Suggestions', 'bool', '/Items/Suggestions : chez Jellyfin, des titres au hasard. Reco+ y met la liste classée du compte.', 0, 0, 0, 'replace', 'c'],
             ['OverrideSimilar', '« Plus comme ceci »', 'bool', 'Sur la fiche d\'un film ou d\'une série. Jellyfin : recouvrement de genres et de personnes pour les films, séries au hasard. Reco+ : ressemblance de contenu, un peu des goûts du compte, et le volet suivant d\'une saga en premier.', 0, 0, 0, 'replace', 'c'],
             // Rangées d'accueil : une ligne par rangée, l'interrupteur et le titre côte à côte
-            ['_RowMain', 'Rangée principale', 'note', 'Le classement du compte : demandes arrivées et nouvelles saisons en tête, puis ses titres. Avec le mode étendu, les titres hors bibliothèque s\'y mélangent.', 0, 0, 0, 'rows', 'c'],
+            ['_RowMain', 'Rangée principale', 'note', 'Le classement du compte : demandes arrivées et nouvelles saisons en tête, puis ses titres. Avec le mode étendu, elle peut aussi recevoir des titres hors bibliothèque (onglet Mode étendu).', 0, 0, 0, 'rows', 'c'],
             ['HssSectionTitle', 'Titre', 'text', 'Titre de la rangée principale. Partout ailleurs sur cette page, {ROW} désigne cette rangée.', 0, 0, 0, 'rows', 'c', 'Pour toi'],
             ['_RowNew', 'Nouveautés', 'note', 'Les titres arrivés récemment (voir « Nouveautés : arrivées depuis » dans les réglages avancés), dans l\'ordre des goûts du compte, sans ceux des rangées au-dessus. Moins de 4 titres : vide.', 0, 0, 0, 'rows', 'c'],
             ['RowNewTitle', 'Titre', 'text', 'Titre de la rangée des nouveautés.', 0, 0, 0, 'rows', 'c', 'Nouveautés pour toi'],
@@ -320,7 +337,7 @@
             ['RowMoviesTitle', 'Titre', 'text', 'Titre de la rangée des films.', 0, 0, 0, 'rows', 'c', 'Films pour toi'],
             ['_RowSeries', 'Séries', 'note', 'Les séries suivantes du classement du compte, sans celles des rangées au-dessus.', 0, 0, 0, 'rows', 'c'],
             ['RowSeriesTitle', 'Titre', 'text', 'Titre de la rangée des séries.', 0, 0, 0, 'rows', 'c', 'Séries pour toi'],
-            ['_ExtendedRowNote', 'Rangée à part du mode étendu', 'note', 'Seulement sans Home Screen Sections : les titres hors bibliothèque ont alors leur propre rangée, sous la première de l\'accueil. Avec HSS, ils se mélangent à la rangée principale et ce titre ne sert pas.', 0, 0, 0, 'rows', 'c'],
+            ['_ExtendedRowNote', 'Rangée à part du mode étendu', 'note', 'Seulement sans Home Screen Sections : les titres hors bibliothèque ont alors leur propre rangée, sous la première de l\'accueil (si la rangée principale en reçoit, onglet Mode étendu). Avec HSS, ils vont dans les rangées Reco+ et ce titre ne sert pas.', 0, 0, 0, 'rows', 'c'],
             ['ExtendedTitle', 'Titre', 'text', 'Titre de la rangée à part du mode étendu (sans Home Screen Sections).', 0, 0, 0, 'rows', 'c', 'À découvrir pour toi'],
             ['RowSize', 'Titres par rangée', 'int', 'Pour chaque rangée Reco+, {ROW} comprise.', 1, 5, 60, 'rowsadv', 'c', '20'],
             ['RowNewDays', 'Nouveautés : arrivées depuis (jours)', 'int', 'Seuls les titres ajoutés depuis ce nombre de jours vont dans la rangée des nouveautés.', 1, 1, 365, 'rowsadv', 'c', '30'],
@@ -334,6 +351,7 @@
             ['UserMinIntervalMinutes', 'Écart minimal entre deux recalculs d\'un compte (min)', 'int', 'Un compte n\'est jamais recalculé plus souvent que ça, même très actif. 0 = pas de limite. Le bouton « Recalculer maintenant » l\'ignore.', 5, 0, 1440, 'genadv', 'c', '15'],
             ['ListSize', 'Taille de la liste par compte', 'int', 'Titres gardés par compte. Les pages qui en demandent davantage reçoivent la liste entière. Plus grand = un peu plus de mémoire et de disque.', 10, 20, 1000, 'genadv', 'c', '200'],
             ['TimeZone', 'Fuseau horaire des visionnages', 'text', 'Identifiant IANA, ex. Europe/Paris. Sert à l\'heure de la journée. Vide = celui du serveur Jellyfin (souvent UTC dans un conteneur Docker sans TZ).', 0, 0, 0, 'genadv', 'c', 'celui du serveur'],
+            ['Threads', 'Fils d\'exécution (calcul et calibrage)', 'int', 'Comptes calculés en même temps, et cas évalués en même temps pendant le calibrage. 0 = automatique : la moitié des cœurs, pour que Jellyfin garde de quoi servir les lectures. Plus = plus rapide, mais plus de processeur pris pendant le calcul.', 1, 0, 256, 'genadv', 'c', '0 (automatique)'],
             ['PlaybackReportingDbPath', 'Base Playback Reporting', 'text', 'Vide = détection automatique. Sert à dater précisément le premier lancement de chaque titre, utile au calibrage.', 0, 0, 0, 'genadv', 'c', 'vide'],
 
             // ---- Listes
@@ -435,13 +453,20 @@
 
             // ---- Mode étendu
             ['ExtendedEnabled', 'Activer le mode étendu', 'bool', 'Recommande aussi des titres absents de la bibliothèque. Contrôle parental du compte respecté, avec les règles de Jellyfin (classification du pays choisi, titres non classés et étiquettes bloquées selon le compte).', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedHomeRow', 'Sur l\'accueil', 'bool', 'Avec Home Screen Sections : mélangés dans la rangée {ROW}. Sans : rangée à part. Avec Jellyfin Enhanced relié à Seerr : ses cartes, sa fiche et son bouton Demander.', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedMixMode', 'Mélange dans la rangée {ROW}', 'enum:Interleave=à intervalle fixe,Score=libre (classement du moteur)', 'À intervalle fixe : un titre hors bibliothèque toutes les N cartes, quoi qu\'il arrive. Libre : bibliothèque et hors bibliothèque sont notés ensemble par le moteur, sur ce qu\'ils ont en commun (goût, note, sortie récente ; pas les « vus ensemble », la nouveauté ni la popularité sur le serveur, que seuls les titres de la bibliothèque peuvent avoir), et chacun prend sa place ; un titre hors bibliothèque moins bien classé que toute la rangée n\'apparaît pas, sauf pour atteindre le minimum ci-dessous.', 0, 0, 0, 'ext', 'c', 'à intervalle fixe'],
-            ['ExtendedMinFree', 'Mélange libre : titres hors bibliothèque au minimum', 'int', 'Si le classement en place moins dans la rangée, les mieux classés sont ajoutés quand même, répartis régulièrement. 0 = le classement seul : aucun s\'ils sont tous moins bien notés que la rangée.', 1, 0, 20, 'ext', 'c', '0'],
-            ['ExtendedMaxFree', 'Mélange libre : titres hors bibliothèque au maximum', 'int', 'Au plus ce nombre de titres hors bibliothèque prennent place d\'eux-mêmes dans la rangée (les mieux classés), en plus des places découverte. 0 = aucune limite : le classement seul décide. La rangée garde toujours sa taille : chaque titre montré remplace un titre de la bibliothèque moins bien classé.', 1, 0, 60, 'ext', 'c', '0 (aucune limite)'],
-            ['ExtendedDiscoverySlots', 'Mélange libre : places découverte', 'int', 'Places données aux titres hors bibliothèque les mieux notés (note TMDb fiable : ramenée vers la moyenne tant qu\'il y a peu de votes, et au moins autant de votes que pour les pépites) qui n\'en ont pas trouvé d\'eux-mêmes, même un peu en dehors des habitudes du compte. 0 = aucune.', 1, 0, 10, 'ext', 'c', '0'],
-            ['ExtendedMixEvery', '1 titre hors bibliothèque toutes les … cartes', 'int', 'Mélange à intervalle fixe seulement. 3 = deux titres de la bibliothèque puis un à découvrir. 2 = un sur deux.', 1, 2, 20, 'ext', 'c', '3'],
-            ['ExtendedCount', 'Titres proposés', 'int', 'Nombre maximal de titres hors bibliothèque par compte.', 1, 1, 100, 'ext', 'c', '20'],
+            ['ExtendedCount', 'Titres proposés', 'int', 'Nombre maximal de titres hors bibliothèque par compte, toutes rangées confondues : chacun ne va que dans une rangée. Avec plusieurs rangées qui en reçoivent, augmentez-le (40 et plus).', 1, 1, 100, 'ext', 'c', '20'],
+            // Contenu de chaque rangée d'accueil
+            ['SourcePourToi', 'Rangée {T:HssSectionTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Tous les titres hors bibliothèque peuvent y aller (les mieux classés d\'abord). Sans Home Screen Sections : décide de la rangée à part du mode étendu. Les demandes arrivées et nouvelles saisons en tête ne bougent pas.', 0, 0, 0, 'exthome', 'c', 'mélange'],
+            ['SourceNouveautes', 'Rangée {T:RowNewTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Hors bibliothèque : les titres sortis récemment (voir ci-dessous).', 0, 0, 0, 'exthome', 'c', 'bibliothèque seule'],
+            ['SourceParceQue', 'Rangées {T:RowBecauseTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Hors bibliothèque : les titres proches du titre aimé de chaque rangée, surtout par la ressemblance, comme ceux de la bibliothèque.', 0, 0, 0, 'exthome', 'c', 'bibliothèque seule'],
+            ['SourceFilms', 'Rangée {T:RowMoviesTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Hors bibliothèque : les films.', 0, 0, 0, 'exthome', 'c', 'bibliothèque seule'],
+            ['SourceSeries', 'Rangée {T:RowSeriesTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Hors bibliothèque : les séries.', 0, 0, 0, 'exthome', 'c', 'bibliothèque seule'],
+            ['RowNewReleasedDays', 'Nouveautés hors bibliothèque : sorties depuis (jours)', 'int', 'Seuls les titres hors bibliothèque sortis depuis ce nombre de jours vont dans la rangée des nouveautés (dans la bibliothèque, c\'est la date d\'ajout qui compte).', 30, 30, 3650, 'exthome', 'c', '365'],
+            // Mélange (rangées réglées sur « mélange »)
+            ['ExtendedMixMode', 'Façon de mélanger', 'enum:Interleave=à intervalle fixe,Score=libre (classement du moteur)', 'À intervalle fixe : un titre hors bibliothèque toutes les N cartes, quoi qu\'il arrive. Libre : bibliothèque et hors bibliothèque sont notés ensemble par le moteur, sur ce qu\'ils ont en commun (goût, note, sortie récente ; pas les « vus ensemble », la nouveauté ni la popularité sur le serveur, que seuls les titres de la bibliothèque peuvent avoir), et chacun prend sa place ; un titre hors bibliothèque moins bien classé que toute la rangée n\'apparaît pas, sauf pour atteindre le minimum ci-dessous.', 0, 0, 0, 'extmix', 'c', 'à intervalle fixe'],
+            ['ExtendedMixEvery', '1 titre hors bibliothèque toutes les … cartes', 'int', '3 = deux titres de la bibliothèque puis un à découvrir. 2 = un sur deux.', 1, 2, 20, 'extmix', 'c', '3'],
+            ['ExtendedMinFree', 'Titres hors bibliothèque au minimum, par rangée', 'int', 'Si le classement en place moins dans la rangée, les mieux classés sont ajoutés quand même, répartis régulièrement. 0 = le classement seul : aucun s\'ils sont tous moins bien notés que la rangée.', 1, 0, 20, 'extmix', 'c', '0'],
+            ['ExtendedMaxFree', 'Titres hors bibliothèque au maximum, par rangée', 'int', 'Au plus ce nombre de titres hors bibliothèque prennent place d\'eux-mêmes dans la rangée (les mieux classés), en plus des places découverte. 0 = aucune limite : le classement seul décide.', 1, 0, 60, 'extmix', 'c', '0 (aucune limite)'],
+            ['ExtendedDiscoverySlots', 'Places découverte, par rangée', 'int', 'Places données aux titres hors bibliothèque les mieux notés (note TMDb fiable : ramenée vers la moyenne tant qu\'il y a peu de votes, et au moins autant de votes que pour les pépites) qui n\'en ont pas trouvé d\'eux-mêmes, même un peu en dehors des habitudes du compte. 0 = aucune.', 1, 0, 10, 'extmix', 'c', '0'],
             ['ExtendedRequestButton', 'Bouton « Demander » de Reco+', 'bool', 'Utilisé seulement sans Jellyfin Enhanced. La demande est faite au nom de l\'utilisateur, avec ses droits et quotas Seerr.', 0, 0, 0, 'extadv', 'c', 'activé'],
             ['ExtendedAnchors', 'Titres aimés servant de point de départ', 'int', 'Les N titres les plus aimés du compte dont on lit les recommandations et titres similaires TMDb. Plus = plus de candidats, plus variés (au-delà, des titres juste « bien aimés », qui pèsent moins à la présélection) ; aussi la base des genres, thèmes, auteurs, studios et langues explorés.', 1, 1, 500, 'extadv', 'c', '30'],
             ['ExtendedPages', 'Pages lues par titre aimé', 'int', 'Pages de recommandations et de titres similaires TMDb (20 titres environ chacune) lues pour chaque titre de départ (mises en cache 3 jours). 1 = les plus proches seulement ; TMDb trie du plus proche au moins proche, les dernières pages s\'éloignent du titre de départ.', 1, 1, 10, 'extadv', 'c', '2'],
@@ -463,7 +488,7 @@
             ['ExtendedCrossingsMax', 'Croisements explorés', 'int', 'Par sorte (films, séries) : les N couples genre × thème ou genre × langue d\'origine les plus forts dans les titres aimés. Listes plus étroites : la moitié des votes minimum suffit.', 1, 0, 30, 'extadv', 'c', '6'],
             ['ExtendedGemMinRating', 'Pépites : note TMDb minimale', 'num', 'Plus haute que pour les autres sources : avec peu de votes, une note est moins sûre.', 0.1, 0, 10, 'extadv', 'c', '7,8'],
             ['ExtendedMinVotesAll', 'Toutes sources : votes TMDb minimum', 'int', 'Un titre hors bibliothèque doit avoir au moins ce nombre de votes TMDb, quelle que soit la source (courts métrages, avant-premières, titres confidentiels écartés). Les titres pas encore sortis sont toujours écartés.', 10, 0, 100000, 'extadv', 'c', '50'],
-            ['ExtendedGemMinVotes', 'Pépites : votes TMDb minimum', 'int', 'En dessous, la note ne veut rien dire (amis du réalisateur, fans).', 10, 0, 100000, 'extadv', 'c', '50'],
+            ['ExtendedGemMinVotes', 'Pépites : votes TMDb minimum', 'int', 'En dessous, la note ne veut rien dire (amis du réalisateur, fans). Sert aussi aux places découverte du mélange libre, même pépites coupées.', 10, 0, 100000, 'extadv', 'c', '50'],
             ['ExtendedGemMaxVotes', 'Pépites : votes TMDb maximum', 'int', 'Au-dessus, le titre est déjà connu : il relève des autres sources.', 50, 0, 100000, 'extadv', 'c', '500'],
             ['ExtendedGemGenres', 'Pépites : genres préférés explorés', 'int', 'En plus d\'une recherche tous genres, par sorte.', 1, 0, 20, 'extadv', 'c', '3'],
 
@@ -503,15 +528,24 @@
             var v = i && i.value.trim() ? i.value.trim() : 'Pour toi';
             return '« ' + v + ' »';
         }
+        // « {T:Champ} » = titre actuel d'une rangée (champ de titre de l'onglet Général, ou sa valeur par défaut)
+        function rowTitle(field) {
+            var i = $('#rp_c_' + field);
+            var f = F.filter(function (x) { return x[0] === field; })[0];
+            var t = i && i.value.trim() ? i.value.trim() : (f ? f[9] : field);
+            return '« ' + String(t).replace(/\s*\{titre\}/, '…') + ' »';
+        }
+        function fillTpl(t) {
+            return t.replace(/\{ROW\}/g, rowName()).replace(/\{T:(\w+)\}/g, function (m, k) { return rowTitle(k); });
+        }
         function tpl(e, text, attr) {
-            if (String(text).indexOf('{ROW}') < 0) { if (attr) { e.setAttribute(attr, text); } else { e.textContent = text; } return e; }
+            if (!/\{ROW\}|\{T:\w+\}/.test(String(text))) { if (attr) { e.setAttribute(attr, text); } else { e.textContent = text; } return e; }
             e.setAttribute(attr ? 'data-tpl-' + attr : 'data-tpl', text);
             return e;
         }
         function applyTpl() {
-            var r = rowName();
-            page.querySelectorAll('[data-tpl]').forEach(function (e) { e.textContent = e.getAttribute('data-tpl').replace(/\{ROW\}/g, r); });
-            page.querySelectorAll('[data-tpl-aria-label]').forEach(function (e) { e.setAttribute('aria-label', e.getAttribute('data-tpl-aria-label').replace(/\{ROW\}/g, r)); });
+            page.querySelectorAll('[data-tpl]').forEach(function (e) { e.textContent = fillTpl(e.getAttribute('data-tpl')); });
+            page.querySelectorAll('[data-tpl-aria-label]').forEach(function (e) { e.setAttribute('aria-label', fillTpl(e.getAttribute('data-tpl-aria-label'))); });
         }
 
         function tip(f) {
@@ -589,52 +623,121 @@
                 if (f[3]) { wrap.appendChild(tip(f)); }
                 host.appendChild(wrap);
             });
-            $('#rp_c_HssSectionTitle').addEventListener('input', applyTpl);
+            page.querySelectorAll('[data-fields="rows"] input').forEach(function (i) { i.addEventListener('input', applyTpl); });
             applyTpl();
         }
 
-        // Réglages qui ne servent que dans certains cas : masqués sinon (leur valeur est gardée)
-        function v(id) { var e = $('#' + id); return e ? e.value : null; }
-        function on(id) { var e = $('#' + id); return !!(e && e.checked); }
-        var WHEN = {
-            c_ExtendedMixMode: function () { return on('rp_c_ExtendedHomeRow'); },
-            c_ExtendedMixEvery: function () { return on('rp_c_ExtendedHomeRow') && v('rp_c_ExtendedMixMode') !== 'Score'; },
-            c_ExtendedMinFree: function () { return on('rp_c_ExtendedHomeRow') && v('rp_c_ExtendedMixMode') === 'Score'; },
-            c_ExtendedMaxFree: function () { return on('rp_c_ExtendedHomeRow') && v('rp_c_ExtendedMixMode') === 'Score'; },
-            c_ExtendedDiscoverySlots: function () { return on('rp_c_ExtendedHomeRow') && v('rp_c_ExtendedMixMode') === 'Score'; },
-            c_ExtendedTopRatedMinVotes: function () { return on('rp_c_ExtendedTopRated'); },
-            c_ExtendedTopRatedPages: function () { return on('rp_c_ExtendedTopRated'); },
-            c_ExtendedGenres: function () { return on('rp_c_ExtendedByGenre'); },
-            c_ExtendedKeywords: function () { return on('rp_c_ExtendedByKeyword'); },
-            c_ExtendedPeopleMinTitles: function () { return on('rp_c_ExtendedByPeople'); },
-            c_ExtendedPeople: function () { return on('rp_c_ExtendedByPeople'); },
-            c_ExtendedStudioMinTitles: function () { return on('rp_c_ExtendedByStudio'); },
-            c_ExtendedStudios: function () { return on('rp_c_ExtendedByStudio'); },
-            c_ExtendedLanguageMinShare: function () { return on('rp_c_ExtendedByLanguage') || on('rp_c_ExtendedCrossings'); },
-            c_ExtendedCrossingsMax: function () { return on('rp_c_ExtendedCrossings'); },
-            c_ExtendedGemMinRating: function () { return on('rp_c_ExtendedGems'); },
-            c_ExtendedGemMinVotes: function () { return on('rp_c_ExtendedGems'); },
-            c_ExtendedGemMaxVotes: function () { return on('rp_c_ExtendedGems'); },
-            c_ExtendedGemGenres: function () { return on('rp_c_ExtendedGems'); },
-            c_TimeZone: function () { return on('rp_e_WTimeOfDay_on'); },
-            e_Mmr: function () { return v('rp_e_Diversity') !== 'Calibrated'; },
-            e_CalibrationStrength: function () { return v('rp_e_Diversity') === 'Calibrated'; },
-            e_SeriesFullHours: function () { return on('rp_e_SeriesByTime'); },
-            e_SeriesFullEpisodes: function () { return !on('rp_e_SeriesByTime'); },
-            e_Bm25K1: function () { return v('rp_e_Weighting') === 'Bm25'; },
-            e_Bm25B: function () { return v('rp_e_Weighting') === 'Bm25'; },
-            e_ShortTermTitles: function () { return on('rp_e_WShortTerm_on'); },
-            e_ImpressionDays: function () { return on('rp_e_WImpression_on'); },
-            e_ImpressionRecoveryDays: function () { return on('rp_e_WImpression_on'); },
-            e_ReleaseDays: function () { return on('rp_e_WRelease_on'); },
-            e_FreshDays: function () { return on('rp_e_WFresh_on'); },
-            e_HouseholdPrior: function () { return on('rp_e_WHousehold_on'); }
+        // Réglages sans effet dans la configuration actuelle : grisés, avec la raison (leur valeur est gardée et enregistrée).
+        // Une raison commune à toute une boîte est dite une fois, en tête de la boîte.
+        var EL = {};
+        function byId(id) { return Object.prototype.hasOwnProperty.call(EL, id) ? EL[id] : (EL[id] = $('#' + id)); }
+        function v(id) { var e = byId(id); return e ? e.value : null; }
+        function on(id) { var e = byId(id); return !!(e && e.checked); }
+        var BY = {};
+        F.forEach(function (f) { BY[f[0]] = f; });
+        function fOf(name) { return BY[name]; }
+        function idOf(name) { var f = fOf(name); return f ? fid(f) : ''; }
+        function val(name) { return v(idOf(name)); }
+        function sw(name) { var f = fOf(name); return !!f && on(fid(f) + (f[2] === 'factor' ? '_on' : '')); }
+        function num(name) { var n = parseFloat(String(val(name) || '0').replace(',', '.')); return isNaN(n) ? 0 : n; }
+        function factorOff(name) { return sw(name) ? '' : 'facteur « ' + fOf(name)[1] + ' » coupé (onglet Moteur)'; }
+        function srcOff(name) { return sw(name) ? '' : 'source « ' + fOf(name)[1] + ' » coupée'; }
+        var SOURCES = ['SourcePourToi', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms', 'SourceSeries'];
+        var EXT_GROUPS = ['ext', 'exthome', 'extmix', 'extadv', 'extsrc'];
+        var NEEDS_SEERR = ['UseSeerrVotes', 'UseSeerrWatchlist', 'RequestWeight', 'WatchlistWeight', 'PinnedRequests', 'PinnedMaxDays', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
+        var NO_MIX = function () { return SOURCES.some(function (k) { return val(k) === 'Mix'; }) ? '' : 'aucune rangée réglée sur « mélange »'; };
+        var WHY = {
+            ExtendedMixMode: NO_MIX,
+            ExtendedMixEvery: function () { return NO_MIX() || (val('ExtendedMixMode') === 'Score' ? 'mélange libre choisi' : ''); },
+            ExtendedMinFree: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? 'mélange à intervalle fixe choisi' : ''); },
+            ExtendedMaxFree: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? 'mélange à intervalle fixe choisi' : ''); },
+            ExtendedDiscoverySlots: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? 'mélange à intervalle fixe choisi' : ''); },
+            RowNewReleasedDays: function () { return val('SourceNouveautes') === 'Local' ? 'nouveautés en bibliothèque seule' : ''; },
+            _ExtendedRowNote: function () { return val('SourcePourToi') === 'Local' || !sw('ExtendedEnabled') ? 'pas de titres hors bibliothèque dans la rangée principale (onglet Mode étendu)' : ''; },
+            ExtendedTitle: function () { return val('SourcePourToi') === 'Local' || !sw('ExtendedEnabled') ? 'pas de titres hors bibliothèque dans la rangée principale (onglet Mode étendu)' : ''; },
+            ExtendedTopRatedMinVotes: function () { return srcOff('ExtendedTopRated'); },
+            ExtendedTopRatedPages: function () { return srcOff('ExtendedTopRated'); },
+            ExtendedGenres: function () { return srcOff('ExtendedByGenre'); },
+            ExtendedKeywords: function () { return srcOff('ExtendedByKeyword'); },
+            ExtendedPeopleMinTitles: function () { return srcOff('ExtendedByPeople'); },
+            ExtendedPeople: function () { return srcOff('ExtendedByPeople'); },
+            ExtendedStudioMinTitles: function () { return srcOff('ExtendedByStudio'); },
+            ExtendedStudios: function () { return srcOff('ExtendedByStudio'); },
+            ExtendedLanguageMinShare: function () { return sw('ExtendedByLanguage') || sw('ExtendedCrossings') ? '' : 'sources « langues » et « croisements » coupées'; },
+            ExtendedCrossingsMax: function () { return srcOff('ExtendedCrossings'); },
+            ExtendedGemMinRating: function () { return srcOff('ExtendedGems'); },
+            ExtendedGemMaxVotes: function () { return srcOff('ExtendedGems'); },
+            ExtendedGemGenres: function () { return srcOff('ExtendedGems'); },
+            TimeZone: function () { return factorOff('WTimeOfDay'); },
+            Mmr: function () { return val('Diversity') === 'Calibrated' ? 'diversité calibrée choisie' : ''; },
+            CalibrationStrength: function () { return val('Diversity') !== 'Calibrated' ? 'diversité calibrée non choisie (onglet Listes)' : ''; },
+            SeriesFullHours: function () { return sw('SeriesByTime') ? '' : 'poids compté en épisodes'; },
+            SeriesFullEpisodes: function () { return sw('SeriesByTime') ? 'poids compté en temps regardé' : ''; },
+            Bm25K1: function () { return val('Weighting') !== 'Bm25' ? 'pondération TF-IDF choisie' : ''; },
+            Bm25B: function () { return val('Weighting') !== 'Bm25' ? 'pondération TF-IDF choisie' : ''; },
+            ShortTermTitles: function () { return factorOff('WShortTerm'); },
+            WImpression: function () { return sw('TrackImpressions') ? '' : 'titres montrés non comptés (onglet Général)'; },
+            ImpressionDays: function () { return sw('TrackImpressions') ? factorOff('WImpression') : 'titres montrés non comptés (onglet Général)'; },
+            ImpressionRecoveryDays: function () { return sw('TrackImpressions') ? factorOff('WImpression') : 'titres montrés non comptés (onglet Général)'; },
+            ReleaseDays: function () { return factorOff('WRelease'); },
+            FreshDays: function () { return factorOff('WFresh'); },
+            HouseholdPrior: function () { return factorOff('WHousehold'); },
+            WatchlistWeight: function () { return sw('UseSeerrWatchlist') ? '' : 'listes de suivi Seerr non lues (onglet Général)'; },
+            HiddenWeight: function () { return sw('UseJellyfinEnhanced') ? '' : 'Jellyfin Enhanced non lu (onglet Général)'; },
+            RatingPriorVotes: function () { return sw('SeerrEnabled') && sw('UseSeerrVotes') ? '' : 'nombre de votes TMDb non lu (Seerr)'; },
+            PinnedMaxDays: function () { return num('PinnedRequests') > 0 ? '' : 'aucun titre demandé placé en tête'; },
+            NewEpisodesMaxDays: function () { return num('NewEpisodesPinned') > 0 ? '' : 'aucune nouvelle saison placée en tête'; },
+            SagaMax: function () { return sw('Saga') ? '' : 'règle de saga coupée'; },
+            ExtendedRequestButton: function () { return ''; }
         };
+        var G = {};
+        function reason(f) {
+            var name = f[0];
+            if (name === 'Enabled') { return ''; }
+            if (!G.enabled) { return 'plugin coupé (onglet Général)'; }
+            var ext = EXT_GROUPS.indexOf(f[7]) >= 0 || name === 'WTmdbAgreement' || name === '_ExtendedRowNote' || name === 'ExtendedTitle';
+            if ((ext || NEEDS_SEERR.indexOf(name) >= 0) && !G.seerr) { return 'Seerr non utilisé (onglet Seerr)'; }
+            if (ext && name !== 'ExtendedEnabled' && !G.ext) { return 'mode étendu coupé (onglet Mode étendu)'; }
+            return WHY[name] ? WHY[name]() : '';
+        }
+        // conteneur de chaque réglage et réglages de chaque boîte : cherchés une fois (la page ne change plus après build)
+        var HOLD = null, BOXES = null;
+        function holders() {
+            if (HOLD) { return; }
+            HOLD = F.map(function (f) {
+                if (f[2] === 'users' || f[2] === 'genres') { return null; }
+                var e = $('#' + fid(f));
+                return e ? (e.closest('.rp-factor') || e.closest('.rp-field')) : null;
+            });
+            BOXES = Array.prototype.map.call(page.querySelectorAll('.rp-box'), function (b) { return { b: b, hs: b.querySelectorAll('.rp-field, .rp-factor') }; })
+                .filter(function (x) { return x.hs.length > 0; });
+        }
         function applyWhen() {
-            Object.keys(WHEN).forEach(function (k) {
-                var e = $('#rp_' + k);
-                var box = e && e.closest('.rp-field');
-                if (box) { box.classList.toggle('rp-hidden', !WHEN[k]()); }
+            holders();
+            G = { enabled: sw('Enabled'), seerr: sw('SeerrEnabled'), ext: sw('ExtendedEnabled') };
+            F.forEach(function (f, k) {
+                var h = HOLD[k];
+                if (!h) { return; }
+                var why = reason(f);
+                if ((h.getAttribute('data-why') || '') === why && h.__whyDone) { return; }   // rien de changé
+                h.__whyDone = true;
+                h.classList.toggle('rp-off', !!why);
+                h.setAttribute('data-why', why);
+                var w = h.querySelector(':scope > .rp-why');
+                if (why && !w) { w = el('div', { 'class': 'rp-why' }); h.appendChild(w); }
+                if (w) { w.textContent = why ? 'Sans effet : ' + why + '.' : ''; w.classList.toggle('rp-hidden', !why); }
+                h.querySelectorAll('input, select').forEach(function (i) { i.disabled = !!why; });
+                if (!why && h.__sync) { h.__sync(); }   // facteur : le curseur suit son interrupteur
+            });
+            // raison commune à toute une boîte : dite une fois en tête
+            BOXES.forEach(function (x) {
+                var b = x.b, hs = x.hs;
+                var whys = Array.prototype.map.call(hs, function (h) { return h.getAttribute('data-why') || ''; });
+                var all = whys.every(function (x) { return x && x === whys[0]; });
+                b.classList.toggle('rp-box-off', all);
+                var n = b.querySelector(':scope > .rp-boxwhy');
+                if (all && !n) { n = el('p', { 'class': 'rp-boxwhy' }); var h3 = b.querySelector(':scope > h3'); if (h3) { h3.after(n); } else { b.prepend(n); } }
+                if (n) { n.textContent = all ? 'Sans effet : ' + whys[0] + '.' : ''; n.classList.toggle('rp-hidden', !all); }
             });
         }
         page.addEventListener('change', applyWhen);
@@ -966,7 +1069,7 @@
                 tb.innerHTML = '';
                 $('#rpPreviewSourcesBox').classList.toggle('rp-hidden', !keys.length);
                 if (keys.length) {
-                    var head = el('tr'); ['Source', 'Trouvés', 'Détaillés', 'Proposés', 'Dans la rangée'].forEach(function (h) { head.appendChild(el('th', {}, h)); }); tb.appendChild(head);
+                    var head = el('tr'); ['Source', 'Trouvés', 'Détaillés', 'Proposés', 'Sur l\'accueil'].forEach(function (h) { head.appendChild(el('th', {}, h)); }); tb.appendChild(head);
                     SOURCE_ORDER.filter(function (k) { return st[k]; }).concat(keys.filter(function (k) { return SOURCE_ORDER.indexOf(k) < 0; })).forEach(function (k) {
                         var s = st[k], tr = el('tr');
                         [SOURCE_NAMES[k] || k, s.Found, s.Detailed, s.Proposed, s.Placed === null || s.Placed === undefined ? '—' : s.Placed]
