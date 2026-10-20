@@ -12,9 +12,9 @@
         "version": "1.0.21.0",
         "changelog": "1.0.21 : contenu de chaque rangée d'accueil au choix (onglet Mode étendu) — bibliothèque seule, Seerr seul ou mélange, pour « Pour toi », Nouveautés (titres sortis récemment), « Parce que tu as aimé … » (titres proches du titre aimé), Films et Séries ; le serveur compose chaque rangée : un titre hors bibliothèque ne va que dans une rangée, ceux de la bibliothèque qu'il remplace passent aux rangées suivantes, chaque rangée garde sa taille. L'interrupteur « Sur l'accueil » disparaît (repris automatiquement). Calcul des comptes en parallèle et nouveau réglage « Fils d'exécution » (calcul et calibrage ; 0 = la moitié des cœurs). Titres des rangées « Parce que … » et affichages aussi sans mode étendu. L'aperçu montre la rangée de chaque titre hors bibliothèque. Page de configuration : un réglage sans effet dans la configuration actuelle est grisé, avec la raison (au lieu d'être masqué).",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.21.0/RecoPlus_1.0.21.0.zip",
+        "checksum": "92e6ef55ef514482abdf147173cf658f",
+        "timestamp": "2026-10-20T21:41:58Z"
       },
       {
         "version": "1.0.20.0",
