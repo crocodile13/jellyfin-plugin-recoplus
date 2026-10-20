@@ -100,8 +100,11 @@ public sealed class MethodResult
     /// <summary>Historique suffisant, limite ou insuffisant pour cette méthode.</summary>
     public string Sufficiency { get; init; } = string.Empty;
 
-    /// <summary>Gain sûr et généralisable.</summary>
+    /// <summary>Gain sûr, généralisable et d'au moins <see cref="Calibrator.MinPracticalGain"/>.</summary>
     public bool Recommended { get; set; }
+
+    /// <summary>La méthode n'a rien changé au réglage actuel.</summary>
+    public bool NoChange { get; set; }
 }
 
 /// <summary>
@@ -110,6 +113,9 @@ public sealed class MethodResult
 /// </summary>
 public static class Calibrator
 {
+    /// <summary>Gain minimal (relatif, en validation croisée) pour recommander un réglage : en dessous, rien de visible.</summary>
+    public const double MinPracticalGain = 0.01;
+
     /// <summary>Titres adoptés avant le premier cas évalué.</summary>
     public const int MinTrain = 4;
 
@@ -719,7 +725,9 @@ public static class Calibrator
         progress?.Report(100);
         foreach (var r in results)
         {
-            r.Recommended = r.Result.Gain > cur.Gain + 1e-9 && r.CvDelta > 0 && r.Ci.Low > 0;
+            r.NoChange = System.Text.Json.JsonSerializer.Serialize(r.Settings.Sanitized()) == System.Text.Json.JsonSerializer.Serialize(current);
+            r.Recommended = !r.NoChange && r.Result.Gain > cur.Gain + 1e-9 && r.CvDelta > 0 && r.Ci.Low > 0
+                            && r.CvDelta / Math.Max(cur.Gain, 1e-9) >= MinPracticalGain;
         }
 
         // la méthode retenue : recommandée d'abord, puis meilleure généralisation (validation croisée)
@@ -728,8 +736,11 @@ public static class Calibrator
         double rel(double x) => x / Math.Max(cur.Gain, 1e-9);
         bool improved = pick.Result.Gain > cur.Gain + 1e-9;
         string who = results.Count > 1 ? $"{pick.Name} (la meilleure des {results.Count} méthodes) : " : string.Empty;
-        string verdict = !improved
+        bool sureButTiny = !pick.Recommended && improved && pick.CvDelta > 0 && pick.Ci.Low > 0;
+        string verdict = pick.NoChange || !improved
             ? who + "aucun réglage ne fait mieux que l'actuel : on garde l'actuel."
+            : sureButTiny
+                ? who + $"gain réel mais négligeable ({Pct(rel(pick.CvDelta))} en validation croisée, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}], moins de {Pct(MinPracticalGain).TrimStart('+')}) : rien de visible, inutile de l'appliquer."
             : pick.Recommended
                 ? who + $"gain probable et qui se généralise : appris sur une moitié des comptes, il fait mieux sur l'autre ({Pct(rel(pick.CvDelta))} de qualité de classement, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}])."
                 : who + $"gain sur cet historique ({Pct(rel(pick.Result.Gain - cur.Gain))}), mais il ne se généralise pas d'une moitié des comptes à l'autre (validation croisée {Pct(rel(pick.CvDelta))}, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}]) : application déconseillée.";

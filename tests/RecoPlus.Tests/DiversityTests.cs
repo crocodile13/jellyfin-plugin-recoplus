@@ -183,11 +183,13 @@ public class DiversityTests
         var cases = Calibrator.Cases(ds);
         Assert.NotEmpty(cases);
         var strong = ChoiceModel.Learn(ds, sim, cases, start, 1e6);
-        Assert.All(ChoiceModel.Weights, w => Assert.True(Math.Abs(w.Get(strong) - w.Get(start)) < 0.02, w.Name));
+        Assert.All(ChoiceModel.Weights, w => Assert.Equal(w.Get(start), w.Get(strong)));   // sans preuve : rien ne bouge, pas même du bruit
         var free = ChoiceModel.Learn(ds, sim, cases, start, 1e-4);
         Assert.All(ChoiceModel.Weights, w => Assert.InRange(w.Get(free), 0, w.Hi));
         Assert.Equal(free.WFresh, ChoiceModel.Learn(ds, sim, cases, start, 1e-4).WFresh); // déterministe
 
+        Assert.True(NeuralNet.IsZero(null) && NeuralNet.IsZero(new double[NeuralNet.Size]));
+        Assert.Null(NeuralNet.With(start, new double[NeuralNet.Size]).Neural);              // correction nulle : aucune
         var rep = Calibrator.Calibrate(ds, start, method: CalibrationMethod.ChoiceModel);
         Assert.False(rep.Recommended);   // trop peu de cas synthétiques
         Assert.Equal(CalibrationMethod.ChoiceModel, rep.Method);

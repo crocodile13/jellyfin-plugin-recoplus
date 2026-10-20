@@ -64,6 +64,8 @@ public sealed class HssSectionHandler
     /// <summary>Troisième rangée « Parce que tu as aimé … ».</summary>
     public QueryResult<BaseItemDto> GetBecause3(HssPayload payload) => Row(payload, HomeRows.ParceQue + 3);
 
+    private static bool RowEnabledFor(Configuration.PluginConfiguration cfg, string row) => HomeScreenSectionsIntegration.RowEnabled(cfg, row);
+
     private QueryResult<BaseItemDto> Row(HssPayload payload, string row)
     {
         try
@@ -73,6 +75,12 @@ public sealed class HssSectionHandler
                 return new QueryResult<BaseItemDto>();
             }
 
+            var cfg = Plugin.Instance?.Configuration;
+            if (cfg is null || !RowEnabledFor(cfg, row))
+            {
+                return new QueryResult<BaseItemDto>();   // rangée coupée dans Reco+ : vide, HSS ne l'affiche pas
+            }
+
             var user = _users.GetUserById(payload.UserId);
             var r = user is null ? null : _reco.For(user.Id);
             if (user is null || r is null)
@@ -80,7 +88,7 @@ public sealed class HssSectionHandler
                 return new QueryResult<BaseItemDto>();
             }
 
-            int size = Math.Clamp(Plugin.Instance?.Configuration.RowSize ?? 20, 5, 60);
+            int size = Math.Clamp(cfg.RowSize, 5, 60);
             var src = row == HomeRows.PourToi && !r.Rows.ContainsKey(HomeRows.PourToi)
                 ? r.Pinned.Concat(r.Ranked)                                   // cache d'une version précédente
                 : r.Rows.GetValueOrDefault(row) ?? new List<string>();
@@ -121,33 +129,44 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     /// <summary>Préfixe des identifiants de section (l'identifiant de rangée suit).</summary>
     public const string Prefix = "RecoPlus";
 
-    /// <summary>Sections à déclarer selon la configuration : (identifiant, titre affiché, méthode).</summary>
+    /// <summary>
+    /// Toutes les rangées Reco+, toujours déclarées (identifiant, titre affiché, méthode) : elles figurent ainsi dans la
+    /// liste de Home Screen Sections sans redémarrage. Une rangée coupée dans Reco+ reste vide, et HSS ne l'affiche pas.
+    /// </summary>
     public static List<(string Id, string Title, string Method)> Sections(Configuration.PluginConfiguration cfg)
     {
-        var l = new List<(string, string, string)> { (SectionId, cfg.HssSectionTitle, nameof(HssSectionHandler.GetResults)) };
-        if (cfg.RowNew)
+        string because = BecauseGeneric(cfg);
+        return new List<(string, string, string)>
         {
-            l.Add((Prefix + HomeRows.Nouveautes, cfg.RowNewTitle, nameof(HssSectionHandler.GetNew)));
-        }
-
-        string because = (cfg.RowBecauseTitle ?? string.Empty).Replace("{titre}", "…", StringComparison.Ordinal).Trim();
-        for (int i = 1; i <= Math.Clamp(cfg.RowBecause, 0, 3); i++)
-        {
-            l.Add((Prefix + HomeRows.ParceQue + i, because.Length > 0 ? because : "Parce que tu as aimé…", "GetBecause" + i));
-        }
-
-        if (cfg.RowMovies)
-        {
-            l.Add((Prefix + HomeRows.Films, cfg.RowMoviesTitle, nameof(HssSectionHandler.GetMovies)));
-        }
-
-        if (cfg.RowSeries)
-        {
-            l.Add((Prefix + HomeRows.Series, cfg.RowSeriesTitle, nameof(HssSectionHandler.GetSeries)));
-        }
-
-        return l;
+            (SectionId, Title(cfg.HssSectionTitle, "Pour toi"), nameof(HssSectionHandler.GetResults)),
+            (Prefix + HomeRows.Nouveautes, Title(cfg.RowNewTitle, "Nouveautés pour toi"), nameof(HssSectionHandler.GetNew)),
+            (Prefix + HomeRows.ParceQue + 1, because, nameof(HssSectionHandler.GetBecause1)),
+            (Prefix + HomeRows.ParceQue + 2, because, nameof(HssSectionHandler.GetBecause2)),
+            (Prefix + HomeRows.ParceQue + 3, because, nameof(HssSectionHandler.GetBecause3)),
+            (Prefix + HomeRows.Films, Title(cfg.RowMoviesTitle, "Films pour toi"), nameof(HssSectionHandler.GetMovies)),
+            (Prefix + HomeRows.Series, Title(cfg.RowSeriesTitle, "Séries pour toi"), nameof(HssSectionHandler.GetSeries)),
+        };
     }
+
+    private static string Title(string? t, string fallback) => string.IsNullOrWhiteSpace(t) ? fallback : t.Trim();
+
+    /// <summary>Titre générique des rangées « Parce que … » (clients sans le script web : TV, applications mobiles).</summary>
+    public static string BecauseGeneric(Configuration.PluginConfiguration cfg)
+    {
+        var t = Title(cfg.RowBecauseTitle, "Parce que tu as aimé {titre}");
+        return t.Contains("{titre}", StringComparison.Ordinal) ? t.Replace("{titre}", "…", StringComparison.Ordinal).Replace(" …", "…", StringComparison.Ordinal) : t;
+    }
+
+    /// <summary>Rangée active dans Reco+ (identifiant de rangée, sans le préfixe).</summary>
+    public static bool RowEnabled(Configuration.PluginConfiguration cfg, string row) => cfg.Enabled && row switch
+    {
+        HomeRows.PourToi => cfg.HssSection,
+        HomeRows.Nouveautes => cfg.RowNew,
+        HomeRows.Films => cfg.RowMovies,
+        HomeRows.Series => cfg.RowSeries,
+        _ when row.StartsWith(HomeRows.ParceQue, StringComparison.Ordinal) && int.TryParse(row.AsSpan(HomeRows.ParceQue.Length), out var n) => n >= 1 && n <= Math.Clamp(cfg.RowBecause, 0, 3),
+        _ => false,
+    };
 
     private readonly ILogger<HomeScreenSectionsIntegration> _log;
     private readonly Notifier _notifier;
@@ -168,10 +187,34 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken).ConfigureAwait(false);
-        var cfg = Plugin.Instance?.Configuration;
-        if (cfg is null || !cfg.Enabled || !cfg.HssSection)
+        Register();
+
+        // titres ou rangées modifiés : déclarés à nouveau (HSS remplace la déclaration de même identifiant), sans redémarrage
+        if (Plugin.Instance is { } p)
         {
-            State = "désactivée";
+            p.ConfigurationChanged += OnConfigChanged;
+            try
+            {
+                await Task.Delay(Timeout.Infinite, stoppingToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                // arrêt de Jellyfin
+            }
+            finally
+            {
+                p.ConfigurationChanged -= OnConfigChanged;
+            }
+        }
+    }
+
+    private void OnConfigChanged(object? sender, MediaBrowser.Model.Plugins.BasePluginConfiguration e) => Register();
+
+    private void Register()
+    {
+        var cfg = Plugin.Instance?.Configuration;
+        if (cfg is null)
+        {
             return;
         }
 
@@ -209,11 +252,12 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
             }
 
             Registered = true;
-            State = sections.Count == 1
-                ? $"rangée « {cfg.HssSectionTitle} » déclarée (à activer dans la configuration de Home Screen Sections)"
-                : $"{sections.Count} rangées déclarées : {string.Join(", ", sections.Select(x => "« " + x.Title + " »"))} (à activer dans la configuration de Home Screen Sections)";
+            var on = sections.Where(x => RowEnabled(cfg, x.Id[Prefix.Length..])).Select(x => "« " + x.Title + " »").ToList();
+            State = on.Count == 0
+                ? "aucune rangée active (déclarées à Home Screen Sections, mais vides)"
+                : $"actives : {string.Join(", ", on)} — à ajouter dans la configuration de Home Screen Sections";
             _notifier.Clear("off-" + Feature.HomeScreenSection);
-            _log.LogInformation("Reco+ : rangée Home Screen Sections déclarée");
+            _log.LogInformation("Reco+ : {N} rangées déclarées à Home Screen Sections ({On} actives)", sections.Count, on.Count);
         }
         catch (Exception ex)
         {

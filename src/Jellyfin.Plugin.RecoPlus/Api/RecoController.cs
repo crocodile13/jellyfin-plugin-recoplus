@@ -121,12 +121,18 @@ public sealed class RecoController : ControllerBase
         var r = _reco.For(me.Value);
         bool on = cfg.Enabled && cfg.ExtendedEnabled && _seerr.Configured;
         bool hss = cfg.HssSection && HomeScreenSectionsIntegration.Registered && CompatibilityGuard.Allowed(Feature.HomeScreenSection);
-        string tpl = string.IsNullOrWhiteSpace(cfg.RowBecauseTitle) ? "Parce que tu as aimé {titre}" : cfg.RowBecauseTitle;
+        string tpl = string.IsNullOrWhiteSpace(cfg.RowBecauseTitle) ? "Parce que tu as aimé {titre}" : cfg.RowBecauseTitle.Trim();
+        // titre de chaque rangée Reco+ tel que configuré (effet immédiat dans le client web), et pour les rangées
+        // « Parce que … » le titre aimé de ce compte
+        var rowTitles = HomeScreenSectionsIntegration.Sections(cfg).ToDictionary(x => x.Id, x => x.Title, StringComparer.Ordinal);
+        foreach (var (row, anchor) in r?.RowAnchors ?? new Dictionary<string, string>())
+        {
+            rowTitles[HomeScreenSectionsIntegration.Prefix + row] = tpl.Replace("{titre}", anchor, StringComparison.Ordinal);
+        }
+
         return Ok(new
         {
-            // titres des rangées « Parce que tu as aimé … » de ce compte (le script remplace le titre générique)
-            rowTitles = r is null || !cfg.Enabled ? new Dictionary<string, string>() : r.RowAnchors.ToDictionary(
-                kv => HomeScreenSectionsIntegration.Prefix + kv.Key, kv => tpl.Replace("{titre}", kv.Value, StringComparison.Ordinal)),
+            rowTitles = cfg.Enabled ? rowTitles : new Dictionary<string, string>(),
             // affichages comptés seulement si le compte reçoit des recommandations Reco+
             track = cfg.Enabled && cfg.TrackImpressions && (cfg.Engine?.WImpression ?? 0) > 0 && r is not null,
             enabled = on,
@@ -134,7 +140,7 @@ public sealed class RecoController : ControllerBase
             hss,
             mixMode = cfg.ExtendedMixMode == Configuration.MixMode.Score ? "score" : "interleave",
             mixEvery = Math.Clamp(cfg.ExtendedMixEvery, 2, 20),
-            skip = Math.Min(r?.Pinned.Count ?? 0, 20),
+            skip = Math.Min(r?.Pinned.Count ?? 0, Math.Clamp(cfg.RowSize, 5, 60)),
             title = cfg.ExtendedTitle,
             canRequest = on && cfg.ExtendedRequestButton && (r?.SeerrUserId ?? 0) > 0,
             seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? cfg.SeerrUrl.TrimEnd('/') : cfg.SeerrPublicUrl.TrimEnd('/'),
@@ -266,6 +272,7 @@ public sealed class RecoController : ControllerBase
                         ciHigh = m.Ci.High,
                         sufficiency = m.Sufficiency,
                         recommended = m.Recommended,
+                        noChange = m.NoChange,
                     }),
                 },
             },
