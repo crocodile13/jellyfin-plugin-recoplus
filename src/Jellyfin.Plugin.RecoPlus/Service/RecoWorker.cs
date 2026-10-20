@@ -32,6 +32,7 @@ public sealed class RecoWorker : BackgroundService
     private readonly ILogger<RecoWorker> _log;
     private readonly ConcurrentDictionary<Guid, DateTime> _dueUsers = new();
     private readonly ConcurrentDictionary<Guid, DateTime> _lastUserRun = new();
+    private readonly object _allLock = new();
     private DateTime? _dueAll;
     private DateTime _lastLibraryRun = DateTime.MinValue;
     private bool _libraryPending;
@@ -83,7 +84,10 @@ public sealed class RecoWorker : BackgroundService
         }
 
         var due = DateTime.UtcNow + delay;
-        _dueAll = _dueAll is { } d && d < due ? d : due;
+        lock (_allLock)
+        {
+            _dueAll = _dueAll is { } d && d < due ? d : due;
+        }
     }
 
     private void OnItemAdded(object? sender, ItemChangeEventArgs e)
@@ -91,9 +95,12 @@ public sealed class RecoWorker : BackgroundService
         if (e.Item is Movie or Series && Enabled)
         {
             // ajouts en rafale regroupés ; au plus un recalcul complet par heure pour cette raison
-            var due = Due(DateTime.UtcNow, LibraryDelay, _lastLibraryRun == DateTime.MinValue ? (DateTime?)null : _lastLibraryRun, LibraryMinGap);
-            _dueAll = _dueAll is { } d && d < due ? d : due;
-            _libraryPending = true;
+            lock (_allLock)
+            {
+                var due = Due(DateTime.UtcNow, LibraryDelay, _lastLibraryRun == DateTime.MinValue ? (DateTime?)null : _lastLibraryRun, LibraryMinGap);
+                _dueAll = _dueAll is { } d && d < due ? d : due;
+                _libraryPending = true;
+            }
         }
     }
 
@@ -144,15 +151,24 @@ public sealed class RecoWorker : BackgroundService
                 }
 
                 var now = DateTime.UtcNow;
-                if (_dueAll is { } all && all <= now)
+                bool runAll = false;
+                lock (_allLock)
                 {
-                    _dueAll = null;
-                    _dueUsers.Clear();
-                    if (_libraryPending)
+                    if (_dueAll is { } all && all <= now)
                     {
-                        _libraryPending = false;
-                        _lastLibraryRun = now;
+                        _dueAll = null;
+                        runAll = true;
+                        if (_libraryPending)
+                        {
+                            _libraryPending = false;
+                            _lastLibraryRun = now;
+                        }
                     }
+                }
+
+                if (runAll)
+                {
+                    _dueUsers.Clear();
 
                     // calcul complet = tâche planifiée « Recalcul des recommandations » (visible, avec sa progression)
                     _log.LogInformation("Reco+ : recalcul de tous les comptes mis en file (Tâches planifiées)");

@@ -44,6 +44,8 @@ public sealed class HssSectionHandler
     }
 
     /// <summary>« Pour toi » : épinglés puis liste classée, droits du compte appliqués.</summary>
+    private static readonly ItemFields[] CardFields = { ItemFields.PrimaryImageAspectRatio, ItemFields.MediaSourceCount };
+
     public QueryResult<BaseItemDto> GetResults(HssPayload payload) => Row(payload, HomeRows.PourToi);
 
     /// <summary>« Films pour toi ».</summary>
@@ -104,7 +106,8 @@ public sealed class HssSectionHandler
                 IsVirtualItem = false,
             }).ToDictionary(i => i.Id);
             var items = ids.Where(allowed.ContainsKey).Select(x => allowed[x]).Take(size).ToList();
-            var dtos = _dto.GetBaseItemDtos(items, new DtoOptions(), user);
+            // champs utiles aux cartes seulement (comme les rangées de HSS) : pas d'acteurs, chapitres ni sources par titre
+            var dtos = _dto.GetBaseItemDtos(items, new DtoOptions { Fields = CardFields }, user);
             return new QueryResult<BaseItemDto>(0, dtos.Count, dtos);
         }
         catch (Exception ex)

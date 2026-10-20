@@ -128,7 +128,10 @@ Tableau de bord → Extensions → Reco+. La page est organisée en onglets :
 | Mode étendu | titres hors bibliothèque : activation ; mélangés dans la rangée d'accueil un toutes les N cartes, ou librement selon le classement commun du moteur (sur ce que les deux ont : goût, note, sortie récente), avec en option un minimum de titres hors bibliothèque montrés et des places « découverte » pour les mieux notés ; sources (chacune se coupe) : recommandations et titres similaires des titres aimés, volets manquants des sagas, filmographies des réalisateurs, créateurs et scénaristes récurrents, les mieux notés de TMDb tous genres, des genres, thèmes (mots-clés), studios et chaînes, langues d'origine préférés et de leurs croisements (genre × thème, genre × langue), et des pépites peu connues (très bien notées, peu de votes), lus à des pages tirées au hasard chaque jour ; hasard du jour réglable ; l'aperçu montre l'apport de chaque source ; note et nombre de votes minimaux ; au recalcul complet, l'exploration Seerr n'est refaite que pour les comptes actifs récemment |
 | Notifications | webhook, avec envoi de test |
 | Calibrage | méthode (automatique, modèle de choix appris, recherche par curseurs) avec un avertissement si l'historique ne suffit pas ; voir ci-dessous |
-| Aperçu | ce que voit actuellement un compte, rangée par rangée |
+| Aperçu | ce que voit actuellement un compte, rangée par rangée (et, en mode développeur, l'apport de chaque source du mode étendu) |
+| Journal | mode développeur : le journal de Reco+ en temps réel (ou de tout Jellyfin), filtrable, secrets masqués |
+
+Les onglets Moteur, Calibrage et Journal n'apparaissent qu'en **mode développeur** (case en haut à droite des onglets, retenue par navigateur).
 
 Chaque onglet montre l'essentiel ; les réglages avancés sont repliés. Survolez (ou touchez) le **?** à côté d'un réglage pour son aide et sa valeur par défaut. Un seul bouton **Enregistrer** sauvegarde à la fois les réglages et les secrets saisis.
 

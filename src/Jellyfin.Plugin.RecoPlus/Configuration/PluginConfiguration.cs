@@ -151,6 +151,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Langue des métadonnées TMDb (doit correspondre à celle de la bibliothèque).</summary>
     public string SeerrLanguage { get; set; } = "fr";
 
+    /// <summary>Appels de Reco+ à Seerr par seconde, au plus (2 en cours au plus) : laisse Seerr répondre aux utilisateurs.</summary>
+    public int SeerrRate { get; set; } = 8;
+
     /// <summary>Pays de référence des classifications (contrôle parental des titres hors bibliothèque).</summary>
     public string RatingCountry { get; set; } = "FR";
 

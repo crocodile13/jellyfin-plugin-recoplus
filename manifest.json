@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.17.0",
+        "changelog": "1.0.17 : revue complète. Plus rapide : classement ~10× plus rapide à listes identiques (produits scalaires sur entiers et mis en cache le temps du calcul) ; rangées d'accueil servies avec les seuls champs utiles aux cartes ; listes TMDb gardées sur disque (un redémarrage ne relance plus toute l'exploration). Seerr ménagé : 2 appels en cours au plus et 8 par seconde (réglable), pour que Jellyfin Enhanced reste servi pendant un calcul ; Seerr injoignable : lecture sautée au lieu d'attendre. Corrections : demandes Seerr relues pour un calcul d'un seul compte quand elles ont plus de 30 min (elles ne l'étaient plus qu'au calcul complet) ; titres hors bibliothèque gardés d'un calcul précédent filtrés (vus, masqués, demandés, arrivés, contrôle parental) ; titre ntfy avec accents ; adresse interne de Seerr plus envoyée aux utilisateurs. Nouveau : mode développeur (onglets Moteur, Calibrage et le nouveau Journal en temps réel, détail par source de l'aperçu) ; fin de calcul et exploration écrites dans le journal.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.16.0",
         "changelog": "1.0.16 : mode étendu — deux nouvelles sources : croisements de ses goûts (genre × thème, genre × langue d'origine : « Bien noté en drame, thème « vengeance » », « Bien noté en animation, en japonais ») et pépites peu connues (très bien notées mais peu de votes TMDb, tous genres et genres préférés ; note et votes min./max. réglables) ; l'aperçu de la configuration montre l'apport de chaque source pour un compte (titres trouvés, détaillés, proposés, placés dans la rangée). Seerr qui ne répond plus ne bloque plus le calcul : après 3 échecs d'affilée (délai dépassé, connexion refusée, erreur 5xx), plus aucun appel pendant 5 min, les comptes gardent leurs titres hors bibliothèque précédents.",
         "targetAbi": "12.2.0.0",

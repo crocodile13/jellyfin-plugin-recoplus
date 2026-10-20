@@ -427,8 +427,15 @@ public sealed class SeerrClient
         var text = await res.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
         if (res.StatusCode == HttpStatusCode.Created)
         {
-            using var doc = JsonDocument.Parse(text);
-            return Int(doc.RootElement, "id");
+            try
+            {
+                using var doc = JsonDocument.Parse(text);
+                return Int(doc.RootElement, "id");
+            }
+            catch (JsonException)
+            {
+                return 0; // demande créée, réponse illisible : la demande existe quand même
+            }
         }
 
         string msg = string.Empty;
