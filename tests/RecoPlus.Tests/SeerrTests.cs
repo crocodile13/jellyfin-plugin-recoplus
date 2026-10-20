@@ -72,6 +72,59 @@ public class SeerrTests
     }
 
     [Fact]
+    public void ParsesIdsForExplorationAndPrefersTheatricalCertification()
+    {
+        var j = JsonDocument.Parse("""
+        {"title":"F","genres":[{"id":16,"name":"Animation"},{"id":0,"name":"x"}],"keywords":[{"id":210024,"name":"anime"}],
+         "productionCompanies":[{"id":10342,"name":"Studio Ghibli"}],
+         "credits":{"cast":[],"crew":[{"id":608,"name":"Hayao Miyazaki","job":"Director"},{"id":608,"name":"Hayao Miyazaki","job":"Screenplay"},{"id":9,"name":"Z","job":"Editor"}]},
+         "releases":{"results":[{"iso_3166_1":"FR","release_dates":[{"type":1,"certification":"16"},{"type":3,"certification":"U"}]}]}}
+        """).RootElement;
+        var d = SeerrClient.ParseDetails("movie", 1, j);
+        Assert.Equal(SeerrDetails.CurrentFormat, d.Format);
+        Assert.Equal(new[] { new SeerrRef(16, "Animation") }, d.GenreRefs);                    // identifiant 0 écarté
+        Assert.Equal(new[] { new SeerrRef(210024, "anime") }, d.KeywordRefs);
+        Assert.Equal(new[] { new SeerrRef(10342, "Studio Ghibli") }, d.StudioRefs);
+        Assert.Equal(new[] { new SeerrRef(608, "Hayao Miyazaki") }, d.PeopleRefs);             // auteur une fois, pas le monteur
+        Assert.Equal("U", d.Certifications["FR"]);                                              // sortie en salle d'abord
+
+        var tv = SeerrClient.ParseDetails("tv", 2, JsonDocument.Parse("""{"name":"S","createdBy":[{"id":5,"name":"C"}],"networks":[{"id":213,"name":"Netflix"}]}""").RootElement);
+        Assert.Equal(new[] { new SeerrRef(5, "C") }, tv.PeopleRefs);
+        Assert.Equal(new[] { new SeerrRef(213, "Netflix") }, tv.StudioRefs);
+    }
+
+    [Fact]
+    public void MapsListResultsWithTheirOwnKind()
+    {
+        var items = JsonDocument.Parse("""
+        [{"id":1,"mediaType":"movie","title":"M","voteAverage":8.1,"voteCount":900,"releaseDate":"2001-01-01"},
+         {"id":2,"mediaType":"tv","name":"T","voteAverage":7.9,"voteCount":50},
+         {"id":3,"mediaType":"person","name":"P"},{"id":0,"title":"?"},{"id":4,"title":"Sans sorte"}]
+        """).RootElement.EnumerateArray();
+        var r = SeerrClient.MapResults(items, "movie");
+        Assert.Equal(new[] { "movie:1", "tv:2", "movie:4" }, r.Select(x => x.MediaType + ":" + x.TmdbId));
+        Assert.Equal("T", r[1].Name);
+        Assert.Equal(900, r[0].VoteCount);
+    }
+
+    [Fact]
+    public async Task DiscoverBuildsTheSeerrQuery()
+    {
+        string? path = null;
+        var fake = new Fake(r =>
+        {
+            path = r.RequestUri!.PathAndQuery;
+            return Json(HttpStatusCode.OK, new { results = new[] { new { id = 7, title = "X", voteAverage = 8.0, voteCount = 2000 } } });
+        });
+        var cl = new SeerrClient(new HttpClient(fake), "http://seerr:5055", "k");
+        var res = await cl.DiscoverAsync("movie", new Dictionary<string, string> { ["sortBy"] = "vote_average.desc", ["voteCountGte"] = "500", ["genre"] = "16", ["language"] = "all", ["keywords"] = "" }, 3, CancellationToken.None);
+        Assert.Equal("/api/v1/discover/movies?page=3&genre=16&language=all&sortBy=vote_average.desc&voteCountGte=500", path);
+        Assert.Equal("movie:7", res[0].MediaType + ":" + res[0].TmdbId);
+        await cl.DiscoverAsync("tv", new Dictionary<string, string>(), 1, CancellationToken.None);
+        Assert.Equal("/api/v1/discover/tv?page=1", path);
+    }
+
+    [Fact]
     public async Task RequestActsAsUserAndMapsErrors()
     {
         var fake = new Fake(r => r.RequestUri!.AbsolutePath.EndsWith("/api/v1/request", StringComparison.Ordinal)

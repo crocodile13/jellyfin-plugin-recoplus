@@ -40,6 +40,9 @@ public sealed class ExternalRec
     /// <summary>Titre aimé qui a amené celui-ci (« parce que tu as aimé … »).</summary>
     public string Because { get; set; } = string.Empty;
 
+    /// <summary>Pourquoi ce titre est proposé, en clair (« Parce que tu as aimé … », « De Hayao Miyazaki », « Bien noté en animation »…).</summary>
+    public string Reason { get; set; } = string.Empty;
+
     /// <summary>
     /// Mélange libre : nombre de titres de la bibliothèque (rangée « Pour toi », hors demandes en tête) que le moteur classe
     /// devant celui-ci ; -1 = non calculé.

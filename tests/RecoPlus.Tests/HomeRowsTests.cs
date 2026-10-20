@@ -175,4 +175,15 @@ public class HomeRowsTests
         Assert.Equal(new[] { 8, 16 }, HomeRows.FreePlaces(lib.Take(16).ToArray(), new[] { 0.5, 0.4 }, 1));
         Assert.Equal(new[] { 0 }, HomeRows.FreePlaces(new[] { 1.0 }, new[] { 0.5 }, 5));   // jamais au-delà de la rangée
     }
+
+    [Fact]
+    public void ForcePlacesTakesUnplacedTitlesInTheGivenOrder()
+    {
+        var after = new[] { 3, 17, 17, 17, 17 };
+        // découverte : les mieux notés d'abord (ordre 4, 2, …), seulement ceux sans place
+        var a = HomeRows.ForcePlaces((int[])after.Clone(), 17, new[] { 0, 4, 2, 1 }, 2);
+        Assert.Equal(new[] { 3, 17, 11, 17, 6 }, a);
+        Assert.Equal(after, HomeRows.ForcePlaces((int[])after.Clone(), 17, new[] { 4 }, 0));
+        Assert.Equal(after, HomeRows.ForcePlaces((int[])after.Clone(), 0, new[] { 4 }, 2));
+    }
 }

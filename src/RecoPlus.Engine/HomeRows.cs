@@ -175,10 +175,24 @@ public static class HomeRows
             return after;
         }
 
-        var forced = Enumerable.Range(0, ext.Count).Where(i => after[i] >= n).Take(missing).ToList();
+        return ForcePlaces(after, n, Enumerable.Range(0, ext.Count), missing);
+    }
+
+    /// <summary>
+    /// Place de force jusqu'à <paramref name="count"/> titres hors bibliothèque qui n'ont pas de place (place ≥
+    /// <paramref name="libCount"/>), pris dans l'ordre <paramref name="order"/>, répartis régulièrement dans la rangée.
+    /// </summary>
+    public static int[] ForcePlaces(int[] after, int libCount, IEnumerable<int> order, int count)
+    {
+        if (libCount <= 0 || count <= 0)
+        {
+            return after;
+        }
+
+        var forced = order.Where(i => i >= 0 && i < after.Length && after[i] >= libCount).Distinct().Take(count).ToList();
         for (int j = 0; j < forced.Count; j++)
         {
-            after[forced[j]] = Math.Clamp((int)Math.Round((j + 1.0) * n / (forced.Count + 1), MidpointRounding.AwayFromZero), 0, n - 1);
+            after[forced[j]] = Math.Clamp((int)Math.Round((j + 1.0) * libCount / (forced.Count + 1), MidpointRounding.AwayFromZero), 0, libCount - 1);
         }
 
         return after;

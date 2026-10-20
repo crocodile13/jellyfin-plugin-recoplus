@@ -336,5 +336,14 @@ await test('fiche refusée au compte par Jellyfin Enhanced (403, contrôle paren
     assert.equal(p.calls.je.length, 3, 'raison du refus lue seulement pour les fiches manquantes');
 });
 
+await test('raison affichée : celle du serveur, sinon « Parce que tu as aimé … »', async () => {
+    const items = ext(2).map((it, i) => ({ ...it, Reason: i === 0 ? 'De Hayao Miyazaki' : '' }));
+    const p = page({ hssCards: 4, data: { ...base, items } });
+    await wait(700);
+    const imgs = [...p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext .cardImageContainer')];
+    assert.equal(imgs[0].title, 'De Hayao Miyazaki');
+    assert.equal(imgs[1].title, 'Parce que tu as aimé Aimé 1');
+});
+
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');
 process.exit(failures ? 1 : 0);
