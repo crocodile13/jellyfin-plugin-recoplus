@@ -585,6 +585,15 @@ function pageTexts() {
     return keys;
 }
 
+await test('par défaut, chaque rangée mélange bibliothèque et Seerr (serveur et page d\'accord)', async () => {
+    const cs = readFileSync(join(root, 'src/Jellyfin.Plugin.RecoPlus/Configuration/PluginConfiguration.cs'), 'utf8');
+    const rows = ['SourcePourToi', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms', 'SourceSeries'];
+    for (const k of rows) {
+        assert.match(cs, new RegExp('RowSource ' + k + ' \\{ get; set; \\} = RowSource\\.Mix;'), k + ' côté serveur');
+        assert.match(HTML, new RegExp("\\['" + k + "',[^\\n]*'c', 'mélange'\\]"), k + ' : défaut affiché');
+    }
+});
+
 await test('langue : chaque texte de la page a sa traduction anglaise (mêmes paramètres)', async () => {
     const keys = pageTexts();
     assert.ok(keys.size > 400, 'textes trouvés : ' + keys.size);

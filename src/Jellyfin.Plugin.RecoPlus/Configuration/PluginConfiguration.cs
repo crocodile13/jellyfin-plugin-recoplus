@@ -211,7 +211,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public bool ExtendedEnabled { get; set; }
 
     /// <summary>Nombre de titres hors bibliothèque proposés.</summary>
-    public int ExtendedCount { get; set; } = 20;
+    public int ExtendedCount { get; set; } = 40;
 
     /// <summary>Titres aimés utilisés comme points de départ dans le catalogue.</summary>
     public int ExtendedAnchors { get; set; } = 30;
@@ -339,16 +339,16 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public RowSource SourcePourToi { get; set; } = RowSource.Mix;
 
     /// <summary>Contenu de la rangée « Nouveautés » (hors bibliothèque : sortis récemment).</summary>
-    public RowSource SourceNouveautes { get; set; } = RowSource.Local;
+    public RowSource SourceNouveautes { get; set; } = RowSource.Mix;
 
     /// <summary>Contenu des rangées « Parce que tu as aimé … » (hors bibliothèque : proches du titre aimé).</summary>
-    public RowSource SourceParceQue { get; set; } = RowSource.Local;
+    public RowSource SourceParceQue { get; set; } = RowSource.Mix;
 
     /// <summary>Contenu de la rangée « Films ».</summary>
-    public RowSource SourceFilms { get; set; } = RowSource.Local;
+    public RowSource SourceFilms { get; set; } = RowSource.Mix;
 
     /// <summary>Contenu de la rangée « Séries ».</summary>
-    public RowSource SourceSeries { get; set; } = RowSource.Local;
+    public RowSource SourceSeries { get; set; } = RowSource.Mix;
 
     /// <summary>Nouveautés hors bibliothèque : sortis depuis ce nombre de jours.</summary>
     public int RowNewReleasedDays { get; set; } = 365;
