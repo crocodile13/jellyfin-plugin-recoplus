@@ -173,10 +173,10 @@ public static class NeuralNet
 
     /// <summary>Entraîne la correction sur des cas (réglages du moteur fixés), à force de régularisation donnée.</summary>
     public static double[] Train(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings s, double kappa,
-        CancellationToken ct = default, int iterations = 300)
+        CancellationToken ct = default, int iterations = 300, ChoiceModel.FeatureCache? cache = null)
     {
         s = s.Sanitized();
-        var raw = ChoiceModel.Build(ds, sim, cases, s, ct);
+        var raw = ChoiceModel.Build(ds, sim, cases, s, ct, cache);
         var data = Prepare(raw, s);
         var th = new double[Size];
         if (data.Count == 0)
@@ -244,38 +244,13 @@ public static class NeuralNet
         return r.Sanitized();
     }
 
-    /// <summary>Force de régularisation par validation croisée par comptes (à égalité, la plus forte).</summary>
+    /// <summary>Force de régularisation par validation croisée par comptes, k groupes (à égalité, la plus forte).</summary>
     public static double SelectKappa(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings s,
-        Action? tick = null, CancellationToken ct = default)
-    {
-        var fold = Calibrator.Folds(cases);
-        var parts = new[] { 0, 1 }.Select(f => cases.Where(c => fold[c.Ev.User] == f).ToList()).ToArray();
-        if (parts.Any(p => p.Count < 10))
+        Action? tick = null, CancellationToken ct = default, ChoiceModel.FeatureCache? cache = null, int folds = 0)
+        => Calibrator.SelectByCv(cases, Kappas, (train, test, kappa) =>
         {
-            return Kappas[^1];
-        }
-
-        double bestK = Kappas[^1], bestG = double.NegativeInfinity;
-        foreach (var kappa in Kappas.Reverse())
-        {
-            double sw = 0, sg = 0;
-            for (int f = 0; f < 2; f++)
-            {
-                var net = Train(ds, sim, parts[f], s, kappa, ct);
-                var r = Calibrator.EvaluateRanks(ds, sim, parts[1 - f], With(s, net), ct);
-                double w = parts[1 - f].Sum(c => c.Weight);
-                sw += w;
-                sg += r.Gain * w;
-                tick?.Invoke();
-            }
-
-            double g = sw > 0 ? sg / sw : 0;
-            if (g > bestG + 1e-9)
-            {
-                (bestG, bestK) = (g, kappa);
-            }
-        }
-
-        return bestK;
-    }
+            var net = Train(ds, sim, train, s, kappa, ct, cache: cache);
+            tick?.Invoke();
+            return Calibrator.EvaluateRanks(ds, sim, test, With(s, net), ct).Gain;
+        }, folds);
 }

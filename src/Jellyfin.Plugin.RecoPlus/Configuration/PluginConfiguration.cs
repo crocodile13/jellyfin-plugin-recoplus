@@ -92,6 +92,39 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Méthode du calibrage.</summary>
     public CalibrationMethod CalibrationMethod { get; set; } = CalibrationMethod.Auto;
 
+    /// <summary>Calibrage : groupes de comptes de la validation croisée (2-10) ; 0 = automatique.</summary>
+    public int CalibrationFolds { get; set; }
+
+    /// <summary>Calibrage : groupes pour la recherche par curseurs et le réseau (2-10) ; 0 = automatique (3 au plus).</summary>
+    public int CalibrationSlowFolds { get; set; }
+
+    /// <summary>Calibrage : groupes du choix de régularisation imbriqué (2-10) ; 0 = automatique (2).</summary>
+    public int CalibrationInnerFolds { get; set; }
+
+    /// <summary>Calibrage : choix de l'étape du chemin (automatique = prudent).</summary>
+    public CalibrationPrudence CalibrationPrudence { get; set; } = CalibrationPrudence.Auto;
+
+    /// <summary>Calibrage : passes de la recherche par curseurs ; 0 = automatique (2).</summary>
+    public int CalibrationPasses { get; set; }
+
+    /// <summary>Calibrage : affinages par réglage de la recherche par curseurs ; 0 = automatique (4).</summary>
+    public int CalibrationRefine { get; set; }
+
+    /// <summary>Calibrage : gain minimal en validation croisée pour recommander (%) ; 0 = automatique (1 %).</summary>
+    public double CalibrationMinGain { get; set; }
+
+    /// <summary>Réglages du calibrage lui-même.</summary>
+    public CalibrationOptions BuildCalibrationOptions() => new()
+    {
+        Folds = CalibrationFolds,
+        SlowFolds = CalibrationSlowFolds,
+        InnerFolds = CalibrationInnerFolds,
+        Prudence = CalibrationPrudence,
+        Passes = CalibrationPasses,
+        Refine = CalibrationRefine,
+        MinGainPercent = CalibrationMinGain,
+    };
+
     /// <summary>Nombre de titres demandés, arrivés et pas encore vus, placés en tête.</summary>
     public int PinnedRequests { get; set; } = 3;
 

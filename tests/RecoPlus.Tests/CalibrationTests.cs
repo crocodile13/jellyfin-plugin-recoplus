@@ -60,6 +60,61 @@ public class CalibrationTests
     }
 
     [Fact]
+    public void CachedContextsGiveTheSameEvaluation()
+    {
+        var ds = Golden();
+        var cases = Calibrator.Cases(ds);
+        var cache = new Calibrator.ContextCache();
+        var s0 = new EngineSettings();
+        var sim = new SimilarityIndex(Core.BuildVectors(ds.Titles, s0));
+        // poids du score (contexte gardé), puis un réglage de signal (contexte refait), puis retour
+        foreach (var s in new[] { s0, new EngineSettings { WMaxSim = 0.7, WFresh = 0.5, Mmr = 0.9 }, new EngineSettings { HalfLifeDays = 30, AbandonDays = 5 }, s0 })
+        {
+            var a = Calibrator.EvaluateRanks(ds, sim, cases, s);
+            var b = Calibrator.EvaluateRanks(ds, sim, cases, s, contexts: cache);
+            Assert.Equal(a.PerEventGain, b.PerEventGain);
+        }
+    }
+
+    [Fact]
+    public void FoldsSpreadAccountsAndCvPicksTheBestValue()
+    {
+        var ds = Golden();
+        var cases = Calibrator.Cases(ds);
+        int k = Calibrator.FoldCount(cases);
+        var f = Calibrator.Folds(cases, k);
+        Assert.All(f.Values, v => Assert.InRange(v, 0, k - 1));
+        Assert.Equal(cases.Select(c => c.Ev.User).Distinct().Count(), f.Count);
+        // valeur qui fait gagner partout : choisie ; sans différence : la dernière (la plus prudente)
+        Assert.Equal(2, Calibrator.SelectByCv(cases, new[] { 1, 2, 3 }, (tr, te, v) => v == 2 ? 1.0 : 0.5));
+        Assert.Equal(3, Calibrator.SelectByCv(cases, new[] { 1, 2, 3 }, (tr, te, v) => 0.5));
+    }
+
+    [Fact]
+    public void CalibrationOptionsHaveAutomaticDefaultsAndAreHonoured()
+    {
+        var ds = Golden();
+        var cases = Calibrator.Cases(ds);
+        var auto = new CalibrationOptions();
+        Assert.Equal(Calibrator.FoldCount(cases), auto.FoldsFor(cases));
+        Assert.Equal(Math.Min(3, auto.FoldsFor(cases)), auto.SlowFoldsFor(cases));
+        Assert.Equal(2, auto.InnerFoldsEff);
+        Assert.Equal(1, auto.SeMultiplier);
+        Assert.Equal((2, 4), (auto.PassesEff, auto.RefineEff));
+        Assert.Equal(Calibrator.MinPracticalGain, auto.MinGain);
+        var accounts = cases.Select(c => c.Ev.User).Distinct().Count();
+        Assert.Equal(Math.Min(10, accounts), new CalibrationOptions { Folds = 50 }.FoldsFor(cases));   // jamais plus que les comptes
+        Assert.Equal(0, new CalibrationOptions { Prudence = CalibrationPrudence.Best }.SeMultiplier);
+
+        var rep = Calibrator.Calibrate(ds, new EngineSettings(), method: CalibrationMethod.ChoiceModel, options: new CalibrationOptions { Folds = 2, MinGainPercent = 5 });
+        if (rep.Methods.Count > 0)
+        {
+            Assert.Equal(2, rep.Folds);
+            Assert.Equal(0.05, rep.MinGain, 9);
+        }
+    }
+
+    [Fact]
     public void IndexedScoreEqualsDirectScore()
     {
         var ds = Golden();

@@ -145,7 +145,10 @@ The Calibration tab replays your server's history: every time an account started
   - *Neural network* (experimental): a small non-linear correction (10 → 8 → 1, tanh, 96 parameters) learned on the score's ingredients and added to the engine; it starts at zero and regularisation pulls it back without evidence. Needs a lot of history (about 10 cases per parameter).
   - *Automatic* (default): runs all of them and keeps the one that generalises best.
   - The page shows, for each method, whether the history is **sufficient, borderline or insufficient**.
-- **Validation.** Each method is redone on half of the accounts and measured on the other half (two-fold cross-validation by account). A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero) and reaches at least 1%: below that nothing would be visible. A tiny change to a weight (under 0.02 or 3%) is not proposed: it is just noise.
+- **Validation.** Each method is redone without one group of accounts and measured on that group, for every group (cross-validation by account: 5 groups from 10 accounts, 3 from 6, otherwise 2). The regularisation strength of the learned models is chosen the same way.
+- **How far to move.** Every method yields a path away from the current settings: each change kept by the coordinate search, or a quarter, half and all of the way to a learned model. Cross-validation measures every point of the path, and the shortest one within one standard error of the best is kept (the "one-standard-error" rule: without clear evidence, move less; the start of the path means "keep the current settings"). This is what stops the coordinate search from overfitting.
+- **Recommendation.** A setting is **recommended** only if its gain holds on accounts that did not help choose it (bootstrap 95% CI above zero) and reaches at least 1%: below that nothing would be visible.
+- **Settings of the calibration itself** (Calibration tab, "Calibration settings", saved at once; 0 = automatic): number of groups of the cross-validation, of the slow methods and of the nested regularisation choice, how far to move (prudent = one standard error, very prudent = two, or the best step), passes and refinements of the coordinate search, minimal gain to recommend. Settings that do not apply to the chosen method are greyed out. A tiny change to a weight (under 0.02 or 3%) is not proposed: it is just noise.
 
 The calibration data can be exported, pseudonymised (accounts renamed u01, u02…, no names or IDs), to evaluate it elsewhere: **Export the calibration data** button.
 
@@ -153,13 +156,15 @@ Nothing is applied until you click **Apply**; the previous settings are kept for
 
 On the reference household (144 cases over 13 accounts, once the 22 fake cases of a bulk mark are removed and started titles added at half weight):
 
-| Method | In-sample | Cross-validation (95% CI) | History |
-|---|---|---|---|
-| Coordinate search | +17.8% | −3.1% [−11.5; +8.0] | insufficient |
-| Learned choice model | −0.4% | +0.7% [−0.9; +4.5] | sufficient |
-| Neural network | 0% | −2.1% [−6.0; +2.5] | insufficient |
+Path of each method (1.0.23, 5-fold cross-validation by account, no hindsight; gain relative to the defaults):
 
-Coordinate search is textbook overfitting: +18% on the cases used to tune it, −3% on unseen accounts. No method is recommended, so the defaults stay. That is the safeguard working, not a failure. Automatic mode takes about 23 minutes on one core (choice model: one minute; network: six).
+| Method | Steps | In-sample along the path | Cross-validation along the path | Kept |
+|---|---|---|---|---|
+| Coordinate search | 18 | +0.1% → +16.0% | −0.7% → −3.9% (never above 0) | none |
+| Learned choice model | ¼, ½, all | 0% → −0.3% | −0.3% → −1.3% | none |
+| Neural network | ¼, ½, all | 0% | ±0.1% | none (no gain on the history) |
+
+Coordinate search is textbook overfitting: every change it keeps improves the cases used to tune it (+16% after 18 changes) and makes unseen accounts worse. Each point of the path is now measured, so this is visible and nothing is proposed: the defaults stay. That is the safeguard working, not a failure. Automatic mode takes about 27 minutes on two cores.
 
 New features were measured the same way before choosing their defaults: weighting series by watch time does as well as counting episodes (letting very long series exceed 1 does worse, hence the cap at 1); time of day does worse (−0.7% to −3.8%: too few views per slot and account) and stays off; personalised diversity gives +0.8% ranking quality over fixed diversity (95% CI [−0.1%; +2.4%]) and becomes the default; calibrated diversity is neutral at moderate strength and loses at high strength; current taste brings nothing on this history (the half-life already follows recent interests) and stays off. Titles shown but never opened cannot be measured this way (no display history before 1.0.5), so the default penalty is deliberately moderate.
 
