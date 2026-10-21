@@ -426,7 +426,7 @@ public sealed class SeerrService
     {
         EnsureLoaded();
         var key = mediaType + ":" + tmdbId;
-        if (_details.TryGetValue(key, out var d) && DateTime.UtcNow - d.FetchedAt < DetailsTtl && d.Format >= SeerrDetails.CurrentFormat
+        if (_details.TryGetValue(key, out var d) && DateTime.UtcNow - d.FetchedAt < DetailsTtl && d.Format >= SeerrDetails.MinFormat(mediaType)
             && (!requireVotes || d.VoteCount is not null))
         {
             return d;

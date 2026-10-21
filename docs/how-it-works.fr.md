@@ -18,7 +18,7 @@
 - **Les demandes Seerr** sont une intention déclarée *de court terme*, et **la liste de suivi Seerr** compte comme une demande, plus faible (0,4).
   - Demi-vie de 21 jours, ignorée après 90 jours.
   - Dès que le titre est regardé, c'est ce visionnage qui compte.
-  - Elles nourrissent les goûts, mais ne poussent jamais **leur propre** titre : un titre demandé est classé sans sa propre demande, écarté juste après la demande ou son arrivée (le compte sait déjà qu'il le veut, pas besoin de le lui faire découvrir), puis revient peu à peu s'il reste non vu (même demi-vie de 21 jours) : une vieille demande oubliée qui colle aux goûts du compte peut remonter.
+  - Elles nourrissent les goûts, mais ne poussent jamais **leur propre** titre : un titre demandé est classé sans sa propre demande, écarté juste après la demande ou son arrivée — montré dans aucune rangée pendant une demi-vie (le compte sait déjà qu'il le veut, pas besoin de le lui faire découvrir) — puis revient peu à peu s'il reste non vu (même demi-vie de 21 jours) : une vieille demande oubliée qui colle aux goûts du compte peut remonter.
 - Un titre noté (avis, pouce) ou en favori n'est pas proposé : c'est un titre déjà vu (réglable : « Proposer aussi ce que le compte a déjà marqué »).
 - **En tête de liste : les nouveautés de ce que le compte suit**, pendant 45 jours après leur arrivée (3 titres au plus), jamais un titre qu'il a demandé :
   - nouveaux épisodes ou nouvelle saison d'une série vue sur ce serveur et presque rattrapée (pas besoin de l'avoir aimée, juste un poids positif : ni abandonnée, ni masquée) ;
@@ -40,6 +40,7 @@
 - **Montré sans être ouvert.** Un titre resté plusieurs jours à l'écran d'un compte sans qu'il l'ouvre descend progressivement (au plus 40 % de son score), puis remonte avec le temps (demi-vie de 30 jours). Ne compte que ce que le script de l'accueil a vu **réellement affiché au compte connecté** : carte d'une rangée Reco+ visible au moins une seconde, onglet au premier plan, une fois par jour. Ouvrir le titre remet son compteur à zéro.
 - **Goût du moment, en option** (coupé par défaut) : ressemblance avec les 5 derniers titres aimés, en plus des goûts de toujours.
 - **Heure de la journée, en option** (coupée par défaut) : ressemblance avec les titres aimés regardés dans la même tranche horaire (nuit, matin, après-midi, soirée) ; une liste est alors calculée par tranche et servie selon l'heure de la demande (fuseau réglable).
+- **La rangée « Nouveautés »** : seulement les titres arrivés récemment qui figurent dans le premier quart du classement par goût ; un mois calme ne la remplit pas avec n'importe quoi.
 - **Les sagas.**
   - Une seule entrée par saga, et c'est le premier volet pas encore vu, pas le 4ᵉ.
   - Les grands regroupements thématiques ont au plus deux entrées.

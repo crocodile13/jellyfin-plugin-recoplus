@@ -81,6 +81,13 @@ public static class HomeRows
     /// </summary>
     public const double RelativeSimilarity = 0.4;
 
+    /// <summary>
+    /// Rangée « Nouveautés » : seulement les titres arrivés récemment qui figurent dans cette part du classement par goût
+    /// (le premier quart). Sans cela, une rangée de nouveautés se remplit de tout ce qui vient d'arriver, même sans aucun
+    /// rapport avec le compte (peu de titres arrivent en un mois).
+    /// </summary>
+    public const double NewTopShare = 0.25;
+
     /// <summary>Titres aimés examinés comme points de départ des rangées « Parce que … » (les plus forts d'abord).</summary>
     public const int AnchorCandidates = 40;
 
@@ -166,7 +173,9 @@ public static class HomeRows
         if (o.New)
         {
             double cut = ctx.Now - (Math.Clamp(o.NewDays, 1, 365) * Core.Day);
-            var fresh = ordered.Where(id => T.TryGetValue(id, out var t) && (t.Added ?? 0) >= cut && !used.Contains(id)).ToList();
+            var desc = sc.Values.OrderByDescending(v => v).ToList();
+            double bar = desc.Count > 0 ? desc[Math.Min(desc.Count - 1, (int)(NewTopShare * desc.Count))] : double.NegativeInfinity;
+            var fresh = ordered.Where(id => T.TryGetValue(id, out var t) && (t.Added ?? 0) >= cut && !used.Contains(id) && sc.GetValueOrDefault(id, double.NegativeInfinity) >= bar).ToList();
             rows[Nouveautes] = fresh.Count >= 4 ? Row(Nouveautes, null, fresh) : new List<string>();
         }
 
