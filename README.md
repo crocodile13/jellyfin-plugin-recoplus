@@ -77,7 +77,7 @@ Reco+ is a Jellyfin plugin that replaces the built-in recommendations — Sugges
 
 ## Getting started
 
-1. Open **Dashboard → Plugins → Reco+**. The defaults are the evaluated ones: Reco+ works as soon as it is installed.
+1. Open **Reco+** in the Plugins section of the dashboard menu (or **Dashboard → Plugins → Reco+**). The defaults are the evaluated ones: Reco+ works as soon as it is installed.
 2. Click **Recompute now** on the Status tab (otherwise each account is computed at its next activity).
 3. With Home Screen Sections: add the Reco+ rows you want in its settings ("Add Section"); their titles are set on the General tab.
 4. With Seerr: enter its URL and API key on the Seerr tab, click **Test**, then enable extended mode if you want titles outside the library.

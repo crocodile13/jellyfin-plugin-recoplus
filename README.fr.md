@@ -77,7 +77,7 @@ Reco+ est un plugin Jellyfin qui remplace les recommandations intégrées — Su
 
 ## Prise en main
 
-1. Ouvrez **Tableau de bord → Extensions → Reco+**. Les valeurs par défaut sont celles qui ont été évaluées : Reco+ fonctionne dès l'installation.
+1. Ouvrez **Reco+** dans la section Extensions du menu du tableau de bord (ou **Tableau de bord → Extensions → Reco+**). Les valeurs par défaut sont celles qui ont été évaluées : Reco+ fonctionne dès l'installation.
 2. Cliquez sur **Recalculer maintenant** dans l'onglet État (sinon chaque compte est calculé à sa prochaine activité).
 3. Avec Home Screen Sections : ajoutez les rangées Reco+ voulues dans ses réglages (« Add Section ») ; leurs titres se règlent dans l'onglet Général.
 4. Avec Seerr : saisissez son URL et sa clé d'API dans l'onglet Seerr, cliquez sur **Tester**, puis activez le mode étendu si vous voulez des titres hors bibliothèque.

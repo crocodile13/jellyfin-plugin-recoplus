@@ -35,6 +35,8 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
   - `Api/RecoController.cs` : `RecoPlus/…` ; tout ce qui touche à la configuration exige les droits d'administration.
   - `I18n.cs` : réglage de langue (`UiLanguage` : celle de Jellyfin, français, anglais), langue et pays des
     métadonnées du serveur (valeurs par défaut de la langue TMDb et du pays des classifications).
+  - `Web/icon.svg` : icône de l'entrée « Reco+ » du menu du tableau de bord (`EnableInMainMenu`, icône Material
+    « style » de secours ; `client.js` la remplace par le logo par CSS, sans toucher au DOM de l'interface).
   - `Web/configPage.html` (page de configuration) et `Web/client.js` (script de l'accueil : titres des rangées
     « Parce que … », titres montrés, titres hors bibliothèque).
 - Fichiers dans le dossier de données du plugin : `recommandations.json`, `premiers-lancements.json`, `secrets.json`

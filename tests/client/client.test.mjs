@@ -413,5 +413,21 @@ await test('langue : celle de l\'interface Jellyfin envoyée au serveur, textes 
     assert.equal(cards[0].querySelector('button').textContent, '✓ requested');
 });
 
+await test('menu du tableau de bord : l\'icône de l\'entrée Reco+ devient le logo, sans toucher au DOM de l\'interface', async () => {
+    const p = page({ hssCards: 0, data: { ...base } });
+    const d = p.w.document;
+    const nav = d.createElement('nav');
+    nav.innerHTML = '<a href="#/configurationpage?name=RecoPlus"><div class="MuiListItemIcon-root"><span class="material-icons MuiIcon-root">style</span></div><span>Reco+</span></a>'
+        + '<a href="#/configurationpage?name=Other"><div class="MuiListItemIcon-root"><span class="material-icons MuiIcon-root">folder</span></div></a>';
+    d.body.appendChild(nav);
+    await wait(700);
+    const [mine, other] = nav.querySelectorAll('.material-icons');
+    assert.ok(mine.hasAttribute('data-recoplus-icon'), 'icône Reco+ marquée');
+    assert.ok(!other.hasAttribute('data-recoplus-icon'), 'les autres extensions ne bougent pas');
+    assert.equal(mine.textContent, 'style', 'nœud de l\'interface intact');
+    const css = [...d.querySelectorAll('style')].map((x) => x.textContent).join('');
+    assert.match(css, /\[data-recoplus-icon\]\{color:transparent!important;background:url\("\/RecoPlus\/icon\.svg"\)/);
+});
+
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');
 process.exit(failures ? 1 : 0);
