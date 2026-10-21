@@ -238,7 +238,7 @@
             <div class="rp-pane" data-pane="calibrage">
                 <div class="rp-box">
                     <h3>Calibrage sur l'historique</h3>
-                    <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, à quel rang ce titre figurait-il dans les recommandations calculées juste avant, avec seulement ce qui était connu alors ? Chaque cas pèse selon l'historique déjà connu du compte, et les comptes sont équilibrés. Chaque méthode propose un réglage, puis est refaite sur une moitié des comptes et mesurée sur l'autre (validation croisée) : un réglage n'est recommandé que si son gain se retrouve, de façon sûre et d'au moins 1 %, chez des comptes qui n'ont pas servi à le choisir (en dessous, rien ne se verrait). Rien n'est appliqué sans votre clic ; les onglets Listes et Général n'entrent pas en jeu. Visible aussi dans Tâches planifiées.</p>
+                    <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, à quel rang ce titre figurait-il dans les recommandations calculées juste avant, avec seulement ce qui était connu alors ? Chaque cas pèse selon l'historique déjà connu du compte, et les comptes sont équilibrés. Chaque méthode est refaite sans un groupe de comptes et mesurée sur ce groupe, pour chaque groupe (validation croisée, 5 groupes à partir de 10 comptes par défaut), à chaque étape de son chemin vers le réglage appris ; on garde l'étape la plus prudente qui fait presque aussi bien que la meilleure. Un réglage n'est recommandé que si son gain se retrouve, de façon sûre et d'au moins le gain minimal (1 % par défaut), chez des comptes qui n'ont pas servi à le choisir (en dessous, rien ne se verrait). Rien n'est appliqué sans votre clic ; les onglets Listes et Général n'entrent pas en jeu. Visible aussi dans Tâches planifiées.</p>
                     <div class="rp-grid"><div class="rp-field"><div class="selectContainer">
                         <label class="selectLabel" for="rpCalMethod">Méthode</label>
                         <select is="emby-select" id="rpCalMethod">
@@ -248,6 +248,10 @@
                             <option value="Neural">Réseau de neurones (expérimental)</option>
                         </select>
                     </div><span class="rp-tip" tabindex="0" role="note" aria-label="Modèle de choix appris : apprend d'un coup les 10 poids du score (logit conditionnel : « quel titre a été choisi parmi tous ceux proposables »), régularisé vers les réglages actuels, force choisie par validation croisée ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages (grille puis section dorée), contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux. Par défaut : automatique.">?<span class="rp-bubble">Modèle de choix appris : apprend d'un coup les 10 poids du score (logit conditionnel : « quel titre a été choisi parmi tous ceux proposables »), régularisé vers les réglages actuels, force choisie par validation croisée ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages (grille puis section dorée), contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux. Par défaut : automatique.</span></span></div></div>
+                    <details class="rp-adv"><summary>Réglages du calibrage <span>— validation croisée, prudence, recherche (0 = automatique) ; enregistrés aussitôt</span></summary>
+                        <div class="rp-grid" data-fields="calib"></div>
+                        <span id="rpCalOptState" class="mute rp-result"></span>
+                    </details>
                     <div id="rpCalData" class="rp-result mute"></div>
                     <div class="rp-row">
                         <button is="emby-button" type="button" class="raised" id="rpCalStart"><span>Lancer</span></button>
@@ -508,6 +512,15 @@
             ['ExtendedByLanguage', 'Ses langues d\'origine', 'bool', 'Langues d\'origine qui pèsent dans les titres aimés : titres bien notés dans ces langues.', 0, 0, 0, 'extsrc', 'c', 'activé'],
             ['ExtendedNoise', 'Hasard du jour', 'num', 'Bruit ajouté chaque jour au classement des titres hors bibliothèque : 0 = toujours le même ordre, 0,3 = les titres de valeur proche changent de place, 1 = beaucoup de mouvement. Un titre nettement moins bon ne passe pas devant un très bon. Fixe pour la journée.', 0.05, 0, 1, 'extsrc', 'c', '0,3'],
 
+            // ---- Calibrage (enregistrés dès qu'ils changent, comme la méthode)
+            ['CalibrationFolds', 'Validation croisée : groupes de comptes', 'int', 'Chaque méthode est refaite sans un groupe de comptes et mesurée sur ce groupe, pour chaque groupe. Plus de groupes = mesure moins bruitée (chaque apprentissage voit plus de comptes) mais calcul plus long. 0 = automatique : 5 à partir de 10 comptes, 3 à partir de 6, sinon 2. Jamais plus que le nombre de comptes.', 1, 0, 10, 'calib', 'c', '0 (automatique)'],
+            ['CalibrationSlowFolds', 'Recherche par curseurs et réseau : groupes', 'int', 'Ces deux méthodes refont tout leur apprentissage pour chaque groupe : c\'est le plus long du calibrage. 0 = automatique : 3 au plus (et jamais plus que les groupes ci-dessus).', 1, 0, 10, 'calib', 'c', '0 (automatique)'],
+            ['CalibrationInnerFolds', 'Choix de la régularisation : groupes', 'int', 'Modèle de choix et réseau : à l\'intérieur de chaque groupe, la force de régularisation est choisie par une validation croisée imbriquée sur ce nombre de groupes. 0 = automatique : 2.', 1, 0, 10, 'calib', 'c', '0 (automatique)'],
+            ['CalibrationPrudence', 'Jusqu\'où bouger', 'enum:Auto=automatique (prudent),Prudent=prudent : à 1 erreur type de la meilleure étape,VeryPrudent=très prudent : à 2 erreurs types,Best=la meilleure étape (risqué)', 'Chaque méthode donne un chemin qui s\'éloigne du réglage actuel, mesuré étape par étape en validation croisée. Prudent : la plus courte étape qui fait presque aussi bien que la meilleure (à une erreur type près) — sans preuve nette, on bouge moins. La meilleure étape gagne parfois un peu plus, mais suit plus souvent le hasard de l\'historique.', 0, 0, 0, 'calib', 'c', 'automatique (prudent)'],
+            ['CalibrationPasses', 'Recherche par curseurs : passes', 'int', 'Nombre de tours sur tous les réglages (la recherche s\'arrête plus tôt si un tour ne change rien). 0 = automatique : 2.', 1, 0, 5, 'calib', 'c', '0 (automatique)'],
+            ['CalibrationRefine', 'Recherche par curseurs : affinages par réglage', 'int', 'Après la grille de 5 points, nombre de pas de section dorée autour du meilleur point. 0 = automatique : 4.', 1, 0, 12, 'calib', 'c', '0 (automatique)'],
+            ['CalibrationMinGain', 'Gain minimal pour recommander (%)', 'num', 'Un réglage n\'est recommandé que si son gain en validation croisée atteint ce seuil (et que son intervalle de confiance est au-dessus de zéro). En dessous, rien ne se verrait. 0 = automatique : 1 %.', 0.1, 0, 50, 'calib', 'c', '0 (automatique : 1 %)'],
+
             // ---- Notifications
             ['Webhook', 'Type', 'enum:None=aucun,Ntfy=ntfy,Gotify=Gotify,Discord=Discord,Json=JSON générique', 'Format du message envoyé quand une partie de Reco+ se coupe ou revient.', 0, 0, 0, 'notif', 'c']
         ];
@@ -692,7 +705,11 @@
             PinnedMaxDays: function () { return num('PinnedRequests') > 0 ? '' : 'aucun titre demandé placé en tête'; },
             NewEpisodesMaxDays: function () { return num('NewEpisodesPinned') > 0 ? '' : 'aucune nouvelle saison placée en tête'; },
             SagaMax: function () { return sw('Saga') ? '' : 'règle de saga coupée'; },
-            ExtendedRequestButton: function () { return ''; }
+            ExtendedRequestButton: function () { return ''; },
+            CalibrationPasses: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? 'pas de recherche par curseurs avec la méthode choisie' : ''; },
+            CalibrationRefine: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? 'pas de recherche par curseurs avec la méthode choisie' : ''; },
+            CalibrationSlowFolds: function () { return v('rpCalMethod') === 'ChoiceModel' ? 'ni recherche par curseurs ni réseau avec la méthode choisie' : ''; },
+            CalibrationInnerFolds: function () { return v('rpCalMethod') === 'Coordinate' ? 'pas de régularisation à choisir avec la recherche par curseurs' : ''; }
         };
         var G = {};
         function reason(f) {
@@ -797,10 +814,10 @@
                 }
                 if (f[2] === 'bool') { e.checked = !!v; } else { e.value = v === null || v === undefined ? '' : v; }
             });
+            $('#rpCalMethod').value = cfg.CalibrationMethod || 'Auto';
             renderChecks();
             applyTpl();
             applyWhen();
-            $('#rpCalMethod').value = cfg.CalibrationMethod || 'Auto';
         }
 
         function read(cfg) {
@@ -870,16 +887,29 @@
                     var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); tb.appendChild(tr);
                 });
                 rep.appendChild(tb);
-                rep.appendChild(el('p', { 'class': 'mute' }, r.current.events + ' cas sur ' + r.current.accounts + ' comptes au moment du calcul. Qualité de classement = moyenne de 1/log2(1 + rang du titre adopté), pondérée (historique plus fourni = plus de poids, comptes équilibrés). Tous les écarts sont relatifs au réglage actuel ; « validation croisée » = appris sur une moitié des comptes, mesuré sur l\'autre.'));
+                rep.appendChild(el('p', { 'class': 'mute' }, r.current.events + ' cas sur ' + r.current.accounts + ' comptes au moment du calcul. Qualité de classement = moyenne de 1/log2(1 + rang du titre adopté), pondérée (historique plus fourni = plus de poids, comptes équilibrés). Tous les écarts sont relatifs au réglage actuel ; « validation croisée » = appris sans un groupe de comptes, mesuré sur ce groupe, pour chaque groupe' + (r.folds ? ' (' + r.folds + ' groupes)' : '') + (r.minGain ? ' ; gain minimal pour recommander : ' + (100 * r.minGain).toFixed(1).replace('.', ',') + ' %' : '') + '.'));
                 rep.appendChild(el('p', { 'class': r.recommended ? 'ok' : '' }, r.verdict));
                 if (r.methods && r.methods.length) {
                     var mt = el('table');
                     [['Méthode', 'Sur l\'historique', 'Validation croisée', 'IC 95 %', 'Historique', '']].concat(r.methods.map(function (m) {
                         var tag = (m.method === r.method ? 'retenue' : '') + (m.recommended ? ' ✔' : '');
-                        if (m.noChange) { return [m.name, 'aucun changement appris', '—', '—', m.sufficiency, tag]; }
+                        if (m.noChange) { return [m.name, (m.cvPath || []).length > 1 ? 'aucune étape ne tient en validation croisée' : 'aucun changement appris', '—', '—', m.sufficiency, tag]; }
                         return [m.name, rel((m.gain || 0) - (r.current.gain || 0)), rel(m.cvDelta), '[' + rel(m.ciLow) + ' ; ' + rel(m.ciHigh) + ']', m.sufficiency, tag];
                     })).forEach(function (row, i) { var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); mt.appendChild(tr); });
                     rep.appendChild(mt);
+                    // chemin de chaque méthode : ce qu'elle gagne sur l'historique et ce qui en reste en validation croisée
+                    r.methods.forEach(function (m) {
+                        var n = (m.cvPath || []).length;
+                        if (n < 2) { return; }
+                        var det = el('details');
+                        det.appendChild(el('summary', {}, m.name + ' : chemin (' + (n - 1) + ' étape' + (n > 2 ? 's' : '') + ', retenue : ' + (m.picked ? m.picked : 'aucune') + ')'));
+                        var pt = el('table');
+                        [['Étape', 'Sur l\'historique', 'Validation croisée']].concat(m.cvPath.map(function (cv, i) {
+                            return [(i === 0 ? 'actuel' : String(i)) + (i === m.picked ? ' ◀' : ''), rel(m.fitPath[i] || 0), rel(cv)];
+                        })).forEach(function (row, i) { var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); pt.appendChild(tr); });
+                        det.appendChild(pt);
+                        rep.appendChild(det);
+                    });
                 }
                 if (r.steps && r.steps.length) {
                     var ul = el('ul'); r.steps.forEach(function (st) { ul.appendChild(el('li', {}, st.Parameter + ' → ' + st.Value)); });
@@ -1047,6 +1077,25 @@
         });
         page.querySelector('.rp-tab[data-tab="calibrage"]').addEventListener('click', calLoad);
         $('#rpCalStart').addEventListener('click', function () { api('POST', 'Calibration/Start').then(refresh, refresh); });
+        // réglages du calibrage : enregistrés dès qu'ils changent (seulement eux : le reste du formulaire n'est pas touché)
+        function calibValue(f) {
+            var e = $('#' + fid(f));
+            if (f[2] === 'int') { var i = parseInt(e.value, 10); return isNaN(i) ? 0 : i; }
+            if (f[2] === 'num') { var n = parseFloat(String(e.value).replace(',', '.')); return isNaN(n) ? 0 : n; }
+            return e.value;
+        }
+        page.querySelectorAll('[data-fields="calib"] input, [data-fields="calib"] select').forEach(function (e) {
+            e.addEventListener('change', function () {
+                var st = $('#rpCalOptState');
+                ApiClient.getPluginConfiguration(pluginId).then(function (cfg) {
+                    F.filter(function (f) { return f[7] === 'calib'; }).forEach(function (f) {
+                        cfg[f[0]] = calibValue(f);
+                        if (lastCfg) { lastCfg[f[0]] = cfg[f[0]]; }
+                    });
+                    return ApiClient.updatePluginConfiguration(pluginId, cfg);
+                }).then(function () { st.textContent = 'enregistré'; }, function () { st.textContent = 'échec de l\'enregistrement'; });
+            });
+        });
         // export : téléchargé avec le jeton de la session (un simple lien n'en aurait pas)
         $('#rpCalExport').addEventListener('click', function () {
             var st = $('#rpCalExportState'), b = $('#rpCalExport');

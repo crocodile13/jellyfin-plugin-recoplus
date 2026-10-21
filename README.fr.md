@@ -149,7 +149,10 @@ L'onglet Calibrage rejoue l'historique de votre serveur : chaque fois qu'un comp
   - *Réseau de neurones* (expérimental) : petite correction non linéaire (10 → 8 → 1, tanh, 96 paramètres) apprise sur les ingrédients du score et ajoutée au moteur ; elle part de zéro et la régularisation l'y ramène sans preuve. Il faut beaucoup d'historique (environ 10 cas par paramètre).
   - *Automatique* (par défaut) : toutes, et garde celle qui se généralise le mieux.
   - La page indique, pour chaque méthode, si l'historique est **suffisant, limite ou insuffisant**.
-- **Validation.** Chaque méthode est refaite sur la moitié des comptes et mesurée sur l'autre (validation croisée à deux plis, par compte). Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap) et atteint au moins 1 % : en dessous, rien ne se verrait. Un changement minime d'un poids (moins de 0,02 ou de 3 %) n'est pas proposé : ce n'est que du bruit.
+- **Validation.** Chaque méthode est refaite sans un groupe de comptes et mesurée sur ce groupe, pour chaque groupe (validation croisée par compte : 5 groupes à partir de 10 comptes, 3 à partir de 6, sinon 2). La force de régularisation des modèles appris est choisie de la même façon.
+- **Jusqu'où bouger.** Chaque méthode donne un chemin qui s'éloigne du réglage actuel : chaque changement gardé par la recherche par curseurs, ou un quart, la moitié et tout le chemin vers un modèle appris. La validation croisée mesure chaque point du chemin, et on garde le plus court qui fait à moins d'une erreur type du meilleur (règle « 1-SE » : sans preuve nette, on bouge moins ; le début du chemin, c'est garder l'actuel). C'est ce qui empêche la recherche par curseurs de sur-apprendre.
+- **Recommandation.** Un réglage n'est **recommandé** que si son gain se retrouve chez des comptes qui n'ont pas servi à le choisir (intervalle de confiance à 95 % au-dessus de zéro, par bootstrap) et atteint au moins 1 % : en dessous, rien ne se verrait.
+- **Réglages du calibrage lui-même** (onglet Calibrage, « Réglages du calibrage », enregistrés aussitôt ; 0 = automatique) : nombre de groupes de la validation croisée, des méthodes longues et du choix imbriqué de la régularisation, jusqu'où bouger (prudent = une erreur type, très prudent = deux, ou la meilleure étape), passes et affinages de la recherche par curseurs, gain minimal pour recommander. Les réglages sans objet pour la méthode choisie sont grisés. Un changement minime d'un poids (moins de 0,02 ou de 3 %) n'est pas proposé : ce n'est que du bruit.
 
 Le jeu de calibrage peut être exporté, pseudonymisé (comptes renommés u01, u02…, ni nom ni identifiant), pour l'évaluer ailleurs : bouton **Exporter le jeu de calibrage**.
 
@@ -157,13 +160,15 @@ Rien n'est appliqué sans clic sur **Appliquer** ; le réglage précédent est g
 
 Sur le foyer de référence (144 cas sur 13 comptes, une fois les 22 faux cas d'un marquage en masse écartés et les titres commencés ajoutés à demi-poids) :
 
-| Méthode | Sur l'historique | Validation croisée (IC 95 %) | Historique |
-|---|---|---|---|
-| Recherche par curseurs | +17,8 % | −3,1 % [−11,5 ; +8,0] | insuffisant |
-| Modèle de choix appris | −0,4 % | +0,7 % [−0,9 ; +4,5] | suffisant |
-| Réseau de neurones | 0 % | −2,1 % [−6,0 ; +2,5] | insuffisant |
+Chemin de chaque méthode (1.0.23, validation croisée à 5 groupes de comptes, sans connaître la suite ; écart avec les valeurs par défaut) :
 
-La recherche par curseurs est l'exemple type du surapprentissage : +18 % sur les cas qui ont servi à régler, −3 % sur des comptes neufs. Aucune méthode n'est recommandée et les valeurs par défaut restent. C'est le garde-fou qui fonctionne, pas un échec. Durée en automatique : environ 23 minutes sur un cœur (modèle de choix : une minute ; réseau : six).
+| Méthode | Étapes | Sur l'historique, le long du chemin | Validation croisée, le long du chemin | Retenue |
+|---|---|---|---|---|
+| Recherche par curseurs | 18 | +0,1 % → +16,0 % | −0,7 % → −3,9 % (jamais au-dessus de 0) | aucune |
+| Modèle de choix appris | ¼, ½, tout | 0 % → −0,3 % | −0,3 % → −1,3 % | aucune |
+| Réseau de neurones | ¼, ½, tout | 0 % | ±0,1 % | aucune (aucun gain sur l'historique) |
+
+La recherche par curseurs est l'exemple type du surapprentissage : chaque changement qu'elle garde améliore les cas qui ont servi à régler (+16 % après 18 changements) et dégrade des comptes neufs. Chaque point du chemin est maintenant mesuré : c'est visible, et rien n'est proposé ; les valeurs par défaut restent. C'est le garde-fou qui fonctionne, pas un échec. Durée en automatique : environ 27 minutes sur deux cœurs.
 
 Les nouveautés ont été mesurées de la même façon avant de fixer leurs valeurs par défaut : le poids des séries selon le temps regardé fait aussi bien que le compte d'épisodes (et le laisser dépasser 1 pour les très grosses séries fait moins bien, d'où le plafond à 1) ; l'heure de la journée fait moins bien (−0,7 à −3,8 % : trop peu de visionnages par tranche et par compte) et reste coupée ; la diversité personnalisée fait +0,8 % de qualité de classement par rapport à la diversité fixe (IC95 [−0,1 % ; +2,4 %]) et devient la valeur par défaut ; la diversité calibrée est neutre à force modérée et perd à force élevée ; le goût du moment n'apporte rien sur cet historique (la demi-vie suit déjà les envies récentes) et reste coupé. Les titres montrés sans être ouverts ne peuvent pas être mesurés ainsi (aucun historique d'affichage avant la 1.0.5) : la pénalité par défaut est volontairement modérée.
 

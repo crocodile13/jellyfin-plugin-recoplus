@@ -74,7 +74,8 @@ public sealed class CalibrationService
             var cur = Plugin.Instance!.Configuration.Engine;
             Cpu.Threads = Plugin.Instance.Configuration.Threads;
             var method = Plugin.Instance.Configuration.CalibrationMethod;
-            Report = await Task.Run(() => Calibrator.Calibrate(ds, cur, new Progress<double>(p => progress.Report(Math.Max(1, p))), ct, method: method), ct).ConfigureAwait(false);
+            var options = Plugin.Instance.Configuration.BuildCalibrationOptions();
+            Report = await Task.Run(() => Calibrator.Calibrate(ds, cur, new Progress<double>(p => progress.Report(Math.Max(1, p))), ct, method: method, options: options), ct).ConfigureAwait(false);
             ReportAt = DateTime.UtcNow;
             _log.LogInformation("Reco+ : calibrage terminé — {Verdict}", Report.Verdict);
         }

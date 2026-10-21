@@ -40,8 +40,81 @@ public sealed class EvalResult
 public sealed record CalibrationStep(string Parameter, string Value, double Hit10, double Hit20, bool Kept);
 
 /// <summary>Résultat du calibrage.</summary>
+/// <summary>Jusqu'où une méthode peut s'éloigner du réglage actuel, selon la validation croisée.</summary>
+public enum CalibrationPrudence
+{
+    /// <summary>Automatique : prudent.</summary>
+    Auto,
+
+    /// <summary>L'étape la meilleure en validation croisée, même de peu.</summary>
+    Best,
+
+    /// <summary>La plus courte à moins d'une erreur type de la meilleure (règle 1-SE).</summary>
+    Prudent,
+
+    /// <summary>La plus courte à moins de deux erreurs types de la meilleure.</summary>
+    VeryPrudent
+}
+
+/// <summary>Réglages du calibrage lui-même ; 0 (ou Auto) = valeur automatique.</summary>
+public sealed class CalibrationOptions
+{
+    /// <summary>Groupes de comptes de la validation croisée (2 à 10) ; 0 = auto (5 à partir de 10 comptes, 3 à partir de 6, sinon 2).</summary>
+    public int Folds { get; set; }
+
+    /// <summary>Groupes pour la recherche par curseurs et le réseau (longs) ; 0 = auto (au plus 3).</summary>
+    public int SlowFolds { get; set; }
+
+    /// <summary>Groupes pour choisir la régularisation à l'intérieur de chaque groupe ; 0 = auto (2).</summary>
+    public int InnerFolds { get; set; }
+
+    /// <summary>Choix de l'étape du chemin.</summary>
+    public CalibrationPrudence Prudence { get; set; }
+
+    /// <summary>Passes de la recherche par curseurs ; 0 = auto (2).</summary>
+    public int Passes { get; set; }
+
+    /// <summary>Affinages (section dorée) par réglage ; 0 = auto (4).</summary>
+    public int Refine { get; set; }
+
+    /// <summary>Gain minimal en validation croisée pour recommander (%) ; 0 = auto (1 %).</summary>
+    public double MinGainPercent { get; set; }
+
+    /// <summary>Groupes effectifs pour ces cas.</summary>
+    public int FoldsFor(IReadOnlyList<Calibrator.Case> cases)
+    {
+        int accounts = cases.Select(c => c.Ev.User).Distinct(StringComparer.Ordinal).Count();
+        int k = Folds >= 2 ? Folds : Calibrator.FoldCount(cases);
+        return Math.Clamp(k, 2, Math.Max(2, Math.Min(10, accounts)));
+    }
+
+    /// <summary>Groupes effectifs des méthodes longues.</summary>
+    public int SlowFoldsFor(IReadOnlyList<Calibrator.Case> cases) => Math.Min(FoldsFor(cases), SlowFolds >= 2 ? Math.Min(SlowFolds, 10) : 3);
+
+    /// <summary>Groupes effectifs du choix de régularisation imbriqué.</summary>
+    public int InnerFoldsEff => InnerFolds >= 2 ? Math.Min(InnerFolds, 10) : 2;
+
+    /// <summary>Erreurs types tolérées sous la meilleure étape.</summary>
+    public double SeMultiplier => Prudence switch { CalibrationPrudence.Best => 0, CalibrationPrudence.VeryPrudent => 2, _ => 1 };
+
+    /// <summary>Passes effectives.</summary>
+    public int PassesEff => Passes >= 1 ? Math.Min(Passes, 5) : 2;
+
+    /// <summary>Affinages effectifs.</summary>
+    public int RefineEff => Refine >= 1 ? Math.Min(Refine, 12) : 4;
+
+    /// <summary>Gain minimal effectif (part, pas %).</summary>
+    public double MinGain => MinGainPercent > 0 ? Math.Min(MinGainPercent, 50) / 100.0 : Calibrator.MinPracticalGain;
+}
+
 public sealed class CalibrationReport
 {
+    /// <summary>Groupes de comptes de la validation croisée (effectifs).</summary>
+    public int Folds { get; init; }
+
+    /// <summary>Gain minimal pour recommander (part).</summary>
+    public double MinGain { get; init; } = Calibrator.MinPracticalGain;
+
     /// <summary>Score du réglage actuel.</summary>
     public required EvalResult Current { get; init; }
 
@@ -105,6 +178,15 @@ public sealed class MethodResult
 
     /// <summary>La méthode n'a rien changé au réglage actuel.</summary>
     public bool NoChange { get; set; }
+
+    /// <summary>Chemin de la méthode : écart de qualité avec l'actuel, sur tout l'historique, à chaque étape (0 = actuel).</summary>
+    public double[] FitPath { get; init; } = Array.Empty<double>();
+
+    /// <summary>Même chose en validation croisée : appris sans chaque groupe de comptes, mesuré sur lui.</summary>
+    public double[] CvPath { get; init; } = Array.Empty<double>();
+
+    /// <summary>Étape retenue (règle 1-SE ; 0 = garder l'actuel).</summary>
+    public int Picked { get; init; }
 }
 
 /// <summary>
@@ -320,12 +402,71 @@ public static class Calibrator
     }
 
     /// <summary>
+    /// Contexte de chaque cas (historique à cette date, signaux, « vus ensemble », candidats), gardé tant que les réglages
+    /// qui le changent ne bougent pas : la recherche essaie surtout des poids du score, qui n'y touchent pas. Une seule
+    /// version gardée à la fois (mémoire bornée).
+    /// </summary>
+    public sealed class ContextCache
+    {
+        // réglages qui ne servent qu'au score ou au classement (jamais aux signaux ni aux « vus ensemble ») : ignorés dans
+        // la clé ; en oublier un ne fait que manquer le cache
+        private static readonly System.Reflection.PropertyInfo[] ScoreOnly = new[]
+        {
+            nameof(EngineSettings.WCentroid), nameof(EngineSettings.WMaxSim), nameof(EngineSettings.WCollab), nameof(EngineSettings.WNegative),
+            nameof(EngineSettings.WPopularity), nameof(EngineSettings.WQuality), nameof(EngineSettings.WFresh), nameof(EngineSettings.WTmdbAgreement),
+            nameof(EngineSettings.WRelease), nameof(EngineSettings.WHousehold), nameof(EngineSettings.WShortTerm), nameof(EngineSettings.WTimeOfDay),
+            nameof(EngineSettings.WImpression), nameof(EngineSettings.WNeural), nameof(EngineSettings.Neural), nameof(EngineSettings.Mmr),
+            nameof(EngineSettings.Diversity), nameof(EngineSettings.CalibrationStrength), nameof(EngineSettings.GateTop), nameof(EngineSettings.SagaMax),
+            nameof(EngineSettings.FreshDays), nameof(EngineSettings.ReleaseDays), nameof(EngineSettings.Rating), nameof(EngineSettings.RatingPriorVotes),
+            nameof(EngineSettings.HouseholdPrior), nameof(EngineSettings.ShortTermTitles),
+        }.Select(n => typeof(EngineSettings).GetProperty(n)!).ToArray();
+
+        private static readonly EngineSettings Defaults = new();
+        private readonly object _lock = new();
+        private string? _key;
+        private System.Collections.Concurrent.ConcurrentDictionary<EvalEvent, (Context Ctx, List<string> Cands)> _m = new();
+
+        internal static string KeyOf(EngineSettings s)
+        {
+            var c = s.Clone();
+            foreach (var p in ScoreOnly)
+            {
+                p.SetValue(c, p.GetValue(Defaults));
+            }
+
+            return System.Text.Json.JsonSerializer.Serialize(c);
+        }
+
+        internal (Context Ctx, List<string> Cands) Get(Dataset ds, EvalEvent e, EngineSettings s, string key)
+        {
+            System.Collections.Concurrent.ConcurrentDictionary<EvalEvent, (Context, List<string>)> m;
+            lock (_lock)
+            {
+                if (_key != key)
+                {
+                    (_key, _m) = (key, new());
+                }
+
+                m = _m;
+            }
+
+            return m.GetOrAdd(e, ev =>
+            {
+                var hist = Snapshot(ds, ev.T0 - 1);
+                return (new Context(ds, ev.T0 - 1, hist, s), Candidates(ds, hist[ev.User], ev.T0));
+            });
+        }
+    }
+
+    /// <summary>
     /// Évalue un réglage sur des cas, avec une mesure fine : le RANG du titre adopté parmi tous les candidats (liste
     /// finale pour les 20 premiers, score au-delà), gain = 1 / log2(1 + rang). Bien plus de puissance statistique
     /// qu'un simple « dans le top 10 ou non ».
     /// </summary>
-    public static EvalResult EvaluateRanks(Dataset ds, SimilarityIndex sim, IReadOnlyList<Case> cases, EngineSettings s, CancellationToken ct = default)
+    public static EvalResult EvaluateRanks(Dataset ds, SimilarityIndex sim, IReadOnlyList<Case> cases, EngineSettings s, CancellationToken ct = default,
+        ContextCache? contexts = null)
     {
+        string? ckey = contexts is null ? null : ContextCache.KeyOf(s);
         var vec = sim.Vectors;
         var h10 = new bool[cases.Count];
         var h20 = new bool[cases.Count];
@@ -335,10 +476,19 @@ public static class Calibrator
         System.Threading.Tasks.Parallel.For(0, cases.Count, po, i =>
         {
             var (u, target, t0) = cases[i].Ev;
-            var hist = Snapshot(ds, t0 - 1);
-            var ctx = new Context(ds, t0 - 1, hist, s);
-            var seen = hist[u];
-            var cands = Candidates(ds, seen, t0);
+            Context ctx;
+            List<string> cands;
+            if (contexts is not null)
+            {
+                (ctx, cands) = contexts.Get(ds, cases[i].Ev, s, ckey!);
+            }
+            else
+            {
+                var hist = Snapshot(ds, t0 - 1);
+                ctx = new Context(ds, t0 - 1, hist, s);
+                cands = Candidates(ds, hist[u], t0);
+            }
+
             var sc = Recommender.Score(ctx, vec, u, cands, s, sim: sim);
             var list = Recommender.Rank(ctx, vec, cands, sc, 20, s, u, sim);
             int r = list.IndexOf(target);
@@ -382,10 +532,60 @@ public static class Calibrator
         => ds.Titles.Values.Where(t => !t.External && !seen.ContainsKey(t.Id) && (t.Added ?? 0) <= t0).Select(t => t.Id).ToList();
 
     /// <summary>Deux moitiés par COMPTE (alternées par nombre de cas) : un gain doit tenir sur des personnes différentes.</summary>
-    public static Dictionary<string, int> Folds(IReadOnlyList<Case> cases)
+    public static Dictionary<string, int> Folds(IReadOnlyList<Case> cases) => Folds(cases, 2);
+
+    /// <summary>Groupes de comptes pour la validation croisée (attribués à tour de rôle, des comptes les plus actifs aux moins actifs).</summary>
+    public static Dictionary<string, int> Folds(IReadOnlyList<Case> cases, int k)
     {
         var users = cases.GroupBy(c => c.Ev.User).OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal).Select(g => g.Key).ToList();
-        return users.Select((u, k) => (u, k % 2)).ToDictionary(x => x.u, x => x.Item2, StringComparer.Ordinal);
+        return users.Select((u, i) => (u, i % Math.Max(2, k))).ToDictionary(x => x.u, x => x.Item2, StringComparer.Ordinal);
+    }
+
+    /// <summary>
+    /// Nombre de groupes de comptes de la validation croisée : 5 à partir de 10 comptes (chaque apprentissage voit 80 %
+    /// des comptes, la mesure est bien moins bruitée qu'avec deux moitiés), 3 à partir de 6, sinon 2.
+    /// </summary>
+    public static int FoldCount(IReadOnlyList<Case> cases)
+    {
+        int a = cases.Select(c => c.Ev.User).Distinct(StringComparer.Ordinal).Count();
+        return a >= 10 ? 5 : a >= 6 ? 3 : 2;
+    }
+
+    /// <summary>
+    /// Choisit une valeur par validation croisée par comptes : pour chaque valeur, apprise sans un groupe et mesurée sur
+    /// lui (gain moyen pondéré). À égalité ou sans assez de cas, la dernière de la liste (la plus prudente).
+    /// </summary>
+    public static T SelectByCv<T>(IReadOnlyList<Case> cases, IReadOnlyList<T> values, Func<List<Case>, List<Case>, T, double> trainTest, int folds = 0)
+    {
+        int k = folds >= 2 ? folds : FoldCount(cases);
+        var fold = Folds(cases, k);
+        var parts = Enumerable.Range(0, k).Select(f => cases.Where(c => fold[c.Ev.User] == f).ToList()).ToArray();
+        if (parts.Any(p => p.Count < 5) || cases.Count - parts.Max(p => p.Count) < 10)
+        {
+            return values[^1];
+        }
+
+        T best = values[^1];
+        double bestG = double.NegativeInfinity;
+        foreach (var v in values.Reverse())
+        {
+            double sw = 0, sg = 0;
+            for (int f = 0; f < k; f++)
+            {
+                var train = cases.Where(c => fold[c.Ev.User] != f).ToList();
+                double w = parts[f].Sum(c => c.Weight);
+                sw += w;
+                sg += trainTest(train, parts[f], v) * w;
+            }
+
+            double g = sw > 0 ? sg / sw : 0;
+            if (g > bestG + 1e-9)
+            {
+                (bestG, best) = (g, v);
+            }
+        }
+
+        return best;
     }
 
     /// <summary>Un paramètre continu exploré : bornes sûres, échelle (log pour les poids multiplicatifs), zéro essayé ou non.</summary>
@@ -447,6 +647,46 @@ public static class Calibrator
     private static string VecKey(EngineSettings s) => string.Join('|', s.Weighting, s.Bm25K1, s.Bm25B, s.FeatGenre, s.FeatTag, s.FeatStudio, s.FeatActor,
         s.FeatDirector, s.FeatWriter, s.FeatCreator, s.FeatDecade, s.FeatKind, s.FeatLanguage, s.FeatCountry, s.Actors, s.StudiosKept);
 
+    /// <summary>
+    /// Index des produits scalaires par jeu de vecteurs, en nombre borné : chaque valeur essayée d'un réglage de contenu
+    /// donne d'autres vecteurs, et garder tous les index fait exploser la mémoire. On garde celui des réglages actuels
+    /// (toujours resservi) et les quelques derniers utilisés ; un index écarté est simplement recalculé s'il revient.
+    /// </summary>
+    public sealed class SimCache
+    {
+        private const int Keep = 3;
+        private readonly string _pinned;
+        private readonly Dictionary<string, (SimilarityIndex Sim, long Used)> _m = new(StringComparer.Ordinal);
+        private long _clock;
+
+        public SimCache(string pinned) => _pinned = pinned;
+
+        public SimilarityIndex Get(string key, Func<Dictionary<string, SparseVector>> vectors)
+        {
+            lock (_m)
+            {
+                if (_m.TryGetValue(key, out var e))
+                {
+                    _m[key] = (e.Sim, ++_clock);
+                    return e.Sim;
+                }
+            }
+
+            var sim = new SimilarityIndex(vectors());
+            lock (_m)
+            {
+                _m[key] = (sim, ++_clock);
+                while (_m.Count > Keep + 1)
+                {
+                    var old = _m.Where(kv => kv.Key != _pinned && kv.Key != key).OrderBy(kv => kv.Value.Used).First().Key;
+                    _m.Remove(old);
+                }
+            }
+
+            return sim;
+        }
+    }
+
     /// <summary>Optimiseur : recherche par coordonnées, grille puis section dorée par paramètre, garde-fou des deux moitiés.</summary>
     private sealed class Search
     {
@@ -454,13 +694,15 @@ public static class Calibrator
         private readonly Dataset _ds;
         private readonly List<Case> _cases;
         private readonly int[][] _halves;
-        private readonly Dictionary<string, SimilarityIndex> _sims;
+        private readonly SimCache _sims;
+        private readonly ContextCache? _contexts;
         private readonly Dictionary<string, EvalResult> _memo = new(StringComparer.Ordinal);
         private readonly CancellationToken _ct;
         private readonly Action _tick;
 
-        public Search(Dataset ds, List<Case> cases, Dictionary<string, SimilarityIndex> sims, Action tick, CancellationToken ct)
+        public Search(Dataset ds, List<Case> cases, SimCache sims, Action tick, CancellationToken ct, ContextCache? contexts = null)
         {
+            _contexts = contexts;
             _ds = ds;
             _cases = cases;
             _sims = sims;
@@ -476,6 +718,9 @@ public static class Calibrator
 
         public List<CalibrationStep> Steps { get; } = new();
 
+        /// <summary>Réglage après chaque changement gardé, dans l'ordre (le chemin de la recherche).</summary>
+        public List<EngineSettings> Path { get; } = new();
+
         public EvalResult Eval(EngineSettings s)
         {
             s = s.Sanitized();
@@ -486,13 +731,10 @@ public static class Calibrator
             }
 
             var vk = VecKey(s);
-            if (!_sims.TryGetValue(vk, out var sim))
-            {
-                _sims[vk] = sim = new SimilarityIndex(Core.BuildVectors(_ds.Titles, s));
-            }
+            var sim = _sims.Get(vk, () => Core.BuildVectors(_ds.Titles, s));
 
             _tick();
-            return _memo[key] = EvaluateRanks(_ds, sim, _cases, s, _ct);
+            return _memo[key] = EvaluateRanks(_ds, sim, _cases, s, _ct, _contexts);
         }
 
         public double Half(EvalResult r, int h)
@@ -528,6 +770,7 @@ public static class Calibrator
                         {
                             (best, bestRes, changed) = (cand.Sanitized(), r, true);
                             Steps.Add(new CalibrationStep(c.Name, Convert.ToString(v, System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty, r.Hit10, r.Hit20, true));
+                            Path.Add(best);
                         }
                     }
                 }
@@ -544,6 +787,7 @@ public static class Calibrator
                     {
                         (best, bestRes, changed) = (s, r, true);
                         Steps.Add(new CalibrationStep(k.Name, k.Get(s).ToString("0.###", System.Globalization.CultureInfo.InvariantCulture), r.Hit10, r.Hit20, true));
+                        Path.Add(best);
                     }
                 }
 
@@ -656,26 +900,43 @@ public static class Calibrator
 
     /// <summary>
     /// Calibrage : chaque méthode retenue propose un réglage appris sur tout l'historique, puis est jugée en validation
-    /// croisée par comptes (apprise sur une moitié des comptes, mesurée sur l'autre). En automatique, on garde la méthode
+    /// croisée par comptes (apprise sans un groupe de comptes, mesurée sur lui, pour chaque groupe). En automatique, on garde la méthode
     /// qui se généralise le mieux. Un réglage n'est recommandé que si ce gain hors échantillon est sûr (IC95 &gt; 0).
     /// Rien n'est appliqué ici.
     /// </summary>
     public static CalibrationReport Calibrate(Dataset ds, EngineSettings current, IProgress<double>? progress = null, CancellationToken ct = default,
-        int passes = 2, int refine = 4, CalibrationMethod method = CalibrationMethod.Auto)
+        int passes = 0, int refine = 0, CalibrationMethod method = CalibrationMethod.Auto, CalibrationOptions? options = null)
     {
+        var opt = options ?? new CalibrationOptions();
+        passes = passes > 0 ? passes : opt.PassesEff;
+        refine = refine > 0 ? refine : opt.RefineEff;
+        double minGain = opt.MinGain;
         current = current.Sanitized();
         var cases = Cases(ds);
-        var sims = new Dictionary<string, SimilarityIndex>(StringComparer.Ordinal);
+        var sims = new SimCache(VecKey(current));
         bool coord = method is CalibrationMethod.Auto or CalibrationMethod.Coordinate;
         bool choice = method is CalibrationMethod.Auto or CalibrationMethod.ChoiceModel;
         bool neural = method is CalibrationMethod.Auto or CalibrationMethod.Neural;
+        int kf = opt.FoldsFor(cases), kc = opt.SlowFoldsFor(cases), ki = opt.InnerFoldsEff;
+        // avancement : nombre d'évaluations prévues (la recherche s'arrête souvent avant sa deuxième passe : estimation haute)
         int perRun = (Choices.Sum(c => c.Values.Length) + (Knobs.Count * (7 + refine * 2))) * passes;
-        int perChoice = (ChoiceModel.Kappas.Count * 2) + 2;
-        int perNeural = (NeuralNet.Kappas.Count * 2) + 2;
-        int budget = (coord ? perRun * 2 : 0) + (choice ? perChoice * 3 : 0) + (neural ? perNeural * 3 : 0) + 1, done = 0;
-        void Tick() => progress?.Report(Math.Min(99.0, 100.0 * ++done / budget));
+        int perChoice = (ChoiceModel.Kappas.Count * kf) + 1 + (kf * ((ChoiceModel.Kappas.Count * ki) + 4));
+        int perNeural = (NeuralNet.Kappas.Count * kc) + 1 + (kc * ((NeuralNet.Kappas.Count * ki) + 4));
+        // une évaluation = 1 ; un apprentissage du modèle de choix ≈ 10 ; un entraînement du réseau ≈ 50 (durées mesurées)
+        const double ChoiceUnit = 10, NeuralUnit = 50;
+        double budget = (coord ? perRun * (1 + kc) : 0) + (choice ? perChoice * ChoiceUnit : 0) + (neural ? perNeural * NeuralUnit : 0) + 1, done = 0;
+        void Report(double units)
+        {
+            done += units;
+            progress?.Report(Math.Min(99.0, 100.0 * done / budget));
+        }
 
-        var full = new Search(ds, cases, sims, Tick, ct);
+        void Tick() => Report(1);
+        void TickChoice() => Report(ChoiceUnit);
+        void TickNeural() => Report(NeuralUnit);
+
+        var contexts = new ContextCache();
+        var full = new Search(ds, cases, sims, Tick, ct, contexts);
         var cur = full.Eval(current);
         if (cases.Count < MinEvents)
         {
@@ -691,89 +952,134 @@ public static class Calibrator
             };
         }
 
-        var fold = Folds(cases);
         var baseG = cur.PerEventGain;
         var results = new List<MethodResult>();
 
-        // une méthode = (réglage proposé sur tout l'historique, réglage appris sur une partie des cas)
-        MethodResult Judge(CalibrationMethod m, string name, EngineSettings proposed, List<CalibrationStep> steps, Func<List<Case>, EngineSettings> learnOn)
+        // Une méthode = un chemin de réglages de plus en plus éloignés de l'actuel (recherche : chaque changement gardé ;
+        // modèles appris : un quart, la moitié, tout le chemin vers le réglage appris). La validation croisée par comptes
+        // (k groupes) mesure chaque étape du chemin appris sans le groupe, sur ce groupe ; on retient la plus courte
+        // étape dont le gain est à moins d'une erreur type du meilleur (règle « 1-SE » : sans preuve nette, on bouge
+        // moins), 0 = rester à l'actuel. Le réglage proposé est cette étape du chemin appris sur tout l'historique.
+        MethodResult Judge(CalibrationMethod m, string name, IReadOnlyList<EngineSettings> fullPath, Func<int, List<CalibrationStep>> stepsUpTo,
+            Func<List<Case>, IReadOnlyList<EngineSettings>> learnPath, int k)
         {
-            var res = full.Eval(proposed);
-            var oof = new double[cases.Count];
-            Array.Copy(baseG, oof, oof.Length);
-            for (int f = 0; f < 2; f++)
+            var fold = Folds(cases, k);
+            int n = fullPath.Count;
+            var oof = Enumerable.Range(0, n + 1).Select(_ => (double[])baseG.Clone()).ToArray();
+            for (int f = 0; f < k; f++)
             {
-                var train = cases.Where(c => fold[c.Ev.User] == f).ToList();
-                var testIdx = Enumerable.Range(0, cases.Count).Where(i => fold[cases[i].Ev.User] != f).ToList();
+                var train = cases.Where(c => fold[c.Ev.User] != f).ToList();
+                var testIdx = Enumerable.Range(0, cases.Count).Where(i => fold[cases[i].Ev.User] == f).ToList();
                 if (train.Count < 10 || testIdx.Count == 0)
                 {
                     continue;
                 }
 
-                var learned = learnOn(train);
-                var r = new Search(ds, testIdx.Select(i => cases[i]).ToList(), sims, Tick, ct).Eval(learned);
-                for (int k = 0; k < testIdx.Count; k++)
+                var path = learnPath(train);
+                var test = new Search(ds, testIdx.Select(i => cases[i]).ToList(), sims, Tick, ct, contexts);
+                for (int step = 1; step <= n && path.Count > 0; step++)
                 {
-                    oof[testIdx[k]] = r.PerEventGain[k];
+                    var r = test.Eval(path[Math.Min(step, path.Count) - 1]);   // mémorisé : une étape absente coûte rien
+                    for (int t = 0; t < testIdx.Count; t++)
+                    {
+                        oof[step][testIdx[t]] = r.PerEventGain[t];
+                    }
                 }
             }
 
             var all = Enumerable.Range(0, cases.Count).ToList();
+            var delta = oof.Select(o => Weighted(cases, all, i => o[i] - baseG[i])).ToArray();
+            int best = Enumerable.Range(0, n + 1).OrderByDescending(x => delta[x]).ThenBy(x => x).First();
+            var bestCi = BootstrapDelta(cases, oof[best], baseG);
+            double se = opt.SeMultiplier * Math.Max(0, (bestCi.High - bestCi.Low) / (2 * 1.96));
+            int pick = Enumerable.Range(0, n + 1).First(x => delta[x] >= delta[best] - se);
+            var proposed = pick == 0 ? current : fullPath[pick - 1];
+            var fit = new double[n + 1];
+            for (int step = 1; step <= n; step++)
+            {
+                fit[step] = full.Eval(fullPath[step - 1]).Gain - cur.Gain;   // déjà mesuré pendant la recherche : mémorisé
+            }
+
             return new MethodResult
             {
+                FitPath = fit,
+                CvPath = delta,
+                Picked = pick,
                 Method = m,
                 Name = name,
                 Settings = proposed,
-                Result = res,
-                Steps = steps,
-                CvDelta = Weighted(cases, all, i => oof[i] - baseG[i]),
-                Ci = BootstrapDelta(cases, oof, baseG),
+                Result = full.Eval(proposed),
+                Steps = pick == 0 ? new List<CalibrationStep>() : stepsUpTo(pick),
+                CvDelta = delta[pick],
+                Ci = pick == 0 ? (0, 0) : BootstrapDelta(cases, oof[pick], baseG),
                 Sufficiency = Sufficiency(m, cases.Count).Level,
             };
         }
 
+        // chemin d'un modèle appris : un quart, la moitié, puis tout le chemin de l'actuel vers le réglage appris
+        static IReadOnlyList<EngineSettings> Shrunk(Func<double, EngineSettings> at) => new[] { at(0.25), at(0.5), at(1.0) };
+
         if (coord)
         {
-            var (best, _) = full.Run(current, passes, refine);
-            results.Add(Judge(CalibrationMethod.Coordinate, "Recherche par curseurs", best, full.Steps.ToList(),
-                train => new Search(ds, train, sims, Tick, ct).Run(current, passes, refine).S));
+            full.Run(current, passes, refine);
+            var path = full.Path.ToList();
+            var steps = full.Steps.ToList();
+            results.Add(Judge(CalibrationMethod.Coordinate, "Recherche par curseurs", path, upTo => steps.Take(upTo).ToList(),
+                train =>
+                {
+                    var sr = new Search(ds, train, sims, Tick, ct, contexts);
+                    sr.Run(current, passes, refine);
+                    return sr.Path;
+                }, kc));   // une recherche complète par groupe : 3 groupes au plus (durée)
         }
 
-        if (choice)
+        if (choice || neural)
         {
-            // un seul jeu de vecteurs : le modèle de choix n'apprend que les poids du score, pas le contenu
+            // un seul jeu de vecteurs : modèle de choix et réseau n'apprennent que le score, pas le contenu
             var vk = VecKey(current);
-            if (!sims.TryGetValue(vk, out var sim))
+            var sim = sims.Get(vk, () => Core.BuildVectors(ds.Titles, current));
+
+            var cache = new ChoiceModel.FeatureCache(current);
+            if (choice)
             {
-                sims[vk] = sim = new SimilarityIndex(Core.BuildVectors(ds.Titles, current));
+                var kappa = ChoiceModel.SelectKappa(ds, sim, cases, current, TickChoice, ct, cache, folds: kf);
+                var learned = ChoiceModel.Learn(ds, sim, cases, current, kappa, ct, cache: cache);
+                TickChoice();
+                List<CalibrationStep> StepsOf(EngineSettings s) => ChoiceModel.Weights.Where(w => Math.Abs(w.Get(s) - w.Get(current)) >= 1e-3)
+                    .Select(w => new CalibrationStep(w.Name, w.Get(s).ToString("0.###", System.Globalization.CultureInfo.InvariantCulture), 0, 0, true)).ToList();
+                var path = Shrunk(a => ChoiceModel.Toward(current, learned, a));
+                results.Add(Judge(CalibrationMethod.ChoiceModel, "Modèle de choix appris", path, upTo => StepsOf(path[upTo - 1]),
+                    train =>
+                    {
+                        var l = ChoiceModel.Learn(ds, sim, train, current, ChoiceModel.SelectKappa(ds, sim, train, current, TickChoice, ct, cache, folds: ki), ct, cache: cache);
+                        return Shrunk(a => ChoiceModel.Toward(current, l, a));
+                    }, kf));
             }
 
-            var kappa = ChoiceModel.SelectKappa(ds, sim, cases, current, Tick, ct);
-            var learned = ChoiceModel.Learn(ds, sim, cases, current, kappa, ct);
-            Tick();
-            var steps = ChoiceModel.Weights.Where(w => Math.Abs(w.Get(learned) - w.Get(current)) >= 1e-3)
-                .Select(w => new CalibrationStep(w.Name, w.Get(learned).ToString("0.###", System.Globalization.CultureInfo.InvariantCulture), 0, 0, true)).ToList();
-            results.Add(Judge(CalibrationMethod.ChoiceModel, "Modèle de choix appris", learned, steps,
-                train => ChoiceModel.Learn(ds, sim, train, current, ChoiceModel.SelectKappa(ds, sim, train, current, Tick, ct), ct)));
-        }
-
-        if (neural)
-        {
-            var vk = VecKey(current);
-            if (!sims.TryGetValue(vk, out var sim))
+            if (neural)
             {
-                sims[vk] = sim = new SimilarityIndex(Core.BuildVectors(ds.Titles, current));
+                var kappa = NeuralNet.SelectKappa(ds, sim, cases, current, TickNeural, ct, cache, folds: kc);
+                var net = NeuralNet.Train(ds, sim, cases, current, kappa, ct, cache: cache);
+                TickNeural();
+                EngineSettings Scaled(double[] w, double a)
+                {
+                    var r = NeuralNet.With(current, w);
+                    r.WNeural = a;
+                    return r.Sanitized();
+                }
+
+                var path = Shrunk(a => Scaled(net, a));
+                results.Add(Judge(CalibrationMethod.Neural, "Réseau de neurones (expérimental)", path,
+                    upTo => new List<CalibrationStep>
+                    {
+                        new("Correction apprise (réseau de neurones)", $"{NeuralNet.Size} paramètres, régularisation {kappa.ToString(System.Globalization.CultureInfo.InvariantCulture)}, force {path[upTo - 1].WNeural.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)}", 0, 0, true),
+                    },
+                    train =>
+                    {
+                        var w = NeuralNet.Train(ds, sim, train, current, NeuralNet.SelectKappa(ds, sim, train, current, TickNeural, ct, cache, folds: ki), ct, cache: cache);
+                        return Shrunk(a => Scaled(w, a));
+                    }, kc));   // entraînement long : 3 groupes au plus
             }
-
-            var kappa = NeuralNet.SelectKappa(ds, sim, cases, current, Tick, ct);
-            var learned = NeuralNet.With(current, NeuralNet.Train(ds, sim, cases, current, kappa, ct));
-            Tick();
-            var steps = new List<CalibrationStep>
-            {
-                new("Correction apprise (réseau de neurones)", $"{NeuralNet.Size} paramètres, régularisation {kappa.ToString(System.Globalization.CultureInfo.InvariantCulture)}", 0, 0, true),
-            };
-            results.Add(Judge(CalibrationMethod.Neural, "Réseau de neurones (expérimental)", learned, steps,
-                train => NeuralNet.With(current, NeuralNet.Train(ds, sim, train, current, NeuralNet.SelectKappa(ds, sim, train, current, Tick, ct), ct))));
         }
 
         progress?.Report(100);
@@ -781,7 +1087,7 @@ public static class Calibrator
         {
             r.NoChange = System.Text.Json.JsonSerializer.Serialize(r.Settings.Sanitized()) == System.Text.Json.JsonSerializer.Serialize(current);
             r.Recommended = !r.NoChange && r.Result.Gain > cur.Gain + 1e-9 && r.CvDelta > 0 && r.Ci.Low > 0
-                            && r.CvDelta / Math.Max(cur.Gain, 1e-9) >= MinPracticalGain;
+                            && r.CvDelta / Math.Max(cur.Gain, 1e-9) >= minGain;
         }
 
         // la méthode retenue : recommandée d'abord, puis meilleure généralisation (validation croisée)
@@ -794,12 +1100,14 @@ public static class Calibrator
         string verdict = pick.NoChange || !improved
             ? who + "aucun réglage ne fait mieux que l'actuel : on garde l'actuel."
             : sureButTiny
-                ? who + $"gain réel mais négligeable ({Pct(rel(pick.CvDelta))} en validation croisée, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}], moins de {Pct(MinPracticalGain).TrimStart('+')}) : rien de visible, inutile de l'appliquer."
+                ? who + $"gain réel mais négligeable ({Pct(rel(pick.CvDelta))} en validation croisée, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}], moins de {Pct(minGain).TrimStart('+')}) : rien de visible, inutile de l'appliquer."
             : pick.Recommended
-                ? who + $"gain probable et qui se généralise : appris sur une moitié des comptes, il fait mieux sur l'autre ({Pct(rel(pick.CvDelta))} de qualité de classement, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}])."
-                : who + $"gain sur cet historique ({Pct(rel(pick.Result.Gain - cur.Gain))}), mais il ne se généralise pas d'une moitié des comptes à l'autre (validation croisée {Pct(rel(pick.CvDelta))}, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}]) : application déconseillée.";
+                ? who + $"gain probable et qui se généralise : appris sans chaque groupe de comptes, il fait mieux sur ce groupe ({Pct(rel(pick.CvDelta))} de qualité de classement, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}])."
+                : who + $"gain sur cet historique ({Pct(rel(pick.Result.Gain - cur.Gain))}), mais il ne se généralise pas à des comptes qui n'ont pas servi à l'apprendre (validation croisée {Pct(rel(pick.CvDelta))}, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}]) : application déconseillée.";
         return new CalibrationReport
         {
+            Folds = kf,
+            MinGain = minGain,
             Current = cur,
             Proposed = pick.Result,
             ProposedSettings = pick.Settings,

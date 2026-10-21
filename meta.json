@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.22 : calibrage plus fidèle — il utilise les mêmes données que les recommandations (demandes et listes de suivi Seerr, votes TMDb, avis et titres masqués de Jellyfin Enhanced ; comptes ignorés exclus ; rien n'est demandé à Seerr pendant le calibrage) et ne voit plus rien de la suite : un titre commencé avant mais fini après est vu en cours, une demande compte dès sa date ; un titre demandé ou mis en liste de suivi avant d'être regardé n'est plus compté comme un cas de classement. Nouveau bouton « Exporter le jeu de calibrage » (pseudonymisé, onglet Calibrage). Une demande faite depuis une carte Reco+ retire le titre pour de bon (elle ne le retirait que de la tranche horaire servie).",
+  "changelog": "1.0.23 : calibrage plus solide — validation croisée à 5 groupes de comptes (au lieu de deux moitiés) pour juger chaque méthode et choisir la régularisation ; chaque méthode donne un chemin (chaque changement de la recherche par curseurs, ou un quart, la moitié et tout le chemin vers un modèle appris) et on garde l'étape la plus prudente qui fait presque aussi bien que la meilleure en validation croisée : la recherche par curseurs ne sur-apprend plus. L'onglet Calibrage montre ce chemin (sur l'historique et en validation croisée). Mémoire bornée (la recherche pouvait épuiser la mémoire du serveur) et contextes réutilisés entre essais ; avancement plus juste. Réglages du calibrage lui-même (onglet Calibrage, 0 = automatique) : groupes de la validation croisée, des méthodes longues et du choix imbriqué de la régularisation, prudence (1 ou 2 erreurs types, ou la meilleure étape), passes et affinages de la recherche par curseurs, gain minimal pour recommander.",
   "description": "Recommandations personnelles à la place de celles de Jellyfin.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-20T00:00:00.0000000Z",
-  "version": "1.0.22.0",
+  "version": "1.0.23.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

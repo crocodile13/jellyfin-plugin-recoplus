@@ -260,6 +260,8 @@ public sealed class RecoController : ControllerBase
                 {
                     current = new { hit10 = _calib.Report.Current.Hit10, hit20 = _calib.Report.Current.Hit20, gain = _calib.Report.Current.Gain, events = _calib.Report.Current.Events, accounts = _calib.Report.Current.Accounts },
                     proposed = new { hit10 = _calib.Report.Proposed.Hit10, hit20 = _calib.Report.Proposed.Hit20, gain = _calib.Report.Proposed.Gain },
+                    folds = _calib.Report.Folds,
+                    minGain = _calib.Report.MinGain,
                     cvDelta = _calib.Report.CvDelta,
                     ciLow = _calib.Report.DeltaCi.Low,
                     ciHigh = _calib.Report.DeltaCi.High,
@@ -279,6 +281,9 @@ public sealed class RecoController : ControllerBase
                         sufficiency = m.Sufficiency,
                         recommended = m.Recommended,
                         noChange = m.NoChange,
+                        fitPath = m.FitPath,
+                        cvPath = m.CvPath,
+                        picked = m.Picked,
                     }),
                 },
             },

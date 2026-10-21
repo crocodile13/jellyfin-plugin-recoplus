@@ -368,6 +368,29 @@ await test('export du jeu de calibrage : téléchargé avec la session, en JSON'
     assert.match(d.getElementById('rpCalExportState').textContent, /téléchargé/);
 });
 
+await test('réglages du calibrage : 0 = automatique, enregistrés aussitôt (eux seuls), grisés selon la méthode', async () => {
+    const c = JSON.parse(JSON.stringify(cfg));
+    Object.assign(c, { CalibrationMethod: 'ChoiceModel', CalibrationFolds: 0, CalibrationPrudence: 'Auto', ListSize: 200 });
+    const { d, saved } = open(c);
+    await wait(50);
+    const box = d.querySelector('[data-fields="calib"]');
+    assert.ok(box.closest('[data-pane="calibrage"]'));
+    const ids = [...box.querySelectorAll('input, select')].map((e) => e.id);
+    assert.deepEqual(ids, ['rp_c_CalibrationFolds', 'rp_c_CalibrationSlowFolds', 'rp_c_CalibrationInnerFolds', 'rp_c_CalibrationPrudence', 'rp_c_CalibrationPasses', 'rp_c_CalibrationRefine', 'rp_c_CalibrationMinGain']);
+    const off = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
+    assert.ok(off('rp_c_CalibrationPasses') && off('rp_c_CalibrationSlowFolds') && !off('rp_c_CalibrationInnerFolds'), 'modèle de choix : pas de curseurs');
+    const m = d.getElementById('rpCalMethod'); m.value = 'Coordinate'; m.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    await wait(30);
+    assert.ok(!off('rp_c_CalibrationPasses') && off('rp_c_CalibrationInnerFolds'));
+    d.getElementById('rp_c_ListSize').value = '999';                // modifié sans enregistrer : ne doit pas partir
+    const f = d.getElementById('rp_c_CalibrationFolds'); f.value = '4'; f.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    await wait(50);
+    const last = saved.at(-1);
+    assert.equal(last.CalibrationFolds, 4);
+    assert.equal(last.ListSize, 200, 'le reste du formulaire n\'est pas enregistré');
+    assert.equal(d.getElementById('rpCalOptState').textContent, 'enregistré');
+});
+
 await test('fils d\'exécution réglables (0 = automatique)', async () => {
     const { d, saved } = open({ ...cfg, Threads: 6 });
     await wait(50);
@@ -483,6 +506,26 @@ await test('journal : entrées ajoutées en texte brut, curseur suivi, filtre de
     assert.deepEqual(visible, ['ERR', 'WRN']);
     assert.match(d.getElementById('rpLogState').textContent, /log_1\.log — 3 entrées/);
     assert.ok(calls[1].includes('cursor=log_1.log%7C10'), 'curseur renvoyé');
+});
+
+await test('calibrage : chemin de chaque méthode (historique / validation croisée), étape retenue marquée', async () => {
+    const st = JSON.parse(JSON.stringify(status));
+    st.calibration = { running: false, progress: 100, at: '2026-10-21T12:00:00Z', report: {
+        current: { gain: 0.25, hit10: 0.2, hit20: 0.3, events: 144, accounts: 15 }, proposed: { gain: 0.25, hit10: 0.2, hit20: 0.3 },
+        cvDelta: 0, ciLow: 0, ciHigh: 0, recommended: false, verdict: 'on garde l\'actuel', method: 'Coordinate', steps: [],
+        methods: [{ method: 'Coordinate', name: 'Recherche par curseurs', gain: 0.25, cvDelta: 0, ciLow: 0, ciHigh: 0, sufficiency: 'insuffisant', recommended: false, noChange: true,
+                    fitPath: [0, 0.01, 0.03], cvPath: [0, -0.002, -0.008], picked: 0 }] } };
+    const { w, d } = open(cfg);
+    const ajax = w.ApiClient.ajax;
+    w.ApiClient.ajax = (o) => (o.url === '/RecoPlus/Status' ? Promise.resolve(st) : ajax(o));
+    w.document.querySelector('#RecoPlusConfigPage').dispatchEvent(new w.Event('pageshow'));
+    await wait(80);
+    const rep = d.getElementById('rpCalReport');
+    assert.match(rep.textContent, /aucune étape ne tient en validation croisée/);
+    const det = rep.querySelector('details');
+    assert.match(det.querySelector('summary').textContent, /2 étapes, retenue : aucune/);
+    const rows = [...det.querySelectorAll('tr')].map((tr) => [...tr.children].map((c) => c.textContent));
+    assert.deepEqual(rows, [['Étape', 'Sur l\'historique', 'Validation croisée'], ['actuel ◀', '+0,0 %', '+0,0 %'], ['1', '+4,0 %', '-0,8 %'], ['2', '+12,0 %', '-3,2 %']]);
 });
 
 await test('calibrage : écarts en %, méthode sans changement signalée, application non recommandée confirmée à part', async () => {

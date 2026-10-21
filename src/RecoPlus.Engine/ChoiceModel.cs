@@ -71,13 +71,40 @@ public static class ChoiceModel
         public required double Weight { get; init; }
     }
 
+    /// <summary>
+    /// Caractéristiques déjà calculées pour UN réglage (celui de départ d'un calibrage), par cas : le choix de la
+    /// régularisation et la validation croisée réapprennent sur des sous-ensembles de cas, toujours depuis ce réglage.
+    /// </summary>
+    public sealed class FeatureCache
+    {
+        private readonly System.Collections.Concurrent.ConcurrentDictionary<EvalEvent, CaseData?> _d = new();
+
+        public FeatureCache(EngineSettings s) => Key = System.Text.Json.JsonSerializer.Serialize(s.Sanitized());
+
+        internal string Key { get; }
+
+        internal bool For(EngineSettings s) => System.Text.Json.JsonSerializer.Serialize(s) == Key;
+
+        internal bool TryGet(EvalEvent e, out CaseData? d) => _d.TryGetValue(e, out d);
+
+        internal void Put(EvalEvent e, CaseData? d) => _d[e] = d;
+    }
+
     /// <summary>Caractéristiques de chaque candidat de chaque cas, garde-fou figé selon les réglages <paramref name="s"/>.</summary>
-    internal static List<CaseData> Build(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings s, CancellationToken ct)
+    internal static List<CaseData> Build(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings s, CancellationToken ct,
+        FeatureCache? cache = null)
     {
         var res = new CaseData?[cases.Count];
+        var use = cache is not null && cache.For(s) ? cache : null;
         var po = new ParallelOptions { MaxDegreeOfParallelism = Cpu.Degree, CancellationToken = ct };
         Parallel.For(0, cases.Count, po, i =>
         {
+            if (use is not null && use.TryGet(cases[i].Ev, out var known))
+            {
+                res[i] = known is null ? null : new CaseData { X = known.X, N = known.N, Target = known.Target, Weight = cases[i].Weight };
+                return;
+            }
+
             var (u, target, t0) = cases[i].Ev;
             var hist = Calibrator.Snapshot(ds, t0 - 1);
             var ctx = new Context(ds, t0 - 1, hist, s);
@@ -86,6 +113,7 @@ public static class ChoiceModel
             int ti = cands.IndexOf(target);
             if (ti < 0)
             {
+                use?.Put(cases[i].Ev, null);
                 return;
             }
 
@@ -115,6 +143,7 @@ public static class ChoiceModel
             }
 
             res[i] = new CaseData { X = x, N = cands.Count, Target = ti, Weight = cases[i].Weight };
+            use?.Put(cases[i].Ev, res[i]);
         });
         return res.OfType<CaseData>().ToList();
     }
@@ -444,14 +473,14 @@ public static class ChoiceModel
 
     /// <summary>Apprend les poids du score sur des cas, à force de régularisation donnée (itérations externes : garde-fou recalculé).</summary>
     public static EngineSettings Learn(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings start, double kappa,
-        CancellationToken ct = default, int outer = 3)
+        CancellationToken ct = default, int outer = 3, FeatureCache? cache = null)
     {
         start = start.Sanitized();
         var d = Weights.Select(w => w.Get(start)).ToArray();
         var s = start;
         for (int o = 0; o < outer; o++)
         {
-            var data = Build(ds, sim, cases, s, ct);
+            var data = Build(ds, sim, cases, s, ct, cache);
             if (data.Count == 0)
             {
                 return start;
@@ -470,40 +499,28 @@ public static class ChoiceModel
     }
 
     /// <summary>
-    /// Force de régularisation par validation croisée sur les comptes des cas donnés (deux moitiés) : celle dont les
-    /// poids appris sur une moitié classent le mieux l'autre (mesure du calibrage : gain de rang). À égalité, la plus forte.
+    /// Force de régularisation par validation croisée sur les comptes des cas donnés (k groupes de comptes, voir
+    /// <see cref="Calibrator.FoldCount"/>) : celle dont les poids appris sans un groupe classent le mieux ce groupe (mesure
+    /// du calibrage : gain de rang). À égalité, la plus forte.
     /// </summary>
     public static double SelectKappa(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings start,
-        Action? tick = null, CancellationToken ct = default)
+        Action? tick = null, CancellationToken ct = default, FeatureCache? cache = null, int folds = 0)
+        => Calibrator.SelectByCv(cases, Kappas, (train, test, kappa) =>
+        {
+            var learned = Learn(ds, sim, train, start, kappa, ct, cache: cache);
+            tick?.Invoke();
+            return Calibrator.EvaluateRanks(ds, sim, test, learned, ct).Gain;
+        }, folds);
+
+    /// <summary>Réglages entre <paramref name="from"/> et <paramref name="to"/> : chaque poids appris pris à <paramref name="alpha"/> du chemin.</summary>
+    public static EngineSettings Toward(EngineSettings from, EngineSettings to, double alpha)
     {
-        var fold = Calibrator.Folds(cases);
-        var parts = new[] { 0, 1 }.Select(f => cases.Where(c => fold[c.Ev.User] == f).ToList()).ToArray();
-        if (parts.Any(p => p.Count < 10))
+        var r = from.Clone();
+        foreach (var w in Weights)
         {
-            return Kappas[^1];
+            w.Set(r, Math.Round(w.Get(from) + (alpha * (w.Get(to) - w.Get(from))), 3));
         }
 
-        double bestK = Kappas[^1], bestG = double.NegativeInfinity;
-        foreach (var kappa in Kappas.Reverse())
-        {
-            double sw = 0, sg = 0;
-            for (int f = 0; f < 2; f++)
-            {
-                var learned = Learn(ds, sim, parts[f], start, kappa, ct);
-                var r = Calibrator.EvaluateRanks(ds, sim, parts[1 - f], learned, ct);
-                double w = parts[1 - f].Sum(c => c.Weight);
-                sw += w;
-                sg += r.Gain * w;
-                tick?.Invoke();
-            }
-
-            double g = sw > 0 ? sg / sw : 0;
-            if (g > bestG + 1e-9)
-            {
-                (bestG, bestK) = (g, kappa);
-            }
-        }
-
-        return bestK;
+        return r.Sanitized();
     }
 }
