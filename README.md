@@ -1,8 +1,8 @@
 <p align="center"><img src="assets/logo.svg" width="144" alt="Reco+ logo"></p>
 
-<h1 align="center">Reco+</h1>
+<h1 align="center">Reco+ — recommendation engine plugin for Jellyfin</h1>
 
-<p align="center"><b>Personal recommendations for Jellyfin, computed from each account's whole watch history.</b></p>
+<p align="center"><b>Personalized, Netflix-style recommendations for Jellyfin, computed from each user's whole watch history.</b></p>
 
 <p align="center">
   <a href="https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/crocodile13/jellyfin-plugin-recoplus?sort=semver"></a>
@@ -13,7 +13,7 @@
 
 <p align="center"><i><a href="README.fr.md">Version française</a></i></p>
 
-Reco+ replaces Jellyfin's built-in recommendations (Suggestions, "Because you watched", "More like this") with lists ranked for each account, adds home rows through Home Screen Sections, and can suggest titles you don't have yet through Seerr. Everything is computed in the background and cached: no page ever waits.
+Reco+ is a Jellyfin plugin that replaces the built-in recommendations — Suggestions, "Because you watched", "More like this" (similar items) — with lists ranked for each user. It adds personalized home screen rows ("For you", "Because you liked …") through Home Screen Sections, and can recommend movies and TV shows you don't have yet through Seerr (Jellyseerr / Overseerr), with a one-click *Request* button. Everything is computed in the background and cached: no page ever waits.
 
 ## Features
 
@@ -84,6 +84,18 @@ Reco+ replaces Jellyfin's built-in recommendations (Suggestions, "Because you wa
 5. Check what an account gets on the **Preview** tab.
 
 Basic settings are visible at once; advanced ones are folded away or in the **Engine** and **Calibration** tabs; diagnostic tools (log, calibration data export) are in **developer mode**. Hover over **?** next to any setting for its help.
+
+## FAQ
+
+**Why are Jellyfin's recommendations so random?** In Jellyfin, `/Items/Suggestions` returns random items, "Because you watched" only looks at the last few movies, and "More like this" picks random series sharing a genre. Reco+ replaces all three with a ranking built from each user's whole history.
+
+**Can I get a Netflix-like home screen in Jellyfin?** Yes, with [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections): Reco+ provides "For you", "New for you", "Because you liked …", "Movies for you" and "Series for you" rows, personalized per user.
+
+**Can Jellyfin recommend movies I don't have yet?** Yes, with extended mode and a Seerr (Jellyseerr or Overseerr) instance: titles from the TMDb catalogue are suggested in the home rows, ranked by the same engine, and can be requested in one click. Nothing is requested automatically.
+
+**Does it work for several users or a family server?** Yes: each user gets their own lists, Jellyfin's library access and parental controls are respected, and guest or child accounts can be ignored.
+
+**How is it different from other recommendation plugins?** It uses explicit feedback (ratings, favourites, hidden titles, requests, abandoned titles), content similarity and collaborative filtering ("watched together"), keeps popular or new titles from being pushed to users they don't fit, and can calibrate itself on your own history.
 
 ## Optional integrations
 
