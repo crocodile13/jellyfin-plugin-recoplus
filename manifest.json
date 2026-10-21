@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.28.0",
+        "changelog": "1.0.28: Reco+ entry in the Plugins section of the dashboard menu, with the plugin's logo as its icon.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.27.0",
         "changelog": "1.0.27: everything defaults to English — server logs, plugin image, catalogue text, home page fallback texts, calibration export file name (reco-calibration-…). The interface language still follows Jellyfin by default.",
         "targetAbi": "12.2.0.0",

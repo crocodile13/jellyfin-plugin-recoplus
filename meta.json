@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.27: everything defaults to English — server logs, plugin image, catalogue text, home page fallback texts, calibration export file name (reco-calibration-…). The interface language still follows Jellyfin by default.",
+  "changelog": "1.0.28: Reco+ entry in the Plugins section of the dashboard menu, with the plugin's logo as its icon.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.27.0",
+  "version": "1.0.28.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

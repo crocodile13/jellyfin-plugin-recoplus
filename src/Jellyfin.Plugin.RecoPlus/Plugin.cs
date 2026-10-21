@@ -92,6 +92,15 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     public IEnumerable<PluginPageInfo> GetPages()
     {
         var ns = GetType().Namespace;
-        yield return new PluginPageInfo { Name = "RecoPlus", EmbeddedResourcePath = ns + ".Web.configPage.html" };
+        // entrée « Reco+ » dans la section Extensions du menu du tableau de bord ; icône Material « style » (affiches
+        // empilées), remplacée par le logo par le script de l'interface web (client.js)
+        yield return new PluginPageInfo
+        {
+            Name = "RecoPlus",
+            DisplayName = "Reco+",
+            EmbeddedResourcePath = ns + ".Web.configPage.html",
+            EnableInMainMenu = true,
+            MenuIcon = "style",
+        };
     }
 }

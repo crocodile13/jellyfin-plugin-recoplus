@@ -447,11 +447,33 @@
     style.textContent = '#' + ROW_ID + ' .itemsContainer::-webkit-scrollbar{display:none}';
     (document.head || document.documentElement).appendChild(style);
 
+    // Menu du tableau de bord : l'entrée Reco+ (icône Material « style » donnée par le serveur) prend le logo du plugin.
+    // Rien n'est ajouté ni retiré dans le DOM géré par l'interface (React) : l'icône existante est seulement marquée
+    // (attribut) et une règle CSS la remplace par le logo. Sans le script, l'icône Material reste.
+    var iconCss = null;
+    function menuIcon() {
+        var links = document.querySelectorAll('a[href*="configurationpage?name=RecoPlus"]');
+        if (!links.length) { return; }
+        if (!iconCss) {
+            var a = api();
+            var url = a && a.getUrl ? a.getUrl('RecoPlus/icon.svg') : '../RecoPlus/icon.svg';
+            iconCss = el('style');
+            iconCss.textContent = '[data-recoplus-icon]{color:transparent!important;background:url("' + url.replace(/["\\]/g, '') + '") center/contain no-repeat;}'
+                + '[data-recoplus-icon]>*{visibility:hidden}';
+            (document.head || document.documentElement).appendChild(iconCss);
+        }
+        for (var i = 0; i < links.length; i++) {
+            var icon = links[i].querySelector('.material-icons, .MuiIcon-root, .MuiListItemIcon-root > svg, .navMenuOptionIcon');
+            if (icon && !icon.hasAttribute('data-recoplus-icon')) { icon.setAttribute('data-recoplus-icon', ''); }
+        }
+    }
+
     var scheduled = false;
     new MutationObserver(function () {
         if (scheduled) { return; }
         scheduled = true;
-        setTimeout(function () { scheduled = false; check(); }, 400);
+        setTimeout(function () { scheduled = false; menuIcon(); check(); }, 400);
     }).observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(menuIcon, 0);
     setTimeout(check, 0); // accueil déjà affiché au chargement du script
 })();

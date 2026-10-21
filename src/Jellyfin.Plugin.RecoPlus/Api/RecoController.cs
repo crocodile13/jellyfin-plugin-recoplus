@@ -148,6 +148,22 @@ public sealed class RecoController : ControllerBase
         return File(s, "application/javascript; charset=utf-8");
     }
 
+    /// <summary>Icône du menu du tableau de bord (logo sans fond). Publique, comme tout fichier de l'interface web.</summary>
+    [HttpGet("icon.svg")]
+    [AllowAnonymous]
+    [Produces("image/svg+xml")]
+    public ActionResult Icon()
+    {
+        var s = Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Plugin).Namespace + ".Web.icon.svg");
+        if (s is null)
+        {
+            return NotFound();
+        }
+
+        Response.Headers.CacheControl = "public, max-age=86400";
+        return File(s, "image/svg+xml");
+    }
+
     /// <summary>Mode étendu du compte connecté.</summary>
     [HttpGet("Extended")]
     [Authorize]
