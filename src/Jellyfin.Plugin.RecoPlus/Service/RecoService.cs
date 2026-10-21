@@ -67,7 +67,15 @@ public sealed class RecoService : IDisposable
     private readonly IServiceProvider _services;
     private readonly ConcurrentDictionary<string, UserRecs> _recs = new(StringComparer.Ordinal);
     private Dictionary<string, Dictionary<string, Interaction>> _lastHist = new(StringComparer.Ordinal);
-    private IReadOnlyDictionary<(Guid, Guid), double>? _prCache;
+    private PrDates? _prCache;
+
+    /// <summary>
+    /// Exploration Seerr récente de chaque compte : un recalcul d'un seul compte (après une lecture) la reprend au lieu
+    /// de tout relire (la partie longue du calcul) ; le calcul complet la refait.
+    /// </summary>
+    private readonly ConcurrentDictionary<string, (DateTime At, ExtCandidates C)> _extMemo = new(StringComparer.Ordinal);
+
+    private static readonly TimeSpan ExtMemoTtl = TimeSpan.FromHours(6);
     private DateTime _prAt;
     private readonly object _loadLock = new();
     private readonly object _vecLock = new();
@@ -280,10 +288,14 @@ public sealed class RecoService : IDisposable
     public void Invalidate()
     {
         _recs.Clear();
+        _extMemo.Clear();
         Persist();
     }
 
-    private IReadOnlyDictionary<(Guid, Guid), double>? PlaybackReporting(bool force)
+    /// <summary>Dates de Playback Reporting : premier et dernier lancement réels de chaque élément par compte.</summary>
+    private sealed record PrDates(IReadOnlyDictionary<(Guid, Guid), double> First, IReadOnlyDictionary<(Guid, Guid), double> Last);
+
+    private PrDates? PlaybackReporting(bool force)
     {
         if (!force && _prCache is not null && DateTime.UtcNow - _prAt < TimeSpan.FromHours(6))
         {
@@ -307,19 +319,20 @@ public sealed class RecoService : IDisposable
     }
 
     // anciens lancements rattachés au titre actuel (fichiers remplacés par Radarr/Sonarr) : il faut la bibliothèque
-    private Dictionary<(Guid, Guid), double> ReadPr(out string status)
+    private PrDates ReadPr(out string status)
     {
         var rows = _pr.FirstStarts(out status);
         var lib = _index.Get();
         var movies = HistoryMath.NameIndex(lib.Titles.Values.Where(t => t.Kind == TitleKind.Movie && !t.External).Select(t => (Guid.ParseExact(t.Id, "N"), t.Name)));
         var series = HistoryMath.NameIndex(lib.Titles.Values.Where(t => t.Kind == TitleKind.Series && !t.External).Select(t => (Guid.ParseExact(t.Id, "N"), t.Name)));
-        var map = HistoryMath.MapPlaybackStarts(rows, g => lib.Titles.ContainsKey(g.ToString("N")) || lib.EpisodeSeries.ContainsKey(g), movies, series, out var remapped);
+        bool Known(Guid g) => lib.Titles.ContainsKey(g.ToString("N")) || lib.EpisodeSeries.ContainsKey(g);
+        var map = HistoryMath.MapPlaybackStarts(rows, Known, movies, series, out var remapped);
         if (remapped > 0)
         {
             status = Texts.Pack("{0}, {1} lectures d'anciens fichiers rattachées", status, remapped);
         }
 
-        return map;
+        return new PrDates(map, HistoryMath.MapPlaybackLasts(rows, Known, movies, series));
     }
 
     /// <summary>
@@ -375,12 +388,19 @@ public sealed class RecoService : IDisposable
     /// <summary>
     /// Déjà connu du compte, donc pas à recommander : vu ou écarté (<see cref="Seen"/>), et — sauf si la configuration
     /// le demande — ce qu'il a déjà marqué : noté (un avis ou un pouce, c'est un titre vu), en favori (titre, saison ou
-    /// épisode), en liste de suivi ou demandé. Recommander, c'est faire découvrir ; ce que le compte sait déjà vouloir
-    /// voir, il le trouve dans ses listes. Ces marques restent des signaux de goût pour tout le reste.
+    /// épisode), et hors bibliothèque, en liste de suivi ou demandé. Ces marques restent des signaux de goût pour tout le
+    /// reste.
     /// </summary>
-    internal static bool Known(IReadOnlyDictionary<string, Interaction> h, string id, bool proposeMarked)
+    /// <param name="h">Historique du compte.</param>
+    /// <param name="id">Titre.</param>
+    /// <param name="proposeMarked">Proposer aussi les titres marqués.</param>
+    /// <param name="intentAllowed">
+    /// Un titre demandé ou mis de côté reste candidat (titres de la bibliothèque) : classé sans ses propres signaux et
+    /// d'abord écarté, il revient peu à peu s'il n'est toujours pas vu (<see cref="Recommender.ScoreAll"/>).
+    /// </param>
+    internal static bool Known(IReadOnlyDictionary<string, Interaction> h, string id, bool proposeMarked, bool intentAllowed = false)
         => Seen(h, id) || (!proposeMarked && h.TryGetValue(id, out var x)
-            && (x.Rating is not null || x.Favorite || x.FavSeasons > 0 || x.FavEpisodes > 0 || x.Watchlisted > 0 || x.Requested > 0));
+            && (x.Rating is not null || x.Favorite || x.FavSeasons > 0 || x.FavEpisodes > 0 || (!intentAllowed && (x.Watchlisted > 0 || x.Requested > 0))));
 
     private static double Unix(DateTime d) => new DateTimeOffset(DateTime.SpecifyKind(d, DateTimeKind.Utc)).ToUnixTimeMilliseconds() / 1000.0;
 
@@ -425,7 +445,7 @@ public sealed class RecoService : IDisposable
             var key = u.Id.ToString("N");
             if (needAll || only == u.Id || !_lastHist.TryGetValue(key, out var h))
             {
-                h = _history.Build(u.Id, rows.GetValueOrDefault(u.Id), lib, pr);
+                h = _history.Build(u.Id, rows.GetValueOrDefault(u.Id), lib, pr?.First, pr?.Last);
             }
 
             hist[key] = h.ToDictionary(kv => kv.Key, kv => kv.Value.Copy(), StringComparer.Ordinal);
@@ -470,6 +490,13 @@ public sealed class RecoService : IDisposable
             for (int i = 0; i < extTargets.Count; i++)
             {
                 ct.ThrowIfCancellationRequested();
+                var uk = extTargets[i].Id.ToString("N");
+                if (only is not null && _extMemo.TryGetValue(uk, out var memo) && DateTime.UtcNow - memo.At < ExtMemoTtl)
+                {
+                    extCands[uk] = Reuse(memo.C, hist.GetValueOrDefault(uk), lib, seerr, titles, colls, cfg);
+                    continue;
+                }
+
                 var explored = await ExtendedCandidates(extTargets[i], ctx, lib, tmdbOf, seerr, cl, titles, colls, cfg, ct).ConfigureAwait(false);
                 if (_seerr.Down)
                 {
@@ -477,7 +504,8 @@ public sealed class RecoService : IDisposable
                     break; // Seerr a lâché en route : ce compte et les suivants gardent leurs titres hors bibliothèque précédents
                 }
 
-                extCands[extTargets[i].Id.ToString("N")] = explored;
+                extCands[uk] = explored;
+                _extMemo[uk] = (DateTime.UtcNow, explored);
                 progress?.Report(40 + (20.0 * (i + 1) / extTargets.Count));
             }
 
@@ -504,29 +532,15 @@ public sealed class RecoService : IDisposable
             var key = u.Id.ToString("N");
             var h = hist[key];
             var accessible = job.Accessible;
-            var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !Known(h, id, cfg.ProposeMarked) && ListPolicy.Allows(ct0, lo))
+            var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !Known(h, id, cfg.ProposeMarked, intentAllowed: true) && ListPolicy.Allows(ct0, lo))
                 .OrderBy(id => id, StringComparer.Ordinal).ToList();
             var r = new UserRecs { ComputedAt = DateTime.UtcNow, SeerrUserId = seerr.UserMap.GetValueOrDefault(key) };
 
-            // demandés, arrivés, jamais commencés : en tête
-            // seulement si le titre est arrivé récemment : c'est une nouvelle pour ce compte, pas une liste permanente
-            double pinCut = now - (Math.Clamp(cfg.PinnedMaxDays, 1, 365) * Core.Day);
-            var pinned = h.Values.Where(x => x.Requested > 0 && x.Last == 0 && !x.Played && accessible.Contains(x.Title)
-                    && lib.Titles.TryGetValue(x.Title, out var lt) && (lt.Added ?? 0) >= pinCut)
-                .OrderByDescending(x => x.Requested).Take(Math.Max(0, cfg.PinnedRequests)).Select(x => x.Title).ToList();
-
-            // nouveaux épisodes d'une série rattrapée et aimée (nouvelle saison) : en tête aussi, pendant un temps
-            if (cfg.NewEpisodesPinned > 0)
-            {
-                double newCut = now - (Math.Clamp(cfg.NewEpisodesMaxDays, 1, 365) * Core.Day);
-                var sig = uc.Sig.GetValueOrDefault(key);
-                pinned.AddRange(h.Values
-                    .Where(x => x.NewEpisodes > 0 && !x.Hidden && accessible.Contains(x.Title) && sig is not null && sig.GetValueOrDefault(x.Title) > 0
-                        && Guid.TryParse(x.Title, out var sg) && lib.EpisodeAdded.TryGetValue(sg, out var ad) && ad.Length > 0 && ad[^1] >= newCut)
-                    .OrderByDescending(x => lib.EpisodeAdded[Guid.Parse(x.Title)][^1])
-                    .Take(cfg.NewEpisodesPinned).Select(x => x.Title).Where(id => !pinned.Contains(id)).ToList());
-            }
-
+            // en tête : les nouveautés de ce que le compte suit (nouveaux épisodes, nouvelle saison, volet suivant d'une
+            // saga), pendant un temps ; jamais un titre qu'il a lui-même demandé (il sait déjà qu'il le veut)
+            var pinned = Pins.Select(ds, h, uc.Sig.GetValueOrDefault(key) ?? new Dictionary<string, double>(), accessible.Contains,
+                id => Guid.TryParse(id, out var sg) && lib.EpisodeDates.TryGetValue(sg, out var ed) ? ed : null, now,
+                new PinOptions(Math.Clamp(cfg.NewEpisodesPinned, 0, 20), Math.Clamp(cfg.NewEpisodesMaxDays, 1, 365), s.SagaMax));
             r.Pinned = pinned;
 
             // rangées que HSS montre à ce compte : les autres ne « réservent » aucun titre
@@ -542,7 +556,7 @@ public sealed class RecoService : IDisposable
                 foreach (var slot in slots)
                 {
                     uc.Slot = slot;
-                    var sc = Recommender.Score(uc, vec, key, cands, s, exposure: expo);
+                    var sc = Recommender.ScoreAll(uc, vec, key, cands, s, exposure: expo);
                     var ranked = Recommender.Rank(uc, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s, key, simIdx).Where(id => !pinned.Contains(id)).ToList();
 
                     // présentation : hasard du jour et minimums films/séries (le classement par goût reste intact pour les catégories)
@@ -760,7 +774,7 @@ public sealed class RecoService : IDisposable
     {
         int size = Math.Clamp(cfg.RowSize, 5, 60);
         // score commun (ce que bibliothèque et hors bibliothèque ont en commun), même bruit du jour pour les titres hors bibliothèque
-        var joint = Recommender.Score(ctx, vec, key, hv.Ordered.Concat(recs.Select(p => p.Id)).Distinct().ToList(), Recommender.Shared(s), exposure: expo);
+        var joint = Recommender.ScoreAll(ctx, vec, key, hv.Ordered.Concat(recs.Select(p => p.Id)).Distinct().ToList(), Recommender.Shared(s), exposure: expo);
         var jointExt = Exploration.Noisy(recs.ToDictionary(p => p.Id, p => joint[p.Id], StringComparer.Ordinal), noise, noiseSeed);
         double Key(string id) => jointExt.TryGetValue(id, out var e) ? e : joint.GetValueOrDefault(id);
 
@@ -1059,7 +1073,7 @@ public sealed class RecoService : IDisposable
         var rows = _userData.ReadAll();
         foreach (var u in users)
         {
-            hist[u.Id.ToString("N")] = _history.Build(u.Id, rows.GetValueOrDefault(u.Id), lib, pr).ToDictionary(kv => kv.Key, kv => kv.Value.Copy(), StringComparer.Ordinal);
+            hist[u.Id.ToString("N")] = _history.Build(u.Id, rows.GetValueOrDefault(u.Id), lib, pr?.First, pr?.Last).ToDictionary(kv => kv.Key, kv => kv.Value.Copy(), StringComparer.Ordinal);
         }
 
         var seerr = _seerr.Configured ? _seerr.Last : new SeerrSnapshot { Status = "désactivé ou non configuré" };
@@ -1229,7 +1243,35 @@ public sealed class RecoService : IDisposable
     /// <summary>Candidats hors bibliothèque d'un compte : identifiants, accord TMDb, titre aimé d'origine et raison affichée.</summary>
     private sealed record ExtCandidates(
         List<string> Ids, Dictionary<string, double> Agree, Dictionary<string, string> Because, Dictionary<string, string> Reasons,
-        Dictionary<string, string> SourceOf, Dictionary<string, int> Found);
+        Dictionary<string, string> SourceOf, Dictionary<string, int> Found, Dictionary<string, SeerrDetails> Details);
+
+    /// <summary>
+    /// Exploration précédente reprise : ses titres hors bibliothèque sont remis dans le jeu de données, sauf ceux qui ne
+    /// sont plus à proposer (arrivés dans la bibliothèque, demandés, vus ou marqués depuis).
+    /// </summary>
+    private static ExtCandidates Reuse(ExtCandidates c, IReadOnlyDictionary<string, Interaction>? h, LibrarySnapshot lib, SeerrSnapshot seerr,
+        Dictionary<string, Title> titles, Dictionary<string, List<string>> colls, Configuration.PluginConfiguration cfg)
+    {
+        h ??= new Dictionary<string, Interaction>();
+        var ids = new List<string>();
+        foreach (var id in c.Ids)
+        {
+            var k = id[5..];
+            if (!c.Details.TryGetValue(id, out var d) || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Known(h, id, cfg.ProposeMarked))
+            {
+                continue;
+            }
+
+            if (!titles.ContainsKey(id))
+            {
+                titles[id] = ExternalTitle(d, id, colls);
+            }
+
+            ids.Add(id);
+        }
+
+        return c with { Ids = ids };
+    }
 
     /// <summary>
     /// Candidats hors bibliothèque, de plusieurs sources fusionnées à parts équilibrées : recommandations et titres
@@ -1255,6 +1297,7 @@ public sealed class RecoService : IDisposable
         // toutes sources : une note TMDb ne veut rien dire avec une poignée de votes (courts métrages, avant-premières,
         // titres pas encore sortis notés par quelques fans)
         int minVotesAll = Math.Clamp(cfg.ExtendedMinVotesAll, 0, 1_000_000);
+        int minRuntime = Math.Clamp(cfg.ExtendedMinRuntime, 0, 600);
         string today = DateTime.UtcNow.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
         bool Skip(SeerrResult r, string k)
             => r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Known(seen, "tmdb:" + k, cfg.ProposeMarked)
@@ -1546,12 +1589,14 @@ public sealed class RecoService : IDisposable
         var agree = new Dictionary<string, double>(StringComparer.Ordinal);
         var reasons = new Dictionary<string, string>(StringComparer.Ordinal);
         var sourceOf = new Dictionary<string, string>(StringComparer.Ordinal);
+        var kept = new Dictionary<string, SeerrDetails>(StringComparer.Ordinal);
         for (int i = 0; i < merged.Count; i++)
         {
             var (k, source) = merged[i];
             var d = details[i];
             if (d is null || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ParentalAllowed(policy, d, country)
                 || (d.VoteCount ?? 0) < minVotesAll
+                || (minRuntime > 0 && d.Runtime is int rt && rt < minRuntime)   // court métrage (durée inconnue : gardé)
                 || d.ReleaseDate is null || string.CompareOrdinal(d.ReleaseDate, today) > 0)   // pas encore sorti
             {
                 continue;
@@ -1564,6 +1609,7 @@ public sealed class RecoService : IDisposable
             }
 
             ids.Add(id);
+            kept[id] = d;
             sourceOf[id] = source;
             agree[id] = count.GetValueOrDefault(k) / (double)Math.Max(1, anchors.Count);
             reasons[id] = source == "related"
@@ -1572,7 +1618,7 @@ public sealed class RecoService : IDisposable
         }
 
         var found = bySource.ToDictionary(kv => kv.Key, kv => kv.Value.Count, StringComparer.Ordinal);
-        return new ExtCandidates(ids, agree, because, reasons, sourceOf, found);
+        return new ExtCandidates(ids, agree, because, reasons, sourceOf, found, kept);
     }
 
     /// <summary>Catégories « Parce que tu as aimé X » : chaque film recommandé va sous le titre aimé dont il est le plus proche.</summary>

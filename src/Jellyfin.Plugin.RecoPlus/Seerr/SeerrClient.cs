@@ -110,6 +110,9 @@ public sealed class SeerrDetails
     /// <summary>Nombre de votes TMDb (null : fiche lue par une ancienne version, à relire).</summary>
     public int? VoteCount { get; init; }
 
+    /// <summary>Durée d'un film en minutes (null : inconnue, ou fiche lue par une version antérieure).</summary>
+    public int? Runtime { get; init; }
+
     /// <summary>Date de sortie ou de première diffusion (aaaa-mm-jj).</summary>
     public string? ReleaseDate { get; init; }
 
@@ -419,6 +422,7 @@ public sealed class SeerrClient
             Certifications = certs,
             VoteCount = d.TryGetProperty("voteCount", out var vc) && vc.ValueKind == JsonValueKind.Number && vc.TryGetInt32(out var vcn) ? vcn : null,
             ReleaseDate = date.Length >= 10 ? date[..10] : null,
+            Runtime = movie && Int(d, "runtime") is > 0 and var rt ? rt : null,
             OriginalLanguage = Str(d, "originalLanguage") is { Length: > 0 } ol ? ol : null,
             Countries = Arr(d, "productionCountries").Select(c => Str(c, "name")).Where(n => n.Length > 0).ToList(),
         };

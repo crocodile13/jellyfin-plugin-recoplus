@@ -132,6 +132,13 @@ public sealed class EngineSettings
     /// <summary>Poids d'une note explicite du compte (avis Jellyfin Enhanced, note ou pouce Jellyfin), dans les deux sens.</summary>
     public double RatingWeight { get; set; } = 1.0;
 
+    /// <summary>
+    /// Titre aimé (favori, note, pouce) sans avoir été vu sur ce serveur — vu ailleurs : part de son poids (0-1). Un
+    /// goût réel mais moins sûr qu'un visionnage, et sans date donc sans oubli ; ½ = autant qu'un titre vu et aimé il y
+    /// a longtemps (plancher de récence).
+    /// </summary>
+    public double LikedUnseen { get; set; } = 0.5;
+
     /// <summary>Poids négatif d'un titre masqué (« pas intéressé »).</summary>
     public double HiddenWeight { get; set; } = 1.0;
 
@@ -338,6 +345,7 @@ public sealed class EngineSettings
         s.FavEpisodeShare = Clamp(s.FavEpisodeShare, 0, 1);
         s.RewatchBoost = Clamp(s.RewatchBoost, 0, 3);
         s.RatingWeight = Clamp(s.RatingWeight, 0, 3);
+        s.LikedUnseen = Clamp(s.LikedUnseen, 0, 1);
         s.HiddenWeight = Clamp(s.HiddenWeight, 0, 3);
         s.ReleaseDays = Clamp(s.ReleaseDays, 7, 3650);
         s.RatingPriorVotes = Clamp(s.RatingPriorVotes, 0, 100_000);

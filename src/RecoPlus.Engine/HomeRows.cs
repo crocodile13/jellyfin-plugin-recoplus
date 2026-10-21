@@ -71,8 +71,18 @@ public static class HomeRows
     /// <summary>Titres de réserve par rangée (droits d'accès revérifiés à l'affichage).</summary>
     public const int Spare = 6;
 
-    /// <summary>Ressemblance minimale avec le titre aimé pour « Parce que tu as aimé … ».</summary>
-    public const double MinSimilarity = 0.1;
+    /// <summary>Ressemblance minimale absolue avec le titre aimé pour « Parce que tu as aimé … » (plancher).</summary>
+    public const double MinSimilarity = 0.05;
+
+    /// <summary>
+    /// Ressemblance minimale relative : part de la ressemblance du voisin le plus proche encore libre. Les ressemblances
+    /// dépendent de la bibliothèque (nombre et finesse des métadonnées) : un seuil fixe vide les rangées des unes et
+    /// remplit celles des autres de titres sans rapport.
+    /// </summary>
+    public const double RelativeSimilarity = 0.4;
+
+    /// <summary>Titres aimés examinés comme points de départ des rangées « Parce que … » (les plus forts d'abord).</summary>
+    public const int AnchorCandidates = 40;
 
     /// <summary>Une rangée « Parce que tu as aimé … » n'est montrée qu'avec au moins ce nombre de titres.</summary>
     public const int MinBecause = 6;
@@ -168,7 +178,7 @@ public static class HomeRows
             var sagas = new HashSet<string>(StringComparer.Ordinal);
             int k = 0;
             foreach (var (a, _) in sig.Where(e => e.Value > 0 && T.TryGetValue(e.Key, out var t) && !t.External && vec.ContainsKey(e.Key))
-                         .OrderByDescending(e => e.Value).ThenBy(e => e.Key, StringComparer.Ordinal).Take(15))
+                         .OrderByDescending(e => e.Value).ThenBy(e => e.Key, StringComparer.Ordinal).Take(AnchorCandidates))
             {
                 if (k >= nb)
                 {
@@ -176,15 +186,18 @@ public static class HomeRows
                 }
 
                 var fr = Recommender.Franchise(ctx.Ds, a);
-                if (fr is { } f && !sagas.Add(f.Id))
+                if (fr is { } f && sagas.Contains(f.Id))
                 {
                     continue; // un seul titre de départ par saga
                 }
 
                 var av = vec[a];
-                var near = ordered.Where(id => id != a && !used.Contains(id))     // jamais le titre aimé dans sa propre rangée
-                    .Select(id => (Id: id, Sim: av.Dot(vec[id])))
-                    .Where(x => x.Sim >= MinSimilarity)
+                var free = ordered.Where(id => id != a && !used.Contains(id))     // jamais le titre aimé dans sa propre rangée
+                    .Select(id => (Id: id, Sim: av.Dot(vec[id]))).ToList();
+                double best = free.Count > 0 ? free.Max(x => x.Sim) : 0;
+                double floor = Math.Max(MinSimilarity, RelativeSimilarity * best);
+                var near = free
+                    .Where(x => x.Sim >= floor)
                     .OrderByDescending(x => (0.7 * x.Sim) + (0.3 * (span > 0 ? (sc[x.Id] - min) / span : 0)))
                     .ThenBy(x => x.Id, StringComparer.Ordinal)
                     .Select(x => x.Id).ToList();
@@ -194,6 +207,11 @@ public static class HomeRows
                 }
 
                 k++;
+                if (fr is { } f2)
+                {
+                    sagas.Add(f2.Id); // la saga n'est prise que si la rangée existe : un autre volet peut servir sinon
+                }
+
                 rows[ParceQue + k] = Row(ParceQue + k, a, near);
                 anchors[ParceQue + k] = T[a].Name;
                 anchorIds[ParceQue + k] = a;

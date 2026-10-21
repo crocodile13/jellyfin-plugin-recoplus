@@ -128,17 +128,11 @@ public sealed class PluginConfiguration : BasePluginConfiguration
         MinGainPercent = CalibrationMinGain,
     };
 
-    /// <summary>Nombre de titres demandés, arrivés et pas encore vus, placés en tête.</summary>
-    public int PinnedRequests { get; set; } = 3;
-
     /// <summary>
     /// Proposer aussi ce que le compte a déjà marqué sans l'avoir lu : noté, en favori, en liste de suivi, demandé. Non
     /// par défaut : une note ou un favori, c'est un titre vu ; une liste de suivi, c'est déjà une liste.
     /// </summary>
     public bool ProposeMarked { get; set; }
-
-    /// <summary>Un titre demandé n'est placé en tête que pendant ce nombre de jours après son arrivée.</summary>
-    public int PinnedMaxDays { get; set; } = 30;
 
     /// <summary>Taille de la liste calculée par utilisateur.</summary>
     public int ListSize { get; set; } = 200;
@@ -152,10 +146,13 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Réglages du moteur.</summary>
     public EngineSettings Engine { get; set; } = new();
 
-    /// <summary>Nouveaux épisodes d'une série rattrapée et aimée placés en tête (0 = jamais).</summary>
-    public int NewEpisodesPinned { get; set; } = 2;
+    /// <summary>
+    /// Nouveautés de ce que le compte suit placées en tête (0 = jamais) : nouveaux épisodes ou nouvelle saison d'une
+    /// série qu'il a rattrapée, volet suivant d'une saga. Jamais un titre qu'il a demandé lui-même.
+    /// </summary>
+    public int NewEpisodesPinned { get; set; } = 3;
 
-    /// <summary>Pendant ce nombre de jours après l'arrivée du dernier épisode.</summary>
+    /// <summary>Pendant ce nombre de jours après l'arrivée de la nouveauté.</summary>
     public int NewEpisodesMaxDays { get; set; } = 45;
 
     /// <summary>Lire les masquages (« pas intéressé ») et les avis notés de Jellyfin Enhanced.</summary>
@@ -286,6 +283,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>Titres hors bibliothèque, toutes sources : votes TMDb minimum (et titres pas encore sortis écartés).</summary>
     public int ExtendedMinVotesAll { get; set; } = 50;
+
+    /// <summary>Titres hors bibliothèque : durée minimale d'un film en minutes (courts métrages écartés ; 0 = aucune).</summary>
+    public int ExtendedMinRuntime { get; set; } = 40;
 
     /// <summary>Pépites : votes TMDb minimum (en dessous, la note ne veut rien dire).</summary>
     public int ExtendedGemMinVotes { get; set; } = 50;

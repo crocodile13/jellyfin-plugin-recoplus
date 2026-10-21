@@ -115,6 +115,7 @@ public static class Core
     /// <summary>Poids signé d'une interaction : &gt;0 aimé, &lt;0 abandonné, 0 neutre (en cours, zapping).</summary>
     public static double Signal(Interaction x, TitleKind kind, int nEpisodes, double now, EngineSettings p)
     {
+        bool seenHere = x.Played || x.Episodes > 0 || x.Completion >= p.Zap;
         double last = x.Last != 0 ? x.Last : now;
         double idle = (now - last) / Day;
         double b;
@@ -171,8 +172,9 @@ public static class Core
             b = Math.Max(b, 0) + (p.FavoriteBoost * fav);
         }
 
-        // Revu : signal fort d'un titre aimé (ne rattrape pas un abandon).
-        if (x.Rewatch > 0 && b > 0)
+        // Revu : signal fort d'un titre aimé (ne rattrape pas un abandon). Un titre marqué « vu » en masse n'est pas
+        // revu : re-marquer fait grimper le compteur de lectures sans visionnage.
+        if (x.Rewatch > 0 && b > 0 && !x.Backfill)
         {
             b += p.RewatchBoost * Math.Min(1.0, x.Rewatch);
         }
@@ -182,6 +184,12 @@ public static class Core
         {
             r = Math.Clamp(r, -1.0, 1.0);
             b = r > 0 ? Math.Max(b, 0) + (p.RatingWeight * r) : Math.Min(b, 0) + (p.RatingWeight * r);
+        }
+
+        // Aimé sans être vu ici (vu ailleurs) : un goût, plus léger qu'un visionnage, sans date donc sans oubli.
+        if (!seenHere && b > 0)
+        {
+            return b * p.LikedUnseen;
         }
 
         // Demande Seerr ou liste de suivi d'un titre jamais commencé : intention déclarée, de COURT terme (demi-vie
@@ -213,7 +221,8 @@ public static class Core
     /// <summary>
     /// Repère les titres dont la date est inconnue : vus sans aucune date, ou marqués « vus » en masse (au moins
     /// BulkMinTitles titres vus « commencés » à moins de BulkGapSeconds les uns des autres — personne ne lance 4 films
-    /// en quelques minutes). Renvoie le nombre de titres marqués.
+    /// en quelques minutes) ; une grappe de dates de fin (« marquer comme vu » sur des titres déjà commencés) ramène la
+    /// date au début connu. Renvoie le nombre de titres marqués.
     /// </summary>
     public static int MarkBackfill(IEnumerable<Interaction> history)
     {
@@ -245,6 +254,39 @@ public static class Core
                     if (!seen[k].Backfill)
                     {
                         seen[k].Backfill = true;
+                        n++;
+                    }
+                }
+            }
+
+            i = j + 1;
+        }
+
+        // « Marquer comme vu » en masse sur des titres déjà commencés : la date de fin est réécrite, pas le début. Une
+        // grappe de fins (même règle) n'est pas une date de visionnage : on garde le début s'il est connu et antérieur,
+        // sinon la date est inconnue.
+        var ends = all.Where(x => (x.Played || x.Episodes > 0) && x.Last != 0 && !x.Backfill).OrderBy(x => x.Last).ThenBy(x => x.Title, StringComparer.Ordinal).ToList();
+        i = 0;
+        while (i < ends.Count)
+        {
+            int j = i;
+            while (j + 1 < ends.Count && ends[j + 1].Last - ends[j].Last <= BulkGapSeconds)
+            {
+                j++;
+            }
+
+            if (j - i + 1 >= BulkMinTitles)
+            {
+                for (int k = i; k <= j; k++)
+                {
+                    var x = ends[k];
+                    if (x.Start != 0 && x.Start < x.Last - BulkGapSeconds)
+                    {
+                        x.Last = x.Start;
+                    }
+                    else
+                    {
+                        x.Backfill = true;
                         n++;
                     }
                 }

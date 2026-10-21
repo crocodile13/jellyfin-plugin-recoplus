@@ -28,9 +28,14 @@ public sealed class UserHistory
     /// <summary>Interactions du compte avec les titres de l'instantané, à partir de ses lignes de données utilisateur.</summary>
     /// <param name="rows">Lignes de ce compte (UserDataReader).</param>
     /// <param name="prFirst">Premiers lancements issus de Playback Reporting (facultatif).</param>
+    /// <param name="prLast">
+    /// Dernières lectures réelles issues de Playback Reporting (facultatif) : elles priment sur la date de dernière
+    /// lecture de Jellyfin, que « marquer comme vu » réécrit sans visionnage.
+    /// </param>
     public Dictionary<string, Interaction> Build(Guid userId, IReadOnlyDictionary<Guid, UserDataRow>? rows, LibrarySnapshot lib,
-        IReadOnlyDictionary<(Guid User, Guid Item), double>? prFirst)
+        IReadOnlyDictionary<(Guid User, Guid Item), double>? prFirst, IReadOnlyDictionary<(Guid User, Guid Item), double>? prLast = null)
     {
+        double PrLast(Guid item) => prLast is not null && prLast.TryGetValue((userId, item), out var v) ? v : 0;
         var inter = new Dictionary<string, Interaction>(StringComparer.Ordinal);
         if (rows is null || rows.Count == 0)
         {
@@ -77,7 +82,7 @@ public sealed class UserHistory
                 continue; // saisons, musique, éléments supprimés…
             }
 
-            double last = Unix(d.LastPlayed);
+            double last = PrLast(d.ItemId) is > 0 and var real ? real : Unix(d.LastPlayed);
             if (t.Kind == TitleKind.Movie)
             {
                 double comp = d.Played ? 1.0 : (lib.Runtime.TryGetValue(d.ItemId, out var rt) && rt > 0 ? Math.Min(1.0, d.Position / (double)rt) : 0);
@@ -135,7 +140,9 @@ public sealed class UserHistory
             }
 
             inter.TryGetValue(id, out var prev);
-            double seriesLast = lasts.Count > 0 ? lasts.Max() : 0;   // 0 : épisodes marqués vus sans date
+            // dernière lecture réelle (Playback Reporting) si connue, sinon la date de Jellyfin ; 0 : marqués vus sans date
+            double realLast = Math.Max(PrLast(sid), eps.Select(e => PrLast(e.ItemId)).DefaultIfEmpty(0).Max());
+            double seriesLast = realLast > 0 ? realLast : (lasts.Count > 0 ? lasts.Max() : 0);
             inter[id] = new Interaction
             {
                 Title = id,

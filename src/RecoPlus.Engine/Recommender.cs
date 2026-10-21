@@ -185,11 +185,13 @@ public static class Recommender
     }
 
     /// <summary>Calcule les composantes brutes (le profil moyen dépend de WNegative, le reste non).</summary>
+    /// <param name="signals">Facultatif : signaux du compte à utiliser à la place des siens (voir <see cref="ScoreAll"/>).</param>
     public static Components Compute(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
-        IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null, SimilarityIndex? sim = null)
+        IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null, SimilarityIndex? sim = null,
+        IReadOnlyDictionary<string, double>? signals = null)
     {
         var T = ctx.Ds.Titles;
-        var sig = ctx.Sig.TryGetValue(user, out var su) ? su : new Dictionary<string, double>();
+        var sig = signals ?? (ctx.Sig.TryGetValue(user, out var su) ? su : new Dictionary<string, double>());
         var pos = sig.Where(e => e.Value > 0).ToList();
         var neg = sig.Where(e => e.Value < 0).Select(e => new KeyValuePair<string, double>(e.Key, -e.Value)).ToList();
 
@@ -472,11 +474,13 @@ public static class Recommender
     /// </summary>
     /// <param name="tmdbAgreement">Facultatif : candidat → part des titres aimés dont TMDb le recommande (mode étendu).</param>
     /// <param name="exposure">Facultatif : affichages sans ouverture, par titre.</param>
+    /// <param name="signals">Facultatif : signaux du compte à utiliser à la place des siens.</param>
     public static Dictionary<string, double> Score(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
         IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null,
-        Dictionary<string, ScoreParts>? parts = null, SimilarityIndex? sim = null, IReadOnlyDictionary<string, Exposure>? exposure = null)
+        Dictionary<string, ScoreParts>? parts = null, SimilarityIndex? sim = null, IReadOnlyDictionary<string, Exposure>? exposure = null,
+        IReadOnlyDictionary<string, double>? signals = null)
     {
-        var c = Compute(ctx, vec, user, cands, w, tmdbAgreement, sim);
+        var c = Compute(ctx, vec, user, cands, w, tmdbAgreement, sim, signals);
         var taste = new double[cands.Count];
         for (int i = 0; i < taste.Length; i++)
         {
@@ -520,6 +524,61 @@ public static class Recommender
         }
 
         return outp;
+    }
+
+    /// <summary>
+    /// Part du score que garde un titre demandé (Seerr) ou mis en liste de suivi, jamais regardé : 0 juste après (le
+    /// compte sait déjà qu'il le veut, ce n'est pas une découverte), puis 1 − ½^(âge / demi-vie d'une demande) : plus il
+    /// reste longtemps sans être regardé, plus le rappeler a du sens. L'âge part de la demande, ou de l'arrivée du titre
+    /// dans la bibliothèque si elle est plus tardive (un titre demandé il y a un an et arrivé hier est une nouvelle que
+    /// le compte attendait, pas un oubli). 1 pour tout autre titre.
+    /// </summary>
+    public static double IntentFactor(Interaction? x, Title? t, double now, EngineSettings w)
+    {
+        double at = x is null ? 0 : Math.Max(x.Requested, x.Watchlisted);
+        if (at <= 0)
+        {
+            return 1.0;
+        }
+
+        at = Math.Max(at, t?.Added ?? 0);
+
+        double age = Math.Max(0.0, (now - at) / Core.Day);
+        return 1.0 - Math.Pow(0.5, age / Math.Max(1.0, w.RequestHalfLifeDays));
+    }
+
+    /// <summary>
+    /// <see cref="Score"/> pour une liste qui peut contenir des titres demandés ou en liste de suivi (jamais regardés) :
+    /// ceux-ci sont notés sans leur propre signal (sinon ils ressembleraient parfaitement à eux-mêmes), puis réduits
+    /// selon <see cref="IntentFactor"/>. Les autres titres gardent leur score normal.
+    /// </summary>
+    public static Dictionary<string, double> ScoreAll(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
+        IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null, SimilarityIndex? sim = null,
+        IReadOnlyDictionary<string, Exposure>? exposure = null)
+    {
+        var sc = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure);
+        var hist = ctx.Hist.TryGetValue(user, out var h) ? h : null;
+        if (hist is null)
+        {
+            return sc;
+        }
+
+        var wanted = cands.Where(id => hist.TryGetValue(id, out var x) && (x.Requested > 0 || x.Watchlisted > 0)).ToHashSet(StringComparer.Ordinal);
+        if (wanted.Count == 0)
+        {
+            return sc;
+        }
+
+        var sig = ctx.Sig.TryGetValue(user, out var su) ? su : new Dictionary<string, double>();
+        var without = sig.Where(kv => !wanted.Contains(kv.Key)).ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
+        var alone = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure, without);
+        foreach (var id in wanted)
+        {
+            double v = alone[id];
+            sc[id] = v - ((1.0 - IntentFactor(hist[id], ctx.Ds.Titles.GetValueOrDefault(id), ctx.Now, w)) * Math.Abs(v));
+        }
+
+        return sc;
     }
 
     /// <summary>Collection la plus précise (la plus petite, au moins 2 titres) contenant t.</summary>

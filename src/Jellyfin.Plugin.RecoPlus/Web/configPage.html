@@ -133,7 +133,7 @@
                     <div class="rp-box"><h3>Composition du haut de liste</h3><p data-tpl="Les premiers titres de la liste (« Haut de liste », 20 par défaut, comme la taille de la rangée {ROW})."></p><div class="rp-grid" data-fields="mix"></div></div>
                     <div class="rp-box"><h3>Filtres</h3><p>Un titre filtré n'est jamais proposé. Un titre sans note ou sans année passe.</p><div class="rp-grid" data-fields="filters"></div><h4 class="rp-h4">Genres jamais proposés</h4><div data-fields="genres"></div></div>
                     <div class="rp-box"><h3>Diversité et sagas</h3><p>Personnalisée (par défaut, la mieux évaluée) : la liste est aussi variée que ce que le compte regarde. Calibrée : la part de chaque genre suit celle de son historique. Fixe : la même pénalité de redondance pour tous.</p><div class="rp-grid" data-fields="diversmode"></div><div class="rp-factors" data-fields="divers"></div><div class="rp-grid" data-fields="sagas"></div></div>
-                    <div class="rp-box"><h3>En tête de liste</h3><p>Un titre demandé dans Seerr, arrivé récemment et pas encore regardé, et la nouvelle saison d'une série rattrapée et aimée passent devant tout le reste.</p><div class="rp-grid" data-fields="pinned"></div></div>
+                    <div class="rp-box"><h3>En tête de liste</h3><p>Les nouveautés de ce que le compte suit passent devant tout le reste, pendant un temps : nouveaux épisodes ou nouvelle saison d'une série qu'il a rattrapée, volet suivant d'une saga. Un titre qu'il a demandé n'y est jamais : il sait déjà qu'il le veut ; il est classé comme les autres, d'abord écarté, puis peut revenir s'il n'est toujours pas vu.</p><div class="rp-grid" data-fields="pinned"></div></div>
                     <details class="rp-adv"><summary>Réglages avancés <span>— taille des listes, sagas, diversité calibrée</span></summary>
                         <div class="rp-box"><div class="rp-grid" data-fields="listadv"></div></div>
                     </details>
@@ -411,10 +411,8 @@
             ['ExcludedGenres', '', 'genres', '', 0, 0, 0, 'genres', 'l'],
             ['Saga', 'Règle de saga', 'bool', 'Une seule entrée par saga, et c\'est le premier volet pas encore vu (pas le 4ᵉ quand on n\'a pas vu le 1ᵉʳ).', 0, 0, 0, 'sagas', 'e', 'activée'],
             ['ProposeMarked', 'Proposer aussi ce que le compte a déjà marqué', 'bool', 'Titres notés (avis, pouce), en favori, en liste de suivi ou demandés, mais pas lus sur ce serveur. Coupé par défaut : une note ou un favori, c\'est un titre déjà vu ; une liste de suivi, c\'est déjà une liste. Ces marques comptent toujours pour les goûts.', 0, 0, 0, 'pinned', 'c', 'coupé'],
-            ['PinnedRequests', 'Titres placés en tête', 'int', 'Nombre maximal de titres demandés, arrivés et pas encore vus mis tout en haut. 0 = jamais. Nécessite Seerr.', 1, 0, 20, 'pinned', 'c', '3'],
-            ['PinnedMaxDays', 'Pendant (jours après l\'arrivée)', 'int', 'Au-delà, le titre n\'est plus mis en avant (le compte retrouve ses demandes dans Seerr) : c\'est une nouvelle, pas une liste permanente.', 1, 1, 365, 'pinned', 'c', '30'],
-            ['NewEpisodesPinned', 'Nouvelle saison d\'une série aimée', 'int', 'Nombre maximal de séries placées en tête quand de nouveaux épisodes arrivent alors que le compte avait tout vu et aimait la série. 0 = jamais.', 1, 0, 10, 'pinned', 'c', '2'],
-            ['NewEpisodesMaxDays', 'Pendant (jours après le dernier épisode arrivé)', 'int', 'Au-delà, la série n\'est plus mise en avant (« À suivre » de Jellyfin prend le relais).', 1, 1, 365, 'pinned', 'c', '45'],
+            ['NewEpisodesPinned', 'Nouveautés de ce que vous suivez', 'int', 'Nombre maximal de titres placés en tête : nouveaux épisodes d\'une série vue sur ce serveur et rattrapée, ou aimée et diffusés récemment ; volet suivant d\'une saga dont les volets précédents sont vus. 0 = jamais.', 1, 0, 20, 'pinned', 'c', '3'],
+            ['NewEpisodesMaxDays', 'Pendant (jours après l\'arrivée)', 'int', 'Au-delà, la nouveauté n\'est plus mise en avant (« À suivre » de Jellyfin prend le relais pour les séries).', 1, 1, 365, 'pinned', 'c', '45'],
             ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. Gardez-le égal aux « Titres par rangée » (onglet Général, 20 par défaut) pour qu\'ils portent exactement sur ce que montre {ROW}.', 1, 5, 100, 'listadv', 'l', '20'],
             ['SagaMax', 'Au-delà : regroupement thématique', 'int', 'Une collection plus grande que ce nombre n\'est pas une saga mais un regroupement (« Films Marvel », « Ghibli ») : 2 entrées au plus, sans règle de premier volet.', 1, 2, 100, 'listadv', 'e', '12'],
 
@@ -465,6 +463,7 @@
             ['RecencyFloor', 'Poids minimal d\'un titre ancien', 'num', 'Un titre très ancien ne descend jamais sous cette part de son poids (0-1).', 0.05, 0, 1, 'sigadv', 'e', '0,25'],
             ['MovieDone', 'Film « vu » au-delà de', 'num', 'Part du film regardée (0-1) à partir de laquelle il compte comme vu.', 0.05, 0.3, 1, 'sigadv', 'e', '0,7'],
             ['Zap', 'Simple zapping en dessous de', 'num', 'Part du film (0-1) en dessous de laquelle ce n\'est ni un goût ni un abandon.', 0.01, 0, 0.3, 'sigadv', 'e', '0,05'],
+            ['LikedUnseen', 'Poids d\'un titre aimé mais pas vu ici', 'num', 'Pouce ou favori sur un titre jamais lu sur ce serveur (vu ailleurs, ou marqué par erreur) : part de son poids (0-1). 1 = autant qu\'un titre vu et aimé ; 0 = ignoré.', 0.05, 0, 1, 'sigadv', 'e', '0,5'],
             ['RequestMaxDays', 'Demande ignorée après (jours)', 'num', 'Une demande jamais regardée ne compte plus du tout après ce délai.', 1, 1, 730, 'sigadv', 'e', '90'],
             ['ShortTermTitles', 'Goût du moment : derniers titres aimés', 'int', 'Nombre de titres aimés les plus récents (dernière activité) qui forment le goût du moment.', 1, 1, 30, 'momentadv', 'e', '5'],
             ['ImpressionDays', 'Montré sans être ouvert : jours pour l\'effet', 'num', 'Après ce nombre de jours d\'affichage, environ deux tiers de la pénalité sont atteints (1 − e^(−jours/valeur)).', 1, 1, 90, 'momentadv', 'e', '7'],
@@ -535,6 +534,7 @@
             ['ExtendedLanguageMinShare', 'Langues : part minimale des titres aimés (%)', 'int', 'Une langue d\'origine n\'est explorée que si elle pèse au moins cette part des titres aimés (ex. japonais pour beaucoup d\'anime).', 1, 1, 100, 'extadv', 'c', '15'],
             ['ExtendedCrossingsMax', 'Croisements explorés', 'int', 'Par sorte (films, séries) : les N couples genre × thème ou genre × langue d\'origine les plus forts dans les titres aimés. Listes plus étroites : la moitié des votes minimum suffit.', 1, 0, 30, 'extadv', 'c', '6'],
             ['ExtendedGemMinRating', 'Pépites : note TMDb minimale', 'num', 'Plus haute que pour les autres sources : avec peu de votes, une note est moins sûre.', 0.1, 0, 10, 'extadv', 'c', '7,8'],
+            ['ExtendedMinRuntime', 'Toutes sources : durée minimale d\'un film (minutes)', 'int', 'Les films plus courts (courts métrages) ne sont pas proposés hors bibliothèque. Durée inconnue : gardé. 0 = aucune limite.', 5, 0, 600, 'extadv', 'c', '40'],
             ['ExtendedMinVotesAll', 'Toutes sources : votes TMDb minimum', 'int', 'Un titre hors bibliothèque doit avoir au moins ce nombre de votes TMDb, quelle que soit la source (courts métrages, avant-premières, titres confidentiels écartés). Les titres pas encore sortis sont toujours écartés.', 10, 0, 100000, 'extadv', 'c', '50'],
             ['ExtendedGemMinVotes', 'Pépites : votes TMDb minimum', 'int', 'En dessous, la note ne veut rien dire (amis du réalisateur, fans). Sert aussi aux places découverte du mélange libre, même pépites coupées.', 10, 0, 100000, 'extadv', 'c', '50'],
             ['ExtendedGemMaxVotes', 'Pépites : votes TMDb maximum', 'int', 'Au-dessus, le titre est déjà connu : il relève des autres sources.', 50, 0, 100000, 'extadv', 'c', '500'],
@@ -703,7 +703,7 @@
         function srcOff(name) { return sw(name) ? '' : tf('source « {0} » coupée', t(fOf(name)[1])); }
         var SOURCES = ['SourcePourToi', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms', 'SourceSeries'];
         var EXT_GROUPS = ['ext', 'exthome', 'extmix', 'extadv', 'extsrc'];
-        var NEEDS_SEERR = ['UseSeerrVotes', 'UseSeerrWatchlist', 'RequestWeight', 'WatchlistWeight', 'PinnedRequests', 'PinnedMaxDays', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
+        var NEEDS_SEERR = ['UseSeerrVotes', 'UseSeerrWatchlist', 'RequestWeight', 'WatchlistWeight', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
         var NO_MIX = function () { return SOURCES.some(function (k) { return val(k) === 'Mix'; }) ? '' : t('aucune rangée réglée sur « mélange »'); };
         var WHY = {
             ExtendedMixMode: NO_MIX,
@@ -744,8 +744,7 @@
             WatchlistWeight: function () { return sw('UseSeerrWatchlist') ? '' : t('listes de suivi Seerr non lues (onglet Général)'); },
             HiddenWeight: function () { return sw('UseJellyfinEnhanced') ? '' : t('Jellyfin Enhanced non lu (onglet Général)'); },
             RatingPriorVotes: function () { return sw('SeerrEnabled') && sw('UseSeerrVotes') ? '' : t('nombre de votes TMDb non lu (Seerr)'); },
-            PinnedMaxDays: function () { return num('PinnedRequests') > 0 ? '' : t('aucun titre demandé placé en tête'); },
-            NewEpisodesMaxDays: function () { return num('NewEpisodesPinned') > 0 ? '' : t('aucune nouvelle saison placée en tête'); },
+            NewEpisodesMaxDays: function () { return num('NewEpisodesPinned') > 0 ? '' : t('aucune nouveauté placée en tête'); },
             SagaMax: function () { return sw('Saga') ? '' : t('règle de saga coupée'); },
             ExtendedRequestButton: function () { return ''; },
             CalibrationPasses: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? t('pas de recherche par curseurs avec la méthode choisie') : ''; },

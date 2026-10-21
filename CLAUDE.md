@@ -13,7 +13,10 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
   - `Recommender.cs` : `Context` (signaux de tous les comptes à un instant), `Compute` (ingrédients : goût d'ensemble,
     titre aimé le plus proche, vus ensemble, écart aux abandons, goût du moment, heure de la journée, nouveauté,
     popularité, note, sortie, avis du foyer), `Score` (goût + bonus réservés aux N premiers par goût : le garde-fou),
+    `ScoreAll` (titres demandés ou en liste de suivi notés sans leur propre signal puis écartés selon `IntentFactor`),
     `Rank` (diversité MMR / personnalisée / calibrée, règle de saga).
+  - `Pins.cs` : titres en tête (nouveautés de ce que le compte suit : nouveaux épisodes, volet suivant d'une saga ;
+    jamais un titre demandé).
   - `HomeRows.cs` : répartition des rangées sans doublon (`Allocate`, rappel `fit`), placement des titres hors
     bibliothèque (`PlaceRow`, `FitRow`, `FreePlaces`, `CapPlaces`, `ForcePlaces`), `RowSource`, `MixOptions`.
   - `ListPolicy.cs` (présentation : hasard du jour, minimums films/séries, filtres), `Exploration.cs` (mode étendu :
