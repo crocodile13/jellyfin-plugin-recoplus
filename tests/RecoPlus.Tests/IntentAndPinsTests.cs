@@ -82,6 +82,20 @@ public class IntentAndPinsTests
         Assert.True(Recommender.IntentFactor(new Interaction { Title = "a", Requested = Now - (200 * Day) }, late, Now, w) < 0.05);
     }
 
+    [Fact]
+    public void ARequestIsHeldBackForOneHalfLifeThenRanked()
+    {
+        var w = new EngineSettings { RequestHalfLifeDays = 21 };
+        var t = new Title { Id = "a", Kind = TitleKind.Movie, Added = Now - (100 * Day) };
+        Assert.True(Recommender.HeldBack(new Interaction { Title = "a", Requested = Now - (5 * Day) }, t, Now, w));
+        Assert.False(Recommender.HeldBack(new Interaction { Title = "a", Requested = Now - (22 * Day) }, t, Now, w));
+        Assert.False(Recommender.HeldBack(new Interaction { Title = "a" }, t, Now, w));
+        Assert.False(Recommender.HeldBack(null, t, Now, w));
+        // demandé il y a longtemps, arrivé il y a 5 jours : encore retenu
+        var late = new Title { Id = "a", Kind = TitleKind.Movie, Added = Now - (5 * Day) };
+        Assert.True(Recommender.HeldBack(new Interaction { Title = "a", Requested = Now - (300 * Day) }, late, Now, w));
+    }
+
     private static (Context Ctx, Dictionary<string, SparseVector> Vec, List<string> Cands, EngineSettings S) Library(double requestedAt)
     {
         var titles = new Dictionary<string, Title>(StringComparer.Ordinal);

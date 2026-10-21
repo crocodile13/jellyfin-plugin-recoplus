@@ -63,6 +63,9 @@ public class HomeRowsTests
         Assert.All(r.Rows[HomeRows.Films], id => Assert.Equal(TitleKind.Movie, ctx.Ds.Titles[id].Kind));
         Assert.All(r.Rows[HomeRows.Series], id => Assert.Equal(TitleKind.Series, ctx.Ds.Titles[id].Kind));
         Assert.All(r.Rows[HomeRows.Nouveautes], id => Assert.True(ctx.Ds.Titles[id].Added >= Now - (30 * Core.Day)));
+        // nouveautés : seulement parmi le premier quart du classement par goût
+        var bar = sc.Values.OrderByDescending(v => v).ElementAt((int)(HomeRows.NewTopShare * sc.Count));
+        Assert.All(r.Rows[HomeRows.Nouveautes], id => Assert.True(sc[id] >= bar));
 
         // trois titres aimés différents, jamais deux de la même saga (001 et 002 sont dans la même)
         Assert.Equal(3, r.Anchors.Count);

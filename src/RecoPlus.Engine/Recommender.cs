@@ -548,6 +548,13 @@ public static class Recommender
     }
 
     /// <summary>
+    /// Titre demandé ou mis de côté encore « retenu » : moins d'une demi-vie depuis la demande ou l'arrivée
+    /// (<see cref="IntentFactor"/> sous ½). Il n'est proposé dans aucune rangée — même une petite rangée
+    /// (nouveautés, « Parce que … ») où son score réduit ne suffirait pas à l'écarter.
+    /// </summary>
+    public static bool HeldBack(Interaction? x, Title? t, double now, EngineSettings w) => IntentFactor(x, t, now, w) < 0.5;
+
+    /// <summary>
     /// <see cref="Score"/> pour une liste qui peut contenir des titres demandés ou en liste de suivi (jamais regardés) :
     /// ceux-ci sont notés sans leur propre signal (sinon ils ressembleraient parfaitement à eux-mêmes), puis réduits
     /// selon <see cref="IntentFactor"/>. Les autres titres gardent leur score normal.

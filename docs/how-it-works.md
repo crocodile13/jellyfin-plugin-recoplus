@@ -15,7 +15,7 @@
 - **Seerr requests** are a *short-term* declared interest, and the **Seerr watchlist** counts like a request, weaker (0.4):
   - half-life 21 days, ignored after 90;
   - once the title is actually watched, what the account did with it counts instead;
-  - they feed the taste profile, but never push **their own** title: a requested title is ranked without its own request, held back right after the request or its arrival (the account already knows it wants it — it does not need to discover it), then comes back gradually if it stays unwatched (same 21-day half-life): an old forgotten request that fits the account's taste may resurface.
+  - they feed the taste profile, but never push **their own** title: a requested title is ranked without its own request, held back right after the request or its arrival — shown in no row at all for one half-life (the account already knows it wants it — it does not need to discover it) — then comes back gradually if it stays unwatched (same 21-day half-life): an old forgotten request that fits the account's taste may resurface.
 - A rated (review, thumbs up) or favourite title is not recommended: it has been seen (setting: "Also propose what the account has already marked").
 - **At the top of the list: what is new in what the account follows**, for 45 days after it arrives (up to 3 titles), never a title it requested:
   - new episodes or a new season of a series watched on this server that the account had nearly caught up with (no like needed, just a positive weight: not abandoned, not hidden);
@@ -39,6 +39,7 @@
 - **Shown but never opened.** A title that stayed on an account's screen for several days without being opened slowly sinks (at most 40% of its score), then recovers over time (30-day half-life). Only what the home-screen script saw **actually displayed to the signed-in account** counts: a card of a Reco+ row visible for at least one second, tab in the foreground, once per day. Opening the title resets its counter.
 - **Current taste, optional** (off by default): similarity to the last 5 liked titles, on top of long-term taste.
 - **Time of day, optional** (off by default): similarity to liked titles watched in the same time slot (night, morning, afternoon, evening); one list per slot is then computed and served according to the time of the request (configurable time zone).
+- **"New for you" row**: only recent arrivals that rank in the top quarter by taste, so a quiet month does not fill it with whatever just arrived.
 - **Sagas.** At most one entry per saga, and it is the first volume not yet seen, not volume 4. Large thematic collections get at most two entries.
 
 ## Measured on one real server (be careful with these numbers)

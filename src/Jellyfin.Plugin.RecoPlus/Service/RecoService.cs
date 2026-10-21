@@ -532,14 +532,22 @@ public sealed class RecoService : IDisposable
             var key = u.Id.ToString("N");
             var h = hist[key];
             var accessible = job.Accessible;
-            var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !Known(h, id, cfg.ProposeMarked, intentAllowed: true) && ListPolicy.Allows(ct0, lo))
+            // un titre demandé ou mis de côté n'est proposé nulle part tant qu'il est « retenu » (moins d'une demi-vie depuis
+            // la demande ou l'arrivée) : le compte sait déjà qu'il le veut
+            var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !Known(h, id, cfg.ProposeMarked, intentAllowed: true) && ListPolicy.Allows(ct0, lo)
+                    && !Recommender.HeldBack(h.GetValueOrDefault(id), ct0, now, s))
                 .OrderBy(id => id, StringComparer.Ordinal).ToList();
             var r = new UserRecs { ComputedAt = DateTime.UtcNow, SeerrUserId = seerr.UserMap.GetValueOrDefault(key) };
 
             // en tête : les nouveautés de ce que le compte suit (nouveaux épisodes, nouvelle saison, volet suivant d'une
             // saga), pendant un temps ; jamais un titre qu'il a lui-même demandé (il sait déjà qu'il le veut)
+            // épisodes que le compte n'a pas encore vus : un fichier remplacé (meilleure version) d'un épisode vu n'est
+            // pas une nouveauté
+            var urows = rows.GetValueOrDefault(u.Id);
             var pinned = Pins.Select(ds, h, uc.Sig.GetValueOrDefault(key) ?? new Dictionary<string, double>(), accessible.Contains,
-                id => Guid.TryParse(id, out var sg) && lib.EpisodeDates.TryGetValue(sg, out var ed) ? ed : null, now,
+                id => Guid.TryParse(id, out var sg) && lib.EpisodeDates.TryGetValue(sg, out var ed)
+                    ? ed.Where(e => !(urows is not null && urows.TryGetValue(e.Id, out var er) && er.Played)).Select(e => (e.Added, e.Aired)).ToList()
+                    : null, now,
                 new PinOptions(Math.Clamp(cfg.NewEpisodesPinned, 0, 20), Math.Clamp(cfg.NewEpisodesMaxDays, 1, 365), s.SagaMax));
             r.Pinned = pinned;
 

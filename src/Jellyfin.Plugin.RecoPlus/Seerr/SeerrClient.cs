@@ -53,7 +53,13 @@ public sealed record SeerrRef(int Id, string Name);
 public sealed class SeerrDetails
 {
     /// <summary>Version du format de fiche : une fiche d'un format plus ancien est relue.</summary>
-    public const int CurrentFormat = 2;
+    public const int CurrentFormat = 3;
+
+    /// <summary>
+    /// Format minimal accepté en cache : 3 pour un film (durée, 1.0.29 : courts métrages écartés), 2 pour une série
+    /// (rien de nouveau, pas la peine de la relire).
+    /// </summary>
+    public static int MinFormat(string mediaType) => mediaType == "movie" ? 3 : 2;
 
     /// <summary>Format de cette fiche (0 : écrite par une version antérieure à 1.0.15).</summary>
     public int Format { get; init; }
