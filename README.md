@@ -19,6 +19,33 @@ It has been built and tested against **Jellyfin 12.2** only.
 
 Everything is computed in the background and cached in memory and on disk, so no page ever waits for a computation. An account without a ready list simply gets Jellyfin's normal answer.
 
+## Screenshots
+
+<p align="center">
+  <img src="assets/screenshots/accueil.jpg" alt="Home screen with four Reco+ rows: For you (with titles outside the library), New for you, Movies for you, Series for you" width="100%">
+  <br><sub>Home screen with Home Screen Sections: four Reco+ rows, a title never repeated across them. The first row mixes in titles outside the library (Seerr cards from Jellyfin Enhanced).</sub>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/etat.png" alt="Status tab: last computation, accounts ready, Playback Reporting, Seerr and Jellyfin Enhanced status, compatibility checks" width="100%">
+  <br><sub>Status tab: what was read, and the compatibility checks run at start-up.</sub>
+</p>
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><img src="assets/screenshots/general.png" alt="General tab: what Reco+ replaces, home row titles, explicit feedback sources, ignored accounts"><br><sub><b>General</b> — what Reco+ replaces, row titles, explicit feedback, ignored accounts.</sub></td>
+    <td width="50%" valign="top"><img src="assets/screenshots/listes.png" alt="Lists tab: top of list composition, filters, excluded genres, diversity and sagas, pinned titles"><br><sub><b>Lists</b> — what is shown: randomness, minimums, filters, diversity, sagas, pinned titles.</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><img src="assets/screenshots/seerr.png" alt="Seerr tab: connection, internal and public URLs, API key stored apart"><br><sub><b>Seerr</b> — connection test; the key is stored apart and never sent back.</sub></td>
+    <td width="50%" valign="top"><img src="assets/screenshots/notifications.png" alt="Notifications tab: webhook type, URL and token stored as secrets"><br><sub><b>Notifications</b> — webhook when a part switches itself off.</sub></td>
+  </tr>
+</table>
+
+<sub>Interface in French. Screenshots from version 1.0.20 on a real server: account names replaced, artwork blurred, titles made up.</sub>
+
+<sub>PS: the rain is not a Reco+ feature. It is a personal whim of the author's "production" instance, where these screenshots were taken. The plugin recommends films; it does not do the weather.</sub>
+
 ## What the engine takes into account
 
 - **Whole history, with decay.** A title watched long ago still counts, but less. The half-life is 90 days, the MovieLens value reported by Larrain, Parra et al., RecSys 2015.

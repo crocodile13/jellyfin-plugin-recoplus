@@ -17,6 +17,33 @@ Reco+ remplace les recommandations de Jellyfin par des listes calculées sur **t
 
 Tout est calculé en arrière-plan et gardé en cache, en mémoire et sur disque : aucune page n'attend un calcul. Un compte dont la liste n'est pas encore prête reçoit la réponse normale de Jellyfin.
 
+## Captures d'écran
+
+<p align="center">
+  <img src="assets/screenshots/accueil.jpg" alt="Accueil avec quatre rangées Reco+ : Pour toi (avec des titres hors bibliothèque), Nouveautés, Films, Séries" width="100%">
+  <br><sub>Accueil avec Home Screen Sections : quatre rangées Reco+, jamais un titre deux fois. La première mélange des titres hors bibliothèque (cartes Seerr de Jellyfin Enhanced).</sub>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/etat.png" alt="Onglet État : dernier calcul, comptes prêts, Playback Reporting, Seerr, Jellyfin Enhanced, vérifications de compatibilité" width="100%">
+  <br><sub>Onglet État : ce qui a été lu, et les vérifications de compatibilité faites au démarrage.</sub>
+</p>
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><img src="assets/screenshots/general.png" alt="Onglet Général : ce que Reco+ remplace, titres des rangées, retours explicites, comptes ignorés"><br><sub><b>Général</b> — ce que Reco+ remplace, titres des rangées, retours explicites, comptes ignorés.</sub></td>
+    <td width="50%" valign="top"><img src="assets/screenshots/listes.png" alt="Onglet Listes : composition du haut de liste, filtres, genres exclus, diversité et sagas, titres en tête"><br><sub><b>Listes</b> — ce qui est montré : hasard, minimums, filtres, diversité, sagas, titres en tête.</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><img src="assets/screenshots/seerr.png" alt="Onglet Seerr : connexion, URL interne et publique, clé stockée à part"><br><sub><b>Seerr</b> — test de connexion ; la clé est stockée à part et jamais renvoyée.</sub></td>
+    <td width="50%" valign="top"><img src="assets/screenshots/notifications.png" alt="Onglet Notifications : type de webhook, URL et jeton stockés comme secrets"><br><sub><b>Notifications</b> — webhook quand une partie se coupe d'elle-même.</sub></td>
+  </tr>
+</table>
+
+<sub>Captures de la version 1.0.20 sur un vrai serveur : noms des comptes remplacés, affiches floutées, titres inventés.</sub>
+
+<sub>PS : la pluie n'est pas une fonctionnalité de Reco+. C'est un délire perso de l'instance de « prod » de l'auteur, sur laquelle ces captures ont été prises. Le plugin recommande des films, il ne fait pas la météo.</sub>
+
 ## Ce que le moteur prend en compte
 
 - **Tout l'historique, avec décroissance.** Un titre vu il y a longtemps compte encore, mais moins. La demi-vie est de 90 jours (valeur MovieLens, Larrain, Parra et al., RecSys 2015).
