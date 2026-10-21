@@ -291,7 +291,7 @@
   "Nombre de votes TMDb (via Seerr)": "Number of TMDb votes (via Seerr)",
   "Nombre maximal de séries placées en tête quand de nouveaux épisodes arrivent alors que le compte avait tout vu et aimait la série. 0 = jamais.": "Maximum number of series placed first when new episodes arrive while the account had watched everything and liked the series. 0 = never.",
   "Nombre maximal de titres demandés, arrivés et pas encore vus mis tout en haut. 0 = jamais. Nécessite Seerr.": "Maximum number of requested titles, arrived and not yet watched, placed at the very top. 0 = never. Requires Seerr.",
-  "Nombre maximal de titres hors bibliothèque par compte, toutes rangées confondues : chacun ne va que dans une rangée. Avec plusieurs rangées qui en reçoivent, augmentez-le (40 et plus).": "Maximum number of titles outside the library per account, across all rows: each one only goes into one row. With several rows receiving them, increase it (40 and more).",
+  "Nombre maximal de titres hors bibliothèque par compte, toutes rangées confondues : chacun ne va que dans une rangée. Par défaut, toutes les rangées en reçoivent : 40 en laisse environ 8 par rangée.": "Maximum number of titles outside the library per account, across all rows: each one only goes into one row. By default all rows receive some: 40 leaves about 8 per row.",
   "Note": "Rating",
   "Note de la communauté": "Community rating",
   "Note de la communauté : celle que fournissent les métadonnées (TMDb par défaut, IMDb avec OMDb). Critiques : à défaut, celle de la communauté. Un titre sans note est neutre (6,5/10).": "Community rating: the one provided by the metadata (TMDb by default, IMDb with OMDb). Critics: otherwise, the community one. A title without a rating is neutral (6.5/10).",
