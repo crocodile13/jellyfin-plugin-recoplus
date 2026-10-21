@@ -410,7 +410,7 @@ public sealed class RecoService : IDisposable
         var cfg = Plugin.Instance!.Configuration;
         Cpu.Threads = cfg.Threads;
         var s = Settings;
-        var lib = _index.Get();
+        var lib = _index.Get(metadata: only is null);
         var pr = PlaybackReporting(only is null);
         // comptes exclus : ni recommandations, ni historique pris en compte pour le foyer
         var users = _users.GetUsers().Where(u => !Excluded(u.Id.ToString("N"))).ToList();

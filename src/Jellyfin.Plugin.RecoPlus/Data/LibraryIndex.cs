@@ -100,11 +100,15 @@ public sealed class LibraryIndex
     }
 
     /// <summary>Instantané à jour (reconstruit si la bibliothèque a changé).</summary>
-    public LibrarySnapshot Get()
+    /// <param name="metadata">
+    /// Prendre aussi en compte les métadonnées modifiées depuis le dernier instantané (calcul complet), au lieu
+    /// d'attendre jusqu'à 6 h : après un nettoyage de métadonnées, le prochain calcul complet les voit.
+    /// </param>
+    public LibrarySnapshot Get(bool metadata = false)
     {
         lock (_lock)
         {
-            if (_current is null || _dirty || (_softDirty && DateTime.UtcNow - _current.BuiltAt > TimeSpan.FromHours(6)))
+            if (_current is null || _dirty || (_softDirty && (metadata || DateTime.UtcNow - _current.BuiltAt > TimeSpan.FromHours(6))))
             {
                 _dirty = false;
                 _softDirty = false;
