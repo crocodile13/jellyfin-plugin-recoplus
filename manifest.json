@@ -12,9 +12,9 @@
         "version": "1.0.27.0",
         "changelog": "1.0.27: everything defaults to English — server logs, plugin image, catalogue text, home page fallback texts, calibration export file name (reco-calibration-…). The interface language still follows Jellyfin by default.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.27.0/RecoPlus_1.0.27.0.zip",
+        "checksum": "16ccef01b5bf676dfd122b8ae7169179",
+        "timestamp": "2026-10-21T09:16:17Z"
       },
       {
         "version": "1.0.26.0",
