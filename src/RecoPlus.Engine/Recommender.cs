@@ -475,10 +475,11 @@ public static class Recommender
     /// <param name="tmdbAgreement">Facultatif : candidat → part des titres aimés dont TMDb le recommande (mode étendu).</param>
     /// <param name="exposure">Facultatif : affichages sans ouverture, par titre.</param>
     /// <param name="signals">Facultatif : signaux du compte à utiliser à la place des siens.</param>
+    /// <param name="prior">Poids de l'a priori d'un compte qui démarre (<see cref="ColdStart"/>) ; 0 = aucun.</param>
     public static Dictionary<string, double> Score(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
         IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null,
         Dictionary<string, ScoreParts>? parts = null, SimilarityIndex? sim = null, IReadOnlyDictionary<string, Exposure>? exposure = null,
-        IReadOnlyDictionary<string, double>? signals = null)
+        IReadOnlyDictionary<string, double>? signals = null, double prior = 0)
     {
         var c = Compute(ctx, vec, user, cands, w, tmdbAgreement, sim, signals);
         var taste = new double[cands.Count];
@@ -512,6 +513,12 @@ public static class Recommender
                 x[8] = b * c.Re[ci];
                 x[9] = b * c.Hh[ci];
                 sc += w.WNeural * NeuralNet.Residual(net, x);
+            }
+
+            if (prior > 0)
+            {
+                // a priori sans goût connu : ce que le foyer regarde, puis la note de la communauté
+                sc += prior * ((0.6 * c.Pop[ci]) + (0.4 * (c.Q[ci] + 1.0) / 2.0));
             }
 
             if (exposure is not null && exposure.TryGetValue(cands[ci], out var ex))
@@ -563,7 +570,8 @@ public static class Recommender
         IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null, SimilarityIndex? sim = null,
         IReadOnlyDictionary<string, Exposure>? exposure = null)
     {
-        var sc = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure);
+        double prior = ColdStart(ctx.Sig.TryGetValue(user, out var s0) ? s0 : null);
+        var sc = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure, null, prior);
         var hist = ctx.Hist.TryGetValue(user, out var h) ? h : null;
         if (hist is null)
         {
@@ -578,7 +586,7 @@ public static class Recommender
 
         var sig = ctx.Sig.TryGetValue(user, out var su) ? su : new Dictionary<string, double>();
         var without = sig.Where(kv => !wanted.Contains(kv.Key)).ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
-        var alone = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure, without);
+        var alone = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure, without, prior);
         foreach (var id in wanted)
         {
             double v = alone[id];
@@ -586,6 +594,24 @@ public static class Recommender
         }
 
         return sc;
+    }
+
+    /// <summary>Masse de goût (somme des signaux positifs) à laquelle l'a priori d'un compte qui démarre ne pèse plus que la moitié.</summary>
+    public const double ColdStartMass = 2.0;
+
+    /// <summary>Poids de l'a priori pour un compte sans aucun goût connu.</summary>
+    public const double ColdStartWeight = 0.3;
+
+    /// <summary>
+    /// Poids de l'a priori d'un compte qui démarre : sans goût connu, tous les titres ont le même score de goût et le
+    /// garde-fou ne réserve aucun bonus, l'ordre serait arbitraire. On ajoute alors ce que le foyer regarde et la note de
+    /// la communauté, avec un poids ColdStartWeight / (1 + (m / ColdStartMass)²) où m est la masse de goût du compte :
+    /// plein pour un nouveau compte, la moitié vers deux titres aimés, négligeable ensuite (fonction continue, aucun palier).
+    /// </summary>
+    public static double ColdStart(IReadOnlyDictionary<string, double>? signals)
+    {
+        double m = signals is null ? 0 : signals.Values.Where(v => v > 0).Sum();
+        return ColdStartWeight / (1.0 + ((m / ColdStartMass) * (m / ColdStartMass)));
     }
 
     /// <summary>Collection la plus précise (la plus petite, au moins 2 titres) contenant t.</summary>

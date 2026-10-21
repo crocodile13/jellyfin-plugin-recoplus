@@ -24,6 +24,12 @@ public sealed class LibrarySnapshot
     /// <summary>Identifiant TMDb → titre (« movie:123 » / « tv:456 »).</summary>
     public required Dictionary<string, string> ByTmdb { get; init; }
 
+    /// <summary>
+    /// Titres en double (même identifiant TMDb, par exemple la même série dans deux bibliothèques) : titre → tous les
+    /// exemplaires, le premier étant celui de <see cref="ByTmdb"/>. Seuls les titres qui ont un double y figurent.
+    /// </summary>
+    public Dictionary<string, string[]> Copies { get; init; } = new(StringComparer.Ordinal);
+
     /// <summary>Épisode → série, pour agréger l'historique.</summary>
     public required Dictionary<Guid, Guid> EpisodeSeries { get; init; }
 
@@ -185,6 +191,7 @@ public sealed class LibraryIndex
 
         var titles = new Dictionary<string, Title>(StringComparer.Ordinal);
         var byTmdb = new Dictionary<string, string>(StringComparer.Ordinal);
+        var copies = new Dictionary<string, List<string>>(StringComparer.Ordinal);
         foreach (var it in items)
         {
             var kind = it is Series ? TitleKind.Series : TitleKind.Movie;
@@ -240,7 +247,16 @@ public sealed class LibraryIndex
             var tmdb = it.GetProviderId(MetadataProvider.Tmdb);
             if (!string.IsNullOrEmpty(tmdb))
             {
-                byTmdb.TryAdd((kind == TitleKind.Series ? "tv:" : "movie:") + tmdb, id);
+                var tk = (kind == TitleKind.Series ? "tv:" : "movie:") + tmdb;
+                if (!byTmdb.TryAdd(tk, id))
+                {
+                    if (!copies.TryGetValue(tk, out var cl))
+                    {
+                        copies[tk] = cl = new List<string> { byTmdb[tk] };
+                    }
+
+                    cl.Add(id);
+                }
             }
         }
 
@@ -261,6 +277,7 @@ public sealed class LibraryIndex
             Titles = titles,
             Collections = colls,
             ByTmdb = byTmdb,
+            Copies = copies.Values.SelectMany(g => g.Select(id => (id, g))).ToDictionary(x => x.id, x => x.g.ToArray(), StringComparer.Ordinal),
             EpisodeSeries = epSeries,
             Runtime = runtime,
             SeriesMeanHours = epHours.ToDictionary(kv => kv.Key, kv => kv.Value.Sum / kv.Value.N),

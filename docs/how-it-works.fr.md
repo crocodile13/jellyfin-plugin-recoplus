@@ -40,6 +40,8 @@
 - **Montré sans être ouvert.** Un titre resté plusieurs jours à l'écran d'un compte sans qu'il l'ouvre descend progressivement (au plus 40 % de son score), puis remonte avec le temps (demi-vie de 30 jours). Ne compte que ce que le script de l'accueil a vu **réellement affiché au compte connecté** : carte d'une rangée Reco+ visible au moins une seconde, onglet au premier plan, une fois par jour. Ouvrir le titre remet son compteur à zéro.
 - **Goût du moment, en option** (coupé par défaut) : ressemblance avec les 5 derniers titres aimés, en plus des goûts de toujours.
 - **Heure de la journée, en option** (coupée par défaut) : ressemblance avec les titres aimés regardés dans la même tranche horaire (nuit, matin, après-midi, soirée) ; une liste est alors calculée par tranche et servie selon l'heure de la demande (fuseau réglable).
+- **Les nouveaux comptes.** Sans goût connu, tous les titres ont le même score : on ajoute un a priori, ce que le foyer regarde puis la note de la communauté. Son poids diminue continûment avec les goûts du compte (moitié vers deux titres aimés, négligeable ensuite).
+- **Les doublons.** Un titre présent deux fois dans la bibliothèque (même identifiant TMDb, par exemple dans deux bibliothèques) n'est proposé qu'une fois, et pas du tout si l'un des deux a été vu.
 - **La rangée « Nouveautés »** : seulement les titres arrivés récemment qui figurent dans le premier quart du classement par goût ; un mois calme ne la remplit pas avec n'importe quoi.
 - **Les sagas.**
   - Une seule entrée par saga, et c'est le premier volet pas encore vu, pas le 4ᵉ.
