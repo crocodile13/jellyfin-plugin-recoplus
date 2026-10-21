@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.30: a requested title is shown in no row (not even New or Because you liked) for one half-life after its request or arrival; a replaced file of an already watched episode no longer pins its series at the top; the New row only keeps recent arrivals in the top quarter by taste; cached movie details are re-read once to get their length, so short films are really left out.",
+  "changelog": "1.0.31: new accounts with no history get what the household watches and the best-rated titles instead of an arbitrary order (a prior that fades continuously as the account's taste grows); a title present twice in the library is proposed once, and not at all if either copy was watched.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.30.0",
+  "version": "1.0.31.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

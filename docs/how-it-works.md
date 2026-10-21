@@ -39,6 +39,8 @@
 - **Shown but never opened.** A title that stayed on an account's screen for several days without being opened slowly sinks (at most 40% of its score), then recovers over time (30-day half-life). Only what the home-screen script saw **actually displayed to the signed-in account** counts: a card of a Reco+ row visible for at least one second, tab in the foreground, once per day. Opening the title resets its counter.
 - **Current taste, optional** (off by default): similarity to the last 5 liked titles, on top of long-term taste.
 - **Time of day, optional** (off by default): similarity to liked titles watched in the same time slot (night, morning, afternoon, evening); one list per slot is then computed and served according to the time of the request (configurable time zone).
+- **New accounts.** With no known taste every title scores the same, so a prior is added: what the household watches, then the community rating. Its weight fades continuously with the account's taste (half at about two liked titles, negligible after).
+- **Duplicates.** A title present twice in the library (same TMDb id, e.g. in two libraries) is proposed once, and not at all if either copy was watched.
 - **"New for you" row**: only recent arrivals that rank in the top quarter by taste, so a quiet month does not fill it with whatever just arrived.
 - **Sagas.** At most one entry per saga, and it is the first volume not yet seen, not volume 4. Large thematic collections get at most two entries.
 

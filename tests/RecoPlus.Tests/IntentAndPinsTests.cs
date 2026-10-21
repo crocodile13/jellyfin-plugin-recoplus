@@ -120,7 +120,7 @@ public class IntentAndPinsTests
     public void ARequestNeverRecommendsItselfButMayComeBackLater()
     {
         var (ctx, vec, cands, s) = Library(Now - 3600);
-        var plain = Recommender.Score(ctx, vec, "u", cands, s);
+        var plain = Recommender.Score(ctx, vec, "u", cands, s, prior: Recommender.ColdStart(ctx.Sig["u"]));
         var all = Recommender.ScoreAll(ctx, vec, "u", cands, s);
         // les autres titres : inchangés (la demande compte toujours pour les goûts)
         Assert.All(cands.Where(c => c != "t10"), c => Assert.Equal(plain[c], all[c], 12));
@@ -132,10 +132,40 @@ public class IntentAndPinsTests
         var (ctx2, vec2, cands2, s2) = Library(Now - (365 * Day));
         var without = new Dictionary<string, double>(ctx2.Sig["u"], StringComparer.Ordinal);
         without.Remove("t10");
-        var bare = Recommender.Score(ctx2, vec2, "u", cands2, s2, signals: without);
+        var bare = Recommender.Score(ctx2, vec2, "u", cands2, s2, signals: without, prior: Recommender.ColdStart(ctx2.Sig["u"]));
         var later = Recommender.ScoreAll(ctx2, vec2, "u", cands2, s2);
         Assert.Equal(bare["t10"], later["t10"], 3);   // demandé il y a un an, arrivé il y a 300 jours : ½^(300/21) près
         Assert.True(later["t10"] > all["t10"]);
+    }
+
+    [Fact]
+    public void ANewAccountGetsWhatTheHouseholdWatchesNotAnArbitraryOrder()
+    {
+        // sans goût connu, tous les scores de goût valent 0 : l'a priori (popularité dans le foyer, note) décide
+        Assert.Equal(Recommender.ColdStartWeight, Recommender.ColdStart(null), 12);
+        Assert.Equal(Recommender.ColdStartWeight / 2, Recommender.ColdStart(new Dictionary<string, double> { ["a"] = Recommender.ColdStartMass }), 12);
+        Assert.True(Recommender.ColdStart(new Dictionary<string, double> { ["a"] = 80 }) < 1e-3);
+        Assert.Equal(Recommender.ColdStartWeight, Recommender.ColdStart(new Dictionary<string, double> { ["a"] = -3 }), 12);   // seuls les goûts comptent
+
+        var titles = new Dictionary<string, Title>(StringComparer.Ordinal);
+        for (int i = 0; i < 6; i++)
+        {
+            var id = "t" + i;
+            titles[id] = new Title { Id = id, Kind = TitleKind.Movie, Name = id, Genres = new[] { "g" + i }, Added = Now - (300 * Day), Community = i == 5 ? 9 : 6.5 };
+        }
+
+        var users = new Dictionary<string, Dictionary<string, Interaction>>(StringComparer.Ordinal)
+        {
+            ["new"] = new(StringComparer.Ordinal),
+            ["a"] = new(StringComparer.Ordinal) { ["t2"] = new Interaction { Title = "t2", Played = true, Completion = 1, Start = Now - Day, Last = Now - Day } },
+            ["b"] = new(StringComparer.Ordinal) { ["t2"] = new Interaction { Title = "t2", Played = true, Completion = 1, Start = Now - Day, Last = Now - Day } },
+        };
+        var ds = new Dataset { Titles = titles, Users = users, Now = Now };
+        var w = new EngineSettings();
+        var ctx = new Context(ds, Now, users, w);
+        var sc = Recommender.ScoreAll(ctx, Core.BuildVectors(titles, w), "new", titles.Keys.ToList(), w);
+        Assert.Equal("t2", sc.OrderByDescending(kv => kv.Value).First().Key);   // ce que le foyer regarde
+        Assert.True(sc["t5"] > sc["t0"]);                                          // puis la mieux notée
     }
 
     // ------------------------------------------------------------------ en tête

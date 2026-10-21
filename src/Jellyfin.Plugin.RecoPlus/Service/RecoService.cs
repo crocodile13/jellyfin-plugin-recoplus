@@ -535,7 +535,9 @@ public sealed class RecoService : IDisposable
             // un titre demandé ou mis de côté n'est proposé nulle part tant qu'il est « retenu » (moins d'une demi-vie depuis
             // la demande ou l'arrivée) : le compte sait déjà qu'il le veut
             var cands = accessible.Where(id => titles.TryGetValue(id, out var ct0) && !Known(h, id, cfg.ProposeMarked, intentAllowed: true) && ListPolicy.Allows(ct0, lo)
-                    && !Recommender.HeldBack(h.GetValueOrDefault(id), ct0, now, s))
+                    && !Recommender.HeldBack(h.GetValueOrDefault(id), ct0, now, s)
+                    // titre en double dans la bibliothèque : un seul exemplaire proposé, aucun si l'un d'eux est déjà vu
+                    && !(lib.Copies.TryGetValue(id, out var cp) && (cp.TakeWhile(o => o != id).Any(accessible.Contains) || cp.Any(o => o != id && Known(h, o, cfg.ProposeMarked)))))
                 .OrderBy(id => id, StringComparer.Ordinal).ToList();
             var r = new UserRecs { ComputedAt = DateTime.UtcNow, SeerrUserId = seerr.UserMap.GetValueOrDefault(key) };
 
