@@ -13,6 +13,14 @@ namespace RecoPlus.Engine;
 /// </summary>
 public static class Exploration
 {
+    /// <summary>Noms (français : clés de traduction, voir <see cref="Texts"/>) des langues d'origine explorées, par code ISO 639-1.</summary>
+    public static IReadOnlyDictionary<string, string> LanguageNames { get; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        ["ja"] = "japonais", ["ko"] = "coréen", ["zh"] = "chinois", ["cn"] = "cantonais", ["fr"] = "français", ["en"] = "anglais",
+        ["es"] = "espagnol", ["it"] = "italien", ["de"] = "allemand", ["pt"] = "portugais", ["hi"] = "hindi", ["ru"] = "russe",
+        ["sv"] = "suédois", ["da"] = "danois", ["no"] = "norvégien", ["pl"] = "polonais", ["tr"] = "turc", ["th"] = "thaï",
+    };
+
     /// <summary>Empreinte stable d'une chaîne (FNV-1a 64 bits ; string.GetHashCode change à chaque démarrage).</summary>
     public static ulong Hash(string s)
     {

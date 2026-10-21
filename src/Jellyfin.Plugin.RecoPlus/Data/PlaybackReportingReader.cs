@@ -6,6 +6,7 @@ using System.IO;
 using MediaBrowser.Common.Configuration;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Data;
 
@@ -44,7 +45,7 @@ public sealed class PlaybackReportingReader
         var path = ResolvePath();
         if (path is null)
         {
-            status = "absente";
+            status = Texts.Pack("absente");
             return res;
         }
 
@@ -72,12 +73,12 @@ public sealed class PlaybackReportingReader
                 }
             }
 
-            status = $"lue ({res.Count} entrées)";
+            status = Texts.Pack("lue ({0} entrées)", res.Count);
         }
         catch (Exception ex) when (ex is SqliteException or IOException or TypeLoadException or InvalidOperationException or DllNotFoundException)
         {
             _log.LogWarning("Reco+ : base Playback Reporting illisible ({Type}: {Msg}), ignorée", ex.GetType().Name, ex.Message);
-            status = "illisible : " + ex.GetType().Name;
+            status = Texts.Pack("illisible : {0}", ex.GetType().Name);
             res.Clear();
         }
 

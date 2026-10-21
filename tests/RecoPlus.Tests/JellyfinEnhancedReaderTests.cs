@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Jellyfin.Plugin.RecoPlus.Data;
+using RecoPlus.Engine;
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
@@ -52,7 +53,8 @@ public class JellyfinEnhancedReaderTests
             Assert.Equal(1.0, a.Ratings["tv:1396"]);
             Assert.False(a.Ratings.ContainsKey("movie:1"), "avis sans note ignoré");
             Assert.Empty(all[Bob.ToString("N")].HiddenItems);
-            Assert.Contains("2 titres masqués", r.State, StringComparison.Ordinal);
+            Assert.Contains("2 titres masqués", Texts.Render(r.State, "fr"), StringComparison.Ordinal);
+            Assert.Contains("2 hidden titles", Texts.Render(r.State, "en"), StringComparison.Ordinal);
         }
         finally
         {
@@ -71,7 +73,7 @@ public class JellyfinEnhancedReaderTests
             var r = new JellyfinEnhancedReader(d, NullLogger<JellyfinEnhancedReader>.Instance);
             var all = r.ReadAll(new[] { Alice });
             Assert.Empty(all[Alice.ToString("N")].HiddenItems);
-            Assert.Contains("illisible", r.State, StringComparison.Ordinal);
+            Assert.Contains("illisible", Texts.Render(r.State, "fr"), StringComparison.Ordinal);
 
             var none = new JellyfinEnhancedReader(Path.Combine(d, "absent"), NullLogger<JellyfinEnhancedReader>.Instance);
             Assert.Empty(none.ReadAll(new[] { Alice }));

@@ -35,25 +35,49 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     public override Guid Id => PluginGuid;
 
     /// <inheritdoc />
-    public override string Description => "Recommandations personnelles (historique complet, abandons, sagas, demandes Seerr, mode étendu) à la place de celles de Jellyfin.";
+    public override string Description => Texts.T("Recommandations personnelles (historique complet, abandons, sagas, demandes Seerr, mode étendu) à la place de celles de Jellyfin.", I18n.Lang());
 
     /// <summary>
-    /// Anciens réglages : « Sur l'accueil » coupé (avant 1.0.21) = aucune rangée avec des titres hors bibliothèque.
+    /// Anciens réglages : « Sur l'accueil » coupé (avant 1.0.21) = aucune rangée avec des titres hors bibliothèque ;
+    /// titres de rangées restés aux valeurs françaises par défaut (avant 1.0.25) = titres par défaut, qui suivent la langue.
     /// </summary>
     private void Migrate()
     {
         var c = this.Configuration;
-        if (c.ExtendedHomeRow is not bool home)
+        bool changed = false;
+        if (c.ExtendedHomeRow is bool home)
+        {
+            if (!home)
+            {
+                c.SourcePourToi = c.SourceNouveautes = c.SourceParceQue = c.SourceFilms = c.SourceSeries = RowSource.Local;
+            }
+
+            c.ExtendedHomeRow = null;
+            changed = true;
+        }
+
+        string Default(string v, string fr)
+        {
+            if (v.Trim() != fr)
+            {
+                return v;
+            }
+
+            changed = true;
+            return string.Empty;
+        }
+
+        c.HssSectionTitle = Default(c.HssSectionTitle, Integration.HomeScreenSectionsIntegration.DefaultPourToi);
+        c.RowNewTitle = Default(c.RowNewTitle, Integration.HomeScreenSectionsIntegration.DefaultNew);
+        c.RowMoviesTitle = Default(c.RowMoviesTitle, Integration.HomeScreenSectionsIntegration.DefaultMovies);
+        c.RowSeriesTitle = Default(c.RowSeriesTitle, Integration.HomeScreenSectionsIntegration.DefaultSeries);
+        c.RowBecauseTitle = Default(c.RowBecauseTitle, Integration.HomeScreenSectionsIntegration.DefaultBecause);
+        c.ExtendedTitle = Default(c.ExtendedTitle, Integration.HomeScreenSectionsIntegration.DefaultExtended);
+        if (!changed)
         {
             return;
         }
 
-        if (!home)
-        {
-            c.SourcePourToi = c.SourceNouveautes = c.SourceParceQue = c.SourceFilms = c.SourceSeries = RowSource.Local;
-        }
-
-        c.ExtendedHomeRow = null;
         try
         {
             SaveConfiguration();

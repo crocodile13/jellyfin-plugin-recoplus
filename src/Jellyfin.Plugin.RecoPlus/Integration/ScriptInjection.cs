@@ -77,7 +77,7 @@ public sealed class ScriptInjection : IStartupFilter
             int close = page.LastIndexOf("</body>", StringComparison.OrdinalIgnoreCase);
             if (close >= 0 && page.IndexOf(Marker, StringComparison.Ordinal) < 0)
             {
-                page = page[..close] + "<script defer src=\"../" + Marker + "?v=" + Version + "\"></script>\n" + page[close..];
+                page = page[..close] + "<script defer src=\"../" + Marker + "?v=" + Version + "\"></script>\n" + page[close..];   // i18n:skip
             }
         }
         catch (Exception ex)

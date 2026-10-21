@@ -41,8 +41,19 @@ public sealed class ExternalRec
     /// <summary>Titre aimé qui a amené celui-ci (« parce que tu as aimé … »).</summary>
     public string Because { get; set; } = string.Empty;
 
-    /// <summary>Pourquoi ce titre est proposé, en clair (« Parce que tu as aimé … », « De Hayao Miyazaki », « Bien noté en animation »…).</summary>
+    /// <summary>
+    /// Pourquoi ce titre est proposé (« Parce que tu as aimé … », « De Hayao Miyazaki », « Bien noté en animation »…),
+    /// emballé (<see cref="Texts.Pack"/>) : voir <see cref="In"/>.
+    /// </summary>
     public string Reason { get; set; } = string.Empty;
+
+    /// <summary>Copie à envoyer à un client : la raison rendue dans sa langue.</summary>
+    public ExternalRec In(string lang)
+    {
+        var c = (ExternalRec)MemberwiseClone();
+        c.Reason = Texts.Render(Reason, lang);
+        return c;
+    }
 
     /// <summary>Source d'exploration qui l'a apporté (related, saga, people, keyword, genre, cross, gems, studio, language, top).</summary>
     public string Source { get; set; } = string.Empty;

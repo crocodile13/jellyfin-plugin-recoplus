@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus;
 
@@ -66,7 +67,7 @@ public sealed class PluginServiceRegistrator : IPluginServiceRegistrator
 
         if (existing.ImplementationType is null || existing.Lifetime != ServiceLifetime.Singleton)
         {
-            CompatibilityGuard.DecoratorProblem = $"enregistrement inattendu ({existing.Lifetime}, {existing.ImplementationType?.FullName ?? "fabrique ou instance"})";
+            CompatibilityGuard.DecoratorProblem = Texts.Pack("enregistrement inattendu ({0}, {1})", existing.Lifetime, existing.ImplementationType?.FullName ?? Texts.Translatable("fabrique ou instance"));
             return;
         }
 

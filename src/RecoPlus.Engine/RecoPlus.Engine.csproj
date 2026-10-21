@@ -8,4 +8,8 @@
     <NoWarn>CS1573;CS1591</NoWarn>
     <Version>1.0.1</Version>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- dictionnaire français → anglais (pas de « .en. » dans le nom : MSBuild en ferait un assembly satellite) -->
+    <EmbeddedResource Include="english.json" LogicalName="RecoPlus.Engine.english.json" />
+  </ItemGroup>
 </Project>

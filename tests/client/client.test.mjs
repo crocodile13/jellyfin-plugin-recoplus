@@ -26,11 +26,12 @@ function page({ hssCards = 0, data, je = null, io = null, jeWait = 0, shape = 'P
     const calls = { getJSON: 0, posts: [], je: [] };
     w.ApiClient = {
         getCurrentUserId: () => 'u1',
-        getUrl: (p) => '/' + p,
+        getUrl: (p, q) => '/' + p + (q ? '?' + new w.URLSearchParams(q).toString() : ''),
         getJSON: (url) => {
             const m = /JellyfinEnhanced\/jellyseerr\/(tv|movie)\/(\d+)$/.exec(url);
             if (m) { calls.je.push(url); const st = jeHttp[m[2]] || 200; return st === 200 ? Promise.resolve({}) : Promise.reject({ status: st }); }
             calls.getJSON++;
+            calls.urls = (calls.urls || []).concat(url);
             return Promise.resolve(JSON.parse(JSON.stringify(data)));
         },
         ajax: (o) => { calls.posts.push(o); return Promise.resolve({}); },
@@ -396,6 +397,20 @@ await test('raison affichée : celle du serveur, sinon « Parce que tu as aimé 
     const imgs = [...p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext .cardImageContainer')];
     assert.equal(imgs[0].title, 'De Hayao Miyazaki');
     assert.equal(imgs[1].title, 'Parce que tu as aimé Aimé 1');
+});
+
+await test('langue : celle de l\'interface Jellyfin envoyée au serveur, textes du serveur utilisés', async () => {
+    const texts = { request: 'Request', requested: '✓ requested', failed: 'Request failed', series: 'series', because: 'Because you liked {0}', title: 'Discover for you' };
+    const items = ext(3).map((it) => ({ ...it, Reason: '' }));
+    const p = page({ hssCards: 4, data: { ...base, texts, items, layouts: pour(inter(4, items, 2)) } });
+    await wait(700);
+    assert.match(p.calls.urls[0], /RecoPlus\/Extended\?lang=/, 'langue envoyée');
+    const cards = [...p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext')];
+    assert.equal(cards[0].querySelector('button').textContent, 'Request');
+    assert.equal(cards[0].querySelector('.cardImageContainer').title, 'Because you liked Aimé 0');
+    cards[0].querySelector('button').click();
+    await wait(50);
+    assert.equal(cards[0].querySelector('button').textContent, '✓ requested');
 });
 
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');

@@ -20,6 +20,7 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     sources, bruit du jour, note fiable), `SimilarityIndex.cs` (produits scalaires précalculés), `Cpu.cs` (fils).
   - `Calibrator.cs` / `ChoiceModel.cs` / `NeuralNet.cs` : calibrage (voir plus bas). `Settings.cs` : `EngineSettings`
     (+ `Sanitized()`, bornes de chaque réglage).
+  - `Texts.cs` + `english.json` : textes français / anglais (voir Conventions).
 - `src/Jellyfin.Plugin.RecoPlus/` : intégration.
   - `Service/RecoService.cs` : calcul complet ou d'un compte (`ComputeCore`), données (`Assemble`), jeu de calibrage,
     aperçu. `RecoWorker.cs` : quand recalculer (activité du compte regroupée, écart minimal, au démarrage).
@@ -32,10 +33,14 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
   - `Data/` : lecture de l'historique (Jellyfin, Playback Reporting, Jellyfin Enhanced), premiers lancements, titres
     montrés, secrets, journal (`LogTail`), export du jeu de calibrage (`CalibrationExport`).
   - `Api/RecoController.cs` : `RecoPlus/…` ; tout ce qui touche à la configuration exige les droits d'administration.
+  - `I18n.cs` : réglage de langue (`UiLanguage` : celle de Jellyfin, français, anglais), langue et pays des
+    métadonnées du serveur (valeurs par défaut de la langue TMDb et du pays des classifications).
   - `Web/configPage.html` (page de configuration) et `Web/client.js` (script de l'accueil : titres des rangées
     « Parce que … », titres montrés, titres hors bibliothèque).
 - Fichiers dans le dossier de données du plugin : `recommandations.json`, `premiers-lancements.json`, `secrets.json`
   (mode 600), titres montrés ; cache Seerr : `fiches.json`, `listes.json`. Tous écrits par fichier temporaire + renommage.
+- `README.md` / `README.fr.md` : README classique (présentation, installation, prise en main) ; le détail (moteur,
+  mesures, réglages, calibrage) est dans `docs/how-it-works.md` / `.fr.md`. Les deux langues restent alignées.
 - `tests/RecoPlus.Tests/` (xUnit), `tests/client/*.test.mjs` (jsdom), `prototype/` (moteur Python de référence,
   `golden.py` régénère le jeu synthétique de `golden.json`), `tools/reco-export/` (export lecture seule, pseudonymisé).
 - CI (`.github/workflows/ci.yml`) : cohérence des versions, `golden.py`, `build.sh`, tests jsdom, tests de
@@ -71,7 +76,19 @@ de la CI.
 
 ## Conventions
 
-- Texte de l'interface, commentaires et docs XML : français, phrases complètes.
+- Commentaires et docs XML : français, phrases complètes. Interface : français (langue source) et anglais.
+- Traduction (`Texts`, `english.json` dans le moteur) : le texte français est la clé, `english.json` sa traduction.
+  - Un texte affiché passe par `Texts.Pack` (message avec paramètres `{0}`, rendu plus tard dans la langue du lecteur ;
+    `Texts.Pack("texte")` sans paramètre marque un texte simple), `Texts.T` (rendu tout de suite), `Texts.Translatable`
+    (paramètre à traduire lui aussi) ; jamais de `$"…"` ni de concaténation pour un texte affiché.
+  - Un état ou une erreur gardé en mémoire reste emballé ; il est rendu à la frontière : `RecoController` (`L`, `Msg`,
+    langue = réglage du plugin, sinon `?lang=`, sinon Accept-Language, sinon serveur), notifications et journal
+    d'activité (langue du serveur), journaux du serveur (français, `Render(…, "fr")`).
+  - Côté page : `t('…')` / `tf('…', x)` pour chaque texte construit, `translateDom` pour le HTML statique ; chaque appel
+    à l'API porte `lang`. Côté accueil : textes fournis par `RecoPlus/Extended` (`texts`).
+  - Les tests vérifient que chaque texte (sources C#, page, libellés du moteur) a sa traduction, avec les mêmes
+    paramètres. Une donnée (titre, genre TMDb) n'est jamais traduite. Ligne à ignorer : commentaire `i18n:skip`.
+  - Pas de « .en. » dans le nom d'une ressource : MSBuild en ferait un assembly satellite (d'où `english.json`).
 - `TreatWarningsAsErrors` : un avertissement casse la CI (attention aux `cref` ambigus entre surcharges).
 - Dans l'espace de noms `Jellyfin.Plugin.RecoPlus`, `RecoPlus.Engine.X` se résout mal (CS0234) : `using RecoPlus.Engine;`.
   Une méthode ne porte pas le nom d'un type qu'elle renvoie (`BuildCalibrationOptions`, pas `CalibrationOptions`).
@@ -126,8 +143,12 @@ de la CI.
 - Pas de réglage obsolète : un réglage retiré est migré (`Plugin.Migrate`) puis supprimé de la page.
 - Titres des rangées : tous dans l'onglet Général ; ailleurs, `{ROW}` (rangée principale) ou `{T:Champ}` reprennent le
   titre saisi.
-- Onglets Moteur, Calibrage, Journal : mode développeur seulement. Les réglages du calibrage s'enregistrent dès qu'ils
-  changent (eux seuls), comme la méthode.
+- Trois niveaux : de base (visible) ; avancé (onglets Moteur et Calibrage, marqués « avancé », et sections repliées
+  « Réglages avancés ») ; mode développeur (Journal, export et réglages statistiques du calibrage, chemin détaillé des
+  méthodes, apport de chaque source dans l'aperçu). Un outil de diagnostic va en mode développeur, pas en avancé.
+- Les réglages du calibrage s'enregistrent dès qu'ils changent (eux seuls), comme la méthode.
+- Construction après le chargement de la langue (`__rpReady`) ; une variable locale ne s'appelle jamais `t`.
+- Une option de liste `enum:` ne contient pas de virgule dans son libellé (séparateur des options).
 
 ## Faits utiles (vérifiés dans les sources des autres plugins)
 
@@ -145,3 +166,4 @@ de la CI.
 - Un test jsdom qui dépend d'une minuterie (journal toutes les 2 s) devient instable si la page ralentit : garder
   les recalculs de la page bon marché (éléments mis en cache, rien à refaire quand rien ne change).
 - `pkill -f motif` tue aussi le shell dont la ligne de commande contient le motif.
+- `i18n.en.json` comme ressource incorporée : MSBuild y voit la culture « en » et la sort de l'assembly (satellite).

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.RecoPlus.Data;
 using Microsoft.Extensions.Logging;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Seerr;
 
@@ -33,7 +34,7 @@ public sealed class SeerrSnapshot
     /// <summary>Lecture réussie.</summary>
     public bool Ok { get; init; }
 
-    /// <summary>État lisible.</summary>
+    /// <summary>État lisible (emballé : <see cref="Texts.Pack"/>).</summary>
     public string Status { get; init; } = "désactivé";
 
     /// <summary>Moment de la lecture.</summary>
@@ -190,8 +191,9 @@ public sealed class SeerrService
                 Requested = reqs.Where(r => r.RequestStatus is 1 or 2).Select(r => r.MediaType + ":" + r.TmdbId).ToHashSet(StringComparer.Ordinal),
                 Version = version,
                 Ok = true,
-                Status = $"connecté (v{version}) — {map.Count} comptes liés, {reqs.Count} demandes, {watch.Values.Sum(l => l.Count)} titres en liste de suivi"
-                    + (watchErrors > 0 ? $" ({watchErrors} listes illisibles)" : string.Empty),
+                Status = watchErrors > 0
+                    ? Texts.Pack("connecté (v{0}) — {1} comptes liés, {2} demandes, {3} titres en liste de suivi ({4} listes illisibles)", version, map.Count, reqs.Count, watch.Values.Sum(l => l.Count), watchErrors)
+                    : Texts.Pack("connecté (v{0}) — {1} comptes liés, {2} demandes, {3} titres en liste de suivi", version, map.Count, reqs.Count, watch.Values.Sum(l => l.Count)),
             };
         }
         catch (Exception ex) when (ex is SeerrException or HttpRequestException or TaskCanceledException or JsonException)
@@ -203,7 +205,7 @@ public sealed class SeerrService
 
             Failed(ex, ct);
             _log.LogWarning("Reco+ : Seerr indisponible ({Msg}) — recommandations calculées sans lui", ex.Message);
-            return Last = new SeerrSnapshot { Status = "indisponible : " + ex.Message };
+            return Last = new SeerrSnapshot { Status = Texts.Pack("indisponible : {0}", SeerrException.TextOf(ex)) };
         }
     }
 
@@ -448,7 +450,7 @@ public sealed class SeerrService
                 return d;
             }
 
-            d = await cl.DetailsAsync(mediaType, tmdbId, Plugin.Instance!.Configuration.SeerrLanguage, ct).ConfigureAwait(false);
+            d = await cl.DetailsAsync(mediaType, tmdbId, Plugin.Instance!.Configuration.TmdbLanguage(), ct).ConfigureAwait(false);
             Answered();
             _details[key] = d;
             _failed.TryRemove(key, out _);
@@ -499,7 +501,7 @@ public sealed class SeerrService
                         break;
                     }
 
-                    var items = await cl.RelatedAsync(mediaType, tmdbId, rel, Plugin.Instance!.Configuration.SeerrLanguage, page, ct).ConfigureAwait(false);
+                    var items = await cl.RelatedAsync(mediaType, tmdbId, rel, Plugin.Instance!.Configuration.TmdbLanguage(), page, ct).ConfigureAwait(false);
                     Answered();
                     got = items.Count;
                     anyOk = true;

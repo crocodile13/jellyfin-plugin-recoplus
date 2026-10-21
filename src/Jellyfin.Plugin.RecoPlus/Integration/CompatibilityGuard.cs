@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Integration;
 
@@ -55,6 +56,10 @@ public sealed class CompatibilityGuard : IHostedService
         _host = host;
         _log = log;
         Instance = this;
+        // configuration du serveur, lue à la demande : langue de l'interface (mode « langue de Jellyfin » sans client :
+        // notifications, journal d'activité, rangées HSS) et langue / pays des métadonnées (TMDb, classifications)
+        I18n.ServerConfig = () => (sp.GetService(typeof(MediaBrowser.Controller.Configuration.IServerConfigurationManager))
+            as MediaBrowser.Controller.Configuration.IServerConfigurationManager)?.Configuration;
     }
 
     /// <summary>Instance courante.</summary>
@@ -97,7 +102,8 @@ public sealed class CompatibilityGuard : IHostedService
     {
         if (_disabled.TryAdd(f, reason))
         {
-            _notifier.Raise("off-" + f, $"{Label(f)} désactivé", reason + " Jellyfin reprend son comportement normal pour cette partie.");
+            _notifier.Raise("off-" + f, Texts.Pack("{0} désactivé", Texts.Translatable(Label(f))),
+                Texts.Pack("{0} Jellyfin reprend son comportement normal pour cette partie.", reason));
         }
     }
 
@@ -116,12 +122,13 @@ public sealed class CompatibilityGuard : IHostedService
 
             if (q.Count >= 5)
             {
-                Disable(f, $"5 erreurs en 10 minutes (dernière : {ex.GetType().Name}: {ex.Message}). Probablement une version de Jellyfin qui ne correspond plus ; partie coupée jusqu'au prochain redémarrage.");
+                Disable(f, Texts.Pack("5 erreurs en 10 minutes (dernière : {0}). Probablement une version de Jellyfin qui ne correspond plus ; partie coupée jusqu'au prochain redémarrage.", ex.GetType().Name + ": " + ex.Message));
             }
         }
     }
 
-    private static string Label(Feature f) => f switch
+    /// <summary>Nom d'une partie (français : clé de traduction).</summary>
+    public static string Label(Feature f) => f switch
     {
         Feature.MovieRecommendations => "Remplacement de /Movies/Recommendations",
         Feature.Suggestions => "Remplacement de /Items/Suggestions",
@@ -157,11 +164,11 @@ public sealed class CompatibilityGuard : IHostedService
         Checks.Clear();
         var v = _host.ApplicationVersion;
         bool sameVersion = v.Major == Plugin.TestedJellyfin.Major && v.Minor == Plugin.TestedJellyfin.Minor;
-        Checks.Add(("Version de Jellyfin", sameVersion, sameVersion ? $"{v} (testée)" : $"{v} — plugin construit et testé pour {Plugin.TestedJellyfin}.x"));
+        Checks.Add(("Version de Jellyfin", sameVersion, sameVersion ? Texts.Pack("{0} (testée)", v) : Texts.Pack("{0} — plugin construit et testé pour {1}.x", v, Plugin.TestedJellyfin)));
         if (!sameVersion)
         {
             _notifier.Raise("version", "version de Jellyfin non testée",
-                $"Jellyfin {v} alors que Reco+ a été construit pour {Plugin.TestedJellyfin}.x. Les points d'accroche sont vérifiés un par un ; toute partie qui ne colle plus est coupée automatiquement. Une mise à jour du plugin est à prévoir.");
+                Texts.Pack("Jellyfin {0} alors que Reco+ a été construit pour {1}.x. Les points d'accroche sont vérifiés un par un ; toute partie qui ne colle plus est coupée automatiquement. Une mise à jour du plugin est à prévoir.", v, Plugin.TestedJellyfin));
         }
         else
         {
@@ -172,10 +179,10 @@ public sealed class CompatibilityGuard : IHostedService
         var resolved = _sp.GetService<ISimilarItemsManager>();
         bool deco = DecoratorInstalled && resolved is SimilarItemsManagerDecorator;
         Checks.Add(("Remplacement du gestionnaire de recommandations", deco,
-            deco ? "actif" : DecoratorProblem ?? $"le service résolu est {resolved?.GetType().FullName ?? "absent"} (un autre plugin le remplace ?)"));
+            deco ? Texts.Pack("actif") : DecoratorProblem ?? Texts.Pack("le service résolu est {0} (un autre plugin le remplace ?)", resolved?.GetType().FullName ?? Texts.Translatable("absent"))));
         if (!deco)
         {
-            Disable(Feature.MovieRecommendations, "Le gestionnaire de recommandations de Jellyfin n'a pas la forme attendue : " + (DecoratorProblem ?? "décorateur non utilisé") + ".");
+            Disable(Feature.MovieRecommendations, Texts.Pack("Le gestionnaire de recommandations de Jellyfin n'a pas la forme attendue : {0}.", DecoratorProblem ?? Texts.Translatable("décorateur non utilisé")));
             Disable(Feature.Similar, "Même cause que ci-dessus.");
         }
 
@@ -191,7 +198,7 @@ public sealed class CompatibilityGuard : IHostedService
             var a = actions.FirstOrDefault(x => x.ActionName == name);
             if (a is null)
             {
-                bad.Add(name + " absente");
+                bad.Add(Texts.Pack("{0} absente", name));
                 continue;
             }
 
@@ -199,25 +206,26 @@ public sealed class CompatibilityGuard : IHostedService
             var missing = expected.Where(e => !ps.Contains(e)).ToList();
             if (missing.Count > 0)
             {
-                bad.Add(name + " sans " + string.Join(", ", missing));
+                bad.Add(Texts.Pack("{0} sans {1}", name, string.Join(", ", missing)));
             }
         }
 
-        Checks.Add(("Point d'accroche /Items/Suggestions", bad.Count == 0, bad.Count == 0 ? "conforme" : string.Join(" ; ", bad)));
+        string badText = bad.Count == 0 ? Texts.Pack("conforme") : Texts.Join(" ; ", bad);
+        Checks.Add(("Point d'accroche /Items/Suggestions", bad.Count == 0, badText));
         if (bad.Count > 0)
         {
-            Disable(Feature.Suggestions, "Le contrôleur des suggestions de Jellyfin a changé (" + string.Join(" ; ", bad) + ").");
+            Disable(Feature.Suggestions, Texts.Pack("Le contrôleur des suggestions de Jellyfin a changé ({0}).", badText));
         }
 
         // 3. dépendances facultatives
         var asm = AssemblyLoadContext.All.SelectMany(c => c.Assemblies).Select(a => a.GetName()).ToList();
         string Opt(string name) => asm.FirstOrDefault(a => a.Name == name)?.Version?.ToString() ?? string.Empty;
         var hss = Opt("Jellyfin.Plugin.HomeScreenSections");
-        Checks.Add(("Home Screen Sections", hss.Length > 0, hss.Length > 0 ? $"présent ({hss}) : rangée « {Plugin.Instance?.Configuration.HssSectionTitle} » disponible" : "absent : pas de rangée d'accueil (le reste fonctionne)"));
+        Checks.Add(("Home Screen Sections", hss.Length > 0, hss.Length > 0 ? Texts.Pack("présent ({0}) : rangées Reco+ disponibles dans sa configuration", hss) : "absent : pas de rangée d'accueil (le reste fonctionne)"));
         var jfe = Opt("Jellyfin.Plugin.JellyfinEnhanced");
-        Checks.Add(("Jellyfin Enhanced", jfe.Length > 0, jfe.Length > 0 ? $"présent ({jfe}) : le mode étendu utilise ses cartes, sa fiche et ses demandes (s'il est relié à Seerr)" : "absent : le mode étendu utilise les cartes Reco+ et ouvre la page Seerr"));
+        Checks.Add(("Jellyfin Enhanced", jfe.Length > 0, jfe.Length > 0 ? Texts.Pack("présent ({0}) : le mode étendu utilise ses cartes, sa fiche et ses demandes (s'il est relié à Seerr)", jfe) : "absent : le mode étendu utilise les cartes Reco+ et ouvre la page Seerr"));
         var mbe = Opt("Jellyfin.Plugin.MediaBarEnhanced");
-        Checks.Add(("Media Bar Enhanced", true, mbe.Length > 0 ? $"présent ({mbe}) : avec « Personalized Recommendations » activé dans Media Bar Enhanced, il montre les recommandations Reco+ (bibliothèque seulement)" : "absent"));
+        Checks.Add(("Media Bar Enhanced", true, mbe.Length > 0 ? Texts.Pack("présent ({0}) : avec « Personalized Recommendations » activé dans Media Bar Enhanced, il montre les recommandations Reco+ (bibliothèque seulement)", mbe) : Texts.Pack("absent")));
         var lr = asm.FirstOrDefault(a => a.Name?.Contains("LocalRecs", StringComparison.OrdinalIgnoreCase) == true);
         if (lr is not null)
         {

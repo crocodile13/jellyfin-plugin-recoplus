@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Data;
 
@@ -76,11 +77,11 @@ public sealed class SecretStore
         }
     }
 
-    /// <summary>État affichable : « non défini » ou « défini (…1234) ».</summary>
+    /// <summary>État affichable (emballé) : « non défini » ou « défini (…1234) ».</summary>
     public string Describe(string name)
     {
         var v = Get(name);
-        return v is null ? "non défini" : $"défini (…{(v.Length > 4 ? v[^4..] : "****")})";
+        return v is null ? "non défini" : Texts.Pack("défini (…{0})", v.Length > 4 ? v[^4..] : "****");
     }
 
     private void Load()

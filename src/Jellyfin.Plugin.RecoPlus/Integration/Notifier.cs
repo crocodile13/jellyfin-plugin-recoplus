@@ -11,10 +11,11 @@ using Jellyfin.Plugin.RecoPlus.Configuration;
 using Jellyfin.Plugin.RecoPlus.Data;
 using MediaBrowser.Model.Activity;
 using Microsoft.Extensions.Logging;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Integration;
 
-/// <summary>Alerte affichée en bannière sur la page de configuration.</summary>
+/// <summary>Alerte affichée en bannière sur la page de configuration (titre et message emballés : <see cref="Texts.Pack"/>).</summary>
 public sealed record Alert(string Key, string Title, string Message, DateTime At);
 
 /// <summary>
@@ -45,18 +46,20 @@ public sealed class Notifier
     /// <summary>Retire une alerte devenue sans objet.</summary>
     public void Clear(string key) => _alerts.TryRemove(key, out _);
 
-    /// <summary>Lève une alerte.</summary>
+    /// <summary>Lève une alerte (titre et message emballés ou non : rendus dans la langue de chaque destinataire).</summary>
     public void Raise(string key, string title, string message)
     {
         _alerts[key] = new Alert(key, title, message, DateTime.UtcNow);
-        _log.LogWarning("Reco+ : {Title} — {Message}", title, message);
+        _log.LogWarning("Reco+ : {Title} — {Message}", Texts.Render(title, "fr"), Texts.Render(message, "fr"));
         if (_sent.TryGetValue(key, out var last) && DateTime.UtcNow - last < TimeSpan.FromHours(24))
         {
             return;
         }
 
         _sent[key] = DateTime.UtcNow;
-        _ = Task.Run(() => SendAsync(title, message));
+        // journal d'activité et webhook : langue du serveur (pas de lecteur connu)
+        var lang = I18n.Lang();
+        _ = Task.Run(() => SendAsync(Texts.Render(title, lang), Texts.Render(message, lang)));
     }
 
     private async Task SendAsync(string title, string message)
@@ -78,8 +81,9 @@ public sealed class Notifier
         await SendWebhookAsync(title, message).ConfigureAwait(false);
     }
 
-    /// <summary>Envoie au webhook configuré (renvoie un message d'état, pour le bouton « tester »).</summary>
-    /// <param name="kindOverride">Valeurs saisies non enregistrées (bouton « tester ») ; null = valeurs enregistrées.</param>
+    /// <summary>État renvoyé par <see cref="SendWebhookAsync"/> quand le webhook a accepté le message.</summary>
+    public const string Sent = "envoyé";
+
     /// <summary>Texte d'en-tête HTTP : tel quel s'il est en ASCII, sinon encodé « =?UTF-8?B?…?= » (RFC 2047).</summary>
     internal static string HeaderText(string s)
     {
@@ -95,6 +99,8 @@ public sealed class Notifier
         return s;
     }
 
+    /// <summary>Envoie au webhook configuré ; renvoie l'état (emballé), pour le bouton « tester ».</summary>
+    /// <param name="kindOverride">Valeurs saisies non enregistrées (bouton « tester ») ; null = valeurs enregistrées.</param>
     public async Task<string> SendWebhookAsync(string title, string message, WebhookKind? kindOverride = null, string? urlOverride = null, string? tokenOverride = null)
     {
         var kind = kindOverride ?? Plugin.Instance?.Configuration.Webhook ?? WebhookKind.None;
@@ -102,12 +108,12 @@ public sealed class Notifier
         var token = string.IsNullOrWhiteSpace(tokenOverride) ? _secrets.Get(SecretStore.WebhookToken) : tokenOverride.Trim();
         if (kind == WebhookKind.None || url is null)
         {
-            return "aucun webhook configuré";
+            return Texts.Pack("aucun webhook configuré");
         }
 
         if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || (uri.Scheme != "https" && uri.Scheme != "http"))
         {
-            return "URL de webhook invalide";
+            return Texts.Pack("URL de webhook invalide");
         }
 
         try
@@ -145,12 +151,12 @@ public sealed class Notifier
             var http = _http.CreateClient("RecoPlusWebhook");
             http.Timeout = TimeSpan.FromSeconds(15);
             using var res = await http.SendAsync(req).ConfigureAwait(false);
-            return res.IsSuccessStatusCode ? "envoyé" : $"refusé ({(int)res.StatusCode})";
+            return res.IsSuccessStatusCode ? Sent : Texts.Pack("refusé ({0})", (int)res.StatusCode);
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or InvalidOperationException or FormatException)
         {
             _log.LogWarning("Reco+ : webhook en échec ({Type})", ex.GetType().Name);
-            return "échec : " + ex.GetType().Name;
+            return Texts.Pack("échec : {0}", ex.GetType().Name);
         }
     }
 }

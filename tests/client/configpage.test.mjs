@@ -23,23 +23,29 @@ async function test(name, fn) {
 const users = [{ id: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', name: 'alice', ready: true }, { id: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', name: 'bob', ready: false }];
 const status = { version: '1.0.3.0', engine: { UsersWithRecs: 1 }, alerts: [], checks: [], disabled: {}, hss: 'ok', secrets: { seerrApiKey: 'non défini', webhookUrl: 'non défini', webhookToken: 'non défini' }, calibration: {}, canRollback: false, users };
 
-function open(cfg, extra) {
+async function open(cfg, extra) {
     const dom = new JSDOM(HTML, { runScripts: 'outside-only', pretendToBeVisual: true });
     const w = dom.window;
-    const saved = [];
+    const saved = [], calls = [];
     const store = JSON.parse(JSON.stringify(cfg));
     w.Dashboard = { showLoadingMsg() {}, hideLoadingMsg() {}, alert(m) { throw new Error(m); }, processPluginConfigurationUpdateResult() {} };
     w.ApiClient = {
         getUrl: (p) => '/' + p,
-        ajax: (o) => Promise.resolve(extra && extra[o.url.split('?')[0]] !== undefined ? (typeof extra[o.url.split('?')[0]] === 'function' ? extra[o.url.split('?')[0]](o) : extra[o.url.split('?')[0]]) : o.url === '/RecoPlus/Status' ? status : o.url === '/RecoPlus/Genres' ? ['Animation', 'Documentaire', 'Science-Fiction'] : {}),
+        ajax: (o) => {
+            const u = o.url.split('?')[0];
+            calls.push(o.url);
+            return Promise.resolve(extra && extra[u] !== undefined ? (typeof extra[u] === 'function' ? extra[u](o) : extra[u]) : u === '/RecoPlus/Status' ? status : u === '/RecoPlus/Genres' ? ['Animation', 'Documentaire', 'Science-Fiction'] : {});
+        },
         getPluginConfiguration: () => Promise.resolve(JSON.parse(JSON.stringify(store))),
         updatePluginConfiguration: (id, c) => { saved.push(JSON.parse(JSON.stringify(c))); return Promise.resolve({}); },
     };
     w.confirm = () => true;
     const script = HTML.match(/<script>([\s\S]*?)<\/script>/)[1];
     w.eval(script);
-    w.document.querySelector('#RecoPlusConfigPage').dispatchEvent(new w.Event('pageshow'));
-    return { w, d: w.document, saved };
+    const page = w.document.querySelector('#RecoPlusConfigPage');
+    page.dispatchEvent(new w.Event('pageshow'));
+    await page.__rpReady;           // langue chargée, page construite
+    return { w, d: w.document, saved, calls };
 }
 
 function fieldsOf(html) {
@@ -64,7 +70,7 @@ await test('chaque réglage de la page existe côté serveur (aucune faute de no
 });
 
 await test('chaque réglage a une aide au survol', async () => {
-    const { d } = open(cfg);
+    const { d } = await open(cfg);
     await wait(50);
     const f = fieldsOf(HTML).filter((x) => x.type !== 'users' && x.type !== 'genres');
     const noTip = f.filter((x) => !x.tip).map((x) => x.key);
@@ -79,7 +85,7 @@ await test('chaque réglage a une aide au survol', async () => {
 });
 
 await test('chaque groupe de champs a sa place dans la page, et les onglets réglables affichent Enregistrer', async () => {
-    const { d, w } = open(cfg);
+    const { d, w } = await open(cfg);
     const groups = new Set(fieldsOf(HTML).map((x) => x.group));
     for (const g of groups) { assert.ok(d.querySelector(`[data-fields="${g}"]`), 'groupe sans place : ' + g); }
     const bar = d.getElementById('rpSaveBar');
@@ -92,7 +98,7 @@ await test('chaque groupe de champs a sa place dans la page, et les onglets rég
 });
 
 await test('les réglages avancés sont repliés par défaut, les essentiels visibles', async () => {
-    const { d } = open(cfg);
+    const { d } = await open(cfg);
     for (const det of d.querySelectorAll('details.rp-adv')) { assert.equal(det.open, false); }
     assert.equal(d.getElementById('rp_l_RandomPercent').closest('details'), null);
     assert.equal(d.getElementById('rp_l_MinMovies').closest('details'), null);
@@ -101,7 +107,7 @@ await test('les réglages avancés sont repliés par défaut, les essentiels vis
 });
 
 await test('aller-retour : comptes ignorés, genres exclus, nouveaux réglages de liste', async () => {
-    const { d, saved } = open(cfg);
+    const { d, saved } = await open(cfg);
     await wait(50);
     const userBoxes = [...d.querySelectorAll('#rp_c_ExcludedUsers input')];
     assert.deepEqual(userBoxes.map((c) => [c.value, c.checked]), [[users[0].id, false], [users[1].id, true]]);
@@ -131,7 +137,7 @@ await test('aller-retour : comptes ignorés, genres exclus, nouveaux réglages d
 await test('facteurs : interrupteur + force, enregistrés comme poids (coupé = 0)', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c.Engine, { WMaxSim: 2, WCollab: 0, RequestWeight: 1.2, WFresh: 4, FeatActor: 0.7 });
-    const { d, saved } = open(c);
+    const { d, saved } = await open(c);
     await wait(50);
     const f = (k) => ({ on: d.getElementById(`rp_e_${k}_on`), r: d.getElementById(`rp_e_${k}`), m: d.getElementById(`rp_e_${k}`).closest('.rp-factor').querySelector('.rp-mult') });
     assert.equal(f('WMaxSim').on.checked, true);
@@ -161,7 +167,7 @@ await test('facteurs : interrupteur + force, enregistrés comme poids (coupé = 
 await test('le nom de la rangée suit le titre saisi, partout', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
     c.HssSectionTitle = 'Contenu que vous devriez aimer';
-    const { d } = open(c);
+    const { d } = await open(c);
     await wait(50);
     assert.match(d.querySelector('[data-pane="listes"] .rp-sub').textContent, /« Contenu que vous devriez aimer »/);
     const input = d.getElementById('rp_c_HssSectionTitle');
@@ -178,7 +184,7 @@ await test('le nom de la rangée suit le titre saisi, partout', async () => {
 await test('valeur hors curseur (calibrage) : affichée en entier et jamais modifiée sans action', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c.Engine, { WCollab: 1.0, WRelease: 0, FeatLanguage: 0.75, FavEpisodeShare: 0.3 });
-    const { d, saved } = open(c);
+    const { d, saved } = await open(c);
     await wait(50);
     const r = d.getElementById('rp_e_WCollab');
     assert.ok(Number(r.max) >= 3.33, 'curseur élargi : ' + r.max);
@@ -201,7 +207,7 @@ await test('1.0.5 : rangées, diversité, affichages — aller-retour', async ()
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c, { RowSize: 20, RowBecauseTitle: 'Parce que tu as aimé {titre}', TrackImpressions: true });
     Object.assign(c.Engine, { Diversity: 'Personalized', WImpression: 0.4, WShortTerm: 0, CalibrationStrength: 0.5 });
-    const { d, saved } = open(c);
+    const { d, saved } = await open(c);
     await wait(50);
     assert.equal(d.getElementById('rp_e_Diversity').value, 'Personalized');
     assert.equal(d.getElementById('rp_e_WShortTerm_on').checked, false, 'goût du moment coupé par défaut');
@@ -221,7 +227,7 @@ await test('1.0.5 : rangées, diversité, affichages — aller-retour', async ()
 });
 
 await test('chaque onglet de réglages : l\'avancé est replié par défaut', async () => {
-    const { d } = open(cfg);
+    const { d } = await open(cfg);
     await wait(50);
     const panes = [...d.querySelectorAll('#rpForm .rp-pane')];
     const withAdv = panes.filter((p) => p.querySelector('details.rp-adv'));
@@ -230,10 +236,10 @@ await test('chaque onglet de réglages : l\'avancé est replié par défaut', as
 });
 
 await test('calibrage : méthode enregistrée au changement, avertissement si l\'historique ne suffit pas', async () => {
-    const { w, d, saved } = open({ ...cfg, CalibrationMethod: 'Auto' });
+    const { w, d, saved } = await open({ ...cfg, CalibrationMethod: 'Auto' });
     const data = { cases: 70, methods: { Auto: { level: 'limite', message: '70 cas…' }, ChoiceModel: { level: 'limite', message: '70 cas pour 10 réglages' }, Coordinate: { level: 'insuffisant', message: '70 cas pour 36 réglages : pas assez' } } };
     const ajax = w.ApiClient.ajax;
-    w.ApiClient.ajax = (o) => (o.url === '/RecoPlus/Calibration/Data' ? Promise.resolve(data) : ajax(o));
+    w.ApiClient.ajax = (o) => (o.url.split('?')[0] === '/RecoPlus/Calibration/Data' ? Promise.resolve(data) : ajax(o));
     await wait(50);
     assert.equal(d.getElementById('rpCalMethod').value, 'Auto');
     d.querySelector('.rp-tab[data-tab="calibrage"]').click();
@@ -250,7 +256,7 @@ await test('calibrage : méthode enregistrée au changement, avertissement si l\
 });
 
 await test('rangées d\'accueil : seulement les titres, tous au même endroit (le choix des rangées est celui de HSS)', async () => {
-    const { d } = open({ ...cfg, RowNewTitle: 'Nouveautés pour vous', ExtendedTitle: 'À découvrir' });
+    const { d } = await open({ ...cfg, RowNewTitle: 'Nouveautés pour vous', ExtendedTitle: 'À découvrir' });
     await wait(50);
     const rows = d.querySelector('[data-fields="rows"]');
     const ids = [...rows.querySelectorAll('input, select')].map((e) => e.id);
@@ -265,7 +271,7 @@ await test('réglages sans objet masqués selon le mode, valeurs gardées', asyn
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c, { ExtendedHomeRow: true, ExtendedMixMode: 'Score', ExtendedMixEvery: 4 });
     Object.assign(c.Engine, { Diversity: 'Personalized', CalibrationStrength: 0.5, Weighting: 'TfIdf', WShortTerm: 0, SeriesByTime: true });
-    const { d, saved } = open(c);
+    const { d, saved } = await open(c);
     await wait(50);
     const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
     assert.ok(hidden('rp_c_ExtendedMixEvery'), 'mélange libre : pas d\'intervalle');
@@ -285,7 +291,7 @@ await test('réglages sans objet masqués selon le mode, valeurs gardées', asyn
 await test('mode étendu : contenu de chaque rangée, titres des rangées à jour, réglages du mélange seulement s\'il sert', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c, { SourcePourToi: 'Mix', SourceNouveautes: 'Local', SourceParceQue: 'Local', SourceFilms: 'Seerr', SourceSeries: 'Local', RowMoviesTitle: 'Mes films', RowNewReleasedDays: 200, ExtendedMixMode: 'Score' });
-    const { d, saved } = open(c);
+    const { d, saved } = await open(c);
     await wait(50);
     const box = d.querySelector('[data-fields="exthome"]');
     const sel = [...box.querySelectorAll('select')].map((e) => e.id);
@@ -320,7 +326,7 @@ await test('réglages sans effet : grisés, désactivés, avec la raison (une fo
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c, { SeerrEnabled: false, SourcePourToi: 'Mix', TrackImpressions: true });
     Object.assign(c.Engine, { WImpression: 0.5, WShortTerm: 0, ShortTermTitles: 5 });
-    const { d, saved } = open(c);
+    const { d, saved } = await open(c);
     await wait(50);
     const off = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
     const why = (id) => d.getElementById(id).closest('.rp-field').getAttribute('data-why');
@@ -350,7 +356,7 @@ await test('réglages sans effet : grisés, désactivés, avec la raison (une fo
 
 await test('export du jeu de calibrage : téléchargé avec la session, en JSON', async () => {
     const calls = [];
-    const { w, d } = open(cfg, { '/RecoPlus/Calibration/Export': (o) => { calls.push(o); return '{"format":"reco-plus-calibration-1"}'; } });
+    const { w, d } = await open(cfg, { '/RecoPlus/Calibration/Export': (o) => { calls.push(o); return '{"format":"reco-plus-calibration-1"}'; } });
     const made = [];
     w.URL.createObjectURL = (b) => { made.push(b); return 'blob:x'; };
     w.URL.revokeObjectURL = () => {};
@@ -371,7 +377,7 @@ await test('export du jeu de calibrage : téléchargé avec la session, en JSON'
 await test('réglages du calibrage : 0 = automatique, enregistrés aussitôt (eux seuls), grisés selon la méthode', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c, { CalibrationMethod: 'ChoiceModel', CalibrationFolds: 0, CalibrationPrudence: 'Auto', ListSize: 200 });
-    const { d, saved } = open(c);
+    const { d, saved } = await open(c);
     await wait(50);
     const box = d.querySelector('[data-fields="calib"]');
     assert.ok(box.closest('[data-pane="calibrage"]'));
@@ -392,7 +398,7 @@ await test('réglages du calibrage : 0 = automatique, enregistrés aussitôt (eu
 });
 
 await test('fils d\'exécution réglables (0 = automatique)', async () => {
-    const { d, saved } = open({ ...cfg, Threads: 6 });
+    const { d, saved } = await open({ ...cfg, Threads: 6 });
     await wait(50);
     const i = d.getElementById('rp_c_Threads');
     assert.ok(i.closest('[data-fields="genadv"]'));
@@ -406,7 +412,7 @@ await test('fils d\'exécution réglables (0 = automatique)', async () => {
 await test('mode étendu : sources dans « Où chercher », réglages d\'une source masqués quand elle est coupée', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c, { ExtendedByGenre: false, ExtendedByPeople: true, ExtendedGenres: 7, ExtendedNoise: 0.3 });
-    const { d, saved } = open(c);
+    const { d, saved } = await open(c);
     await wait(50);
     const box = d.querySelector('[data-fields="extsrc"]');
     for (const k of ['ExtendedTopRated', 'ExtendedByGenre', 'ExtendedByKeyword', 'ExtendedSagas', 'ExtendedByPeople', 'ExtendedByStudio', 'ExtendedCrossings', 'ExtendedGems', 'ExtendedByLanguage', 'ExtendedNoise']) {
@@ -426,7 +432,7 @@ await test('mode étendu : sources dans « Où chercher », réglages d\'une sou
 await test('mode étendu : réglages des pépites et croisements masqués quand la source est coupée', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c, { ExtendedGems: false, ExtendedCrossings: true, ExtendedByLanguage: false, ExtendedGemMaxVotes: 300 });
-    const { d, saved } = open(c);
+    const { d, saved } = await open(c);
     await wait(50);
     const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
     for (const k of ['ExtendedGemMinRating', 'ExtendedGemMaxVotes', 'ExtendedGemGenres']) { assert.ok(hidden('rp_c_' + k), k); }
@@ -447,7 +453,7 @@ await test('aperçu : tableau des sources, dans l\'ordre, « — » sans mélang
         related: { Found: 300, Detailed: 60, Proposed: 9, Placed: null },
         gems: { Found: 25, Detailed: 12, Proposed: 3, Placed: null },
     } };
-    const { d } = open(cfg, { '/RecoPlus/Preview': preview });
+    const { d } = await open(cfg, { '/RecoPlus/Preview': preview });
     await wait(50);
     assert.ok(d.getElementById('rpPreviewSourcesBox').classList.contains('rp-hidden'));
     d.getElementById('rpPreviewBtn').click();
@@ -462,20 +468,30 @@ await test('aperçu : tableau des sources, dans l\'ordre, « — » sans mélang
     assert.ok(!d.getElementById('rpPreviewSourcesBox').classList.contains('rp-hidden'));
 });
 
-await test('mode développeur : Moteur, Calibrage, Journal et détail par source cachés par défaut, montrés à la demande', async () => {
-    const { d, w } = open(cfg);
+await test('mode développeur : Journal et détail par source cachés par défaut ; Moteur et Calibrage visibles (avancés)', async () => {
+    const { d, w } = await open(cfg);
     await wait(50);
     const page = d.getElementById('RecoPlusConfigPage');
     const shown = (sel) => w.getComputedStyle(d.querySelector(sel)).display !== 'none';
     assert.ok(!page.classList.contains('rp-devmode'));
-    for (const t of ['moteur', 'calibrage', 'journal']) { assert.ok(d.querySelector('.rp-tab[data-tab="' + t + '"]').classList.contains('rp-dev'), t); }
+    assert.ok(d.querySelector('.rp-tab[data-tab="journal"]').classList.contains('rp-dev'));
+    // outils de développement : export et réglages statistiques du calibrage ; la langue est un réglage de base
+    assert.ok(d.getElementById('rpCalExport').closest('.rp-dev'), 'export du jeu de calibrage : développeur');
+    assert.ok(d.querySelector('[data-fields="calib"]').closest('.rp-dev'), 'réglages statistiques du calibrage : développeur');
+    assert.ok(!d.getElementById('rpCalStart').closest('.rp-dev') && !d.getElementById('rpCalMethod').closest('.rp-dev'), 'lancer et choisir la méthode : avancé');
+    assert.ok(!d.getElementById('rp_c_Language').closest('details') && !d.getElementById('rp_c_Language').closest('.rp-dev'), 'langue : de base');
+    for (const t of ['moteur', 'calibrage']) {
+        const tab = d.querySelector('.rp-tab[data-tab="' + t + '"]');
+        assert.ok(!tab.classList.contains('rp-dev') && shown('.rp-tab[data-tab="' + t + '"]'), t + ' visible sans mode développeur');
+        assert.ok(tab.querySelector('.rp-tabtag'), t + ' marqué avancé');
+    }
     assert.ok(!d.querySelector('.rp-tab[data-tab="general"]').classList.contains('rp-dev'));
     assert.ok(d.getElementById('rpPreviewSourcesBox').classList.contains('rp-dev'));
     const dev = d.getElementById('rpDev');
     dev.checked = true; dev.dispatchEvent(new w.Event('change', { bubbles: true }));
     assert.ok(page.classList.contains('rp-devmode'));
-    d.querySelector('.rp-tab[data-tab="moteur"]').click();
-    assert.ok(d.querySelector('.rp-pane[data-pane="moteur"]').classList.contains('on'));
+    d.querySelector('.rp-tab[data-tab="journal"]').click();
+    assert.ok(d.querySelector('.rp-pane[data-pane="journal"]').classList.contains('on'));
     dev.checked = false; dev.dispatchEvent(new w.Event('change', { bubbles: true }));
     assert.ok(d.querySelector('.rp-pane[data-pane="etat"]').classList.contains('on'), 'onglet caché quitté');
     assert.ok(shown('.rp-tab[data-tab="general"]'));
@@ -489,7 +505,7 @@ await test('journal : entrées ajoutées en texte brut, curseur suivi, filtre de
             { t: '18:00:01', l: 'ERR', c: 'Jellyfin.Plugin.RecoPlus.Service.RecoService', m: 'échec' } ] },
         { cursor: 'log_1.log|20', file: 'log_1.log', entries: [{ t: '18:00:02', l: 'WRN', c: 'X.Y', m: 'attention' }] },
     ];
-    const { d, w } = open(cfg, { '/RecoPlus/Logs': (o) => { calls.push(o.url); return o.url.includes('cursor=') ? chunks[1] : chunks[0]; } });
+    const { d, w } = await open(cfg, { '/RecoPlus/Logs': (o) => { calls.push(o.url); return o.url.includes('cursor=') ? chunks[1] : chunks[0]; } });
     await wait(50);
     const dev = d.getElementById('rpDev'); dev.checked = true; dev.dispatchEvent(new w.Event('change', { bubbles: true }));
     d.querySelector('.rp-tab[data-tab="journal"]').click();
@@ -515,9 +531,9 @@ await test('calibrage : chemin de chaque méthode (historique / validation crois
         cvDelta: 0, ciLow: 0, ciHigh: 0, recommended: false, verdict: 'on garde l\'actuel', method: 'Coordinate', steps: [],
         methods: [{ method: 'Coordinate', name: 'Recherche par curseurs', gain: 0.25, cvDelta: 0, ciLow: 0, ciHigh: 0, sufficiency: 'insuffisant', recommended: false, noChange: true,
                     fitPath: [0, 0.01, 0.03], cvPath: [0, -0.002, -0.008], picked: 0 }] } };
-    const { w, d } = open(cfg);
+    const { w, d } = await open(cfg);
     const ajax = w.ApiClient.ajax;
-    w.ApiClient.ajax = (o) => (o.url === '/RecoPlus/Status' ? Promise.resolve(st) : ajax(o));
+    w.ApiClient.ajax = (o) => (o.url.split('?')[0] === '/RecoPlus/Status' ? Promise.resolve(st) : ajax(o));
     w.document.querySelector('#RecoPlusConfigPage').dispatchEvent(new w.Event('pageshow'));
     await wait(80);
     const rep = d.getElementById('rpCalReport');
@@ -535,9 +551,9 @@ await test('calibrage : écarts en %, méthode sans changement signalée, applic
         cvDelta: 0.00075, ciLow: 0.0000, ciHigh: 0.002, recommended: false, verdict: 'négligeable', method: 'ChoiceModel', steps: [],
         methods: [{ method: 'ChoiceModel', name: 'Modèle de choix appris', gain: 0.251, cvDelta: 0.00075, ciLow: 0, ciHigh: 0.002, sufficiency: 'suffisant', recommended: false, noChange: false },
                   { method: 'Neural', name: 'Réseau de neurones (expérimental)', gain: 0.25, cvDelta: 0, ciLow: 0, ciHigh: 0, sufficiency: 'insuffisant', recommended: false, noChange: true }] } };
-    const { w, d } = open(cfg);
+    const { w, d } = await open(cfg);
     const ajax = w.ApiClient.ajax;
-    w.ApiClient.ajax = (o) => (o.url === '/RecoPlus/Status' ? Promise.resolve(st) : ajax(o));
+    w.ApiClient.ajax = (o) => (o.url.split('?')[0] === '/RecoPlus/Status' ? Promise.resolve(st) : ajax(o));
     w.document.querySelector('#RecoPlusConfigPage').dispatchEvent(new w.Event('pageshow'));
     await wait(80);
     const t = d.getElementById('rpCalReport').textContent;
@@ -545,6 +561,81 @@ await test('calibrage : écarts en %, méthode sans changement signalée, applic
     assert.match(t, /\+0,3 %/);
     assert.match(t, /aucun changement appris/);
     assert.ok(!/\+0\.0008/.test(t), 'pas de valeur brute');
+});
+
+const EN = JSON.parse(readFileSync(join(root, 'src/RecoPlus.Engine/english.json'), 'utf8'));
+
+// textes français de la page : nœuds texte et attributs du HTML, champs F, littéraux t('…') / tf('…'), tables de libellés
+function pageTexts() {
+    const keys = new Set();
+    const add = (x, raw) => { x = raw ? String(x) : String(x).trim(); if (x && /[A-Za-zÀ-ÿ]/.test(x)) keys.add(x); };
+    const dom = new JSDOM(HTML.replace(/<script>[\s\S]*?<\/script>/, '').replace(/<style>[\s\S]*?<\/style>/, ''));
+    const doc = dom.window.document;
+    const walker = doc.createTreeWalker(doc.body, dom.window.NodeFilter.SHOW_TEXT);
+    let n; while ((n = walker.nextNode())) add(n.nodeValue);
+    doc.querySelectorAll('[title],[placeholder],[aria-label],[data-tpl]').forEach((e) => ['title', 'placeholder', 'aria-label', 'data-tpl'].forEach((a) => e.getAttribute(a) && add(e.getAttribute(a))));
+    const js = HTML.match(/<script>([\s\S]*?)<\/script>/)[1];
+    const unq = (x) => x.replace(/\\'/g, "'");
+    for (const f of fieldsOf(HTML)) { add(unq(f.label)); add(unq(f.tip)); if (f.type.startsWith('enum:')) unq(f.type).slice(5).split(',').forEach((o) => add(o.split('=')[1])); }
+    for (const m of js.matchAll(/^\s*\['\w+',[^\n]*'[cel]',\s*'((?:[^'\\]|\\.)*)'/gm)) add(unq(m[1]));
+    for (const m of js.matchAll(/\bt[f]?\(\s*'((?:[^'\\]|\\.)*)'/g)) add(unq(m[1]), true);
+    for (const m of js.matchAll(/\bt[f]?\(\s*[^()']*\?\s*'((?:[^'\\]|\\.)*)'\s*:\s*'((?:[^'\\]|\\.)*)'/g)) { add(unq(m[1]), true); add(unq(m[2]), true); }
+    for (const m of js.matchAll(/\[[\d.]+, '((?:[^'\\]|\\.)*)'\]/g)) add(unq(m[1]));
+    for (const m of js.match(/var SOURCE_NAMES = \{([^}]*)\}/)[1].matchAll(/'((?:[^'\\]|\\.)*)'/g)) add(unq(m[1]));
+    return keys;
+}
+
+await test('langue : chaque texte de la page a sa traduction anglaise (mêmes paramètres)', async () => {
+    const keys = pageTexts();
+    assert.ok(keys.size > 400, 'textes trouvés : ' + keys.size);
+    const missing = [...keys].filter((k) => !EN[k]);
+    assert.deepEqual(missing, []);
+    for (const k of keys) {
+        const ph = (x) => [...new Set((x.match(/\{[\w:]+\}/g) || []).map((p) => (p === '{title}' ? '{titre}' : p)))].sort().join();
+        assert.equal(ph(EN[k]), ph(k), 'paramètres : ' + k);
+    }
+    // tout littéral français du script (hors commentaires, champs F et classes CSS) passe par le dictionnaire
+    const js = HTML.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/^\s*\/\/.*$/gm, '').replace(/\s\/\/ [^'\n]*$/gm, '');
+    const body = js.replace(/var F = \[[\s\S]*?\n\s*\];/, '');
+    const stray = [...body.matchAll(/'((?:[^'\\\n]|\\.)*)'/g)].map((m) => m[1].replace(/\\'/g, "'"))
+        .filter((x) => /[a-zà-ÿ]{2,}[ '’][a-zà-ÿ«»]|[à-ÿ]/i.test(x) && !EN[x] && !/^(rp-|use strict|Playback Reporting)/.test(x));
+    assert.deepEqual(stray, [], 'textes du script hors dictionnaire');
+    // une option de liste sans libellé (virgule dans un libellé) donnerait « undefined »
+    for (const f of fieldsOf(HTML).filter((x) => x.type.startsWith('enum:'))) {
+        for (const o of f.type.slice(5).split(',')) { assert.equal(o.split('=').length, 2, f.key + ' : option mal formée « ' + o + ' »'); }
+    }
+});
+
+await test('langue : page en anglais (réglage ou langue de Jellyfin), textes du serveur demandés en anglais', async () => {
+    // textes d'état : rendus par le serveur dans la langue demandée
+    const st = { ...status, secrets: { seerrApiKey: 'not set', webhookUrl: 'not set', webhookToken: 'not set' } };
+    const { d, calls } = await open({ ...cfg, Language: 'English' }, { '/RecoPlus/I18n': { lang: 'en', dict: EN }, '/RecoPlus/Status': st });
+    await wait(50);
+    const ui = d.querySelector('.content-primary');
+    assert.equal(d.querySelector('.rp-tab[data-tab="general"]').textContent, 'General');
+    assert.equal(d.querySelector('#rpRecompute span').textContent, 'Recompute now');
+    assert.match(d.getElementById('rp_c_Enabled').closest('label').textContent, /Plugin enabled/);
+    assert.equal(d.getElementById('rp_c_HssSectionTitle').getAttribute('placeholder'), 'For you');
+    assert.match(d.getElementById('rp_c_SourceFilms').closest('.rp-field').querySelector('label').textContent, /“Movies for you” row/);
+    assert.match(d.getElementById('rp_c_SourceParceQue').closest('.rp-field').querySelector('label').textContent, /“Because you liked…” rows/);
+    assert.equal(d.getElementById('rp_e_Mmr').closest('.rp-factor').querySelector('.rp-mult').textContent, '×1.00 · normal');
+    assert.deepEqual([...d.getElementById('rp_c_Language').options].map((o) => o.textContent), ["Jellyfin's", 'French', 'English']);
+    // plus aucun texte de la page resté en français
+    const fr = [];
+    const walker = d.createTreeWalker(ui, d.defaultView.NodeFilter.SHOW_TEXT, { acceptNode: (x) => (x.parentNode.nodeName === 'SCRIPT' || x.parentNode.nodeName === 'STYLE' ? 2 : 1) });
+    let n; while ((n = walker.nextNode())) { const k = n.nodeValue.trim(); if (k && EN[k] && EN[k] !== k) fr.push(k); }
+    ui.querySelectorAll('[title],[placeholder],[aria-label]').forEach((e) => ['title', 'placeholder', 'aria-label'].forEach((a) => { const v = e.getAttribute(a); if (v && EN[v] && EN[v] !== v) fr.push(v); }));
+    assert.deepEqual(fr, []);
+    const left = (ui.textContent.match(/.{0,60}(Sans effet|Par défaut :|Valeur évaluée).{0,60}/g) || []);
+    assert.deepEqual(left, [], 'texte composé resté en français');
+    // chaque appel à l'API porte la langue de la page
+    assert.ok(calls.filter((u) => !u.startsWith('/RecoPlus/I18n')).every((u) => /[?&]lang=en(&|$)/.test(u)), calls.join(' '));
+});
+
+await test('langue : sans dictionnaire (serveur injoignable ou français), la page reste en français', async () => {
+    const { d } = await open(cfg, { '/RecoPlus/I18n': { lang: 'fr', dict: {} } });
+    assert.equal(d.querySelector('.rp-tab[data-tab="general"]').textContent, 'Général');
+    assert.equal(d.getElementById('rp_c_HssSectionTitle').getAttribute('placeholder'), 'Pour toi');
 });
 
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');

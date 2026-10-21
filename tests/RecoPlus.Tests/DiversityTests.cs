@@ -170,7 +170,7 @@ public class DiversityTests
         Assert.Equal("limite", Calibrator.Sufficiency(CalibrationMethod.Coordinate, 300).Level);
         Assert.Equal("insuffisant", Calibrator.Sufficiency(CalibrationMethod.Coordinate, 150).Level);
         Assert.Equal("suffisant", Calibrator.Sufficiency(CalibrationMethod.Coordinate, 5000).Level);
-        Assert.Contains("150 cas", Calibrator.Sufficiency(CalibrationMethod.Auto, 150).Message);
+        Assert.Contains("150 cas", Texts.Render(Calibrator.Sufficiency(CalibrationMethod.Auto, 150).Message, "fr"));
     }
 
     [Fact]

@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.25.0",
+        "changelog": "1.0.25 : interface en français et en anglais — page de configuration, rangées et cartes de l'accueil, notifications, tâches planifiées. Réglage « Langue de l'interface » (onglet Général) : celle de Jellyfin (par défaut : la langue de l'interface de chacun, sinon celle du serveur), français ou anglais. Titres des rangées laissés par défaut traduits pour chacun ({titre} ou {title}). Langue TMDb et pays des classifications vides par défaut = ceux des métadonnées de Jellyfin. Page réorganisée en trois niveaux : de base, avancé (onglets Moteur et Calibrage, toujours visibles) et mode développeur (journal, export et réglages statistiques du calibrage, détails de diagnostic). Correction : option « communauté » de la note utilisée qui s'affichait mal. README refait (présentation classique), détail dans docs/how-it-works.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.24.0",
         "changelog": "1.0.24 : calibrage — nombres de groupes automatiques donnés par des fonctions continues plutôt que par paliers : validation croisée en √(nombre de comptes) groupes, arrondi, entre 2 et 10 (autant de groupes que de comptes par groupe : 4 comptes → 2, 9 → 3, 16 → 4, 25 → 5) ; méthodes longues (recherche par curseurs, réseau) en √(2 × groupes), arrondi (5 → 3, 10 → 4).",
         "targetAbi": "12.2.0.0",

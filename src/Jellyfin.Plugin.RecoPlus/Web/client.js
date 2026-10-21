@@ -11,6 +11,8 @@
    Tout le texte est inséré en textContent (aucun HTML venant du serveur). */
 (function () {
     'use strict';
+    // textes de l'interface, remplacés par ceux du serveur (dans la langue retenue) dès la première réponse
+    var TX = { request: 'Demander', requested: '✓ demandé', failed: 'Demande impossible', series: 'série', because: 'Parce que tu as aimé {0}', title: 'À découvrir pour toi' };
     if (window.__recoPlusClient) { return; }
     window.__recoPlusClient = true;
 
@@ -39,7 +41,11 @@
         var uid = a.getCurrentUserId();
         if (cache.data && cache.user === uid && Date.now() - cache.at < TTL) { return Promise.resolve(cache.data); }
         if (cache.pending) { return cache.pending; }
-        cache.pending = a.getJSON(a.getUrl('RecoPlus/Extended')).then(function (d) {
+        // langue de l'interface Jellyfin (attribut lang posé par l'interface web), sinon celle du navigateur ; le serveur
+        // applique le réglage de langue du plugin et rend tous les textes dans la langue retenue
+        var lang = document.documentElement.getAttribute('lang') || navigator.language || '';
+        cache.pending = a.getJSON(a.getUrl('RecoPlus/Extended', { lang: lang })).then(function (d) {
+            if (d && d.texts) { TX = d.texts; }
             cache = { at: Date.now(), user: uid, data: d, pending: null };
             return d;
         }, function () { cache.pending = null; return null; });
@@ -57,7 +63,7 @@
 
     // Pourquoi ce titre est proposé (raison donnée par le serveur ; anciennes réponses : le titre aimé d'origine)
     function reasonOf(it) {
-        return it.Reason || (it.Because ? 'Parce que tu as aimé ' + it.Because : '');
+        return it.Reason || (it.Because ? TX.because.replace('{0}', it.Because) : '');
     }
 
     // Seerr : 2 en attente, 3 en cours, 4 partiellement disponible, 5 disponible, 6 sur liste noire
@@ -184,12 +190,12 @@
             contentType: 'application/json',
             dataType: 'json'
         }).then(function () {
-            btn.textContent = '✓ demandé';
+            btn.textContent = TX.requested;
             cache.at = 0;
         }, function () {
             btn.disabled = false;
-            btn.textContent = 'Demander';
-            btn.title = 'Demande impossible';
+            btn.textContent = TX.request;
+            btn.title = TX.failed;
         });
     }
 
@@ -209,10 +215,10 @@
         sc.appendChild(img);
         box.appendChild(sc);
         box.appendChild(el('div', 'cardText cardTextCentered cardText-first', it.Name || ''));
-        var sub = (it.Year ? it.Year : '') + (it.Vote ? ' · ★ ' + Number(it.Vote).toFixed(1) : '') + (it.MediaType === 'tv' ? ' · série' : '');
+        var sub = (it.Year ? it.Year : '') + (it.Vote ? ' · ★ ' + Number(it.Vote).toFixed(1) : '') + (it.MediaType === 'tv' ? ' · ' + TX.series : '');
         box.appendChild(el('div', 'cardText cardTextCentered cardText-secondary', sub));
         if (d.canRequest) {
-            var b = el('button', 'raised emby-button', 'Demander');
+            var b = el('button', 'raised emby-button', TX.request);
             b.type = 'button';
             b.style.cssText = 'display:block;margin:.3em auto 0;padding:.3em .9em;font-size:.85em;';
             b.addEventListener('click', function (ev) { ev.stopPropagation(); request(b, it); });
@@ -299,7 +305,7 @@
             var sec = el('div', 'verticalSection');
             sec.id = ROW_ID;
             var head = el('div', 'sectionTitleContainer sectionTitleContainer-cards padded-left');
-            head.appendChild(el('h2', 'sectionTitle sectionTitle-cards', d.title || 'À découvrir pour toi'));
+            head.appendChild(el('h2', 'sectionTitle sectionTitle-cards', d.title || TX.title));
             sec.appendChild(head);
             var row = el('div', 'itemsContainer padded-left padded-right');
             // défilement horizontal sans barre visible (molette, glisser, clavier)

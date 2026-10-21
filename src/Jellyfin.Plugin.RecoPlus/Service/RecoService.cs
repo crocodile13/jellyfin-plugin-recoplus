@@ -21,7 +21,7 @@ using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Service;
 
-/// <summary>État du moteur, pour la page de configuration.</summary>
+/// <summary>État du moteur, pour la page de configuration (textes emballés : <see cref="Texts.Pack"/>).</summary>
 public sealed class EngineStatus
 {
     public DateTime? LastFullRun { get; set; }
@@ -298,7 +298,7 @@ public sealed class RecoService : IDisposable
         catch (Exception ex) when (ex is FileNotFoundException or FileLoadException or TypeLoadException or DllNotFoundException or TypeInitializationException)
         {
             // pilote SQLite absent de cet environnement : on s'en passe
-            Status.PlaybackReporting = "indisponible (" + ex.GetType().Name + ")";
+            Status.PlaybackReporting = Texts.Pack("indisponible ({0})", ex.GetType().Name);
             _prCache = null;
         }
 
@@ -316,7 +316,7 @@ public sealed class RecoService : IDisposable
         var map = HistoryMath.MapPlaybackStarts(rows, g => lib.Titles.ContainsKey(g.ToString("N")) || lib.EpisodeSeries.ContainsKey(g), movies, series, out var remapped);
         if (remapped > 0)
         {
-            status += $", {remapped} lectures d'anciens fichiers rattachées";
+            status = Texts.Pack("{0}, {1} lectures d'anciens fichiers rattachées", status, remapped);
         }
 
         return map;
@@ -629,7 +629,7 @@ public sealed class RecoService : IDisposable
             if (cfg.ExtendedEnabled && !extCands.ContainsKey(key) && _recs.TryGetValue(key, out var prevRecs))
             {
                 var policy = PolicyOf(u);
-                var country = string.IsNullOrWhiteSpace(cfg.RatingCountry) ? "US" : cfg.RatingCountry.Trim().ToUpperInvariant();
+                var country = cfg.ClassificationCountry();
                 r.Extended = prevRecs.Extended.Where(e =>
                 {
                     var k = e.MediaType + ":" + e.TmdbId;
@@ -1084,7 +1084,7 @@ public sealed class RecoService : IDisposable
            ?? new List<string>();
 
     /// <summary>Aperçu lisible des 20 premiers titres d'un compte (page de configuration).</summary>
-    public List<string> Preview(Guid user, int n = 20)
+    public List<string> Preview(Guid user, string lang, int n = 20)
     {
         var r = For(user);
         var lib = Library ?? _index.Current;
@@ -1093,12 +1093,13 @@ public sealed class RecoService : IDisposable
             return new List<string>();
         }
 
-        string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? $"{t.Name}{(t.Kind == TitleKind.Series ? " (série)" : string.Empty)}" : id;
+        string series = " (" + Texts.T("série", lang) + ")";
+        string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? t.Name + (t.Kind == TitleKind.Series ? series : string.Empty) : id;
         return r.Pinned.Select(id => "📌 " + Name(id)).Concat(r.Ranked.Select(Name)).Take(n).ToList();
     }
 
     /// <summary>Aperçu des rangées d'accueil supplémentaires d'un compte : libellé → titres (page de configuration).</summary>
-    public Dictionary<string, List<string>> PreviewRows(Guid user)
+    public Dictionary<string, List<string>> PreviewRows(Guid user, string lang)
     {
         var r = For(user);
         var lib = Library ?? _index.Current;
@@ -1109,18 +1110,14 @@ public sealed class RecoService : IDisposable
             return res;
         }
 
-        string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? $"{t.Name}{(t.Kind == TitleKind.Series ? " (série)" : string.Empty)}" : id;
-        string tpl = string.IsNullOrWhiteSpace(cfg.RowBecauseTitle) ? "Parce que tu as aimé {titre}" : cfg.RowBecauseTitle;
+        string series = " (" + Texts.T("série", lang) + ")";
+        string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? t.Name + (t.Kind == TitleKind.Series ? series : string.Empty) : id;
         int size = Math.Clamp(cfg.RowSize, 5, 60);
         foreach (var (row, ids) in r.Rows.Where(kv => kv.Key != HomeRows.PourToi))
         {
-            string label = row switch
-            {
-                HomeRows.Films => cfg.RowMoviesTitle,
-                HomeRows.Series => cfg.RowSeriesTitle,
-                HomeRows.Nouveautes => cfg.RowNewTitle,
-                _ => r.RowAnchors.TryGetValue(row, out var a) ? tpl.Replace("{titre}", a, StringComparison.Ordinal) : row,
-            };
+            string label = row is HomeRows.Films or HomeRows.Series or HomeRows.Nouveautes
+                ? HomeScreenSectionsIntegration.RowTitle(cfg, row, lang)
+                : r.RowAnchors.TryGetValue(row, out var a) ? HomeScreenSectionsIntegration.Because(cfg, a, lang) : row;
             res[label] = ids.Take(size).Select(Name).ToList();
         }
 
@@ -1228,13 +1225,6 @@ public sealed class RecoService : IDisposable
         return Parental.IsAllowed(score, sub, d.MediaType == "tv" ? p.BlockUnratedSeries : p.BlockUnratedMovies, p.Max, p.MaxSub)
                && Parental.TagsAllowed(d.Keywords, d.Genres, p.Blocked, p.Allowed);
     }
-
-    private static readonly Dictionary<string, string> LanguageNames = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["ja"] = "japonais", ["ko"] = "coréen", ["zh"] = "chinois", ["cn"] = "cantonais", ["fr"] = "français", ["en"] = "anglais",
-        ["es"] = "espagnol", ["it"] = "italien", ["de"] = "allemand", ["pt"] = "portugais", ["hi"] = "hindi", ["ru"] = "russe",
-        ["sv"] = "suédois", ["da"] = "danois", ["no"] = "norvégien", ["pl"] = "polonais", ["tr"] = "turc", ["th"] = "thaï",
-    };
 
     /// <summary>Candidats hors bibliothèque d'un compte : identifiants, accord TMDb, titre aimé d'origine et raison affichée.</summary>
     private sealed record ExtCandidates(
@@ -1358,7 +1348,7 @@ public sealed class RecoService : IDisposable
             var votes = Math.Clamp(cfg.ExtendedTopRatedMinVotes, 0, 1_000_000).ToString(System.Globalization.CultureInfo.InvariantCulture);
             foreach (var t in types)
             {
-                Discover("top", t, new Dictionary<string, string> { ["voteCountGte"] = votes }, 1, "Parmi les mieux notés", Math.Clamp(cfg.ExtendedTopRatedPages, 1, 10));
+                Discover("top", t, new Dictionary<string, string> { ["voteCountGte"] = votes }, 1, Texts.Pack("Parmi les mieux notés"), Math.Clamp(cfg.ExtendedTopRatedPages, 1, 10));
             }
         }
 
@@ -1373,7 +1363,7 @@ public sealed class RecoService : IDisposable
             .Select(g => (Item: g.Key, Weight: g.Sum(x => x.A.Weight) / likedTotal))
             .Where(g => g.Weight * 100 >= Math.Clamp(cfg.ExtendedLanguageMinShare, 1, 100))
             .OrderByDescending(g => g.Weight).ThenBy(g => g.Item, StringComparer.Ordinal).ToList();
-        string LanguageLabel(string code) => LanguageNames.TryGetValue(code, out var ln) ? ln : code;
+        string LanguageLabel(string code) => Exploration.LanguageNames.TryGetValue(code, out var ln) ? Texts.Translatable(ln) : code;   // nom traduit au rendu
         string Inv(int v) => v.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
         if (cfg.ExtendedByGenre)
@@ -1385,7 +1375,7 @@ public sealed class RecoService : IDisposable
                     var genreIds = Exploration.GenreFor(gid, t).ToList();
                     if (genreIds.Count > 0)
                     {
-                        Discover("genre", t, new Dictionary<string, string> { ["genre"] = string.Join("|", genreIds) }, w, "Bien noté en " + genreNames[gid]);
+                        Discover("genre", t, new Dictionary<string, string> { ["genre"] = string.Join("|", genreIds) }, w, Texts.Pack("Bien noté en {0}", genreNames[gid]));
                     }
                 }
             }
@@ -1397,7 +1387,7 @@ public sealed class RecoService : IDisposable
             {
                 foreach (var t in types)
                 {
-                    Discover("keyword", t, new Dictionary<string, string> { ["keywords"] = Inv(kid) }, w, "Sur le thème « " + keywordNames[kid] + " »");
+                    Discover("keyword", t, new Dictionary<string, string> { ["keywords"] = Inv(kid) }, w, Texts.Pack("Sur le thème « {0} »", keywordNames[kid]));
                 }
             }
         }
@@ -1416,9 +1406,9 @@ public sealed class RecoService : IDisposable
             int maxCross = Math.Clamp(cfg.ExtendedCrossingsMax, 0, 30);
             var g5 = Norm(topGenres.Take(5));
             var byKeyword = Exploration.Pairs(g5, Norm(topKeywords.Take(5)), maxCross)
-                .Select(p => (Genre: p.A, Extra: "keywords", Value: Inv(p.B), p.Weight, Reason: "Bien noté en " + genreNames[p.A] + ", thème « " + keywordNames[p.B] + " »"));
+                .Select(p => (Genre: p.A, Extra: "keywords", Value: Inv(p.B), p.Weight, Reason: Texts.Pack("Bien noté en {0}, thème « {1} »", genreNames[p.A], keywordNames[p.B])));
             var byLanguage = Exploration.Pairs(g5, Norm(topLanguages.Where(l => l.Item != "en").Take(3)), maxCross)
-                .Select(p => (Genre: p.A, Extra: "language", Value: p.B, p.Weight, Reason: "Bien noté en " + genreNames[p.A] + ", en " + LanguageLabel(p.B) + " (version originale)"));
+                .Select(p => (Genre: p.A, Extra: "language", Value: p.B, p.Weight, Reason: Texts.Pack("Bien noté en {0}, en {1} (version originale)", genreNames[p.A], LanguageLabel(p.B))));
             var votes = Inv(Math.Clamp(cfg.ExtendedMinVotes, 0, 1_000_000) / 2);
             foreach (var c in byKeyword.Concat(byLanguage).OrderByDescending(c => c.Weight).Take(maxCross))
             {
@@ -1445,13 +1435,13 @@ public sealed class RecoService : IDisposable
             };
             foreach (var t in types)
             {
-                Discover("gems", t, gem, 1, "Pépite peu connue");
+                Discover("gems", t, gem, 1, Texts.Pack("Pépite peu connue"));
                 foreach (var (gid, w) in topGenres.Take(Math.Clamp(cfg.ExtendedGemGenres, 0, 20)))
                 {
                     var genreIds = Exploration.GenreFor(gid, t).ToList();
                     if (genreIds.Count > 0)
                     {
-                        Discover("gems", t, new Dictionary<string, string>(gem) { ["genre"] = string.Join("|", genreIds) }, 1 + w, "Pépite peu connue en " + genreNames[gid]);
+                        Discover("gems", t, new Dictionary<string, string>(gem) { ["genre"] = string.Join("|", genreIds) }, 1 + w, Texts.Pack("Pépite peu connue en {0}", genreNames[gid]));
                     }
                 }
             }
@@ -1467,7 +1457,7 @@ public sealed class RecoService : IDisposable
                 foreach (var (sid, w) in Exploration.Top(mine.Select(x => (x.D.StudioRefs.Select(g => g.Id), x.A.Weight)), min, max))
                 {
                     var id = sid.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    Discover("studio", t, new Dictionary<string, string> { [t == "tv" ? "network" : "studio"] = id }, w, (t == "tv" ? "De la chaîne " : "Du studio ") + names[sid]);
+                    Discover("studio", t, new Dictionary<string, string> { [t == "tv" ? "network" : "studio"] = id }, w, Texts.Pack(t == "tv" ? "De la chaîne {0}" : "Du studio {0}", names[sid]));
                 }
             }
         }
@@ -1478,7 +1468,7 @@ public sealed class RecoService : IDisposable
             {
                 foreach (var t in types)
                 {
-                    Discover("language", t, new Dictionary<string, string> { ["language"] = code }, share, "Bien noté en " + LanguageLabel(code) + " (version originale)");
+                    Discover("language", t, new Dictionary<string, string> { ["language"] = code }, share, Texts.Pack("Bien noté en {0} (version originale)", LanguageLabel(code)));
                 }
             }
         }
@@ -1507,7 +1497,7 @@ public sealed class RecoService : IDisposable
                 int rank = 0;
                 foreach (var r in parts[si])
                 {
-                    Add("saga", r, sagas[si].Weight / (1.0 + (0.1 * rank++)), "Dans la saga de " + sagas[si].Anchor);
+                    Add("saga", r, sagas[si].Weight / (1.0 + (0.1 * rank++)), Texts.Pack("Dans la saga de {0}", sagas[si].Anchor));
                 }
             }
         }
@@ -1522,7 +1512,7 @@ public sealed class RecoService : IDisposable
             {
                 foreach (var r in works[pi])
                 {
-                    Add("people", r, people[pi].Weight * (0.5 + (r.Vote / 20.0)), "De " + names[people[pi].Item]);
+                    Add("people", r, people[pi].Weight * (0.5 + (r.Vote / 20.0)), Texts.Pack("De {0}", names[people[pi].Item]));
                 }
             }
         }
@@ -1551,7 +1541,7 @@ public sealed class RecoService : IDisposable
         })).ConfigureAwait(false);
 
         var policy = PolicyOf(u);
-        var country = string.IsNullOrWhiteSpace(cfg.RatingCountry) ? "US" : cfg.RatingCountry.Trim().ToUpperInvariant();
+        var country = cfg.ClassificationCountry();
         var ids = new List<string>();
         var agree = new Dictionary<string, double>(StringComparer.Ordinal);
         var reasons = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -1577,7 +1567,7 @@ public sealed class RecoService : IDisposable
             sourceOf[id] = source;
             agree[id] = count.GetValueOrDefault(k) / (double)Math.Max(1, anchors.Count);
             reasons[id] = source == "related"
-                ? (because.TryGetValue(id, out var b) && b.Length > 0 ? "Parce que tu as aimé " + b : string.Empty)
+                ? (because.TryGetValue(id, out var b) && b.Length > 0 ? Texts.Pack("Parce que tu as aimé {0}", b) : string.Empty)
                 : bySource[source][k].Reason;
         }
 
