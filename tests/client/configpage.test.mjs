@@ -594,6 +594,16 @@ await test('par défaut, chaque rangée mélange bibliothèque et Seerr (serveur
     }
 });
 
+await test('calibrage : méthode par défaut = modèle de choix appris (rapide), pas automatique', async () => {
+    const cs = readFileSync(join(root, 'src/Jellyfin.Plugin.RecoPlus/Configuration/PluginConfiguration.cs'), 'utf8');
+    assert.match(cs, /CalibrationMethod CalibrationMethod \{ get; set; \} = CalibrationMethod\.ChoiceModel;/);
+    const c = JSON.parse(JSON.stringify(cfg)); delete c.CalibrationMethod;
+    const { d } = await open(c);
+    await wait(30);
+    assert.equal(d.getElementById('rpCalMethod').value, 'ChoiceModel');
+    assert.equal(d.getElementById('rpCalMethod').options[0].value, 'ChoiceModel');
+});
+
 await test('langue : chaque texte de la page a sa traduction anglaise (mêmes paramètres)', async () => {
     const keys = pageTexts();
     assert.ok(keys.size > 400, 'textes trouvés : ' + keys.size);
