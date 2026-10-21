@@ -12,9 +12,9 @@
         "version": "1.0.24.0",
         "changelog": "1.0.24 : calibrage — nombres de groupes automatiques donnés par des fonctions continues plutôt que par paliers : validation croisée en √(nombre de comptes) groupes, arrondi, entre 2 et 10 (autant de groupes que de comptes par groupe : 4 comptes → 2, 9 → 3, 16 → 4, 25 → 5) ; méthodes longues (recherche par curseurs, réseau) en √(2 × groupes), arrondi (5 → 3, 10 → 4).",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.24.0/RecoPlus_1.0.24.0.zip",
+        "checksum": "88cff5743c7afd3f491f780e41263edc",
+        "timestamp": "2026-10-21T07:51:01Z"
       },
       {
         "version": "1.0.23.0",
