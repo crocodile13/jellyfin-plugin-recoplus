@@ -12,9 +12,9 @@
         "version": "1.0.26.0",
         "changelog": "1.0.26 : calibrage — méthode par défaut : modèle de choix appris (environ une minute) au lieu d'automatique, qui lance aussi la recherche par curseurs et le réseau de neurones (jusqu'à une heure de processeur) ; automatique reste au choix.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.26.0/RecoPlus_1.0.26.0.zip",
+        "checksum": "a5234867cdee0794a288a4c415806104",
+        "timestamp": "2026-10-21T09:09:20Z"
       },
       {
         "version": "1.0.25.0",
