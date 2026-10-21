@@ -500,7 +500,7 @@ public static class ChoiceModel
 
     /// <summary>
     /// Force de régularisation par validation croisée sur les comptes des cas donnés (k groupes de comptes, voir
-    /// <see cref="Calibrator.FoldCount"/>) : celle dont les poids appris sans un groupe classent le mieux ce groupe (mesure
+    /// <see cref="Calibrator.FoldCount(int)"/>) : celle dont les poids appris sans un groupe classent le mieux ce groupe (mesure
     /// du calibrage : gain de rang). À égalité, la plus forte.
     /// </summary>
     public static double SelectKappa(Dataset ds, SimilarityIndex sim, IReadOnlyList<Calibrator.Case> cases, EngineSettings start,

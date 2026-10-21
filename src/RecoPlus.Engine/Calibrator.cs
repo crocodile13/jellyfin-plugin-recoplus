@@ -59,10 +59,10 @@ public enum CalibrationPrudence
 /// <summary>Réglages du calibrage lui-même ; 0 (ou Auto) = valeur automatique.</summary>
 public sealed class CalibrationOptions
 {
-    /// <summary>Groupes de comptes de la validation croisée (2 à 10) ; 0 = auto (5 à partir de 10 comptes, 3 à partir de 6, sinon 2).</summary>
+    /// <summary>Groupes de comptes de la validation croisée (2 à 10) ; 0 = auto (√comptes, voir <see cref="Calibrator.FoldCount(int)"/>).</summary>
     public int Folds { get; set; }
 
-    /// <summary>Groupes pour la recherche par curseurs et le réseau (longs) ; 0 = auto (au plus 3).</summary>
+    /// <summary>Groupes pour la recherche par curseurs et le réseau (longs) ; 0 = auto (√(2 × groupes), voir <see cref="Calibrator.SlowFoldCount"/>).</summary>
     public int SlowFolds { get; set; }
 
     /// <summary>Groupes pour choisir la régularisation à l'intérieur de chaque groupe ; 0 = auto (2).</summary>
@@ -89,7 +89,11 @@ public sealed class CalibrationOptions
     }
 
     /// <summary>Groupes effectifs des méthodes longues.</summary>
-    public int SlowFoldsFor(IReadOnlyList<Calibrator.Case> cases) => Math.Min(FoldsFor(cases), SlowFolds >= 2 ? Math.Min(SlowFolds, 10) : 3);
+    public int SlowFoldsFor(IReadOnlyList<Calibrator.Case> cases)
+    {
+        int k = FoldsFor(cases);
+        return SlowFolds >= 2 ? Math.Min(SlowFolds, k) : Calibrator.SlowFoldCount(k);
+    }
 
     /// <summary>Groupes effectifs du choix de régularisation imbriqué.</summary>
     public int InnerFoldsEff => InnerFolds >= 2 ? Math.Min(InnerFolds, 10) : 2;
@@ -542,14 +546,23 @@ public static class Calibrator
     }
 
     /// <summary>
-    /// Nombre de groupes de comptes de la validation croisée : 5 à partir de 10 comptes (chaque apprentissage voit 80 %
-    /// des comptes, la mesure est bien moins bruitée qu'avec deux moitiés), 3 à partir de 6, sinon 2.
+    /// Nombre de groupes de comptes de la validation croisée, fonction continue du nombre de comptes n : k = √n arrondi
+    /// (autant de groupes que de comptes par groupe : chaque apprentissage voit 1 − 1/√n des comptes, et chaque mesure
+    /// porte sur √n comptes), entre 2 et 10, jamais plus que n. 4 comptes → 2, 9 → 3, 16 → 4, 25 → 5, 100 → 10.
     /// </summary>
     public static int FoldCount(IReadOnlyList<Case> cases)
-    {
-        int a = cases.Select(c => c.Ev.User).Distinct(StringComparer.Ordinal).Count();
-        return a >= 10 ? 5 : a >= 6 ? 3 : 2;
-    }
+        => FoldCount(cases.Select(c => c.Ev.User).Distinct(StringComparer.Ordinal).Count());
+
+    /// <summary>Voir <see cref="FoldCount(IReadOnlyList{Case})"/>.</summary>
+    public static int FoldCount(int accounts)
+        => Math.Clamp((int)Math.Round(Math.Sqrt(Math.Max(0, accounts)), MidpointRounding.AwayFromZero), 2, Math.Max(2, Math.Min(10, accounts)));
+
+    /// <summary>
+    /// Groupes des méthodes longues (recherche par curseurs, réseau : tout l'apprentissage refait par groupe), fonction
+    /// continue des groupes k de la validation croisée : √(2k) arrondi, entre 2 et k. k = 2 → 2, 5 → 3, 10 → 4.
+    /// </summary>
+    public static int SlowFoldCount(int folds)
+        => Math.Clamp((int)Math.Round(Math.Sqrt(2.0 * Math.Max(2, folds)), MidpointRounding.AwayFromZero), 2, Math.Max(2, folds));
 
     /// <summary>
     /// Choisit une valeur par validation croisée par comptes : pour chaque valeur, apprise sans un groupe et mesurée sur
