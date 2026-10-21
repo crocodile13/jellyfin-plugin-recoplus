@@ -92,10 +92,10 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Méthode du calibrage.</summary>
     public CalibrationMethod CalibrationMethod { get; set; } = CalibrationMethod.Auto;
 
-    /// <summary>Calibrage : groupes de comptes de la validation croisée (2-10) ; 0 = automatique.</summary>
+    /// <summary>Calibrage : groupes de comptes de la validation croisée (2-10) ; 0 = automatique (√comptes).</summary>
     public int CalibrationFolds { get; set; }
 
-    /// <summary>Calibrage : groupes pour la recherche par curseurs et le réseau (2-10) ; 0 = automatique (3 au plus).</summary>
+    /// <summary>Calibrage : groupes pour la recherche par curseurs et le réseau (2-10) ; 0 = automatique (√(2 × groupes)).</summary>
     public int CalibrationSlowFolds { get; set; }
 
     /// <summary>Calibrage : groupes du choix de régularisation imbriqué (2-10) ; 0 = automatique (2).</summary>

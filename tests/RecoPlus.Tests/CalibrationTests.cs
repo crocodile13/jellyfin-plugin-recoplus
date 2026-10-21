@@ -97,7 +97,10 @@ public class CalibrationTests
         var cases = Calibrator.Cases(ds);
         var auto = new CalibrationOptions();
         Assert.Equal(Calibrator.FoldCount(cases), auto.FoldsFor(cases));
-        Assert.Equal(Math.Min(3, auto.FoldsFor(cases)), auto.SlowFoldsFor(cases));
+        Assert.Equal(Calibrator.SlowFoldCount(auto.FoldsFor(cases)), auto.SlowFoldsFor(cases));
+        // fonctions continues (arrondies), pas de paliers
+        Assert.Equal(new[] { 2, 2, 2, 3, 4, 5, 7, 10, 10 }, new[] { 1, 3, 4, 9, 16, 25, 50, 100, 400 }.Select(Calibrator.FoldCount).ToArray());
+        Assert.Equal(new[] { 2, 2, 3, 3, 4 }, new[] { 2, 3, 4, 5, 10 }.Select(Calibrator.SlowFoldCount).ToArray());
         Assert.Equal(2, auto.InnerFoldsEff);
         Assert.Equal(1, auto.SeMultiplier);
         Assert.Equal((2, 4), (auto.PassesEff, auto.RefineEff));

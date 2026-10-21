@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.23 : calibrage plus solide — validation croisée à 5 groupes de comptes (au lieu de deux moitiés) pour juger chaque méthode et choisir la régularisation ; chaque méthode donne un chemin (chaque changement de la recherche par curseurs, ou un quart, la moitié et tout le chemin vers un modèle appris) et on garde l'étape la plus prudente qui fait presque aussi bien que la meilleure en validation croisée : la recherche par curseurs ne sur-apprend plus. L'onglet Calibrage montre ce chemin (sur l'historique et en validation croisée). Mémoire bornée (la recherche pouvait épuiser la mémoire du serveur) et contextes réutilisés entre essais ; avancement plus juste. Réglages du calibrage lui-même (onglet Calibrage, 0 = automatique) : groupes de la validation croisée, des méthodes longues et du choix imbriqué de la régularisation, prudence (1 ou 2 erreurs types, ou la meilleure étape), passes et affinages de la recherche par curseurs, gain minimal pour recommander.",
+  "changelog": "1.0.24 : calibrage — nombres de groupes automatiques donnés par des fonctions continues plutôt que par paliers : validation croisée en √(nombre de comptes) groupes, arrondi, entre 2 et 10 (autant de groupes que de comptes par groupe : 4 comptes → 2, 9 → 3, 16 → 4, 25 → 5) ; méthodes longues (recherche par curseurs, réseau) en √(2 × groupes), arrondi (5 → 3, 10 → 4).",
   "description": "Recommandations personnelles à la place de celles de Jellyfin.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-20T00:00:00.0000000Z",
-  "version": "1.0.23.0",
+  "version": "1.0.24.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

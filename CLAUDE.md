@@ -36,6 +36,7 @@ partielle en comparant les diagnostics avant/après le changement (seuls les nou
 - Version : `Version`, `AssemblyVersion`, `FileVersion` du csproj, `meta.json` (version et changelog) et une entrée en
   tête de `manifest.json` (changelog en français, `sourceUrl`/`checksum`/`timestamp` vides). Le changelog commence par
   « 1.0.N : ».
+- Valeurs automatiques : des fonctions continues (√n, log, interpolation…) plutôt que des paliers (« 5 à partir de 10 »).
 - `TreatWarningsAsErrors` : un avertissement casse la CI.
 - Dans l'espace de noms `Jellyfin.Plugin.RecoPlus`, `RecoPlus.Engine.X` se résout mal (CS0234) : utiliser
   `using RecoPlus.Engine;`.
