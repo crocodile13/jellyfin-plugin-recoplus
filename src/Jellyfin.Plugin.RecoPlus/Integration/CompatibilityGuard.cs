@@ -30,7 +30,7 @@ public enum Feature
     /// <summary>Rangée Home Screen Sections.</summary>
     HomeScreenSection,
 
-    /// <summary>Script client (rangée du mode étendu).</summary>
+    /// <summary>Script client de l'accueil (titres des rangées, titres montrés, titres hors bibliothèque).</summary>
     ClientScript
 }
 
@@ -127,7 +127,7 @@ public sealed class CompatibilityGuard : IHostedService
         Feature.Suggestions => "Remplacement de /Items/Suggestions",
         Feature.Similar => "Remplacement de « Plus comme ceci »",
         Feature.HomeScreenSection => "Rangée Home Screen Sections",
-        _ => "Script client (mode étendu)",
+        _ => "Script de l'accueil",
     };
 
     /// <inheritdoc />
