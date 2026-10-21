@@ -1155,7 +1155,7 @@
                 st.textContent = t('préparation…');
                 ApiClient.ajax({ type: 'GET', url: ApiClient.getUrl('RecoPlus/Calibration/Export'), dataType: 'text' }).then(function (text) {
                     var url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
-                    var a = el('a', { href: url, download: 'reco-calibrage-' + new Date().toISOString().slice(0, 10) + '.json' });
+                    var a = el('a', { href: url, download: 'reco-calibration-' + new Date().toISOString().slice(0, 10) + '.json' });
                     document.body.appendChild(a); a.click(); a.remove();
                     setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
                     st.textContent = tf('téléchargé ({0} Ko)', Math.round(text.length / 1024));

@@ -47,5 +47,5 @@
   </g>
 </g>
   <text x="500" y="318" font-family="Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="132" font-weight="800" fill="#ffffff" letter-spacing="-4">Reco<tspan fill="#ff8a54">+</tspan></text>
-  <text x="506" y="374" font-family="Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="30" font-weight="500" fill="#aab1d6">recommandations pour Jellyfin</text>
+  <text x="506" y="374" font-family="Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-size="30" font-weight="500" fill="#aab1d6">recommendations for Jellyfin</text>
 </svg>

@@ -46,7 +46,7 @@ public sealed class SecretStore
     {
         if (Array.IndexOf(Known, name) < 0)
         {
-            throw new ArgumentException("secret inconnu", nameof(name));
+            throw new ArgumentException("unknown secret", nameof(name));   // i18n:skip (interne)
         }
 
         lock (_lock)
@@ -99,7 +99,7 @@ public sealed class SecretStore
         }
         catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
         {
-            _log.LogWarning("Reco+ : fichier de secrets illisible ({Type}), secrets considérés absents", ex.GetType().Name);
+            _log.LogWarning("Reco+: unreadable secrets file ({Type}), secrets treated as missing", ex.GetType().Name);
             _cache = new();
         }
     }

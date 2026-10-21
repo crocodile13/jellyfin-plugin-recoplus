@@ -50,7 +50,7 @@ public sealed class Notifier
     public void Raise(string key, string title, string message)
     {
         _alerts[key] = new Alert(key, title, message, DateTime.UtcNow);
-        _log.LogWarning("Reco+ : {Title} — {Message}", Texts.Render(title, "fr"), Texts.Render(message, "fr"));
+        _log.LogWarning("Reco+: {Title} — {Message}", Texts.Render(title, "en"), Texts.Render(message, "en"));
         if (_sent.TryGetValue(key, out var last) && DateTime.UtcNow - last < TimeSpan.FromHours(24))
         {
             return;
@@ -75,7 +75,7 @@ public sealed class Notifier
         }
         catch (Exception ex)
         {
-            _log.LogWarning(ex, "Reco+ : écriture dans le journal d'activité impossible");
+            _log.LogWarning(ex, "Reco+: could not write to the activity log");
         }
 
         await SendWebhookAsync(title, message).ConfigureAwait(false);
@@ -155,7 +155,7 @@ public sealed class Notifier
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or InvalidOperationException or FormatException)
         {
-            _log.LogWarning("Reco+ : webhook en échec ({Type})", ex.GetType().Name);
+            _log.LogWarning("Reco+: webhook failed ({Type})", ex.GetType().Name);
             return Texts.Pack("échec : {0}", ex.GetType().Name);
         }
     }

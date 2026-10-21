@@ -77,7 +77,7 @@ public sealed class PlaybackReportingReader
         }
         catch (Exception ex) when (ex is SqliteException or IOException or TypeLoadException or InvalidOperationException or DllNotFoundException)
         {
-            _log.LogWarning("Reco+ : base Playback Reporting illisible ({Type}: {Msg}), ignorée", ex.GetType().Name, ex.Message);
+            _log.LogWarning("Reco+: unreadable Playback Reporting database ({Type}: {Msg}), ignored", ex.GetType().Name, ex.Message);
             status = Texts.Pack("illisible : {0}", ex.GetType().Name);
             res.Clear();
         }

@@ -70,20 +70,23 @@ de la CI.
   avec son sha256, appliqué par Marien (`git am -3`), PR, CI, merge `--rebase`, publication automatique.
 - Une version publiée ne se modifie pas : une correction est une nouvelle version.
 - Version : `Version`, `AssemblyVersion`, `FileVersion` du csproj, `meta.json` (version, changelog) et une entrée en tête
-  de `manifest.json` (changelog en français commençant par « 1.0.N : », `sourceUrl`/`checksum`/`timestamp` vides).
+  de `manifest.json` (changelog en anglais commençant par « 1.0.N: », `sourceUrl`/`checksum`/`timestamp` vides).
   Un commit sans changement de `manifest.json` (documentation) ne publie rien.
 - Commits, titres et descriptions de PR : anglais. Auteur : `crocodile13 <134718087+crocodile13@users.noreply.github.com>`.
 
 ## Conventions
 
 - Commentaires et docs XML : français, phrases complètes. Interface : français (langue source) et anglais.
+- Par défaut, tout ce qui sort du plugin est en anglais : journaux du serveur, changelog, catalogue (`manifest.json`,
+  `meta.json`), image du plugin, textes de repli du script de l'accueil, noms de fichiers exportés. Seule la langue de
+  l'interface suit Jellyfin (réglage « celle de Jellyfin »).
 - Traduction (`Texts`, `english.json` dans le moteur) : le texte français est la clé, `english.json` sa traduction.
   - Un texte affiché passe par `Texts.Pack` (message avec paramètres `{0}`, rendu plus tard dans la langue du lecteur ;
     `Texts.Pack("texte")` sans paramètre marque un texte simple), `Texts.T` (rendu tout de suite), `Texts.Translatable`
     (paramètre à traduire lui aussi) ; jamais de `$"…"` ni de concaténation pour un texte affiché.
   - Un état ou une erreur gardé en mémoire reste emballé ; il est rendu à la frontière : `RecoController` (`L`, `Msg`,
     langue = réglage du plugin, sinon `?lang=`, sinon Accept-Language, sinon serveur), notifications et journal
-    d'activité (langue du serveur), journaux du serveur (français, `Render(…, "fr")`).
+    d'activité (langue du serveur), journaux du serveur (anglais, `Render(…, "en")`).
   - Côté page : `t('…')` / `tf('…', x)` pour chaque texte construit, `translateDom` pour le HTML statique ; chaque appel
     à l'API porte `lang`. Côté accueil : textes fournis par `RecoPlus/Extended` (`texts`).
   - Les tests vérifient que chaque texte (sources C#, page, libellés du moteur) a sa traduction, avec les mêmes

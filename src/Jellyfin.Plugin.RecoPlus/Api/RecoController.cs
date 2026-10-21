@@ -560,7 +560,7 @@ public sealed class RecoController : ControllerBase
         Data.CalibrationExport.Write(ds, ms);
         ms.Position = 0;
         Response.Headers.CacheControl = "no-store";
-        return File(ms, "application/json", "reco-calibrage-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmm", System.Globalization.CultureInfo.InvariantCulture) + ".json");
+        return File(ms, "application/json", "reco-calibration-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmm", System.Globalization.CultureInfo.InvariantCulture) + ".json");
     }
 
     /// <summary>Interrompt le calibrage.</summary>

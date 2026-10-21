@@ -244,7 +244,7 @@ public sealed class LibraryIndex
             }
         }
 
-        _log.LogInformation("Reco+ : bibliothèque indexée — {Titles} titres, {Eps} épisodes, {Colls} collections en {Ms} ms",
+        _log.LogInformation("Reco+: library indexed — {Titles} titles, {Eps} episodes, {Colls} collections in {Ms} ms",
             titles.Count, episodes.Count, colls.Count, sw.ElapsedMilliseconds);
         return new LibrarySnapshot
         {

@@ -129,14 +129,14 @@ public sealed class RecoWorker : BackgroundService
                 var (tracked, missing) = _reco.UsersWithoutRecs();
                 if (missing.Count > 0 && missing.Count == tracked)
                 {
-                    _log.LogInformation("Reco+ : aucune liste en cache, calcul de tous les comptes");
+                    _log.LogInformation("Reco+: no cached list, computing all accounts");
                     ScheduleAll(TimeSpan.Zero);
                 }
                 else
                 {
                     foreach (var u in missing)
                     {
-                        _log.LogInformation("Reco+ : compte {User} sans liste, calcul de ce compte seulement", u);
+                        _log.LogInformation("Reco+: account {User} has no list, computing this account only", u);
                         _dueUsers[u] = DateTime.UtcNow;
                     }
                 }
@@ -171,7 +171,7 @@ public sealed class RecoWorker : BackgroundService
                     _dueUsers.Clear();
 
                     // calcul complet = tâche planifiée « Recalcul des recommandations » (visible, avec sa progression)
-                    _log.LogInformation("Reco+ : recalcul de tous les comptes mis en file (Tâches planifiées)");
+                    _log.LogInformation("Reco+: recomputation of all accounts queued (Scheduled Tasks)");
                     _tasks.QueueIfNotRunning<Tasks.NightlyTask>();
                     continue;
                 }
@@ -188,7 +188,7 @@ public sealed class RecoWorker : BackgroundService
                         catch (Exception ex) when (!stoppingToken.IsCancellationRequested)
                         {
                             // jamais d'arrêt du planificateur pour un calcul raté : l'erreur est dans l'état du moteur
-                            _log.LogError(ex, "Reco+ : échec du recalcul d'un compte");
+                            _log.LogError(ex, "Reco+: account recomputation failed");
                         }
                     }
                 }
