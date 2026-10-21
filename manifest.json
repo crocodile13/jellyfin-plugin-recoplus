@@ -12,9 +12,9 @@
         "version": "1.0.23.0",
         "changelog": "1.0.23 : calibrage plus solide — validation croisée à 5 groupes de comptes (au lieu de deux moitiés) pour juger chaque méthode et choisir la régularisation ; chaque méthode donne un chemin (chaque changement de la recherche par curseurs, ou un quart, la moitié et tout le chemin vers un modèle appris) et on garde l'étape la plus prudente qui fait presque aussi bien que la meilleure en validation croisée : la recherche par curseurs ne sur-apprend plus. L'onglet Calibrage montre ce chemin (sur l'historique et en validation croisée). Mémoire bornée (la recherche pouvait épuiser la mémoire du serveur) et contextes réutilisés entre essais ; avancement plus juste. Réglages du calibrage lui-même (onglet Calibrage, 0 = automatique) : groupes de la validation croisée, des méthodes longues et du choix imbriqué de la régularisation, prudence (1 ou 2 erreurs types, ou la meilleure étape), passes et affinages de la recherche par curseurs, gain minimal pour recommander.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.23.0/RecoPlus_1.0.23.0.zip",
+        "checksum": "f34e83073c3a5d81cca272d74b50b238",
+        "timestamp": "2026-10-21T07:46:21Z"
       },
       {
         "version": "1.0.22.0",
