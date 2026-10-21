@@ -93,7 +93,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public UiLanguage Language { get; set; } = UiLanguage.System;
 
     /// <summary>Méthode du calibrage.</summary>
-    public CalibrationMethod CalibrationMethod { get; set; } = CalibrationMethod.Auto;
+    public CalibrationMethod CalibrationMethod { get; set; } = CalibrationMethod.ChoiceModel;   // rapide ; Auto lance aussi les méthodes longues
 
     /// <summary>Calibrage : groupes de comptes de la validation croisée (2-10) ; 0 = automatique (√comptes).</summary>
     public int CalibrationFolds { get; set; }

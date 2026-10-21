@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.25 : interface en français et en anglais — page de configuration, rangées et cartes de l'accueil, notifications, tâches planifiées. Réglage « Langue de l'interface » (onglet Général) : celle de Jellyfin (par défaut : la langue de l'interface de chacun, sinon celle du serveur), français ou anglais. Titres des rangées laissés par défaut traduits pour chacun ({titre} ou {title}). Langue TMDb et pays des classifications vides par défaut = ceux des métadonnées de Jellyfin. Page réorganisée en trois niveaux : de base, avancé (onglets Moteur et Calibrage, toujours visibles) et mode développeur (journal, export et réglages statistiques du calibrage, détails de diagnostic). Par défaut, chaque rangée d'accueil mélange bibliothèque et Seerr (mode étendu activé), et 40 titres hors bibliothèque par compte. Correction : option « communauté » de la note utilisée qui s'affichait mal. README refait (présentation classique), détail dans docs/how-it-works.",
+  "changelog": "1.0.26 : calibrage — méthode par défaut : modèle de choix appris (environ une minute) au lieu d'automatique, qui lance aussi la recherche par curseurs et le réseau de neurones (jusqu'à une heure de processeur) ; automatique reste au choix.",
   "description": "Recommandations personnelles à la place de celles de Jellyfin.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.25.0",
+  "version": "1.0.26.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [
