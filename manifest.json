@@ -12,9 +12,9 @@
         "version": "1.0.30.0",
         "changelog": "1.0.30: a requested title is shown in no row (not even New or Because you liked) for one half-life after its request or arrival; a replaced file of an already watched episode no longer pins its series at the top; the New row only keeps recent arrivals in the top quarter by taste; cached movie details are re-read once to get their length, so short films are really left out.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.30.0/RecoPlus_1.0.30.0.zip",
+        "checksum": "b7b5bc9c512ee50cacd869e21145741e",
+        "timestamp": "2026-10-21T13:46:36Z"
       },
       {
         "version": "1.0.29.0",
