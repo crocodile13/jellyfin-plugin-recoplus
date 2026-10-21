@@ -55,7 +55,7 @@ public sealed class PlaybackReportingReader
             using var db = new SqliteConnection(cs);
             db.Open();
             using var cmd = db.CreateCommand();
-            cmd.CommandText = "SELECT UserId, ItemId, MAX(ItemType), MAX(ItemName), MIN(DateCreated) FROM PlaybackActivity GROUP BY UserId, ItemId";
+            cmd.CommandText = "SELECT UserId, ItemId, MAX(ItemType), MAX(ItemName), MIN(DateCreated), MAX(DateCreated) FROM PlaybackActivity GROUP BY UserId, ItemId";
             using var r = cmd.ExecuteReader();
             while (r.Read())
             {
@@ -65,11 +65,14 @@ public sealed class PlaybackReportingReader
                     continue;
                 }
 
-                var raw = r.GetString(4);
-                if (DateTime.TryParse(raw, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var dt))
+                static double When(string raw)
+                    => DateTime.TryParse(raw, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var dt)
+                        ? new DateTimeOffset(dt, TimeSpan.Zero).ToUnixTimeSeconds() : 0;
+                double first = When(r.GetString(4));
+                if (first > 0)
                 {
                     res.Add(new PlaybackStart(u, i, r.IsDBNull(2) ? string.Empty : r.GetString(2), r.IsDBNull(3) ? string.Empty : r.GetString(3),
-                        new DateTimeOffset(dt, TimeSpan.Zero).ToUnixTimeSeconds()));
+                        first, r.IsDBNull(5) ? 0 : When(r.GetString(5))));
                 }
             }
 

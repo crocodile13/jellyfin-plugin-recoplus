@@ -39,6 +39,9 @@ public sealed class LibrarySnapshot
     /// <summary>Série → dates d'ajout de ses épisodes (secondes Unix, triées) : nouveaux épisodes depuis le dernier visionnage.</summary>
     public Dictionary<Guid, double[]> EpisodeAdded { get; init; } = new();
 
+    /// <summary>Série → ses épisodes : date d'ajout et date de première diffusion (0 si inconnue), triés par ajout.</summary>
+    public Dictionary<Guid, (double Added, double Aired)[]> EpisodeDates { get; init; } = new();
+
     /// <summary>Date de construction (UTC).</summary>
     public DateTime BuiltAt { get; init; }
 }
@@ -136,6 +139,7 @@ public sealed class LibraryIndex
         var epSeries = new Dictionary<Guid, Guid>();
         var epCount = new Dictionary<Guid, int>();
         var epAdded = new Dictionary<Guid, List<double>>();
+        var epDates = new Dictionary<Guid, List<(double, double)>>();
         var runtime = new Dictionary<Guid, long>();
         var epHours = new Dictionary<Guid, (double Sum, int N)>();
         foreach (var e in episodes.OfType<Episode>())
@@ -160,6 +164,12 @@ public sealed class LibraryIndex
                     }
 
                     l.Add(Unix(e.DateCreated));
+                    if (!epDates.TryGetValue(e.SeriesId, out var dl))
+                    {
+                        epDates[e.SeriesId] = dl = new List<(double, double)>();
+                    }
+
+                    dl.Add((Unix(e.DateCreated), e.PremiereDate is DateTime pd && pd != default ? Unix(pd) : 0));
                 }
             }
         }
@@ -256,6 +266,7 @@ public sealed class LibraryIndex
             SeriesMeanHours = epHours.ToDictionary(kv => kv.Key, kv => kv.Value.Sum / kv.Value.N),
             SeasonSeries = seasonSeries,
             EpisodeAdded = epAdded.ToDictionary(kv => kv.Key, kv => kv.Value.OrderBy(x => x).ToArray()),
+            EpisodeDates = epDates.ToDictionary(kv => kv.Key, kv => kv.Value.OrderBy(x => x.Item1).ToArray()),
             BuiltAt = DateTime.UtcNow,
         };
     }

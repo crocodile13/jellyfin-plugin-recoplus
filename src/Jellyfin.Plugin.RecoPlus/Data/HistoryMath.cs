@@ -7,8 +7,11 @@ using System.Text.RegularExpressions;
 
 namespace Jellyfin.Plugin.RecoPlus.Data;
 
-/// <summary>Une ligne de Playback Reporting : premier lancement d'un élément par un compte, avec son type et son nom.</summary>
-public readonly record struct PlaybackStart(Guid User, Guid Item, string Type, string Name, double At);
+/// <summary>
+/// Une ligne de Playback Reporting : premier lancement d'un élément par un compte (<paramref name="At"/>) et dernier
+/// (<paramref name="Last"/>, 0 si inconnu), avec son type et son nom.
+/// </summary>
+public readonly record struct PlaybackStart(Guid User, Guid Item, string Type, string Name, double At, double Last = 0);
 
 /// <summary>Conversions de l'historique Jellyfin en signaux (sans dépendance à Jellyfin : testables seules).</summary>
 public static partial class HistoryMath
@@ -47,12 +50,24 @@ public static partial class HistoryMath
     /// <param name="seriesByName">Nom normalisé → série (null si ambigu).</param>
     public static Dictionary<(Guid User, Guid Item), double> MapPlaybackStarts(IEnumerable<PlaybackStart> rows, Func<Guid, bool> known,
         IReadOnlyDictionary<string, Guid?> moviesByName, IReadOnlyDictionary<string, Guid?> seriesByName, out int remapped)
+        => Map(rows, known, moviesByName, seriesByName, r => r.At, first: true, out remapped);
+
+    /// <summary>
+    /// Dernières lectures réelles (même rattachement que <see cref="MapPlaybackStarts"/>) : la date d'un visionnage,
+    /// que « marquer comme vu » ne réécrit pas (contrairement à la date de dernière lecture de Jellyfin).
+    /// </summary>
+    public static Dictionary<(Guid User, Guid Item), double> MapPlaybackLasts(IEnumerable<PlaybackStart> rows, Func<Guid, bool> known,
+        IReadOnlyDictionary<string, Guid?> moviesByName, IReadOnlyDictionary<string, Guid?> seriesByName)
+        => Map(rows, known, moviesByName, seriesByName, r => Math.Max(r.At, r.Last), first: false, out _);
+
+    private static Dictionary<(Guid User, Guid Item), double> Map(IEnumerable<PlaybackStart> rows, Func<Guid, bool> known,
+        IReadOnlyDictionary<string, Guid?> moviesByName, IReadOnlyDictionary<string, Guid?> seriesByName, Func<PlaybackStart, double> date, bool first, out int remapped)
     {
         var res = new Dictionary<(Guid, Guid), double>();
         remapped = 0;
         void Put(Guid u, Guid i, double at)
         {
-            if (!res.TryGetValue((u, i), out var cur) || at < cur)
+            if (!res.TryGetValue((u, i), out var cur) || (first ? at < cur : at > cur))
             {
                 res[(u, i)] = at;
             }
@@ -67,7 +82,7 @@ public static partial class HistoryMath
 
             if (known(r.Item))
             {
-                Put(r.User, r.Item, r.At);
+                Put(r.User, r.Item, date(r));
                 continue;
             }
 
@@ -83,7 +98,7 @@ public static partial class HistoryMath
 
             if (target is Guid t)
             {
-                Put(r.User, t, r.At);
+                Put(r.User, t, date(r));
                 remapped++;
             }
         }

@@ -17,6 +17,7 @@ DEFAULTS = dict(
     request_weight=0.6, request_half_life=21.0, request_max_days=90.0, watchlist_weight=0.4,
     fav_season_share=0.6, fav_episode_share=0.3, rewatch_boost=0.0, rating_weight=1.0, hidden_weight=1.0,
     series_by_time=True, series_full_hours=7.5, series_max_weight=1.0,   # séries : poids selon le temps regardé
+    liked_unseen=0.5,            # aimé sans être vu ici (vu ailleurs) : part du poids, sans oubli
 )
 
 DEFAULT_EPISODE_HOURS = 0.75     # durée supposée d'un épisode de durée inconnue
@@ -43,6 +44,22 @@ def mark_backfill(h: dict) -> int:
                     seen[k].backfill = True
                     n += 1
         i = j + 1
+    # grappe de dates de fin (« marquer comme vu » sur des titres commencés) : le début connu, sinon date inconnue
+    ends = sorted((x for x in xs if (x.played or x.episodes > 0) and x.last and not x.backfill), key=lambda x: (x.last, x.title))
+    i = 0
+    while i < len(ends):
+        j = i
+        while j + 1 < len(ends) and ends[j + 1].last - ends[j].last <= BULK_GAP:
+            j += 1
+        if j - i + 1 >= BULK_MIN_TITLES:
+            for k in range(i, j + 1):
+                x = ends[k]
+                if x.start and x.start < x.last - BULK_GAP:
+                    x.last = x.start
+                else:
+                    x.backfill = True
+                    n += 1
+        i = j + 1
     return n
 
 
@@ -60,6 +77,7 @@ def auto_half_life(hist: dict, floor=30.0, default=90.0, min_gaps=20) -> float:
 
 def signal(x: Interaction, kind: str, n_eps: int, now: float, P=DEFAULTS) -> float:
     """Poids signé d'une interaction : >0 aimé, <0 abandonné, 0 neutre (en cours, zapping)."""
+    seen_here = x.played or x.episodes > 0 or x.completion >= P["zap"]
     idle = (now - (x.last or now)) / DAY
     if kind == "Movie":
         if x.played or x.completion >= P["movie_done"]:
@@ -86,11 +104,13 @@ def signal(x: Interaction, kind: str, n_eps: int, now: float, P=DEFAULTS) -> flo
     fav = fav_part(x, P)
     if fav > 0:
         base = max(base, 0) + P["fav_boost"] * fav
-    if x.rewatch > 0 and base > 0:                       # revu : ne rattrape pas un abandon
+    if x.rewatch > 0 and base > 0 and not x.backfill:    # revu : ne rattrape pas un abandon ; pas un marquage en masse
         base += g("rewatch_boost", 0.0) * min(1.0, x.rewatch)
     if x.rating is not None and x.rating != 0:           # note explicite, dans les deux sens
         r = max(-1.0, min(1.0, x.rating))
         base = max(base, 0) + g("rating_weight", 1.0) * r if r > 0 else min(base, 0) + g("rating_weight", 1.0) * r
+    if not seen_here and base > 0:                       # aimé sans être vu ici : goût plus léger, sans oubli
+        return base * g("liked_unseen", 0.5)
     if (x.requested > 0 or x.watchlisted > 0) and base == 0 and not x.played and x.episodes == 0 \
             and x.completion < P["zap"] and fav == 0:
         return max(_intent(x.requested, g("request_weight", 0.6), now, P), _intent(x.watchlisted, g("watchlist_weight", 0.4), now, P))

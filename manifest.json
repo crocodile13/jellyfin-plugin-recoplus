@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.29.0",
+        "changelog": "1.0.29: requests and watchlist still shape taste but never push their own title: a requested title is held back on arrival and may come back if it stays unwatched; the top of the list now holds what is new in what the account follows (new episodes of a series it watched or liked, the next part of a saga), never its own requests; a thumb or favourite on a title never played here counts half; bulk \"mark as watched\" no longer makes old titles look recent (real last play from Playback Reporting); fuller \"Because you liked\" rows; short films left out of outside-the-library suggestions; faster single-account recomputes.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.28.0",
         "changelog": "1.0.28: Reco+ entry in the Plugins section of the dashboard menu, with the plugin's logo as its icon.",
         "targetAbi": "12.2.0.0",

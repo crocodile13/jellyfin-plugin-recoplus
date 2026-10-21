@@ -105,7 +105,7 @@ Les réglages de base sont visibles d'emblée ; les avancés sont repliés ou da
 | Jellyfin Enhanced | le mode étendu utilise ses cartes, sa fiche et son bouton *Demander*, avec l'état Seerr du moment (s'il est relié à Seerr) ; Reco+ l'attend quelques secondes au chargement et remplace ses propres cartes dès qu'il est prêt | cartes Reco+, qui ouvrent la page Seerr, et bouton *Demander* de Reco+ |
 | Media Bar Enhanced | avec son option « Personalized Recommendations » activée, montre les recommandations Reco+ (il appelle les points d'entrée remplacés ; bibliothèque seulement) | — |
 | Playback Reporting | dates de premier lancement précises pour le calibrage | calibrage moins précis ; Reco+ relève lui-même les premiers lancements à partir de son installation |
-| Seerr (ex-Jellyseerr) | demandes comme signal, arrivées en tête, mode étendu | tout cela est coupé, le reste marche |
+| Seerr (ex-Jellyseerr) | demandes et liste de suivi comme signal, mode étendu | tout cela est coupé, le reste marche |
 | LocalRecs | signalé comme doublon | — |
 
 ## Vie privée
