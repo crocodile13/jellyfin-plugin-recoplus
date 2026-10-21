@@ -8,14 +8,27 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Seerr;
 
 /// <summary>Erreur Seerr avec un message lisible (jamais la clé).</summary>
 public sealed class SeerrException : Exception
 {
-    public SeerrException(string message, HttpStatusCode? status = null)
-        : base(message) => Status = status;
+    /// <param name="packed">Message emballé (<see cref="Texts.Pack"/>) ; <see cref="Exception.Message"/> en est le rendu français (journal).</param>
+    /// <param name="status">Code HTTP éventuel.</param>
+    public SeerrException(string packed, HttpStatusCode? status = null)
+        : base(Texts.Render(packed, "fr"))
+    {
+        Packed = packed;
+        Status = status;
+    }
+
+    /// <summary>Message emballé, à rendre dans la langue de celui qui le lit.</summary>
+    public string Packed { get; }
+
+    /// <summary>Message d'une erreur à montrer : emballé pour une erreur Seerr, tel quel sinon.</summary>
+    public static string TextOf(Exception ex) => ex is SeerrException s ? s.Packed : ex.Message;
 
     /// <summary>Code HTTP éventuel.</summary>
     public HttpStatusCode? Status { get; }
@@ -152,7 +165,7 @@ public sealed class SeerrClient
         var body = await res.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
         if (!res.IsSuccessStatusCode)
         {
-            throw new SeerrException($"Seerr a répondu {(int)res.StatusCode} sur {path.Split('?')[0]}", res.StatusCode);
+            throw new SeerrException(Texts.Pack("Seerr a répondu {0} sur {1}", (int)res.StatusCode, path.Split('?')[0]), res.StatusCode);
         }
 
         try
@@ -162,7 +175,7 @@ public sealed class SeerrClient
         }
         catch (JsonException)
         {
-            throw new SeerrException($"réponse non JSON sur {path.Split('?')[0]} (mauvaise URL ?)");
+            throw new SeerrException(Texts.Pack("réponse non JSON sur {0} (mauvaise URL ?)", path.Split('?')[0]));
         }
     }
 
@@ -329,7 +342,7 @@ public sealed class SeerrClient
 
     /// <summary>Crédit d'auteur : réalisation, création, scénario (pas le reste de l'équipe technique).</summary>
     public static bool IsAuthorCredit(JsonElement c)
-        => Str(c, "job") is "Director" or "Creator" or "Screenplay" or "Writer" or "Story" or "Novel" or "Original Story" or "Series Composition";
+        => Str(c, "job") is "Director" or "Creator" or "Screenplay" or "Writer" or "Story" or "Novel" or "Original Story" or "Series Composition";   // i18n:skip (valeurs TMDb)
 
     /// <summary>Fiche détaillée.</summary>
     public async Task<SeerrDetails> DetailsAsync(string mediaType, int tmdbId, string language, CancellationToken ct)
@@ -450,10 +463,10 @@ public sealed class SeerrClient
 
         throw (int)res.StatusCode switch
         {
-            403 => new SeerrException("demande refusée par Seerr (droits ou quota) " + msg, res.StatusCode),
+            403 => new SeerrException(msg.Length > 0 ? Texts.Pack("demande refusée par Seerr (droits ou quota) : {0}", msg) : "demande refusée par Seerr (droits ou quota)", res.StatusCode),
             409 => new SeerrException("déjà demandé", res.StatusCode),
             202 => new SeerrException("rien à demander (saisons déjà disponibles)", res.StatusCode),
-            _ => new SeerrException($"Seerr a répondu {(int)res.StatusCode} " + msg, res.StatusCode),
+            _ => new SeerrException(msg.Length > 0 ? Texts.Pack("Seerr a répondu {0} : {1}", (int)res.StatusCode, msg) : Texts.Pack("Seerr a répondu {0}", (int)res.StatusCode), res.StatusCode),
         };
     }
 

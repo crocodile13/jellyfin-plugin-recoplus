@@ -58,6 +58,7 @@
                 #RecoPlusConfigPage .rp-box-off .rp-why { display: none; }
                 #RecoPlusConfigPage .rp-boxwhy { font-style: italic; color: #e6a23c !important; }
                 #RecoPlusConfigPage:not(.rp-devmode) .rp-dev { display: none !important; }
+                #RecoPlusConfigPage .rp-tabtag { font-size: .72em; color: var(--rp-mute); border: 1px solid var(--rp-line); border-radius: 4px; padding: 0 .35em; margin-left: .3em; vertical-align: middle; }
                 #RecoPlusConfigPage .rp-devtoggle { margin-left: auto; align-self: center; font-size: .9em; opacity: .8; cursor: pointer; white-space: nowrap; }
                 #RecoPlusConfigPage .rp-log { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8em; line-height: 1.45; white-space: pre-wrap; word-break: break-word; max-height: 65vh; overflow: auto; padding: .6em; border: 1px solid var(--rp-line); border-radius: 6px; margin-top: .8em; }
                 #RecoPlusConfigPage .rp-logline { padding: .1em 0; border-bottom: 1px solid rgba(127,127,127,.12); }
@@ -81,21 +82,21 @@
             </style>
 
             <div class="rp-head"><h2>Reco+</h2><span class="mute" id="rpVersion"></span></div>
-            <p class="rp-sub">Recommandations personnelles à la place de celles de Jellyfin, calculées en arrière-plan et mises en cache : aucune page n'attend. Une partie qui ne colle plus à la version de Jellyfin se coupe seule et Jellyfin reprend son comportement normal pour elle. Passez la souris sur <b>?</b> pour l'aide d'un réglage.</p>
+            <p class="rp-sub">Recommandations personnelles à la place de celles de Jellyfin, calculées en arrière-plan et mises en cache : aucune page n'attend. Une partie qui ne colle plus à la version de Jellyfin se coupe seule et Jellyfin reprend son comportement normal pour elle. Passez la souris sur « ? » pour l'aide d'un réglage.</p>
             <div id="rpAlerts"></div>
 
             <div class="rp-tabs">
                 <button type="button" class="rp-tab on" data-tab="etat">État</button>
                 <button type="button" class="rp-tab" data-tab="general">Général</button>
                 <button type="button" class="rp-tab" data-tab="listes">Listes</button>
-                <button type="button" class="rp-tab rp-dev" data-tab="moteur">Moteur</button>
                 <button type="button" class="rp-tab" data-tab="seerr">Seerr</button>
                 <button type="button" class="rp-tab" data-tab="etendu">Mode étendu</button>
                 <button type="button" class="rp-tab" data-tab="notif">Notifications</button>
-                <button type="button" class="rp-tab rp-dev" data-tab="calibrage">Calibrage</button>
                 <button type="button" class="rp-tab" data-tab="apercu">Aperçu</button>
+                <button type="button" class="rp-tab rp-advtab" data-tab="moteur">Moteur <span class="rp-tabtag">avancé</span></button>
+                <button type="button" class="rp-tab rp-advtab" data-tab="calibrage">Calibrage <span class="rp-tabtag">avancé</span></button>
                 <button type="button" class="rp-tab rp-dev" data-tab="journal">Journal</button>
-                <label class="rp-devtoggle" title="Montre les onglets Moteur, Calibrage et Journal, et le détail par source de l'aperçu. Réglage de ce navigateur."><input type="checkbox" id="rpDev"> Mode développeur</label>
+                <label class="rp-devtoggle" title="Outils de développement : journal en temps réel, export du jeu de calibrage, réglages statistiques et chemin détaillé du calibrage, apport de chaque source dans l'aperçu. Réglage de ce navigateur."><input type="checkbox" id="rpDev"> Mode développeur</label>
             </div>
 
             <!-- ÉTAT -->
@@ -119,6 +120,7 @@
                     <div class="rp-box"><h3>Rangées d'accueil</h3><p>Quelles rangées afficher, dans quel ordre et pour quels comptes : cela se règle dans Home Screen Sections, où toutes les rangées Reco+ figurent (« Add Section »). Ici, seulement leurs titres (effet immédiat). Reco+ ne remplit que les rangées que HSS montre à chaque compte, et un titre n'y apparaît jamais deux fois (dans l'ordre de ce tableau) ; les autres rangées de l'accueil ne sont pas concernées.</p><div class="rp-rows" data-fields="rows"></div></div>
                     <div class="rp-box"><h3>Ce que le compte a dit explicitement</h3><p>Sources de retours explicites, en plus de l'historique de lecture et des favoris (films, séries, saisons et épisodes).</p><div class="rp-grid" data-fields="sources"></div></div>
                     <div class="rp-box"><h3>Comptes ignorés</h3><p>Ces comptes n'ont pas de recommandations Reco+ (Jellyfin leur répond normalement) et leur historique ne compte pas pour le foyer : compte invité, de test, d'un enfant…</p><div data-fields="users"></div></div>
+                    <div class="rp-box"><h3>Langue</h3><div class="rp-grid" data-fields="lang"></div></div>
                     <details class="rp-adv"><summary>Réglages avancés <span>— taille des rangées, nouveautés, fonctionnement</span></summary>
                         <div class="rp-box"><h3>Rangées d'accueil</h3><div class="rp-grid" data-fields="rowsadv"></div></div>
                         <div class="rp-box"><h3>Fonctionnement</h3><div class="rp-grid" data-fields="genadv"></div></div>
@@ -248,7 +250,7 @@
                             <option value="Neural">Réseau de neurones (expérimental)</option>
                         </select>
                     </div><span class="rp-tip" tabindex="0" role="note" aria-label="Modèle de choix appris : apprend d'un coup les 10 poids du score (logit conditionnel : « quel titre a été choisi parmi tous ceux proposables »), régularisé vers les réglages actuels, force choisie par validation croisée ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages (grille puis section dorée), contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux. Par défaut : automatique.">?<span class="rp-bubble">Modèle de choix appris : apprend d'un coup les 10 poids du score (logit conditionnel : « quel titre a été choisi parmi tous ceux proposables »), régularisé vers les réglages actuels, force choisie par validation croisée ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages (grille puis section dorée), contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux. Par défaut : automatique.</span></span></div></div>
-                    <details class="rp-adv"><summary>Réglages du calibrage <span>— validation croisée, prudence, recherche (0 = automatique) ; enregistrés aussitôt</span></summary>
+                    <details class="rp-adv rp-dev"><summary>Réglages du calibrage <span>— validation croisée, prudence, recherche (0 = automatique) ; enregistrés aussitôt</span></summary>
                         <div class="rp-grid" data-fields="calib"></div>
                         <span id="rpCalOptState" class="mute rp-result"></span>
                     </details>
@@ -258,7 +260,7 @@
                         <button is="emby-button" type="button" class="raised" id="rpCalCancel"><span>Interrompre</span></button>
                         <span id="rpCalState" class="mute rp-result"></span>
                     </div>
-                    <div class="rp-row">
+                    <div class="rp-row rp-dev">
                         <button is="emby-button" type="button" class="raised" id="rpCalExport" title="Les données exactes du calibrage, pour les évaluer ailleurs. Comptes renommés u01, u02… (aucun nom ni identifiant) ; restent la bibliothèque et, par compte, ce qu'il a fait de chaque titre avec les dates."><span>Exporter le jeu de calibrage (pseudonymisé)</span></button>
                         <span id="rpCalExportState" class="mute rp-result"></span>
                     </div>
@@ -326,6 +328,43 @@
         var timer = null;
         var lastCfg = null;
 
+        // ---- langue : le texte français est la clé ; le serveur donne la langue retenue (réglage du plugin, sinon
+        // langue de l'interface Jellyfin) et le dictionnaire français → langue (vide en français)
+        var LANG = 'fr', DICT = {};
+        var CLIENT_LANG = document.documentElement.getAttribute('lang') || navigator.language || '';
+        var LOCALE = 'fr-FR';
+        function t(s) { return LANG !== 'fr' && Object.prototype.hasOwnProperty.call(DICT, s) && DICT[s] ? DICT[s] : s; }
+        // modèle traduit puis rempli : tf('… {0} …', x)
+        function tf(s) { var a = arguments; return t(s).replace(/\{(\d+)\}/g, function (m, i) { var x = a[+i + 1]; return x === undefined ? m : String(x); }); }
+        // nombres : virgule décimale en français, point sinon
+        function dec(s) { return LANG === 'fr' ? String(s) : String(s).replace(/(\d),(\d)/g, '$1.$2'); }
+        function fixed(x, d) { var s = Number(x).toFixed(d); return LANG === 'fr' ? s.replace('.', ',') : s; }
+        function percent(s) { return LANG === 'fr' ? s + ' %' : s + '%'; }
+        // titre cité : « … » en français, “…” en anglais
+        function quote(s) { return LANG === 'fr' ? '« ' + s + ' »' : '“' + s + '”'; }
+        // textes de la page (nœuds texte, title, placeholder, aria-label, modèles {ROW}) : traduits une fois, avant build()
+        function translateDom(root) {
+            if (LANG === 'fr') { return; }
+            var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function (n) { var p = n.parentNode && n.parentNode.nodeName; return p === 'SCRIPT' || p === 'STYLE' ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; } });
+            var n, nodes = [];
+            while ((n = walker.nextNode())) { nodes.push(n); }
+            nodes.forEach(function (x) {
+                var raw = x.nodeValue, key = raw.trim(), at = raw.indexOf(key);
+                if (key && t(key) !== key) { x.nodeValue = raw.slice(0, at) + t(key) + raw.slice(at + key.length); }
+            });
+            root.querySelectorAll('[title],[placeholder],[aria-label],[data-tpl]').forEach(function (e) {
+                ['title', 'placeholder', 'aria-label', 'data-tpl'].forEach(function (a) { var v = e.getAttribute(a); if (v && t(v) !== v) { e.setAttribute(a, t(v)); } });
+            });
+        }
+        function loadLanguage() {
+            return api('GET', 'I18n?lang=' + encodeURIComponent(CLIENT_LANG)).then(function (r) {
+                if (r && (r.lang === 'en' || r.lang === 'fr')) { LANG = r.lang; DICT = r.dict || {}; }
+            }, function () { /* serveur injoignable : français */ }).then(function () {
+                LOCALE = LANG === 'fr' ? 'fr-FR' : (/^en/i.test(CLIENT_LANG) ? CLIENT_LANG : 'en-US');
+                page.setAttribute('lang', LANG);
+            });
+        }
+
         // [clé, libellé, type, aide (bulle au survol), pas, min, max, groupe, cible, valeur par défaut affichée]
         // cible : c = configuration, e = moteur (Engine), l = listes (Lists)
         var F = [
@@ -336,11 +375,11 @@
             ['OverrideSimilar', '« Plus comme ceci »', 'bool', 'Sur la fiche d\'un film ou d\'une série. Jellyfin : recouvrement de genres et de personnes pour les films, séries au hasard. Reco+ : ressemblance de contenu, un peu des goûts du compte, et le volet suivant d\'une saga en premier.', 0, 0, 0, 'replace', 'c'],
             // Rangées d'accueil : une ligne par rangée, l'interrupteur et le titre côte à côte
             ['_RowMain', 'Rangée principale', 'note', 'Le classement du compte : demandes arrivées et nouvelles saisons en tête, puis ses titres. Avec le mode étendu, elle peut aussi recevoir des titres hors bibliothèque (onglet Mode étendu).', 0, 0, 0, 'rows', 'c'],
-            ['HssSectionTitle', 'Titre', 'text', 'Titre de la rangée principale. Partout ailleurs sur cette page, {ROW} désigne cette rangée.', 0, 0, 0, 'rows', 'c', 'Pour toi'],
+            ['HssSectionTitle', 'Titre', 'text', 'Titre de la rangée principale. Vide = le titre par défaut, dans la langue de chacun. Partout ailleurs sur cette page, {ROW} désigne cette rangée.', 0, 0, 0, 'rows', 'c', 'Pour toi'],
             ['_RowNew', 'Nouveautés', 'note', 'Les titres arrivés récemment (voir « Nouveautés : arrivées depuis » dans les réglages avancés), dans l\'ordre des goûts du compte, sans ceux des rangées au-dessus. Moins de 4 titres : vide.', 0, 0, 0, 'rows', 'c'],
             ['RowNewTitle', 'Titre', 'text', 'Titre de la rangée des nouveautés.', 0, 0, 0, 'rows', 'c', 'Nouveautés pour toi'],
             ['_RowBecause', '« Parce que tu as aimé … » (1 à 3)', 'note', 'Jusqu\'à trois rangées dans Home Screen Sections, chacune autour d\'un titre que le compte a aimé (les plus aimés et récents d\'abord, jamais deux d\'une même saga), avec les titres qui lui ressemblent le plus, sans ceux des rangées au-dessus. Moins de 6 titres proches : vide.', 0, 0, 0, 'rows', 'c'],
-            ['RowBecauseTitle', 'Titre', 'text', '{titre} est remplacé par le titre aimé, propre à chaque compte, dans l\'interface web. Les autres clients (TV, applications) affichent le titre sans lui (« Parce que tu as aimé… »).', 0, 0, 0, 'rows', 'c', 'Parce que tu as aimé {titre}'],
+            ['RowBecauseTitle', 'Titre', 'text', '{titre} (ou {title}) est remplacé par le titre aimé, propre à chaque compte, dans l\'interface web. Les autres clients (TV, applications) affichent le titre sans lui (« Parce que tu as aimé… »).', 0, 0, 0, 'rows', 'c', 'Parce que tu as aimé {titre}'],
             ['_RowMovies', 'Films', 'note', 'Les films suivants du classement du compte, sans ceux des rangées au-dessus.', 0, 0, 0, 'rows', 'c'],
             ['RowMoviesTitle', 'Titre', 'text', 'Titre de la rangée des films.', 0, 0, 0, 'rows', 'c', 'Films pour toi'],
             ['_RowSeries', 'Séries', 'note', 'Les séries suivantes du classement du compte, sans celles des rangées au-dessus.', 0, 0, 0, 'rows', 'c'],
@@ -354,6 +393,7 @@
             ['UseSeerrVotes', 'Nombre de votes TMDb (via Seerr)', 'bool', 'Lit le nombre de votes derrière chaque note, pour ne pas croire une note fondée sur une poignée de votes. Les fiches manquantes sont récupérées progressivement (150 par calcul complet, mises en cache 14 jours).', 0, 0, 0, 'sources', 'c', 'activé'],
             ['TrackImpressions', 'Titres montrés sans être ouverts', 'bool', 'Le script de l\'accueil note les cartes d\'une rangée Reco+ restées au moins une seconde à l\'écran du compte connecté (onglet au premier plan), une fois par jour, et celles qu\'il ouvre. Rien n\'est compté pour une page jamais affichée, un calcul ou un autre compte. Sert au facteur « Montré sans être ouvert » (onglet Moteur).', 0, 0, 0, 'sources', 'c', 'activé'],
             ['UseSeerrWatchlist', 'Listes de suivi Seerr', 'bool', 'Lit la liste de suivi Seerr de chaque compte lié (une requête par compte au calcul complet).', 0, 0, 0, 'sources', 'c', 'activé'],
+            ['Language', 'Langue de l\'interface', 'enum:System=celle de Jellyfin,French=français,English=English', 'Langue de cette page, des rangées et des cartes de l\'accueil, et des notifications. Celle de Jellyfin : la langue de l\'interface de chacun (sinon celle du serveur). Les rangées vues par les applications TV changent au prochain redémarrage de Jellyfin.', 0, 0, 0, 'lang', 'c', 'celle de Jellyfin'],
             ['SimilarPersonalization', 'Personnalisation de « Plus comme ceci »', 'num', '0 = pure ressemblance avec le titre affiché. 1 = surtout les goûts du compte. 0,25 : la fiche reste le sujet, les goûts départagent.', 0.05, 0, 1, 'genadv', 'c', '0,25'],
             ['DebounceSeconds', 'Recalcul d\'un compte après son activité (s)', 'int', 'Délai sans nouvelle action (lecture terminée, vu, favori, note) avant de recalculer le compte : chaque action repousse le recalcul, pour regrouper les actions rapprochées (zapping, épisodes enchaînés, plusieurs favoris d\'affilée).', 10, 10, 3600, 'genadv', 'c', '120'],
             ['UserMinIntervalMinutes', 'Écart minimal entre deux recalculs d\'un compte (min)', 'int', 'Un compte n\'est jamais recalculé plus souvent que ça, même très actif. 0 = pas de limite. Le bouton « Recalculer maintenant » l\'ignore.', 5, 0, 1440, 'genadv', 'c', '15'],
@@ -436,7 +476,7 @@
             ['SeriesAbandonEpisodes', 'Abandonnée si au plus … épisodes vus', 'int', 'Première condition d\'abandon d\'une série.', 1, 0, 20, 'seriesadv', 'e', '2'],
             ['SeriesAbandonFraction', '… et moins de cette part de la série', 'num', 'Deuxième condition (0-1).', 0.01, 0, 1, 'seriesadv', 'e', '0,1'],
             ['SeriesMinEpisodes', '… dans une série d\'au moins … épisodes', 'int', 'Troisième condition : on n\'abandonne pas une mini-série de 3 épisodes après 2.', 1, 1, 500, 'seriesadv', 'e', '6'],
-            ['Rating', 'Note utilisée pour le bonus de qualité', 'enum:Community=communauté (TMDb, IMDb…),Critic=critiques (Rotten Tomatoes…),Best=la meilleure des deux,Mean=la moyenne des deux', 'Note de la communauté : celle que fournissent les métadonnées (TMDb par défaut, IMDb avec OMDb). Critiques : à défaut, celle de la communauté. Un titre sans note est neutre (6,5/10).', 0, 0, 0, 'bonusadv', 'e', 'communauté'],
+            ['Rating', 'Note utilisée pour le bonus de qualité', 'enum:Community=communauté (TMDb ou IMDb…),Critic=critiques (Rotten Tomatoes…),Best=la meilleure des deux,Mean=la moyenne des deux', 'Note de la communauté : celle que fournissent les métadonnées (TMDb par défaut, IMDb avec OMDb). Critiques : à défaut, celle de la communauté. Un titre sans note est neutre (6,5/10).', 0, 0, 0, 'bonusadv', 'e', 'communauté'],
             ['RatingPriorVotes', 'Confiance dans la note : votes fictifs', 'num', 'Moyenne bayésienne (méthode IMDb) : la note de la communauté est tirée vers 6,5 comme si ce nombre de votes à 6,5 s\'ajoutait. Une note de 9 sur 12 votes devient ≈ 6,7 ; sur 20 000 votes elle reste 9. Nécessite les votes TMDb (Seerr). 0 = note brute.', 10, 0, 100000, 'bonusadv', 'e', '150'],
             ['HouseholdPrior', 'Avis du foyer : avis neutres ajoutés', 'num', 'Nombre d\'avis fictifs à 3 étoiles mêlés aux avis du foyer avant d\'en faire la moyenne : avec 2, un seul avis à 5 étoiles donne 3,7 ; cinq avis à 5 en donnent 4,4.', 0.5, 0, 50, 'bonusadv', 'e', '2'],
             ['ReleaseDays', 'Échelle de « sortie récente » (jours)', 'num', 'Le bonus de sortie récente décroît sur cette durée après la sortie.', 1, 7, 3650, 'bonusadv', 'e', '365'],
@@ -455,9 +495,9 @@
             ['SeerrEnabled', 'Utiliser Seerr', 'bool', 'Demandes comme signal de goût, titres demandés arrivés en tête, mode étendu.', 0, 0, 0, 'seerr', 'c'],
             ['SeerrUrl', 'URL vue depuis le serveur Jellyfin', 'text', 'Adresse que le serveur Jellyfin utilise pour joindre Seerr, ex. http://seerr:5055 sur un réseau Docker.', 0, 0, 0, 'seerr', 'c'],
             ['SeerrPublicUrl', 'URL publique (liens)', 'text', 'Adresse ouverte par les navigateurs des utilisateurs (liens vers Seerr). Vide = la même que ci-dessus.', 0, 0, 0, 'seerr', 'c'],
-            ['SeerrLanguage', 'Langue TMDb', 'text', 'Doit être celle des métadonnées de la bibliothèque, pour que les genres se comparent (ex. fr).', 0, 0, 0, 'seerradv', 'c', 'fr'],
+            ['SeerrLanguage', 'Langue TMDb', 'text', 'Doit être celle des métadonnées de la bibliothèque, pour que les genres se comparent (ex. fr). Vide = la langue préférée des métadonnées de Jellyfin.', 0, 0, 0, 'seerradv', 'c', 'celle des métadonnées de Jellyfin'],
             ['SeerrRate', 'Appels à Seerr par seconde', 'int', 'Rythme maximal des appels de Reco+ à Seerr pendant un calcul (2 en cours au plus). Seerr sert aussi les utilisateurs (fiches et demandes de Jellyfin Enhanced) : trop haut, il peut ne plus leur répondre pendant un calcul. Plus bas = calcul plus long. Les listes et fiches restent en cache (aussi après un redémarrage).', 1, 1, 50, 'seerradv', 'c', '8'],
-            ['RatingCountry', 'Pays des classifications', 'text', 'Pays dont on lit la classification d\'âge des titres hors bibliothèque, pour le contrôle parental (ex. FR).', 0, 0, 0, 'seerradv', 'c', 'FR'],
+            ['RatingCountry', 'Pays des classifications', 'text', 'Pays dont on lit la classification d\'âge des titres hors bibliothèque, pour le contrôle parental (ex. FR). Vide = le pays des métadonnées de Jellyfin.', 0, 0, 0, 'seerradv', 'c', 'celui des métadonnées de Jellyfin'],
 
             // ---- Mode étendu
             ['ExtendedEnabled', 'Activer le mode étendu', 'bool', 'Recommande aussi des titres absents de la bibliothèque. Contrôle parental du compte respecté, avec les règles de Jellyfin (classification du pays choisi, titres non classés et étiquettes bloquées selon le compte).', 0, 0, 0, 'ext', 'c'],
@@ -542,15 +582,15 @@
         // « {ROW} » = titre actuel de la rangée d'accueil, mis à jour pendant la frappe
         function rowName() {
             var i = $('#rp_c_HssSectionTitle');
-            var v = i && i.value.trim() ? i.value.trim() : 'Pour toi';
-            return '« ' + v + ' »';
+            var v = i && i.value.trim() ? i.value.trim() : t('Pour toi');
+            return quote(v);
         }
         // « {T:Champ} » = titre actuel d'une rangée (champ de titre de l'onglet Général, ou sa valeur par défaut)
         function rowTitle(field) {
             var i = $('#rp_c_' + field);
             var f = F.filter(function (x) { return x[0] === field; })[0];
-            var t = i && i.value.trim() ? i.value.trim() : (f ? f[9] : field);
-            return '« ' + String(t).replace(/\s*\{titre\}/, '…') + ' »';
+            var x = i && i.value.trim() ? i.value.trim() : (f ? t(f[9]) : field);
+            return quote(String(x).replace(/\s*\{(titre|title)\}/i, '…'));
         }
         function fillTpl(t) {
             return t.replace(/\{ROW\}/g, rowName()).replace(/\{T:(\w+)\}/g, function (m, k) { return rowTitle(k); });
@@ -566,30 +606,31 @@
         }
 
         function tip(f) {
-            var text = f[3] + (f[9] ? ' ' + (f[2] === 'factor' ? 'Valeur évaluée (×1)' : 'Par défaut') + ' : ' + f[9] + '.' : '');
-            var t = tpl(el('span', { 'class': 'rp-tip', tabindex: '0', role: 'note' }, '?'), text, 'aria-label');
-            t.appendChild(tpl(el('span', { 'class': 'rp-bubble' }), text));
-            return t;
+            var def = f[9] ? dec(t(f[9])) : '';
+            var text = t(f[3]) + (def ? ' ' + (f[2] === 'factor' ? tf('Valeur évaluée (×1) : {0}.', def) : tf('Par défaut : {0}.', def)) : '');
+            var b = tpl(el('span', { 'class': 'rp-tip', tabindex: '0', role: 'note' }, '?'), text, 'aria-label');
+            b.appendChild(tpl(el('span', { 'class': 'rp-bubble' }), text));
+            return b;
         }
 
         // Facteur : interrupteur + force. Valeur enregistrée = valeur évaluée × force, ou 0 si coupé.
         var LEVELS = [[0.45, 'très atténué'], [0.85, 'atténué'], [1.15, 'normal'], [1.75, 'renforcé'], [99, 'très renforcé']];
         function multText(m) {
-            for (var i = 0; i < LEVELS.length; i++) { if (m < LEVELS[i][0]) { return '×' + m.toFixed(2).replace('.', ',') + ' · ' + LEVELS[i][1]; } }
+            for (var i = 0; i < LEVELS.length; i++) { if (m < LEVELS[i][0]) { return '×' + fixed(m, 2) + ' · ' + t(LEVELS[i][1]); } }
             return '';
         }
         function factorUi(f) {
             var id = fid(f), row = el('div', { 'class': 'rp-field rp-factor' });
             var lab = el('label');
             lab.appendChild(el('input', { type: 'checkbox', id: id + '_on' }));
-            lab.appendChild(tpl(el('span'), f[1]));
-            var range = el('input', { type: 'range', id: id, min: '0.25', max: String(f[6]), step: '0.05', value: '1', 'aria-label': 'Force : ' + f[1] });
+            lab.appendChild(tpl(el('span'), t(f[1])));
+            var range = el('input', { type: 'range', id: id, min: '0.25', max: String(f[6]), step: '0.05', value: '1', 'aria-label': tf('Force : {0}', t(f[1])) });
             var m = el('span', { 'class': 'rp-mult' });
             var sync = function () {
                 var on = $('#' + id + '_on').checked;
                 range.disabled = !on;
                 row.classList.toggle('off', !on);
-                m.textContent = on ? multText(parseFloat(range.value)) : 'coupé';
+                m.textContent = on ? multText(parseFloat(range.value)) : t('coupé');
             };
             row.__sync = sync;
             row.appendChild(lab); row.appendChild(range); row.appendChild(m); row.appendChild(tip(f));
@@ -612,7 +653,7 @@
                     return;
                 }
                 if (type === 'note') {
-                    var n = el('div', { 'class': 'rp-field rp-note', id: id }, f[1]);
+                    var n = el('div', { 'class': 'rp-field rp-note', id: id }, t(f[1]));
                     n.appendChild(tip(f));
                     host.appendChild(n);
                     return;
@@ -621,19 +662,20 @@
                     inner = el('div', { 'class': 'checkboxContainer' });
                     var lab = el('label');
                     lab.appendChild(el('input', { type: 'checkbox', is: 'emby-checkbox', id: id }));
-                    lab.appendChild(tpl(el('span'), f[1]));
+                    lab.appendChild(tpl(el('span'), t(f[1])));
                     inner.appendChild(lab);
                 } else if (type.indexOf('enum:') === 0) {
                     inner = el('div', { 'class': 'selectContainer' });
-                    inner.appendChild(tpl(el('label', { 'class': 'selectLabel', 'for': id }), f[1]));
+                    inner.appendChild(tpl(el('label', { 'class': 'selectLabel', 'for': id }), t(f[1])));
                     var sel = el('select', { is: 'emby-select', id: id });
-                    type.substring(5).split(',').forEach(function (o) { var kv = o.split('='); sel.appendChild(el('option', { value: kv[0] }, kv[1])); });
+                    type.substring(5).split(',').forEach(function (o) { var kv = o.split('='); sel.appendChild(el('option', { value: kv[0] }, t(kv[1]))); });
                     inner.appendChild(sel);
                 } else {
                     inner = el('div', { 'class': 'inputContainer' });
-                    inner.appendChild(tpl(el('label', { 'class': 'inputLabel', 'for': id }), f[1]));
+                    inner.appendChild(tpl(el('label', { 'class': 'inputLabel', 'for': id }), t(f[1])));
                     var a = { is: 'emby-input', id: id, type: type === 'text' ? 'text' : 'number' };
                     if (type !== 'text') { a.step = f[4]; a.min = f[5]; a.max = f[6]; }
+                    else if (f[9]) { a.placeholder = dec(t(f[9])); }   // champ vide = valeur par défaut, montrée en filigrane
                     inner.appendChild(el('input', a));
                 }
                 wrap.appendChild(inner);
@@ -657,21 +699,21 @@
         function val(name) { return v(idOf(name)); }
         function sw(name) { var f = fOf(name); return !!f && on(fid(f) + (f[2] === 'factor' ? '_on' : '')); }
         function num(name) { var n = parseFloat(String(val(name) || '0').replace(',', '.')); return isNaN(n) ? 0 : n; }
-        function factorOff(name) { return sw(name) ? '' : 'facteur « ' + fOf(name)[1] + ' » coupé (onglet Moteur)'; }
-        function srcOff(name) { return sw(name) ? '' : 'source « ' + fOf(name)[1] + ' » coupée'; }
+        function factorOff(name) { return sw(name) ? '' : tf('facteur « {0} » coupé (onglet Moteur)', t(fOf(name)[1])); }
+        function srcOff(name) { return sw(name) ? '' : tf('source « {0} » coupée', t(fOf(name)[1])); }
         var SOURCES = ['SourcePourToi', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms', 'SourceSeries'];
         var EXT_GROUPS = ['ext', 'exthome', 'extmix', 'extadv', 'extsrc'];
         var NEEDS_SEERR = ['UseSeerrVotes', 'UseSeerrWatchlist', 'RequestWeight', 'WatchlistWeight', 'PinnedRequests', 'PinnedMaxDays', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
-        var NO_MIX = function () { return SOURCES.some(function (k) { return val(k) === 'Mix'; }) ? '' : 'aucune rangée réglée sur « mélange »'; };
+        var NO_MIX = function () { return SOURCES.some(function (k) { return val(k) === 'Mix'; }) ? '' : t('aucune rangée réglée sur « mélange »'); };
         var WHY = {
             ExtendedMixMode: NO_MIX,
-            ExtendedMixEvery: function () { return NO_MIX() || (val('ExtendedMixMode') === 'Score' ? 'mélange libre choisi' : ''); },
-            ExtendedMinFree: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? 'mélange à intervalle fixe choisi' : ''); },
-            ExtendedMaxFree: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? 'mélange à intervalle fixe choisi' : ''); },
-            ExtendedDiscoverySlots: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? 'mélange à intervalle fixe choisi' : ''); },
-            RowNewReleasedDays: function () { return val('SourceNouveautes') === 'Local' ? 'nouveautés en bibliothèque seule' : ''; },
-            _ExtendedRowNote: function () { return val('SourcePourToi') === 'Local' || !sw('ExtendedEnabled') ? 'pas de titres hors bibliothèque dans la rangée principale (onglet Mode étendu)' : ''; },
-            ExtendedTitle: function () { return val('SourcePourToi') === 'Local' || !sw('ExtendedEnabled') ? 'pas de titres hors bibliothèque dans la rangée principale (onglet Mode étendu)' : ''; },
+            ExtendedMixEvery: function () { return NO_MIX() || (val('ExtendedMixMode') === 'Score' ? t('mélange libre choisi') : ''); },
+            ExtendedMinFree: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? t('mélange à intervalle fixe choisi') : ''); },
+            ExtendedMaxFree: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? t('mélange à intervalle fixe choisi') : ''); },
+            ExtendedDiscoverySlots: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? t('mélange à intervalle fixe choisi') : ''); },
+            RowNewReleasedDays: function () { return val('SourceNouveautes') === 'Local' ? t('nouveautés en bibliothèque seule') : ''; },
+            _ExtendedRowNote: function () { return val('SourcePourToi') === 'Local' || !sw('ExtendedEnabled') ? t('pas de titres hors bibliothèque dans la rangée principale (onglet Mode étendu)') : ''; },
+            ExtendedTitle: function () { return val('SourcePourToi') === 'Local' || !sw('ExtendedEnabled') ? t('pas de titres hors bibliothèque dans la rangée principale (onglet Mode étendu)') : ''; },
             ExtendedTopRatedMinVotes: function () { return srcOff('ExtendedTopRated'); },
             ExtendedTopRatedPages: function () { return srcOff('ExtendedTopRated'); },
             ExtendedGenres: function () { return srcOff('ExtendedByGenre'); },
@@ -680,45 +722,45 @@
             ExtendedPeople: function () { return srcOff('ExtendedByPeople'); },
             ExtendedStudioMinTitles: function () { return srcOff('ExtendedByStudio'); },
             ExtendedStudios: function () { return srcOff('ExtendedByStudio'); },
-            ExtendedLanguageMinShare: function () { return sw('ExtendedByLanguage') || sw('ExtendedCrossings') ? '' : 'sources « langues » et « croisements » coupées'; },
+            ExtendedLanguageMinShare: function () { return sw('ExtendedByLanguage') || sw('ExtendedCrossings') ? '' : t('sources « langues » et « croisements » coupées'); },
             ExtendedCrossingsMax: function () { return srcOff('ExtendedCrossings'); },
             ExtendedGemMinRating: function () { return srcOff('ExtendedGems'); },
             ExtendedGemMaxVotes: function () { return srcOff('ExtendedGems'); },
             ExtendedGemGenres: function () { return srcOff('ExtendedGems'); },
             TimeZone: function () { return factorOff('WTimeOfDay'); },
-            Mmr: function () { return val('Diversity') === 'Calibrated' ? 'diversité calibrée choisie' : ''; },
-            CalibrationStrength: function () { return val('Diversity') !== 'Calibrated' ? 'diversité calibrée non choisie (onglet Listes)' : ''; },
-            SeriesFullHours: function () { return sw('SeriesByTime') ? '' : 'poids compté en épisodes'; },
-            SeriesFullEpisodes: function () { return sw('SeriesByTime') ? 'poids compté en temps regardé' : ''; },
-            Bm25K1: function () { return val('Weighting') !== 'Bm25' ? 'pondération TF-IDF choisie' : ''; },
-            Bm25B: function () { return val('Weighting') !== 'Bm25' ? 'pondération TF-IDF choisie' : ''; },
+            Mmr: function () { return val('Diversity') === 'Calibrated' ? t('diversité calibrée choisie') : ''; },
+            CalibrationStrength: function () { return val('Diversity') !== 'Calibrated' ? t('diversité calibrée non choisie (onglet Listes)') : ''; },
+            SeriesFullHours: function () { return sw('SeriesByTime') ? '' : t('poids compté en épisodes'); },
+            SeriesFullEpisodes: function () { return sw('SeriesByTime') ? t('poids compté en temps regardé') : ''; },
+            Bm25K1: function () { return val('Weighting') !== 'Bm25' ? t('pondération TF-IDF choisie') : ''; },
+            Bm25B: function () { return val('Weighting') !== 'Bm25' ? t('pondération TF-IDF choisie') : ''; },
             ShortTermTitles: function () { return factorOff('WShortTerm'); },
-            WImpression: function () { return sw('TrackImpressions') ? '' : 'titres montrés non comptés (onglet Général)'; },
-            ImpressionDays: function () { return sw('TrackImpressions') ? factorOff('WImpression') : 'titres montrés non comptés (onglet Général)'; },
-            ImpressionRecoveryDays: function () { return sw('TrackImpressions') ? factorOff('WImpression') : 'titres montrés non comptés (onglet Général)'; },
+            WImpression: function () { return sw('TrackImpressions') ? '' : t('titres montrés non comptés (onglet Général)'); },
+            ImpressionDays: function () { return sw('TrackImpressions') ? factorOff('WImpression') : t('titres montrés non comptés (onglet Général)'); },
+            ImpressionRecoveryDays: function () { return sw('TrackImpressions') ? factorOff('WImpression') : t('titres montrés non comptés (onglet Général)'); },
             ReleaseDays: function () { return factorOff('WRelease'); },
             FreshDays: function () { return factorOff('WFresh'); },
             HouseholdPrior: function () { return factorOff('WHousehold'); },
-            WatchlistWeight: function () { return sw('UseSeerrWatchlist') ? '' : 'listes de suivi Seerr non lues (onglet Général)'; },
-            HiddenWeight: function () { return sw('UseJellyfinEnhanced') ? '' : 'Jellyfin Enhanced non lu (onglet Général)'; },
-            RatingPriorVotes: function () { return sw('SeerrEnabled') && sw('UseSeerrVotes') ? '' : 'nombre de votes TMDb non lu (Seerr)'; },
-            PinnedMaxDays: function () { return num('PinnedRequests') > 0 ? '' : 'aucun titre demandé placé en tête'; },
-            NewEpisodesMaxDays: function () { return num('NewEpisodesPinned') > 0 ? '' : 'aucune nouvelle saison placée en tête'; },
-            SagaMax: function () { return sw('Saga') ? '' : 'règle de saga coupée'; },
+            WatchlistWeight: function () { return sw('UseSeerrWatchlist') ? '' : t('listes de suivi Seerr non lues (onglet Général)'); },
+            HiddenWeight: function () { return sw('UseJellyfinEnhanced') ? '' : t('Jellyfin Enhanced non lu (onglet Général)'); },
+            RatingPriorVotes: function () { return sw('SeerrEnabled') && sw('UseSeerrVotes') ? '' : t('nombre de votes TMDb non lu (Seerr)'); },
+            PinnedMaxDays: function () { return num('PinnedRequests') > 0 ? '' : t('aucun titre demandé placé en tête'); },
+            NewEpisodesMaxDays: function () { return num('NewEpisodesPinned') > 0 ? '' : t('aucune nouvelle saison placée en tête'); },
+            SagaMax: function () { return sw('Saga') ? '' : t('règle de saga coupée'); },
             ExtendedRequestButton: function () { return ''; },
-            CalibrationPasses: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? 'pas de recherche par curseurs avec la méthode choisie' : ''; },
-            CalibrationRefine: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? 'pas de recherche par curseurs avec la méthode choisie' : ''; },
-            CalibrationSlowFolds: function () { return v('rpCalMethod') === 'ChoiceModel' ? 'ni recherche par curseurs ni réseau avec la méthode choisie' : ''; },
-            CalibrationInnerFolds: function () { return v('rpCalMethod') === 'Coordinate' ? 'pas de régularisation à choisir avec la recherche par curseurs' : ''; }
+            CalibrationPasses: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? t('pas de recherche par curseurs avec la méthode choisie') : ''; },
+            CalibrationRefine: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? t('pas de recherche par curseurs avec la méthode choisie') : ''; },
+            CalibrationSlowFolds: function () { return v('rpCalMethod') === 'ChoiceModel' ? t('ni recherche par curseurs ni réseau avec la méthode choisie') : ''; },
+            CalibrationInnerFolds: function () { return v('rpCalMethod') === 'Coordinate' ? t('pas de régularisation à choisir avec la recherche par curseurs') : ''; }
         };
         var G = {};
         function reason(f) {
             var name = f[0];
             if (name === 'Enabled') { return ''; }
-            if (!G.enabled) { return 'plugin coupé (onglet Général)'; }
+            if (!G.enabled) { return t('plugin coupé (onglet Général)'); }
             var ext = EXT_GROUPS.indexOf(f[7]) >= 0 || name === 'WTmdbAgreement' || name === '_ExtendedRowNote' || name === 'ExtendedTitle';
-            if ((ext || NEEDS_SEERR.indexOf(name) >= 0) && !G.seerr) { return 'Seerr non utilisé (onglet Seerr)'; }
-            if (ext && name !== 'ExtendedEnabled' && !G.ext) { return 'mode étendu coupé (onglet Mode étendu)'; }
+            if ((ext || NEEDS_SEERR.indexOf(name) >= 0) && !G.seerr) { return t('Seerr non utilisé (onglet Seerr)'); }
+            if (ext && name !== 'ExtendedEnabled' && !G.ext) { return t('mode étendu coupé (onglet Mode étendu)'); }
             return WHY[name] ? WHY[name]() : '';
         }
         // conteneur de chaque réglage et réglages de chaque boîte : cherchés une fois (la page ne change plus après build)
@@ -746,7 +788,7 @@
                 h.setAttribute('data-why', why);
                 var w = h.querySelector(':scope > .rp-why');
                 if (why && !w) { w = el('div', { 'class': 'rp-why' }); h.appendChild(w); }
-                if (w) { w.textContent = why ? 'Sans effet : ' + why + '.' : ''; w.classList.toggle('rp-hidden', !why); }
+                if (w) { w.textContent = why ? tf('Sans effet : {0}.', why) : ''; w.classList.toggle('rp-hidden', !why); }
                 h.querySelectorAll('input, select').forEach(function (i) { i.disabled = !!why; });
                 if (!why && h.__sync) { h.__sync(); }   // facteur : le curseur suit son interrupteur
             });
@@ -758,7 +800,7 @@
                 b.classList.toggle('rp-box-off', all);
                 var n = b.querySelector(':scope > .rp-boxwhy');
                 if (all && !n) { n = el('p', { 'class': 'rp-boxwhy' }); var h3 = b.querySelector(':scope > h3'); if (h3) { h3.after(n); } else { b.prepend(n); } }
-                if (n) { n.textContent = all ? 'Sans effet : ' + whys[0] + '.' : ''; n.classList.toggle('rp-hidden', !all); }
+                if (n) { n.textContent = all ? tf('Sans effet : {0}.', whys[0]) : ''; n.classList.toggle('rp-hidden', !all); }
             });
         }
         page.addEventListener('change', applyWhen);
@@ -768,7 +810,7 @@
         function checks(f, items, selected) {
             var box = $('#' + fid(f));
             box.innerHTML = '';
-            if (!items.length) { box.appendChild(el('span', { 'class': 'mute' }, f[2] === 'genres' ? 'Genres disponibles après le premier calcul.' : '…')); return; }
+            if (!items.length) { box.appendChild(el('span', { 'class': 'mute' }, f[2] === 'genres' ? t('Genres disponibles après le premier calcul.') : '…')); return; }
             var sel = (selected || []).map(function (x) { return String(x).toLowerCase(); });
             items.forEach(function (it) {
                 var lab = el('label');
@@ -844,68 +886,70 @@
         }
 
         function api(method, path, body) {
-            return ApiClient.ajax({ type: method, url: ApiClient.getUrl('RecoPlus/' + path), data: body ? JSON.stringify(body) : undefined, contentType: 'application/json', dataType: 'json' });
+            // langue envoyée à chaque appel : les textes du serveur arrivent dans la langue de la page
+            var url = 'RecoPlus/' + path + (path.indexOf('I18n') === 0 ? '' : (path.indexOf('?') >= 0 ? '&' : '?') + 'lang=' + LANG);
+            return ApiClient.ajax({ type: method, url: ApiClient.getUrl(url), data: body ? JSON.stringify(body) : undefined, contentType: 'application/json', dataType: 'json' });
         }
-        function pct(x) { return (x * 100).toFixed(1) + ' %'; }
-        function pts(x) { return (x >= 0 ? '+' : '') + (x * 100).toFixed(1) + ' pts'; }
-        function when(s) { return s ? new Date(s).toLocaleString() : 'jamais'; }
+        function pct(x) { return percent(fixed(x * 100, 1)); }
+        function when(s) { return s ? new Date(s).toLocaleString(LOCALE) : t('jamais'); }
         function kpi(label, value) { var d = el('div', { 'class': 'rp-kpi' }); d.appendChild(el('span', {}, label)); d.appendChild(el('b', {}, value)); return d; }
 
         function renderStatus(s) {
-            $('#rpVersion').textContent = 'version ' + s.version;
+            $('#rpVersion').textContent = tf('version {0}', s.version);
             var al = $('#rpAlerts'); al.innerHTML = '';
             (s.alerts || []).forEach(function (a) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, '⚠ ' + a.Title)); d.appendChild(el('span', {}, a.Message)); al.appendChild(d); });
             var e = s.engine || {}, k = $('#rpKpis'); k.innerHTML = '';
-            k.appendChild(kpi('Calcul complet', e.Running ? 'en cours…' : when(e.LastFullRun) + (e.LastFullRunSeconds ? ' (' + e.LastFullRunSeconds + ' s)' : '')));
-            k.appendChild(kpi('Comptes prêts', String(e.UsersWithRecs)));
-            k.appendChild(kpi('Dernier calcul d\'un compte', when(e.LastUserRun)));
+            k.appendChild(kpi(t('Calcul complet'), e.Running ? t('en cours…') : when(e.LastFullRun) + (e.LastFullRunSeconds ? ' (' + dec(String(e.LastFullRunSeconds).replace('.', ',')) + ' s)' : '')));
+            k.appendChild(kpi(t('Comptes prêts'), String(e.UsersWithRecs)));
+            k.appendChild(kpi(t('Dernier calcul d\'un compte'), when(e.LastUserRun)));
             k.appendChild(kpi('Playback Reporting', e.PlaybackReporting));
             k.appendChild(kpi('Seerr', e.Seerr));
             k.appendChild(kpi('Jellyfin Enhanced', e.JellyfinEnhanced || '—'));
-            k.appendChild(kpi('Rangée d\'accueil', s.hss));
-            if (e.LastError) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, 'Dernière erreur de calcul')); d.appendChild(el('span', {}, e.LastError)); al.appendChild(d); }
-            var t = $('#rpChecks'); t.innerHTML = '';
-            (s.checks || []).forEach(function (c) { var tr = el('tr'); tr.appendChild(el('td', { 'class': c.ok ? 'ok' : 'ko' }, c.ok ? '✔' : '✖')); tr.appendChild(el('td', {}, c.check)); tr.appendChild(el('td', { 'class': 'mute' }, c.detail)); t.appendChild(tr); });
-            Object.keys(s.disabled || {}).forEach(function (n) { var tr = el('tr'); tr.appendChild(el('td', { 'class': 'ko' }, '⏻')); tr.appendChild(el('td', {}, 'Coupé : ' + n)); tr.appendChild(el('td', { 'class': 'mute' }, s.disabled[n])); t.appendChild(tr); });
+            k.appendChild(kpi(t('Rangée d\'accueil'), s.hss));
+            if (e.LastError) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, t('Dernière erreur de calcul'))); d.appendChild(el('span', {}, e.LastError)); al.appendChild(d); }
+            var ct = $('#rpChecks'); ct.innerHTML = '';
+            (s.checks || []).forEach(function (c) { var tr = el('tr'); tr.appendChild(el('td', { 'class': c.ok ? 'ok' : 'ko' }, c.ok ? '✔' : '✖')); tr.appendChild(el('td', {}, c.check)); tr.appendChild(el('td', { 'class': 'mute' }, c.detail)); ct.appendChild(tr); });
+            Object.keys(s.disabled || {}).forEach(function (n) { var tr = el('tr'); tr.appendChild(el('td', { 'class': 'ko' }, '⏻')); tr.appendChild(el('td', {}, tf('Coupé : {0}', n))); tr.appendChild(el('td', { 'class': 'mute' }, s.disabled[n])); ct.appendChild(tr); });
             $('#rpSeerrKeyState').textContent = s.secrets.seerrApiKey;
             $('#rpHookUrlState').textContent = s.secrets.webhookUrl;
             $('#rpHookTokenState').textContent = s.secrets.webhookToken;
 
             var cal = s.calibration || {};
-            $('#rpCalState').textContent = cal.running ? ('en cours : ' + cal.progress + ' %') : (cal.error ? ('erreur : ' + cal.error) : (cal.at ? ('dernier résultat : ' + when(cal.at)) : 'jamais lancé'));
+            $('#rpCalState').textContent = cal.running ? tf('en cours : {0}', percent(dec(String(cal.progress).replace('.', ',')))) : (cal.error ? tf('erreur : {0}', cal.error) : (cal.at ? tf('dernier résultat : {0}', when(cal.at)) : t('jamais lancé')));
             var box = $('#rpCalReportBox'), rep = $('#rpCalReport');
             box.style.display = cal.report ? '' : 'none';
             rep.innerHTML = '';
             if (cal.report) {
                 var r = cal.report, g0 = r.current.gain || 1;
-                var rel = function (x) { return ((x >= 0 ? '+' : '') + (100 * x / g0).toFixed(1) + ' %').replace('.', ','); };
-                if (cal.running) { rep.appendChild(el('p', { 'class': 'mute' }, 'Résultat du calcul précédent (' + when(cal.at) + ') : un nouveau calcul est en cours.')); }
+                var rel = function (x) { return percent((x >= 0 ? '+' : '') + fixed(100 * x / g0, 1)); };
+                if (cal.running) { rep.appendChild(el('p', { 'class': 'mute' }, tf('Résultat du calcul précédent ({0}) : un nouveau calcul est en cours.', when(cal.at)))); }
                 var tb = el('table');
-                [['', 'Qualité de classement', 'Trouvé dans le top 10', 'top 20'],
-                 ['Réglage actuel', (r.current.gain || 0).toFixed(4), pct(r.current.hit10), pct(r.current.hit20)],
-                 ['Réglage proposé', (r.proposed.gain || 0).toFixed(4) + ' (' + rel((r.proposed.gain || 0) - (r.current.gain || 0)) + ')', pct(r.proposed.hit10), pct(r.proposed.hit20)]].forEach(function (row, i) {
+                [['', t('Qualité de classement'), t('Trouvé dans le top 10'), t('top 20')],
+                 [t('Réglage actuel'), fixed(r.current.gain || 0, 4), pct(r.current.hit10), pct(r.current.hit20)],
+                 [t('Réglage proposé'), fixed(r.proposed.gain || 0, 4) + ' (' + rel((r.proposed.gain || 0) - (r.current.gain || 0)) + ')', pct(r.proposed.hit10), pct(r.proposed.hit20)]].forEach(function (row, i) {
                     var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); tb.appendChild(tr);
                 });
                 rep.appendChild(tb);
-                rep.appendChild(el('p', { 'class': 'mute' }, r.current.events + ' cas sur ' + r.current.accounts + ' comptes au moment du calcul. Qualité de classement = moyenne de 1/log2(1 + rang du titre adopté), pondérée (historique plus fourni = plus de poids, comptes équilibrés). Tous les écarts sont relatifs au réglage actuel ; « validation croisée » = appris sans un groupe de comptes, mesuré sur ce groupe, pour chaque groupe' + (r.folds ? ' (' + r.folds + ' groupes)' : '') + (r.minGain ? ' ; gain minimal pour recommander : ' + (100 * r.minGain).toFixed(1).replace('.', ',') + ' %' : '') + '.'));
+                rep.appendChild(el('p', { 'class': 'mute' }, tf('{0} cas sur {1} comptes au moment du calcul. Qualité de classement = moyenne de 1/log2(1 + rang du titre adopté), pondérée (historique plus fourni = plus de poids, comptes équilibrés). Tous les écarts sont relatifs au réglage actuel ; « validation croisée » = appris sans un groupe de comptes, mesuré sur ce groupe, pour chaque groupe', r.current.events, r.current.accounts)
+                    + (r.folds ? tf(' ({0} groupes)', r.folds) : '') + (r.minGain ? tf(' ; gain minimal pour recommander : {0}', percent(fixed(100 * r.minGain, 1))) : '') + '.'));
                 rep.appendChild(el('p', { 'class': r.recommended ? 'ok' : '' }, r.verdict));
                 if (r.methods && r.methods.length) {
                     var mt = el('table');
-                    [['Méthode', 'Sur l\'historique', 'Validation croisée', 'IC 95 %', 'Historique', '']].concat(r.methods.map(function (m) {
-                        var tag = (m.method === r.method ? 'retenue' : '') + (m.recommended ? ' ✔' : '');
-                        if (m.noChange) { return [m.name, (m.cvPath || []).length > 1 ? 'aucune étape ne tient en validation croisée' : 'aucun changement appris', '—', '—', m.sufficiency, tag]; }
-                        return [m.name, rel((m.gain || 0) - (r.current.gain || 0)), rel(m.cvDelta), '[' + rel(m.ciLow) + ' ; ' + rel(m.ciHigh) + ']', m.sufficiency, tag];
+                    [[t('Méthode'), t('Sur l\'historique'), t('Validation croisée'), t('IC 95 %'), t('Historique'), '']].concat(r.methods.map(function (m) {
+                        var tag = (m.method === r.method ? t('retenue') : '') + (m.recommended ? ' ✔' : '');
+                        if (m.noChange) { return [m.name, ((m.cvPath || []).length > 1 ? t('aucune étape ne tient en validation croisée') : t('aucun changement appris')), '—', '—', t(m.sufficiency), tag]; }
+                        return [m.name, rel((m.gain || 0) - (r.current.gain || 0)), rel(m.cvDelta), '[' + rel(m.ciLow) + (LANG === 'fr' ? ' ; ' : ', ') + rel(m.ciHigh) + ']', t(m.sufficiency), tag];
                     })).forEach(function (row, i) { var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); mt.appendChild(tr); });
                     rep.appendChild(mt);
                     // chemin de chaque méthode : ce qu'elle gagne sur l'historique et ce qui en reste en validation croisée
                     r.methods.forEach(function (m) {
                         var n = (m.cvPath || []).length;
                         if (n < 2) { return; }
-                        var det = el('details');
-                        det.appendChild(el('summary', {}, m.name + ' : chemin (' + (n - 1) + ' étape' + (n > 2 ? 's' : '') + ', retenue : ' + (m.picked ? m.picked : 'aucune') + ')'));
+                        var det = el('details', { 'class': 'rp-dev' });   // détail pour le développement
+                        det.appendChild(el('summary', {}, tf(n > 2 ? '{0} : chemin ({1} étapes, retenue : {2})' : '{0} : chemin ({1} étape, retenue : {2})', m.name, n - 1, m.picked ? m.picked : t('aucune'))));
                         var pt = el('table');
-                        [['Étape', 'Sur l\'historique', 'Validation croisée']].concat(m.cvPath.map(function (cv, i) {
-                            return [(i === 0 ? 'actuel' : String(i)) + (i === m.picked ? ' ◀' : ''), rel(m.fitPath[i] || 0), rel(cv)];
+                        [[t('Étape'), t('Sur l\'historique'), t('Validation croisée')]].concat(m.cvPath.map(function (cv, i) {
+                            return [(i === 0 ? t('actuel') : String(i)) + (i === m.picked ? ' ◀' : ''), rel(m.fitPath[i] || 0), rel(cv)];
                         })).forEach(function (row, i) { var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); pt.appendChild(tr); });
                         det.appendChild(pt);
                         rep.appendChild(det);
@@ -913,7 +957,7 @@
                 }
                 if (r.steps && r.steps.length) {
                     var ul = el('ul'); r.steps.forEach(function (st) { ul.appendChild(el('li', {}, st.Parameter + ' → ' + st.Value)); });
-                    rep.appendChild(el('div', { 'class': 'mute' }, 'Changements proposés :')); rep.appendChild(ul);
+                    rep.appendChild(el('div', { 'class': 'mute' }, t('Changements proposés :'))); rep.appendChild(ul);
                 }
             }
             $('#rpCalApply').disabled = !(cal.report && !cal.running && !(cal.report.methods || []).every(function (m) { return m.noChange; }));
@@ -921,7 +965,7 @@
             $('#rpCalRollback').disabled = !s.canRollback;
 
             var sel = $('#rpPreviewUser'), cur = sel.value; sel.innerHTML = '';
-            (s.users || []).forEach(function (u) { sel.appendChild(el('option', { value: u.id }, u.name + (u.ready ? '' : ' (pas de liste)'))); });
+            (s.users || []).forEach(function (u) { sel.appendChild(el('option', { value: u.id }, u.name + (u.ready ? '' : ' ' + t('(pas de liste)')))); });
             if (cur) { sel.value = cur; }
 
             var names = (s.users || []).map(function (u) { return u.id + u.name; }).join('|');
@@ -929,12 +973,12 @@
         }
 
         function refresh() {
-            return api('GET', 'Status').then(renderStatus).catch(function () { $('#rpVersion').textContent = '(état indisponible)'; });
+            return api('GET', 'Status').then(renderStatus).catch(function () { $('#rpVersion').textContent = t('(état indisponible)'); });
         }
         function load() {
             Dashboard.showLoadingMsg();
             ApiClient.getPluginConfiguration(pluginId).then(function (cfg) { fill(cfg); Dashboard.hideLoadingMsg(); });
-            api('GET', 'Genres').then(function (g) { genres = g || []; renderChecks(); }, function () { genres = []; });
+            api('GET', 'Genres').then(function (g) { genres = Array.isArray(g) ? g : []; renderChecks(); }, function () { genres = []; });
             refresh();
         }
         function say(id, ok, text) { var e = $('#' + id); e.className = 'rp-result ' + (ok === null ? 'mute' : (ok ? 'ok' : 'ko')); e.textContent = text; }
@@ -950,7 +994,8 @@
         });
         $('#rpSaveBar').style.display = 'none';
 
-        // mode développeur : onglets Moteur, Calibrage, Journal et détail par source (réglage de ce navigateur)
+        // trois niveaux : de base (visible), avancé (onglets Moteur et Calibrage, sections repliées « Réglages avancés »),
+        // développeur (journal, export et réglages statistiques du calibrage, détails de diagnostic) ; réglage de ce navigateur
         function devStored() { try { return window.localStorage.getItem('recoplus.dev') === '1'; } catch (e) { return false; } }
         function setDev(on) {
             try { window.localStorage.setItem('recoplus.dev', on ? '1' : '0'); } catch (e) { /* navigation privée : pour cette page seulement */ }
@@ -997,157 +1042,170 @@
                 (r.entries || []).forEach(function (e) { box.appendChild(logRow(e)); });
                 while (box.children.length > 2000) { box.removeChild(box.firstChild); }
                 if (stick) { box.scrollTop = box.scrollHeight; }
-                $('#rpLogState').textContent = r.error || (r.file ? r.file + ' — ' + box.children.length + ' entrées' : 'aucun fichier de journal');
-            }, function () { logs.busy = false; $('#rpLogState').textContent = 'journal indisponible'; });
+                $('#rpLogState').textContent = r.error || (r.file ? tf('{0} — {1} entrées', r.file, box.children.length) : t('aucun fichier de journal'));
+            }, function () { logs.busy = false; $('#rpLogState').textContent = t('journal indisponible'); });
         }
         function logRefilter() { Array.prototype.forEach.call($('#rpLog').children, logFilter); }
         $('#rpLogLevel').addEventListener('change', logRefilter);
         $('#rpLogFilter').addEventListener('input', logRefilter);
         $('#rpLogPause').addEventListener('click', function () {
             logs.paused = !logs.paused;
-            $('#rpLogPause').querySelector('span').textContent = logs.paused ? 'Reprendre' : 'Pause';
+            $('#rpLogPause').querySelector('span').textContent = t(logs.paused ? 'Reprendre' : 'Pause');
             if (!logs.paused) { logPoll(); }
         });
         $('#rpLogClear').addEventListener('click', function () { $('#rpLog').innerHTML = ''; });
         page.querySelector('.rp-tab[data-tab="journal"]').addEventListener('click', logPoll);
 
-        build();
-
-        // Un seul « Enregistrer » : réglages + secrets saisis
-        $('#rpForm').addEventListener('submit', function (ev) {
-            ev.preventDefault();
-            Dashboard.showLoadingMsg();
-            var secrets = [['SeerrApiKey', '#rpSeerrKey'], ['WebhookUrl', '#rpHookUrl'], ['WebhookToken', '#rpHookToken']]
-                .filter(function (p) { return $(p[1]).value; });
-            var chain = Promise.resolve();
-            secrets.forEach(function (p) { chain = chain.then(function () { return api('POST', 'Secret', { Name: p[0], Value: $(p[1]).value }); }); });
-            chain.then(function () { return ApiClient.getPluginConfiguration(pluginId); })
-                .then(function (cfg) { read(cfg); lastCfg = cfg; return ApiClient.updatePluginConfiguration(pluginId, cfg); })
-                .then(function (r) { secrets.forEach(function (p) { $(p[1]).value = ''; }); Dashboard.processPluginConfigurationUpdateResult(r); refresh(); })
-                .catch(function () { Dashboard.hideLoadingMsg(); Dashboard.alert('Enregistrement impossible.'); });
-            return false;
-        });
-
-        // Tests : avec ce qui est saisi, sans rien enregistrer
-        $('#rpSeerrTest').addEventListener('click', function () {
-            say('rpSeerrTestResult', null, 'test en cours…');
-            api('POST', 'TestSeerr', { Url: $('#rp_c_SeerrUrl').value, ApiKey: $('#rpSeerrKey').value })
-                .then(function (r) { say('rpSeerrTestResult', r.ok, (r.ok ? '✔ ' : '✖ ') + r.message + (r.ok ? ' — pensez à Enregistrer.' : '')); },
-                      function () { say('rpSeerrTestResult', false, '✖ échec de l\'appel'); });
-        });
-        $('#rpHookTest').addEventListener('click', function () {
-            say('rpHookTestResult', null, 'envoi…');
-            api('POST', 'TestWebhook', { Kind: $('#rp_c_Webhook').value, Url: $('#rpHookUrl').value, Token: $('#rpHookToken').value })
-                .then(function (r) { say('rpHookTestResult', r.message === 'envoyé', r.message); }, function () { say('rpHookTestResult', false, 'échec de l\'appel'); });
-        });
-        $('#rpSeerrKeyClear').addEventListener('click', function () {
-            if (confirm('Effacer la clé Seerr enregistrée ?')) { api('POST', 'Secret', { Name: 'SeerrApiKey', Value: '' }).then(refresh); }
-        });
-        $('#rpHookClear').addEventListener('click', function () {
-            if (confirm('Effacer l\'URL et le jeton enregistrés ?')) {
-                api('POST', 'Secret', { Name: 'WebhookUrl', Value: '' }).then(function () { return api('POST', 'Secret', { Name: 'WebhookToken', Value: '' }); }).then(refresh);
-            }
-        });
-
-        $('#rpRecompute').addEventListener('click', function () { api('POST', 'Recompute').then(refresh, refresh); });
-        $('#rpRecheck').addEventListener('click', function () { api('POST', 'Checks').then(refresh, refresh); });
-        $('#rpEngineReset').addEventListener('click', function () {
-            if (confirm('Remettre les réglages du moteur par défaut ? (l\'actuel est gardé pour revenir en arrière ; les onglets Général et Listes ne changent pas)')) { api('POST', 'Engine/Reset').then(load, load); }
-        });
-        // méthode du calibrage : enregistrée dès qu'elle change ; avertissement si l'historique ne suffit pas
-        var calData = null;
-        function calWarn() {
-            var m = $('#rpCalMethod').value, box = $('#rpCalData');
-            if (!calData) { box.textContent = ''; return; }
-            var d = (calData.methods || {})[m];
-            box.className = 'rp-result ' + (d && d.level === 'suffisant' ? 'ok' : (d && d.level === 'limite' ? 'mute' : 'ko'));
-            box.textContent = d ? (d.level === 'suffisant' ? '✔ ' : '⚠ ') + 'Historique actuel : ' + d.message : '';
-            Array.prototype.forEach.call($('#rpCalMethod').options, function (o) {
-                var x = (calData.methods || {})[o.value];
-                o.textContent = o.textContent.replace(/ — historique .*$/, '') + (x ? ' — historique ' + x.level : '');
+        // événements des champs construits par build()
+        function wire() {
+            // Un seul « Enregistrer » : réglages + secrets saisis
+            var langBefore = 'System';
+            $('#rpForm').addEventListener('submit', function (ev) {
+                ev.preventDefault();
+                Dashboard.showLoadingMsg();
+                var secrets = [['SeerrApiKey', '#rpSeerrKey'], ['WebhookUrl', '#rpHookUrl'], ['WebhookToken', '#rpHookToken']]
+                    .filter(function (p) { return $(p[1]).value; });
+                var chain = Promise.resolve();
+                secrets.forEach(function (p) { chain = chain.then(function () { return api('POST', 'Secret', { Name: p[0], Value: $(p[1]).value }); }); });
+                chain.then(function () { return ApiClient.getPluginConfiguration(pluginId); })
+                    .then(function (cfg) { langBefore = cfg.Language || 'System'; read(cfg); lastCfg = cfg; return ApiClient.updatePluginConfiguration(pluginId, cfg); })
+                    .then(function (r) {
+                        secrets.forEach(function (p) { $(p[1]).value = ''; });
+                        Dashboard.processPluginConfigurationUpdateResult(r);
+                        if ((lastCfg.Language || 'System') !== langBefore) { window.location.reload(); return; }   // nouvelle langue : page reconstruite
+                        refresh();
+                    })
+                    .catch(function () { Dashboard.hideLoadingMsg(); Dashboard.alert(t('Enregistrement impossible.')); });
+                return false;
             });
-        }
-        function calLoad() {
-            api('GET', 'Calibration/Data').then(function (d) { calData = d; calWarn(); }, function () { calData = null; calWarn(); });
-        }
-        $('#rpCalMethod').addEventListener('change', function () {
-            var v = $('#rpCalMethod').value;
-            calWarn();
-            ApiClient.getPluginConfiguration(pluginId).then(function (cfg) { cfg.CalibrationMethod = v; if (lastCfg) { lastCfg.CalibrationMethod = v; } return ApiClient.updatePluginConfiguration(pluginId, cfg); });
-        });
-        page.querySelector('.rp-tab[data-tab="calibrage"]').addEventListener('click', calLoad);
-        $('#rpCalStart').addEventListener('click', function () { api('POST', 'Calibration/Start').then(refresh, refresh); });
-        // réglages du calibrage : enregistrés dès qu'ils changent (seulement eux : le reste du formulaire n'est pas touché)
-        function calibValue(f) {
-            var e = $('#' + fid(f));
-            if (f[2] === 'int') { var i = parseInt(e.value, 10); return isNaN(i) ? 0 : i; }
-            if (f[2] === 'num') { var n = parseFloat(String(e.value).replace(',', '.')); return isNaN(n) ? 0 : n; }
-            return e.value;
-        }
-        page.querySelectorAll('[data-fields="calib"] input, [data-fields="calib"] select').forEach(function (e) {
-            e.addEventListener('change', function () {
-                var st = $('#rpCalOptState');
-                ApiClient.getPluginConfiguration(pluginId).then(function (cfg) {
-                    F.filter(function (f) { return f[7] === 'calib'; }).forEach(function (f) {
-                        cfg[f[0]] = calibValue(f);
-                        if (lastCfg) { lastCfg[f[0]] = cfg[f[0]]; }
-                    });
-                    return ApiClient.updatePluginConfiguration(pluginId, cfg);
-                }).then(function () { st.textContent = 'enregistré'; }, function () { st.textContent = 'échec de l\'enregistrement'; });
+
+            // Tests : avec ce qui est saisi, sans rien enregistrer
+            $('#rpSeerrTest').addEventListener('click', function () {
+                say('rpSeerrTestResult', null, t('test en cours…'));
+                api('POST', 'TestSeerr', { Url: $('#rp_c_SeerrUrl').value, ApiKey: $('#rpSeerrKey').value })
+                    .then(function (r) { say('rpSeerrTestResult', r.ok, (r.ok ? '✔ ' : '✖ ') + r.message + (r.ok ? t(' — pensez à Enregistrer.') : '')); },
+                          function () { say('rpSeerrTestResult', false, '✖ ' + t('échec de l\'appel')); });
             });
-        });
-        // export : téléchargé avec le jeton de la session (un simple lien n'en aurait pas)
-        $('#rpCalExport').addEventListener('click', function () {
-            var st = $('#rpCalExportState'), b = $('#rpCalExport');
-            b.disabled = true;
-            st.textContent = 'préparation…';
-            ApiClient.ajax({ type: 'GET', url: ApiClient.getUrl('RecoPlus/Calibration/Export'), dataType: 'text' }).then(function (text) {
-                var url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
-                var a = el('a', { href: url, download: 'reco-calibrage-' + new Date().toISOString().slice(0, 10) + '.json' });
-                document.body.appendChild(a); a.click(); a.remove();
-                setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
-                st.textContent = 'téléchargé (' + Math.round(text.length / 1024) + ' Ko)';
-                b.disabled = false;
-            }, function () { st.textContent = 'échec de l\'export'; b.disabled = false; });
-        });
-        $('#rpCalCancel').addEventListener('click', function () { api('POST', 'Calibration/Cancel').then(refresh, refresh); });
-        $('#rpCalApply').addEventListener('click', function () {
-            var msg = $('#rpCalApply').__recommended
-                ? 'Appliquer le réglage proposé ? (l\'actuel est gardé pour revenir en arrière)'
-                : 'Ce réglage n\'est PAS recommandé (gain absent, incertain ou négligeable). L\'appliquer quand même ? (l\'actuel est gardé pour revenir en arrière)';
-            if (confirm(msg)) { api('POST', 'Calibration/Apply').then(load, load); }
-        });
-        $('#rpCalRollback').addEventListener('click', function () { api('POST', 'Calibration/Rollback').then(load, load); });
-        $('#rpPreviewBtn').addEventListener('click', function () {
-            api('GET', 'Preview?userId=' + encodeURIComponent($('#rpPreviewUser').value)).then(function (r) {
-                var ol = $('#rpPreviewList'), ox = $('#rpPreviewExt'); ol.innerHTML = ''; ox.innerHTML = '';
-                (r.items || []).forEach(function (n) { ol.appendChild(el('li', {}, n)); });
-                if (!r.items || !r.items.length) { ol.appendChild(el('li', { 'class': 'mute' }, 'pas de liste (compte ignoré ou pas encore calculé)')); }
-                (r.extended || []).forEach(function (n) { ox.appendChild(el('li', {}, n)); });
-                var rr = $('#rpPreviewRows'); rr.innerHTML = '';
-                Object.keys(r.rows || {}).forEach(function (k) {
-                    var d = el('div'); d.appendChild(el('h3', {}, k));
-                    var o = el('ol'); (r.rows[k] || []).forEach(function (n) { o.appendChild(el('li', {}, n)); });
-                    if (!(r.rows[k] || []).length) { o.appendChild(el('li', { 'class': 'mute' }, 'vide (pas assez de titres)')); }
-                    d.appendChild(o); rr.appendChild(d);
-                });
-                if (!r.extended || !r.extended.length) { ox.appendChild(el('li', { 'class': 'mute' }, 'désactivé ou vide')); }
-                var st = r.sources || {}, tb = $('#rpPreviewSources'), keys = Object.keys(st);
-                tb.innerHTML = '';
-                $('#rpPreviewSourcesBox').classList.toggle('rp-hidden', !keys.length);
-                if (keys.length) {
-                    var head = el('tr'); ['Source', 'Trouvés', 'Détaillés', 'Proposés', 'Sur l\'accueil'].forEach(function (h) { head.appendChild(el('th', {}, h)); }); tb.appendChild(head);
-                    SOURCE_ORDER.filter(function (k) { return st[k]; }).concat(keys.filter(function (k) { return SOURCE_ORDER.indexOf(k) < 0; })).forEach(function (k) {
-                        var s = st[k], tr = el('tr');
-                        [SOURCE_NAMES[k] || k, s.Found, s.Detailed, s.Proposed, s.Placed === null || s.Placed === undefined ? '—' : s.Placed]
-                            .forEach(function (x) { tr.appendChild(el('td', {}, String(x))); });
-                        tb.appendChild(tr);
-                    });
+            $('#rpHookTest').addEventListener('click', function () {
+                say('rpHookTestResult', null, t('envoi…'));
+                api('POST', 'TestWebhook', { Kind: $('#rp_c_Webhook').value, Url: $('#rpHookUrl').value, Token: $('#rpHookToken').value })
+                    .then(function (r) { say('rpHookTestResult', !!r.ok, r.message); }, function () { say('rpHookTestResult', false, t('échec de l\'appel')); });
+            });
+            $('#rpSeerrKeyClear').addEventListener('click', function () {
+                if (confirm(t('Effacer la clé Seerr enregistrée ?'))) { api('POST', 'Secret', { Name: 'SeerrApiKey', Value: '' }).then(refresh); }
+            });
+            $('#rpHookClear').addEventListener('click', function () {
+                if (confirm(t('Effacer l\'URL et le jeton enregistrés ?'))) {
+                    api('POST', 'Secret', { Name: 'WebhookUrl', Value: '' }).then(function () { return api('POST', 'Secret', { Name: 'WebhookToken', Value: '' }); }).then(refresh);
                 }
             });
-        });
 
-        page.addEventListener('pageshow', function () { load(); clearInterval(timer); timer = setInterval(refresh, 5000); clearInterval(logs.timer); logs.timer = setInterval(logPoll, 2000); });
+            $('#rpRecompute').addEventListener('click', function () { api('POST', 'Recompute').then(refresh, refresh); });
+            $('#rpRecheck').addEventListener('click', function () { api('POST', 'Checks').then(refresh, refresh); });
+            $('#rpEngineReset').addEventListener('click', function () {
+                if (confirm(t('Remettre les réglages du moteur par défaut ? (l\'actuel est gardé pour revenir en arrière ; les onglets Général et Listes ne changent pas)'))) { api('POST', 'Engine/Reset').then(load, load); }
+            });
+            // méthode du calibrage : enregistrée dès qu'elle change ; avertissement si l'historique ne suffit pas
+            var calData = null;
+            function calWarn() {
+                var m = $('#rpCalMethod').value, box = $('#rpCalData');
+                if (!calData) { box.textContent = ''; return; }
+                var d = (calData.methods || {})[m];
+                box.className = 'rp-result ' + (d && d.level === 'suffisant' ? 'ok' : (d && d.level === 'limite' ? 'mute' : 'ko'));
+                box.textContent = d ? (d.level === 'suffisant' ? '✔ ' : '⚠ ') + tf('Historique actuel : {0}', d.message) : '';
+                Array.prototype.forEach.call($('#rpCalMethod').options, function (o) {
+                    var x = (calData.methods || {})[o.value];
+                    if (o.__base === undefined) { o.__base = o.textContent; }
+                    o.textContent = o.__base + (x ? tf(' — historique {0}', x.label || t(x.level)) : '');
+                });
+            }
+            function calLoad() {
+                api('GET', 'Calibration/Data').then(function (d) { calData = d; calWarn(); }, function () { calData = null; calWarn(); });
+            }
+            $('#rpCalMethod').addEventListener('change', function () {
+                var v = $('#rpCalMethod').value;
+                calWarn();
+                ApiClient.getPluginConfiguration(pluginId).then(function (cfg) { cfg.CalibrationMethod = v; if (lastCfg) { lastCfg.CalibrationMethod = v; } return ApiClient.updatePluginConfiguration(pluginId, cfg); });
+            });
+            page.querySelector('.rp-tab[data-tab="calibrage"]').addEventListener('click', calLoad);
+            $('#rpCalStart').addEventListener('click', function () { api('POST', 'Calibration/Start').then(refresh, refresh); });
+            // réglages du calibrage : enregistrés dès qu'ils changent (seulement eux : le reste du formulaire n'est pas touché)
+            function calibValue(f) {
+                var e = $('#' + fid(f));
+                if (f[2] === 'int') { var i = parseInt(e.value, 10); return isNaN(i) ? 0 : i; }
+                if (f[2] === 'num') { var n = parseFloat(String(e.value).replace(',', '.')); return isNaN(n) ? 0 : n; }
+                return e.value;
+            }
+            page.querySelectorAll('[data-fields="calib"] input, [data-fields="calib"] select').forEach(function (e) {
+                e.addEventListener('change', function () {
+                    var st = $('#rpCalOptState');
+                    ApiClient.getPluginConfiguration(pluginId).then(function (cfg) {
+                        F.filter(function (f) { return f[7] === 'calib'; }).forEach(function (f) {
+                            cfg[f[0]] = calibValue(f);
+                            if (lastCfg) { lastCfg[f[0]] = cfg[f[0]]; }
+                        });
+                        return ApiClient.updatePluginConfiguration(pluginId, cfg);
+                    }).then(function () { st.textContent = t('enregistré'); }, function () { st.textContent = t('échec de l\'enregistrement'); });
+                });
+            });
+            // export : téléchargé avec le jeton de la session (un simple lien n'en aurait pas)
+            $('#rpCalExport').addEventListener('click', function () {
+                var st = $('#rpCalExportState'), b = $('#rpCalExport');
+                b.disabled = true;
+                st.textContent = t('préparation…');
+                ApiClient.ajax({ type: 'GET', url: ApiClient.getUrl('RecoPlus/Calibration/Export'), dataType: 'text' }).then(function (text) {
+                    var url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+                    var a = el('a', { href: url, download: 'reco-calibrage-' + new Date().toISOString().slice(0, 10) + '.json' });
+                    document.body.appendChild(a); a.click(); a.remove();
+                    setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+                    st.textContent = tf('téléchargé ({0} Ko)', Math.round(text.length / 1024));
+                    b.disabled = false;
+                }, function () { st.textContent = t('échec de l\'export'); b.disabled = false; });
+            });
+            $('#rpCalCancel').addEventListener('click', function () { api('POST', 'Calibration/Cancel').then(refresh, refresh); });
+            $('#rpCalApply').addEventListener('click', function () {
+                var msg = $('#rpCalApply').__recommended
+                    ? t('Appliquer le réglage proposé ? (l\'actuel est gardé pour revenir en arrière)')
+                    : t('Ce réglage n\'est PAS recommandé (gain absent, incertain ou négligeable). L\'appliquer quand même ? (l\'actuel est gardé pour revenir en arrière)');
+                if (confirm(msg)) { api('POST', 'Calibration/Apply').then(load, load); }
+            });
+            $('#rpCalRollback').addEventListener('click', function () { api('POST', 'Calibration/Rollback').then(load, load); });
+            $('#rpPreviewBtn').addEventListener('click', function () {
+                api('GET', 'Preview?userId=' + encodeURIComponent($('#rpPreviewUser').value)).then(function (r) {
+                    var ol = $('#rpPreviewList'), ox = $('#rpPreviewExt'); ol.innerHTML = ''; ox.innerHTML = '';
+                    (r.items || []).forEach(function (n) { ol.appendChild(el('li', {}, n)); });
+                    if (!r.items || !r.items.length) { ol.appendChild(el('li', { 'class': 'mute' }, t('pas de liste (compte ignoré ou pas encore calculé)'))); }
+                    (r.extended || []).forEach(function (n) { ox.appendChild(el('li', {}, n)); });
+                    var rr = $('#rpPreviewRows'); rr.innerHTML = '';
+                    Object.keys(r.rows || {}).forEach(function (k) {
+                        var d = el('div'); d.appendChild(el('h3', {}, k));
+                        var o = el('ol'); (r.rows[k] || []).forEach(function (n) { o.appendChild(el('li', {}, n)); });
+                        if (!(r.rows[k] || []).length) { o.appendChild(el('li', { 'class': 'mute' }, t('vide (pas assez de titres)'))); }
+                        d.appendChild(o); rr.appendChild(d);
+                    });
+                    if (!r.extended || !r.extended.length) { ox.appendChild(el('li', { 'class': 'mute' }, t('désactivé ou vide'))); }
+                    var st = r.sources || {}, tb = $('#rpPreviewSources'), keys = Object.keys(st);
+                    tb.innerHTML = '';
+                    $('#rpPreviewSourcesBox').classList.toggle('rp-hidden', !keys.length);
+                    if (keys.length) {
+                        var head = el('tr'); ['Source', 'Trouvés', 'Détaillés', 'Proposés', 'Sur l\'accueil'].forEach(function (h) { head.appendChild(el('th', {}, t(h))); }); tb.appendChild(head);
+                        SOURCE_ORDER.filter(function (k) { return st[k]; }).concat(keys.filter(function (k) { return SOURCE_ORDER.indexOf(k) < 0; })).forEach(function (k) {
+                            var s = st[k], tr = el('tr');
+                            [SOURCE_NAMES[k] ? t(SOURCE_NAMES[k]) : k, s.Found, s.Detailed, s.Proposed, s.Placed === null || s.Placed === undefined ? '—' : s.Placed]
+                                .forEach(function (x) { tr.appendChild(el('td', {}, String(x))); });
+                            tb.appendChild(tr);
+                        });
+                    }
+                });
+            });
+        }
+
+        // démarrage : la langue d'abord (les textes construits en dépendent), puis la page ; pageshow attend
+        var ready = loadLanguage().then(function () { translateDom(page); build(); wire(); });
+        page.__rpReady = ready;
+        page.addEventListener('pageshow', function () {
+            ready.then(function () { load(); clearInterval(timer); timer = setInterval(refresh, 5000); clearInterval(logs.timer); logs.timer = setInterval(logPoll, 2000); });
+        });
         page.addEventListener('pagehide', function () { clearInterval(timer); clearInterval(logs.timer); });
     })();
     </script>

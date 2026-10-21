@@ -77,11 +77,11 @@ public sealed class CalibrationService
             var options = Plugin.Instance.Configuration.BuildCalibrationOptions();
             Report = await Task.Run(() => Calibrator.Calibrate(ds, cur, new Progress<double>(p => progress.Report(Math.Max(1, p))), ct, method: method, options: options), ct).ConfigureAwait(false);
             ReportAt = DateTime.UtcNow;
-            _log.LogInformation("Reco+ : calibrage terminé — {Verdict}", Report.Verdict);
+            _log.LogInformation("Reco+ : calibrage terminé — {Verdict}", Report.VerdictIn("fr"));
         }
         catch (OperationCanceledException)
         {
-            Error = "interrompu";
+            Error = Texts.Pack("interrompu");
             throw;
         }
         catch (Exception ex)

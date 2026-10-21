@@ -134,28 +134,77 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     /// Toutes les rangées Reco+, toujours déclarées (identifiant, titre affiché, méthode) : elles figurent dans la liste
     /// de Home Screen Sections, où l'on choisit lesquelles afficher, dans quel ordre et pour quels comptes.
     /// </summary>
-    public static List<(string Id, string Title, string Method)> Sections(Configuration.PluginConfiguration cfg)
+    /// <param name="cfg">Configuration.</param>
+    /// <param name="lang">Langue des titres par défaut (« fr », « en ») ; null = celle du serveur (rangées déclarées à HSS).</param>
+    public static List<(string Id, string Title, string Method)> Sections(Configuration.PluginConfiguration cfg, string? lang = null)
     {
-        string because = BecauseGeneric(cfg);
+        lang ??= I18n.Lang();
+        string because = BecauseGeneric(cfg, lang);
         return new List<(string, string, string)>
         {
-            (SectionId, Title(cfg.HssSectionTitle, "Pour toi"), nameof(HssSectionHandler.GetResults)),
-            (Prefix + HomeRows.Nouveautes, Title(cfg.RowNewTitle, "Nouveautés pour toi"), nameof(HssSectionHandler.GetNew)),
+            (SectionId, RowTitle(cfg, HomeRows.PourToi, lang), nameof(HssSectionHandler.GetResults)),
+            (Prefix + HomeRows.Nouveautes, RowTitle(cfg, HomeRows.Nouveautes, lang), nameof(HssSectionHandler.GetNew)),
             (Prefix + HomeRows.ParceQue + 1, because, nameof(HssSectionHandler.GetBecause1)),
             (Prefix + HomeRows.ParceQue + 2, because, nameof(HssSectionHandler.GetBecause2)),
             (Prefix + HomeRows.ParceQue + 3, because, nameof(HssSectionHandler.GetBecause3)),
-            (Prefix + HomeRows.Films, Title(cfg.RowMoviesTitle, "Films pour toi"), nameof(HssSectionHandler.GetMovies)),
-            (Prefix + HomeRows.Series, Title(cfg.RowSeriesTitle, "Séries pour toi"), nameof(HssSectionHandler.GetSeries)),
+            (Prefix + HomeRows.Films, RowTitle(cfg, HomeRows.Films, lang), nameof(HssSectionHandler.GetMovies)),
+            (Prefix + HomeRows.Series, RowTitle(cfg, HomeRows.Series, lang), nameof(HssSectionHandler.GetSeries)),
         };
     }
 
-    private static string Title(string? t, string fallback) => string.IsNullOrWhiteSpace(t) ? fallback : t.Trim();
+    /// <summary>Titres par défaut des rangées (français : la clé de traduction ; voir <see cref="Texts"/>).</summary>
+    public const string DefaultPourToi = "Pour toi", DefaultNew = "Nouveautés pour toi", DefaultMovies = "Films pour toi",
+        DefaultSeries = "Séries pour toi", DefaultBecause = "Parce que tu as aimé {titre}", DefaultExtended = "À découvrir pour toi";
+
+    /// <summary>
+    /// Titre choisi par l'administrateur, sinon le titre par défaut dans la langue voulue. Un titre resté égal au défaut
+    /// français (configuration d'avant la traduction) est un titre par défaut : il suit la langue lui aussi.
+    /// </summary>
+    public static string Title(string? stored, string frDefault, string lang)
+        => string.IsNullOrWhiteSpace(stored) || string.Equals(stored.Trim(), frDefault, StringComparison.Ordinal) ? Texts.T(frDefault, lang) : stored.Trim();
+
+    /// <summary>Titre d'une rangée simple (« PourToi », « Nouveautes », « Films », « Series »).</summary>
+    public static string RowTitle(Configuration.PluginConfiguration cfg, string row, string lang) => row switch
+    {
+        HomeRows.Nouveautes => Title(cfg.RowNewTitle, DefaultNew, lang),
+        HomeRows.Films => Title(cfg.RowMoviesTitle, DefaultMovies, lang),
+        HomeRows.Series => Title(cfg.RowSeriesTitle, DefaultSeries, lang),
+        _ => Title(cfg.HssSectionTitle, DefaultPourToi, lang),
+    };
+
+    /// <summary>Titre de la rangée à part du mode étendu (sans Home Screen Sections).</summary>
+    public static string ExtendedTitle(Configuration.PluginConfiguration cfg, string lang) => Title(cfg.ExtendedTitle, DefaultExtended, lang);
+
+    /// <summary>Repère du titre aimé dans le modèle des rangées « Parce que … » : {titre} ou {title}.</summary>
+    private static readonly string[] Anchors = { "{titre}", "{title}" };
+
+    /// <summary>Titre d'une rangée « Parce que … » autour d'un titre aimé.</summary>
+    public static string Because(Configuration.PluginConfiguration cfg, string anchor, string lang)
+    {
+        var t = Title(cfg.RowBecauseTitle, DefaultBecause, lang);
+        foreach (var a in Anchors)
+        {
+            t = t.Replace(a, anchor, StringComparison.OrdinalIgnoreCase);
+        }
+
+        return t;
+    }
 
     /// <summary>Titre générique des rangées « Parce que … » (clients sans le script web : TV, applications mobiles).</summary>
-    public static string BecauseGeneric(Configuration.PluginConfiguration cfg)
+    public static string BecauseGeneric(Configuration.PluginConfiguration cfg, string lang)
     {
-        var t = Title(cfg.RowBecauseTitle, "Parce que tu as aimé {titre}");
-        return t.Contains("{titre}", StringComparison.Ordinal) ? t.Replace("{titre}", "…", StringComparison.Ordinal).Replace(" …", "…", StringComparison.Ordinal) : t;
+        var t = Title(cfg.RowBecauseTitle, DefaultBecause, lang);
+        foreach (var a in Anchors)
+        {
+            int i = t.IndexOf(a, StringComparison.OrdinalIgnoreCase);
+            if (i >= 0)
+            {
+                // « Parce que tu as aimé {titre} » → « Parce que tu as aimé… » (l'espace avant le repère disparaît)
+                return (t[..i].TrimEnd() + "…" + t[(i + a.Length)..]).Trim();
+            }
+        }
+
+        return t;
     }
 
     /// <summary>
@@ -195,7 +244,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     }
 
     /// <summary>État lisible.</summary>
-    public static string State { get; private set; } = "non tenté";
+    public static string State { get; private set; } = "non tenté";   // emballé (Texts.Pack) : traduit à l'affichage
 
     /// <summary>La rangée « Pour toi » est déclarée auprès de Home Screen Sections.</summary>
     public static bool Registered { get; private set; }
@@ -269,14 +318,14 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
             }
 
             Registered = true;
-            State = $"{sections.Count} rangées déclarées ({string.Join(", ", sections.Select(x => "« " + x.Title + " »").Distinct())}) — à choisir et ordonner dans la configuration de Home Screen Sections";
+            State = Texts.Pack("{0} rangées déclarées ({1}) — à choisir et ordonner dans la configuration de Home Screen Sections", sections.Count, string.Join(" · ", sections.Select(x => x.Title).Distinct()));
             _notifier.Clear("off-" + Feature.HomeScreenSection);
             _log.LogInformation("Reco+ : {N} rangées déclarées à Home Screen Sections", sections.Count);
         }
         catch (Exception ex)
         {
-            State = "échec : " + (ex.InnerException ?? ex).Message;
-            CompatibilityGuard.Instance?.Disable(Feature.HomeScreenSection, "Home Screen Sections n'a pas l'interface attendue (" + (ex.InnerException ?? ex).Message + ").");
+            State = Texts.Pack("échec : {0}", (ex.InnerException ?? ex).Message);
+            CompatibilityGuard.Instance?.Disable(Feature.HomeScreenSection, Texts.Pack("Home Screen Sections n'a pas l'interface attendue ({0}).", (ex.InnerException ?? ex).Message));
         }
     }
 }

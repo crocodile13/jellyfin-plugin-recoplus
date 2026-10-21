@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.RecoPlus.Service;
 using MediaBrowser.Model.Tasks;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Tasks;
 
@@ -19,13 +20,13 @@ public sealed class NightlyTask : IScheduledTask
     public NightlyTask(RecoService reco) => _reco = reco;
 
     /// <inheritdoc />
-    public string Name => "Recalcul des recommandations";
+    public string Name => Texts.T("Recalcul des recommandations", I18n.Lang());
 
     /// <inheritdoc />
     public string Key => "RecoPlusNightly";
 
     /// <inheritdoc />
-    public string Description => "Recalcule les recommandations de tous les comptes (bibliothèque, historiques, Seerr, mode étendu).";
+    public string Description => Texts.T("Recalcule les recommandations de tous les comptes (bibliothèque, historiques, Seerr, mode étendu).", I18n.Lang());
 
     /// <inheritdoc />
     public string Category => "Reco+";
@@ -46,13 +47,13 @@ public sealed class CalibrationTask : IScheduledTask
     public CalibrationTask(CalibrationService calib) => _calib = calib;
 
     /// <inheritdoc />
-    public string Name => "Calibrage sur l'historique";
+    public string Name => Texts.T("Calibrage sur l'historique", I18n.Lang());
 
     /// <inheritdoc />
     public string Key => "RecoPlusCalibration";
 
     /// <inheritdoc />
-    public string Description => "Rejoue l'historique pour proposer un réglage du moteur. N'applique rien : le résultat s'affiche sur la page du plugin.";
+    public string Description => Texts.T("Rejoue l'historique pour proposer un réglage du moteur. N'applique rien : le résultat s'affiche sur la page du plugin.", I18n.Lang());
 
     /// <inheritdoc />
     public string Category => "Reco+";

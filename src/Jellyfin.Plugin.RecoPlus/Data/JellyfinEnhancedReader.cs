@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using RecoPlus.Engine;
 
 namespace Jellyfin.Plugin.RecoPlus.Data;
 
@@ -39,7 +40,7 @@ public sealed class JellyfinEnhancedReader
         _log = log;
     }
 
-    /// <summary>État lisible (page de configuration).</summary>
+    /// <summary>État lisible (page de configuration ; emballé : <see cref="Texts.Pack"/>).</summary>
     public string State { get; private set; } = "non lu";
 
     /// <summary>Retours explicites de chaque compte (clé : identifiant en « N »).</summary>
@@ -122,7 +123,9 @@ public sealed class JellyfinEnhancedReader
             _log.LogWarning("Reco+ : avis Jellyfin Enhanced illisibles ({Msg})", ex.Message);
         }
 
-        State = $"lu : {hidden} titres masqués, {ratings} avis notés" + (errors > 0 ? $", {errors} fichier(s) illisible(s)" : string.Empty);
+        State = errors > 0
+            ? Texts.Pack("lu : {0} titres masqués, {1} avis notés, {2} fichier(s) illisible(s)", hidden, ratings, errors)
+            : Texts.Pack("lu : {0} titres masqués, {1} avis notés", hidden, ratings);
         return res;
     }
 
@@ -145,7 +148,7 @@ public sealed class JellyfinEnhancedReader
 
         if (fi.Length > MaxBytes)
         {
-            throw new InvalidDataException("fichier trop gros");
+            throw new InvalidDataException("fichier trop gros");   // i18n:skip (interne, jamais affiché)
         }
 
         using var s = fi.OpenRead();

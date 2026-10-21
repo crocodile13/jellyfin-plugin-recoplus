@@ -60,25 +60,25 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// Titre de la rangée principale. Les rangées affichées, leur ordre et leur activation par compte se règlent dans
     /// Home Screen Sections : Reco+ déclare toujours toutes ses rangées et ne fait que les remplir.
     /// </summary>
-    public string HssSectionTitle { get; set; } = "Pour toi";
+    public string HssSectionTitle { get; set; } = string.Empty;
 
     /// <summary>Titres par rangée d'accueil.</summary>
     public int RowSize { get; set; } = 20;
 
-    /// <summary>Titre de la rangée des films.</summary>
-    public string RowMoviesTitle { get; set; } = "Films pour toi";
+    /// <summary>Titre de la rangée des films (vide = titre par défaut, dans la langue du lecteur ; de même pour les autres titres).</summary>
+    public string RowMoviesTitle { get; set; } = string.Empty;
 
     /// <summary>Titre de la rangée des séries.</summary>
-    public string RowSeriesTitle { get; set; } = "Séries pour toi";
+    public string RowSeriesTitle { get; set; } = string.Empty;
 
     /// <summary>Titre de la rangée des nouveautés.</summary>
-    public string RowNewTitle { get; set; } = "Nouveautés pour toi";
+    public string RowNewTitle { get; set; } = string.Empty;
 
     /// <summary>« Nouveautés » : arrivés depuis ce nombre de jours.</summary>
     public int RowNewDays { get; set; } = 30;
 
-    /// <summary>Titre des rangées « Parce que … » ({titre} = le titre aimé).</summary>
-    public string RowBecauseTitle { get; set; } = "Parce que tu as aimé {titre}";
+    /// <summary>Titre des rangées « Parce que … » ({titre} ou {title} = le titre aimé).</summary>
+    public string RowBecauseTitle { get; set; } = string.Empty;
 
     /// <summary>
     /// Compter ce qui est montré sans être ouvert (seulement quand une rangée Reco+ est réellement à l'écran du compte
@@ -88,6 +88,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>Fuseau horaire des visionnages (identifiant IANA, ex. Europe/Paris) ; vide = celui du serveur.</summary>
     public string TimeZone { get; set; } = string.Empty;
+
+    /// <summary>Langue de l'interface du plugin (page de configuration, accueil, notifications) ; système = celle de Jellyfin.</summary>
+    public UiLanguage Language { get; set; } = UiLanguage.System;
 
     /// <summary>Méthode du calibrage.</summary>
     public CalibrationMethod CalibrationMethod { get; set; } = CalibrationMethod.Auto;
@@ -187,14 +190,20 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>URL publique de Seerr pour les liens (vide = URL interne).</summary>
     public string SeerrPublicUrl { get; set; } = string.Empty;
 
-    /// <summary>Langue des métadonnées TMDb (doit correspondre à celle de la bibliothèque).</summary>
-    public string SeerrLanguage { get; set; } = "fr";
+    /// <summary>Langue des métadonnées TMDb (doit correspondre à celle de la bibliothèque) ; vide = celle des métadonnées de Jellyfin.</summary>
+    public string SeerrLanguage { get; set; } = string.Empty;
+
+    /// <summary>Langue TMDb effective : le réglage, sinon la langue préférée des métadonnées du serveur, sinon l'anglais.</summary>
+    public string TmdbLanguage() => !string.IsNullOrWhiteSpace(SeerrLanguage) ? SeerrLanguage.Trim() : I18n.Metadata().Language ?? "en";
 
     /// <summary>Appels de Reco+ à Seerr par seconde, au plus (2 en cours au plus) : laisse Seerr répondre aux utilisateurs.</summary>
     public int SeerrRate { get; set; } = 8;
 
-    /// <summary>Pays de référence des classifications (contrôle parental des titres hors bibliothèque).</summary>
-    public string RatingCountry { get; set; } = "FR";
+    /// <summary>Pays de référence des classifications (contrôle parental des titres hors bibliothèque) ; vide = celui des métadonnées de Jellyfin.</summary>
+    public string RatingCountry { get; set; } = string.Empty;
+
+    /// <summary>Pays des classifications effectif : le réglage, sinon le pays des métadonnées du serveur, sinon les États-Unis.</summary>
+    public string ClassificationCountry() => (!string.IsNullOrWhiteSpace(RatingCountry) ? RatingCountry : I18n.Metadata().Country ?? "US").Trim().ToUpperInvariant();
 
     // ---- mode étendu
 
@@ -360,7 +369,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public int ExtendedMaxFree { get; set; }
 
     /// <summary>Titre de la rangée à part du mode étendu (sans Home Screen Sections).</summary>
-    public string ExtendedTitle { get; set; } = "À découvrir pour toi";
+    public string ExtendedTitle { get; set; } = string.Empty;
 
     /// <summary>Contenu choisi pour une rangée (« ParceQue1 » à « ParceQue3 » partagent le leur).</summary>
     public RowSource SourceOf(string row) => row switch

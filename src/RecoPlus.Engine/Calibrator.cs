@@ -137,8 +137,11 @@ public sealed class CalibrationReport
     /// <summary>Vrai si le gain est assez sûr pour être recommandé.</summary>
     public bool Recommended { get; init; }
 
-    /// <summary>Explication en français.</summary>
+    /// <summary>Explication, emballée (<see cref="Texts.Pack"/>) : voir <see cref="VerdictIn"/>.</summary>
     public required string Verdict { get; init; }
+
+    /// <summary>Verdict rendu dans une langue (« fr », « en »).</summary>
+    public string VerdictIn(string lang) => Texts.Render(Verdict, lang);
 
     /// <summary>Écart de qualité en validation croisée par comptes (proposé appris sans le compte − actuel).</summary>
     public double CvDelta { get; init; }
@@ -903,12 +906,12 @@ public static class Calibrator
         };
         if (cases < MinEvents || cases < need.Min)
         {
-            return ("insuffisant", $"{cases} cas pour {need.Params} réglages : pas assez d'historique, le calibrage ne proposera rien de fiable (il faut au moins {Math.Max(MinEvents, need.Min)} cas, idéalement {need.Good}).");
+            return ("insuffisant", Texts.Pack("{0} cas pour {1} réglages : pas assez d'historique, le calibrage ne proposera rien de fiable (il faut au moins {2} cas, idéalement {3}).", cases, need.Params, Math.Max(MinEvents, need.Min), need.Good));
         }
 
         return cases < need.Good
-            ? ("limite", $"{cases} cas pour {need.Params} réglages : juste assez pour essayer, mais un gain devra être net pour être recommandé (idéalement {need.Good} cas).")
-            : ("suffisant", $"{cases} cas pour {need.Params} réglages : historique suffisant.");
+            ? ("limite", Texts.Pack("{0} cas pour {1} réglages : juste assez pour essayer, mais un gain devra être net pour être recommandé (idéalement {2} cas).", cases, need.Params, need.Good))
+            : ("suffisant", Texts.Pack("{0} cas pour {1} réglages : historique suffisant.", cases, need.Params));
     }
 
     /// <summary>
@@ -961,7 +964,7 @@ public static class Calibrator
                 Steps = new List<CalibrationStep>(),
                 Recommended = false,
                 Method = method,
-                Verdict = $"Seulement {cases.Count} cas exploitables (minimum {MinEvents}) : pas assez d'historique pour proposer un réglage fiable.",
+                Verdict = Texts.Pack("Seulement {0} cas exploitables (minimum {1}) : pas assez d'historique pour proposer un réglage fiable.", cases.Count, MinEvents),
             };
         }
 
@@ -1085,7 +1088,7 @@ public static class Calibrator
                 results.Add(Judge(CalibrationMethod.Neural, "Réseau de neurones (expérimental)", path,
                     upTo => new List<CalibrationStep>
                     {
-                        new("Correction apprise (réseau de neurones)", $"{NeuralNet.Size} paramètres, régularisation {kappa.ToString(System.Globalization.CultureInfo.InvariantCulture)}, force {path[upTo - 1].WNeural.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)}", 0, 0, true),
+                        new("Correction apprise (réseau de neurones)", Texts.Pack("{0} paramètres, régularisation {1}, force {2}", NeuralNet.Size, kappa.ToString(System.Globalization.CultureInfo.InvariantCulture), path[upTo - 1].WNeural.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)), 0, 0, true),
                     },
                     train =>
                     {
@@ -1108,15 +1111,16 @@ public static class Calibrator
         string Pct(double x) => (x * 100).ToString("+0.0;-0.0", System.Globalization.CultureInfo.InvariantCulture) + " %";
         double rel(double x) => x / Math.Max(cur.Gain, 1e-9);
         bool improved = pick.Result.Gain > cur.Gain + 1e-9;
-        string who = results.Count > 1 ? $"{pick.Name} (la meilleure des {results.Count} méthodes) : " : string.Empty;
+        // textes emballés (Texts.Pack) : traduits à l'affichage, dans la langue de celui qui lit
+        string lead = results.Count > 1 ? Texts.Pack("{0} (la meilleure des {1} méthodes) : ", Texts.Translatable(pick.Name), results.Count) : string.Empty;
         bool sureButTiny = !pick.Recommended && improved && pick.CvDelta > 0 && pick.Ci.Low > 0;
         string verdict = pick.NoChange || !improved
-            ? who + "aucun réglage ne fait mieux que l'actuel : on garde l'actuel."
+            ? Texts.Pack("aucun réglage ne fait mieux que l'actuel : on garde l'actuel.")
             : sureButTiny
-                ? who + $"gain réel mais négligeable ({Pct(rel(pick.CvDelta))} en validation croisée, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}], moins de {Pct(minGain).TrimStart('+')}) : rien de visible, inutile de l'appliquer."
+                ? Texts.Pack("gain réel mais négligeable ({0} en validation croisée, IC95 [{1} ; {2}], moins de {3}) : rien de visible, inutile de l'appliquer.", Pct(rel(pick.CvDelta)), Pct(rel(pick.Ci.Low)), Pct(rel(pick.Ci.High)), Pct(minGain).TrimStart('+'))
             : pick.Recommended
-                ? who + $"gain probable et qui se généralise : appris sans chaque groupe de comptes, il fait mieux sur ce groupe ({Pct(rel(pick.CvDelta))} de qualité de classement, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}])."
-                : who + $"gain sur cet historique ({Pct(rel(pick.Result.Gain - cur.Gain))}), mais il ne se généralise pas à des comptes qui n'ont pas servi à l'apprendre (validation croisée {Pct(rel(pick.CvDelta))}, IC95 [{Pct(rel(pick.Ci.Low))} ; {Pct(rel(pick.Ci.High))}]) : application déconseillée.";
+                ? Texts.Pack("gain probable et qui se généralise : appris sans chaque groupe de comptes, il fait mieux sur ce groupe ({0} de qualité de classement, IC95 [{1} ; {2}]).", Pct(rel(pick.CvDelta)), Pct(rel(pick.Ci.Low)), Pct(rel(pick.Ci.High)))
+                : Texts.Pack("gain sur cet historique ({0}), mais il ne se généralise pas à des comptes qui n'ont pas servi à l'apprendre (validation croisée {1}, IC95 [{2} ; {3}]) : application déconseillée.", Pct(rel(pick.Result.Gain - cur.Gain)), Pct(rel(pick.CvDelta)), Pct(rel(pick.Ci.Low)), Pct(rel(pick.Ci.High)));
         return new CalibrationReport
         {
             Folds = kf,
@@ -1127,7 +1131,7 @@ public static class Calibrator
             DeltaCi = pick.Ci,
             Steps = pick.Steps,
             Recommended = pick.Recommended,
-            Verdict = verdict,
+            Verdict = lead.Length > 0 ? Texts.Pack("{0}{1}", lead, verdict) : verdict,
             CvDelta = pick.CvDelta,
             Method = pick.Method,
             Methods = results,

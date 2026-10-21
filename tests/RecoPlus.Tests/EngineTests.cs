@@ -205,7 +205,8 @@ public class EngineTests
         Assert.InRange(Calibrator.Cases(ds).Count, 0, Calibrator.MinEvents - 1);
         var rep = Calibrator.Calibrate(ds, new EngineSettings());
         Assert.False(rep.Recommended);
-        Assert.Contains("pas assez", rep.Verdict, StringComparison.Ordinal);
+        Assert.Contains("pas assez", rep.VerdictIn("fr"), StringComparison.Ordinal);
+        Assert.Contains("not enough", rep.VerdictIn("en"), StringComparison.Ordinal);
     }
 
     [Fact]

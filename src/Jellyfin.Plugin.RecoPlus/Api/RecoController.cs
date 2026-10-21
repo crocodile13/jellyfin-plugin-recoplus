@@ -93,6 +93,45 @@ public sealed class RecoController : ControllerBase
 
     private Guid? CurrentUser => Guid.TryParse(User.FindFirst("Jellyfin-UserId")?.Value, out var g) ? g : null;
 
+    private string? _lang;
+
+    /// <summary>
+    /// Langue des textes de la réponse (« fr », « en ») : réglage du plugin, sinon celle que le client indique (paramètre
+    /// <c>lang</c> : langue de l'interface Jellyfin), sinon la préférée de son navigateur (Accept-Language), sinon celle
+    /// du serveur.
+    /// </summary>
+    private string Lang => _lang ??= I18n.Lang(ClientLanguage(Request));
+
+    internal static string? ClientLanguage(HttpRequest req)
+    {
+        if (req.Query.TryGetValue("lang", out var q) && !string.IsNullOrWhiteSpace(q.ToString()))
+        {
+            return q.ToString().Length <= 35 ? q.ToString() : null;
+        }
+
+        var accept = req.GetTypedHeaders().AcceptLanguage;
+        return accept?.Where(a => (a.Quality ?? 1) > 0 && a.Value.HasValue && a.Value.Value != "*")
+            .OrderByDescending(a => a.Quality ?? 1).Select(a => a.Value.Value).FirstOrDefault();
+    }
+
+    /// <summary>Texte (emballé ou non) rendu dans la langue de la réponse.</summary>
+    private string L(string? text) => Texts.Render(text, Lang);
+
+    /// <summary>Message d'erreur ou d'état (emballé ou non), rendu dans la langue de la réponse.</summary>
+    private object Msg(string text) => new { message = L(text) };
+
+    /// <summary>
+    /// Textes de l'interface dans la langue retenue (page de configuration) : la langue, et le dictionnaire français →
+    /// langue (vide en français, le texte source).
+    /// </summary>
+    [HttpGet("I18n")]
+    [Authorize]
+    public ActionResult Translations()
+    {
+        Response.Headers.CacheControl = "no-cache";
+        return Ok(new { lang = Lang, dict = Lang == "en" ? Texts.English : new Dictionary<string, string>() });
+    }
+
     /// <summary>Script client (rangée du mode étendu). Public, comme tout fichier de l'interface web.</summary>
     [HttpGet("client.js")]
     [AllowAnonymous]
@@ -124,13 +163,12 @@ public sealed class RecoController : ControllerBase
         var r = _reco.For(me.Value);
         bool on = cfg.Enabled && cfg.ExtendedEnabled && _seerr.Configured;
         bool hss = HomeScreenSectionsIntegration.Registered && CompatibilityGuard.Allowed(Feature.HomeScreenSection);
-        string tpl = string.IsNullOrWhiteSpace(cfg.RowBecauseTitle) ? "Parce que tu as aimé {titre}" : cfg.RowBecauseTitle.Trim();
-        // titre de chaque rangée Reco+ tel que configuré (effet immédiat dans le client web), et pour les rangées
-        // « Parce que … » le titre aimé de ce compte
-        var rowTitles = HomeScreenSectionsIntegration.Sections(cfg).ToDictionary(x => x.Id, x => x.Title, StringComparer.Ordinal);
+        // titre de chaque rangée Reco+ tel que configuré, dans la langue du compte (effet immédiat dans le client web),
+        // et pour les rangées « Parce que … » le titre aimé de ce compte
+        var rowTitles = HomeScreenSectionsIntegration.Sections(cfg, Lang).ToDictionary(x => x.Id, x => x.Title, StringComparer.Ordinal);
         foreach (var (row, anchor) in r?.RowAnchors ?? new Dictionary<string, string>())
         {
-            rowTitles[HomeScreenSectionsIntegration.Prefix + row] = tpl.Replace("{titre}", anchor, StringComparison.Ordinal);
+            rowTitles[HomeScreenSectionsIntegration.Prefix + row] = HomeScreenSectionsIntegration.Because(cfg, anchor, Lang);
         }
 
         return Ok(new
@@ -146,11 +184,21 @@ public sealed class RecoController : ControllerBase
             layouts = on && hss ? (r?.Layouts ?? new Dictionary<string, List<string>>()).Where(kv => cfg.SourceOf(kv.Key) != RowSource.Local)
                 .ToDictionary(kv => HomeScreenSectionsIntegration.Prefix + kv.Key, kv => kv.Value, StringComparer.Ordinal) : new Dictionary<string, List<string>>(),
             rowSize = Math.Clamp(cfg.RowSize, 5, 60),
-            title = cfg.ExtendedTitle,
+            title = HomeScreenSectionsIntegration.ExtendedTitle(cfg, Lang),
+            // textes du script de l'accueil
+            texts = new
+            {
+                request = Texts.T("Demander", Lang),
+                requested = Texts.T("✓ demandé", Lang),
+                failed = Texts.T("Demande impossible", Lang),
+                series = Texts.T("série", Lang),
+                because = Texts.T("Parce que tu as aimé {0}", Lang),
+                title = HomeScreenSectionsIntegration.ExtendedTitle(cfg, Lang),
+            },
             canRequest = on && cfg.ExtendedRequestButton && (r?.SeerrUserId ?? 0) > 0,
             // adresse publique seulement : l'adresse interne de Seerr n'a rien à faire chez les utilisateurs
             seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? string.Empty : cfg.SeerrPublicUrl.TrimEnd('/'),
-            items = on ? (object)(r?.Extended ?? new List<ExternalRec>()) : Array.Empty<object>(),
+            items = on ? (r?.Extended ?? new List<ExternalRec>()).Select(e => e.In(Lang)).ToList() : new List<ExternalRec>(),
         });
     }
 
@@ -176,7 +224,7 @@ public sealed class RecoController : ControllerBase
 
         if ((body.Shown?.Count ?? 0) > 500 || (body.Opened?.Count ?? 0) > 500)
         {
-            return BadRequest(new { message = "trop de titres" });
+            return BadRequest(Msg("trop de titres"));
         }
 
         _impressions.Record(me.Value.ToString("N"), body.Shown, body.Opened, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0);
@@ -197,34 +245,34 @@ public sealed class RecoController : ControllerBase
 
         if (!cfg.Enabled || !cfg.ExtendedEnabled || !cfg.ExtendedRequestButton || !_seerr.Configured)
         {
-            return BadRequest(new { message = "demandes désactivées" });
+            return BadRequest(Msg("demandes désactivées"));
         }
 
         var r = _reco.For(me.Value);
         if (r is null || r.SeerrUserId <= 0)
         {
-            return BadRequest(new { message = "compte non lié à Seerr" });
+            return BadRequest(Msg("compte non lié à Seerr"));
         }
 
         // seuls les titres effectivement proposés à ce compte peuvent être demandés par cette voie
         if (!r.Extended.Any(e => e.MediaType == body.MediaType && e.TmdbId == body.TmdbId))
         {
-            return BadRequest(new { message = "titre non proposé" });
+            return BadRequest(Msg("titre non proposé"));
         }
 
         try
         {
             var id = await _seerr.Client().RequestAsync(r.SeerrUserId, body.MediaType, body.TmdbId, ct).ConfigureAwait(false);
             _reco.DropExtended(me.Value, body.MediaType, body.TmdbId);
-            return Ok(new { requestId = id, message = "demandé" });
+            return Ok(new { requestId = id, message = L("demandé") });
         }
         catch (SeerrException ex)
         {
-            return StatusCode(StatusCodes.Status502BadGateway, new { message = ex.Message });
+            return StatusCode(StatusCodes.Status502BadGateway, Msg(ex.Packed));
         }
         catch (Exception ex) when (ex is System.Net.Http.HttpRequestException or TaskCanceledException)
         {
-            return StatusCode(StatusCodes.Status502BadGateway, new { message = "Seerr injoignable" });
+            return StatusCode(StatusCodes.Status502BadGateway, Msg("Seerr injoignable"));
         }
     }
 
@@ -236,49 +284,64 @@ public sealed class RecoController : ControllerBase
     public ActionResult Status()
     {
         var g = CompatibilityGuard.Instance;
+        var e = _reco.Status;
+        var rep = _calib.Report;
         return Ok(new
         {
             version = typeof(Plugin).Assembly.GetName().Version?.ToString(),
-            engine = _reco.Status,
-            alerts = _notifier.Active,
-            checks = g?.Checks.Select(c => new { check = c.Check, ok = c.Ok, detail = c.Detail }),
-            disabled = g?.Disabled.ToDictionary(kv => kv.Key.ToString(), kv => kv.Value),
-            hss = HomeScreenSectionsIntegration.State,
+            lang = Lang,
+            engine = new
+            {
+                e.LastFullRun,
+                e.LastFullRunSeconds,
+                e.LastUserRun,
+                e.UsersWithRecs,
+                e.LastError,
+                PlaybackReporting = L(e.PlaybackReporting),
+                Seerr = L(e.Seerr),
+                JellyfinEnhanced = L(e.JellyfinEnhanced),
+                e.ExternalTitles,
+                e.Running,
+            },
+            alerts = _notifier.Active.Select(a => new { a.Key, Title = L(a.Title), Message = L(a.Message), a.At }),
+            checks = g?.Checks.ToList().Select(c => new { check = L(c.Check), ok = c.Ok, detail = L(c.Detail) }),
+            disabled = g?.Disabled.ToDictionary(kv => L(CompatibilityGuard.Label(kv.Key)), kv => L(kv.Value)),
+            hss = L(HomeScreenSectionsIntegration.State),
             secrets = new
             {
-                seerrApiKey = _secrets.Describe(SecretStore.SeerrApiKey),
-                webhookUrl = _secrets.Get(SecretStore.WebhookUrl) is null ? "non défini" : "défini",
-                webhookToken = _secrets.Describe(SecretStore.WebhookToken),
+                seerrApiKey = L(_secrets.Describe(SecretStore.SeerrApiKey)),
+                webhookUrl = L(_secrets.Get(SecretStore.WebhookUrl) is null ? "non défini" : "défini"),
+                webhookToken = L(_secrets.Describe(SecretStore.WebhookToken)),
             },
             calibration = new
             {
                 running = _calib.Running,
                 progress = _calib.Progress,
-                error = _calib.Error,
+                error = L(_calib.Error),
                 at = _calib.ReportAt,
-                report = _calib.Report is null ? null : new
+                report = rep is null ? null : new
                 {
-                    current = new { hit10 = _calib.Report.Current.Hit10, hit20 = _calib.Report.Current.Hit20, gain = _calib.Report.Current.Gain, events = _calib.Report.Current.Events, accounts = _calib.Report.Current.Accounts },
-                    proposed = new { hit10 = _calib.Report.Proposed.Hit10, hit20 = _calib.Report.Proposed.Hit20, gain = _calib.Report.Proposed.Gain },
-                    folds = _calib.Report.Folds,
-                    minGain = _calib.Report.MinGain,
-                    cvDelta = _calib.Report.CvDelta,
-                    ciLow = _calib.Report.DeltaCi.Low,
-                    ciHigh = _calib.Report.DeltaCi.High,
-                    recommended = _calib.Report.Recommended,
-                    verdict = _calib.Report.Verdict,
-                    steps = _calib.Report.Steps.Where(s => s.Kept),
-                    settings = _calib.Report.ProposedSettings,
-                    method = _calib.Report.Method.ToString(),
-                    methods = _calib.Report.Methods.Select(m => new
+                    current = new { hit10 = rep.Current.Hit10, hit20 = rep.Current.Hit20, gain = rep.Current.Gain, events = rep.Current.Events, accounts = rep.Current.Accounts },
+                    proposed = new { hit10 = rep.Proposed.Hit10, hit20 = rep.Proposed.Hit20, gain = rep.Proposed.Gain },
+                    folds = rep.Folds,
+                    minGain = rep.MinGain,
+                    cvDelta = rep.CvDelta,
+                    ciLow = rep.DeltaCi.Low,
+                    ciHigh = rep.DeltaCi.High,
+                    recommended = rep.Recommended,
+                    verdict = rep.VerdictIn(Lang),
+                    steps = rep.Steps.Where(s => s.Kept).Select(s => new { Parameter = L(s.Parameter), Value = L(s.Value), s.Hit10, s.Hit20, s.Kept }),
+                    settings = rep.ProposedSettings,
+                    method = rep.Method.ToString(),
+                    methods = rep.Methods.Select(m => new
                     {
                         method = m.Method.ToString(),
-                        name = m.Name,
+                        name = L(m.Name),
                         gain = m.Result.Gain,
                         cvDelta = m.CvDelta,
                         ciLow = m.Ci.Low,
                         ciHigh = m.Ci.High,
-                        sufficiency = m.Sufficiency,
+                        sufficiency = L(m.Sufficiency),
                         recommended = m.Recommended,
                         noChange = m.NoChange,
                         fitPath = m.FitPath,
@@ -305,14 +368,17 @@ public sealed class RecoController : ControllerBase
         var r = _reco.For(userId);
         // rangée d'accueil de chaque titre hors bibliothèque (son titre tel que configuré)
         var cfg = Plugin.Instance!.Configuration;
-        var names = HomeScreenSectionsIntegration.Sections(cfg).ToDictionary(x => x.Id, x => x.Title, StringComparer.Ordinal);
-        string RowOf(ExternalRec e) => e.Row.Length == 0 ? " · sur aucune rangée"
-            : " · rangée « " + (r?.RowAnchors.TryGetValue(e.Row, out var a) == true ? "Parce que : " + a : names.GetValueOrDefault(HomeScreenSectionsIntegration.Prefix + e.Row, e.Row)) + " »";
+        var names = HomeScreenSectionsIntegration.Sections(cfg, Lang).ToDictionary(x => x.Id, x => x.Title, StringComparer.Ordinal);
+        string RowOf(ExternalRec e) => e.Row.Length == 0 ? " · " + Texts.T("sur aucune rangée", Lang)
+            : " · " + Texts.T("rangée « {0} »", Lang, r?.RowAnchors.TryGetValue(e.Row, out var a) == true
+                ? HomeScreenSectionsIntegration.Because(cfg, a, Lang)
+                : names.GetValueOrDefault(HomeScreenSectionsIntegration.Prefix + e.Row, e.Row));
+        string Why(ExternalRec e) => string.IsNullOrEmpty(e.Reason) ? Texts.T("Parce que tu as aimé {0}", Lang, e.Because) : L(e.Reason);
         return Ok(new
         {
-            items = _reco.Preview(userId),
-            extended = r?.Extended.Take(30).Select(e => $"{e.Name} ({e.Year}) — {(string.IsNullOrEmpty(e.Reason) ? "parce que : " + e.Because : e.Reason)}{(cfg.AnyExternalRow() ? RowOf(e) : string.Empty)}"),
-            rows = _reco.PreviewRows(userId),
+            items = _reco.Preview(userId, Lang),
+            extended = r?.Extended.Take(30).Select(e => $"{e.Name} ({e.Year}) — {Why(e)}{(cfg.AnyExternalRow() ? RowOf(e) : string.Empty)}"),
+            rows = _reco.PreviewRows(userId, Lang),
             sources = r?.Sources,
             computedAt = r?.ComputedAt,
         });
@@ -328,7 +394,7 @@ public sealed class RecoController : ControllerBase
     {
         if (cursor is { Length: > 300 })
         {
-            return BadRequest(new { message = "curseur invalide" });
+            return BadRequest(Msg("curseur invalide"));
         }
 
         try
@@ -338,7 +404,7 @@ public sealed class RecoController : ControllerBase
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            return Ok(new { cursor, file = string.Empty, entries = Array.Empty<object>(), error = "journal illisible (" + ex.GetType().Name + ")" });
+            return Ok(new { cursor, file = string.Empty, entries = Array.Empty<object>(), error = Texts.T("journal illisible ({0})", Lang, ex.GetType().Name) });
         }
     }
 
@@ -367,16 +433,16 @@ public sealed class RecoController : ControllerBase
     {
         if (body.Name is not (SecretStore.SeerrApiKey or SecretStore.WebhookUrl or SecretStore.WebhookToken))
         {
-            return BadRequest(new { message = "secret inconnu" });
+            return BadRequest(Msg("secret inconnu"));
         }
 
         if (body.Value is { Length: > 2048 })
         {
-            return BadRequest(new { message = "valeur trop longue" });
+            return BadRequest(Msg("valeur trop longue"));
         }
 
         _secrets.Set(body.Name, body.Value);
-        return Ok(new { state = _secrets.Describe(body.Name) });
+        return Ok(new { state = L(_secrets.Describe(body.Name)) });
     }
 
     /// <summary>
@@ -392,13 +458,13 @@ public sealed class RecoController : ControllerBase
         // la clé enregistrée ne part que vers l'URL enregistrée : un secret n'est jamais envoyé à une adresse saisie
         if (string.IsNullOrWhiteSpace(body.ApiKey) && !SameUrl(url, saved))
         {
-            return Ok(new { ok = false, message = "nouvelle URL : saisissez aussi la clé (la clé enregistrée n'est envoyée qu'à l'URL enregistrée)" });
+            return Ok(new { ok = false, message = L("nouvelle URL : saisissez aussi la clé (la clé enregistrée n'est envoyée qu'à l'URL enregistrée)") });
         }
 
         var key = string.IsNullOrWhiteSpace(body.ApiKey) ? _secrets.Get(SecretStore.SeerrApiKey) : body.ApiKey.Trim();
         if (string.IsNullOrWhiteSpace(url) || string.IsNullOrWhiteSpace(key))
         {
-            return Ok(new { ok = false, message = "URL ou clé manquante" });
+            return Ok(new { ok = false, message = L("URL ou clé manquante") });
         }
 
         try
@@ -413,13 +479,13 @@ public sealed class RecoController : ControllerBase
             return Ok(new
             {
                 ok = true,
-                message = $"connecté à Seerr v{version} — {linked.Count} compte(s) lié(s) à Jellyfin"
-                          + (unmapped.Count > 0 ? $" ; sans compte Seerr : {string.Join(", ", unmapped.Take(10))}{(unmapped.Count > 10 ? "…" : string.Empty)}" : string.Empty),
+                message = Texts.T("connecté à Seerr v{0} — {1} compte(s) lié(s) à Jellyfin", Lang, version, linked.Count)
+                          + (unmapped.Count > 0 ? Texts.T(" ; sans compte Seerr : {0}", Lang, string.Join(", ", unmapped.Take(10)) + (unmapped.Count > 10 ? "…" : string.Empty)) : string.Empty),
             });
         }
         catch (Exception ex) when (ex is SeerrException or System.Net.Http.HttpRequestException or TaskCanceledException or System.Text.Json.JsonException)
         {
-            return Ok(new { ok = false, message = ex is TaskCanceledException ? "pas de réponse (URL injoignable depuis le serveur Jellyfin ?)" : ex.Message });
+            return Ok(new { ok = false, message = L(ex is TaskCanceledException ? "pas de réponse (URL injoignable depuis le serveur Jellyfin ?)" : SeerrException.TextOf(ex)) });
         }
     }
 
@@ -432,10 +498,11 @@ public sealed class RecoController : ControllerBase
         if (string.IsNullOrWhiteSpace(body.Token) && !string.IsNullOrWhiteSpace(body.Url) && _secrets.Get(SecretStore.WebhookToken) is not null
             && !SameUrl(body.Url, _secrets.Get(SecretStore.WebhookUrl)))
         {
-            return Ok(new { message = "nouvelle URL : saisissez aussi le jeton (le jeton enregistré n'est envoyé qu'à l'URL enregistrée)" });
+            return Ok(new { ok = false, message = L("nouvelle URL : saisissez aussi le jeton (le jeton enregistré n'est envoyé qu'à l'URL enregistrée)") });
         }
 
-        return Ok(new { message = await _notifier.SendWebhookAsync("test", "Notification de test de Reco+.", body.Kind, body.Url, body.Token).ConfigureAwait(false) });
+        var state = await _notifier.SendWebhookAsync("test", Texts.T("Notification de test de Reco+.", Lang), body.Kind, body.Url, body.Token).ConfigureAwait(false);
+        return Ok(new { ok = state == Notifier.Sent, message = L(state) });
     }
 
     /// <summary>Même adresse (casse de l'hôte, barre finale et espaces ignorés).</summary>
@@ -453,7 +520,7 @@ public sealed class RecoController : ControllerBase
     {
         if (_calib.Running)
         {
-            return Conflict(new { message = "déjà en cours" });
+            return Conflict(Msg("déjà en cours"));
         }
 
         _calib.Start();
@@ -475,7 +542,7 @@ public sealed class RecoController : ControllerBase
             methods = Enum.GetValues<CalibrationMethod>().ToDictionary(m => m.ToString(), m =>
             {
                 var (level, message) = Calibrator.Sufficiency(m, n);
-                return new { level, message };
+                return new { level, label = L(level), message = L(message) };
             }),
         });
     }
@@ -513,14 +580,14 @@ public sealed class RecoController : ControllerBase
         var rep = _calib.Report;
         if (rep is null)
         {
-            return BadRequest(new { message = "aucun calibrage" });
+            return BadRequest(Msg("aucun calibrage"));
         }
 
         var p = Plugin.Instance!;
         p.Configuration.PreviousEngine = p.Configuration.Engine.Clone();
         p.Configuration.Engine = rep.ProposedSettings.Sanitized();
         p.SaveConfiguration();
-        return Ok(new { message = "appliqué ; « Recalculer » pour tous les comptes maintenant, sinon chacun à sa prochaine activité" });
+        return Ok(Msg("appliqué ; « Recalculer » pour tous les comptes maintenant, sinon chacun à sa prochaine activité"));
     }
 
     /// <summary>Revient au réglage précédent.</summary>
@@ -531,12 +598,12 @@ public sealed class RecoController : ControllerBase
         var p = Plugin.Instance!;
         if (p.Configuration.PreviousEngine is null)
         {
-            return BadRequest(new { message = "rien à restaurer" });
+            return BadRequest(Msg("rien à restaurer"));
         }
 
         (p.Configuration.Engine, p.Configuration.PreviousEngine) = (p.Configuration.PreviousEngine, p.Configuration.Engine);
         p.SaveConfiguration();
-        return Ok(new { message = "réglage précédent restauré ; « Recalculer » pour tous les comptes maintenant" });
+        return Ok(Msg("réglage précédent restauré ; « Recalculer » pour tous les comptes maintenant"));
     }
 
     /// <summary>Remet les réglages du moteur par défaut.</summary>
@@ -548,6 +615,6 @@ public sealed class RecoController : ControllerBase
         p.Configuration.PreviousEngine = p.Configuration.Engine.Clone();
         p.Configuration.Engine = new EngineSettings();
         p.SaveConfiguration();
-        return Ok(new { message = "réglages par défaut ; « Recalculer » pour tous les comptes maintenant" });
+        return Ok(Msg("réglages par défaut ; « Recalculer » pour tous les comptes maintenant"));
     }
 }
