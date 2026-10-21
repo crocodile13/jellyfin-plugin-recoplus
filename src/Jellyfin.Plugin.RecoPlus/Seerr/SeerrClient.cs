@@ -15,10 +15,10 @@ namespace Jellyfin.Plugin.RecoPlus.Seerr;
 /// <summary>Erreur Seerr avec un message lisible (jamais la clé).</summary>
 public sealed class SeerrException : Exception
 {
-    /// <param name="packed">Message emballé (<see cref="Texts.Pack"/>) ; <see cref="Exception.Message"/> en est le rendu français (journal).</param>
+    /// <param name="packed">Message emballé (<see cref="Texts.Pack"/>) ; <see cref="Exception.Message"/> en est le rendu anglais (journal).</param>
     /// <param name="status">Code HTTP éventuel.</param>
     public SeerrException(string packed, HttpStatusCode? status = null)
-        : base(Texts.Render(packed, "fr"))
+        : base(Texts.Render(packed, "en"))
     {
         Packed = packed;
         Status = status;

@@ -12,7 +12,7 @@
 (function () {
     'use strict';
     // textes de l'interface, remplacés par ceux du serveur (dans la langue retenue) dès la première réponse
-    var TX = { request: 'Demander', requested: '✓ demandé', failed: 'Demande impossible', series: 'série', because: 'Parce que tu as aimé {0}', title: 'À découvrir pour toi' };
+    var TX = { request: 'Request', requested: '✓ requested', failed: 'Request failed', series: 'series', because: 'Because you liked {0}', title: 'Discover for you' };
     if (window.__recoPlusClient) { return; }
     window.__recoPlusClient = true;
 

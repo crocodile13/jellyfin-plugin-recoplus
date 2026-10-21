@@ -82,7 +82,7 @@ public sealed class ScriptInjection : IStartupFilter
         }
         catch (Exception ex)
         {
-            _log.LogWarning("Reco+ : injection du script impossible ({Msg}), page d'origine servie", ex.Message);
+            _log.LogWarning("Reco+: could not inject the script ({Msg}), original page served", ex.Message);
         }
 
         var bytes = Encoding.UTF8.GetBytes(page);

@@ -77,7 +77,7 @@ public sealed class CalibrationService
             var options = Plugin.Instance.Configuration.BuildCalibrationOptions();
             Report = await Task.Run(() => Calibrator.Calibrate(ds, cur, new Progress<double>(p => progress.Report(Math.Max(1, p))), ct, method: method, options: options), ct).ConfigureAwait(false);
             ReportAt = DateTime.UtcNow;
-            _log.LogInformation("Reco+ : calibrage terminé — {Verdict}", Report.VerdictIn("fr"));
+            _log.LogInformation("Reco+: calibration finished — {Verdict}", Report.VerdictIn("en"));
         }
         catch (OperationCanceledException)
         {
@@ -87,7 +87,7 @@ public sealed class CalibrationService
         catch (Exception ex)
         {
             Error = ex.GetType().Name + ": " + ex.Message;
-            _log.LogError(ex, "Reco+ : calibrage en échec");
+            _log.LogError(ex, "Reco+: calibration failed");
             throw;
         }
     }

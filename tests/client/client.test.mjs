@@ -211,12 +211,12 @@ await test('sans Jellyfin Enhanced : cartes Reco+ avec bouton Demander', async (
     const cards = p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext');
     assert.equal(cards.length, 2);
     const btn = cards[0].querySelector('button');
-    assert.equal(btn.textContent, 'Demander');
+    assert.equal(btn.textContent, 'Request');
     btn.click();
     await wait(50);
     assert.equal(p.calls.posts.length, 1);
     assert.deepEqual(JSON.parse(p.calls.posts[0].data), { MediaType: 'movie', TmdbId: 1000 });
-    assert.equal(btn.textContent, '✓ demandé');
+    assert.equal(btn.textContent, '✓ requested');
 });
 
 await test('Jellyfin Enhanced non relié à Seerr : cartes Reco+', async () => {
@@ -390,13 +390,13 @@ await test('fiche refusée au compte par Jellyfin Enhanced (403, contrôle paren
     assert.equal(p.calls.je.length, 3, 'raison du refus lue seulement pour les fiches manquantes');
 });
 
-await test('raison affichée : celle du serveur, sinon « Parce que tu as aimé … »', async () => {
+await test('raison affichée : celle du serveur, sinon « Because you liked … » (textes par défaut en anglais)', async () => {
     const items = ext(2).map((it, i) => ({ ...it, Reason: i === 0 ? 'De Hayao Miyazaki' : '' }));
     const p = page({ hssCards: 4, data: { ...base, items, layouts: pour(inter(4, items, 2)) } });
     await wait(700);
     const imgs = [...p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-ext .cardImageContainer')];
     assert.equal(imgs[0].title, 'De Hayao Miyazaki');
-    assert.equal(imgs[1].title, 'Parce que tu as aimé Aimé 1');
+    assert.equal(imgs[1].title, 'Because you liked Aimé 1');
 });
 
 await test('langue : celle de l\'interface Jellyfin envoyée au serveur, textes du serveur utilisés', async () => {

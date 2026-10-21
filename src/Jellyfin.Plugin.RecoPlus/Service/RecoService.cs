@@ -122,7 +122,7 @@ public sealed class RecoService : IDisposable
                     }
                     catch (Exception ex) when (ex is not OutOfMemoryException)
                     {
-                        _log.LogWarning("Reco+ : vecteurs de contenu indisponibles ({Msg})", ex.Message);
+                        _log.LogWarning("Reco+: content vectors unavailable ({Msg})", ex.Message);
                     }
                 }
 
@@ -227,13 +227,13 @@ public sealed class RecoService : IDisposable
                         }
 
                         Status.UsersWithRecs = _recs.Count;
-                        _log.LogInformation("Reco+ : {N} listes rechargées depuis le cache disque", _recs.Count);
+                        _log.LogInformation("Reco+: {N} lists reloaded from the disk cache", _recs.Count);
                     }
                 }
             }
             catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
             {
-                _log.LogWarning("Reco+ : cache disque illisible ({Type}), il sera recalculé", ex.GetType().Name);
+                _log.LogWarning("Reco+: unreadable disk cache ({Type}), it will be recomputed", ex.GetType().Name);
             }
 
             _loaded = true;
@@ -272,7 +272,7 @@ public sealed class RecoService : IDisposable
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             Interlocked.Exchange(ref _dirty, 1);
-            _log.LogWarning(ex, "Reco+ : écriture du cache impossible");
+            _log.LogWarning(ex, "Reco+: could not write the cache");
         }
     }
 
@@ -338,13 +338,13 @@ public sealed class RecoService : IDisposable
             {
                 Status.LastFullRun = DateTime.UtcNow;
                 Status.LastFullRunSeconds = Math.Round(sw.Elapsed.TotalSeconds, 1);
-                _log.LogInformation("Reco+ : calcul complet terminé en {S:0.0} s — {N} comptes, {E} titres hors bibliothèque ; Seerr : {Seerr}",
-                    sw.Elapsed.TotalSeconds, Status.UsersWithRecs, Status.ExternalTitles, Status.Seerr);
+                _log.LogInformation("Reco+: full computation finished in {S:0.0} s — {N} accounts, {E} titles outside the library; Seerr: {Seerr}",
+                    sw.Elapsed.TotalSeconds, Status.UsersWithRecs, Status.ExternalTitles, Texts.Render(Status.Seerr, "en"));
             }
             else
             {
                 Status.LastUserRun = DateTime.UtcNow;
-                _log.LogInformation("Reco+ : compte {User} recalculé en {Ms} ms", _users.GetUserById(only.Value)?.Username ?? only.Value.ToString("N"), sw.ElapsedMilliseconds);
+                _log.LogInformation("Reco+: account {User} recomputed in {Ms} ms", _users.GetUserById(only.Value)?.Username ?? only.Value.ToString("N"), sw.ElapsedMilliseconds);
             }
 
             Status.LastError = null;
@@ -356,7 +356,7 @@ public sealed class RecoService : IDisposable
         catch (Exception ex)
         {
             Status.LastError = $"{DateTime.UtcNow:u} {ex.GetType().Name}: {ex.Message}";
-            _log.LogError(ex, "Reco+ : échec du calcul (les listes précédentes restent servies)");
+            _log.LogError(ex, "Reco+: computation failed (previous lists are still served)");
         }
         finally
         {
@@ -465,7 +465,7 @@ public sealed class RecoService : IDisposable
             var extTargets = targets.Where(Active).ToList();
             if (only is null)
             {
-                _log.LogInformation("Reco+ : exploration Seerr pour {N} compte(s) actif(s) sur {T}", extTargets.Count, targets.Count);
+                _log.LogInformation("Reco+: Seerr exploration for {N} active account(s) out of {T}", extTargets.Count, targets.Count);
             }
             for (int i = 0; i < extTargets.Count; i++)
             {
@@ -473,7 +473,7 @@ public sealed class RecoService : IDisposable
                 var explored = await ExtendedCandidates(extTargets[i], ctx, lib, tmdbOf, seerr, cl, titles, colls, cfg, ct).ConfigureAwait(false);
                 if (_seerr.Down)
                 {
-                    _log.LogWarning("Reco+ : Seerr a lâché pendant l'exploration ; {N} compte(s) gardent leurs titres hors bibliothèque précédents", extTargets.Count - i);
+                    _log.LogWarning("Reco+: Seerr went down during exploration; {N} account(s) keep their previous titles outside the library", extTargets.Count - i);
                     break; // Seerr a lâché en route : ce compte et les suivants gardent leurs titres hors bibliothèque précédents
                 }
 

@@ -370,7 +370,7 @@ await test('export du jeu de calibrage : téléchargé avec la session, en JSON'
     assert.equal(calls[0].dataType, 'text');
     assert.equal(made.length, 1);
     assert.equal(made[0].type, 'application/json');
-    assert.match(clicked, /^reco-calibrage-\d{4}-\d{2}-\d{2}\.json$/);
+    assert.match(clicked, /^reco-calibration-\d{4}-\d{2}-\d{2}\.json$/);
     assert.match(d.getElementById('rpCalExportState').textContent, /téléchargé/);
 });
 

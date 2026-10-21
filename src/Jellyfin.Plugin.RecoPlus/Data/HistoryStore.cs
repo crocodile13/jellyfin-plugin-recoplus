@@ -64,7 +64,7 @@ public sealed class HistoryStore : IDisposable
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             Interlocked.Exchange(ref _dirty, 1);
-            _log.LogWarning(ex, "Reco+ : écriture de l'historique des premiers lancements impossible");
+            _log.LogWarning(ex, "Reco+: could not write the first-play history");
         }
     }
 
@@ -98,7 +98,7 @@ public sealed class HistoryStore : IDisposable
             }
             catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
             {
-                _log.LogWarning(ex, "Reco+ : historique des premiers lancements illisible, repart de zéro");
+                _log.LogWarning(ex, "Reco+: unreadable first-play history, starting from scratch");
             }
 
             _loaded = true;

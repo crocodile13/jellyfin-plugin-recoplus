@@ -90,7 +90,7 @@ public sealed class UserDataReader
             }
         }
 
-        _log.LogInformation("Reco+ : données utilisateur lues — {Rows} lignes, {Users} comptes en {Ms} ms", rows.Count, res.Count, sw.ElapsedMilliseconds);
+        _log.LogInformation("Reco+: user data read — {Rows} rows, {Users} accounts in {Ms} ms", rows.Count, res.Count, sw.ElapsedMilliseconds);
         return res;
     }
 }

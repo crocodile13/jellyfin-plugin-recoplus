@@ -110,7 +110,7 @@ public sealed class CompatibilityGuard : IHostedService
     /// <summary>Signale une erreur ; 5 en 10 minutes coupent la partie jusqu'au redémarrage.</summary>
     public void ReportError(Feature f, Exception ex)
     {
-        _log.LogWarning(ex, "Reco+ : erreur dans {Feature} (repli sur Jellyfin)", f);
+        _log.LogWarning(ex, "Reco+: error in {Feature} (falling back to Jellyfin)", f);
         var q = _errors.GetOrAdd(f, _ => new Queue<DateTime>());
         lock (q)
         {
@@ -149,7 +149,7 @@ public sealed class CompatibilityGuard : IHostedService
             }
             catch (Exception ex)
             {
-                _log.LogError(ex, "Reco+ : vérifications de compatibilité en échec");
+                _log.LogError(ex, "Reco+: compatibility checks failed");
             }
         }, CancellationToken.None);
         return Task.CompletedTask;

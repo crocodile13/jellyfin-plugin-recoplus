@@ -320,7 +320,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
             Registered = true;
             State = Texts.Pack("{0} rangées déclarées ({1}) — à choisir et ordonner dans la configuration de Home Screen Sections", sections.Count, string.Join(" · ", sections.Select(x => x.Title).Distinct()));
             _notifier.Clear("off-" + Feature.HomeScreenSection);
-            _log.LogInformation("Reco+ : {N} rangées déclarées à Home Screen Sections", sections.Count);
+            _log.LogInformation("Reco+: {N} rows registered with Home Screen Sections", sections.Count);
         }
         catch (Exception ex)
         {

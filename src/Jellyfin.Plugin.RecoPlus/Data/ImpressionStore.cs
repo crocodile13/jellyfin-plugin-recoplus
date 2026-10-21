@@ -187,7 +187,7 @@ public sealed partial class ImpressionStore : IDisposable
                 _dirty = true;
             }
 
-            _log.LogWarning(ex, "Reco+ : écriture des affichages impossible");
+            _log.LogWarning(ex, "Reco+: could not write the impressions");
         }
     }
 
@@ -228,7 +228,7 @@ public sealed partial class ImpressionStore : IDisposable
             }
             catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
             {
-                _log.LogWarning("Reco+ : fichier des affichages illisible ({Type}), il repart de zéro", ex.GetType().Name);
+                _log.LogWarning("Reco+: unreadable impressions file ({Type}), starting from scratch", ex.GetType().Name);
             }
         }
     }

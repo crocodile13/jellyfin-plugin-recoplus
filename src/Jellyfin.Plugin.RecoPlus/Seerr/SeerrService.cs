@@ -204,7 +204,7 @@ public sealed class SeerrService
             }
 
             Failed(ex, ct);
-            _log.LogWarning("Reco+ : Seerr indisponible ({Msg}) — recommandations calculées sans lui", ex.Message);
+            _log.LogWarning("Reco+: Seerr unavailable ({Msg}) — recommendations computed without it", ex.Message);
             return Last = new SeerrSnapshot { Status = Texts.Pack("indisponible : {0}", SeerrException.TextOf(ex)) };
         }
     }
@@ -239,7 +239,7 @@ public sealed class SeerrService
             }
             catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
             {
-                _log.LogWarning("Reco+ : cache des fiches Seerr illisible, repart de zéro");
+                _log.LogWarning("Reco+: unreadable Seerr details cache, starting from scratch");
             }
 
             // listes TMDb : gardées entre deux démarrages (sinon toute l'exploration est relue après un redémarrage)
@@ -269,7 +269,7 @@ public sealed class SeerrService
             }
             catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException or NotSupportedException)
             {
-                _log.LogWarning("Reco+ : cache des listes Seerr illisible ({Type}), repart de zéro", ex.GetType().Name);
+                _log.LogWarning("Reco+: unreadable Seerr lists cache ({Type}), starting from scratch", ex.GetType().Name);
             }
 
             _loaded = true;
@@ -330,7 +330,7 @@ public sealed class SeerrService
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
                 Interlocked.Exchange(ref _listsDirty, 1);
-                _log.LogWarning(ex, "Reco+ : écriture du cache des listes Seerr impossible");
+                _log.LogWarning(ex, "Reco+: could not write the Seerr lists cache");
             }
         }
 
@@ -349,7 +349,7 @@ public sealed class SeerrService
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             Interlocked.Exchange(ref _dirty, 1);
-            _log.LogWarning(ex, "Reco+ : écriture du cache Seerr impossible");
+            _log.LogWarning(ex, "Reco+: could not write the Seerr cache");
         }
     }
 
@@ -405,7 +405,7 @@ public sealed class SeerrService
         {
             Interlocked.Exchange(ref _downUntil, (DateTime.UtcNow + DownFor).Ticks);
             Interlocked.Exchange(ref _strikes, 0);
-            _log.LogWarning("Reco+ : Seerr ne répond plus ({Msg}) ; appels suspendus {Min} min, le calcul continue sans", ex.Message, DownFor.TotalMinutes);
+            _log.LogWarning("Reco+: Seerr is not responding ({Msg}); calls suspended for {Min} min, computation continues without it", ex.Message, DownFor.TotalMinutes);
         }
     }
 
@@ -461,7 +461,7 @@ public sealed class SeerrService
         {
             Failed(ex, ct);
             _failed[key] = DateTime.UtcNow + (ex is SeerrException { Status: System.Net.HttpStatusCode.NotFound } ? MissingTtl : FailedTtl);
-            _log.LogDebug("Reco+ : fiche {Key} indisponible ({Msg})", key, ex.Message);
+            _log.LogDebug("Reco+: details {Key} unavailable ({Msg})", key, ex.Message);
             return null;
         }
         finally
@@ -510,7 +510,7 @@ public sealed class SeerrService
                 catch (Exception ex) when (Transient(ex, ct))
                 {
                     Failed(ex, ct);
-                    _log.LogDebug("Reco+ : {Rel} de {Key} (page {Page}) indisponible ({Msg})", rel, key, page, ex.Message);
+                    _log.LogDebug("Reco+: {Rel} of {Key} (page {Page}) unavailable ({Msg})", rel, key, page, ex.Message);
                 }
                 finally
                 {
@@ -586,7 +586,7 @@ public sealed class SeerrService
         {
             Failed(ex, ct);
             _failed["l:" + key] = DateTime.UtcNow + (ex is SeerrException { Status: System.Net.HttpStatusCode.NotFound } ? MissingTtl : FailedTtl);
-            _log.LogDebug("Reco+ : liste {Key} indisponible ({Msg})", key, ex.Message);
+            _log.LogDebug("Reco+: list {Key} unavailable ({Msg})", key, ex.Message);
             return new List<SeerrResult>();
         }
         finally

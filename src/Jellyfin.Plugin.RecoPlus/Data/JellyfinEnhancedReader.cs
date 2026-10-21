@@ -95,7 +95,7 @@ public sealed class JellyfinEnhancedReader
             catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException or InvalidDataException)
             {
                 errors++;
-                _log.LogWarning("Reco+ : masquages Jellyfin Enhanced illisibles pour un compte ({Msg})", ex.Message);
+                _log.LogWarning("Reco+: unreadable Jellyfin Enhanced hidden titles for an account ({Msg})", ex.Message);
             }
         }
 
@@ -120,7 +120,7 @@ public sealed class JellyfinEnhancedReader
         catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException or InvalidDataException)
         {
             errors++;
-            _log.LogWarning("Reco+ : avis Jellyfin Enhanced illisibles ({Msg})", ex.Message);
+            _log.LogWarning("Reco+: unreadable Jellyfin Enhanced reviews ({Msg})", ex.Message);
         }
 
         State = errors > 0
@@ -148,7 +148,7 @@ public sealed class JellyfinEnhancedReader
 
         if (fi.Length > MaxBytes)
         {
-            throw new InvalidDataException("fichier trop gros");   // i18n:skip (interne, jamais affiché)
+            throw new InvalidDataException("file too large");   // i18n:skip (interne, jamais affiché)
         }
 
         using var s = fi.OpenRead();

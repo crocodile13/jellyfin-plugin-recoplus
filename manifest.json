@@ -9,8 +9,16 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.27.0",
+        "changelog": "1.0.27: everything defaults to English — server logs, plugin image, catalogue text, home page fallback texts, calibration export file name (reco-calibration-…). The interface language still follows Jellyfin by default.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.26.0",
-        "changelog": "1.0.26 : calibrage — méthode par défaut : modèle de choix appris (environ une minute) au lieu d'automatique, qui lance aussi la recherche par curseurs et le réseau de neurones (jusqu'à une heure de processeur) ; automatique reste au choix.",
+        "changelog": "1.0.26: calibration — default method is now the learned choice model (about a minute) instead of automatic, which also runs the coordinate search and the neural network (up to an hour of CPU); automatic is still available.",
         "targetAbi": "12.2.0.0",
         "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.26.0/RecoPlus_1.0.26.0.zip",
         "checksum": "a5234867cdee0794a288a4c415806104",
