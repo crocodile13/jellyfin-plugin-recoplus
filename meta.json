@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.33: sagas everywhere and from better clues — one volume per saga, the first one not yet seen, in every home row (not only \"For you\"); sagas are recognised from the movie's TMDb collection (a new part counts even before Jellyfin files it), from Jellyfin collections and from the name (a movie continuing a series comes after the series); collections that mix several TMDb collections (a director, \"Marvel\") are thematic groups, never a saga; a sequel whose start is missing from the library comes last; \"Because you liked X\" only starts from titles actually watched; a Jellyfin Like on a watchlisted title (Seerr / Jellyfin Enhanced watchlist) counts as an intent, not a review; the preview shows the real \"For you\" row and hides empty rows.",
+  "changelog": "1.0.34: TMDb agreement for library titles — for each account, the TMDb recommendations of its most liked titles (through Seerr, cached) give a bonus to the library titles TMDb links to them, weighted by taste and position, worldwide hits damped, still reserved to titles that already fit the account (on by default, General tab, Sources; status on the State tab); new \"Effect of the recommendations\" on the State tab: what accounts do with the library titles offered in their rows — started within 7 days, finished within 30, by row and by position — and the share of recently started titles that had been offered, measured from the watch history alone. A Like on a watchlisted title counts as a review again once the title is watched (movie seen or half watched, series half watched).",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.33.0",
+  "version": "1.0.34.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

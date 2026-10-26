@@ -106,6 +106,11 @@
                     <h3>Compatibilité et dépendances</h3>
                     <table id="rpChecks"></table>
                 </div>
+                <div class="rp-box">
+                    <h3>Effet des recommandations</h3>
+                    <p class="mute">Ce que les comptes font des titres de la bibliothèque proposés dans leurs rangées : commencés dans les 7 jours qui suivent la première proposition, vus en entier dans les 30 jours. Un titre proposé depuis moins longtemps n'est pas encore compté. Rien n'est demandé aux comptes : l'historique de lecture suffit.</p>
+                    <div id="rpMeasure"></div>
+                </div>
                 <div class="rp-row">
                     <button is="emby-button" type="button" class="raised" id="rpRecompute"><span>Recalculer maintenant</span></button>
                     <button is="emby-button" type="button" class="raised" id="rpRecheck"><span>Revérifier la compatibilité</span></button>
@@ -393,6 +398,8 @@
             ['UseSeerrVotes', 'Nombre de votes TMDb (via Seerr)', 'bool', 'Lit le nombre de votes derrière chaque note, pour ne pas croire une note fondée sur une poignée de votes. Les fiches manquantes sont récupérées progressivement (150 par calcul complet, mises en cache 14 jours).', 0, 0, 0, 'sources', 'c', 'activé'],
             ['TrackImpressions', 'Titres montrés sans être ouverts', 'bool', 'Le script de l\'accueil note les cartes d\'une rangée Reco+ restées au moins une seconde à l\'écran du compte connecté (onglet au premier plan), une fois par jour, et celles qu\'il ouvre. Rien n\'est compté pour une page jamais affichée, un calcul ou un autre compte. Sert au facteur « Montré sans être ouvert » (onglet Moteur).', 0, 0, 0, 'sources', 'c', 'activé'],
             ['UseSeerrWatchlist', 'Listes de suivi Seerr', 'bool', 'Lit la liste de suivi Seerr de chaque compte lié (une requête par compte au calcul complet).', 0, 0, 0, 'sources', 'c', 'activé'],
+            ['UseTmdbLibrarySignal', 'Recommandations TMDb pour la bibliothèque', 'bool', 'Lit, via Seerr, les recommandations TMDb des titres les plus aimés de chaque compte (en cache, partagées avec le mode étendu) et en tire l\'« Accord TMDb » des titres de la bibliothèque (onglet Moteur) : ce que TMDb associe à ce que le compte aime, appris sur tous ses utilisateurs. Un titre recommandé partout pèse moins.', 0, 0, 0, 'sources', 'c', 'activé'],
+            ['TmdbLibraryAnchors', 'Titres aimés lus pour la bibliothèque', 'int', 'Les N titres les plus aimés de chaque compte dont on lit les recommandations TMDb pour classer la bibliothèque.', 1, 1, 200, 'sources', 'c', '30'],
             ['Language', 'Langue de l\'interface', 'enum:System=celle de Jellyfin,French=français,English=English', 'Langue de cette page, des rangées et des cartes de l\'accueil, et des notifications. Celle de Jellyfin : la langue de l\'interface de chacun (sinon celle du serveur). Les rangées vues par les applications TV changent au prochain redémarrage de Jellyfin.', 0, 0, 0, 'lang', 'c', 'celle de Jellyfin'],
             ['SimilarPersonalization', 'Personnalisation de « Plus comme ceci »', 'num', '0 = pure ressemblance avec le titre affiché. 1 = surtout les goûts du compte. 0,25 : la fiche reste le sujet, les goûts départagent.', 0.05, 0, 1, 'genadv', 'c', '0,25'],
             ['DebounceSeconds', 'Recalcul d\'un compte après son activité (s)', 'int', 'Délai sans nouvelle action (lecture terminée, vu, favori, note) avant de recalculer le compte : chaque action repousse le recalcul, pour regrouper les actions rapprochées (zapping, épisodes enchaînés, plusieurs favoris d\'affilée).', 10, 10, 3600, 'genadv', 'c', '120'],
@@ -436,7 +443,7 @@
             ['WFresh', 'Nouveauté', 'factor', 'Bonus des titres récemment ajoutés, uniquement s\'ils collent déjà aux goûts du compte (garde-fou). Plafonné : ×2 au plus.', 0, 0, 2, 'fbonus', 'e', '2', 2],
             ['WPopularity', 'Popularité dans le foyer', 'factor', 'Bonus des titres regardés par beaucoup de comptes du serveur, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
             ['WQuality', 'Note de la communauté', 'factor', 'Bonus des titres bien notés (TMDb/IMDb), uniquement s\'ils collent déjà aux goûts (garde-fou). Pour écarter les titres mal notés, utilisez plutôt le filtre « Note minimale » de l\'onglet Listes.', 0, 0, 3, 'fbonus', 'e', '0,1', 0.1],
-            ['WTmdbAgreement', 'Accord TMDb (mode étendu)', 'factor', 'Bonus des titres hors bibliothèque que TMDb recommande à partir de plusieurs titres aimés, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
+            ['WTmdbAgreement', 'Accord TMDb', 'factor', 'Bonus des titres que TMDb recommande à partir de plusieurs titres aimés — hors bibliothèque (mode étendu) comme dans la bibliothèque (onglet Général, Sources) —, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
             ['WRelease', 'Sortie récente', 'factor', 'Bonus des titres sortis récemment (date de sortie, pas d\'ajout à la bibliothèque), uniquement s\'ils collent déjà aux goûts. Coupé par défaut : non évalué sur un historique réel — le Calibrage peut le proposer.', 0, 0, 3, 'fbonus', 'e', 'coupé (×1 = 1)', 1],
             ['WHousehold', 'Avis du foyer', 'factor', 'Bonus des titres bien notés par les AUTRES comptes (avis Jellyfin Enhanced), uniquement s\'ils collent déjà aux goûts. La confiance croît avec le nombre d\'avis : un seul 5 étoiles pèse peu, cinq avis concordants pleinement (voir « Avis neutres ajoutés »).', 0, 0, 3, 'fbonus', 'e', '0,3', 0.3],
             ['Diversity', 'Diversité', 'enum:Personalized=personnalisée (suit la variété du compte),Calibrated=calibrée (part des genres de l\'historique),Fixed=fixe (la même pour tous)', 'Personnalisée : plusieurs forces de diversité sont essayées et la liste gardée est celle dont la variété ressemble le plus à celle de ce que le compte aime — un éclectique reçoit une liste variée, un fan d\'un seul genre une liste resserrée (la mieux évaluée sur l\'historique de référence). Calibrée (Steck, RecSys 2018) : la part de chaque genre dans la liste suit celle de l\'historique (70 % de thrillers vus → environ 70 % proposés, pas 100 %). Fixe : la même pénalité de redondance pour tous.', 0, 0, 0, 'diversmode', 'e', 'personnalisée'],
@@ -703,7 +710,7 @@
         function srcOff(name) { return sw(name) ? '' : tf('source « {0} » coupée', t(fOf(name)[1])); }
         var SOURCES = ['SourcePourToi', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms', 'SourceSeries'];
         var EXT_GROUPS = ['ext', 'exthome', 'extmix', 'extadv', 'extsrc'];
-        var NEEDS_SEERR = ['UseSeerrVotes', 'UseSeerrWatchlist', 'RequestWeight', 'WatchlistWeight', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
+        var NEEDS_SEERR = ['UseSeerrVotes', 'UseSeerrWatchlist', 'UseTmdbLibrarySignal', 'TmdbLibraryAnchors', 'RequestWeight', 'WatchlistWeight', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
         var NO_MIX = function () { return SOURCES.some(function (k) { return val(k) === 'Mix'; }) ? '' : t('aucune rangée réglée sur « mélange »'); };
         var WHY = {
             ExtendedMixMode: NO_MIX,
@@ -757,7 +764,7 @@
             var name = f[0];
             if (name === 'Enabled') { return ''; }
             if (!G.enabled) { return t('plugin coupé (onglet Général)'); }
-            var ext = EXT_GROUPS.indexOf(f[7]) >= 0 || name === 'WTmdbAgreement' || name === '_ExtendedRowNote' || name === 'ExtendedTitle';
+            var ext = EXT_GROUPS.indexOf(f[7]) >= 0 || name === '_ExtendedRowNote' || name === 'ExtendedTitle';
             if ((ext || NEEDS_SEERR.indexOf(name) >= 0) && !G.seerr) { return t('Seerr non utilisé (onglet Seerr)'); }
             if (ext && name !== 'ExtendedEnabled' && !G.ext) { return t('mode étendu coupé (onglet Mode étendu)'); }
             return WHY[name] ? WHY[name]() : '';
@@ -893,6 +900,26 @@
         function when(s) { return s ? new Date(s).toLocaleString(LOCALE) : t('jamais'); }
         function kpi(label, value) { var d = el('div', { 'class': 'rp-kpi' }); d.appendChild(el('span', {}, label)); d.appendChild(el('b', {}, value)); return d; }
 
+        // effet des recommandations : taux par rangée et par place, part des lectures venues d'une proposition
+        var ROW_NAMES = { PourToi: 'Pour toi', Films: 'Films', Series: 'Séries', Nouveautes: 'Nouveautés', ParceQue: 'Parce que tu as aimé {0}' };
+        function renderMeasure(m) {
+            var box = $('#rpMeasure'); box.innerHTML = '';
+            if (!m || !m.All || !(m.All.Proposed7 || m.All.Proposed30 || m.RecentStarts)) {
+                box.appendChild(el('p', { 'class': 'mute' }, m ? tf('Pas encore assez de recul ({0} j) : les premiers taux arrivent 7 jours après les premières propositions.', dec(String(m.Days || 0).replace('.', ','))) : t('Disponible après le prochain calcul.')));
+                return;
+            }
+            function rate(r, n) { return r === null || r === undefined ? '—' : pct(r) + ' (' + n + ')'; }
+            var tb = el('table', { 'class': 'rp-table' });
+            var rows = [[t('Groupe'), t('Commencés sous 7 j'), t('Finis sous 30 j')], [t('Toutes rangées'), rate(m.All.StartRate, m.All.Proposed7), rate(m.All.FinishRate, m.All.Proposed30)]];
+            Object.keys(m.ByRow || {}).forEach(function (k) { var c = m.ByRow[k]; rows.push([tf(ROW_NAMES[k] || k, '…'), rate(c.StartRate, c.Proposed7), rate(c.FinishRate, c.Proposed30)]); });
+            ['1-5', '6-10', '11-20', '21+'].forEach(function (k) { var c = (m.ByPosition || {})[k]; if (c) { rows.push([tf('Places {0}', k), rate(c.StartRate, c.Proposed7), rate(c.FinishRate, c.Proposed30)]); } });
+            rows.forEach(function (row, i) { var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); tb.appendChild(tr); });
+            box.appendChild(tb);
+            box.appendChild(el('p', { 'class': 'mute' }, (m.RecentShare === null || m.RecentShare === undefined ? t('Aucune lecture commencée ces 30 derniers jours.')
+                : tf('Lectures commencées ces 30 derniers jours : {0}, dont {1} proposées peu avant ({2}).', m.RecentStarts, m.RecentFromReco, pct(m.RecentShare)))
+                + ' ' + tf('Recul : {0} j. Entre parenthèses : titres comptés.', dec(String(m.Days || 0).replace('.', ',')))));
+        }
+
         function renderStatus(s) {
             $('#rpVersion').textContent = tf('version {0}', s.version);
             var al = $('#rpAlerts'); al.innerHTML = '';
@@ -904,8 +931,10 @@
             k.appendChild(kpi('Playback Reporting', e.PlaybackReporting));
             k.appendChild(kpi('Seerr', e.Seerr));
             k.appendChild(kpi('Jellyfin Enhanced', e.JellyfinEnhanced || '—'));
+            k.appendChild(kpi(t('Accord TMDb (bibliothèque)'), e.TmdbLibrary || '—'));
             k.appendChild(kpi(t('Rangée d\'accueil'), s.hss));
             if (e.LastError) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, t('Dernière erreur de calcul'))); d.appendChild(el('span', {}, e.LastError)); al.appendChild(d); }
+            renderMeasure(e.Measure);
             var ct = $('#rpChecks'); ct.innerHTML = '';
             (s.checks || []).forEach(function (c) { var tr = el('tr'); tr.appendChild(el('td', { 'class': c.ok ? 'ok' : 'ko' }, c.ok ? '✔' : '✖')); tr.appendChild(el('td', {}, c.check)); tr.appendChild(el('td', { 'class': 'mute' }, c.detail)); ct.appendChild(tr); });
             Object.keys(s.disabled || {}).forEach(function (n) { var tr = el('tr'); tr.appendChild(el('td', { 'class': 'ko' }, '⏻')); tr.appendChild(el('td', {}, tf('Coupé : {0}', n))); tr.appendChild(el('td', { 'class': 'mute' }, s.disabled[n])); ct.appendChild(tr); });

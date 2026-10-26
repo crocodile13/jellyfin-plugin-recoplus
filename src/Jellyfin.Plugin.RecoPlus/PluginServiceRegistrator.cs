@@ -35,6 +35,9 @@ public sealed class PluginServiceRegistrator : IPluginServiceRegistrator
         services.AddSingleton(sp => new ImpressionStore(
             () => Plugin.Instance is null ? null : System.IO.Path.Combine(Plugin.Instance.DataFolderPath, "affichages.json"),
             sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<ImpressionStore>>()));
+        services.AddSingleton(sp => new RecoLedger(
+            () => Plugin.Instance is null ? null : System.IO.Path.Combine(Plugin.Instance.DataFolderPath, "propositions.json"),
+            sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<RecoLedger>>()));
         services.AddSingleton<SeerrService>();
         services.AddSingleton<RecoService>();
         services.AddSingleton<CalibrationService>();

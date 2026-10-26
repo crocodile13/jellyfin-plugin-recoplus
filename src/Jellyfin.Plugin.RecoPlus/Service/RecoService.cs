@@ -42,6 +42,12 @@ public sealed class EngineStatus
 
     public int ExternalTitles { get; set; }
 
+    /// <summary>Accord TMDb pour la bibliothèque : titres aimés explorés et liens vers la bibliothèque.</summary>
+    public string TmdbLibrary { get; set; } = "désactivé";
+
+    /// <summary>Mesure de l'effet des propositions (null avant le premier calcul).</summary>
+    public Measurement.Report? Measure { get; set; }
+
     public bool Running { get; set; }
 }
 
@@ -64,6 +70,7 @@ public sealed class RecoService : IDisposable
     private readonly SemaphoreSlim _gate = new(1, 1);
     private readonly JellyfinEnhancedReader _je;
     private readonly ImpressionStore _impressions;
+    private readonly RecoLedger _ledger;
     private readonly IServiceProvider _services;
     private readonly ConcurrentDictionary<string, UserRecs> _recs = new(StringComparer.Ordinal);
     private Dictionary<string, Dictionary<string, Interaction>> _lastHist = new(StringComparer.Ordinal);
@@ -86,11 +93,12 @@ public sealed class RecoService : IDisposable
     private LibrarySnapshot? _library;
 
     public RecoService(LibraryIndex index, UserHistory history, UserDataReader userData, PlaybackReportingReader pr, SeerrService seerr,
-        JellyfinEnhancedReader je, ImpressionStore impressions, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log, IServiceProvider services)
+        JellyfinEnhancedReader je, ImpressionStore impressions, RecoLedger ledger, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log, IServiceProvider services)
     {
         _services = services;
         _je = je;
         _impressions = impressions;
+        _ledger = ledger;
         _index = index;
         _history = history;
         _userData = userData;
@@ -512,6 +520,17 @@ public sealed class RecoService : IDisposable
             _seerr.SaveCache();
         }
 
+        // accord TMDb pour la bibliothèque : recommandations TMDb des titres aimés (cache partagé avec le mode étendu)
+        var libAgree = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
+        if (cfg.UseTmdbLibrarySignal && seerr.Ok && cl is not null && s.WTmdbAgreement > 0)
+        {
+            libAgree = await LibraryAgreement(targets, ctx, lib, tmdbOf, cl, cfg, ct).ConfigureAwait(false);
+        }
+        else
+        {
+            Status.TmdbLibrary = !cfg.UseTmdbLibrarySignal ? "désactivé" : !seerr.Ok ? "Seerr indisponible" : "poids nul (onglet Moteur)";
+        }
+
         Status.ExternalTitles = titles.Values.Count(t => t.External);
         ApplySagas(ds, lib, tmdbOf);
         var vec = Core.BuildVectors(titles, s);
@@ -570,7 +589,7 @@ public sealed class RecoService : IDisposable
                 foreach (var slot in slots)
                 {
                     uc.Slot = slot;
-                    var sc = Recommender.ScoreAll(uc, vec, key, cands, s, exposure: expo);
+                    var sc = Recommender.ScoreAll(uc, vec, key, cands, s, tmdbAgreement: libAgree.GetValueOrDefault(key), exposure: expo);
                     var ranked = Recommender.Rank(uc, vec, cands, sc, Math.Clamp(cfg.ListSize, 20, 1000), s, key, simIdx).Where(id => !pinned.Contains(id)).ToList();
 
                     // présentation : hasard du jour et minimums films/séries (le classement par goût reste intact pour les catégories)
@@ -672,6 +691,8 @@ public sealed class RecoService : IDisposable
             }
 
             _recs[key] = r;
+            // mesure : ce qui a été proposé à ce compte (titres de la bibliothèque), pour le bilan de l'état du moteur
+            _ledger.Record(key, r.Rows, id => titles.TryGetValue(id, out var lt) && !lt.External, now);
             progress?.Report(60 + (40.0 * Interlocked.Increment(ref done) / Math.Max(1, targets.Count)));
         });
 
@@ -681,6 +702,7 @@ public sealed class RecoService : IDisposable
         }
 
         Status.UsersWithRecs = _recs.Count;
+        Status.Measure = Measurement.Compute(_ledger.Snapshot(), hist, titles, now);
         if (only is null)
         {
             Interlocked.Exchange(ref _dirty, 0);
@@ -1026,14 +1048,14 @@ public sealed class RecoService : IDisposable
             }
         }
 
-        // un « J'aime » de Jellyfin sur un titre de la liste de suivi n'est pas un avis : c'est la liste de suivi elle-même
-        // (que Seerr ou Jellyfin Enhanced reportent dans Jellyfin) ; l'intention compte déjà comme telle, pas comme un
-        // titre aimé (sinon « Parce que tu as aimé X » pour un X jamais vu). Un avis noté (ci-dessous) reste un avis.
+        // un « J'aime » de Jellyfin sur un titre de la liste de suivi pas encore vu n'est pas un avis : c'est la liste de
+        // suivi elle-même (que Seerr ou Jellyfin Enhanced reportent dans Jellyfin) ; l'intention compte déjà comme telle.
+        // Vu et toujours aimé : un avis. Un avis noté (ci-dessous) reste un avis.
         foreach (var h in hist.Values)
         {
             foreach (var x in h.Values)
             {
-                if (x.Watchlisted > 0 && x.Rating is 1.0)
+                if (Core.LikeIsWatchlistIntent(x, titles.TryGetValue(x.Title, out var wt) ? wt.Kind : null))
                 {
                     x.Rating = null;
                 }
@@ -1117,6 +1139,61 @@ public sealed class RecoService : IDisposable
         };
         ApplySagas(ds, lib, tmdbOf);
         return ds;
+    }
+
+    /// <summary>
+    /// Accord TMDb des titres de la bibliothèque pour chaque compte (<see cref="TmdbSignal"/>) : recommandations et
+    /// similaires TMDb de ses titres les plus aimés, lus via Seerr (cache de 3 jours partagé avec le mode étendu, au
+    /// rythme borné de Seerr), ramenés aux titres de la bibliothèque. Seerr injoignable : listes vides, rien ne change.
+    /// </summary>
+    private async Task<Dictionary<string, Dictionary<string, double>>> LibraryAgreement(IReadOnlyList<User> targets, Context ctx,
+        LibrarySnapshot lib, Dictionary<string, string> tmdbOf, SeerrClient cl, Configuration.PluginConfiguration cfg, CancellationToken ct)
+    {
+        int pages = Math.Clamp(cfg.ExtendedPages, 1, 10);
+        int n = Math.Clamp(cfg.TmdbLibraryAnchors, 1, 200);
+        var anchorsOf = new Dictionary<string, List<(double W, string Key)>>(StringComparer.Ordinal);
+        foreach (var u in targets)
+        {
+            var key = u.Id.ToString("N");
+            var sig = ctx.Sig.GetValueOrDefault(key);
+            if (sig is null)
+            {
+                continue;
+            }
+
+            anchorsOf[key] = sig.Where(e => e.Value > 0 && ctx.Ds.Titles.TryGetValue(e.Key, out var t) && !t.External && tmdbOf.ContainsKey(e.Key))
+                .OrderByDescending(e => e.Value).ThenBy(e => e.Key, StringComparer.Ordinal).Take(n)
+                .Select(e => (e.Value, tmdbOf[e.Key])).ToList();
+        }
+
+        var keys = anchorsOf.Values.SelectMany(l => l.Select(a => a.Key)).Distinct(StringComparer.Ordinal).OrderBy(k => k, StringComparer.Ordinal).ToList();
+        var fetched = await Task.WhenAll(keys.Select(k =>
+        {
+            var p = k.Split(':');
+            return p.Length == 2 && int.TryParse(p[1], System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var tid)
+                ? _seerr.RelatedAsync(cl, p[0], tid, pages, ct)
+                : Task.FromResult(new List<SeerrResult>());
+        })).ConfigureAwait(false);
+        _seerr.SaveCache();
+
+        // listes ramenées aux titres de la bibliothèque, dans l'ordre TMDb (recommandations puis similaires), sans doublon
+        var lists = new Dictionary<string, IReadOnlyList<string>>(StringComparer.Ordinal);
+        for (int i = 0; i < keys.Count; i++)
+        {
+            lists[keys[i]] = fetched[i].Select(r => lib.ByTmdb.GetValueOrDefault(r.MediaType + ":" + r.TmdbId)).OfType<string>()
+                .Distinct(StringComparer.Ordinal).ToList();
+        }
+
+        var damp = TmdbSignal.Damping(lists.Values);
+        var res = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
+        foreach (var (key, anchors) in anchorsOf)
+        {
+            res[key] = TmdbSignal.Agreement(anchors.Select(a => (a.W, lists.GetValueOrDefault(a.Key) ?? (IReadOnlyList<string>)Array.Empty<string>())).ToList(), damp);
+        }
+
+        int links = lists.Values.Sum(l => l.Count);
+        Status.TmdbLibrary = Texts.Pack("{0} titres aimés explorés, {1} liens vers la bibliothèque", keys.Count, links);
+        return res;
     }
 
     /// <summary>

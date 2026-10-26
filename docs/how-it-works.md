@@ -48,7 +48,9 @@
   - A Jellyfin collection that mixes several TMDb collections (a director's filmography, "Marvel"), or is larger than a saga, is a thematic group: at most two entries, never a "first volume".
   - A sequel whose start is not in the library (TMDb keyword "sequel", no known saga) comes after everything else.
 - **"Because you liked X"**: X is always a title that was watched (movie seen or half watched, at least one episode of a series), never one that is only a favourite, liked or requested.
-- **Watchlist and "Like"**: Seerr and Jellyfin Enhanced mirror the watchlist into Jellyfin's "Like"; on a watchlisted title that Like counts as an intent to watch, not as a review.
+- **Watchlist and "Like"**: Seerr and Jellyfin Enhanced mirror the watchlist into Jellyfin's "Like"; on a watchlisted title not watched yet, that Like counts as an intent to watch, not as a review. Once the title is watched (movie seen or half watched, series half watched), a Like left in place is a review.
+- **TMDb agreement, in the library too** (needs Seerr, on by default): for each account, the TMDb recommendations of its 30 most liked titles (cached, shared with extended mode) are read; a library title that TMDb recommends from several of them gets a bonus — what TMDb's whole audience watches together, which a household of a few accounts cannot learn alone, and which exists the day a title arrives. Each mention weighs by how much the account likes the source title and fades with the position in TMDb's list (1/√(1 + position)); a title recommended from everything (a worldwide hit) is damped like a too-frequent word (IDF). Like the other bonuses, it only applies to titles that already rank among the account's top by taste.
+- **Effect of the recommendations** (State tab): every computation notes, per account, the library titles offered in its rows (row and position the first time). The watch history then tells what happened: share started within 7 days, watched in full within 30 days, by row and by position, and the share of titles started in the last 30 days that had been offered shortly before. Nothing is asked of the accounts; a title offered too recently is not counted yet. These are the numbers to watch before changing a setting.
 
 ## Measured on one real server (be careful with these numbers)
 
@@ -93,8 +95,8 @@ Dashboard → Plugins → Reco+. The page has one tab per topic:
 
 | Tab | Content |
 |---|---|
-| State | compatibility checks, last computation, per-account readiness |
-| General | what to replace, Home Screen Sections row titles, sources (including titles shown but never opened), ignored accounts, interface language |
+| State | compatibility checks, last computation, per-account readiness, TMDb agreement for the library, effect of the recommendations (started within 7 days, finished within 30, by row and position) |
+| General | what to replace, Home Screen Sections row titles, sources (including titles shown but never opened and TMDb recommendations for the library), ignored accounts, interface language |
 | Lists | what is shown, applied after ranking: share of daily randomness, minimum movies / series, excluded genres, minimum rating and year, diversity (personalised, calibrated or fixed), sagas, what is new in what the account follows |
 | Engine *(advanced)* | every ranking factor (favourites, requests, abandons, similarities, watched together, freshness, popularity, rating, TMDb agreement, content features) can be switched off or made weaker/stronger (×0.25 to ×3); durations; defaults are the evaluated ones |
 | Seerr | URL and key, with a **Test** button that uses the values typed in without saving them |

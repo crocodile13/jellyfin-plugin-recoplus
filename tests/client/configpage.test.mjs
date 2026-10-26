@@ -651,6 +651,31 @@ await test('langue : page en anglais (réglage ou langue de Jellyfin), textes du
     assert.ok(calls.filter((u) => !u.startsWith('/RecoPlus/I18n')).every((u) => /[?&]lang=en(&|$)/.test(u)), calls.join(' '));
 });
 
+await test('état : effet des recommandations (taux par rangée et par place, part des lectures, sans recul)', async () => {
+    const c = (p7, s7, p30, f30) => ({ Proposed7: p7, Started7: s7, Proposed30: p30, Finished30: f30, StartRate: p7 ? s7 / p7 : null, FinishRate: p30 ? f30 / p30 : null });
+    const Measure = { All: c(40, 6, 10, 2), ByRow: { PourToi: c(30, 5, 10, 2), ParceQue: c(10, 1, 0, 0) }, ByPosition: { '1-5': c(20, 4, 5, 1), '21+': c(20, 2, 5, 1) }, RecentStarts: 8, RecentFromReco: 3, RecentShare: 0.375, Days: 35.5 };
+    const st = { ...status, engine: { UsersWithRecs: 1, Measure } };
+    const { d } = await open(cfg, { '/RecoPlus/Status': st });
+    await wait(50);
+    const rows = [...d.querySelectorAll('#rpMeasure tr')].map((tr) => [...tr.children].map((x) => x.textContent));
+    assert.deepEqual(rows[0], ['Groupe', 'Commencés sous 7 j', 'Finis sous 30 j']);
+    assert.deepEqual(rows[1], ['Toutes rangées', '15,0 % (40)', '20,0 % (10)']);
+    assert.deepEqual(rows.slice(2).map((r) => r[0]), ['Pour toi', 'Parce que tu as aimé …', 'Places 1-5', 'Places 21+']);
+    assert.equal(rows[3][2], '—');                                     // pas encore de recul à 30 j
+    assert.match(d.getElementById('rpMeasure').textContent, /: 8, dont 3 proposées peu avant \(37,5 %\)\. Recul : 35,5 j/);
+
+    const en = await open({ ...cfg, Language: 'English' }, { '/RecoPlus/I18n': { lang: 'en', dict: EN }, '/RecoPlus/Status': st });
+    await wait(50);
+    assert.match(en.d.getElementById('rpMeasure').textContent, /All rows.*15\.0 ?% \(40\).*Because you liked …/);
+
+    const empty = await open(cfg, { '/RecoPlus/Status': { ...status, engine: { Measure: { All: c(0, 0, 0, 0), ByRow: {}, ByPosition: {}, RecentStarts: 0, RecentFromReco: 0, RecentShare: null, Days: 2 } } } });
+    await wait(50);
+    assert.match(empty.d.getElementById('rpMeasure').textContent, /Pas encore assez de recul \(2 j\)/);
+    const none = await open(cfg);
+    await wait(50);
+    assert.equal(none.d.getElementById('rpMeasure').textContent, 'Disponible après le prochain calcul.');
+});
+
 await test('langue : sans dictionnaire (serveur injoignable ou français), la page reste en français', async () => {
     const { d } = await open(cfg, { '/RecoPlus/I18n': { lang: 'fr', dict: {} } });
     assert.equal(d.querySelector('.rp-tab[data-tab="general"]').textContent, 'Général');

@@ -112,6 +112,15 @@ public static class Core
     /// <summary>Secondes par jour.</summary>
     public const double Day = 86400.0;
 
+    /// <summary>
+    /// Un « J'aime » de Jellyfin sur un titre de la liste de suivi (Seerr et Jellyfin Enhanced y reportent la liste) est
+    /// une envie de voir, pas un avis — tant que le titre n'est pas vu : film vu ou regardé à moitié, série vue à moitié.
+    /// Une fois vu, un « J'aime » laissé en place est un avis (le compte aurait pu le retirer).
+    /// </summary>
+    public static bool LikeIsWatchlistIntent(Interaction x, TitleKind? kind)
+        => x.Watchlisted > 0 && x.Rating is 1.0
+           && !(kind == TitleKind.Series ? x.Completion >= 0.5 : x.Played || x.Completion >= 0.5);
+
     /// <summary>Poids signé d'une interaction : &gt;0 aimé, &lt;0 abandonné, 0 neutre (en cours, zapping).</summary>
     public static double Signal(Interaction x, TitleKind kind, int nEpisodes, double now, EngineSettings p)
     {

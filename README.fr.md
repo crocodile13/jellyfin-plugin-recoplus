@@ -22,6 +22,7 @@ Reco+ est un plugin Jellyfin qui remplace les recommandations intégrées — Su
 - **Tout ce que le compte a exprimé compte** : historique complet avec oubli progressif, abandons, favoris (séries, saisons, épisodes), notes et avis de Jellyfin Enhanced et titres masqués, demandes et liste de suivi Seerr, titres montrés sans être ouverts.
 - **Mode étendu** (facultatif, nécessite Seerr) : des titres hors bibliothèque dans les rangées d'accueil de votre choix — bibliothèque seule, Seerr seul ou mélange, rangée par rangée — avec les cartes et le bouton *Demander* de Jellyfin Enhanced.
 - **Sûr par conception** : un garde-fou empêche de pousser des titres récents ou populaires à des comptes qu'ils ne concernent pas ; les droits d'accès et le contrôle parental de Jellyfin s'appliquent à chaque liste ; rien n'est jamais demandé automatiquement.
+- **Effet mesuré** : l'onglet État montre ce que les comptes font de ce qui leur est recommandé — commencé sous 7 jours, fini sous 30, par rangée et par place — à partir du seul historique de lecture.
 - **Calibrage** sur votre propre historique, avec validation croisée par compte : un réglage n'est proposé que s'il se généralise vraiment, et rien n'est appliqué sans votre clic.
 - **Se protège seul** : chaque point d'accroche est vérifié au démarrage ; une partie qui ne colle plus se coupe et Jellyfin reprend son comportement normal, avec une alerte (journal d'activité, bannière, webhook facultatif).
 - **Interface en français et en anglais**, selon la langue Jellyfin de chacun.
@@ -110,7 +111,7 @@ Les réglages de base sont visibles d'emblée ; les avancés sont repliés ou da
 
 ## Vie privée
 
-Rien ne quitte le serveur, sauf les appels à **votre** instance Seerr quand vous la configurez et, en mode étendu, les affiches chargées par le client web depuis `image.tmdb.org`. Les titres montrés sans être ouverts restent sur le serveur (un an au plus) et ne jouent que sur le classement de ce compte.
+Rien ne quitte le serveur, sauf les appels à **votre** instance Seerr quand vous la configurez et, en mode étendu, les affiches chargées par le client web depuis `image.tmdb.org`. Les titres montrés sans être ouverts restent sur le serveur (un an au plus) et ne jouent que sur le classement de ce compte ; la liste des titres proposés à chaque compte (pour la mesure de l'onglet État) reste elle aussi sur le serveur et s'oublie 120 jours après la dernière proposition d'un titre.
 
 ## Documentation
 

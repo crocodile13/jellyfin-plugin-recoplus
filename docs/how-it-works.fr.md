@@ -49,7 +49,9 @@
   - Une collection de Jellyfin qui mélange plusieurs collections TMDb (filmographie d'un réalisateur, « Marvel »), ou qui dépasse la taille d'une saga, est un regroupement thématique : au plus deux entrées, jamais de « premier volet ».
   - Une suite dont le début n'est pas dans la bibliothèque (mot-clé TMDb « sequel », aucune saga connue) passe après le reste.
 - **« Parce que tu as aimé X »** : X est toujours un titre regardé (film vu ou regardé à moitié, au moins un épisode d'une série), jamais un titre seulement en favori, liké ou demandé.
-- **Liste de suivi et « J'aime »** : Seerr et Jellyfin Enhanced reportent la liste de suivi dans le « J'aime » de Jellyfin ; sur un titre de la liste de suivi, ce « J'aime » compte comme une intention de voir, pas comme un avis.
+- **Liste de suivi et « J'aime »** : Seerr et Jellyfin Enhanced reportent la liste de suivi dans le « J'aime » de Jellyfin ; sur un titre de la liste de suivi pas encore vu, ce « J'aime » compte comme une intention de voir, pas comme un avis. Une fois le titre vu (film vu ou regardé à moitié, série vue à moitié), un « J'aime » laissé en place est un avis.
+- **Accord TMDb, dans la bibliothèque aussi** (Seerr nécessaire, activé par défaut) : pour chaque compte, les recommandations TMDb de ses 30 titres les plus aimés sont lues (en cache, partagées avec le mode étendu) ; un titre de la bibliothèque que TMDb recommande à partir de plusieurs d'entre eux reçoit un bonus — ce que tout le public de TMDb regarde ensemble, qu'un foyer de quelques comptes ne peut pas apprendre seul, et qui existe dès l'arrivée d'un titre. Chaque mention pèse selon le goût du compte pour le titre de départ et décroît avec la place dans la liste TMDb (1/√(1 + place)) ; un titre recommandé partout (succès planétaire) est atténué comme un mot trop fréquent (IDF). Comme les autres bonus, il ne s'applique qu'aux titres déjà en tête par le goût.
+- **Effet des recommandations** (onglet État) : chaque calcul note, pour chaque compte, les titres de la bibliothèque proposés dans ses rangées (rangée et place la première fois). L'historique de lecture dit ensuite ce qu'il en a fait : part commencée dans les 7 jours, vue en entier dans les 30 jours, par rangée et par place, et part des titres commencés ces 30 derniers jours qui lui avaient été proposés peu avant. Rien n'est demandé aux comptes ; un titre proposé trop récemment n'est pas encore compté. Ce sont les chiffres à regarder avant de changer un réglage.
 
 ## Mesuré sur un vrai serveur (prudence avec ces chiffres)
 
@@ -97,8 +99,8 @@ Tableau de bord → Extensions → Reco+. La page est organisée en onglets :
 
 | Onglet | Contenu |
 |---|---|
-| État | vérifications de compatibilité, dernier calcul, comptes prêts |
-| Général | ce qui est remplacé, titres des rangées Home Screen Sections, sources (dont les titres montrés sans être ouverts), comptes ignorés, langue de l'interface |
+| État | vérifications de compatibilité, dernier calcul, comptes prêts, accord TMDb pour la bibliothèque, effet des recommandations (commencés sous 7 jours, finis sous 30, par rangée et par place) |
+| Général | ce qui est remplacé, titres des rangées Home Screen Sections, sources (dont les titres montrés sans être ouverts et les recommandations TMDb pour la bibliothèque), comptes ignorés, langue de l'interface |
 | Listes | ce qui est montré, appliqué après le classement : part de hasard du jour, minimums de films et de séries, genres exclus, note et année minimales, diversité (personnalisée, calibrée ou fixe), sagas, nouveautés de ce que le compte suit |
 | Moteur *(avancé)* | chaque facteur de classement (favoris, demandes, abandons, ressemblances, vus ensemble, nouveauté, popularité, note, accord TMDb, caractéristiques de contenu) se coupe ou se règle en force (×0,25 à ×3) ; durées ; valeurs par défaut évaluées |
 | Seerr | URL et clé, avec un bouton **Tester** qui utilise les valeurs saisies sans les enregistrer |
