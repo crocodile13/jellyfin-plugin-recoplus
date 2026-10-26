@@ -22,6 +22,7 @@ Reco+ is a Jellyfin plugin that replaces the built-in recommendations — Sugges
 - **Uses everything the account told you**: whole history with decay, abandoned titles, favourites (series, seasons, episodes), ratings and Jellyfin Enhanced reviews and hidden titles, Seerr requests and watchlist, titles shown but never opened.
 - **Extended mode** (optional, needs Seerr): titles outside the library in the home rows of your choice — library only, Seerr only or mixed, per row — with Jellyfin Enhanced's cards and *Request* button.
 - **Safe by design**: a guard rail keeps new or popular titles from being pushed to accounts they don't fit; Jellyfin's access rules and parental control apply to every list; nothing is ever requested automatically.
+- **Measured effect**: the State tab shows what accounts do with what is recommended — started within 7 days, finished within 30, by row and by position — from the watch history alone.
 - **Calibration** on your own history, with cross-validation by account: settings are only proposed when they really generalize, and nothing is applied without your click.
 - **Self-protecting**: every Jellyfin hook is checked at start-up; a part that no longer fits switches itself off and Jellyfin's normal behaviour comes back, with an alert (activity log, banner, optional webhook).
 - **English and French** interface, following each person's Jellyfin language.
@@ -110,7 +111,7 @@ Basic settings are visible at once; advanced ones are folded away or in the **En
 
 ## Privacy
 
-Nothing leaves the server, except calls to **your** Seerr instance when you configure it and, in extended mode, posters loaded by the web client from `image.tmdb.org`. Titles shown but never opened stay on the server (one year at most) and only affect that account's ranking.
+Nothing leaves the server, except calls to **your** Seerr instance when you configure it and, in extended mode, posters loaded by the web client from `image.tmdb.org`. Titles shown but never opened stay on the server (one year at most) and only affect that account's ranking; the list of titles offered to each account (for the State tab's measurement) stays on the server too and is forgotten 120 days after a title was last offered.
 
 ## Documentation
 

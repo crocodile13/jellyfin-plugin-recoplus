@@ -316,6 +316,8 @@ public sealed class RecoController : ControllerBase
                 PlaybackReporting = L(e.PlaybackReporting),
                 Seerr = L(e.Seerr),
                 JellyfinEnhanced = L(e.JellyfinEnhanced),
+                TmdbLibrary = L(e.TmdbLibrary),
+                e.Measure,
                 e.ExternalTitles,
                 e.Running,
             },

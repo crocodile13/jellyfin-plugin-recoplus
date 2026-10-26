@@ -164,6 +164,15 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Lire les listes de suivi Seerr (intention, plus faible qu'une demande).</summary>
     public bool UseSeerrWatchlist { get; set; } = true;
 
+    /// <summary>
+    /// Recommandations TMDb des titres aimés (via Seerr, en cache) pour classer aussi les titres de la bibliothèque :
+    /// « Accord TMDb » (onglet Moteur).
+    /// </summary>
+    public bool UseTmdbLibrarySignal { get; set; } = true;
+
+    /// <summary>Titres aimés par compte dont on lit les recommandations TMDb pour la bibliothèque.</summary>
+    public int TmdbLibraryAnchors { get; set; } = 30;
+
     /// <summary>Présentation des listes : filtres, hasard du jour, minimums de films et de séries.</summary>
     public ListOptions Lists { get; set; } = new();
 

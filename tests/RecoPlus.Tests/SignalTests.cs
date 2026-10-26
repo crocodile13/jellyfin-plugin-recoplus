@@ -214,4 +214,19 @@ public class SignalTests
             Assert.Equal(want, h.Values.Select(x => x.Backfill).ToArray());
         }
     }
+
+    [Fact]
+    public void WatchlistLikeIsAnIntentUntilTheTitleIsWatched()
+    {
+        static Interaction X(bool played = false, double comp = 0, int eps = 0, double? rating = 1.0, double wl = 1)
+            => new() { Title = "t", Played = played, Completion = comp, Episodes = eps, Rating = rating, Watchlisted = wl };
+        Assert.True(Core.LikeIsWatchlistIntent(X(), TitleKind.Movie));                       // pas vu : envie de voir
+        Assert.True(Core.LikeIsWatchlistIntent(X(comp: 0.3), TitleKind.Movie));              // entamé seulement
+        Assert.False(Core.LikeIsWatchlistIntent(X(played: true, comp: 1), TitleKind.Movie)); // vu, J'aime gardé : avis
+        Assert.False(Core.LikeIsWatchlistIntent(X(comp: 0.6), TitleKind.Movie));
+        Assert.True(Core.LikeIsWatchlistIntent(X(played: true, comp: 0.1, eps: 2), TitleKind.Series)); // 2 épisodes
+        Assert.False(Core.LikeIsWatchlistIntent(X(played: true, comp: 0.5, eps: 10), TitleKind.Series));
+        Assert.False(Core.LikeIsWatchlistIntent(X(wl: 0), TitleKind.Movie));                 // pas dans la liste
+        Assert.False(Core.LikeIsWatchlistIntent(X(rating: 0.8), TitleKind.Movie));           // avis noté : reste un avis
+    }
 }
