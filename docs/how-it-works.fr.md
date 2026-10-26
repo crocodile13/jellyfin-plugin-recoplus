@@ -44,8 +44,12 @@
 - **Les doublons.** Un titre présent deux fois dans la bibliothèque (même identifiant TMDb, par exemple dans deux bibliothèques) n'est proposé qu'une fois, et pas du tout si l'un des deux a été vu.
 - **La rangée « Nouveautés »** : seulement les titres arrivés récemment qui figurent dans le premier quart du classement par goût ; un mois calme ne la remplit pas avec n'importe quoi.
 - **Les sagas.**
-  - Une seule entrée par saga, et c'est le premier volet pas encore vu, pas le 4ᵉ.
-  - Les grands regroupements thématiques ont au plus deux entrées.
+  - Une seule entrée par saga, et c'est le premier volet pas encore vu, pas le 4ᵉ — dans « Pour toi » comme dans toutes les autres rangées (« Nouveautés », « Parce que tu as aimé … », films, séries). Une nouveauté au milieu d'une saga dont le début n'est pas vu n'entre pas dans « Nouveautés ».
+  - Une saga se reconnaît à trois indices : la collection TMDb des films (un nouveau volet est reconnu même quand Jellyfin ne l'a pas encore rangé dans sa collection), les collections de Jellyfin, et le nom (« Overlord » puis « Overlord : The Sacred Kingdom » : même langue d'origine, un studio ou un auteur en commun, et pas de collection TMDb qui dise le contraire). Un film qui prolonge une série vient après la série.
+  - Une collection de Jellyfin qui mélange plusieurs collections TMDb (filmographie d'un réalisateur, « Marvel »), ou qui dépasse la taille d'une saga, est un regroupement thématique : au plus deux entrées, jamais de « premier volet ».
+  - Une suite dont le début n'est pas dans la bibliothèque (mot-clé TMDb « sequel », aucune saga connue) passe après le reste.
+- **« Parce que tu as aimé X »** : X est toujours un titre regardé (film vu ou regardé à moitié, au moins un épisode d'une série), jamais un titre seulement en favori, liké ou demandé.
+- **Liste de suivi et « J'aime »** : Seerr et Jellyfin Enhanced reportent la liste de suivi dans le « J'aime » de Jellyfin ; sur un titre de la liste de suivi, ce « J'aime » compte comme une intention de voir, pas comme un avis.
 
 ## Mesuré sur un vrai serveur (prudence avec ces chiffres)
 

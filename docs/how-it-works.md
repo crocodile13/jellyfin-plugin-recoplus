@@ -42,7 +42,13 @@
 - **New accounts.** With no known taste every title scores the same, so a prior is added: what the household watches, then the community rating. Its weight fades continuously with the account's taste (half at about two liked titles, negligible after).
 - **Duplicates.** A title present twice in the library (same TMDb id, e.g. in two libraries) is proposed once, and not at all if either copy was watched.
 - **"New for you" row**: only recent arrivals that rank in the top quarter by taste, so a quiet month does not fill it with whatever just arrived.
-- **Sagas.** At most one entry per saga, and it is the first volume not yet seen, not volume 4. Large thematic collections get at most two entries.
+- **Sagas.**
+  - At most one entry per saga, and it is the first volume not yet seen, not volume 4 — in "For you" and in every other row ("New", "Because you liked …", movies, series). A new arrival in the middle of a saga whose start is unseen does not go into "New".
+  - A saga is recognised from three clues: the movie's TMDb collection (a new part is recognised even before Jellyfin files it in its collection), Jellyfin collections, and the name ("Overlord" then "Overlord: The Sacred Kingdom": same original language, a studio or author in common, and no TMDb collection saying otherwise). A movie that continues a series comes after the series.
+  - A Jellyfin collection that mixes several TMDb collections (a director's filmography, "Marvel"), or is larger than a saga, is a thematic group: at most two entries, never a "first volume".
+  - A sequel whose start is not in the library (TMDb keyword "sequel", no known saga) comes after everything else.
+- **"Because you liked X"**: X is always a title that was watched (movie seen or half watched, at least one episode of a series), never one that is only a favourite, liked or requested.
+- **Watchlist and "Like"**: Seerr and Jellyfin Enhanced mirror the watchlist into Jellyfin's "Like"; on a watchlisted title that Like counts as an intent to watch, not as a review.
 
 ## Measured on one real server (be careful with these numbers)
 

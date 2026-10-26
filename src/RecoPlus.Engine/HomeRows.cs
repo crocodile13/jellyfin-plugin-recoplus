@@ -24,6 +24,12 @@ public sealed class RowOptions
 
     /// <summary>Rangées « Parce que tu as aimé … » (0 à 3).</summary>
     public int Because { get; set; }
+
+    /// <summary>Règle de saga dans chaque rangée (un volet par saga, le premier pas encore vu).</summary>
+    public bool Saga { get; set; } = true;
+
+    /// <summary>Au-delà de cette taille, une collection est un regroupement thématique (voir EngineSettings.SagaMax).</summary>
+    public int SagaMax { get; set; } = 12;
 }
 
 /// <summary>Contenu d'une rangée d'accueil.</summary>
@@ -167,6 +173,73 @@ public static class HomeRows
             return l.Take(k).Concat(l.Skip(k).Take(Spare)).ToList();
         }
 
+        // règle de saga d'une rangée : un seul volet par saga, et jamais un volet dont un précédent n'est pas encore vu —
+        // le premier volet non vu le remplace s'il est libre et va dans la rangée (substitute), sinon le titre est écarté ;
+        // une suite dont le début manque à la bibliothèque passe après le reste
+        var candidates = new HashSet<string>(ordered, StringComparer.Ordinal);
+        IEnumerable<string> Sagaed(IEnumerable<string> src, Func<string, bool>? substitute)
+        {
+            if (!o.Saga)
+            {
+                foreach (var id in src)
+                {
+                    yield return id;
+                }
+
+                yield break;
+            }
+
+            var sagas = new HashSet<string>(StringComparer.Ordinal);
+            var later = new List<string>();
+            foreach (var id in src)
+            {
+                if (Sagas.IsOrphanSequel(ctx.Ds, id))
+                {
+                    later.Add(id);
+                    continue;
+                }
+
+                if (Recommender.Franchise(ctx.Ds, id) is { } f && Sagas.IsSaga(ctx.Ds, f, o.SagaMax))
+                {
+                    if (sagas.Contains(f.Id))
+                    {
+                        continue;
+                    }
+
+                    string? first = null;
+                    foreach (var p in ctx.Ds.Collections[f.Id])
+                    {
+                        if (candidates.Contains(p) && (first is null || Sagas.Order(T[p], T[first]) < 0))
+                        {
+                            first = p;
+                        }
+                    }
+
+                    if (first is not null && first != id)
+                    {
+                        // volet plus loin : remplacé par le premier non vu s'il peut aller ici, écarté sinon (le premier
+                        // pourra encore venir plus bas dans la rangée)
+                        if (substitute is not null && !used.Contains(first) && substitute(first))
+                        {
+                            sagas.Add(f.Id);
+                            yield return first;
+                        }
+
+                        continue;
+                    }
+
+                    sagas.Add(f.Id);
+                }
+
+                yield return id;
+            }
+
+            foreach (var id in later)
+            {
+                yield return id;
+            }
+        }
+
         // « Pour toi » : ce que HSS affichera, réserves comprises (aucune rangée ne les reprend)
         rows[PourToi] = Row(PourToi, null, pourToi);
 
@@ -176,7 +249,8 @@ public static class HomeRows
             var desc = sc.Values.OrderByDescending(v => v).ToList();
             double bar = desc.Count > 0 ? desc[Math.Min(desc.Count - 1, (int)(NewTopShare * desc.Count))] : double.NegativeInfinity;
             var fresh = ordered.Where(id => T.TryGetValue(id, out var t) && (t.Added ?? 0) >= cut && !used.Contains(id) && sc.GetValueOrDefault(id, double.NegativeInfinity) >= bar).ToList();
-            rows[Nouveautes] = fresh.Count >= 4 ? Row(Nouveautes, null, fresh) : new List<string>();
+            var freshRow = Sagaed(fresh, null).ToList();
+            rows[Nouveautes] = freshRow.Count >= 4 ? Row(Nouveautes, null, freshRow) : new List<string>();
         }
 
         int nb = Math.Clamp(o.Because, 0, 3);
@@ -184,9 +258,12 @@ public static class HomeRows
         {
             double min = sc.Count > 0 ? sc.Values.Min() : 0, span = sc.Count > 0 ? sc.Values.Max() - min : 0;
             var sig = ctx.Sig.TryGetValue(user, out var su) ? su : new Dictionary<string, double>();
+            var hist = ctx.Hist.TryGetValue(user, out var hu) ? hu : new Dictionary<string, Interaction>();
             var sagas = new HashSet<string>(StringComparer.Ordinal);
             int k = 0;
-            foreach (var (a, _) in sig.Where(e => e.Value > 0 && T.TryGetValue(e.Key, out var t) && !t.External && vec.ContainsKey(e.Key))
+            // point de départ : un titre réellement regardé (pas seulement mis en favori, liké ou demandé)
+            foreach (var (a, _) in sig.Where(e => e.Value > 0 && T.TryGetValue(e.Key, out var t) && !t.External && vec.ContainsKey(e.Key)
+                                                   && hist.TryGetValue(e.Key, out var ax) && Watched(ax, t))
                          .OrderByDescending(e => e.Value).ThenBy(e => e.Key, StringComparer.Ordinal).Take(AnchorCandidates))
             {
                 if (k >= nb)
@@ -205,11 +282,11 @@ public static class HomeRows
                     .Select(id => (Id: id, Sim: av.Dot(vec[id]))).ToList();
                 double best = free.Count > 0 ? free.Max(x => x.Sim) : 0;
                 double floor = Math.Max(MinSimilarity, RelativeSimilarity * best);
-                var near = free
+                var near = Sagaed(free
                     .Where(x => x.Sim >= floor)
                     .OrderByDescending(x => (0.7 * x.Sim) + (0.3 * (span > 0 ? (sc[x.Id] - min) / span : 0)))
                     .ThenBy(x => x.Id, StringComparer.Ordinal)
-                    .Select(x => x.Id).ToList();
+                    .Select(x => x.Id), null).ToList();
                 if (near.Count < MinBecause)
                 {
                     continue;
@@ -234,16 +311,23 @@ public static class HomeRows
 
         if (o.Movies)
         {
-            rows[Films] = Row(Films, null, ordered.Where(id => T.TryGetValue(id, out var t) && t.Kind == TitleKind.Movie));
+            rows[Films] = Row(Films, null, Sagaed(ordered.Where(id => T.TryGetValue(id, out var t) && t.Kind == TitleKind.Movie), id => T[id].Kind == TitleKind.Movie));
         }
 
         if (o.Series)
         {
-            rows[Series] = Row(Series, null, ordered.Where(id => T.TryGetValue(id, out var t) && t.Kind == TitleKind.Series));
+            rows[Series] = Row(Series, null, Sagaed(ordered.Where(id => T.TryGetValue(id, out var t) && t.Kind == TitleKind.Series), id => T[id].Kind == TitleKind.Series));
         }
 
         return new Result(rows, anchors) { AnchorIds = anchorIds };
     }
+
+    /// <summary>
+    /// Regardé pour de bon, de quoi dire « tu as aimé » : film vu ou regardé au moins à moitié, série dont au moins un
+    /// épisode a été vu.
+    /// </summary>
+    public static bool Watched(Interaction x, Title t)
+        => t.Kind == TitleKind.Movie ? x.Played || x.Completion >= 0.5 : x.Episodes > 0 || x.Played || x.Completion > 0;
 
     /// <summary>
     /// Mélange libre : place de chaque titre hors bibliothèque dans la rangée « Pour toi » = nombre de titres de la

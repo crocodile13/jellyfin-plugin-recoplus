@@ -178,6 +178,12 @@ public sealed class Dataset
     /// <summary>Collections : identifiant → titres (dans l'ordre de la collection, filtrés aux titres connus).</summary>
     public Dictionary<string, List<string>> Collections { get; init; } = new();
 
+    /// <summary>
+    /// Collections qui ne sont pas des sagas (titres de plusieurs univers : filmographie, thème) : au plus deux entrées
+    /// par liste, jamais de « premier volet » (voir <see cref="Sagas"/>).
+    /// </summary>
+    public HashSet<string> Thematic { get; init; } = new(StringComparer.Ordinal);
+
     /// <summary>Instant de référence (secondes Unix).</summary>
     public double Now { get; init; }
 

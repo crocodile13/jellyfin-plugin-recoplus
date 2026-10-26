@@ -85,6 +85,12 @@ public class ParityTests
             colls[c.Name] = c.Value.EnumerateArray().Select(x => x.GetString()!).ToList();
         }
 
+        var thematic = new HashSet<string>(StringComparer.Ordinal);
+        if (d.TryGetProperty("thematic", out var th) && th.ValueKind == JsonValueKind.Array)
+        {
+            thematic.UnionWith(th.EnumerateArray().Select(x => x.GetString()!));
+        }
+
         var reviews = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
         if (d.TryGetProperty("reviews", out var rv))
         {
@@ -97,7 +103,7 @@ public class ParityTests
         int shift = d.TryGetProperty("utc_offset_hours", out var off) && off.ValueKind == JsonValueKind.Number ? off.GetInt32() : 0;
         var ds = new Dataset
         {
-            Titles = titles, Users = users, Collections = colls, Now = d.GetProperty("now").GetDouble(), Reviews = reviews,
+            Titles = titles, Users = users, Collections = colls, Thematic = thematic, Now = d.GetProperty("now").GetDouble(), Reviews = reviews,
             LocalHour = shift == 0 ? null : t => (int)((((t + (shift * 3600)) % 86400) + 86400) % 86400 / 3600),
         };
         ds.LinkCollections();

@@ -109,6 +109,15 @@ public static class CalibrationExport
 
         w.WriteEndObject();
 
+        // collections qui ne sont pas des sagas (titres de plusieurs univers)
+        w.WriteStartArray("thematic");
+        foreach (var id in ds.Thematic.Order(StringComparer.Ordinal))
+        {
+            w.WriteStringValue(id);
+        }
+
+        w.WriteEndArray();
+
         w.WriteStartObject("reviews");
         foreach (var (title, by) in ds.Reviews.OrderBy(kv => kv.Key, StringComparer.Ordinal))
         {

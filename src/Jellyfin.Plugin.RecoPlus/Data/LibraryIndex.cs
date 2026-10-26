@@ -21,6 +21,9 @@ public sealed class LibrarySnapshot
     /// <summary>Collections (BoxSet) → titres.</summary>
     public required Dictionary<string, List<string>> Collections { get; init; }
 
+    /// <summary>Collection TMDb de chaque film qui en a une (métadonnées de Jellyfin) : titre → identifiant.</summary>
+    public Dictionary<string, int> TmdbCollection { get; init; } = new(System.StringComparer.Ordinal);
+
     /// <summary>Identifiant TMDb → titre (« movie:123 » / « tv:456 »).</summary>
     public required Dictionary<string, string> ByTmdb { get; init; }
 
@@ -196,6 +199,7 @@ public sealed class LibraryIndex
         var titles = new Dictionary<string, Title>(StringComparer.Ordinal);
         var byTmdb = new Dictionary<string, string>(StringComparer.Ordinal);
         var copies = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        var tmdbColl = new Dictionary<string, int>(StringComparer.Ordinal);
         foreach (var it in items)
         {
             var kind = it is Series ? TitleKind.Series : TitleKind.Movie;
@@ -248,6 +252,12 @@ public sealed class LibraryIndex
                 Countries = it.ProductionLocations ?? Array.Empty<string>(),
                 Language = string.IsNullOrWhiteSpace(it.OriginalLanguage) ? null : it.OriginalLanguage,
             };
+            if (int.TryParse(it.GetProviderId(MetadataProvider.TmdbCollection), System.Globalization.NumberStyles.Integer,
+                    System.Globalization.CultureInfo.InvariantCulture, out var tcol) && tcol > 0)
+            {
+                tmdbColl[id] = tcol;
+            }
+
             var tmdb = it.GetProviderId(MetadataProvider.Tmdb);
             if (!string.IsNullOrEmpty(tmdb))
             {
@@ -280,6 +290,7 @@ public sealed class LibraryIndex
         {
             Titles = titles,
             Collections = colls,
+            TmdbCollection = tmdbColl,
             ByTmdb = byTmdb,
             Copies = copies.Values.SelectMany(g => g.Select(id => (id, g))).ToDictionary(x => x.id, x => x.g.ToArray(), StringComparer.Ordinal),
             EpisodeSeries = epSeries,

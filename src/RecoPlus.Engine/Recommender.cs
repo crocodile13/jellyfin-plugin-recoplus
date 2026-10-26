@@ -614,16 +614,22 @@ public static class Recommender
         return ColdStartWeight / (1.0 + ((m / ColdStartMass) * (m / ColdStartMass)));
     }
 
-    /// <summary>Collection la plus précise (la plus petite, au moins 2 titres) contenant t.</summary>
+    /// <summary>
+    /// Collection la plus précise (la plus petite, au moins 2 titres) contenant t : une saga d'abord, un regroupement
+    /// thématique (<see cref="Dataset.Thematic"/>) seulement à défaut.
+    /// </summary>
     public static (int Size, string Id)? Franchise(Dataset ds, string t)
     {
         (int, string)? best = null;
+        bool bestThematic = true;
         foreach (var c in ds.Titles[t].Collections)
         {
             int n = ds.Collections.TryGetValue(c, out var l) ? l.Count : 0;
-            if (n >= 2 && (best is null || n < best.Value.Item1))
+            bool th = ds.Thematic.Contains(c);
+            if (n >= 2 && (best is null || (bestThematic && !th) || (th == bestThematic && n < best.Value.Item1)))
             {
                 best = (n, c);
+                bestThematic = th;
             }
         }
 
@@ -932,6 +938,7 @@ public static class Recommender
         var outp = new List<string>();
         var outSet = new HashSet<string>(StringComparer.Ordinal);
         var used = new Dictionary<string, int>(StringComparer.Ordinal);
+        var deferred = new List<string>();
         while (pool.Count > 0 && outp.Count < k)
         {
             int bi = picker.Pick(pool);
@@ -939,22 +946,30 @@ public static class Recommender
             pool.RemoveAt(bi);
             if (w.Saga)
             {
+                // suite dont le début manque à la bibliothèque : après tout le reste
+                if (Sagas.IsOrphanSequel(ctx.Ds, best))
+                {
+                    deferred.Add(best);
+                    continue;
+                }
+
                 var fr = Franchise(ctx.Ds, best);
                 if (fr is { } f)
                 {
-                    if (used.GetValueOrDefault(f.Id) >= (f.Size <= w.SagaMax ? 1 : 2))
+                    bool saga = Sagas.IsSaga(ctx.Ds, f, w.SagaMax);
+                    if (used.GetValueOrDefault(f.Id) >= (saga ? 1 : 2))
                     {
                         continue;
                     }
 
-                    if (f.Size <= w.SagaMax)
+                    if (saga)
                     {
-                        var kind = T[best].Kind;
+                        // le premier volet pas encore vu, film ou série (la série d'abord quand le film la prolonge)
                         string? first = null;
                         (int, string)? fk = null;
                         foreach (var t in ctx.Ds.Collections[f.Id])
                         {
-                            if (!cset.Contains(t) || T[t].Kind != kind)
+                            if (!cset.Contains(t))
                             {
                                 continue;
                             }
@@ -981,6 +996,19 @@ public static class Recommender
             {
                 outp.Add(best);
                 picker.Added(best, pool);
+            }
+        }
+
+        foreach (var d in deferred)
+        {
+            if (outp.Count >= k)
+            {
+                break;
+            }
+
+            if (outSet.Add(d))
+            {
+                outp.Add(d);
             }
         }
 
