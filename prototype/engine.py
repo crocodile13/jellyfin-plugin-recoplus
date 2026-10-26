@@ -456,14 +456,24 @@ def gate_rank(taste, fr, pop, q, W, rel=None, hh=None):
 SAGA_MAX = 12          # au-delà, une collection est un regroupement thématique, pas une suite
 
 
-def franchise(T, colls, t):
-    """Collection la plus précise (la plus petite, ≥ 2 titres) contenant t, ou None."""
-    best = None
+def franchise(T, colls, t, thematic=frozenset()):
+    """Collection la plus précise (la plus petite, ≥ 2 titres) contenant t, ou None : une saga d'abord, un
+    regroupement thématique (collection mélangée) seulement à défaut."""
+    best, best_th = None, True
     for c in T[t].colls:
         n = len(colls.get(c, ()))
-        if n >= 2 and (best is None or n < best[0]):
-            best = (n, c)
+        th = c in thematic
+        if n >= 2 and (best is None or (best_th and not th) or (th == best_th and n < best[0])):
+            best, best_th = (n, c), th
     return best
+
+
+def is_orphan_sequel(T, colls, thematic, t):
+    """Suite dont le début manque à la bibliothèque : mot-clé « sequel » et aucune saga."""
+    if not any(x.lower() == "sequel" for x in T[t].tags):
+        return False
+    fr = franchise(T, colls, t, thematic)
+    return not (fr and fr[1] not in thematic)
 
 
 PERSONAL_FACTORS = (1.0, 0.5, 2.0, 0.0, 4.0)
@@ -571,25 +581,35 @@ class CalibratedPicker:
 def _greedy(ctx, vec, cands, pool, k, saga, picker):
     T = ctx.ds.titles
     colls = ctx.ds.meta.get("colls", {})
+    thematic = ctx.ds.meta.get("thematic", frozenset())
     cset = set(cands)
-    pool, out, used = list(pool), [], Counter()
+    pool, out, used, deferred = list(pool), [], Counter(), []
     while pool and len(out) < k:
         best = pool.pop(picker.pick(pool))
         if saga:
-            fr = franchise(T, colls, best)
+            if is_orphan_sequel(T, colls, thematic, best):
+                deferred.append(best)              # suite dont le début manque : après tout le reste
+                continue
+            fr = franchise(T, colls, best, thematic)
             if fr:
                 n, cid = fr
-                if used[cid] >= (1 if n <= SAGA_MAX else 2):
+                is_saga = n <= SAGA_MAX and cid not in thematic
+                if used[cid] >= (1 if is_saga else 2):
                     continue
-                if n <= SAGA_MAX:
-                    first = min((t for t in colls[cid] if t in cset and T[t].kind == T[best].kind),
-                                key=lambda t: (T[t].year or 9999, T[t].name))
+                if is_saga:
+                    # premier volet pas encore vu, film ou série (la série d'abord quand le film la prolonge)
+                    first = min((t for t in colls[cid] if t in cset), key=lambda t: (T[t].year or 9999, T[t].name))
                     if first not in out:
                         best = first
                 used[cid] += 1
         if best not in out:
             out.append(best)
             picker.added(best, pool)
+    for d in deferred:
+        if len(out) >= k:
+            break
+        if d not in out:
+            out.append(d)
     return out
 
 

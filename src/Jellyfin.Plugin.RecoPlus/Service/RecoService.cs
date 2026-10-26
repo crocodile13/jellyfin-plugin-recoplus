@@ -513,7 +513,7 @@ public sealed class RecoService : IDisposable
         }
 
         Status.ExternalTitles = titles.Values.Count(t => t.External);
-        ds.LinkCollections();
+        ApplySagas(ds, lib, tmdbOf);
         var vec = Core.BuildVectors(titles, s);
         // produits scalaires gardés le temps du calcul (classement avec diversité : ~10× plus rapide, mêmes listes) ;
         // budget mémoire borné, au-delà calcul direct
@@ -524,6 +524,10 @@ public sealed class RecoService : IDisposable
         // droits d'accès et rangées Home Screen Sections de chaque compte : lus d'abord, un compte à la fois (bibliothèque
         // de Jellyfin, autre plugin) ; ensuite les comptes sont calculés en parallèle (réglage « Threads »)
         var prep = targets.Select(u => (U: u, Accessible: _history.Accessible(u), Rows: RowOptionsOf(cfg, HomeScreenSectionsIntegration.EnabledFor(_services, u.Id)))).ToList();
+        foreach (var p in prep)
+        {
+            (p.Rows.Saga, p.Rows.SagaMax) = (s.Saga, s.SagaMax);
+        }
         var po = new ParallelOptions { MaxDegreeOfParallelism = Cpu.Degree, CancellationToken = ct };
         Parallel.ForEach(prep, po, job =>
         {
@@ -1022,6 +1026,20 @@ public sealed class RecoService : IDisposable
             }
         }
 
+        // un « J'aime » de Jellyfin sur un titre de la liste de suivi n'est pas un avis : c'est la liste de suivi elle-même
+        // (que Seerr ou Jellyfin Enhanced reportent dans Jellyfin) ; l'intention compte déjà comme telle, pas comme un
+        // titre aimé (sinon « Parce que tu as aimé X » pour un X jamais vu). Un avis noté (ci-dessous) reste un avis.
+        foreach (var h in hist.Values)
+        {
+            foreach (var x in h.Values)
+            {
+                if (x.Watchlisted > 0 && x.Rating is 1.0)
+                {
+                    x.Rating = null;
+                }
+            }
+        }
+
         // Jellyfin Enhanced : « pas intéressé » (masqué partout) et avis notés — ce que le compte a dit explicitement
         var hiddenTmdb = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
         var reviews = new Dictionary<string, Dictionary<string, double>>(StringComparer.Ordinal);
@@ -1087,7 +1105,7 @@ public sealed class RecoService : IDisposable
         }
 
         var seerr = _seerr.Configured ? _seerr.Last : new SeerrSnapshot { Status = "désactivé ou non configuré" };
-        var (titles, colls, _, reviews, _) = await Assemble(lib, hist, users, seerr, null, false, cfg, ct).ConfigureAwait(false);
+        var (titles, colls, tmdbOf, reviews, _) = await Assemble(lib, hist, users, seerr, null, false, cfg, ct).ConfigureAwait(false);
         var ds = new Dataset
         {
             Titles = titles,
@@ -1097,8 +1115,37 @@ public sealed class RecoService : IDisposable
             Now = Unix(DateTime.UtcNow),
             LocalHour = LocalHourFunc(cfg),
         };
-        ds.LinkCollections();
+        ApplySagas(ds, lib, tmdbOf);
         return ds;
+    }
+
+    /// <summary>
+    /// Sagas du calcul (<see cref="Sagas.Refine"/>) : collections TMDb (métadonnées de Jellyfin, sinon fiches Seerr en
+    /// cache), collections de Jellyfin cohérentes, suites par le nom ; les collections mélangées deviennent thématiques.
+    /// </summary>
+    private void ApplySagas(Dataset ds, LibrarySnapshot lib, Dictionary<string, string> tmdbOf)
+    {
+        var tc = new Dictionary<string, int>(lib.TmdbCollection, StringComparer.Ordinal);
+        foreach (var (id, key) in tmdbOf)
+        {
+            if (!tc.ContainsKey(id) && key.StartsWith("movie:", StringComparison.Ordinal)
+                && int.TryParse(key.AsSpan(6), System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var tid)
+                && _seerr.CachedDetails("movie", tid)?.CollectionId is int c && c > 0)
+            {
+                tc[id] = c;
+            }
+        }
+
+        var r = Sagas.Refine(ds.Titles, ds.Collections, tc, Settings.SagaMax);
+        ds.Collections.Clear();
+        foreach (var (cid, items) in r.Collections)
+        {
+            ds.Collections[cid] = items;
+        }
+
+        ds.Thematic.Clear();
+        ds.Thematic.UnionWith(r.Thematic);
+        ds.LinkCollections();
     }
 
     /// <summary>Genres présents dans la bibliothèque (page de configuration).</summary>
@@ -1119,7 +1166,10 @@ public sealed class RecoService : IDisposable
 
         string series = " (" + Texts.T("série", lang) + ")";
         string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? t.Name + (t.Kind == TitleKind.Series ? series : string.Empty) : id;
-        return r.Pinned.Select(id => "📌 " + Name(id)).Concat(r.Ranked.Select(Name)).Take(n).ToList();
+        // la rangée « Pour toi » telle que l'accueil la montre (titres en tête compris) ; à défaut, la liste classée
+        var pins = new HashSet<string>(r.Pinned, StringComparer.Ordinal);
+        var row = r.Rows.TryGetValue(HomeRows.PourToi, out var pt) && pt.Count > 0 ? pt : r.Pinned.Concat(r.Ranked).ToList();
+        return row.Take(n).Select(id => (pins.Contains(id) ? "📌 " : string.Empty) + Name(id)).ToList();
     }
 
     /// <summary>Aperçu des rangées d'accueil supplémentaires d'un compte : libellé → titres (page de configuration).</summary>
@@ -1137,7 +1187,7 @@ public sealed class RecoService : IDisposable
         string series = " (" + Texts.T("série", lang) + ")";
         string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? t.Name + (t.Kind == TitleKind.Series ? series : string.Empty) : id;
         int size = Math.Clamp(cfg.RowSize, 5, 60);
-        foreach (var (row, ids) in r.Rows.Where(kv => kv.Key != HomeRows.PourToi))
+        foreach (var (row, ids) in r.Rows.Where(kv => kv.Key != HomeRows.PourToi && kv.Value.Count > 0))
         {
             string label = row is HomeRows.Films or HomeRows.Series or HomeRows.Nouveautes
                 ? HomeScreenSectionsIntegration.RowTitle(cfg, row, lang)

@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.32: a full recomputation (scheduled or manual) now picks up metadata changes right away instead of within 6 hours, so cleaned-up tags take effect without restarting Jellyfin.",
+  "changelog": "1.0.33: sagas everywhere and from better clues — one volume per saga, the first one not yet seen, in every home row (not only \"For you\"); sagas are recognised from the movie's TMDb collection (a new part counts even before Jellyfin files it), from Jellyfin collections and from the name (a movie continuing a series comes after the series); collections that mix several TMDb collections (a director, \"Marvel\") are thematic groups, never a saga; a sequel whose start is missing from the library comes last; \"Because you liked X\" only starts from titles actually watched; a Jellyfin Like on a watchlisted title (Seerr / Jellyfin Enhanced watchlist) counts as an intent, not a review; the preview shows the real \"For you\" row and hides empty rows.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.32.0",
+  "version": "1.0.33.0",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": [

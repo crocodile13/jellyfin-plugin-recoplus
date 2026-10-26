@@ -91,7 +91,7 @@ public static class Pins
         {
             if (m.External || m.Kind != TitleKind.Movie || (m.Added ?? 0) < cut || !allowed(m.Id)
                 || (h.TryGetValue(m.Id, out var mx) && (SeenHere(mx) || mx.Hidden || mx.Requested > 0 || mx.Watchlisted > 0 || mx.Favorite || mx.Rating is not null))
-                || Recommender.Franchise(ds, m.Id) is not { } fr || fr.Size > o.SagaMax || !ds.Collections.TryGetValue(fr.Id, out var parts))
+                || Recommender.Franchise(ds, m.Id) is not { } fr || !Sagas.IsSaga(ds, fr, o.SagaMax) || !ds.Collections.TryGetValue(fr.Id, out var parts))
             {
                 continue;
             }
@@ -99,7 +99,8 @@ public static class Pins
             double Order(Title t) => t.Released ?? (t.Year is int y ? new DateTimeOffset(y, 7, 1, 0, 0, 0, TimeSpan.Zero).ToUnixTimeSeconds() : double.MaxValue);
             var others = parts.Where(p => p != m.Id && ds.Titles.TryGetValue(p, out var pt) && !pt.External).Select(p => ds.Titles[p]).ToList();
             // le volet suivant seulement : chaque volet sorti avant lui a été vu ici ou aimé (vu ailleurs)
-            if (others.Any(p => Order(p) < Order(m) && p.Kind == TitleKind.Movie
+            // (films comme séries : un film qui prolonge une série suppose la série vue)
+            if (others.Any(p => Order(p) < Order(m)
                 && !(h.TryGetValue(p.Id, out var px) && !px.Hidden && (SeenHere(px) || sig.GetValueOrDefault(p.Id) > 0))))
             {
                 continue;
