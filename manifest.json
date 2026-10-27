@@ -12,9 +12,9 @@
         "version": "1.0.34.0",
         "changelog": "1.0.34: TMDb agreement for library titles — for each account, the TMDb recommendations of its most liked titles (through Seerr, cached) give a bonus to the library titles TMDb links to them, weighted by taste and position, worldwide hits damped, still reserved to titles that already fit the account (on by default, General tab, Sources; status on the State tab); new \"Effect of the recommendations\" on the State tab: what accounts do with the library titles offered in their rows — started within 7 days, finished within 30, by row and by position — and the share of recently started titles that had been offered, measured from the watch history alone. A Like on a watchlisted title counts as a review again once the title is watched (movie seen or half watched, series half watched).",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.34.0/RecoPlus_1.0.34.0.zip",
+        "checksum": "7036b6d09a9ffae7a68ff4b294670d7e",
+        "timestamp": "2026-10-27T14:52:05Z"
       },
       {
         "version": "1.0.33.0",
