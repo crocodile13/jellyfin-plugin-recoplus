@@ -231,7 +231,7 @@
   "Journal en temps réel": "Live log",
   "Jusqu'où bouger": "How far to move",
   "Jusqu'à trois rangées dans Home Screen Sections, chacune autour d'un titre que le compte a aimé (les plus aimés et récents d'abord, jamais deux d'une même saga), avec les titres qui lui ressemblent le plus, sans ceux des rangées au-dessus. Moins de 6 titres proches : vide.": "Up to three rows in Home Screen Sections, each around a title the account liked (the most liked and recent first, never two from the same saga), with the titles most similar to it, without those of the rows above. Fewer than 6 close titles: empty.",
-  "L'exploration Seerr (la partie longue du calcul) n'est refaite que pour les comptes actifs depuis ce nombre de jours ; les autres gardent leurs titres jusqu'à leur prochaine activité. 0 = tous les comptes.": "The Seerr exploration (the long part of the computation) is only redone for accounts active within this many days; the others keep their titles until their next activity. 0 = all accounts.",
+  "L'exploration Seerr (la partie longue du calcul) n'est refaite que pour les comptes actifs (lecture ou simple connexion) depuis ce nombre de jours ; les autres gardent leurs titres au plus une semaine, ou jusqu'à leur prochaine activité. 0 = tous les comptes.": "The Seerr exploration (the long part of the computation) is only redone for accounts active (a play or just signing in) within this many days; the others keep their titles for a week at most, or until their next activity. 0 = all accounts.",
   "La pénalité est divisée par deux tous les … jours sans nouvel affichage : un titre ignoré revient.": "The penalty is halved every … days without being shown again: an ignored title comes back.",
   "Lancer": "Start",
   "Langue": "Language",

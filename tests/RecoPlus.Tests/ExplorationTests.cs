@@ -153,4 +153,23 @@ public class ExplorationTests
         Assert.True(Parental.TagsAllowed(new[] { "Kids" }, new[] { "Drame" }, Array.Empty<string>(), new[] { "kids" }));
         Assert.False(Parental.TagsAllowed(new[] { "kids", "gore" }, Array.Empty<string>(), new[] { "gore" }, new[] { "kids" })); // bloqué l'emporte
     }
+
+    [Fact]
+    public void InactiveAccountsAreReexploredWhenTheirTitlesAreStaleOrUnplaced()
+    {
+        const double Now = 1_790_000_000, D = Core.Day;
+        // inactif (dernière lecture il y a 6 mois, pas de connexion), titres récents et placés : on garde
+        Assert.False(Exploration.Due(15, true, Now - (2 * D), null, Now - (180 * D), Now, 30, 7));
+        // … titres placés dans aucune rangée (exploration d'une ancienne version) : à refaire
+        Assert.True(Exploration.Due(15, false, Now - (2 * D), null, Now - (180 * D), Now, 30, 7));
+        // … date inconnue (avant la 1.0.36) ou titres de plus d'une semaine : à refaire
+        Assert.True(Exploration.Due(15, true, null, null, Now - (180 * D), Now, 30, 7));
+        Assert.True(Exploration.Due(15, true, Now - (8 * D), null, Now - (180 * D), Now, 30, 7));
+        // une simple connexion récente suffit à être actif
+        Assert.True(Exploration.Due(15, true, Now - (2 * D), Now - D, Now - (180 * D), Now, 30, 7));
+        Assert.True(Exploration.Due(15, true, Now - (2 * D), null, Now - (3 * D), Now, 30, 7));
+        // rien de gardé, ou fenêtre à 0 : toujours
+        Assert.True(Exploration.Due(0, true, Now - D, null, 0, Now, 30, 7));
+        Assert.True(Exploration.Due(15, true, Now - D, null, 0, Now, 0, 7));
+    }
 }

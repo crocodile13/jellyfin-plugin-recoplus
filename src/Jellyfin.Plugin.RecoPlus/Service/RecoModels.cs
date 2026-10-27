@@ -100,6 +100,9 @@ public sealed class UserRecs
     /// <summary>Mode étendu.</summary>
     public List<ExternalRec> Extended { get; set; } = new();
 
+    /// <summary>Date de la dernière exploration Seerr de ce compte (null : jamais, ou avant la 1.0.36).</summary>
+    public DateTime? ExtendedAt { get; set; }
+
     /// <summary>Bilan de la dernière exploration, par source (aperçu de la configuration).</summary>
     public Dictionary<string, SourceStat> Sources { get; set; } = new(StringComparer.Ordinal);
 

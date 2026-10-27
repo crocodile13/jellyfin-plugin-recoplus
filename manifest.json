@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.36.0",
+        "changelog": "1.0.36: accounts that had not watched anything for a month kept old titles outside the library, placed in no home row, so they saw no Seerr suggestions at all — they are now explored again when their titles are unplaced or more than a week old, and signing in counts as activity, not only playing something.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.35.0",
         "changelog": "1.0.35: Reco+ now updates itself — the plugin is marked for automatic updates, so Jellyfin's \"Update Plugins\" scheduled task installs new versions from the repository (a restart applies them). Versions up to 1.0.34 were marked not to: update to 1.0.35 once by hand.",
         "targetAbi": "12.2.0.0",

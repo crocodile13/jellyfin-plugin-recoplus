@@ -83,6 +83,10 @@ public sealed class RecoService : IDisposable
     private readonly ConcurrentDictionary<string, (DateTime At, ExtCandidates C)> _extMemo = new(StringComparer.Ordinal);
 
     private static readonly TimeSpan ExtMemoTtl = TimeSpan.FromHours(6);
+
+    // titres hors bibliothèque d'un compte inactif : réexplorés au plus tard après ce délai
+    private static readonly TimeSpan ExtendedRefresh = TimeSpan.FromDays(7);
+
     private DateTime _prAt;
     private readonly object _loadLock = new();
     private readonly object _vecLock = new();
@@ -482,12 +486,15 @@ public sealed class RecoService : IDisposable
             bool Active(Jellyfin.Database.Implementations.Entities.User u)
             {
                 var k = u.Id.ToString("N");
-                if (only is not null || activeDays == 0 || !_recs.TryGetValue(k, out var prev) || prev.Extended.Count == 0)
+                if (only is not null || !_recs.TryGetValue(k, out var prev))
                 {
                     return true;
                 }
 
-                return hist.TryGetValue(k, out var h) && h.Values.Any(x => Math.Max(x.Last, x.Start) >= now - (activeDays * Core.Day));
+                double lastPlay = hist.TryGetValue(k, out var h) && h.Count > 0 ? h.Values.Max(x => Math.Max(x.Last, x.Start)) : 0;
+                return Exploration.Due(prev.Extended.Count, prev.Extended.Any(e => e.Row.Length > 0) || !cfg.AnyExternalRow(),
+                    prev.ExtendedAt is { } at ? Unix(at) : null, u.LastActivityDate is { } la ? Unix(la) : null, lastPlay, now,
+                    activeDays, ExtendedRefresh.TotalDays);
             }
 
             var extTargets = targets.Where(Active).ToList();
@@ -643,6 +650,7 @@ public sealed class RecoService : IDisposable
                 }
 
                 r.Extended = recs.Select(p => p.Rec!).ToList();
+                r.ExtendedAt = DateTime.UtcNow;
                 List<string>? placedFrom = null;
 
                 // accueil : titres hors bibliothèque dans les rangées qui en reçoivent, pour chaque vue (tranche horaire)
@@ -685,6 +693,7 @@ public sealed class RecoService : IDisposable
                            && (d is null || (d.MediaStatus is not (2 or 3 or 4 or 5 or 6) && ParentalAllowed(policy, d, country)));
                 }).ToList();
                 r.Sources = prevRecs.Sources;
+                r.ExtendedAt = prevRecs.ExtendedAt;
                 // leur place dans les rangées aussi (une rangée recalculée depuis se recompose sans ce qui a disparu)
                 var still = r.Extended.Select(e => e.MediaType + ":" + e.TmdbId).ToHashSet(StringComparer.Ordinal);
                 r.Layouts = prevRecs.Layouts.ToDictionary(kv => kv.Key, kv => kv.Value.Where(t => t.Length == 0 || still.Contains(t)).ToList(), StringComparer.Ordinal);

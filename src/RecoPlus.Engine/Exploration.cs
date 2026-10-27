@@ -13,6 +13,31 @@ namespace RecoPlus.Engine;
 /// </summary>
 public static class Exploration
 {
+    /// <summary>
+    /// Faut-il refaire l'exploration Seerr d'un compte à ce calcul complet ? Oui s'il n'a aucun titre hors bibliothèque,
+    /// si ses titres ne sont placés dans aucune rangée qui en reçoit, s'ils datent de plus de <paramref name="refreshDays"/>
+    /// jours (ou d'avant que la date soit notée), ou s'il a été actif depuis <paramref name="activeDays"/> jours : une
+    /// lecture, ou simplement une connexion. Sinon ses titres précédents restent (l'exploration est la partie longue).
+    /// </summary>
+    /// <param name="prevCount">Titres hors bibliothèque gardés.</param>
+    /// <param name="prevPlaced">Au moins un est placé dans une rangée (ou aucune rangée n'en reçoit).</param>
+    /// <param name="prevAt">Date de la dernière exploration (secondes Unix), null si inconnue.</param>
+    /// <param name="lastActivity">Dernière activité Jellyfin du compte (connexion), null si inconnue.</param>
+    /// <param name="lastPlay">Dernière lecture (secondes Unix, 0 si aucune).</param>
+    /// <param name="now">Maintenant (secondes Unix).</param>
+    /// <param name="activeDays">Fenêtre d'activité (0 = toujours explorer).</param>
+    /// <param name="refreshDays">Âge maximal des titres gardés.</param>
+    public static bool Due(int prevCount, bool prevPlaced, double? prevAt, double? lastActivity, double lastPlay, double now, double activeDays, double refreshDays)
+    {
+        if (activeDays <= 0 || prevCount == 0 || !prevPlaced || prevAt is not { } at || now - at > refreshDays * Core.Day)
+        {
+            return true;
+        }
+
+        double since = now - (activeDays * Core.Day);
+        return lastPlay >= since || (lastActivity is { } la && la >= since);
+    }
+
     /// <summary>Noms (français : clés de traduction, voir <see cref="Texts"/>) des langues d'origine explorées, par code ISO 639-1.</summary>
     public static IReadOnlyDictionary<string, string> LanguageNames { get; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
     {
