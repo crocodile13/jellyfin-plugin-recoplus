@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.35.0",
+        "changelog": "1.0.35: Reco+ now updates itself — the plugin is marked for automatic updates, so Jellyfin's \"Update Plugins\" scheduled task installs new versions from the repository (a restart applies them). Versions up to 1.0.34 were marked not to: update to 1.0.35 once by hand.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.34.0",
         "changelog": "1.0.34: TMDb agreement for library titles — for each account, the TMDb recommendations of its most liked titles (through Seerr, cached) give a bonus to the library titles TMDb links to them, weighted by taste and position, worldwide hits damped, still reserved to titles that already fit the account (on by default, General tab, Sources; status on the State tab); new \"Effect of the recommendations\" on the State tab: what accounts do with the library titles offered in their rows — started within 7 days, finished within 30, by row and by position — and the share of recently started titles that had been offered, measured from the watch history alone. A Like on a watchlisted title counts as a review again once the title is watched (movie seen or half watched, series half watched).",
         "targetAbi": "12.2.0.0",
