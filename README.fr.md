@@ -70,6 +70,8 @@ Reco+ est un plugin Jellyfin qui remplace les recommandations intégrées — Su
 2. Installez **Reco+** depuis le catalogue.
 3. Redémarrez Jellyfin.
 
+Les nouvelles versions sont ensuite installées par la tâche planifiée **Mettre à jour les extensions** de Jellyfin (Tableau de bord → Tâches planifiées) et appliquées au redémarrage suivant.
+
 ### À la main
 
 1. Téléchargez `RecoPlus_<version>.zip` depuis les [releases](https://github.com/crocodile13/jellyfin-plugin-recoplus/releases) et vérifiez-le avec le `.sha256` publié.
