@@ -12,9 +12,9 @@
         "version": "1.0.35.0",
         "changelog": "1.0.35: Reco+ now updates itself — the plugin is marked for automatic updates, so Jellyfin's \"Update Plugins\" scheduled task installs new versions from the repository (a restart applies them). Versions up to 1.0.34 were marked not to: update to 1.0.35 once by hand.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.35.0/RecoPlus_1.0.35.0.zip",
+        "checksum": "15086cf8926b580fb31e616d38e36f34",
+        "timestamp": "2026-10-27T14:54:11Z"
       },
       {
         "version": "1.0.34.0",
