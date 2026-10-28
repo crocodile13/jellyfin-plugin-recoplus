@@ -48,7 +48,10 @@ public sealed class RowOptions
 
     /// <summary>Réglage de sortes d'une rangée de base (« ParceQue2 » → celui de « ParceQue »).</summary>
     public KindFilter KindSetting(string baseRow)
-        => Kinds.TryGetValue(baseRow.StartsWith(HomeRows.ParceQue, StringComparison.Ordinal) ? HomeRows.ParceQue : baseRow, out var k) ? k : KindFilter.Both;
+    {
+        var b = baseRow.StartsWith(HomeRows.ParceQue, StringComparison.Ordinal) ? HomeRows.ParceQue : baseRow;
+        return Kinds.TryGetValue(b, out var k) ? k : HomeRows.DefaultKind(b);
+    }
 
     /// <summary>Sortes de titres effectivement admises dans une rangée (« TendancesFilms » : films ; « Films » : films).</summary>
     public KindFilter KindOf(string row)
@@ -105,14 +108,20 @@ public static class HomeRows
     public const string PourToi = "PourToi", Films = "Films", Series = "Series", Nouveautes = "Nouveautes", ParceQue = "ParceQue", Tendances = "Tendances",
         Populaires = "Populaires", AVenir = "AVenir";
 
+    /// <summary>
+    /// Suite du classement après les autres rangées. Séparée par défaut, ses deux moitiés gardent leurs identifiants
+    /// historiques : « Films » et « Series » ; réunie, c'est la rangée « Suite » (films et séries).
+    /// </summary>
+    public const string Suite = "Suite";
+
     /// <summary>Rangées tirées d'une liste TMDb, dans l'ordre de priorité de la répartition.</summary>
     public static readonly string[] ListRows = { Tendances, Populaires, AVenir };
 
     /// <summary>Rangées dont la sorte de titres se règle (les autres sont « Films » et « Séries », déjà d'une seule sorte).</summary>
-    public static readonly string[] KindRows = { PourToi, Tendances, Populaires, AVenir, Nouveautes, ParceQue };
+    public static readonly string[] KindRows = { PourToi, Tendances, Populaires, AVenir, Nouveautes, ParceQue, Suite };
 
     /// <summary>Contenus réglables, un par sorte de rangée (« ParceQue » vaut pour les trois rangées « Parce que … »).</summary>
-    public static readonly string[] SourceRows = { PourToi, Tendances, Populaires, AVenir, Nouveautes, ParceQue, Films, Series };
+    public static readonly string[] SourceRows = { PourToi, Tendances, Populaires, AVenir, Nouveautes, ParceQue, Suite };
 
     /// <summary>
     /// Rangées de base, dans l'ordre de la répartition (et de la liste de Home Screen Sections) ; les listes TMDb seulement
@@ -135,9 +144,11 @@ public static class HomeRows
             yield return ParceQue + i;
         }
 
-        yield return Films;
-        yield return Series;
+        yield return Suite;
     }
+
+    /// <summary>Sortes par défaut d'une rangée de base : la suite du classement est séparée (films, séries), les autres non.</summary>
+    public static KindFilter DefaultKind(string baseRow) => baseRow == Suite ? KindFilter.Split : KindFilter.Both;
 
     /// <summary>Suffixes des deux rangées d'une rangée séparée (films, séries).</summary>
     public const string MoviesSuffix = "Films", SeriesSuffix = "Series";
@@ -150,12 +161,12 @@ public static class HomeRows
     {
         if (row == Films)
         {
-            return (row, KindFilter.Movies);
+            return (Suite, KindFilter.Movies);
         }
 
         if (row == Series)
         {
-            return (row, KindFilter.Series);
+            return (Suite, KindFilter.Series);
         }
 
         if (row.Length > MoviesSuffix.Length && row.EndsWith(MoviesSuffix, StringComparison.Ordinal))
@@ -179,8 +190,19 @@ public static class HomeRows
     }
 
     /// <summary>Identifiants des rangées produites par une rangée de base selon son réglage de sortes.</summary>
-    public static IEnumerable<string> Expand(string baseRow, KindFilter k)
-        => k == KindFilter.Split ? new[] { baseRow + MoviesSuffix, baseRow + SeriesSuffix } : new[] { baseRow };
+    public static IEnumerable<string> Expand(string baseRow, KindFilter k) => baseRow == Suite
+        ? k switch
+        {
+            KindFilter.Split => new[] { Films, Series },
+            KindFilter.Movies => new[] { Films },
+            KindFilter.Series => new[] { Series },
+            _ => new[] { Suite },
+        }
+        : k == KindFilter.Split ? new[] { baseRow + MoviesSuffix, baseRow + SeriesSuffix } : new[] { baseRow };
+
+    /// <summary>Toutes les formes possibles d'une rangée de base (réunie, ses moitiés), pour reconnaître celles d'un accueil.</summary>
+    public static IEnumerable<string> Forms(string baseRow)
+        => Expand(baseRow, KindFilter.Split).Append(baseRow == Suite ? Suite : baseRow).Distinct(StringComparer.Ordinal);
 
     /// <summary>Titres de réserve par rangée (droits d'accès revérifiés à l'affichage).</summary>
     public const int Spare = 6;
@@ -452,14 +474,14 @@ public static class HomeRows
             }
         }
 
-        if (o.Movies)
+        // suite du classement : « Films » et « Séries » (séparée), une seule sorte, ou les deux réunies
+        foreach (var id in Expand(Suite, o.KindSetting(Suite)).Where(Visible))
         {
-            rows[Films] = Row(Films, null, Sagaed(ordered.Where(id => T.TryGetValue(id, out var t) && t.Kind == TitleKind.Movie), id => T[id].Kind == TitleKind.Movie));
-        }
-
-        if (o.Series)
-        {
-            rows[Series] = Row(Series, null, Sagaed(ordered.Where(id => T.TryGetValue(id, out var t) && t.Kind == TitleKind.Series), id => T[id].Kind == TitleKind.Series));
+            if (id == Films ? o.Movies : id == Series ? o.Series : o.Movies || o.Series)
+            {
+                var k = o.KindOf(id);
+                rows[id] = Row(id, null, Sagaed(ordered.Where(x => Kind(k, x)), x => Kind(k, x)));
+            }
         }
 
         return new Result(rows, anchors) { AnchorIds = anchorIds };

@@ -812,8 +812,8 @@ public sealed class RecoService : IDisposable
         return new RowOptions
         {
             Size = Math.Clamp(cfg.RowSize, 5, 60),
-            Movies = On(HomeRows.Films),
-            Series = On(HomeRows.Series),
+            Movies = On(HomeRows.Suite),
+            Series = On(HomeRows.Suite),
             New = On(HomeRows.Nouveautes),
             NewDays = Math.Clamp(cfg.RowNewDays, 1, 365),
             Because = because,
@@ -883,6 +883,22 @@ public sealed class RecoService : IDisposable
         var jointExt = Exploration.Noisy(recs.ToDictionary(p => p.Id, p => joint[p.Id], StringComparer.Ordinal), noise, noiseSeed);
         double Key(string id) => jointExt.TryGetValue(id, out var e) ? e : joint.GetValueOrDefault(id);
 
+        // goût minimal : score commun du titre de la bibliothèque du compte placé au quantile voulu (0 = aucun ; 0,5 = la
+        // médiane ; 1 = le meilleur), interpolé entre deux places
+        var libKeys = hv.Ordered.Select(id => joint.GetValueOrDefault(id)).OrderBy(x => x).ToArray();
+        double TasteBar(double q)
+        {
+            if (q <= 0 || libKeys.Length == 0)
+            {
+                return double.NegativeInfinity;
+            }
+
+            double pos = Math.Clamp(q, 0, 1) * (libKeys.Length - 1);
+            int lo = (int)Math.Floor(pos);
+            int hi = Math.Min(lo + 1, libKeys.Length - 1);
+            return libKeys[lo] + ((pos - lo) * (libKeys[hi] - libKeys[lo]));
+        }
+
         var mix = new MixOptions
         {
             Free = cfg.ExtendedMixMode == Configuration.MixMode.Score,
@@ -917,8 +933,10 @@ public sealed class RecoService : IDisposable
                 HomeRows.Nouveautes => (t.Released ?? 0) >= releasedCut && t.Released <= now,
                 _ => true,
             };
+            // listes du moment : un titre hors bibliothèque doit aussi convenir au compte (goût minimal)
+            double floor = listRow ? TasteBar(pool!.TasteFloor) : double.NegativeInfinity;
             var cand = Enumerable.Range(0, recs.Count).Where(i => !taken.Contains(i) && (listRow ? poolIdx[kindRow].Contains(i) : i < general.Count)
-                && titles.TryGetValue(recs[i].Id, out var t) && Fits(t)).ToList();
+                && titles.TryGetValue(recs[i].Id, out var t) && Fits(t) && Key(recs[i].Id) >= floor).ToList();
 
             // clé de classement : celle de la rangée (« Parce que … » : surtout la ressemblance avec le titre aimé ; listes
             // TMDb : la place dans la liste mêlée au goût du compte, comme pour leurs titres de la bibliothèque)
@@ -1232,7 +1250,7 @@ public sealed class RecoService : IDisposable
     }
 
     /// <summary>Titres hors bibliothèque d'une rangée de liste TMDb pour un compte : titres (dans l'ordre de la liste), intensité, part du goût.</summary>
-    private sealed record ListPool(List<(string Id, ExternalRec Rec)> Items, Dictionary<string, double> Score, double Taste);
+    private sealed record ListPool(List<(string Id, ExternalRec Rec)> Items, Dictionary<string, double> Score, double Taste, double TasteFloor);
 
     /// <summary>
     /// Titres hors bibliothèque des listes TMDb proposables à un compte, pour les rangées affichées qui en reçoivent : pas
@@ -1289,11 +1307,15 @@ public sealed class RecoService : IDisposable
                 }
             }
 
-            res[row] = new ListPool(items, tl.Score, cfg.ListSettings(row).Taste);
+            var set = cfg.ListSettings(row);
+            res[row] = new ListPool(items, tl.Score, set.Taste, set.TasteFloor);
         }
 
         return res;
     }
+
+    /// <summary>À venir : titres lus au plus, par sorte, avant de garder les plus attendus.</summary>
+    private const int UpcomingMaxRead = 100;
 
     /// <summary>
     /// Une liste TMDb du moment pour une rangée : ses titres (identifiant de la bibliothèque, sinon « tmdb:sorte:id »),
@@ -1315,7 +1337,8 @@ public sealed class RecoService : IDisposable
         int read = 0, inLib = 0;
         foreach (var row in HomeRows.ListRows)
         {
-            int count = cfg.ListSettings(row).Count;
+            var set = cfg.ListSettings(row);
+            int count = set.Count;
             var perKind = new List<IReadOnlyList<string>>();
             foreach (var type in new[] { "movie", "tv" })
             {
@@ -1325,8 +1348,16 @@ public sealed class RecoService : IDisposable
                     HomeRows.Populaires => (type == "movie" ? "movies" : "tv", string.Empty),
                     _ => (type == "movie" ? "movies/upcoming" : "tv/upcoming", string.Empty),
                 };
-                var keys = new List<string>();
-                for (int p = 1; p <= (count + 19) / 20 && keys.Count < count; p++)
+                // à venir : la liste de TMDb n'est pas triée par intérêt ; on en lit trois fois plus et on garde les plus
+                // attendues (popularité TMDb). Tendances et populaires sont déjà dans l'ordre de TMDb.
+                bool upcoming = row == HomeRows.AVenir;
+                int want = upcoming ? Math.Min(3 * count, UpcomingMaxRead) : count;
+                // hors bibliothèque, seulement les titres qui comptent (popularité, votes) ; les écartés ne prennent pas de
+                // place : on lit au plus deux fois plus de pages pour garder le nombre voulu
+                bool Counts(SeerrResult r) => lib.ByTmdb.ContainsKey(r.MediaType + ":" + r.TmdbId)
+                    || (r.Popularity >= set.MinPopularity && r.VoteCount >= set.MinVotes);
+                var found = new List<SeerrResult>();
+                for (int p = 1; p <= 2 * ((want + 19) / 20) && found.Count < want; p++)
                 {
                     var items = await _seerr.ListAsync(cl, list, query, type, p, ct).ConfigureAwait(false);
                     if (items.Count == 0)
@@ -1334,10 +1365,11 @@ public sealed class RecoService : IDisposable
                         break;
                     }
 
-                    keys.AddRange(items.Where(r => r.MediaType == type && !r.Adult).Select(r => r.MediaType + ":" + r.TmdbId));
+                    found.AddRange(items.Where(r => r.MediaType == type && !r.Adult && Counts(r)));
                 }
 
-                perKind.Add(keys.Distinct(StringComparer.Ordinal).Take(count)
+                var ranked = upcoming ? found.Select((r, i) => (r, i)).OrderByDescending(x => x.r.Popularity).ThenBy(x => x.i).Select(x => x.r) : found;
+                perKind.Add(ranked.Select(r => r.MediaType + ":" + r.TmdbId).Distinct(StringComparer.Ordinal).Take(count)
                     .Select(k => lib.ByTmdb.TryGetValue(k, out var lid) ? lid : "tmdb:" + k).ToList());
             }
 

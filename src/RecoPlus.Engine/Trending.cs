@@ -107,7 +107,7 @@ public static class SplitLayout
     /// <returns>La liste a changé.</returns>
     public static bool Apply(List<string> sections, string prefix, string baseRow, KindFilter kind)
     {
-        var all = new[] { baseRow, baseRow + HomeRows.MoviesSuffix, baseRow + HomeRows.SeriesSuffix }.Select(x => prefix + x).ToHashSet(StringComparer.Ordinal);
+        var all = HomeRows.Forms(baseRow).Select(x => prefix + x).ToHashSet(StringComparer.Ordinal);
         var want = HomeRows.Expand(baseRow, kind).Select(x => prefix + x).ToList();
         bool Stale(string s) => all.Contains(s) && !want.Contains(s, StringComparer.Ordinal);
         if (!sections.Any(Stale))

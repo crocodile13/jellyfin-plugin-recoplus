@@ -57,8 +57,13 @@ public class TrendingTests
     {
         Assert.Equal(("Tendances", (KindFilter?)KindFilter.Movies), HomeRows.SplitOf("TendancesFilms"));
         Assert.Equal(("ParceQue2", (KindFilter?)KindFilter.Series), HomeRows.SplitOf("ParceQue2Series"));
-        Assert.Equal(("Films", (KindFilter?)KindFilter.Movies), HomeRows.SplitOf("Films"));
-        Assert.Equal(("Series", (KindFilter?)KindFilter.Series), HomeRows.SplitOf("Series"));
+        Assert.Equal(("Suite", (KindFilter?)KindFilter.Movies), HomeRows.SplitOf("Films"));        // moitiés de la suite du classement
+        Assert.Equal(("Suite", (KindFilter?)KindFilter.Series), HomeRows.SplitOf("Series"));
+        Assert.Equal(new[] { "Films", "Series" }, HomeRows.Expand("Suite", KindFilter.Split));        // identifiants historiques
+        Assert.Equal(new[] { "Suite" }, HomeRows.Expand("Suite", KindFilter.Both));
+        Assert.Equal(new[] { "Series" }, HomeRows.Expand("Suite", KindFilter.Series));
+        Assert.Equal(KindFilter.Split, new RowOptions().KindSetting("Suite"));                       // séparée par défaut
+        Assert.Equal(KindFilter.Both, new RowOptions().KindSetting("Tendances"));
         Assert.Equal(("PourToi", (KindFilter?)null), HomeRows.SplitOf("PourToi"));
         Assert.Equal("ParceQue", HomeRows.KindOfRow("ParceQue3Films"));
         Assert.Equal("AVenir", HomeRows.KindOfRow("AVenirSeries"));
@@ -75,8 +80,8 @@ public class TrendingTests
     [Fact]
     public void BaseRowsFollowTheAllocationOrderAndListRowsNeedTheLists()
     {
-        Assert.Equal(new[] { "PourToi", "Tendances", "Populaires", "AVenir", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Films", "Series" }, HomeRows.BaseRows(true));
-        Assert.Equal(new[] { "PourToi", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Films", "Series" }, HomeRows.BaseRows(false));
+        Assert.Equal(new[] { "PourToi", "Tendances", "Populaires", "AVenir", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Suite" }, HomeRows.BaseRows(true));
+        Assert.Equal(new[] { "PourToi", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Suite" }, HomeRows.BaseRows(false));
         Assert.Equal(HomeRows.BaseRows(true).Select(HomeRows.KindOfRow).Distinct().OrderBy(x => x, StringComparer.Ordinal), HomeRows.SourceRows.OrderBy(x => x, StringComparer.Ordinal));
     }
 
@@ -106,6 +111,14 @@ public class TrendingTests
         var both = new List<string> { P + "Nouveautes", P + "NouveautesFilms" };
         Assert.True(SplitLayout.Apply(both, P, "Nouveautes", KindFilter.Split));
         Assert.Equal(new[] { P + "NouveautesFilms" }, both);
+
+        // suite du classement : « Films » et « Series » réunies en « Suite » à la place de la première, et inversement
+        var suite = new List<string> { "A", P + "Films", "B", P + "Series" };
+        Assert.True(SplitLayout.Apply(suite, P, "Suite", KindFilter.Both));
+        Assert.Equal(new[] { "A", P + "Suite", "B" }, suite);
+        Assert.True(SplitLayout.Apply(suite, P, "Suite", KindFilter.Split));
+        Assert.Equal(new[] { "A", P + "Films", P + "Series", "B" }, suite);
+        Assert.False(SplitLayout.Apply(suite, P, "Suite", KindFilter.Split));
 
         // une autre rangée au nom proche n'est pas touchée
         var other = new List<string> { P + "ParceQue1", P + "ParceQue2" };
@@ -179,6 +192,27 @@ public class TrendingTests
         Assert.False(r.Rows.ContainsKey("PopulairesFilms"));
         Assert.DoesNotContain("t00", r.Rows["PopulairesSeries"]);           // déjà vu : pas candidat
         Assert.DoesNotContain("tmdb:movie:9", r.Rows["PopulairesSeries"]);
+    }
+
+    [Fact]
+    public void TheRestOfTheRankingIsSplitByDefaultMergedOrSingleKindOnRequest()
+    {
+        var (ctx, vec, ordered, sc) = Setup();
+        RowOptions O(KindFilter? k) => new() { Size = 5, Movies = true, Series = true, Kinds = k is { } kk ? new() { ["Suite"] = kk } : new() };
+        Dictionary<string, List<string>> Rows(KindFilter? k) => HomeRows.Allocate(ctx, vec, "u", ordered.Take(5).ToList(), ordered, sc, O(k)).Rows;
+
+        var split = Rows(null);
+        Assert.True(split.ContainsKey("Films") && split.ContainsKey("Series") && !split.ContainsKey("Suite"));
+        Assert.All(split["Films"], id => Assert.Equal(TitleKind.Movie, ctx.Ds.Titles[id].Kind));
+        Assert.All(split["Series"], id => Assert.Equal(TitleKind.Series, ctx.Ds.Titles[id].Kind));
+
+        var merged = Rows(KindFilter.Both);
+        Assert.False(merged.ContainsKey("Films") || merged.ContainsKey("Series"));
+        Assert.Contains(merged["Suite"], id => ctx.Ds.Titles[id].Kind == TitleKind.Movie);
+        Assert.Contains(merged["Suite"], id => ctx.Ds.Titles[id].Kind == TitleKind.Series);
+
+        var movies = Rows(KindFilter.Movies);
+        Assert.True(movies.ContainsKey("Films") && !movies.ContainsKey("Series") && !movies.ContainsKey("Suite"));
     }
 
     [Fact]

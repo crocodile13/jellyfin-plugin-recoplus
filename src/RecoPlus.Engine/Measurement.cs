@@ -101,7 +101,7 @@ public static class Measurement
     }
 
     /// <summary>Rangée ramenée à son type (« ParceQue2 » → « ParceQue », « TendancesFilms » → « Tendances »).</summary>
-    public static string RowKind(string row) => HomeRows.KindOfRow(row);
+    public static string RowKind(string row) => row is HomeRows.Films or HomeRows.Series ? row : HomeRows.KindOfRow(row);   // films et séries comptés à part
 
     /// <summary>Tranche de places.</summary>
     public static string Bucket(int position)
