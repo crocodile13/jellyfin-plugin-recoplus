@@ -5,15 +5,17 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>CS1591</NoWarn>
-    <Version>1.0.37.0</Version>
-    <AssemblyVersion>1.0.37.0</AssemblyVersion>
-    <FileVersion>1.0.37.0</FileVersion>
+    <Version>1.0.38.0</Version>
+    <AssemblyVersion>1.0.38.0</AssemblyVersion>
+    <FileVersion>1.0.38.0</FileVersion>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <!-- version la plus ancienne prise en charge (targetAbi) ; la CI compile aussi contre la plus récente de Jellyfin 12 -->
+    <JellyfinVersion Condition="'$(JellyfinVersion)' == ''">12.2.0</JellyfinVersion>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Jellyfin.Controller" Version="12.2.0" ExcludeAssets="runtime" />
-    <PackageReference Include="Jellyfin.Model" Version="12.2.0" ExcludeAssets="runtime" />
+    <PackageReference Include="Jellyfin.Controller" Version="$(JellyfinVersion)" ExcludeAssets="runtime" />
+    <PackageReference Include="Jellyfin.Model" Version="$(JellyfinVersion)" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.0" ExcludeAssets="runtime" />
   </ItemGroup>
   <ItemGroup>

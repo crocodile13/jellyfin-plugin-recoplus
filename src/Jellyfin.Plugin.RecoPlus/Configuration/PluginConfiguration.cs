@@ -490,9 +490,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     };
 
     /// <summary>Au moins une rangée reçoit des titres hors bibliothèque.</summary>
-    public bool AnyExternalRow() => SourcePourToi != RowSource.Local || SourceNouveautes != RowSource.Local
-        || SourceParceQue != RowSource.Local || SourceFilms != RowSource.Local || SourceSeries != RowSource.Local
-        || SourceTendances != RowSource.Local || SourcePopulaires != RowSource.Local || SourceAVenir != RowSource.Local;
+    public bool AnyExternalRow() => Array.Exists(HomeRows.SourceRows, r => SourceOf(r) != RowSource.Local);
 
     /// <summary>Bouton « Demander » (la demande est faite au nom de l'utilisateur, avec ses droits et quotas Seerr).</summary>
     public bool ExtendedRequestButton { get; set; } = true;

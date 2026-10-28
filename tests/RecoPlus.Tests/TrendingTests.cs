@@ -73,6 +73,14 @@ public class TrendingTests
     }
 
     [Fact]
+    public void BaseRowsFollowTheAllocationOrderAndListRowsNeedTheLists()
+    {
+        Assert.Equal(new[] { "PourToi", "Tendances", "Populaires", "AVenir", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Films", "Series" }, HomeRows.BaseRows(true));
+        Assert.Equal(new[] { "PourToi", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Films", "Series" }, HomeRows.BaseRows(false));
+        Assert.Equal(HomeRows.BaseRows(true).Select(HomeRows.KindOfRow).Distinct().OrderBy(x => x, StringComparer.Ordinal), HomeRows.SourceRows.OrderBy(x => x, StringComparer.Ordinal));
+    }
+
+    [Fact]
     public void SplitLayoutReplacesInPlaceAndRespectsChoices()
     {
         const string P = "RecoPlus";

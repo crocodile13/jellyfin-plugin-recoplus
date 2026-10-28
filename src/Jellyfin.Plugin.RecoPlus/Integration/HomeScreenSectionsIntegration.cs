@@ -147,15 +147,8 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     {
         lang ??= I18n.Lang();
         var res = new List<(string, string, string, string)>();
-        // rangées de base dans l'ordre de la liste de HSS ; les listes TMDb seulement avec Seerr (sinon elles seraient vides)
-        var bases = new List<string> { HomeRows.PourToi };
-        if (cfg.SeerrEnabled)
-        {
-            bases.AddRange(HomeRows.ListRows);
-        }
-
-        bases.AddRange(new[] { HomeRows.Nouveautes, HomeRows.ParceQue + 1, HomeRows.ParceQue + 2, HomeRows.ParceQue + 3, HomeRows.Films, HomeRows.Series });
-        foreach (var b in bases)
+        // les listes TMDb seulement avec Seerr
+        foreach (var b in HomeRows.BaseRows(cfg.SeerrEnabled))
         {
             foreach (var row in HomeRows.Expand(b, cfg.KindOf(b)))
             {
@@ -323,8 +316,8 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
                 return 0;
             }
 
-            var bases = new List<string> { HomeRows.PourToi, HomeRows.Nouveautes, HomeRows.ParceQue + 1, HomeRows.ParceQue + 2, HomeRows.ParceQue + 3 };
-            bases.AddRange(HomeRows.ListRows);
+            // toutes les rangées séparables, listes TMDb comprises (même Seerr coupé : l'accueil reste cohérent)
+            var bases = HomeRows.BaseRows(true).Where(b => b is not HomeRows.Films and not HomeRows.Series).ToList();
             int changed = 0;
             foreach (var u in _users.GetUsers())
             {

@@ -163,12 +163,12 @@ public sealed class CompatibilityGuard : IHostedService
     {
         Checks.Clear();
         var v = _host.ApplicationVersion;
-        bool sameVersion = v.Major == Plugin.TestedJellyfin.Major && v.Minor == Plugin.TestedJellyfin.Minor;
-        Checks.Add(("Version de Jellyfin", sameVersion, sameVersion ? Texts.Pack("{0} (testée)", v) : Texts.Pack("{0} — plugin construit et testé pour {1}.x", v, Plugin.TestedJellyfin)));
+        bool sameVersion = Plugin.IsTested(v);
+        Checks.Add(("Version de Jellyfin", sameVersion, sameVersion ? Texts.Pack("{0} (testée)", v) : Texts.Pack("{0} — plugin construit et testé pour Jellyfin {1} à {2}", v, Plugin.TestedFrom, Plugin.TestedTo)));
         if (!sameVersion)
         {
             _notifier.Raise("version", "version de Jellyfin non testée",
-                Texts.Pack("Jellyfin {0} alors que Reco+ a été construit pour {1}.x. Les points d'accroche sont vérifiés un par un ; toute partie qui ne colle plus est coupée automatiquement. Une mise à jour du plugin est à prévoir.", v, Plugin.TestedJellyfin));
+                Texts.Pack("Jellyfin {0} alors que Reco+ a été construit et testé pour Jellyfin {1} à {2}. Les points d'accroche sont vérifiés un par un ; toute partie qui ne colle plus est coupée automatiquement. Une mise à jour du plugin est à prévoir.", v, Plugin.TestedFrom, Plugin.TestedTo));
         }
         else
         {
