@@ -326,7 +326,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
             var bases = new List<string> { HomeRows.PourToi, HomeRows.Nouveautes, HomeRows.ParceQue + 1, HomeRows.ParceQue + 2, HomeRows.ParceQue + 3 };
             bases.AddRange(HomeRows.ListRows);
             int changed = 0;
-            foreach (var u in _users.Users)
+            foreach (var u in _users.GetUsers())
             {
                 var settings = get.Invoke(mgr, new object[] { u.Id });
                 if (settings?.GetType().GetProperty("EnabledSections")?.GetValue(settings) is not List<string> list)
