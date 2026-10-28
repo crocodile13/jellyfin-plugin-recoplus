@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Data.Enums;
 using Jellyfin.Plugin.RecoPlus.Service;
+using MediaBrowser.Common.Configuration;
 using MediaBrowser.Controller.Dto;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Library;
@@ -304,13 +305,108 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     private readonly Notifier _notifier;
     private readonly IServiceProvider _services;
     private readonly IUserManager _users;
+    private readonly IApplicationPaths _paths;
 
-    public HomeScreenSectionsIntegration(ILogger<HomeScreenSectionsIntegration> log, Notifier notifier, IServiceProvider services, IUserManager users)
+    public HomeScreenSectionsIntegration(ILogger<HomeScreenSectionsIntegration> log, Notifier notifier, IServiceProvider services, IUserManager users,
+        IApplicationPaths paths)
     {
         _log = log;
         _notifier = notifier;
         _services = services;
         _users = users;
+        _paths = paths;
+    }
+
+    /// <summary>
+    /// Comptes qui ont enregistré leur propre choix de sections dans Home Screen Sections (fichier
+    /// <c>ModularHomeSettings.json</c>) ; les autres suivent le tableau de l'administrateur.
+    /// </summary>
+    private HashSet<Guid> SavedHssUsers()
+    {
+        var res = new HashSet<Guid>();
+        var file = System.IO.Path.Combine(_paths.PluginConfigurationsPath, "Jellyfin.Plugin.HomeScreenSections", "ModularHomeSettings.json");
+        try
+        {
+            if (System.IO.File.Exists(file))
+            {
+                using var doc = JsonDocument.Parse(System.IO.File.ReadAllText(file));
+                foreach (var e in doc.RootElement.EnumerateArray())
+                {
+                    if (e.ValueKind == JsonValueKind.Object && e.TryGetProperty("UserId", out var id) && id.ValueKind == JsonValueKind.String && Guid.TryParse(id.GetString(), out var g))
+                    {
+                        res.Add(g);
+                    }
+                }
+            }
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException or JsonException or InvalidOperationException)
+        {
+            _log.LogWarning("Reco+: could not read Home Screen Sections user settings ({Msg})", ex.Message);
+        }
+
+        return res;
+    }
+
+    /// <summary>
+    /// Tableau des sections de l'administrateur (Home Screen Sections) : une rangée séparée ou réunie y prend la place de
+    /// l'ancienne forme, avec ses réglages (ordre, affichage, droits). Sans cela, les comptes qui suivent le tableau par
+    /// défaut perdraient la rangée jusqu'au prochain enregistrement de la page de HSS.
+    /// </summary>
+    /// <returns>Le tableau a changé.</returns>
+    private bool ReconcileAdminTable(Assembly asm, IReadOnlyList<string> bases, Configuration.PluginConfiguration cfg)
+    {
+        var pt = asm.GetType("Jellyfin.Plugin.HomeScreenSections.HomeScreenSectionsPlugin");
+        var inst = pt?.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static)?.GetValue(null);
+        var conf = inst is null ? null : pt!.GetProperty("Configuration")?.GetValue(inst);
+        var prop = conf?.GetType().GetProperty("SectionSettings");
+        if (prop?.GetValue(conf) is not Array arr || arr.GetType().GetElementType() is not { } et || et.GetProperty("SectionId") is not { } idProp)
+        {
+            return false;
+        }
+
+        var items = arr.Cast<object>().ToList();
+        string Id(object o) => idProp.GetValue(o) as string ?? string.Empty;
+        bool changed = false;
+        foreach (var b in bases)
+        {
+            var (remove, add) = SplitLayout.Replace(items.Select(Id).ToList(), Prefix, b, cfg.KindOf(b));
+            if (remove.Count == 0)
+            {
+                continue;
+            }
+
+            int at = items.FindIndex(o => Id(o) == remove[0]);
+            var copies = add.Select(a =>
+            {
+                var from = items.First(o => Id(o) == a.From);
+                var copy = Activator.CreateInstance(et)!;
+                foreach (var p in et.GetProperties().Where(p => p.CanRead && p.CanWrite && p.GetIndexParameters().Length == 0))
+                {
+                    p.SetValue(copy, p.GetValue(from));
+                }
+
+                idProp.SetValue(copy, a.Id);
+                return copy;
+            }).ToList();
+            items.InsertRange(at, copies);
+            items.RemoveAll(o => remove.Contains(Id(o)));
+            changed = true;
+        }
+
+        if (!changed)
+        {
+            return false;
+        }
+
+        var res = Array.CreateInstance(et, items.Count);
+        for (int i = 0; i < items.Count; i++)
+        {
+            res.SetValue(items[i], i);
+        }
+
+        prop!.SetValue(conf, res);
+        pt!.GetMethod("SaveConfiguration", Type.EmptyTypes)?.Invoke(inst, null);
+        return true;
     }
 
     /// <summary>
@@ -334,8 +430,15 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
 
             // toutes les rangées séparables, listes TMDb comprises (même Seerr coupé : l'accueil reste cohérent)
             var bases = HomeRows.BaseRows(true).ToList();
+            if (ReconcileAdminTable(asm, bases, cfg))
+            {
+                _log.LogInformation("Reco+: Home Screen Sections table updated after a row was split or merged");
+            }
+
+            // seulement les comptes qui ont leur propre choix : les enregistrer tous figerait ceux qui suivent le tableau
+            var saved = SavedHssUsers();
             int changed = 0;
-            foreach (var u in _users.GetUsers())
+            foreach (var u in _users.GetUsers().Where(u => saved.Contains(u.Id)))
             {
                 var settings = get.Invoke(mgr, new object[] { u.Id });
                 if (settings?.GetType().GetProperty("EnabledSections")?.GetValue(settings) is not List<string> list)
@@ -363,7 +466,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
 
             return changed;
         }
-        catch (Exception ex) when (ex is TargetInvocationException or InvalidOperationException or InvalidCastException or ArgumentException or MissingMethodException)
+        catch (Exception ex) when (ex is TargetInvocationException or TargetException or InvalidOperationException or InvalidCastException or ArgumentException or MissingMethodException or MemberAccessException)
         {
             _log.LogWarning("Reco+: could not update the accounts' home rows ({Msg})", (ex.InnerException ?? ex).Message);
             return 0;

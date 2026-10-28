@@ -329,6 +329,14 @@ await test('contenu de chaque rangée, rangées séparées, réglages du mélang
     assert.equal(d.getElementById('rp_c_TitleParceQueFilms').placeholder, 'Comme {titre} : films');
     assert.equal(note.previousElementSibling, d.getElementById('rp_c_SourceParceQue').closest('.rp-field'), 'sous la ligne de la rangée');
     assert.equal(note.nextElementSibling, d.getElementById('rp_c__SubParceQueFilms'), 'puis les titres des deux moitiés');
+    // titre de la ligne : « Titre de base » une fois séparée, sans effet quand les deux moitiés ont leur titre
+    const lab = () => d.querySelector('label[for="rp_c_RowBecauseTitle"]').textContent;
+    assert.equal(lab(), 'Titre de base');
+    const tf = d.getElementById('rp_c_TitleParceQueFilms'), ts = d.getElementById('rp_c_TitleParceQueSeries');
+    tf.value = 'Films comme {titre}'; tf.dispatchEvent(new d.defaultView.Event('input', { bubbles: true }));
+    assert.ok(!d.getElementById('rp_c_RowBecauseTitle').closest('.rp-field').classList.contains('rp-off'), 'une moitié sans titre : la base sert encore');
+    ts.value = 'Séries comme {titre}'; ts.dispatchEvent(new d.defaultView.Event('input', { bubbles: true }));
+    assert.equal(d.getElementById('rp_c_RowBecauseTitle').closest('.rp-field').getAttribute('data-why'), 'les deux rangées ont leur propre titre');
     const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
     const mixBox = () => d.getElementById('rpMixBox').classList.contains('rp-box-off');
     assert.ok(!mixBox(), 'une rangée mélangée : réglages du mélange visibles');
@@ -677,7 +685,7 @@ await test('langue : page en anglais (réglage ou langue de Jellyfin), textes du
     assert.match(d.getElementById('rp_c_Enabled').closest('label').textContent, /Plugin enabled/);
     assert.equal(d.getElementById('rp_c_HssSectionTitle').getAttribute('placeholder'), 'For you');
     assert.equal(d.getElementById('rp_c_SourceFilms').closest('.rp-field').querySelector('label').textContent, 'Content');
-    assert.deepEqual([...d.getElementById('rp_c_KindTendances').options].map((o) => o.textContent), ['movies and series', 'movies only', 'series only', 'split (2 rows)']);
+    assert.deepEqual([...d.getElementById('rp_c_KindTendances').options].map((o) => o.textContent), ['movies and series', 'movies only', 'series only', 'as 2 rows']);
     const k = d.getElementById('rp_c_KindParceQue'); k.value = 'Split'; k.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
     assert.equal(d.getElementById('rp_c_TitleParceQueFilms').placeholder, 'Because you liked {title}: movies');
     assert.equal(d.getElementById('rp_e_Mmr').closest('.rp-factor').querySelector('.rp-mult').textContent, '×1.00 · normal');

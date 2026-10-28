@@ -195,6 +195,29 @@ public class TrendingTests
     }
 
     [Fact]
+    public void AdminTableReplacementCopiesTheStaleEntryAndOnlyWhenNeeded()
+    {
+        const string P = "RecoPlus";
+        var (rm, add) = SplitLayout.Replace(new[] { "NextUp", P + "Tendances", P + "Films" }, P, "Tendances", KindFilter.Split);
+        Assert.Equal(new[] { P + "Tendances" }, rm);
+        Assert.Equal(new[] { (P + "TendancesFilms", P + "Tendances"), (P + "TendancesSeries", P + "Tendances") }, add);
+
+        // déjà à jour, ou rangée absente du tableau : rien
+        Assert.Empty(SplitLayout.Replace(new[] { P + "TendancesFilms", P + "TendancesSeries" }, P, "Tendances", KindFilter.Split).Remove);
+        Assert.Empty(SplitLayout.Replace(new[] { "NextUp" }, P, "Tendances", KindFilter.Split).Remove);
+
+        // une moitié déjà là : seule l'autre est créée, sur le modèle de la forme périmée
+        var (rm2, add2) = SplitLayout.Replace(new[] { P + "Films", P + "Suite" }, P, "Suite", KindFilter.Split);
+        Assert.Equal(new[] { P + "Suite" }, rm2);
+        Assert.Equal(new[] { (P + "Series", P + "Suite") }, add2);
+
+        // réunie : les deux moitiés laissent la place à une seule, copiée sur la première
+        var (rm3, add3) = SplitLayout.Replace(new[] { P + "Films", P + "Series" }, P, "Suite", KindFilter.Both);
+        Assert.Equal(new[] { P + "Films", P + "Series" }, rm3);
+        Assert.Equal(new[] { (P + "Suite", P + "Films") }, add3);
+    }
+
+    [Fact]
     public void TheRestOfTheRankingIsSplitByDefaultMergedOrSingleKindOnRequest()
     {
         var (ctx, vec, ordered, sc) = Setup();

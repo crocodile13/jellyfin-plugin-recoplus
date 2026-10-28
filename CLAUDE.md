@@ -193,6 +193,14 @@ de la CI.
 
 - HSS : une section de plugin a une instance (Limit 1, Min/Max ignorés) ; les sections de même ordre sont mélangées ;
   une section sans élément est masquée ; rangées de plugin en paysage par défaut. Classes DOM `RecoPlus<Rangée>`.
+- HSS, ce qui est affiché : les sections du tableau de l'administrateur (`SectionSettings` de sa configuration : ordre,
+  `Enabled`, `AllowUserOverride`, affichage) croisées avec le choix du compte. Une section déclarée mais absente du
+  tableau n'est jamais montrée (sa page ne l'ajoute qu'à l'enregistrement). Choix des comptes :
+  `plugins/configurations/Jellyfin.Plugin.HomeScreenSections/ModularHomeSettings.json` ; un compte sans entrée suit les
+  sections actives du tableau ; `AllowUserOverride` coupé impose l'état `Enabled` à tous.
+- Rangée séparée ou réunie (`ReconcileSplits`) : le tableau de l'administrateur est mis à jour (la nouvelle forme
+  reprend les réglages de l'ancienne, à sa place), puis seulement les comptes qui ont leur propre choix. Enregistrer
+  le choix d'un compte qui suit le tableau le figerait.
 - Les titres hors bibliothèque n'existent que dans le client web (script) ; les applications TV ne voient que la
   bibliothèque.
 - Media Bar Enhanced : n'utilise Reco+ que si son option « Personalized Recommendations » est active
@@ -230,5 +238,7 @@ de la CI.
 - Un test jsdom qui dépend d'une minuterie (journal toutes les 2 s) devient instable si la page ralentit : garder
   les recalculs de la page bon marché (éléments mis en cache, rien à refaire quand rien ne change).
 - `pkill -f motif` tue aussi le shell dont la ligne de commande contient le motif.
+- `UpdateUserSettings` de HSS appelé pour tous les comptes : ceux qui suivaient le tableau ont été figés. Seulement
+  les comptes présents dans `ModularHomeSettings.json`.
 - Patch livré sur une branche supposée (`reco-1.0.N-1` jamais créée) : toujours vérifier la base (voir Livraison).
 - `i18n.en.json` comme ressource incorporée : MSBuild y voit la culture « en » et la sort de l'assembly (satellite).

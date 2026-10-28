@@ -403,8 +403,8 @@
             // Rangées d'accueil : une ligne par rangée (titre, sortes, contenu), dans l'ordre où elles se servent
             ['_RowMain', 'Rangée principale', 'note', 'Le classement du compte : demandes arrivées et nouvelles saisons en tête, puis ses titres.', 0, 0, 0, 'rows', 'c'],
             ['HssSectionTitle', 'Titre', 'text', 'Titre de la rangée principale. Vide = le titre par défaut, dans la langue de chacun. Partout ailleurs sur cette page, {ROW} désigne cette rangée.', 0, 0, 0, 'rows', 'c', 'Pour toi'],
-            ['KindPourToi', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
-            ['SourcePourToi', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Hors bibliothèque : tous les titres du mode étendu peuvent y aller (les mieux classés d\'abord). Sans Home Screen Sections : décide de la rangée à part du mode étendu. Les demandes arrivées et nouvelles saisons en tête ne bougent pas.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['KindPourToi', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=en 2 rangées', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourcePourToi', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Hors bibliothèque : tous les titres du mode étendu peuvent y aller (les mieux classés d\'abord). Sans Home Screen Sections : décide de la rangée à part du mode étendu. Les demandes arrivées et nouvelles saisons en tête ne bougent pas.', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_SubPourToiFilms', '↳ Rangée films', 'note', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['TitlePourToiFilms', 'Titre', 'text', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['_Blank1PourToiFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
@@ -416,8 +416,8 @@
             ['_RowLists', 'Listes du moment (TMDb, via Seerr)', 'sep', '', 0, 0, 0, 'rows', 'c'],
             ['_RowTrending', 'Tendances', 'note', 'Ce qui fait parler en ce moment sur TMDb (tendances de la semaine ou du jour), rangé selon les goûts du compte (réglage plus bas). Nécessite Seerr.', 0, 0, 0, 'rows', 'c'],
             ['RowTrendingTitle', 'Titre', 'text', 'Titre de la rangée des tendances.', 0, 0, 0, 'rows', 'c', 'Tendances'],
-            ['KindTendances', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
-            ['SourceTendances', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Bibliothèque seule : les tendances déjà présentes. Hors bibliothèque : celles qui manquent (non demandées). Mélange : les deux.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['KindTendances', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=en 2 rangées', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourceTendances', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Bibliothèque seule : les tendances déjà présentes. Hors bibliothèque : celles qui manquent (non demandées). Mélange : les deux.', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_SubTendancesFilms', '↳ Rangée films', 'note', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['TitleTendancesFilms', 'Titre', 'text', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['_Blank1TendancesFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
@@ -428,8 +428,8 @@
             ['_Blank2TendancesSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
             ['_RowPopular', 'Populaires', 'note', 'Les titres les plus populaires sur TMDb en ce moment (comme « Films populaires » et « Séries populaires » de Seerr) : plus durables que les tendances. Nécessite Seerr.', 0, 0, 0, 'rows', 'c'],
             ['RowPopularTitle', 'Titre', 'text', 'Titre de la rangée des titres populaires.', 0, 0, 0, 'rows', 'c', 'Populaires'],
-            ['KindPopulaires', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
-            ['SourcePopulaires', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Bibliothèque seule : les titres populaires déjà présents. Hors bibliothèque : ceux qui manquent (non demandés). Mélange : les deux.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['KindPopulaires', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=en 2 rangées', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourcePopulaires', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Bibliothèque seule : les titres populaires déjà présents. Hors bibliothèque : ceux qui manquent (non demandés). Mélange : les deux.', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_SubPopulairesFilms', '↳ Rangée films', 'note', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['TitlePopulairesFilms', 'Titre', 'text', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['_Blank1PopulairesFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
@@ -440,8 +440,8 @@
             ['_Blank2PopulairesSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
             ['_RowUpcoming', 'À venir', 'note', 'Les prochaines sorties (films en salle bientôt, séries qui commencent), comme « À venir » dans Seerr : à demander d\'avance. Nécessite Seerr.', 0, 0, 0, 'rows', 'c'],
             ['RowUpcomingTitle', 'Titre', 'text', 'Titre de la rangée des titres à venir.', 0, 0, 0, 'rows', 'c', 'À venir'],
-            ['KindAVenir', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
-            ['SourceAVenir', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Un titre pas encore sorti n\'est presque jamais dans la bibliothèque : hors bibliothèque seuls par défaut.', 0, 0, 0, 'rows', 'c', 'hors bibliothèque seuls'],
+            ['KindAVenir', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=en 2 rangées', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourceAVenir', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Un titre pas encore sorti n\'est presque jamais dans la bibliothèque : hors bibliothèque seuls par défaut.', 0, 0, 0, 'rows', 'c', 'hors bibliothèque'],
             ['_SubAVenirFilms', '↳ Rangée films', 'note', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['TitleAVenirFilms', 'Titre', 'text', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['_Blank1AVenirFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
@@ -453,8 +453,8 @@
             ['_RowMine', 'Selon les goûts du compte', 'sep', '', 0, 0, 0, 'rows', 'c'],
             ['_RowNew', 'Nouveautés', 'note', 'Les titres arrivés récemment (voir « Nouveautés : arrivées depuis » dans les réglages avancés), dans l\'ordre des goûts du compte, sans ceux des rangées au-dessus. Moins de 4 titres : vide.', 0, 0, 0, 'rows', 'c'],
             ['RowNewTitle', 'Titre', 'text', 'Titre de la rangée des nouveautés.', 0, 0, 0, 'rows', 'c', 'Nouveautés pour toi'],
-            ['KindNouveautes', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
-            ['SourceNouveautes', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Hors bibliothèque : les titres sortis récemment (voir « sorties depuis » dans les réglages avancés).', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['KindNouveautes', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=en 2 rangées', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourceNouveautes', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Hors bibliothèque : les titres sortis récemment (voir « sorties depuis » dans les réglages avancés).', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_SubNouveautesFilms', '↳ Rangée films', 'note', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['TitleNouveautesFilms', 'Titre', 'text', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['_Blank1NouveautesFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
@@ -465,8 +465,8 @@
             ['_Blank2NouveautesSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
             ['_RowBecause', '« Parce que tu as aimé … » (1 à 3)', 'note', 'Jusqu\'à trois rangées dans Home Screen Sections, chacune autour d\'un titre que le compte a aimé (les plus aimés et récents d\'abord, jamais deux d\'une même saga), avec les titres qui lui ressemblent le plus, sans ceux des rangées au-dessus. Moins de 6 titres proches : vide.', 0, 0, 0, 'rows', 'c'],
             ['RowBecauseTitle', 'Titre', 'text', '{titre} (ou {title}) est remplacé par le titre aimé, propre à chaque compte, dans l\'interface web. Les autres clients (TV, applications) affichent le titre sans lui (« Parce que tu as aimé… »).', 0, 0, 0, 'rows', 'c', 'Parce que tu as aimé {titre}'],
-            ['KindParceQue', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
-            ['SourceParceQue', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Hors bibliothèque : les titres proches du titre aimé de chaque rangée, surtout par la ressemblance, comme ceux de la bibliothèque.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['KindParceQue', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=en 2 rangées', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourceParceQue', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Hors bibliothèque : les titres proches du titre aimé de chaque rangée, surtout par la ressemblance, comme ceux de la bibliothèque.', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_SubParceQueFilms', '↳ Rangée films', 'note', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ». {titre} (ou {title}) est remplacé par le titre aimé.', 0, 0, 0, 'rows', 'c'],
             ['TitleParceQueFilms', 'Titre', 'text', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ». {titre} (ou {title}) est remplacé par le titre aimé.', 0, 0, 0, 'rows', 'c'],
             ['_Blank1ParceQueFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
@@ -477,8 +477,8 @@
             ['_Blank2ParceQueSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
             ['_RowSuite', 'Suite du classement', 'note', 'Les titres suivants du classement du compte, sans ceux des rangées au-dessus. Par défaut séparée en deux rangées, films et séries ; réunie, une seule rangée de films et de séries.', 0, 0, 0, 'rows', 'c'],
             ['RowSuiteTitle', 'Titre', 'text', 'Titre de la rangée réunie (films et séries). Séparée ou d\'une seule sorte, ce sont les titres des rangées films et séries ci-dessous.', 0, 0, 0, 'rows', 'c', 'Encore pour toi'],
-            ['KindSuite', 'Films ou séries', 'enum:Split=séparés (2 rangées),Both=films et séries,Movies=films seulement,Series=séries seulement', 'Séparés (par défaut) : deux rangées, films et séries, chacune avec son titre. Films ou séries seulement : une rangée. Films et séries : une rangée réunie.', 0, 0, 0, 'rows', 'c', 'séparés (2 rangées)'],
-            ['SourceFilms', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Hors bibliothèque : les films et séries du mode étendu, selon la sorte de chaque rangée.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['KindSuite', 'Films ou séries', 'enum:Split=en 2 rangées,Both=films et séries,Movies=films seulement,Series=séries seulement', 'En 2 rangées (par défaut) : deux rangées, films et séries, chacune avec son titre. Films ou séries seulement : une rangée. Films et séries : une rangée réunie.', 0, 0, 0, 'rows', 'c', 'en 2 rangées'],
+            ['SourceFilms', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Hors bibliothèque : les films et séries du mode étendu, selon la sorte de chaque rangée.', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_SubSuiteFilms', '↳ Rangée films', 'note', 'Rangée des films de la suite du classement (séparée, ou films seulement).', 0, 0, 0, 'rows', 'c'],
             ['RowMoviesTitle', 'Titre', 'text', 'Titre de la rangée des films.', 0, 0, 0, 'rows', 'c', 'Films pour toi'],
             ['_Blank1SuiteFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
@@ -622,7 +622,7 @@
 
             // ---- Mode étendu
             ['ExtendedEnabled', 'Activer le mode étendu', 'bool', 'Recommande aussi des titres absents de la bibliothèque. Contrôle parental du compte respecté, avec les règles de Jellyfin (classification du pays choisi, titres non classés et étiquettes bloquées selon le compte).', 0, 0, 0, 'ext', 'c'],
-            ['ExtendedCount', 'Titres proposés', 'int', 'Nombre maximal de titres hors bibliothèque par compte, toutes rangées confondues : chacun ne va que dans une rangée. Par défaut, toutes les rangées en reçoivent : 40 en laisse environ 8 par rangée.', 1, 1, 100, 'ext', 'c', '40'],
+            ['ExtendedCount', 'Titres proposés', 'int', 'Nombre maximal de titres hors bibliothèque trouvés par l\'exploration, par compte, toutes rangées confondues : chacun ne va que dans une rangée. Les listes du moment (Tendances, Populaires, À venir) ont leurs propres titres, en plus.', 1, 1, 100, 'ext', 'c', '40'],
             ['RowNewReleasedDays', 'Nouveautés hors bibliothèque : sorties depuis (jours)', 'int', 'Seuls les titres hors bibliothèque sortis depuis ce nombre de jours vont dans la rangée des nouveautés (dans la bibliothèque, c\'est la date d\'ajout qui compte).', 30, 30, 3650, 'rowsadv', 'c', '365'],
             // Mélange (rangées réglées sur « mélange »)
             ['ExtendedMixMode', 'Façon de mélanger', 'enum:Interleave=à intervalle fixe,Score=libre (classement du moteur)', 'À intervalle fixe : un titre hors bibliothèque toutes les N cartes, quoi qu\'il arrive. Libre : bibliothèque et hors bibliothèque sont notés ensemble par le moteur, sur ce qu\'ils ont en commun (goût, note, sortie récente ; pas les « vus ensemble », la nouveauté ni la popularité sur le serveur, que seuls les titres de la bibliothèque peuvent avoir), et chacun prend sa place ; un titre hors bibliothèque moins bien classé que toute la rangée n\'apparaît pas, sauf pour atteindre le minimum ci-dessous.', 0, 0, 0, 'extmix', 'c', 'à intervalle fixe'],
@@ -829,15 +829,18 @@
                     var e = $('#' + fid(f));
                     if (e) { (e.closest('.rp-field') || e).classList.toggle('rp-hidden', !shows(SUBS[f[0]][1])); }
                 });
+                if (base !== 'Suite') {
+                    var lab = page.querySelector('label[for="' + idOf(KIND_TITLE[k]) + '"]');
+                    if (lab) { lab.textContent = t(split ? 'Titre de base' : 'Titre'); }
+                }
+                if (split) {
+                    n.textContent = '⇉ ' + t('Deux rangées dans Home Screen Sections, à la place de celle-ci chez les comptes qui l\'affichaient (à l\'enregistrement).');
+                }
                 if (split && base !== 'Suite') {
                     var raw = $('#' + idOf(KIND_TITLE[k])), def = fOf(KIND_TITLE[k]);
                     var tpl = raw && raw.value.trim() ? raw.value.trim() : t(def[9]);   // {titre} gardé : filigrane fidèle
                     $('#' + idOf('Title' + base + 'Films')).placeholder = tf('{0} : films', tpl);
                     $('#' + idOf('Title' + base + 'Series')).placeholder = tf('{0} : séries', tpl);
-                    n.textContent = '⇉ ' + t('Deux rangées dans Home Screen Sections, chacune avec son titre ci-dessous (vide = le titre de la rangée suivi de « : films » ou « : séries »). Les comptes qui affichaient la rangée reçoivent les deux à l\'enregistrement.');
-                }
-                else if (split) {
-                    n.textContent = '⇉ ' + t('Deux rangées dans Home Screen Sections, films et séries, chacune avec son titre ci-dessous. Les comptes qui affichaient la rangée reçoivent les deux à l\'enregistrement.');
                 }
             });
         }
@@ -915,6 +918,12 @@
             CalibrationSlowFolds: function () { return v('rpCalMethod') === 'ChoiceModel' ? t('ni recherche par curseurs ni réseau avec la méthode choisie') : ''; },
             CalibrationInnerFolds: function () { return v('rpCalMethod') === 'Coordinate' ? t('pas de régularisation à choisir avec la recherche par curseurs') : ''; }
         };
+        ['PourToi', 'Tendances', 'Populaires', 'AVenir', 'Nouveautes', 'ParceQue'].forEach(function (b) {
+            WHY[KIND_TITLE['Kind' + b]] = function () {
+                return val('Kind' + b) === 'Split' && (val('Title' + b + 'Films') || '').trim() && (val('Title' + b + 'Series') || '').trim()
+                    ? t('les deux rangées ont leur propre titre') : '';
+            };
+        });
         var G = {};
         function reason(f) {
             var name = f[0];
