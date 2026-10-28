@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.42.0",
+        "changelog": "1.0.42: mixed rows shorter than their size (Trending, Popular, a quiet month of new arrivals) are now completed with titles outside the library, which used to appear only when they outranked the few library titles; current lists get their titles outside the library even for accounts without a recent exploration; the preview shows how many list titles each account could get and how many were placed.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.41.0",
         "changelog": "1.0.41: splitting or merging a row now also updates the Home Screen Sections admin table (the new rows take the old one's place and settings), so accounts that follow the defaults keep the row; only accounts with their own saved choice are updated, the others are no longer frozen; the main title of a split row becomes its \"base title\" (unused once both halves have a title); shorter option labels and notes; extended-mode count help clarified.",
         "targetAbi": "12.2.0.0",

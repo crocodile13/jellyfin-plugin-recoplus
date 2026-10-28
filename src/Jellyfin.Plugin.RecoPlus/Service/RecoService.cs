@@ -656,6 +656,41 @@ public sealed class RecoService : IDisposable
                 uc.Slot = null;
             }
 
+            // accueil : titres hors bibliothèque dans les rangées qui en reçoivent, pour chaque vue (tranche horaire) ;
+            // renvoie la source de chaque titre placé dans la vue par défaut (bilan de l'aperçu)
+            List<string>? PlaceAll(List<(string Id, ExternalRec Rec)> general, Dictionary<string, ListPool> pools, double noise, string noiseSeed)
+            {
+                if (!cfg.AnyExternalRow() || views.Count == 0)
+                {
+                    return null;
+                }
+
+                List<string>? from = null;
+                foreach (var hv in views)
+                {
+                    uc.Slot = hv.Slot;
+                    var placed = PlaceExternals(uc, vec, key, r.Pinned, general, pools, hv, cfg, s, expo, noise, noiseSeed, titles, now);
+                    if (hv.Default)
+                    {
+                        (r.Rows, r.RowAnchors, r.Layouts) = (hv.View.Rows, hv.View.RowAnchors, hv.View.Layouts);
+                        var known = r.Extended.Select(e => e.MediaType + ":" + e.TmdbId).ToHashSet(StringComparer.Ordinal);
+                        foreach (var (rec, row, after) in placed)
+                        {
+                            (rec.Row, rec.After) = (row, after);
+                            if (known.Add(rec.MediaType + ":" + rec.TmdbId))
+                            {
+                                r.Extended.Add(rec);   // titre d'une liste TMDb : servi au client comme les autres
+                            }
+                        }
+
+                        from = placed.Select(x => x.Rec.Source).ToList();
+                    }
+                }
+
+                uc.Slot = null;
+                return from;
+            }
+
             var hid = hiddenTmdb.GetValueOrDefault(key);
             var extIds = extCands.TryGetValue(key, out var ex)
                 ? ex.Ids.Where(id => ListPolicy.Allows(titles[id], lo) && (hid is null || !hid.Contains(id.StartsWith("tmdb:", StringComparison.Ordinal) ? id[5..] : id))).ToList()
@@ -675,38 +710,19 @@ public sealed class RecoService : IDisposable
 
                 r.Extended = recs.Select(p => p.Rec!).ToList();
                 r.ExtendedAt = DateTime.UtcNow;
-                List<string>? placedFrom = null;
                 var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo);
-
-                // accueil : titres hors bibliothèque dans les rangées qui en reçoivent, pour chaque vue (tranche horaire)
-                if (cfg.AnyExternalRow() && views.Count > 0)
-                {
-                    foreach (var hv in views)
-                    {
-                        uc.Slot = hv.Slot;
-                        var placed = PlaceExternals(uc, vec, key, r.Pinned, recs.Select(p => (p.Id, p.Rec!)).ToList(), pools, hv, cfg, s, expo, noise, noiseSeed, titles, now);
-                        if (hv.Default)
-                        {
-                            (r.Rows, r.RowAnchors, r.Layouts) = (hv.View.Rows, hv.View.RowAnchors, hv.View.Layouts);
-                            var known = r.Extended.Select(e => e.MediaType + ":" + e.TmdbId).ToHashSet(StringComparer.Ordinal);
-                            foreach (var (rec, row, after) in placed)
-                            {
-                                (rec.Row, rec.After) = (row, after);
-                                if (known.Add(rec.MediaType + ":" + rec.TmdbId))
-                                {
-                                    r.Extended.Add(rec);   // titre d'une liste TMDb : servi au client comme les autres
-                                }
-                            }
-
-                            placedFrom = placed.Select(x => x.Rec.Source).ToList();
-                        }
-                    }
-
-                    uc.Slot = null;
-                }
+                var placedFrom = PlaceAll(recs.Select(p => (p.Id, p.Rec!)).ToList(), pools, noise, noiseSeed);
 
                 // bilan par source (aperçu) : trouvés, détaillés et autorisés, proposés, placés dans la rangée
-                r.Sources = Exploration.Stats(ex.Found, extIds.Select(id => ex.SourceOf.GetValueOrDefault(id, string.Empty)), r.Extended.Select(e => e.Source), placedFrom);
+                // listes du moment : « trouvés » = leurs titres hors bibliothèque proposables au compte (avant le goût minimal)
+                var found = new Dictionary<string, int>(ex.Found, StringComparer.Ordinal);
+                int inLists = pools.Values.Sum(p => p.Items.Count);
+                if (inLists > 0)
+                {
+                    found["list"] = inLists;
+                }
+
+                r.Sources = Exploration.Stats(found, extIds.Select(id => ex.SourceOf.GetValueOrDefault(id, string.Empty)), r.Extended.Select(e => e.Source), placedFrom);
             }
 
             // pas d'exploration pour ce compte (inactif, ou Seerr injoignable) : ses titres hors bibliothèque précédents restent
@@ -727,6 +743,24 @@ public sealed class RecoService : IDisposable
                 // leur place dans les rangées aussi (une rangée recalculée depuis se recompose sans ce qui a disparu)
                 var still = r.Extended.Select(e => e.MediaType + ":" + e.TmdbId).ToHashSet(StringComparer.Ordinal);
                 r.Layouts = prevRecs.Layouts.ToDictionary(kv => kv.Key, kv => kv.Value.Where(t => t.Length == 0 || still.Contains(t)).ToList(), StringComparer.Ordinal);
+            }
+
+            // pas d'exploration pour ce compte : les listes du moment reçoivent quand même leurs titres hors bibliothèque,
+            // et les titres hors bibliothèque gardés se replacent avec elles (rangées recomposées)
+            if (cfg.ExtendedEnabled && !(ex is not null && extIds.Count > 0))
+            {
+                var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo);
+                if (pools.Count > 0)
+                {
+                    var kept = r.Extended.Select(e => (Id: "tmdb:" + e.MediaType + ":" + e.TmdbId, Rec: e)).Where(p => titles.ContainsKey(p.Id)).ToList();
+                    foreach (var (_, e) in kept)
+                    {
+                        (e.Row, e.After) = (string.Empty, -1);   // replacés ci-dessous, ou plus dans une rangée
+                    }
+
+                    double noise = double.IsFinite(cfg.ExtendedNoise) ? Math.Clamp(cfg.ExtendedNoise, 0, 1) : 0;
+                    PlaceAll(kept, pools, noise, key + "|" + Exploration.Day(DateTime.UtcNow));
+                }
             }
 
             _recs[key] = r;
@@ -980,9 +1014,10 @@ public sealed class RecoService : IDisposable
                 .OrderByDescending(j => Exploration.ConfidentRating(titles[recs[cand[j]].Id].Community, titles[recs[cand[j]].Id].Votes))
                 .ThenBy(j => j);
             var (after, kept) = HomeRows.PlaceRow(lib.Select(rank).ToList(), cand.Select(i => rank(recs[i].Id)).ToList(), source, mix, discovery, size - skip);
+            // mélange : une rangée trop courte (liste du moment, nouveautés d'un mois calme) est complétée à la suite
             var mine = source == RowSource.Seerr
                 ? Enumerable.Range(0, Math.Min(cand.Count, size - skip)).ToList()
-                : Enumerable.Range(0, cand.Count).Where(j => after[j] < lib.Count).ToList();
+                : Enumerable.Range(0, cand.Count).Where(j => after[j] < lib.Count).Concat(HomeRows.FillTail(after, lib.Count, kept, size - skip)).ToList();
             if (mine.Count == 0)
             {
                 return -1;
