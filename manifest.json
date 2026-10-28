@@ -12,9 +12,9 @@
         "version": "1.0.37.0",
         "changelog": "1.0.37: new home rows \"Trending\", \"Popular right now\" and \"Upcoming\" (TMDb lists through Seerr, sorted by each account's taste, library and/or titles outside the library); TMDb trends now also raise the popularity bonus in every row; every row can show movies, series, both, or be split into two rows, and accounts' Home Screen Sections layouts follow automatically; new \"Home\" settings tab gathering titles, kinds and content of every row, with Seerr-dependent settings greyed out when Seerr is not used.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.37.0/RecoPlus_1.0.37.0.zip",
+        "checksum": "86618652facf5fb8d0ee3d0feaf0f96d",
+        "timestamp": "2026-10-28T12:51:08Z"
       },
       {
         "version": "1.0.36.0",
