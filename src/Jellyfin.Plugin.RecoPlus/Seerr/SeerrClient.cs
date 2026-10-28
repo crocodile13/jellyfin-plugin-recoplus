@@ -44,7 +44,7 @@ public sealed record SeerrRequest(int RequestedBy, string MediaType, int TmdbId,
 public sealed record SeerrWatch(string MediaType, int TmdbId, DateTime CreatedAt);
 
 /// <summary>Résultat d'une liste TMDb (recommandations, similaires, découverte, saga, filmographie).</summary>
-public sealed record SeerrResult(string MediaType, int TmdbId, string Name, bool Adult, int MediaStatus, double Vote, string? PosterPath, string? Date, int VoteCount = 0);
+public sealed record SeerrResult(string MediaType, int TmdbId, string Name, bool Adult, int MediaStatus, double Vote, string? PosterPath, string? Date, int VoteCount = 0, double Popularity = 0);
 
 /// <summary>Élément TMDb nommé (genre, mot-clé, personne, studio, chaîne).</summary>
 public sealed record SeerrRef(int Id, string Name);
@@ -318,7 +318,7 @@ public sealed class SeerrClient
                 var type = Str(r, "mediaType") is { Length: > 0 } t ? t : defaultType;
                 bool movie = type == "movie";
                 return new SeerrResult(type, Int(r, "id"), Str(r, movie ? "title" : "name"), Bool(r, "adult"), MediaStatusOf(r),
-                    Dbl(r, "voteAverage"), Str(r, "posterPath"), Str(r, movie ? "releaseDate" : "firstAirDate"), Int(r, "voteCount"));
+                    Dbl(r, "voteAverage"), Str(r, "posterPath"), Str(r, movie ? "releaseDate" : "firstAirDate"), Int(r, "voteCount"), Dbl(r, "popularity"));
             })
             .Where(r => r.TmdbId > 0 && r.MediaType is "movie" or "tv")
             .ToList();

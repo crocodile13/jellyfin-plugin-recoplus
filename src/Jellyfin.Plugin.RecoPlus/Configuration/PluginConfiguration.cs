@@ -15,6 +15,14 @@ public enum MixMode
     Score
 }
 
+/// <summary>Réglages d'une rangée de liste TMDb : titres lus, part du goût, filtres des titres hors bibliothèque.</summary>
+/// <param name="Count">Titres lus par sorte.</param>
+/// <param name="Taste">Part du goût dans l'ordre (0 = ordre de TMDb).</param>
+/// <param name="MinPopularity">Popularité TMDb minimale d'un titre hors bibliothèque.</param>
+/// <param name="MinVotes">Votes TMDb minimum d'un titre hors bibliothèque.</param>
+/// <param name="TasteFloor">Goût minimal d'un titre hors bibliothèque : quantile du classement de la bibliothèque du compte.</param>
+public sealed record ListRowSettings(int Count, double Taste, double MinPopularity, int MinVotes, double TasteFloor);
+
 /// <summary>Période des tendances TMDb.</summary>
 public enum TrendWindow
 {
@@ -76,11 +84,17 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Titres par rangée d'accueil.</summary>
     public int RowSize { get; set; } = 20;
 
-    /// <summary>Titre de la rangée des films (vide = titre par défaut, dans la langue du lecteur ; de même pour les autres titres).</summary>
+    /// <summary>
+    /// Titre de la rangée des films, moitié de la suite du classement (vide = titre par défaut, dans la langue du lecteur ;
+    /// de même pour les autres titres).
+    /// </summary>
     public string RowMoviesTitle { get; set; } = string.Empty;
 
-    /// <summary>Titre de la rangée des séries.</summary>
+    /// <summary>Titre de la rangée des séries, moitié de la suite du classement.</summary>
     public string RowSeriesTitle { get; set; } = string.Empty;
+
+    /// <summary>Titre de la suite du classement réunie (films et séries).</summary>
+    public string RowSuiteTitle { get; set; } = string.Empty;
 
     /// <summary>Titre de la rangée des nouveautés.</summary>
     public string RowNewTitle { get; set; } = string.Empty;
@@ -121,6 +135,63 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Sortes de titres des rangées « Parce que … ».</summary>
     public KindFilter KindParceQue { get; set; } = KindFilter.Both;
 
+    /// <summary>Sortes de titres de la suite du classement : séparée par défaut (rangées « Films » et « Séries »).</summary>
+    public KindFilter KindSuite { get; set; } = KindFilter.Split;
+
+    /// <summary>Titre de la moitié « films » de la rangée principale séparée (vide = titre de la rangée suivi de « : films »).</summary>
+    public string TitlePourToiFilms { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « séries » de la rangée principale séparée (vide = titre de la rangée suivi de « : séries »).</summary>
+    public string TitlePourToiSeries { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « films » de la rangée des tendances séparée (vide = titre de la rangée suivi de « : films »).</summary>
+    public string TitleTendancesFilms { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « séries » de la rangée des tendances séparée (vide = titre de la rangée suivi de « : séries »).</summary>
+    public string TitleTendancesSeries { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « films » de la rangée des titres populaires séparée (vide = titre de la rangée suivi de « : films »).</summary>
+    public string TitlePopulairesFilms { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « séries » de la rangée des titres populaires séparée (vide = titre de la rangée suivi de « : séries »).</summary>
+    public string TitlePopulairesSeries { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « films » de la rangée des titres à venir séparée (vide = titre de la rangée suivi de « : films »).</summary>
+    public string TitleAVenirFilms { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « séries » de la rangée des titres à venir séparée (vide = titre de la rangée suivi de « : séries »).</summary>
+    public string TitleAVenirSeries { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « films » de la rangée des nouveautés séparée (vide = titre de la rangée suivi de « : films »).</summary>
+    public string TitleNouveautesFilms { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « séries » de la rangée des nouveautés séparée (vide = titre de la rangée suivi de « : séries »).</summary>
+    public string TitleNouveautesSeries { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « films » de la rangée « Parce que … » ({titre} possible) séparée (vide = titre de la rangée suivi de « : films »).</summary>
+    public string TitleParceQueFilms { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « séries » de la rangée « Parce que … » ({titre} possible) séparée (vide = titre de la rangée suivi de « : séries »).</summary>
+    public string TitleParceQueSeries { get; set; } = string.Empty;
+
+    /// <summary>Titre saisi pour une moitié de rangée séparée (null : aucun pour cette rangée).</summary>
+    public string? SplitTitle(string kindRow, KindFilter half) => (kindRow, half == KindFilter.Movies) switch
+    {
+        (HomeRows.PourToi, true) => TitlePourToiFilms,
+        (HomeRows.PourToi, false) => TitlePourToiSeries,
+        (HomeRows.Tendances, true) => TitleTendancesFilms,
+        (HomeRows.Tendances, false) => TitleTendancesSeries,
+        (HomeRows.Populaires, true) => TitlePopulairesFilms,
+        (HomeRows.Populaires, false) => TitlePopulairesSeries,
+        (HomeRows.AVenir, true) => TitleAVenirFilms,
+        (HomeRows.AVenir, false) => TitleAVenirSeries,
+        (HomeRows.Nouveautes, true) => TitleNouveautesFilms,
+        (HomeRows.Nouveautes, false) => TitleNouveautesSeries,
+        (HomeRows.ParceQue, true) => TitleParceQueFilms,
+        (HomeRows.ParceQue, false) => TitleParceQueSeries,
+        _ => null,
+    };
+
     /// <summary>Sortes de titres choisies pour une rangée de base (« ParceQue2 » → celles de « ParceQue »).</summary>
     public KindFilter KindOf(string baseRow) => HomeRows.KindOfRow(baseRow) switch
     {
@@ -130,6 +201,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
         HomeRows.AVenir => KindAVenir,
         HomeRows.Nouveautes => KindNouveautes,
         HomeRows.ParceQue => KindParceQue,
+        HomeRows.Suite => KindSuite,
         _ => KindFilter.Both,
     };
 
@@ -157,12 +229,44 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public double UpcomingTaste { get; set; } = 0.8;
 
     /// <summary>Taille de lecture et part du goût d'une rangée de liste.</summary>
-    public (int Count, double Taste) ListSettings(string row) => row switch
+    public ListRowSettings ListSettings(string row) => row switch
     {
-        HomeRows.Tendances => (Math.Clamp(TrendingCount, 5, 100), Unit(TrendingTaste)),
-        HomeRows.Populaires => (Math.Clamp(PopularCount, 5, 100), Unit(PopularTaste)),
-        _ => (Math.Clamp(UpcomingCount, 5, 100), Unit(UpcomingTaste)),
+        HomeRows.Tendances => new(Math.Clamp(TrendingCount, 5, 100), Unit(TrendingTaste), Pos(TrendingMinPopularity), Math.Max(0, TrendingMinVotes), Unit(TrendingTasteFloor)),
+        HomeRows.Populaires => new(Math.Clamp(PopularCount, 5, 100), Unit(PopularTaste), Pos(PopularMinPopularity), Math.Max(0, PopularMinVotes), Unit(PopularTasteFloor)),
+        _ => new(Math.Clamp(UpcomingCount, 5, 100), Unit(UpcomingTaste), Pos(UpcomingMinPopularity), Math.Max(0, UpcomingMinVotes), Unit(UpcomingTasteFloor)),
     };
+
+    // listes du moment, titres hors bibliothèque : seulement ceux qui comptent (popularité TMDb, votes) et qui
+    // conviennent assez au compte (goût minimal : place dans son propre classement de la bibliothèque)
+
+    /// <summary>Tendances hors bibliothèque : popularité TMDb minimale (0 = aucune).</summary>
+    public double TrendingMinPopularity { get; set; }
+
+    /// <summary>Tendances hors bibliothèque : votes TMDb minimum.</summary>
+    public int TrendingMinVotes { get; set; } = 50;
+
+    /// <summary>Tendances hors bibliothèque : goût minimal (0 = aucun ; 0,5 = au moins aussi bien classé que la moitié de la bibliothèque du compte).</summary>
+    public double TrendingTasteFloor { get; set; } = 0.3;
+
+    /// <summary>Populaires hors bibliothèque : popularité TMDb minimale.</summary>
+    public double PopularMinPopularity { get; set; }
+
+    /// <summary>Populaires hors bibliothèque : votes TMDb minimum.</summary>
+    public int PopularMinVotes { get; set; } = 50;
+
+    /// <summary>Populaires hors bibliothèque : goût minimal.</summary>
+    public double PopularTasteFloor { get; set; } = 0.3;
+
+    /// <summary>À venir hors bibliothèque : popularité TMDb minimale (pas encore de votes : c'est l'attente qui compte).</summary>
+    public double UpcomingMinPopularity { get; set; } = 10;
+
+    /// <summary>À venir hors bibliothèque : votes TMDb minimum (0 : un titre pas encore sorti n'a presque pas de votes).</summary>
+    public int UpcomingMinVotes { get; set; }
+
+    /// <summary>À venir hors bibliothèque : goût minimal (plus haut : sans note ni votes, le goût fait le tri).</summary>
+    public double UpcomingTasteFloor { get; set; } = 0.5;
+
+    private static double Pos(double v) => double.IsFinite(v) ? Math.Max(0, v) : 0;
 
     private static double Unit(double v) => double.IsFinite(v) ? Math.Clamp(v, 0, 1) : 0;
 
@@ -439,11 +543,8 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Contenu des rangées « Parce que tu as aimé … » (hors bibliothèque : proches du titre aimé).</summary>
     public RowSource SourceParceQue { get; set; } = RowSource.Mix;
 
-    /// <summary>Contenu de la rangée « Films ».</summary>
+    /// <summary>Contenu de la suite du classement (rangées « Films » et « Séries », ou réunie ; nom historique).</summary>
     public RowSource SourceFilms { get; set; } = RowSource.Mix;
-
-    /// <summary>Contenu de la rangée « Séries ».</summary>
-    public RowSource SourceSeries { get; set; } = RowSource.Mix;
 
     /// <summary>Contenu de la rangée des tendances (hors bibliothèque : les tendances absentes de la bibliothèque).</summary>
     public RowSource SourceTendances { get; set; } = RowSource.Mix;
@@ -480,8 +581,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     {
         HomeRows.PourToi => SourcePourToi,
         HomeRows.Nouveautes => SourceNouveautes,
-        HomeRows.Films => SourceFilms,
-        HomeRows.Series => SourceSeries,
+        HomeRows.Suite => SourceFilms,
         HomeRows.ParceQue => SourceParceQue,
         HomeRows.Tendances => SourceTendances,
         HomeRows.Populaires => SourcePopulaires,

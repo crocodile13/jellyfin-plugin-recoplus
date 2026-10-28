@@ -181,15 +181,24 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     /// </summary>
     public static string DisplayTitle(Configuration.PluginConfiguration cfg, string row, string? anchor, string lang)
     {
-        var (b, sfx) = HomeRows.SplitOf(row);
+        // moitiés de la suite du classement : leurs titres de toujours
         if (row is HomeRows.Films or HomeRows.Series)
         {
-            sfx = null;
+            return RowTitle(cfg, row, lang);
         }
 
-        string t = b.StartsWith(HomeRows.ParceQue, StringComparison.Ordinal)
-            ? (anchor is null ? BecauseGeneric(cfg, lang) : Because(cfg, anchor, lang))
-            : RowTitle(cfg, b, lang);
+        var (b, sfx) = HomeRows.SplitOf(row);
+
+        bool because = b.StartsWith(HomeRows.ParceQue, StringComparison.Ordinal);
+        string Fill(string tpl) => !because ? tpl : anchor is null ? WithoutAnchor(tpl) : WithAnchor(tpl, anchor);
+
+        // moitié d'une rangée séparée : son propre titre s'il est saisi
+        if (sfx is { } half && cfg.SplitTitle(HomeRows.KindOfRow(b), half) is { } custom && !string.IsNullOrWhiteSpace(custom))
+        {
+            return Fill(custom.Trim());
+        }
+
+        string t = Fill(because ? Title(cfg.RowBecauseTitle, DefaultBecause, lang) : RowTitle(cfg, b, lang));
         return sfx switch
         {
             KindFilter.Movies => Texts.T("{0} : films", lang, t),
@@ -201,7 +210,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     /// <summary>Titres par défaut des rangées (français : la clé de traduction ; voir <see cref="Texts"/>).</summary>
     public const string DefaultPourToi = "Pour toi", DefaultNew = "Nouveautés pour toi", DefaultMovies = "Films pour toi",
         DefaultSeries = "Séries pour toi", DefaultBecause = "Parce que tu as aimé {titre}", DefaultExtended = "À découvrir pour toi",
-        DefaultTrending = "Tendances", DefaultPopular = "Populaires en ce moment", DefaultUpcoming = "À venir";
+        DefaultTrending = "Tendances", DefaultSuite = "Encore pour toi", DefaultPopular = "Populaires", DefaultUpcoming = "À venir";
 
     /// <summary>
     /// Titre choisi par l'administrateur, sinon le titre par défaut dans la langue voulue. Un titre resté égal au défaut
@@ -219,6 +228,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
         HomeRows.Tendances => Title(cfg.RowTrendingTitle, DefaultTrending, lang),
         HomeRows.Populaires => Title(cfg.RowPopularTitle, DefaultPopular, lang),
         HomeRows.AVenir => Title(cfg.RowUpcomingTitle, DefaultUpcoming, lang),
+        HomeRows.Suite => Title(cfg.RowSuiteTitle, DefaultSuite, lang),
         _ => Title(cfg.HssSectionTitle, DefaultPourToi, lang),
     };
 
@@ -230,8 +240,15 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
 
     /// <summary>Titre d'une rangée « Parce que … » autour d'un titre aimé.</summary>
     public static string Because(Configuration.PluginConfiguration cfg, string anchor, string lang)
+        => WithAnchor(Title(cfg.RowBecauseTitle, DefaultBecause, lang), anchor);
+
+    /// <summary>Titre générique des rangées « Parce que … » (clients sans le script web : TV, applications mobiles).</summary>
+    public static string BecauseGeneric(Configuration.PluginConfiguration cfg, string lang)
+        => WithoutAnchor(Title(cfg.RowBecauseTitle, DefaultBecause, lang));
+
+    /// <summary>Modèle « … {titre} … » rempli avec le titre aimé.</summary>
+    private static string WithAnchor(string t, string anchor)
     {
-        var t = Title(cfg.RowBecauseTitle, DefaultBecause, lang);
         foreach (var a in Anchors)
         {
             t = t.Replace(a, anchor, StringComparison.OrdinalIgnoreCase);
@@ -240,10 +257,9 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
         return t;
     }
 
-    /// <summary>Titre générique des rangées « Parce que … » (clients sans le script web : TV, applications mobiles).</summary>
-    public static string BecauseGeneric(Configuration.PluginConfiguration cfg, string lang)
+    /// <summary>Modèle « … {titre} … » sans titre aimé : « Parce que tu as aimé… ».</summary>
+    private static string WithoutAnchor(string t)
     {
-        var t = Title(cfg.RowBecauseTitle, DefaultBecause, lang);
         foreach (var a in Anchors)
         {
             int i = t.IndexOf(a, StringComparison.OrdinalIgnoreCase);
@@ -317,7 +333,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
             }
 
             // toutes les rangées séparables, listes TMDb comprises (même Seerr coupé : l'accueil reste cohérent)
-            var bases = HomeRows.BaseRows(true).Where(b => b is not HomeRows.Films and not HomeRows.Series).ToList();
+            var bases = HomeRows.BaseRows(true).ToList();
             int changed = 0;
             foreach (var u in _users.GetUsers())
             {

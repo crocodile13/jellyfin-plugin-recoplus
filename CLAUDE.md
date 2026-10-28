@@ -131,8 +131,9 @@ de la CI.
   l'heure de la journée est active, rangées, titres hors bibliothèque et composition des rangées.
 - Rangées d'accueil : `HomeRows.Allocate` remplit, sans doublon et dans l'ordre de `HomeRows.BaseRows` : « Pour
   toi », les listes TMDb du moment (Tendances, Populaires, À venir ; avec Seerr, `TmdbListsAsync`, ordre
-  `Trending.Order`), Nouveautés, « Parce que … » 1-3, Films, Séries. Chaque rangée de `HomeRows.KindRows` se règle en
-  films / séries / les deux / séparée (`KindFilter.Split` : identifiants suffixés `Films` et `Series`, servis par
+  `Trending.Order`), Nouveautés, « Parce que … » 1-3, suite du classement (`HomeRows.Suite` : séparée par défaut, ses
+  moitiés gardent les identifiants historiques `Films` et `Series` ; réunie : `Suite`). Chaque rangée de
+  `HomeRows.KindRows` se règle en films / séries / les deux / séparée (titre propre à chaque moitié) (`KindFilter.Split` : identifiants suffixés `Films` et `Series`, servis par
   `HssSectionHandler.GetRow` via `additionalData`) ; à l'enregistrement, `ReconcileSplits` met à jour l'accueil HSS de
   chaque compte (`SplitLayout.Apply`). La tendance TMDb entre aussi dans la popularité (`Dataset.Trending`,
   `TrendingShare`, OU probabiliste avec la popularité du foyer, parité avec le prototype) ; avec des titres hors bibliothèque, `PlaceExternals` choisit leur place selon le contenu de chaque rangée

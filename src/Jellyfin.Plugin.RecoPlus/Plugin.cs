@@ -55,7 +55,7 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
         {
             if (!home)
             {
-                c.SourcePourToi = c.SourceNouveautes = c.SourceParceQue = c.SourceFilms = c.SourceSeries = RowSource.Local;
+                c.SourcePourToi = c.SourceNouveautes = c.SourceParceQue = c.SourceFilms = RowSource.Local;
             }
 
             c.ExtendedHomeRow = null;
