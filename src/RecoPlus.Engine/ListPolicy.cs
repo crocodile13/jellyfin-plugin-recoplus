@@ -10,8 +10,8 @@ namespace RecoPlus.Engine;
 /// </summary>
 public sealed class ListOptions
 {
-    /// <summary>Haut de liste concerné par le hasard et les minimums (la rangée d'accueil montre 20 titres).</summary>
-    public int Window { get; set; } = 20;
+    /// <summary>Haut de liste concerné par le hasard et les minimums ; 0 = automatique : la taille des rangées d'accueil.</summary>
+    public int Window { get; set; }
 
     /// <summary>Part du haut de liste tirée au hasard parmi tous les titres proposables (0-50 %).</summary>
     public double RandomPercent { get; set; }
@@ -32,9 +32,10 @@ public sealed class ListOptions
     public int MinYear { get; set; }
 
     /// <summary>Copie ramenée dans un domaine sûr.</summary>
-    public ListOptions Sanitized()
+    /// <param name="rowSize">Taille des rangées d'accueil : haut de liste quand il est automatique (0).</param>
+    public ListOptions Sanitized(int rowSize = 20)
     {
-        var w = Math.Clamp(Window, 5, 100);
+        var w = Math.Clamp(Window > 0 ? Window : rowSize, 5, 100);
         var movies = Math.Clamp(MinMovies, 0, w);
         var series = Math.Clamp(MinSeries, 0, w);
         if (movies + series > w)
