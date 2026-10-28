@@ -70,6 +70,7 @@ public sealed class SeerrService
     // listes d'exploration : découverte 3 jours, sagas et filmographies 7 jours (elles bougent peu)
     private static readonly TimeSpan DiscoverTtl = TimeSpan.FromDays(3);
     private static readonly TimeSpan StableListTtl = TimeSpan.FromDays(7);
+    private static readonly TimeSpan ListTtl = TimeSpan.FromHours(6);   // tendances, populaires, à venir
     private readonly IHttpClientFactory _http;
     private readonly SecretStore _secrets;
     private readonly ILogger<SeerrService> _log;
@@ -539,6 +540,13 @@ public sealed class SeerrService
         => CachedListAsync(
             "d:" + mediaType + ":" + page + ":" + string.Join("&", query.OrderBy(kv => kv.Key, StringComparer.Ordinal).Select(kv => kv.Key + "=" + kv.Value)),
             DiscoverTtl, c => cl.DiscoverAsync(mediaType, query, page, c), ct);
+
+    /// <summary>Une page d'une liste TMDb (tendances, populaires, à venir) ; cache 6 heures, partagé entre les comptes.</summary>
+    public Task<List<SeerrResult>> ListAsync(SeerrClient cl, string list, string query, string defaultType, int page, CancellationToken ct)
+    {
+        var lang = Plugin.Instance?.Configuration.TmdbLanguage() ?? "en";
+        return CachedListAsync("L:" + list + "?" + query + ":" + page + ":" + lang, ListTtl, c => cl.ListAsync(list, query, defaultType, lang, page, c), ct);
+    }
 
     /// <summary>Films d'une saga TMDb (cache 7 jours).</summary>
     public Task<List<SeerrResult>> CollectionAsync(SeerrClient cl, int collectionId, CancellationToken ct)

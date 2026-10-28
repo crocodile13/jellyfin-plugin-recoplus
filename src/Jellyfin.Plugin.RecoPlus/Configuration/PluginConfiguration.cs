@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MediaBrowser.Model.Plugins;
 using RecoPlus.Engine;
@@ -12,6 +13,16 @@ public enum MixMode
 
     /// <summary>Libre : chacun à la place que lui donne le classement commun du moteur.</summary>
     Score
+}
+
+/// <summary>Période des tendances TMDb.</summary>
+public enum TrendWindow
+{
+    /// <summary>Tendances de la semaine (plus stables).</summary>
+    Week,
+
+    /// <summary>Tendances du jour.</summary>
+    Day
 }
 
 /// <summary>Type de webhook de notification.</summary>
@@ -79,6 +90,81 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>Titre des rangées « Parce que … » ({titre} ou {title} = le titre aimé).</summary>
     public string RowBecauseTitle { get; set; } = string.Empty;
+
+    /// <summary>Titre de la rangée des tendances.</summary>
+    public string RowTrendingTitle { get; set; } = string.Empty;
+
+    /// <summary>Titre de la rangée des titres populaires.</summary>
+    public string RowPopularTitle { get; set; } = string.Empty;
+
+    /// <summary>Titre de la rangée des titres à venir.</summary>
+    public string RowUpcomingTitle { get; set; } = string.Empty;
+
+    // sortes de titres de chaque rangée : films et séries ensemble, films, séries, ou deux rangées séparées
+    // (« Films pour toi » et « Séries pour toi » sont déjà d'une seule sorte)
+
+    /// <summary>Sortes de titres de la rangée principale.</summary>
+    public KindFilter KindPourToi { get; set; } = KindFilter.Both;
+
+    /// <summary>Sortes de titres de la rangée des tendances.</summary>
+    public KindFilter KindTendances { get; set; } = KindFilter.Both;
+
+    /// <summary>Sortes de titres de la rangée des titres populaires.</summary>
+    public KindFilter KindPopulaires { get; set; } = KindFilter.Both;
+
+    /// <summary>Sortes de titres de la rangée des titres à venir.</summary>
+    public KindFilter KindAVenir { get; set; } = KindFilter.Both;
+
+    /// <summary>Sortes de titres de la rangée des nouveautés.</summary>
+    public KindFilter KindNouveautes { get; set; } = KindFilter.Both;
+
+    /// <summary>Sortes de titres des rangées « Parce que … ».</summary>
+    public KindFilter KindParceQue { get; set; } = KindFilter.Both;
+
+    /// <summary>Sortes de titres choisies pour une rangée de base (« ParceQue2 » → celles de « ParceQue »).</summary>
+    public KindFilter KindOf(string baseRow) => HomeRows.KindOfRow(baseRow) switch
+    {
+        HomeRows.PourToi => KindPourToi,
+        HomeRows.Tendances => KindTendances,
+        HomeRows.Populaires => KindPopulaires,
+        HomeRows.AVenir => KindAVenir,
+        HomeRows.Nouveautes => KindNouveautes,
+        HomeRows.ParceQue => KindParceQue,
+        _ => KindFilter.Both,
+    };
+
+    // rangées tirées des listes TMDb (via Seerr)
+
+    /// <summary>Tendances : celles de la semaine ou du jour.</summary>
+    public TrendWindow TrendingWindow { get; set; } = TrendWindow.Week;
+
+    /// <summary>Tendances : titres lus par sorte (films, séries), dans l'ordre de TMDb.</summary>
+    public int TrendingCount { get; set; } = 40;
+
+    /// <summary>Tendances : part du goût du compte dans l'ordre de la rangée (0 = ordre de TMDb, 1 = goût seul).</summary>
+    public double TrendingTaste { get; set; } = 0.6;
+
+    /// <summary>Populaires : titres lus par sorte.</summary>
+    public int PopularCount { get; set; } = 40;
+
+    /// <summary>Populaires : part du goût du compte dans l'ordre de la rangée.</summary>
+    public double PopularTaste { get; set; } = 0.6;
+
+    /// <summary>À venir : titres lus par sorte.</summary>
+    public int UpcomingCount { get; set; } = 40;
+
+    /// <summary>À venir : part du goût du compte dans l'ordre de la rangée.</summary>
+    public double UpcomingTaste { get; set; } = 0.8;
+
+    /// <summary>Taille de lecture et part du goût d'une rangée de liste.</summary>
+    public (int Count, double Taste) ListSettings(string row) => row switch
+    {
+        HomeRows.Tendances => (Math.Clamp(TrendingCount, 5, 100), Unit(TrendingTaste)),
+        HomeRows.Populaires => (Math.Clamp(PopularCount, 5, 100), Unit(PopularTaste)),
+        _ => (Math.Clamp(UpcomingCount, 5, 100), Unit(UpcomingTaste)),
+    };
+
+    private static double Unit(double v) => double.IsFinite(v) ? Math.Clamp(v, 0, 1) : 0;
 
     /// <summary>
     /// Compter ce qui est montré sans être ouvert (seulement quand une rangée Reco+ est réellement à l'écran du compte
@@ -359,6 +445,15 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Contenu de la rangée « Séries ».</summary>
     public RowSource SourceSeries { get; set; } = RowSource.Mix;
 
+    /// <summary>Contenu de la rangée des tendances (hors bibliothèque : les tendances absentes de la bibliothèque).</summary>
+    public RowSource SourceTendances { get; set; } = RowSource.Mix;
+
+    /// <summary>Contenu de la rangée des titres populaires.</summary>
+    public RowSource SourcePopulaires { get; set; } = RowSource.Mix;
+
+    /// <summary>Contenu de la rangée des titres à venir (presque jamais dans la bibliothèque : Seerr par défaut).</summary>
+    public RowSource SourceAVenir { get; set; } = RowSource.Seerr;
+
     /// <summary>Nouveautés hors bibliothèque : sortis depuis ce nombre de jours.</summary>
     public int RowNewReleasedDays { get; set; } = 365;
 
@@ -381,19 +476,23 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public string ExtendedTitle { get; set; } = string.Empty;
 
     /// <summary>Contenu choisi pour une rangée (« ParceQue1 » à « ParceQue3 » partagent le leur).</summary>
-    public RowSource SourceOf(string row) => row switch
+    public RowSource SourceOf(string row) => HomeRows.KindOfRow(row) switch
     {
         HomeRows.PourToi => SourcePourToi,
         HomeRows.Nouveautes => SourceNouveautes,
         HomeRows.Films => SourceFilms,
         HomeRows.Series => SourceSeries,
-        _ when row.StartsWith(HomeRows.ParceQue, System.StringComparison.Ordinal) => SourceParceQue,
+        HomeRows.ParceQue => SourceParceQue,
+        HomeRows.Tendances => SourceTendances,
+        HomeRows.Populaires => SourcePopulaires,
+        HomeRows.AVenir => SourceAVenir,
         _ => RowSource.Local,
     };
 
     /// <summary>Au moins une rangée reçoit des titres hors bibliothèque.</summary>
     public bool AnyExternalRow() => SourcePourToi != RowSource.Local || SourceNouveautes != RowSource.Local
-        || SourceParceQue != RowSource.Local || SourceFilms != RowSource.Local || SourceSeries != RowSource.Local;
+        || SourceParceQue != RowSource.Local || SourceFilms != RowSource.Local || SourceSeries != RowSource.Local
+        || SourceTendances != RowSource.Local || SourcePopulaires != RowSource.Local || SourceAVenir != RowSource.Local;
 
     /// <summary>Bouton « Demander » (la demande est faite au nom de l'utilisateur, avec ses droits et quotas Seerr).</summary>
     public bool ExtendedRequestButton { get; set; } = true;

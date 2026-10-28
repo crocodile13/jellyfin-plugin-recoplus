@@ -47,7 +47,10 @@
                 #RecoPlusConfigPage .rp-factor.off .rp-mult { opacity: .5; }
                 #RecoPlusConfigPage .rp-factor .rp-tip { position: relative; }
                 @media (max-width: 600px) { #RecoPlusConfigPage .rp-factors { grid-template-columns: 1fr; } #RecoPlusConfigPage .rp-factor { grid-template-columns: 1fr 1fr 1.6em; } #RecoPlusConfigPage .rp-factor .rp-mult { grid-column: 1 / 3; } }
-                #RecoPlusConfigPage .rp-rows { display: grid; grid-template-columns: minmax(14em, 1fr) minmax(14em, 2fr); gap: 0 2em; align-items: end; max-width: 56em; }
+                #RecoPlusConfigPage .rp-rows { display: grid; grid-template-columns: minmax(11em, 1.1fr) minmax(12em, 1.5fr) minmax(11em, 1.1fr) minmax(10em, 1fr); gap: 0 1.6em; align-items: end; }
+                #RecoPlusConfigPage .rp-rowsep { grid-column: 1 / -1; margin: .6em 0 0; padding-top: .5em; border-top: 1px solid var(--rp-line); font-size: .85em; color: var(--rp-mute); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+                #RecoPlusConfigPage .rp-splitnote { grid-column: 1 / -1; margin: -.6em 0 1em; font-size: .85em; color: var(--rp-accent); }
+                @media (max-width: 900px) { #RecoPlusConfigPage .rp-rows { grid-template-columns: 1fr 1fr; } }
                 #RecoPlusConfigPage .rp-note { margin-bottom: 1.2em; padding-top: 1.4em; font-weight: 600; }
                 #RecoPlusConfigPage .rp-hidden { display: none !important; }
                 /* réglage sans effet dans la configuration actuelle : grisé, raison dessous (ou une fois en tête de boîte) */
@@ -65,7 +68,7 @@
                 #RecoPlusConfigPage .rp-logline.lv-WRN b { color: #e6a23c; } #RecoPlusConfigPage .rp-logline.lv-ERR b, #RecoPlusConfigPage .rp-logline.lv-FTL b { color: #ec6262; }
                 #RecoPlusConfigPage .rp-logline.lv-ERR, #RecoPlusConfigPage .rp-logline.lv-FTL { background: rgba(236,98,98,.08); }
                 #RecoPlusConfigPage .rp-log input, #RecoPlusConfigPage #rpLogFilter { font: inherit; }
-                @media (max-width: 600px) { #RecoPlusConfigPage .rp-rows { grid-template-columns: 1fr; } }
+                @media (max-width: 600px) { #RecoPlusConfigPage .rp-rows { grid-template-columns: 1fr; } #RecoPlusConfigPage .rp-rows .rp-note { padding-top: .6em; border-top: 1px solid var(--rp-line); } }
                 #RecoPlusConfigPage .rp-default { color: var(--rp-mute); font-size: .85em; margin-top: .4em; display: block; }
                 #RecoPlusConfigPage .rp-checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .1em 1em; max-height: 18em; overflow: auto; padding: .3em 0; }
                 #RecoPlusConfigPage .rp-checks label { display: flex; gap: .5em; align-items: center; cursor: pointer; padding: .2em 0; }
@@ -88,6 +91,7 @@
             <div class="rp-tabs">
                 <button type="button" class="rp-tab on" data-tab="etat">État</button>
                 <button type="button" class="rp-tab" data-tab="general">Général</button>
+                <button type="button" class="rp-tab" data-tab="accueil">Accueil</button>
                 <button type="button" class="rp-tab" data-tab="listes">Listes</button>
                 <button type="button" class="rp-tab" data-tab="seerr">Seerr</button>
                 <button type="button" class="rp-tab" data-tab="etendu">Mode étendu</button>
@@ -122,13 +126,34 @@
                 <!-- GÉNÉRAL -->
                 <div class="rp-pane" data-pane="general">
                     <div class="rp-box"><h3>Ce que Reco+ remplace</h3><p>Chaque interrupteur coupé rend la main à Jellyfin pour cette partie.</p><div class="rp-grid" data-fields="replace"></div></div>
-                    <div class="rp-box"><h3>Rangées d'accueil</h3><p>Quelles rangées afficher, dans quel ordre et pour quels comptes : cela se règle dans Home Screen Sections, où toutes les rangées Reco+ figurent (« Add Section »). Ici, seulement leurs titres (effet immédiat). Reco+ ne remplit que les rangées que HSS montre à chaque compte, et un titre n'y apparaît jamais deux fois (dans l'ordre de ce tableau) ; les autres rangées de l'accueil ne sont pas concernées.</p><div class="rp-rows" data-fields="rows"></div></div>
-                    <div class="rp-box"><h3>Ce que le compte a dit explicitement</h3><p>Sources de retours explicites, en plus de l'historique de lecture et des favoris (films, séries, saisons et épisodes).</p><div class="rp-grid" data-fields="sources"></div></div>
+                    <div class="rp-box"><h3>Ce qui est lu en plus de l'historique</h3><p>En plus de l'historique de lecture et des favoris (films, séries, saisons et épisodes) : ce que les comptes ont dit explicitement, et des données TMDb lues via Seerr.</p><div class="rp-grid" data-fields="sources"></div></div>
                     <div class="rp-box"><h3>Comptes ignorés</h3><p>Ces comptes n'ont pas de recommandations Reco+ (Jellyfin leur répond normalement) et leur historique ne compte pas pour le foyer : compte invité, de test, d'un enfant…</p><div data-fields="users"></div></div>
                     <div class="rp-box"><h3>Langue</h3><div class="rp-grid" data-fields="lang"></div></div>
-                    <details class="rp-adv"><summary>Réglages avancés <span>— taille des rangées, nouveautés, fonctionnement</span></summary>
-                        <div class="rp-box"><h3>Rangées d'accueil</h3><div class="rp-grid" data-fields="rowsadv"></div></div>
+                    <details class="rp-adv"><summary>Réglages avancés <span>— « Plus comme ceci », recalculs, fuseau, performances</span></summary>
                         <div class="rp-box"><h3>Fonctionnement</h3><div class="rp-grid" data-fields="genadv"></div></div>
+                    </details>
+                </div>
+
+                <!-- ACCUEIL -->
+                <div class="rp-pane" data-pane="accueil">
+                    <div class="rp-box"><h3>Rangées d'accueil</h3>
+                        <p>Quelles rangées afficher, dans quel ordre et pour quels comptes : cela se règle dans Home Screen Sections (« Add Section »), où figurent toutes les rangées Reco+. Ici, pour chacune : son titre, films et/ou séries, et son contenu. Un titre n'apparaît jamais dans deux rangées : chacune prend dans l'ordre de ce tableau, et seulement parmi les rangées que HSS montre au compte.</p>
+                        <p><b>Films et séries, en deux rangées</b> : la rangée devient deux rangées dans Home Screen Sections, « … : films » et « … : séries ». À l'enregistrement, chaque compte qui affichait la rangée reçoit les deux à sa place (et les retrouve réunies si l'on revient en arrière) ; un compte qui n'en a gardé qu'une moitié la garde. Contenu : bibliothèque seule, titres hors bibliothèque seuls (mode étendu, interface web seulement : les applications TV gardent la bibliothèque), ou les deux mélangés.</p>
+                        <div class="rp-rows" data-fields="rows"></div>
+                    </div>
+                    <div class="rp-box"><h3>Listes du moment (TMDb)</h3>
+                        <p>Rangées Tendances, Populaires et À venir : les listes de TMDb lues via Seerr à chaque calcul complet (en cache 6 heures), pour les films et pour les séries. Chaque compte n'y voit que ce qu'il n'a pas vu, rangé selon ses goûts autant que réglé ici. Sans Seerr, ces rangées n'existent pas dans Home Screen Sections.</p>
+                        <h4 class="rp-h4">Tendances</h4><div class="rp-grid" data-fields="lt"></div>
+                        <h4 class="rp-h4">Populaires</h4><div class="rp-grid" data-fields="lp"></div>
+                        <h4 class="rp-h4">À venir</h4><div class="rp-grid" data-fields="lu"></div>
+                    </div>
+                    <div class="rp-box" id="rpMixBox">
+                        <h3>Mélange</h3>
+                        <p>Pour les rangées dont le contenu est « mélange » : comment les titres hors bibliothèque s'y glissent.</p>
+                        <div class="rp-grid" data-fields="extmix"></div>
+                    </div>
+                    <details class="rp-adv"><summary>Réglages avancés <span>— taille des rangées, nouveautés</span></summary>
+                        <div class="rp-box"><div class="rp-grid" data-fields="rowsadv"></div></div>
                     </details>
                 </div>
 
@@ -194,16 +219,7 @@
                         <p>Titres du catalogue TMDb (via Seerr) trouvés à partir de ce que chaque compte aime, triés par le même moteur et le même garde-fou. Rien n'est jamais demandé automatiquement. Nécessite Seerr.</p>
                         <div class="rp-grid" data-fields="ext"></div>
                     </div>
-                    <div class="rp-box">
-                        <h3>Sur l'accueil : contenu de chaque rangée</h3>
-                        <p>Pour chaque rangée Reco+ : la bibliothèque seule, les titres hors bibliothèque seuls (Seerr), ou les deux mélangés. Un titre hors bibliothèque ne va que dans une rangée, celle du haut d'abord ; les titres de la bibliothèque qu'il remplace passent aux rangées suivantes. Chaque rangée garde sa taille. Seerr seul : dans l'interface web seulement (les applications TV gardent la bibliothèque), et la rangée garde la bibliothèque tant qu'aucun titre hors bibliothèque ne lui va. Avec Jellyfin Enhanced relié à Seerr : ses cartes, sa fiche et son bouton Demander.</p>
-                        <div class="rp-grid" data-fields="exthome"></div>
-                    </div>
-                    <div class="rp-box" id="rpMixBox">
-                        <h3>Mélange</h3>
-                        <p>Pour les rangées réglées sur « mélange ».</p>
-                        <div class="rp-grid" data-fields="extmix"></div>
-                    </div>
+                    <p class="rp-sub">Où vont ces titres sur l'accueil : colonne « Contenu » de l'onglet Accueil. Un titre hors bibliothèque ne va que dans une rangée, celle du haut d'abord ; chaque rangée garde sa taille. Avec Jellyfin Enhanced relié à Seerr : ses cartes, sa fiche et son bouton Demander.</p>
                     <div class="rp-box">
                         <h3>Où chercher</h3>
                         <p>Sources des titres proposés, en plus des recommandations des titres aimés. Chacune apporte sa part, puis le moteur les classe toutes de la même façon, selon les goûts du compte.</p>
@@ -378,20 +394,51 @@
             ['OverrideMovieRecommendations', 'Recommandations de films', 'bool', 'Onglet « Suggestions » des films, Media Bar, et tout ce qui appelle /Movies/Recommendations. Reco+ y met des catégories « Parce que tu as aimé X » tirées de tout l\'historique (Jellyfin : les 7 derniers films vus).', 0, 0, 0, 'replace', 'c'],
             ['OverrideSuggestions', 'Suggestions', 'bool', '/Items/Suggestions : chez Jellyfin, des titres au hasard. Reco+ y met la liste classée du compte.', 0, 0, 0, 'replace', 'c'],
             ['OverrideSimilar', '« Plus comme ceci »', 'bool', 'Sur la fiche d\'un film ou d\'une série. Jellyfin : recouvrement de genres et de personnes pour les films, séries au hasard. Reco+ : ressemblance de contenu, un peu des goûts du compte, et le volet suivant d\'une saga en premier.', 0, 0, 0, 'replace', 'c'],
-            // Rangées d'accueil : une ligne par rangée, l'interrupteur et le titre côte à côte
-            ['_RowMain', 'Rangée principale', 'note', 'Le classement du compte : demandes arrivées et nouvelles saisons en tête, puis ses titres. Avec le mode étendu, elle peut aussi recevoir des titres hors bibliothèque (onglet Mode étendu).', 0, 0, 0, 'rows', 'c'],
+            // Rangées d'accueil : une ligne par rangée (titre, sortes, contenu), dans l'ordre où elles se servent
+            ['_RowMain', 'Rangée principale', 'note', 'Le classement du compte : demandes arrivées et nouvelles saisons en tête, puis ses titres.', 0, 0, 0, 'rows', 'c'],
             ['HssSectionTitle', 'Titre', 'text', 'Titre de la rangée principale. Vide = le titre par défaut, dans la langue de chacun. Partout ailleurs sur cette page, {ROW} désigne cette rangée.', 0, 0, 0, 'rows', 'c', 'Pour toi'],
+            ['KindPourToi', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=films et séries séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourcePourToi', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Hors bibliothèque : tous les titres du mode étendu peuvent y aller (les mieux classés d\'abord). Sans Home Screen Sections : décide de la rangée à part du mode étendu. Les demandes arrivées et nouvelles saisons en tête ne bougent pas.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['_RowLists', 'Listes du moment (TMDb, via Seerr)', 'sep', '', 0, 0, 0, 'rows', 'c'],
+            ['_RowTrending', 'Tendances', 'note', 'Ce qui fait parler en ce moment sur TMDb (tendances de la semaine ou du jour), rangé selon les goûts du compte (réglage plus bas). Nécessite Seerr.', 0, 0, 0, 'rows', 'c'],
+            ['RowTrendingTitle', 'Titre', 'text', 'Titre de la rangée des tendances.', 0, 0, 0, 'rows', 'c', 'Tendances'],
+            ['KindTendances', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=films et séries séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourceTendances', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Bibliothèque seule : les tendances déjà présentes. Hors bibliothèque : celles qui manquent (non demandées). Mélange : les deux.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['_RowPopular', 'Populaires', 'note', 'Les titres les plus populaires sur TMDb en ce moment (comme « Films populaires » et « Séries populaires » de Seerr) : plus durables que les tendances. Nécessite Seerr.', 0, 0, 0, 'rows', 'c'],
+            ['RowPopularTitle', 'Titre', 'text', 'Titre de la rangée des titres populaires.', 0, 0, 0, 'rows', 'c', 'Populaires en ce moment'],
+            ['KindPopulaires', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=films et séries séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourcePopulaires', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Bibliothèque seule : les titres populaires déjà présents. Hors bibliothèque : ceux qui manquent (non demandés). Mélange : les deux.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['_RowUpcoming', 'À venir', 'note', 'Les prochaines sorties (films en salle bientôt, séries qui commencent), comme « À venir » dans Seerr : à demander d\'avance. Nécessite Seerr.', 0, 0, 0, 'rows', 'c'],
+            ['RowUpcomingTitle', 'Titre', 'text', 'Titre de la rangée des titres à venir.', 0, 0, 0, 'rows', 'c', 'À venir'],
+            ['KindAVenir', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=films et séries séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourceAVenir', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Un titre pas encore sorti n\'est presque jamais dans la bibliothèque : hors bibliothèque seuls par défaut.', 0, 0, 0, 'rows', 'c', 'hors bibliothèque seuls'],
+            ['_RowMine', 'Selon les goûts du compte', 'sep', '', 0, 0, 0, 'rows', 'c'],
             ['_RowNew', 'Nouveautés', 'note', 'Les titres arrivés récemment (voir « Nouveautés : arrivées depuis » dans les réglages avancés), dans l\'ordre des goûts du compte, sans ceux des rangées au-dessus. Moins de 4 titres : vide.', 0, 0, 0, 'rows', 'c'],
             ['RowNewTitle', 'Titre', 'text', 'Titre de la rangée des nouveautés.', 0, 0, 0, 'rows', 'c', 'Nouveautés pour toi'],
+            ['KindNouveautes', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=films et séries séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourceNouveautes', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Hors bibliothèque : les titres sortis récemment (voir « sorties depuis » dans les réglages avancés).', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_RowBecause', '« Parce que tu as aimé … » (1 à 3)', 'note', 'Jusqu\'à trois rangées dans Home Screen Sections, chacune autour d\'un titre que le compte a aimé (les plus aimés et récents d\'abord, jamais deux d\'une même saga), avec les titres qui lui ressemblent le plus, sans ceux des rangées au-dessus. Moins de 6 titres proches : vide.', 0, 0, 0, 'rows', 'c'],
             ['RowBecauseTitle', 'Titre', 'text', '{titre} (ou {title}) est remplacé par le titre aimé, propre à chaque compte, dans l\'interface web. Les autres clients (TV, applications) affichent le titre sans lui (« Parce que tu as aimé… »).', 0, 0, 0, 'rows', 'c', 'Parce que tu as aimé {titre}'],
+            ['KindParceQue', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=films et séries séparés (2 rangées)', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourceParceQue', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Hors bibliothèque : les titres proches du titre aimé de chaque rangée, surtout par la ressemblance, comme ceux de la bibliothèque.', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_RowMovies', 'Films', 'note', 'Les films suivants du classement du compte, sans ceux des rangées au-dessus.', 0, 0, 0, 'rows', 'c'],
             ['RowMoviesTitle', 'Titre', 'text', 'Titre de la rangée des films.', 0, 0, 0, 'rows', 'c', 'Films pour toi'],
+            ['_Blank_RowMovies', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
+            ['SourceFilms', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Hors bibliothèque : les films.', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_RowSeries', 'Séries', 'note', 'Les séries suivantes du classement du compte, sans celles des rangées au-dessus.', 0, 0, 0, 'rows', 'c'],
             ['RowSeriesTitle', 'Titre', 'text', 'Titre de la rangée des séries.', 0, 0, 0, 'rows', 'c', 'Séries pour toi'],
-            ['_ExtendedRowNote', 'Rangée à part du mode étendu', 'note', 'Seulement sans Home Screen Sections : les titres hors bibliothèque ont alors leur propre rangée, sous la première de l\'accueil (si la rangée principale en reçoit, onglet Mode étendu). Avec HSS, ils vont dans les rangées Reco+ et ce titre ne sert pas.', 0, 0, 0, 'rows', 'c'],
-            ['ExtendedTitle', 'Titre', 'text', 'Titre de la rangée à part du mode étendu (sans Home Screen Sections).', 0, 0, 0, 'rows', 'c', 'À découvrir pour toi'],
-            ['RowSize', 'Titres par rangée', 'int', 'Pour chaque rangée Reco+, {ROW} comprise.', 1, 5, 60, 'rowsadv', 'c', '20'],
+            ['_Blank_RowSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
+            ['SourceSeries', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque seuls', 'Hors bibliothèque : les séries.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            // Listes du moment : lecture et ordre
+            ['TrendingWindow', 'Période', 'enum:Week=tendances de la semaine,Day=tendances du jour', 'Semaine : plus stable, ce qui dure. Jour : ce qui buzze aujourd\'hui, change vite.', 0, 0, 0, 'lt', 'c', 'semaine'],
+            ['TrendingCount', 'Titres lus par sorte', 'int', 'Les N premiers de la liste TMDb, pour les films et pour les séries (20 par page lue). Plus = plus de choix pour chaque compte, une tendance plus faible en bas de liste.', 5, 5, 100, 'lt', 'c', '40'],
+            ['TrendingTaste', 'Part des goûts dans l\'ordre', 'num', '0 = l\'ordre de TMDb (la plus forte tendance d\'abord, la même pour tous). 1 = les goûts du compte seuls, parmi les tendances. Entre les deux, un mélange des deux classements.', 0.05, 0, 1, 'lt', 'c', '0,6'],
+            ['PopularCount', 'Titres lus par sorte', 'int', 'Les N premiers de la liste TMDb, pour les films et pour les séries.', 5, 5, 100, 'lp', 'c', '40'],
+            ['PopularTaste', 'Part des goûts dans l\'ordre', 'num', '0 = l\'ordre de TMDb ; 1 = les goûts du compte seuls, parmi ces titres.', 0.05, 0, 1, 'lp', 'c', '0,6'],
+            ['UpcomingCount', 'Titres lus par sorte', 'int', 'Les N prochaines sorties, pour les films et pour les séries.', 5, 5, 100, 'lu', 'c', '40'],
+            ['UpcomingTaste', 'Part des goûts dans l\'ordre', 'num', '0 = l\'ordre de TMDb (popularité attendue) ; 1 = les goûts du compte seuls.', 0.05, 0, 1, 'lu', 'c', '0,8'],
+            ['ExtendedTitle', 'Titre de la rangée à part (sans Home Screen Sections)', 'text', 'Seulement sans Home Screen Sections : les titres hors bibliothèque ont alors leur propre rangée, sous la première de l\'accueil (si la rangée principale en reçoit, onglet Accueil). Avec HSS, ils vont dans les rangées Reco+ et ce titre ne sert pas.', 0, 0, 0, 'extadv', 'c', 'À découvrir pour toi'],
+            ['RowSize', 'Titres par rangée', 'int', 'Pour chaque rangée Reco+, {ROW} comprise (et pour chaque moitié d\'une rangée séparée).', 1, 5, 60, 'rowsadv', 'c', '20'],
             ['RowNewDays', 'Nouveautés : arrivées depuis (jours)', 'int', 'Seuls les titres ajoutés depuis ce nombre de jours vont dans la rangée des nouveautés.', 1, 1, 365, 'rowsadv', 'c', '30'],
             ['ExcludedUsers', '', 'users', '', 0, 0, 0, 'users', 'c'],
             ['UseJellyfinEnhanced', 'Masquages et avis de Jellyfin Enhanced', 'bool', 'Lit, sans rien modifier, les titres masqués partout (« pas intéressé ») et les avis notés de chaque compte. Sans Jellyfin Enhanced : rien n\'est lu.', 0, 0, 0, 'sources', 'c', 'activé'],
@@ -417,7 +464,7 @@
             ['MinYear', 'Année de sortie minimale', 'int', 'Avant cette année, jamais proposé. Un titre sans année passe. 0 = pas de filtre.', 1, 0, 2100, 'filters', 'l', '0'],
             ['ExcludedGenres', '', 'genres', '', 0, 0, 0, 'genres', 'l'],
             ['Saga', 'Règle de saga', 'bool', 'Une seule entrée par saga, et c\'est le premier volet pas encore vu (pas le 4ᵉ quand on n\'a pas vu le 1ᵉʳ).', 0, 0, 0, 'sagas', 'e', 'activée'],
-            ['ProposeMarked', 'Proposer aussi ce que le compte a déjà marqué', 'bool', 'Titres notés (avis, pouce), en favori, en liste de suivi ou demandés, mais pas lus sur ce serveur. Coupé par défaut : une note ou un favori, c\'est un titre déjà vu ; une liste de suivi, c\'est déjà une liste. Ces marques comptent toujours pour les goûts.', 0, 0, 0, 'pinned', 'c', 'coupé'],
+            ['ProposeMarked', 'Proposer aussi ce que le compte a déjà marqué', 'bool', 'Titres notés (avis, pouce), en favori, en liste de suivi ou demandés, mais pas lus sur ce serveur. Coupé par défaut : une note ou un favori, c\'est un titre déjà vu ; une liste de suivi, c\'est déjà une liste. Ces marques comptent toujours pour les goûts.', 0, 0, 0, 'filters', 'c', 'coupé'],
             ['NewEpisodesPinned', 'Nouveautés de ce que vous suivez', 'int', 'Nombre maximal de titres placés en tête : nouveaux épisodes d\'une série vue sur ce serveur et rattrapée, ou aimée et diffusés récemment ; volet suivant d\'une saga dont les volets précédents sont vus. 0 = jamais.', 1, 0, 20, 'pinned', 'c', '3'],
             ['NewEpisodesMaxDays', 'Pendant (jours après l\'arrivée)', 'int', 'Au-delà, la nouveauté n\'est plus mise en avant (« À suivre » de Jellyfin prend le relais pour les séries).', 1, 1, 365, 'pinned', 'c', '45'],
             ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. Gardez-le égal aux « Titres par rangée » (onglet Général, 20 par défaut) pour qu\'ils portent exactement sur ce que montre {ROW}.', 1, 5, 100, 'listadv', 'l', '20'],
@@ -441,7 +488,7 @@
             ['WTimeOfDay', 'Heure de la journée', 'factor', 'Fait remonter ce qui ressemble aux titres aimés regardés dans la même tranche horaire que maintenant (nuit 0-6 h, matin, après-midi, soirée 18-24 h) : on ne regarde pas la même chose à 8 h et à 23 h. Une liste est alors calculée par tranche et servie selon l\'heure. Coupé par défaut : sur l\'historique de référence il fait moins bien (trop peu de visionnages par tranche et par compte) — le Calibrage peut le proposer sur le vôtre. Fuseau : réglage avancé de l\'onglet Général.', 0, 0, 4, 'fsim', 'e', 'coupé (×1 = 0,5)', 0.5],
             ['WCollab', 'Vus ensemble dans le foyer', 'factor', 'Fait remonter les titres souvent regardés par les mêmes personnes que les titres aimés du compte (filtrage collaboratif, prudent sur un petit foyer).', 0, 0, 3, 'fsim', 'e', '0,3', 0.3],
             ['WFresh', 'Nouveauté', 'factor', 'Bonus des titres récemment ajoutés, uniquement s\'ils collent déjà aux goûts du compte (garde-fou). Plafonné : ×2 au plus.', 0, 0, 2, 'fbonus', 'e', '2', 2],
-            ['WPopularity', 'Popularité dans le foyer', 'factor', 'Bonus des titres regardés par beaucoup de comptes du serveur, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
+            ['WPopularity', 'Popularité', 'factor', 'Bonus des titres regardés par beaucoup de comptes du serveur, et de ceux en tendance sur TMDb (voir « Tendance TMDb dans la popularité », réglages avancés), uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
             ['WQuality', 'Note de la communauté', 'factor', 'Bonus des titres bien notés (TMDb/IMDb), uniquement s\'ils collent déjà aux goûts (garde-fou). Pour écarter les titres mal notés, utilisez plutôt le filtre « Note minimale » de l\'onglet Listes.', 0, 0, 3, 'fbonus', 'e', '0,1', 0.1],
             ['WTmdbAgreement', 'Accord TMDb', 'factor', 'Bonus des titres que TMDb recommande à partir de plusieurs titres aimés — hors bibliothèque (mode étendu) comme dans la bibliothèque (onglet Général, Sources) —, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
             ['WRelease', 'Sortie récente', 'factor', 'Bonus des titres sortis récemment (date de sortie, pas d\'ajout à la bibliothèque), uniquement s\'ils collent déjà aux goûts. Coupé par défaut : non évalué sur un historique réel — le Calibrage peut le proposer.', 0, 0, 3, 'fbonus', 'e', 'coupé (×1 = 1)', 1],
@@ -487,6 +534,7 @@
             ['HouseholdPrior', 'Avis du foyer : avis neutres ajoutés', 'num', 'Nombre d\'avis fictifs à 3 étoiles mêlés aux avis du foyer avant d\'en faire la moyenne : avec 2, un seul avis à 5 étoiles donne 3,7 ; cinq avis à 5 en donnent 4,4.', 0.5, 0, 50, 'bonusadv', 'e', '2'],
             ['ReleaseDays', 'Échelle de « sortie récente » (jours)', 'num', 'Le bonus de sortie récente décroît sur cette durée après la sortie.', 1, 7, 3650, 'bonusadv', 'e', '365'],
             ['WNeural', 'Correction apprise (réseau de neurones)', 'factor', 'N\'existe qu\'après un calibrage « Réseau de neurones » appliqué : petite correction non linéaire ajoutée au score. Coupé : le moteur ignore la correction (sans l\'effacer). Sans correction apprise, ce réglage n\'a aucun effet.', 0, 0, 2, 'bonusadv', 'e', '1 (si appris)', 1],
+            ['TrendingShare', 'Tendance TMDb dans la popularité', 'num', 'Le bonus de popularité compte aussi ce qui est en tendance sur TMDb (liste de la rangée Tendances, lue même si la rangée n\'est pas affichée), dans toutes les rangées : 0 = le foyer seul ; 1 = la première tendance vaut un titre vu par tout le foyer. L\'effet décroît le long de la liste (la 4e tendance compte moitié moins que la 1re). Garde-fou inchangé : seulement pour les titres qui collent déjà aux goûts. Nécessite Seerr.', 0.05, 0, 1, 'bonusadv', 'e', '0,5'],
             ['GateTop', 'Bonus réservés aux N premiers par goût', 'int', 'Garde-fou, toujours actif : seuls les N premiers titres par goût peuvent recevoir nouveauté, popularité et note. Un titre sans rapport avec le compte n\'est jamais poussé.', 5, 5, 500, 'bonusadv', 'e', '60'],
             ['FreshDays', 'Échelle de nouveauté (jours)', 'num', 'Le bonus de nouveauté décroît sur cette durée après l\'ajout.', 1, 1, 365, 'bonusadv', 'e', '45'],
             ['Weighting', 'Pondération du contenu', 'enum:TfIdf=TF-IDF,Bm25=BM25', 'TF-IDF : une caractéristique rare (un réalisateur) pèse plus qu\'une courante (« Drame »). BM25 : variante qui atténue les titres très décrits.', 0, 0, 0, 'contentnum', 'e', 'TF-IDF'],
@@ -508,13 +556,7 @@
             // ---- Mode étendu
             ['ExtendedEnabled', 'Activer le mode étendu', 'bool', 'Recommande aussi des titres absents de la bibliothèque. Contrôle parental du compte respecté, avec les règles de Jellyfin (classification du pays choisi, titres non classés et étiquettes bloquées selon le compte).', 0, 0, 0, 'ext', 'c'],
             ['ExtendedCount', 'Titres proposés', 'int', 'Nombre maximal de titres hors bibliothèque par compte, toutes rangées confondues : chacun ne va que dans une rangée. Par défaut, toutes les rangées en reçoivent : 40 en laisse environ 8 par rangée.', 1, 1, 100, 'ext', 'c', '40'],
-            // Contenu de chaque rangée d'accueil
-            ['SourcePourToi', 'Rangée {T:HssSectionTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Tous les titres hors bibliothèque peuvent y aller (les mieux classés d\'abord). Sans Home Screen Sections : décide de la rangée à part du mode étendu. Les demandes arrivées et nouvelles saisons en tête ne bougent pas.', 0, 0, 0, 'exthome', 'c', 'mélange'],
-            ['SourceNouveautes', 'Rangée {T:RowNewTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Hors bibliothèque : les titres sortis récemment (voir ci-dessous).', 0, 0, 0, 'exthome', 'c', 'mélange'],
-            ['SourceParceQue', 'Rangées {T:RowBecauseTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Hors bibliothèque : les titres proches du titre aimé de chaque rangée, surtout par la ressemblance, comme ceux de la bibliothèque.', 0, 0, 0, 'exthome', 'c', 'mélange'],
-            ['SourceFilms', 'Rangée {T:RowMoviesTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Hors bibliothèque : les films.', 0, 0, 0, 'exthome', 'c', 'mélange'],
-            ['SourceSeries', 'Rangée {T:RowSeriesTitle}', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=Seerr seul', 'Hors bibliothèque : les séries.', 0, 0, 0, 'exthome', 'c', 'mélange'],
-            ['RowNewReleasedDays', 'Nouveautés hors bibliothèque : sorties depuis (jours)', 'int', 'Seuls les titres hors bibliothèque sortis depuis ce nombre de jours vont dans la rangée des nouveautés (dans la bibliothèque, c\'est la date d\'ajout qui compte).', 30, 30, 3650, 'exthome', 'c', '365'],
+            ['RowNewReleasedDays', 'Nouveautés hors bibliothèque : sorties depuis (jours)', 'int', 'Seuls les titres hors bibliothèque sortis depuis ce nombre de jours vont dans la rangée des nouveautés (dans la bibliothèque, c\'est la date d\'ajout qui compte).', 30, 30, 3650, 'rowsadv', 'c', '365'],
             // Mélange (rangées réglées sur « mélange »)
             ['ExtendedMixMode', 'Façon de mélanger', 'enum:Interleave=à intervalle fixe,Score=libre (classement du moteur)', 'À intervalle fixe : un titre hors bibliothèque toutes les N cartes, quoi qu\'il arrive. Libre : bibliothèque et hors bibliothèque sont notés ensemble par le moteur, sur ce qu\'ils ont en commun (goût, note, sortie récente ; pas les « vus ensemble », la nouveauté ni la popularité sur le serveur, que seuls les titres de la bibliothèque peuvent avoir), et chacun prend sa place ; un titre hors bibliothèque moins bien classé que toute la rangée n\'apparaît pas, sauf pour atteindre le minimum ci-dessous.', 0, 0, 0, 'extmix', 'c', 'à intervalle fixe'],
             ['ExtendedMixEvery', '1 titre hors bibliothèque toutes les … cartes', 'int', '3 = deux titres de la bibliothèque puis un à découvrir. 2 = un sur deux.', 1, 2, 20, 'extmix', 'c', '3'],
@@ -573,8 +615,8 @@
         ];
 
         var genres = [], users = [];
-        var SOURCE_ORDER = ['related', 'saga', 'people', 'cross', 'keyword', 'gems', 'genre', 'studio', 'language', 'top'];
-        var SOURCE_NAMES = { related: 'Proches des titres aimés', saga: 'Sagas', people: 'Auteurs', cross: 'Croisements', keyword: 'Thèmes', gems: 'Pépites', genre: 'Genres', studio: 'Studios et chaînes', language: 'Langues d\'origine', top: 'Les mieux notés' };
+        var SOURCE_ORDER = ['related', 'saga', 'people', 'cross', 'keyword', 'gems', 'genre', 'studio', 'language', 'top', 'list'];
+        var SOURCE_NAMES = { list: 'Listes du moment (tendances, populaires, à venir)', related: 'Proches des titres aimés', saga: 'Sagas', people: 'Auteurs', cross: 'Croisements', keyword: 'Thèmes', gems: 'Pépites', genre: 'Genres', studio: 'Studios et chaînes', language: 'Langues d\'origine', top: 'Les mieux notés' };
 
         function el(tag, attrs, text) {
             var e = document.createElement(tag);
@@ -659,6 +701,8 @@
                     host.appendChild(factorUi(f));
                     return;
                 }
+                if (type === 'blank') { host.appendChild(el('div', { 'aria-hidden': 'true' })); return; }
+                if (type === 'sep') { host.appendChild(el('div', { 'class': 'rp-rowsep', id: id }, t(f[1]))); return; }
                 if (type === 'note') {
                     var n = el('div', { 'class': 'rp-field rp-note', id: id }, t(f[1]));
                     n.appendChild(tip(f));
@@ -690,7 +734,28 @@
                 host.appendChild(wrap);
             });
             page.querySelectorAll('[data-fields="rows"] input').forEach(function (i) { i.addEventListener('input', applyTpl); });
+            // rangée séparée : ce que HSS montrera, sous la ligne de la rangée
+            F.filter(function (f) { return /^Kind/.test(f[0]); }).forEach(function (f) {
+                var src = $('#' + idOf('Source' + f[0].slice(4))).closest('.rp-field');
+                var n = el('div', { 'class': 'rp-splitnote rp-hidden', id: fid(f) + '_split' });
+                src.after(n);
+            });
             applyTpl();
+        }
+        // titre affiché d'une rangée (saisi, sinon par défaut), sans le « {titre} » des rangées « Parce que »
+        var KIND_TITLE = { KindPourToi: 'HssSectionTitle', KindTendances: 'RowTrendingTitle', KindPopulaires: 'RowPopularTitle', KindAVenir: 'RowUpcomingTitle', KindNouveautes: 'RowNewTitle', KindParceQue: 'RowBecauseTitle' };
+        function splitNotes() {
+            Object.keys(KIND_TITLE).forEach(function (k) {
+                var n = $('#' + idOf(k) + '_split');
+                if (!n) { return; }
+                var split = val(k) === 'Split';
+                n.classList.toggle('rp-hidden', !split);
+                if (split) {
+                    var base = rowTitle(KIND_TITLE[k]).replace(/^[«“]\s*|\s*[»”]$/g, '');
+                    n.textContent = '⇉ ' + tf('Deux rangées dans Home Screen Sections : {0} et {1}. Les comptes qui affichaient la rangée reçoivent les deux à l\'enregistrement.',
+                        quote(tf('{0} : films', base)), quote(tf('{0} : séries', base)));
+                }
+            });
         }
 
         // Réglages sans effet dans la configuration actuelle : grisés, avec la raison (leur valeur est gardée et enregistrée).
@@ -708,19 +773,22 @@
         function num(name) { var n = parseFloat(String(val(name) || '0').replace(',', '.')); return isNaN(n) ? 0 : n; }
         function factorOff(name) { return sw(name) ? '' : tf('facteur « {0} » coupé (onglet Moteur)', t(fOf(name)[1])); }
         function srcOff(name) { return sw(name) ? '' : tf('source « {0} » coupée', t(fOf(name)[1])); }
-        var SOURCES = ['SourcePourToi', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms', 'SourceSeries'];
-        var EXT_GROUPS = ['ext', 'exthome', 'extmix', 'extadv', 'extsrc'];
-        var NEEDS_SEERR = ['UseSeerrVotes', 'UseSeerrWatchlist', 'UseTmdbLibrarySignal', 'TmdbLibraryAnchors', 'RequestWeight', 'WatchlistWeight', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
-        var NO_MIX = function () { return SOURCES.some(function (k) { return val(k) === 'Mix'; }) ? '' : t('aucune rangée réglée sur « mélange »'); };
+        var SOURCES = ['SourcePourToi', 'SourceTendances', 'SourcePopulaires', 'SourceAVenir', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms', 'SourceSeries'];
+        var EXT_GROUPS = ['ext', 'extmix', 'extadv', 'extsrc'];
+        // rangées tirées des listes TMDb : sans Seerr, elles n'existent pas dans Home Screen Sections
+        var LIST_ROWS = ['_RowLists', '_RowTrending', 'RowTrendingTitle', 'KindTendances', 'SourceTendances', '_RowPopular', 'RowPopularTitle', 'KindPopulaires', 'SourcePopulaires',
+            '_RowUpcoming', 'RowUpcomingTitle', 'KindAVenir', 'SourceAVenir', 'TrendingWindow', 'TrendingCount', 'TrendingTaste', 'PopularCount', 'PopularTaste', 'UpcomingCount', 'UpcomingTaste'];
+        var NEEDS_SEERR = ['TrendingShare', 'UseSeerrVotes', 'UseSeerrWatchlist', 'UseTmdbLibrarySignal', 'TmdbLibraryAnchors', 'RequestWeight', 'WatchlistWeight', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
+        var NO_MIX = function () { return SOURCES.some(function (k) { return val(k) === 'Mix'; }) ? '' : t('aucune rangée au contenu « mélange »'); };
         var WHY = {
-            ExtendedMixMode: NO_MIX,
+            ExtendedMixMode: function () { return NO_MIX(); },
             ExtendedMixEvery: function () { return NO_MIX() || (val('ExtendedMixMode') === 'Score' ? t('mélange libre choisi') : ''); },
             ExtendedMinFree: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? t('mélange à intervalle fixe choisi') : ''); },
             ExtendedMaxFree: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? t('mélange à intervalle fixe choisi') : ''); },
             ExtendedDiscoverySlots: function () { return NO_MIX() || (val('ExtendedMixMode') !== 'Score' ? t('mélange à intervalle fixe choisi') : ''); },
-            RowNewReleasedDays: function () { return val('SourceNouveautes') === 'Local' ? t('nouveautés en bibliothèque seule') : ''; },
-            _ExtendedRowNote: function () { return val('SourcePourToi') === 'Local' || !sw('ExtendedEnabled') ? t('pas de titres hors bibliothèque dans la rangée principale (onglet Mode étendu)') : ''; },
-            ExtendedTitle: function () { return val('SourcePourToi') === 'Local' || !sw('ExtendedEnabled') ? t('pas de titres hors bibliothèque dans la rangée principale (onglet Mode étendu)') : ''; },
+            RowNewReleasedDays: function () { return !G.seerr || !G.ext ? t('pas de titres hors bibliothèque (Seerr et mode étendu)') : val('SourceNouveautes') === 'Local' ? t('nouveautés en bibliothèque seule') : ''; },
+            ExtendedTitle: function () { return val('SourcePourToi') === 'Local' ? t('pas de titres hors bibliothèque dans la rangée principale (onglet Accueil)') : ''; },
+            TrendingShare: function () { return factorOff('WPopularity'); },
             ExtendedTopRatedMinVotes: function () { return srcOff('ExtendedTopRated'); },
             ExtendedTopRatedPages: function () { return srcOff('ExtendedTopRated'); },
             ExtendedGenres: function () { return srcOff('ExtendedByGenre'); },
@@ -764,8 +832,10 @@
             var name = f[0];
             if (name === 'Enabled') { return ''; }
             if (!G.enabled) { return t('plugin coupé (onglet Général)'); }
-            var ext = EXT_GROUPS.indexOf(f[7]) >= 0 || name === '_ExtendedRowNote' || name === 'ExtendedTitle';
+            var ext = EXT_GROUPS.indexOf(f[7]) >= 0;
+            if (LIST_ROWS.indexOf(name) >= 0 && !G.seerr) { return t('Seerr non utilisé (onglet Seerr) : rangée absente de l\'accueil'); }
             if ((ext || NEEDS_SEERR.indexOf(name) >= 0) && !G.seerr) { return t('Seerr non utilisé (onglet Seerr)'); }
+            if (SOURCES.indexOf(name) >= 0 && (!G.seerr || !G.ext)) { return !G.seerr ? t('Seerr non utilisé (onglet Seerr) : bibliothèque seule') : t('mode étendu coupé (onglet Mode étendu) : bibliothèque seule'); }
             if (ext && name !== 'ExtendedEnabled' && !G.ext) { return t('mode étendu coupé (onglet Mode étendu)'); }
             return WHY[name] ? WHY[name]() : '';
         }
@@ -774,7 +844,7 @@
         function holders() {
             if (HOLD) { return; }
             HOLD = F.map(function (f) {
-                if (f[2] === 'users' || f[2] === 'genres') { return null; }
+                if (f[2] === 'users' || f[2] === 'genres' || f[2] === 'blank') { return null; }
                 var e = $('#' + fid(f));
                 return e ? (e.closest('.rp-factor') || e.closest('.rp-field')) : null;
             });
@@ -811,6 +881,8 @@
         }
         page.addEventListener('change', applyWhen);
         page.addEventListener('input', applyWhen);
+        page.addEventListener('change', splitNotes);
+        page.addEventListener('input', splitNotes);
 
         // listes à cocher (comptes, genres) : construites quand les données arrivent, cochées d'après la configuration
         function checks(f, items, selected) {
@@ -844,7 +916,7 @@
         function fill(cfg) {
             lastCfg = cfg;
             F.forEach(function (f) {
-                if (f[2] === 'users' || f[2] === 'genres' || f[2] === 'note') { return; }
+                if (f[2] === 'users' || f[2] === 'genres' || f[2] === 'note' || f[2] === 'blank' || f[2] === 'sep') { return; }
                 var e = $('#' + fid(f)), v = src(cfg, f)[f[0]];
                 if (f[2] === 'factor') {
                     var w = Number(v), on = isFinite(w) && w > 0;
@@ -860,18 +932,21 @@
                     e.closest('.rp-factor').__sync();
                     return;
                 }
-                if (f[2] === 'bool') { e.checked = !!v; } else { e.value = v === null || v === undefined ? '' : v; }
+                if (f[2] === 'bool') { e.checked = !!v; }
+                else if (f[2].indexOf('enum:') === 0 && (v === null || v === undefined)) { e.selectedIndex = 0; }   // réglage absent : valeur par défaut (première)
+                else { e.value = v === null || v === undefined ? '' : v; }
             });
             $('#rpCalMethod').value = cfg.CalibrationMethod || 'ChoiceModel';
             renderChecks();
             applyTpl();
             applyWhen();
+            splitNotes();
         }
 
         function read(cfg) {
             F.forEach(function (f) {
                 var dst = src(cfg, f);
-                if (f[2] === 'note') { return; }
+                if (f[2] === 'note' || f[2] === 'blank' || f[2] === 'sep') { return; }
                 if (f[2] === 'users' || f[2] === 'genres') {
                     dst[f[0]] = Array.prototype.map.call(page.querySelectorAll('#' + fid(f) + ' input:checked'), function (c) { return c.value; });
                     return;
@@ -901,7 +976,7 @@
         function kpi(label, value) { var d = el('div', { 'class': 'rp-kpi' }); d.appendChild(el('span', {}, label)); d.appendChild(el('b', {}, value)); return d; }
 
         // effet des recommandations : taux par rangée et par place, part des lectures venues d'une proposition
-        var ROW_NAMES = { PourToi: 'Pour toi', Films: 'Films', Series: 'Séries', Nouveautes: 'Nouveautés', ParceQue: 'Parce que tu as aimé {0}' };
+        var ROW_NAMES = { PourToi: 'Pour toi', Tendances: 'Tendances', Populaires: 'Populaires en ce moment', AVenir: 'À venir', Films: 'Films', Series: 'Séries', Nouveautes: 'Nouveautés', ParceQue: 'Parce que tu as aimé {0}' };
         function renderMeasure(m) {
             var box = $('#rpMeasure'); box.innerHTML = '';
             if (!m || !m.All || !(m.All.Proposed7 || m.All.Proposed30 || m.RecentStarts)) {
@@ -932,6 +1007,7 @@
             k.appendChild(kpi('Seerr', e.Seerr));
             k.appendChild(kpi('Jellyfin Enhanced', e.JellyfinEnhanced || '—'));
             k.appendChild(kpi(t('Accord TMDb (bibliothèque)'), e.TmdbLibrary || '—'));
+            k.appendChild(kpi(t('Listes du moment (TMDb)'), e.TmdbLists || '—'));
             k.appendChild(kpi(t('Rangée d\'accueil'), s.hss));
             if (e.LastError) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, t('Dernière erreur de calcul'))); d.appendChild(el('span', {}, e.LastError)); al.appendChild(d); }
             renderMeasure(e.Measure);
@@ -1016,7 +1092,7 @@
             b.addEventListener('click', function () {
                 page.querySelectorAll('.rp-tab').forEach(function (x) { x.classList.toggle('on', x === b); });
                 page.querySelectorAll('.rp-pane').forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-pane') === b.getAttribute('data-tab')); });
-                var formTab = ['general', 'listes', 'moteur', 'seerr', 'etendu', 'notif'].indexOf(b.getAttribute('data-tab')) >= 0;
+                var formTab = ['general', 'accueil', 'listes', 'moteur', 'seerr', 'etendu', 'notif'].indexOf(b.getAttribute('data-tab')) >= 0;
                 $('#rpSaveBar').style.display = formTab ? '' : 'none';
             });
         });

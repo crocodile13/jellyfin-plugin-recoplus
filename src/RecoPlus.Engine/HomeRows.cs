@@ -30,6 +30,35 @@ public sealed class RowOptions
 
     /// <summary>Au-delà de cette taille, une collection est un regroupement thématique (voir EngineSettings.SagaMax).</summary>
     public int SagaMax { get; set; } = 12;
+
+    /// <summary>
+    /// Rangées tirées d'une liste TMDb (« Tendances », « Populaires », « AVenir ») : titres de la bibliothèque de la liste,
+    /// dans l'ordre de la rangée pour ce compte (<see cref="Trending.Order"/>). Rangée absente = pas de rangée.
+    /// </summary>
+    public Dictionary<string, IReadOnlyList<string>> Lists { get; set; } = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Sortes de titres par rangée (« PourToi », « Tendances », « Populaires », « AVenir », « Nouveautes », « ParceQue ») ;
+    /// absente = films et séries ensemble. <see cref="KindFilter.Split"/> : deux rangées, suffixes « Films » et « Series ».
+    /// </summary>
+    public Dictionary<string, KindFilter> Kinds { get; set; } = new(StringComparer.Ordinal);
+
+    /// <summary>Rangées que Home Screen Sections montre au compte (identifiants complets) ; null = toutes.</summary>
+    public HashSet<string>? Shown { get; set; }
+
+    /// <summary>Réglage de sortes d'une rangée de base (« ParceQue2 » → celui de « ParceQue »).</summary>
+    public KindFilter KindSetting(string baseRow)
+        => Kinds.TryGetValue(baseRow.StartsWith(HomeRows.ParceQue, StringComparison.Ordinal) ? HomeRows.ParceQue : baseRow, out var k) ? k : KindFilter.Both;
+
+    /// <summary>Sortes de titres effectivement admises dans une rangée (« TendancesFilms » : films ; « Films » : films).</summary>
+    public KindFilter KindOf(string row)
+    {
+        var (b, sfx) = HomeRows.SplitOf(row);
+        return sfx ?? (KindSetting(b) == KindFilter.Split ? KindFilter.Both : KindSetting(b));
+    }
+
+    /// <summary>Copie (les listes et sortes sont partagées, à remplacer et non à modifier).</summary>
+    public RowOptions Clone() => (RowOptions)MemberwiseClone();
 }
 
 /// <summary>Contenu d'une rangée d'accueil.</summary>
@@ -66,13 +95,64 @@ public sealed class MixOptions
 
 /// <summary>
 /// Répartit les recommandations d'un compte entre ses rangées d'accueil sans qu'un titre apparaisse deux fois :
-/// « Pour toi » d'abord, puis Nouveautés, « Parce que tu as aimé … » (des titres aimés différents, de sagas différentes),
-/// Films, Séries. Les autres rangées de l'accueil (celles de Jellyfin ou d'autres plugins) ne sont pas concernées.
+/// « Pour toi » d'abord, puis Tendances, Nouveautés, « Parce que tu as aimé … » (des titres aimés différents, de sagas
+/// différentes), Films, Séries. Chaque rangée peut se limiter aux films ou aux séries (<see cref="RowOptions.Kinds"/>).
+/// Les autres rangées de l'accueil (celles de Jellyfin ou d'autres plugins) ne sont pas concernées.
 /// </summary>
 public static class HomeRows
 {
     /// <summary>Identifiants des rangées (suffixes des sections Home Screen Sections).</summary>
-    public const string PourToi = "PourToi", Films = "Films", Series = "Series", Nouveautes = "Nouveautes", ParceQue = "ParceQue";
+    public const string PourToi = "PourToi", Films = "Films", Series = "Series", Nouveautes = "Nouveautes", ParceQue = "ParceQue", Tendances = "Tendances",
+        Populaires = "Populaires", AVenir = "AVenir";
+
+    /// <summary>Rangées tirées d'une liste TMDb, dans l'ordre de priorité de la répartition.</summary>
+    public static readonly string[] ListRows = { Tendances, Populaires, AVenir };
+
+    /// <summary>Rangées dont la sorte de titres se règle (les autres sont « Films » et « Séries », déjà d'une seule sorte).</summary>
+    public static readonly string[] KindRows = { PourToi, Tendances, Populaires, AVenir, Nouveautes, ParceQue };
+
+    /// <summary>Suffixes des deux rangées d'une rangée séparée (films, séries).</summary>
+    public const string MoviesSuffix = "Films", SeriesSuffix = "Series";
+
+    /// <summary>
+    /// Rangée de base et sorte imposée par le suffixe : « TendancesFilms » → (« Tendances », films) ; « ParceQue2Series » →
+    /// (« ParceQue2 », séries) ; « Films » et « Series » restent elles-mêmes, de leur sorte ; sinon (rangée, null).
+    /// </summary>
+    public static (string Base, KindFilter? Kind) SplitOf(string row)
+    {
+        if (row == Films)
+        {
+            return (row, KindFilter.Movies);
+        }
+
+        if (row == Series)
+        {
+            return (row, KindFilter.Series);
+        }
+
+        if (row.Length > MoviesSuffix.Length && row.EndsWith(MoviesSuffix, StringComparison.Ordinal))
+        {
+            return (row[..^MoviesSuffix.Length], KindFilter.Movies);
+        }
+
+        if (row.Length > SeriesSuffix.Length && row.EndsWith(SeriesSuffix, StringComparison.Ordinal))
+        {
+            return (row[..^SeriesSuffix.Length], KindFilter.Series);
+        }
+
+        return (row, null);
+    }
+
+    /// <summary>Type de rangée, pour les réglages et les bilans : « ParceQue2Films » → « ParceQue », « TendancesSeries » → « Tendances ».</summary>
+    public static string KindOfRow(string row)
+    {
+        var b = SplitOf(row).Base;
+        return b.StartsWith(ParceQue, StringComparison.Ordinal) ? ParceQue : b;
+    }
+
+    /// <summary>Identifiants des rangées produites par une rangée de base selon son réglage de sortes.</summary>
+    public static IEnumerable<string> Expand(string baseRow, KindFilter k)
+        => k == KindFilter.Split ? new[] { baseRow + MoviesSuffix, baseRow + SeriesSuffix } : new[] { baseRow };
 
     /// <summary>Titres de réserve par rangée (droits d'accès revérifiés à l'affichage).</summary>
     public const int Spare = 6;
@@ -240,17 +320,45 @@ public static class HomeRows
             }
         }
 
+        bool Kind(KindFilter k, string id) => T.TryGetValue(id, out var t) && Trending.Allows(k, t.Kind);
+        bool Visible(string id) => o.Shown is null || o.Shown.Contains(id);
+
+        // une rangée de base donne une rangée, ou deux (films, séries) si elle est séparée ; src(sorte) = ses titres possibles
+        void Emit(string baseRow, string? anchor, Func<KindFilter, IEnumerable<string>> src, bool always = false)
+        {
+            foreach (var id in Expand(baseRow, o.KindSetting(baseRow)))
+            {
+                if (always || Visible(id))
+                {
+                    rows[id] = Row(id, anchor, src(o.KindOf(id)));
+                }
+            }
+        }
+
         // « Pour toi » : ce que HSS affichera, réserves comprises (aucune rangée ne les reprend)
-        rows[PourToi] = Row(PourToi, null, pourToi);
+        Emit(PourToi, null, k => pourToi.Where(id => Kind(k, id)), always: true);
+
+        // rangées des listes TMDb (tendances, populaires, à venir) : juste après « Pour toi », pour garder leur identité
+        foreach (var lr in ListRows)
+        {
+            if (o.Lists.TryGetValue(lr, out var list))
+            {
+                Emit(lr, null, k => Sagaed(list.Where(id => candidates.Contains(id) && !used.Contains(id) && Kind(k, id)), id => Kind(k, id)));
+            }
+        }
 
         if (o.New)
         {
             double cut = ctx.Now - (Math.Clamp(o.NewDays, 1, 365) * Core.Day);
             var desc = sc.Values.OrderByDescending(v => v).ToList();
             double bar = desc.Count > 0 ? desc[Math.Min(desc.Count - 1, (int)(NewTopShare * desc.Count))] : double.NegativeInfinity;
-            var fresh = ordered.Where(id => T.TryGetValue(id, out var t) && (t.Added ?? 0) >= cut && !used.Contains(id) && sc.GetValueOrDefault(id, double.NegativeInfinity) >= bar).ToList();
-            var freshRow = Sagaed(fresh, null).ToList();
-            rows[Nouveautes] = freshRow.Count >= 4 ? Row(Nouveautes, null, freshRow) : new List<string>();
+            foreach (var id in Expand(Nouveautes, o.KindSetting(Nouveautes)).Where(Visible))
+            {
+                var k = o.KindOf(id);
+                var fresh = ordered.Where(x => Kind(k, x) && (T[x].Added ?? 0) >= cut && !used.Contains(x) && sc.GetValueOrDefault(x, double.NegativeInfinity) >= bar).ToList();
+                var freshRow = Sagaed(fresh, null).ToList();
+                rows[id] = freshRow.Count >= 4 ? Row(id, null, freshRow) : new List<string>();
+            }
         }
 
         int nb = Math.Clamp(o.Because, 0, 3);
@@ -260,6 +368,7 @@ public static class HomeRows
             var sig = ctx.Sig.TryGetValue(user, out var su) ? su : new Dictionary<string, double>();
             var hist = ctx.Hist.TryGetValue(user, out var hu) ? hu : new Dictionary<string, Interaction>();
             var sagas = new HashSet<string>(StringComparer.Ordinal);
+            var kb = o.KindSetting(ParceQue) == KindFilter.Split ? KindFilter.Both : o.KindSetting(ParceQue);
             int k = 0;
             // point de départ : un titre réellement regardé (pas seulement mis en favori, liké ou demandé)
             foreach (var (a, _) in sig.Where(e => e.Value > 0 && T.TryGetValue(e.Key, out var t) && !t.External && vec.ContainsKey(e.Key)
@@ -278,7 +387,7 @@ public static class HomeRows
                 }
 
                 var av = vec[a];
-                var free = ordered.Where(id => id != a && !used.Contains(id))     // jamais le titre aimé dans sa propre rangée
+                var free = ordered.Where(id => id != a && !used.Contains(id) && Kind(kb, id))     // jamais le titre aimé dans sa propre rangée
                     .Select(id => (Id: id, Sim: av.Dot(vec[id]))).ToList();
                 double best = free.Count > 0 ? free.Max(x => x.Sim) : 0;
                 double floor = Math.Max(MinSimilarity, RelativeSimilarity * best);
@@ -298,14 +407,20 @@ public static class HomeRows
                     sagas.Add(f2.Id); // la saga n'est prise que si la rangée existe : un autre volet peut servir sinon
                 }
 
-                rows[ParceQue + k] = Row(ParceQue + k, a, near);
-                anchors[ParceQue + k] = T[a].Name;
-                anchorIds[ParceQue + k] = a;
+                Emit(ParceQue + k, a, kk => near.Where(id => Kind(kk, id)), always: true);
+                foreach (var id in Expand(ParceQue + k, o.KindSetting(ParceQue)))
+                {
+                    anchors[id] = T[a].Name;
+                    anchorIds[id] = a;
+                }
             }
 
             for (int i = k + 1; i <= nb; i++)
             {
-                rows[ParceQue + i] = new List<string>();
+                foreach (var id in Expand(ParceQue + i, o.KindSetting(ParceQue)))
+                {
+                    rows[id] = new List<string>();
+                }
             }
         }
 

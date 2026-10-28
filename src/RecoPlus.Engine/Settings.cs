@@ -258,6 +258,13 @@ public sealed class EngineSettings
     public double HouseholdPrior { get; set; } = 2;
 
     /// <summary>
+    /// Part des tendances TMDb dans la popularité (0 = popularité dans le foyer seule, 1 = une tendance compte autant
+    /// qu'un titre vu par tout le foyer) : popularité = 1 − (1 − foyer) × (1 − part × tendance). Bonus réservé comme la
+    /// popularité (garde-fou) ; sans effet sans tendances (Seerr absent, calibrage).
+    /// </summary>
+    public double TrendingShare { get; set; } = 0.5;
+
+    /// <summary>
     /// Goût du moment : proximité aux derniers titres aimés (profil court terme), en plus du profil de toujours.
     /// Une période « séries coréennes » se voit tout de suite, sans effacer le reste.
     /// </summary>
@@ -350,6 +357,7 @@ public sealed class EngineSettings
         s.ReleaseDays = Clamp(s.ReleaseDays, 7, 3650);
         s.RatingPriorVotes = Clamp(s.RatingPriorVotes, 0, 100_000);
         s.HouseholdPrior = Clamp(s.HouseholdPrior, 0, 50);
+        s.TrendingShare = Clamp(s.TrendingShare, 0, 1);
         s.Bm25K1 = Clamp(s.Bm25K1, 0, 5);
         s.Bm25B = Clamp(s.Bm25B, 0, 1);
         foreach (var p in typeof(EngineSettings).GetProperties())

@@ -184,7 +184,7 @@ public sealed class RecoController : ControllerBase
         var rowTitles = HomeScreenSectionsIntegration.Sections(cfg, Lang).ToDictionary(x => x.Id, x => x.Title, StringComparer.Ordinal);
         foreach (var (row, anchor) in r?.RowAnchors ?? new Dictionary<string, string>())
         {
-            rowTitles[HomeScreenSectionsIntegration.Prefix + row] = HomeScreenSectionsIntegration.Because(cfg, anchor, Lang);
+            rowTitles[HomeScreenSectionsIntegration.Prefix + row] = HomeScreenSectionsIntegration.DisplayTitle(cfg, row, anchor, Lang);
         }
 
         return Ok(new
@@ -317,6 +317,7 @@ public sealed class RecoController : ControllerBase
                 Seerr = L(e.Seerr),
                 JellyfinEnhanced = L(e.JellyfinEnhanced),
                 TmdbLibrary = L(e.TmdbLibrary),
+                TmdbLists = L(e.TmdbLists),
                 e.Measure,
                 e.ExternalTitles,
                 e.Running,
@@ -386,11 +387,8 @@ public sealed class RecoController : ControllerBase
         var r = _reco.For(userId);
         // rangée d'accueil de chaque titre hors bibliothèque (son titre tel que configuré)
         var cfg = Plugin.Instance!.Configuration;
-        var names = HomeScreenSectionsIntegration.Sections(cfg, Lang).ToDictionary(x => x.Id, x => x.Title, StringComparer.Ordinal);
         string RowOf(ExternalRec e) => e.Row.Length == 0 ? " · " + Texts.T("sur aucune rangée", Lang)
-            : " · " + Texts.T("rangée « {0} »", Lang, r?.RowAnchors.TryGetValue(e.Row, out var a) == true
-                ? HomeScreenSectionsIntegration.Because(cfg, a, Lang)
-                : names.GetValueOrDefault(HomeScreenSectionsIntegration.Prefix + e.Row, e.Row));
+            : " · " + Texts.T("rangée « {0} »", Lang, HomeScreenSectionsIntegration.DisplayTitle(cfg, e.Row, r?.RowAnchors.GetValueOrDefault(e.Row), Lang));
         string Why(ExternalRec e) => string.IsNullOrEmpty(e.Reason) ? Texts.T("Parce que tu as aimé {0}", Lang, e.Because) : L(e.Reason);
         return Ok(new
         {

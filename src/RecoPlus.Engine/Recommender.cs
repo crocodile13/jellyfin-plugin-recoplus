@@ -399,7 +399,10 @@ public static class Recommender
             c.Neg[ci] = negPen;
             c.St[ci] = st;
             c.Tod[ci] = todProf.Count > 0 ? v.Dot(todProf) : 0;
-            c.Pop[ci] = Math.Log(1 + othersPop.GetValueOrDefault(id)) / Math.Log(1 + maxPop);
+            // popularité : dans le foyer, et tendance TMDb du moment (OU probabiliste : chacune peut la porter seule)
+            double house = Math.Log(1 + othersPop.GetValueOrDefault(id)) / Math.Log(1 + maxPop);
+            double trend = ctx.Ds.Trending.TryGetValue(id, out var tr) ? Math.Clamp(tr, 0.0, 1.0) * Math.Clamp(w.TrendingShare, 0.0, 1.0) : 0.0;
+            c.Pop[ci] = trend > 0 ? 1.0 - ((1.0 - house) * (1.0 - trend)) : house;
             c.Q[ci] = Math.Clamp((Quality(tc, w.Rating, w.RatingPriorVotes) - 6.5) / 2.0, -1.0, 1.0);
             c.Hh[ci] = Household(ctx.Ds, id, user, w.HouseholdPrior);
             double rel = tc.Released ?? 0;

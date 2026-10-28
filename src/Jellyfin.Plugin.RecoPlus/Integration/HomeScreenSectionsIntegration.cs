@@ -66,6 +66,13 @@ public sealed class HssSectionHandler
     /// <summary>Troisième rangée « Parce que tu as aimé … ».</summary>
     public QueryResult<BaseItemDto> GetBecause3(HssPayload payload) => Row(payload, HomeRows.ParceQue + 3);
 
+    /// <summary>
+    /// Toute autre rangée (tendances, populaires, à venir, moitiés « films » et « séries » d'une rangée séparée) :
+    /// l'identifiant de la rangée arrive dans la donnée attachée à la section lors de sa déclaration.
+    /// </summary>
+    public QueryResult<BaseItemDto> GetRow(HssPayload payload)
+        => HomeScreenSectionsIntegration.IsRowId(payload.AdditionalData) ? Row(payload, payload.AdditionalData!) : new QueryResult<BaseItemDto>();
+
     private QueryResult<BaseItemDto> Row(HssPayload payload, string row)
     {
         try
@@ -136,25 +143,72 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     /// </summary>
     /// <param name="cfg">Configuration.</param>
     /// <param name="lang">Langue des titres par défaut (« fr », « en ») ; null = celle du serveur (rangées déclarées à HSS).</param>
-    public static List<(string Id, string Title, string Method)> Sections(Configuration.PluginConfiguration cfg, string? lang = null)
+    public static List<(string Id, string Title, string Method, string Row)> Sections(Configuration.PluginConfiguration cfg, string? lang = null)
     {
         lang ??= I18n.Lang();
-        string because = BecauseGeneric(cfg, lang);
-        return new List<(string, string, string)>
+        var res = new List<(string, string, string, string)>();
+        // rangées de base dans l'ordre de la liste de HSS ; les listes TMDb seulement avec Seerr (sinon elles seraient vides)
+        var bases = new List<string> { HomeRows.PourToi };
+        if (cfg.SeerrEnabled)
         {
-            (SectionId, RowTitle(cfg, HomeRows.PourToi, lang), nameof(HssSectionHandler.GetResults)),
-            (Prefix + HomeRows.Nouveautes, RowTitle(cfg, HomeRows.Nouveautes, lang), nameof(HssSectionHandler.GetNew)),
-            (Prefix + HomeRows.ParceQue + 1, because, nameof(HssSectionHandler.GetBecause1)),
-            (Prefix + HomeRows.ParceQue + 2, because, nameof(HssSectionHandler.GetBecause2)),
-            (Prefix + HomeRows.ParceQue + 3, because, nameof(HssSectionHandler.GetBecause3)),
-            (Prefix + HomeRows.Films, RowTitle(cfg, HomeRows.Films, lang), nameof(HssSectionHandler.GetMovies)),
-            (Prefix + HomeRows.Series, RowTitle(cfg, HomeRows.Series, lang), nameof(HssSectionHandler.GetSeries)),
+            bases.AddRange(HomeRows.ListRows);
+        }
+
+        bases.AddRange(new[] { HomeRows.Nouveautes, HomeRows.ParceQue + 1, HomeRows.ParceQue + 2, HomeRows.ParceQue + 3, HomeRows.Films, HomeRows.Series });
+        foreach (var b in bases)
+        {
+            foreach (var row in HomeRows.Expand(b, cfg.KindOf(b)))
+            {
+                res.Add((Prefix + row, DisplayTitle(cfg, row, null, lang), MethodOf(row), row));
+            }
+        }
+
+        return res;
+    }
+
+    /// <summary>Méthode d'une rangée : celle de toujours pour les rangées d'origine (déclarations existantes), sinon GetRow.</summary>
+    private static string MethodOf(string row) => row switch
+    {
+        HomeRows.PourToi => nameof(HssSectionHandler.GetResults),
+        HomeRows.Nouveautes => nameof(HssSectionHandler.GetNew),
+        HomeRows.Films => nameof(HssSectionHandler.GetMovies),
+        HomeRows.Series => nameof(HssSectionHandler.GetSeries),
+        "ParceQue1" => nameof(HssSectionHandler.GetBecause1),
+        "ParceQue2" => nameof(HssSectionHandler.GetBecause2),
+        "ParceQue3" => nameof(HssSectionHandler.GetBecause3),
+        _ => nameof(HssSectionHandler.GetRow),
+    };
+
+    /// <summary>Identifiant de rangée acceptable (lettres et chiffres).</summary>
+    public static bool IsRowId(string? s) => !string.IsNullOrEmpty(s) && s.Length <= 40 && s.All(char.IsAsciiLetterOrDigit);
+
+    /// <summary>
+    /// Titre affiché d'une rangée : celui de sa rangée de base, avec « films » ou « séries » pour une moitié de rangée
+    /// séparée ; pour « Parce que … », le titre aimé (<paramref name="anchor"/>) ou la forme générique.
+    /// </summary>
+    public static string DisplayTitle(Configuration.PluginConfiguration cfg, string row, string? anchor, string lang)
+    {
+        var (b, sfx) = HomeRows.SplitOf(row);
+        if (row is HomeRows.Films or HomeRows.Series)
+        {
+            sfx = null;
+        }
+
+        string t = b.StartsWith(HomeRows.ParceQue, StringComparison.Ordinal)
+            ? (anchor is null ? BecauseGeneric(cfg, lang) : Because(cfg, anchor, lang))
+            : RowTitle(cfg, b, lang);
+        return sfx switch
+        {
+            KindFilter.Movies => Texts.T("{0} : films", lang, t),
+            KindFilter.Series => Texts.T("{0} : séries", lang, t),
+            _ => t,
         };
     }
 
     /// <summary>Titres par défaut des rangées (français : la clé de traduction ; voir <see cref="Texts"/>).</summary>
     public const string DefaultPourToi = "Pour toi", DefaultNew = "Nouveautés pour toi", DefaultMovies = "Films pour toi",
-        DefaultSeries = "Séries pour toi", DefaultBecause = "Parce que tu as aimé {titre}", DefaultExtended = "À découvrir pour toi";
+        DefaultSeries = "Séries pour toi", DefaultBecause = "Parce que tu as aimé {titre}", DefaultExtended = "À découvrir pour toi",
+        DefaultTrending = "Tendances", DefaultPopular = "Populaires en ce moment", DefaultUpcoming = "À venir";
 
     /// <summary>
     /// Titre choisi par l'administrateur, sinon le titre par défaut dans la langue voulue. Un titre resté égal au défaut
@@ -169,6 +223,9 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
         HomeRows.Nouveautes => Title(cfg.RowNewTitle, DefaultNew, lang),
         HomeRows.Films => Title(cfg.RowMoviesTitle, DefaultMovies, lang),
         HomeRows.Series => Title(cfg.RowSeriesTitle, DefaultSeries, lang),
+        HomeRows.Tendances => Title(cfg.RowTrendingTitle, DefaultTrending, lang),
+        HomeRows.Populaires => Title(cfg.RowPopularTitle, DefaultPopular, lang),
+        HomeRows.AVenir => Title(cfg.RowUpcomingTitle, DefaultUpcoming, lang),
         _ => Title(cfg.HssSectionTitle, DefaultPourToi, lang),
     };
 
@@ -236,11 +293,72 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
 
     private readonly ILogger<HomeScreenSectionsIntegration> _log;
     private readonly Notifier _notifier;
+    private readonly IServiceProvider _services;
+    private readonly IUserManager _users;
 
-    public HomeScreenSectionsIntegration(ILogger<HomeScreenSectionsIntegration> log, Notifier notifier)
+    public HomeScreenSectionsIntegration(ILogger<HomeScreenSectionsIntegration> log, Notifier notifier, IServiceProvider services, IUserManager users)
     {
         _log = log;
         _notifier = notifier;
+        _services = services;
+        _users = users;
+    }
+
+    /// <summary>
+    /// Rangées séparées ou réunies : l'accueil de chaque compte suit tout seul. Là où un compte affichait la rangée, il
+    /// affiche ses deux moitiés (films, séries) à la même place, et inversement ; une rangée que le compte n'affichait
+    /// pas reste absente. Rien n'est fait si Home Screen Sections n'a pas l'interface attendue.
+    /// </summary>
+    /// <returns>Nombre de comptes mis à jour.</returns>
+    private int ReconcileSplits(Assembly asm, Configuration.PluginConfiguration cfg)
+    {
+        try
+        {
+            var t = asm.GetType("Jellyfin.Plugin.HomeScreenSections.Library.IHomeScreenManager");
+            var mgr = t is null ? null : _services.GetService(t);
+            var get = t?.GetMethod("GetUserSettings", new[] { typeof(Guid) });
+            var upd = t?.GetMethods().FirstOrDefault(m => m.Name == "UpdateUserSettings" && m.GetParameters().Length == 2);
+            if (mgr is null || get is null || upd is null)
+            {
+                return 0;
+            }
+
+            var bases = new List<string> { HomeRows.PourToi, HomeRows.Nouveautes, HomeRows.ParceQue + 1, HomeRows.ParceQue + 2, HomeRows.ParceQue + 3 };
+            bases.AddRange(HomeRows.ListRows);
+            int changed = 0;
+            foreach (var u in _users.Users)
+            {
+                var settings = get.Invoke(mgr, new object[] { u.Id });
+                if (settings?.GetType().GetProperty("EnabledSections")?.GetValue(settings) is not List<string> list)
+                {
+                    continue;
+                }
+
+                bool any = false;
+                foreach (var b in bases)
+                {
+                    any |= SplitLayout.Apply(list, Prefix, b, cfg.KindOf(b));
+                }
+
+                if (any)
+                {
+                    upd.Invoke(mgr, new[] { u.Id, settings });
+                    changed++;
+                }
+            }
+
+            if (changed > 0)
+            {
+                _log.LogInformation("Reco+: home rows of {N} account(s) updated after a row was split or merged", changed);
+            }
+
+            return changed;
+        }
+        catch (Exception ex) when (ex is TargetInvocationException or InvalidOperationException or InvalidCastException or ArgumentException or MissingMethodException)
+        {
+            _log.LogWarning("Reco+: could not update the accounts' home rows ({Msg})", (ex.InnerException ?? ex).Message);
+            return 0;
+        }
     }
 
     /// <summary>État lisible.</summary>
@@ -303,13 +421,14 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
             }
 
             var sections = Sections(cfg);
-            foreach (var (id, title, method) in sections)
+            foreach (var (id, title, method, row) in sections)
             {
                 var payload = JsonSerializer.Serialize(new
                 {
                     id,
                     displayText = title,
                     limit = 1,
+                    additionalData = row,
                     resultsAssembly = typeof(HssSectionHandler).Assembly.FullName,
                     resultsClass = typeof(HssSectionHandler).FullName,
                     resultsMethod = method,
@@ -318,6 +437,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
             }
 
             Registered = true;
+            ReconcileSplits(asm, cfg);
             State = Texts.Pack("{0} rangées déclarées ({1}) — à choisir et ordonner dans la configuration de Home Screen Sections", sections.Count, string.Join(" · ", sections.Select(x => x.Title).Distinct()));
             _notifier.Clear("off-" + Feature.HomeScreenSection);
             _log.LogInformation("Reco+: {N} rows registered with Home Screen Sections", sections.Count);

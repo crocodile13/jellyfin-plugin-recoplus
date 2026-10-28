@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -44,6 +45,9 @@ public sealed class EngineStatus
 
     /// <summary>Accord TMDb pour la bibliothèque : titres aimés explorés et liens vers la bibliothèque.</summary>
     public string TmdbLibrary { get; set; } = "désactivé";
+
+    /// <summary>Listes TMDb (tendances, populaires, à venir) : titres lus et part présente dans la bibliothèque.</summary>
+    public string TmdbLists { get; set; } = "désactivé";
 
     /// <summary>Mesure de l'effet des propositions (null avant le premier calcul).</summary>
     public Measurement.Report? Measure { get; set; }
@@ -470,8 +474,21 @@ public sealed class RecoService : IDisposable
         var cl = seerr.Ok ? _seerr.Client() : null;
         var (titles, colls, tmdbOf, reviews, hiddenTmdb) = await Assemble(lib, hist, users, seerr, cl, only is null, cfg, ct).ConfigureAwait(false);
 
+        // listes TMDb du moment (tendances, populaires, à venir) : rangées dédiées, et tendances dans la popularité
+        var lists = seerr.Ok && cl is not null
+            ? await TmdbListsAsync(cl, lib, titles, colls, cfg, ct).ConfigureAwait(false)
+            : new Dictionary<string, TmdbList>(StringComparer.Ordinal);
+        if (!(seerr.Ok && cl is not null))
+        {
+            Status.TmdbLists = seerr.Ok ? "désactivé" : "Seerr indisponible";
+        }
+
         double now = Unix(DateTime.UtcNow);
-        var ds = new Dataset { Titles = titles, Users = hist, Collections = colls, Now = now, Reviews = reviews, LocalHour = LocalHourFunc(cfg) };
+        var ds = new Dataset
+        {
+            Titles = titles, Users = hist, Collections = colls, Now = now, Reviews = reviews, LocalHour = LocalHourFunc(cfg),
+            Trending = lists.TryGetValue(HomeRows.Tendances, out var trendList) ? trendList.Score : new Dictionary<string, double>(StringComparer.Ordinal),
+        };
         var ctx = new Context(ds, now, hist, s);
         progress?.Report(40);
 
@@ -606,7 +623,14 @@ public sealed class RecoService : IDisposable
                     // rangées d'accueil supplémentaires, sans doublons entre elles ni avec « Pour toi »
                     var shownSet = new HashSet<string>(shaped, StringComparer.Ordinal);
                     var ordered = shaped.Concat(pool.Where(id => !shownSet.Contains(id)).OrderByDescending(id => sc[id]).ThenBy(id => id, StringComparer.Ordinal)).ToList();
-                    var home = HomeRows.Allocate(uc, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, rowOpts);
+                    // rangées des listes TMDb : leurs titres de la bibliothèque, dans l'ordre de ce compte (tendance et goût)
+                    var ro = rowOpts.Clone();
+                    var candSet = cands.ToHashSet(StringComparer.Ordinal);
+                    ro.Lists = lists.Where(kv => RowShown(ro, kv.Key)).ToDictionary(
+                        kv => kv.Key,
+                        kv => (IReadOnlyList<string>)Trending.Order(kv.Value.Ids.Where(candSet.Contains), kv.Value.Score, sc, cfg.ListSettings(kv.Key).Taste),
+                        StringComparer.Ordinal);
+                    var home = HomeRows.Allocate(uc, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, ro);
                     var view = new SlotRecs
                     {
                         Ranked = shaped,
@@ -614,7 +638,7 @@ public sealed class RecoService : IDisposable
                         Rows = home.Rows,
                         RowAnchors = home.Anchors,
                     };
-                    views.Add(new HomeView(slot, view, shaped, ordered, sc));
+                    views.Add(new HomeView(slot, view, shaped, ordered, sc) { Opts = ro });
                     if (slot is int sl)
                     {
                         r.Slots[sl] = view;
@@ -652,6 +676,7 @@ public sealed class RecoService : IDisposable
                 r.Extended = recs.Select(p => p.Rec!).ToList();
                 r.ExtendedAt = DateTime.UtcNow;
                 List<string>? placedFrom = null;
+                var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo);
 
                 // accueil : titres hors bibliothèque dans les rangées qui en reçoivent, pour chaque vue (tranche horaire)
                 if (cfg.AnyExternalRow() && views.Count > 0)
@@ -659,13 +684,18 @@ public sealed class RecoService : IDisposable
                     foreach (var hv in views)
                     {
                         uc.Slot = hv.Slot;
-                        var placed = PlaceExternals(uc, vec, key, r.Pinned, recs.Select(p => (p.Id, p.Rec!)).ToList(), hv, rowOpts, cfg, s, expo, noise, noiseSeed, titles, now);
+                        var placed = PlaceExternals(uc, vec, key, r.Pinned, recs.Select(p => (p.Id, p.Rec!)).ToList(), pools, hv, cfg, s, expo, noise, noiseSeed, titles, now);
                         if (hv.Default)
                         {
                             (r.Rows, r.RowAnchors, r.Layouts) = (hv.View.Rows, hv.View.RowAnchors, hv.View.Layouts);
+                            var known = r.Extended.Select(e => e.MediaType + ":" + e.TmdbId).ToHashSet(StringComparer.Ordinal);
                             foreach (var (rec, row, after) in placed)
                             {
                                 (rec.Row, rec.After) = (row, after);
+                                if (known.Add(rec.MediaType + ":" + rec.TmdbId))
+                                {
+                                    r.Extended.Add(rec);   // titre d'une liste TMDb : servi au client comme les autres
+                                }
                             }
 
                             placedFrom = placed.Select(x => x.Rec.Source).ToList();
@@ -768,7 +798,8 @@ public sealed class RecoService : IDisposable
     /// </summary>
     internal static RowOptions RowOptionsOf(Configuration.PluginConfiguration cfg, HashSet<string>? shown)
     {
-        bool On(string row) => shown is null || shown.Contains(row);
+        // une rangée séparée compte comme affichée si l'une de ses deux moitiés l'est
+        bool On(string row) => shown is null || shown.Contains(row) || HomeRows.Expand(row, cfg.KindOf(row)).Any(shown.Contains);
         int because = 0;
         for (int i = 1; i <= 3; i++)
         {
@@ -786,8 +817,14 @@ public sealed class RecoService : IDisposable
             New = On(HomeRows.Nouveautes),
             NewDays = Math.Clamp(cfg.RowNewDays, 1, 365),
             Because = because,
+            Kinds = HomeRows.KindRows.ToDictionary(k => k, cfg.KindOf, StringComparer.Ordinal),
+            Shown = shown,
         };
     }
+
+    /// <summary>Rangée de base affichée au compte (l'une de ses moitiés si elle est séparée).</summary>
+    internal static bool RowShown(RowOptions o, string baseRow)
+        => o.Shown is null || o.Shown.Contains(baseRow) || HomeRows.Expand(baseRow, o.KindSetting(baseRow)).Any(o.Shown.Contains);
 
     /// <summary>Une vue des rangées d'accueil (tranche horaire) et ce qui a servi à la calculer.</summary>
     private sealed class HomeView(int? slot, SlotRecs view, List<string> shaped, List<string> ordered, Dictionary<string, double> sc)
@@ -803,6 +840,9 @@ public sealed class RecoService : IDisposable
         public Dictionary<string, double> Sc { get; } = sc;
 
         public bool Default { get; set; }
+
+        /// <summary>Rangées de cette vue (listes TMDb dans l'ordre du compte).</summary>
+        public RowOptions Opts { get; set; } = new();
     }
 
     /// <summary>
@@ -813,11 +853,31 @@ public sealed class RecoService : IDisposable
     /// renvoie les titres placés, leur rangée et leur place.
     /// </summary>
     private static List<(ExternalRec Rec, string Row, int After)> PlaceExternals(Context ctx, IReadOnlyDictionary<string, SparseVector> vec,
-        string key, List<string> pinned, List<(string Id, ExternalRec Rec)> recs, HomeView hv, RowOptions rowOpts,
+        string key, List<string> pinned, List<(string Id, ExternalRec Rec)> general, Dictionary<string, ListPool> pools, HomeView hv,
         Configuration.PluginConfiguration cfg, EngineSettings s, IReadOnlyDictionary<string, Exposure>? expo, double noise, string noiseSeed,
         IReadOnlyDictionary<string, Title> titles, double now)
     {
         int size = Math.Clamp(cfg.RowSize, 5, 60);
+        var rowOpts = hv.Opts;
+        // titres hors bibliothèque : ceux de l'exploration (toutes les rangées), puis ceux des listes TMDb (leur rangée seule)
+        var recs = general.ToList();
+        var index = recs.Select((p, i) => (p.Id, i)).ToDictionary(x => x.Id, x => x.i, StringComparer.Ordinal);
+        var poolIdx = new Dictionary<string, HashSet<int>>(StringComparer.Ordinal);
+        foreach (var (row, pool) in pools)
+        {
+            var set = poolIdx[row] = new HashSet<int>();
+            foreach (var p in pool.Items)
+            {
+                if (!index.TryGetValue(p.Id, out var i))
+                {
+                    index[p.Id] = i = recs.Count;
+                    recs.Add(p);
+                }
+
+                set.Add(i);
+            }
+        }
+
         // score commun (ce que bibliothèque et hors bibliothèque ont en commun), même bruit du jour pour les titres hors bibliothèque
         var joint = Recommender.ScoreAll(ctx, vec, key, hv.Ordered.Concat(recs.Select(p => p.Id)).Distinct().ToList(), Recommender.Shared(s), exposure: expo);
         var jointExt = Exploration.Noisy(recs.ToDictionary(p => p.Id, p => joint[p.Id], StringComparer.Ordinal), noise, noiseSeed);
@@ -847,20 +907,29 @@ public sealed class RecoService : IDisposable
             }
 
             // demandes et nouvelles saisons en tête de « Pour toi » : jamais déplacées
-            int skip = row == HomeRows.PourToi ? shown.TakeWhile(pinnedSet.Contains).Count() : 0;
+            var kindRow = HomeRows.KindOfRow(row);
+            int skip = kindRow == HomeRows.PourToi ? shown.TakeWhile(pinnedSet.Contains).Count() : 0;
             var lib = shown.Skip(skip).ToList();
-            bool Fits(Title t) => row switch
+            var kind = rowOpts.KindOf(row);
+            bool listRow = pools.TryGetValue(kindRow, out var pool);
+            bool Fits(Title t) => Trending.Allows(kind, t.Kind) && kindRow switch
             {
-                HomeRows.Films => t.Kind == TitleKind.Movie,
-                HomeRows.Series => t.Kind == TitleKind.Series,
                 HomeRows.Nouveautes => (t.Released ?? 0) >= releasedCut && t.Released <= now,
                 _ => true,
             };
-            var cand = Enumerable.Range(0, recs.Count).Where(i => !taken.Contains(i) && titles.TryGetValue(recs[i].Id, out var t) && Fits(t)).ToList();
+            var cand = Enumerable.Range(0, recs.Count).Where(i => !taken.Contains(i) && (listRow ? poolIdx[kindRow].Contains(i) : i < general.Count)
+                && titles.TryGetValue(recs[i].Id, out var t) && Fits(t)).ToList();
 
-            // clé de classement : celle de la rangée (« Parce que … » : surtout la ressemblance avec le titre aimé)
+            // clé de classement : celle de la rangée (« Parce que … » : surtout la ressemblance avec le titre aimé ; listes
+            // TMDb : la place dans la liste mêlée au goût du compte, comme pour leurs titres de la bibliothèque)
             Func<string, double> rank = Key;
-            if (anchor is not null && vec.TryGetValue(anchor, out var av))
+            if (listRow)
+            {
+                var all = lib.Concat(cand.Select(i => recs[i].Id)).Select(Key).ToList();
+                double min = all.Count > 0 ? all.Min() : 0, span = all.Count > 0 ? all.Max() - min : 0;
+                rank = id => ((1.0 - pool!.Taste) * pool.Score.GetValueOrDefault(id)) + (pool.Taste * (span > 0 ? (Key(id) - min) / span : 1.0));
+            }
+            else if (anchor is not null && vec.TryGetValue(anchor, out var av))
             {
                 double Sim(string id) => vec.TryGetValue(id, out var v) ? av.Dot(v) : 0;
                 cand = cand.Where(i => Sim(recs[i].Id) >= HomeRows.MinSimilarity).ToList();
@@ -1150,6 +1219,154 @@ public sealed class RecoService : IDisposable
         return ds;
     }
 
+    /// <summary>Titres hors bibliothèque d'une rangée de liste TMDb pour un compte : titres (dans l'ordre de la liste), intensité, part du goût.</summary>
+    private sealed record ListPool(List<(string Id, ExternalRec Rec)> Items, Dictionary<string, double> Score, double Taste);
+
+    /// <summary>
+    /// Titres hors bibliothèque des listes TMDb proposables à un compte, pour les rangées affichées qui en reçoivent : pas
+    /// vus, pas déjà demandés ni masqués, pas arrivés entre-temps, autorisés par son contrôle parental et les filtres des
+    /// listes. Mode étendu seulement (cartes et bouton Demander).
+    /// </summary>
+    private Dictionary<string, ListPool> ListPools(User u, Dictionary<string, Interaction> h, HashSet<string>? hidden, Dictionary<string, TmdbList> lists,
+        RowOptions rowOpts, Dictionary<string, Title> titles, LibrarySnapshot lib, SeerrSnapshot seerr, Configuration.PluginConfiguration cfg, ListOptions lo)
+    {
+        var res = new Dictionary<string, ListPool>(StringComparer.Ordinal);
+        if (!cfg.ExtendedEnabled)
+        {
+            return res;
+        }
+
+        var policy = PolicyOf(u);
+        var country = cfg.ClassificationCountry();
+        int size = Math.Clamp(cfg.RowSize, 5, 60);
+        foreach (var (row, tl) in lists)
+        {
+            if (cfg.SourceOf(row) == RowSource.Local || !RowShown(rowOpts, row) || tl.External.Count == 0)
+            {
+                continue;
+            }
+
+            string reason = row switch
+            {
+                HomeRows.Tendances => cfg.TrendingWindow == Configuration.TrendWindow.Day ? "En tendance aujourd'hui" : "En tendance cette semaine",
+                HomeRows.Populaires => "Populaire en ce moment",
+                _ => "Bientôt à l'affiche",
+            };
+            var items = new List<(string, ExternalRec)>();
+            foreach (var id in tl.External)
+            {
+                var k = id[5..];
+                var p = k.Split(':');
+                var d = int.TryParse(p[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var tid) ? _seerr.CachedDetails(p[0], tid) : null;
+                if (d is null || !titles.TryGetValue(id, out var t) || Known(h, id, cfg.ProposeMarked) || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k)
+                    || hidden?.Contains(k) == true || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ListPolicy.Allows(t, lo) || !ParentalAllowed(policy, d, country))
+                {
+                    continue;
+                }
+
+                if (ToExternalRec(id, titles, new Dictionary<string, string>(), new Dictionary<string, string> { [id] = reason }) is { } rec)
+                {
+                    rec.Source = "list";
+                    items.Add((id, rec));
+                }
+
+                if (items.Count >= size * 2)
+                {
+                    break;
+                }
+            }
+
+            res[row] = new ListPool(items, tl.Score, cfg.ListSettings(row).Taste);
+        }
+
+        return res;
+    }
+
+    /// <summary>
+    /// Une liste TMDb du moment pour une rangée : ses titres (identifiant de la bibliothèque, sinon « tmdb:sorte:id »),
+    /// leur intensité 0..1 (<see cref="Trending.Scores"/>) et ceux qui manquent à la bibliothèque, fiche chargée, du plus
+    /// fort au plus faible.
+    /// </summary>
+    private sealed record TmdbList(List<string> Ids, Dictionary<string, double> Score, List<string> External);
+
+    /// <summary>
+    /// Listes TMDb via Seerr (cache 6 h, partagé) : tendances (semaine ou jour), populaires, à venir ; films et séries lus
+    /// séparément, chacun dans l'ordre de TMDb. Les fiches des titres hors bibliothèque ne sont chargées que si leur rangée
+    /// en reçoit (mode étendu).
+    /// </summary>
+    private async Task<Dictionary<string, TmdbList>> TmdbListsAsync(SeerrClient cl, LibrarySnapshot lib, Dictionary<string, Title> titles,
+        Dictionary<string, List<string>> colls, Configuration.PluginConfiguration cfg, CancellationToken ct)
+    {
+        var res = new Dictionary<string, TmdbList>(StringComparer.Ordinal);
+        string window = cfg.TrendingWindow == Configuration.TrendWindow.Day ? "day" : "week";
+        int read = 0, inLib = 0;
+        foreach (var row in HomeRows.ListRows)
+        {
+            int count = cfg.ListSettings(row).Count;
+            var perKind = new List<IReadOnlyList<string>>();
+            foreach (var type in new[] { "movie", "tv" })
+            {
+                var (list, query) = row switch
+                {
+                    HomeRows.Tendances => ("trending", "mediaType=" + type + "&timeWindow=" + window),
+                    HomeRows.Populaires => (type == "movie" ? "movies" : "tv", string.Empty),
+                    _ => (type == "movie" ? "movies/upcoming" : "tv/upcoming", string.Empty),
+                };
+                var keys = new List<string>();
+                for (int p = 1; p <= (count + 19) / 20 && keys.Count < count; p++)
+                {
+                    var items = await _seerr.ListAsync(cl, list, query, type, p, ct).ConfigureAwait(false);
+                    if (items.Count == 0)
+                    {
+                        break;
+                    }
+
+                    keys.AddRange(items.Where(r => r.MediaType == type && !r.Adult).Select(r => r.MediaType + ":" + r.TmdbId));
+                }
+
+                perKind.Add(keys.Distinct(StringComparer.Ordinal).Take(count)
+                    .Select(k => lib.ByTmdb.TryGetValue(k, out var lid) ? lid : "tmdb:" + k).ToList());
+            }
+
+            var score = Trending.Scores(perKind.ToArray());
+            var ids = score.OrderByDescending(kv => kv.Value).ThenBy(kv => kv.Key, StringComparer.Ordinal).Select(kv => kv.Key).ToList();
+            read += ids.Count;
+            inLib += ids.Count(id => !id.StartsWith("tmdb:", StringComparison.Ordinal));
+
+            // titres hors bibliothèque : fiches (en cache) seulement si la rangée en reçoit
+            var external = new List<string>();
+            if (cfg.ExtendedEnabled && cfg.SourceOf(row) != RowSource.Local)
+            {
+                var ext = ids.Where(id => id.StartsWith("tmdb:", StringComparison.Ordinal)).ToList();
+                var details = await Task.WhenAll(ext.Select(id =>
+                {
+                    var p = id.Split(':');
+                    return int.TryParse(p[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out var tid)
+                        ? _seerr.DetailsAsync(cl, p[1], tid, ct)
+                        : Task.FromResult<SeerrDetails?>(null);
+                })).ConfigureAwait(false);
+                for (int i = 0; i < ext.Count; i++)
+                {
+                    if (details[i] is { } d)
+                    {
+                        if (!titles.ContainsKey(ext[i]))
+                        {
+                            titles[ext[i]] = ExternalTitle(d, ext[i], colls);
+                        }
+
+                        external.Add(ext[i]);
+                    }
+                }
+            }
+
+            res[row] = new TmdbList(ids, score, external);
+        }
+
+        _seerr.SaveCache();
+        Status.TmdbLists = Texts.Pack("{0} titres lus (tendances, populaires, à venir), {1} dans la bibliothèque", read, inLib);
+        return res;
+    }
+
     /// <summary>
     /// Accord TMDb des titres de la bibliothèque pour chaque compte (<see cref="TmdbSignal"/>) : recommandations et
     /// similaires TMDb de ses titres les plus aimés, lus via Seerr (cache de 3 jours partagé avec le mode étendu, au
@@ -1254,7 +1471,11 @@ public sealed class RecoService : IDisposable
         string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? t.Name + (t.Kind == TitleKind.Series ? series : string.Empty) : id;
         // la rangée « Pour toi » telle que l'accueil la montre (titres en tête compris) ; à défaut, la liste classée
         var pins = new HashSet<string>(r.Pinned, StringComparer.Ordinal);
-        var row = r.Rows.TryGetValue(HomeRows.PourToi, out var pt) && pt.Count > 0 ? pt : r.Pinned.Concat(r.Ranked).ToList();
+        // rangée séparée (films, séries) : les deux moitiés entrelacées
+        var halves = new[] { HomeRows.PourToi, HomeRows.PourToi + HomeRows.MoviesSuffix, HomeRows.PourToi + HomeRows.SeriesSuffix }
+            .Select(k => r.Rows.GetValueOrDefault(k)).Where(l => l is { Count: > 0 }).Select(l => l!).ToList();
+        var row = halves.Count == 0 ? r.Pinned.Concat(r.Ranked).ToList()
+            : Enumerable.Range(0, halves.Max(l => l.Count)).SelectMany(i => halves.Where(l => i < l.Count).Select(l => l[i])).Distinct(StringComparer.Ordinal).ToList();
         return row.Take(n).Select(id => (pins.Contains(id) ? "📌 " : string.Empty) + Name(id)).ToList();
     }
 
@@ -1273,11 +1494,9 @@ public sealed class RecoService : IDisposable
         string series = " (" + Texts.T("série", lang) + ")";
         string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? t.Name + (t.Kind == TitleKind.Series ? series : string.Empty) : id;
         int size = Math.Clamp(cfg.RowSize, 5, 60);
-        foreach (var (row, ids) in r.Rows.Where(kv => kv.Key != HomeRows.PourToi && kv.Value.Count > 0))
+        foreach (var (row, ids) in r.Rows.Where(kv => HomeRows.KindOfRow(kv.Key) != HomeRows.PourToi && kv.Value.Count > 0))
         {
-            string label = row is HomeRows.Films or HomeRows.Series or HomeRows.Nouveautes
-                ? HomeScreenSectionsIntegration.RowTitle(cfg, row, lang)
-                : r.RowAnchors.TryGetValue(row, out var a) ? HomeScreenSectionsIntegration.Because(cfg, a, lang) : row;
+            string label = HomeScreenSectionsIntegration.DisplayTitle(cfg, row, r.RowAnchors.GetValueOrDefault(row), lang);
             res[label] = ids.Take(size).Select(Name).ToList();
         }
 

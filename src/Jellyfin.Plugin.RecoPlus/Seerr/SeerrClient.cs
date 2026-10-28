@@ -335,6 +335,16 @@ public sealed class SeerrClient
         return MapResults(Arr(j, "results"), mediaType == "tv" ? "tv" : "movie");
     }
 
+    /// <summary>
+    /// Une page d'une liste TMDb de Seerr : « trending » (tendances, <paramref name="query"/> = mediaType et timeWindow),
+    /// « movies » / « tv » (populaires : découverte triée par popularité), « movies/upcoming » / « tv/upcoming » (à venir).
+    /// </summary>
+    public async Task<List<SeerrResult>> ListAsync(string list, string query, string defaultType, string language, int page, CancellationToken ct)
+    {
+        var j = await Get($"api/v1/discover/{list}?page={Math.Clamp(page, 1, 20)}&language={Uri.EscapeDataString(language)}" + (query.Length > 0 ? "&" + query : string.Empty), ct).ConfigureAwait(false);
+        return MapResults(Arr(j, "results"), defaultType);
+    }
+
     /// <summary>Films d'une saga TMDb, par date de sortie.</summary>
     public async Task<List<SeerrResult>> CollectionAsync(int collectionId, CancellationToken ct)
     {
