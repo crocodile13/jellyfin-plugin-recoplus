@@ -12,9 +12,9 @@
         "version": "1.0.42.0",
         "changelog": "1.0.42: mixed rows shorter than their size (Trending, Popular, a quiet month of new arrivals) are now completed with titles outside the library, which used to appear only when they outranked the few library titles; current lists get their titles outside the library even for accounts without a recent exploration; the preview shows how many list titles each account could get and how many were placed.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.42.0/RecoPlus_1.0.42.0.zip",
+        "checksum": "a27e348633ef68cb072d60e1e5109f33",
+        "timestamp": "2026-10-28T14:32:39Z"
       },
       {
         "version": "1.0.41.0",
