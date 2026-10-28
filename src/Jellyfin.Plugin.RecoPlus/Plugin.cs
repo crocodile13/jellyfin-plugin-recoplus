@@ -73,6 +73,13 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
             return string.Empty;
         }
 
+        // haut de liste resté égal à la taille des rangées (avant 1.0.40) : automatique, il la suit désormais
+        if (c.Lists is { } lists && lists.Window == c.RowSize)
+        {
+            lists.Window = 0;
+            changed = true;
+        }
+
         c.HssSectionTitle = Default(c.HssSectionTitle, Integration.HomeScreenSectionsIntegration.DefaultPourToi);
         c.RowNewTitle = Default(c.RowNewTitle, Integration.HomeScreenSectionsIntegration.DefaultNew);
         c.RowMoviesTitle = Default(c.RowMoviesTitle, Integration.HomeScreenSectionsIntegration.DefaultMovies);

@@ -161,8 +161,22 @@ de la CI.
 - Chaque réglage : une ligne du tableau `F` (clé, libellé, type, aide, pas, min, max, groupe, cible, défaut affiché).
   Le test `configpage.test.mjs` vérifie que chaque clé existe côté serveur.
 - Aide au survol pour chaque réglage, valeur par défaut indiquée ; « 0 = automatique » quand il y a un mode auto.
-- Un réglage sans effet dans la configuration actuelle est **grisé et désactivé, avec la raison** (`WHY` / `reason`) ;
-  une raison commune à toute une boîte est dite une fois en tête. Jamais masqué silencieusement ; valeur gardée.
+- Un réglage sans effet dans la configuration actuelle : choisir le plus parlant pour la situation, valeur toujours
+  gardée et enregistrée.
+  - **Grisé et désactivé, avec la raison** (`WHY` / `reason`) quand il dépend d'un autre réglage que l'on peut changer
+    (Seerr coupé, mode étendu coupé, facteur coupé, rangée en bibliothèque seule…) : l'utilisateur doit voir qu'il
+    existe et ce qui le rallume. Une raison commune à toute une boîte est dite une fois en tête.
+  - **Masqué** seulement quand il n'a aucun sens dans la forme choisie et réapparaît à côté du choix qui le fait
+    exister (sous-lignes des moitiés d'une rangée séparée) : jamais ailleurs que juste sous ce choix.
+- Avant d'ajouter un réglage, relire **toute** la page (tous les onglets) :
+  - pas de doublon ni de chevauchement avec un réglage existant (même effet, ou l'un qui annule l'autre) : étendre
+    l'existant, ou dériver la valeur automatiquement (« 0 = comme … ») ;
+  - même vocabulaire, même unité, même sens de lecture que les réglages voisins et ceux des autres onglets (« goût
+    minimal », « part des goûts », « votes TMDb minimum » veulent dire la même chose partout) ;
+  - à sa place logique : avec ce qu'il règle (onglet de la fonction, boîte de la rangée), le courant visible, le fin
+    dans « Réglages avancés », le diagnostic en mode développeur ;
+  - aide au survol qui dit l'effet concret, les bornes, la valeur par défaut, et ce qui le rend sans effet ;
+  - compréhensible sans lire le code : si l'explication demande plus de deux phrases, revoir le réglage.
 - Pas de réglage obsolète : un réglage retiré est migré (`Plugin.Migrate`) puis supprimé de la page.
 - Onglet Accueil : une ligne de 4 cases par rangée (note, titre, sortes, contenu ; `blank` pour une case vide, `sep`
   pour un intertitre), dans l'ordre de la répartition ; ailleurs, `{ROW}` (rangée principale) ou `{T:Champ}` reprennent

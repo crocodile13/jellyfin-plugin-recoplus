@@ -122,4 +122,13 @@ public class ListPolicyTests
         Assert.Equal("science fiction", ListOptions.Normalize("Science‑Fiction"));
         Assert.Equal("comedie", ListOptions.Normalize("Comédie"));
     }
+
+    [Fact]
+    public void AutomaticWindowFollowsTheRowSize()
+    {
+        Assert.Equal(12, new ListOptions().Sanitized(12).Window);                 // 0 = la taille des rangées
+        Assert.Equal(20, new ListOptions().Sanitized().Window);
+        Assert.Equal(30, new ListOptions { Window = 30 }.Sanitized(12).Window);   // réglé : gardé
+        Assert.Equal(5, new ListOptions().Sanitized(1).Window);                   // bornes
+    }
 }

@@ -435,7 +435,7 @@ public sealed class RecoService : IDisposable
             _recs.TryRemove(gone, out _);
         }
 
-        var lo = cfg.Lists.Sanitized();
+        var lo = cfg.Lists.Sanitized(cfg.RowSize);
         progress?.Report(5);
 
         // Seerr : relu à chaque calcul complet ; pour un calcul d'un seul compte, réutilisé s'il a moins de 30 min (sinon
@@ -1269,6 +1269,7 @@ public sealed class RecoService : IDisposable
         var policy = PolicyOf(u);
         var country = cfg.ClassificationCountry();
         int size = Math.Clamp(cfg.RowSize, 5, 60);
+        int minRuntime = Math.Clamp(cfg.ExtendedMinRuntime, 0, 600);   // courts métrages écartés, comme pour l'exploration
         foreach (var (row, tl) in lists)
         {
             if (cfg.SourceOf(row) == RowSource.Local || !RowShown(rowOpts, row) || tl.External.Count == 0)
@@ -1290,7 +1291,8 @@ public sealed class RecoService : IDisposable
                 var p = k.Split(':');
                 var d = int.TryParse(p[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var tid) ? _seerr.CachedDetails(p[0], tid) : null;
                 if (d is null || !titles.TryGetValue(id, out var t) || Known(h, id, cfg.ProposeMarked) || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k)
-                    || hidden?.Contains(k) == true || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ListPolicy.Allows(t, lo) || !ParentalAllowed(policy, d, country))
+                    || hidden?.Contains(k) == true || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ListPolicy.Allows(t, lo) || !ParentalAllowed(policy, d, country)
+                    || (minRuntime > 0 && d.Runtime is int rt && rt < minRuntime))
                 {
                     continue;
                 }

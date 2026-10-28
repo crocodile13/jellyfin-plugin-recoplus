@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.40.0",
+        "changelog": "1.0.40: settings review — the top-of-list window used by randomness and minimums now follows the row size automatically (0 = automatic; a window equal to the row size is migrated), the short-film minimum also applies to titles outside the library in the current lists, and the help texts say exactly which minimums apply where.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.39.0",
         "changelog": "1.0.39: split rows get their own title for each half (empty = \"…: movies\" / \"…: series\"); \"Movies for you\" and \"Series for you\" become the two halves of a single \"rest of the ranking\" row that can also be merged (\"More for you\") or show one kind; titles outside the library in the Trending, Popular and Upcoming rows are filtered by minimum TMDb popularity, votes and taste (advanced settings), and Upcoming keeps the most anticipated titles; default title \"Popular\".",
         "targetAbi": "12.2.0.0",
