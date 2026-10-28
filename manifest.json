@@ -12,9 +12,9 @@
         "version": "1.0.40.0",
         "changelog": "1.0.40: settings review — the top-of-list window used by randomness and minimums now follows the row size automatically (0 = automatic; a window equal to the row size is migrated), the short-film minimum also applies to titles outside the library in the current lists, and the help texts say exactly which minimums apply where.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.40.0/RecoPlus_1.0.40.0.zip",
+        "checksum": "11098a2ba5025a6251e404f9f202e070",
+        "timestamp": "2026-10-28T13:32:53Z"
       },
       {
         "version": "1.0.39.0",
