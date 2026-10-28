@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.40: settings review — the top-of-list window used by randomness and minimums now follows the row size automatically (0 = automatic; a window equal to the row size is migrated), the short-film minimum also applies to titles outside the library in the current lists, and the help texts say exactly which minimums apply where.",
+  "changelog": "1.0.41: splitting or merging a row now also updates the Home Screen Sections admin table (the new rows take the old one's place and settings), so accounts that follow the defaults keep the row; only accounts with their own saved choice are updated, the others are no longer frozen; the main title of a split row becomes its \"base title\" (unused once both halves have a title); shorter option labels and notes; extended-mode count help clarified.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.40.0",
+  "version": "1.0.41.0",
   "status": "Active",
   "autoUpdate": true,
   "assemblies": [

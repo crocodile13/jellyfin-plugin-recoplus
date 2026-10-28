@@ -126,4 +126,24 @@ public static class SplitLayout
         sections.InsertRange(at, want);
         return true;
     }
+
+    /// <summary>
+    /// Même mise en accord pour un tableau de réglages par section (celui de l'administrateur dans Home Screen Sections) :
+    /// les formes périmées sont retirées ; chaque forme voulue absente est créée sur le modèle de la première forme
+    /// périmée (ordre, affichage, droits), à sa place. Rien à faire si aucune forme périmée n'y figure.
+    /// </summary>
+    /// <param name="ids">Identifiants des réglages, dans l'ordre du tableau.</param>
+    /// <returns>Identifiants à retirer ; identifiants à créer, avec celui dont copier les réglages.</returns>
+    public static (List<string> Remove, List<(string Id, string From)> Add) Replace(IReadOnlyList<string> ids, string prefix, string baseRow, KindFilter kind)
+    {
+        var all = HomeRows.Forms(baseRow).Select(x => prefix + x).ToHashSet(StringComparer.Ordinal);
+        var want = HomeRows.Expand(baseRow, kind).Select(x => prefix + x).ToList();
+        var stale = ids.Where(s => all.Contains(s) && !want.Contains(s, StringComparer.Ordinal)).Distinct(StringComparer.Ordinal).ToList();
+        if (stale.Count == 0)
+        {
+            return (new List<string>(), new List<(string, string)>());
+        }
+
+        return (stale, want.Where(w => !ids.Contains(w, StringComparer.Ordinal)).Select(w => (w, stale[0])).ToList());
+    }
 }

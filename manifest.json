@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.41.0",
+        "changelog": "1.0.41: splitting or merging a row now also updates the Home Screen Sections admin table (the new rows take the old one's place and settings), so accounts that follow the defaults keep the row; only accounts with their own saved choice are updated, the others are no longer frozen; the main title of a split row becomes its \"base title\" (unused once both halves have a title); shorter option labels and notes; extended-mode count help clarified.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.40.0",
         "changelog": "1.0.40: settings review — the top-of-list window used by randomness and minimums now follows the row size automatically (0 = automatic; a window equal to the row size is migrated), the short-film minimum also applies to titles outside the library in the current lists, and the help texts say exactly which minimums apply where.",
         "targetAbi": "12.2.0.0",
