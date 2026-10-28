@@ -100,9 +100,8 @@ public static class Measurement
         public double Days { get; set; }
     }
 
-    /// <summary>Rangée ramenée à son type (« ParceQue2 » → « ParceQue »).</summary>
-    public static string RowKind(string row)
-        => row.StartsWith(HomeRows.ParceQue, StringComparison.Ordinal) ? HomeRows.ParceQue : row;
+    /// <summary>Rangée ramenée à son type (« ParceQue2 » → « ParceQue », « TendancesFilms » → « Tendances »).</summary>
+    public static string RowKind(string row) => HomeRows.KindOfRow(row);
 
     /// <summary>Tranche de places.</summary>
     public static string Bucket(int position)

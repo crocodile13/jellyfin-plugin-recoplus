@@ -9,6 +9,22 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.37.0",
+        "changelog": "1.0.37: new home rows \"Trending\", \"Popular right now\" and \"Upcoming\" (TMDb lists through Seerr, sorted by each account's taste, library and/or titles outside the library); TMDb trends now also raise the popularity bonus in every row; every row can show movies, series, both, or be split into two rows, and accounts' Home Screen Sections layouts follow automatically; new \"Home\" settings tab gathering titles, kinds and content of every row, with Seerr-dependent settings greyed out when Seerr is not used.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
+        "version": "1.0.36.0",
+        "changelog": "1.0.36: accounts that had not watched anything for a month kept old titles outside the library, placed in no home row, so they saw no Seerr suggestions at all — they are now explored again when their titles are unplaced or more than a week old, and signing in counts as activity, not only playing something.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.35.0",
         "changelog": "1.0.35: Reco+ now updates itself — the plugin is marked for automatic updates, so Jellyfin's \"Update Plugins\" scheduled task installs new versions from the repository (a restart applies them). Versions up to 1.0.34 were marked not to: update to 1.0.35 once by hand.",
         "targetAbi": "12.2.0.0",

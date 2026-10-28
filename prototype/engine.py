@@ -283,7 +283,7 @@ def rec_jellyfin(ctx, user, cands, k, seed=0):
 # --- moteur
 ENGINE_W = dict(centroid=1.0, maxsim=2.0, collab=0.3, pop=0.5, quality=0.1, neg=0.6, fresh=2.0, fresh_days=45.0,
                 gate="rank", gate_top=60, release=0.0, release_days=365.0, rating="community",
-                rating_prior_votes=150.0, household=0.3, household_prior=2.0)
+                rating_prior_votes=150.0, household=0.3, household_prior=2.0, trending_share=0.5)
 
 
 def household(ds, title, user, prior) -> float:
@@ -368,7 +368,10 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W, expo=None):
         ms = max((s * dot(vec[t], v) for t, s in pos.items()), default=0.0) / (max(pos.values(), default=1.0))
         col = sum(s * ctx.cooc.get(t, {}).get(c, 0.0) for t, s in pos.items()) / tot
         neg_pen = max((s * dot(vec[t], v) for t, s in neg.items()), default=0.0)
-        pop = math.log1p(others_pop[c]) / math.log1p(maxpop)
+        # popularité : dans le foyer, et tendance TMDb du moment (OU probabiliste), comme Recommender.Compute
+        house = math.log1p(others_pop[c]) / math.log1p(maxpop)
+        trend = min(1.0, max(0.0, (ctx.ds.meta.get("trending") or {}).get(c, 0.0))) * min(1.0, max(0.0, W.get("trending_share", 0.5)))
+        pop = 1.0 - (1.0 - house) * (1.0 - trend) if trend > 0 else house
         q = max(-1.0, min(1.0, (quality(T[c], W.get("rating", "community"), W.get("rating_prior_votes", 150.0)) - 6.5) / 2.0))
         hh = household(ctx.ds, c, user, W.get("household_prior", 2.0))
         rel = T[c].released or 0

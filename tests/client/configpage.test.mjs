@@ -63,7 +63,7 @@ const cfg = {
 await test('chaque réglage de la page existe côté serveur (aucune faute de nom)', async () => {
     const f = fieldsOf(HTML);
     assert.ok(f.length > 60, 'champs lus : ' + f.length);
-    const missing = f.filter((x) => x.type !== 'note' && !PROPS[x.target].has(x.key)).map((x) => x.target + ':' + x.key);
+    const missing = f.filter((x) => !['note', 'sep', 'blank'].includes(x.type) && !PROPS[x.target].has(x.key)).map((x) => x.target + ':' + x.key);
     assert.deepEqual(missing, []);
     const dup = f.map((x) => x.target + x.key).filter((k, i, a) => a.indexOf(k) !== i);
     assert.deepEqual(dup, []);
@@ -72,7 +72,7 @@ await test('chaque réglage de la page existe côté serveur (aucune faute de no
 await test('chaque réglage a une aide au survol', async () => {
     const { d } = await open(cfg);
     await wait(50);
-    const f = fieldsOf(HTML).filter((x) => x.type !== 'users' && x.type !== 'genres');
+    const f = fieldsOf(HTML).filter((x) => !['users', 'genres', 'sep', 'blank'].includes(x.type));
     const noTip = f.filter((x) => !x.tip).map((x) => x.key);
     assert.deepEqual(noTip, []);
     for (const x of f) {
@@ -174,7 +174,8 @@ await test('le nom de la rangée suit le titre saisi, partout', async () => {
     input.value = 'Pour vous';
     input.dispatchEvent(new d.defaultView.Event('input'));
     assert.match(d.querySelector('[data-pane="listes"] .rp-sub').textContent, /« Pour vous »/);
-    assert.match(d.getElementById('rp_c_SourcePourToi').closest('.rp-field').querySelector('label').textContent, /« Pour vous »/);
+    const k = d.getElementById('rp_c_KindPourToi'); k.value = 'Split'; k.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.match(d.getElementById('rp_c_KindPourToi_split').textContent, /« Pour vous : films » et « Pour vous : séries »/);
     const ui = d.querySelector('.content-primary');
     assert.ok(!ui.textContent.includes('{ROW}'), 'modèle non remplacé');
     assert.ok(!ui.textContent.includes('« Pour toi »'), 'nom codé en dur');
@@ -255,15 +256,25 @@ await test('calibrage : méthode enregistrée au changement, avertissement si l\
     assert.ok([...sel.options].some((o) => o.value === 'Neural'), 'réseau de neurones proposé');
 });
 
-await test('rangées d\'accueil : seulement les titres, tous au même endroit (le choix des rangées est celui de HSS)', async () => {
+await test('onglet Accueil : une ligne par rangée (titre, films ou séries, contenu), dans l\'ordre où elles se servent', async () => {
     const { d } = await open({ ...cfg, RowNewTitle: 'Nouveautés pour vous', ExtendedTitle: 'À découvrir' });
     await wait(50);
     const rows = d.querySelector('[data-fields="rows"]');
-    const ids = [...rows.querySelectorAll('input, select')].map((e) => e.id);
-    assert.deepEqual(ids, ['rp_c_HssSectionTitle', 'rp_c_RowNewTitle', 'rp_c_RowBecauseTitle', 'rp_c_RowMoviesTitle', 'rp_c_RowSeriesTitle', 'rp_c_ExtendedTitle']);
+    assert.equal(rows.closest('.rp-pane').getAttribute('data-pane'), 'accueil');
+    const ids = [...rows.querySelectorAll('input, select')].map((e) => e.id.replace('rp_c_', ''));
+    assert.deepEqual(ids, ['HssSectionTitle', 'KindPourToi', 'SourcePourToi', 'RowTrendingTitle', 'KindTendances', 'SourceTendances',
+        'RowPopularTitle', 'KindPopulaires', 'SourcePopulaires', 'RowUpcomingTitle', 'KindAVenir', 'SourceAVenir',
+        'RowNewTitle', 'KindNouveautes', 'SourceNouveautes', 'RowBecauseTitle', 'KindParceQue', 'SourceParceQue',
+        'RowMoviesTitle', 'SourceFilms', 'RowSeriesTitle', 'SourceSeries']);
+    // chaque ligne occupe exactement 4 cases de la grille (rangée, titre, sortes, contenu)
+    const cells = [...rows.children].filter((e) => !e.classList.contains('rp-rowsep') && !e.classList.contains('rp-splitnote'));
+    assert.equal(cells.length % 4, 0);
+    assert.deepEqual([...d.getElementById('rp_c_KindParceQue').options].map((o) => o.value), ['Both', 'Movies', 'Series', 'Split']);
+    assert.deepEqual([...d.getElementById('rp_c_SourceAVenir').options].map((o) => o.value), ['Local', 'Mix', 'Seerr']);
     assert.ok(!rows.closest('details'), 'de base, pas replié');
     assert.equal(d.getElementById('rp_c_RowNewTitle').value, 'Nouveautés pour vous');
-    assert.equal(d.querySelectorAll('[id$="Title"]:not([data-fields="rows"] *)').length, 0, 'aucun titre de rangée ailleurs');
+    assert.equal(d.querySelectorAll('[id$="Title"]:not([data-fields="rows"] *):not(#rp_c_ExtendedTitle)').length, 0, 'aucun autre titre de rangée ailleurs');
+    assert.ok(d.getElementById('rp_c_ExtendedTitle').closest('details.rp-adv'), 'rangée à part (sans HSS) : réglage avancé du mode étendu');
     assert.ok(!d.querySelector('.content-primary').textContent.includes('prochain démarrage'), 'plus de redémarrage à annoncer');
 });
 
@@ -288,21 +299,22 @@ await test('réglages sans objet masqués selon le mode, valeurs gardées', asyn
     assert.equal(saved[0].Engine.Mmr, 0.3);
 });
 
-await test('mode étendu : contenu de chaque rangée, titres des rangées à jour, réglages du mélange seulement s\'il sert', async () => {
+await test('contenu de chaque rangée, rangées séparées, réglages du mélange seulement s\'il sert', async () => {
     const c = JSON.parse(JSON.stringify(cfg));
     Object.assign(c, { SourcePourToi: 'Mix', SourceNouveautes: 'Local', SourceParceQue: 'Local', SourceFilms: 'Seerr', SourceSeries: 'Local', RowMoviesTitle: 'Mes films', RowNewReleasedDays: 200, ExtendedMixMode: 'Score' });
     const { d, saved } = await open(c);
     await wait(50);
-    const box = d.querySelector('[data-fields="exthome"]');
-    const sel = [...box.querySelectorAll('select')].map((e) => e.id);
-    assert.deepEqual(sel, ['rp_c_SourcePourToi', 'rp_c_SourceNouveautes', 'rp_c_SourceParceQue', 'rp_c_SourceFilms', 'rp_c_SourceSeries']);
-    assert.deepEqual([...d.getElementById('rp_c_SourceFilms').options].map((o) => o.value), ['Local', 'Mix', 'Seerr']);
-    const label = (id) => d.getElementById(id).closest('.rp-field').querySelector('label').textContent;
-    assert.equal(label('rp_c_SourceFilms'), 'Rangée « Mes films »');
-    assert.equal(label('rp_c_SourceParceQue'), 'Rangées « Parce que tu as aimé… »');
-    const t = d.getElementById('rp_c_RowMoviesTitle'); t.value = 'Films à voir'; t.dispatchEvent(new d.defaultView.Event('input'));
-    assert.equal(label('rp_c_SourceFilms'), 'Rangée « Films à voir »');
+    assert.equal(d.getElementById('rpMixBox').closest('.rp-pane').getAttribute('data-pane'), 'accueil', 'mélange à côté des rangées');
     assert.ok(!d.getElementById('rp_c_ExtendedHomeRow'), 'ancien interrupteur retiré');
+    // rangée séparée : ce que HSS montrera, sous sa ligne ; le titre suit la saisie
+    const kind = d.getElementById('rp_c_KindParceQue'), note = d.getElementById('rp_c_KindParceQue_split');
+    assert.ok(note.classList.contains('rp-hidden'));
+    kind.value = 'Split'; kind.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.ok(!note.classList.contains('rp-hidden'));
+    assert.match(note.textContent, /« Parce que tu as aimé… : films » et « Parce que tu as aimé… : séries »/);
+    const nt = d.getElementById('rp_c_RowBecauseTitle'); nt.value = 'Comme {titre}'; nt.dispatchEvent(new d.defaultView.Event('input', { bubbles: true }));
+    assert.match(note.textContent, /« Comme… : films »/);
+    assert.equal(note.previousElementSibling, d.getElementById('rp_c_SourceParceQue').closest('.rp-field'), 'sous la ligne de la rangée');
     const hidden = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
     const mixBox = () => d.getElementById('rpMixBox').classList.contains('rp-box-off');
     assert.ok(!mixBox(), 'une rangée mélangée : réglages du mélange visibles');
@@ -311,7 +323,7 @@ await test('mode étendu : contenu de chaque rangée, titres des rangées à jou
     const change = (id, v) => { const e = d.getElementById(id); e.value = v; e.dispatchEvent(new d.defaultView.Event('change', { bubbles: true })); };
     change('rp_c_SourcePourToi', 'Local');
     assert.ok(mixBox(), 'plus aucune rangée mélangée');
-    assert.ok(hidden('rp_c_ExtendedTitle') && hidden('rp_c__ExtendedRowNote'), 'pas de rangée à part');
+    assert.ok(hidden('rp_c_ExtendedTitle'), 'pas de rangée à part');
     change('rp_c_SourceNouveautes', 'Mix');
     assert.ok(!mixBox() && !hidden('rp_c_RowNewReleasedDays'));
     d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
@@ -320,6 +332,8 @@ await test('mode étendu : contenu de chaque rangée, titres des rangées à jou
     assert.equal(saved[0].SourceNouveautes, 'Mix');
     assert.equal(saved[0].SourceFilms, 'Seerr');
     assert.equal(saved[0].RowNewReleasedDays, 200);
+    assert.equal(saved[0].KindParceQue, 'Split');
+    assert.equal(saved[0].KindPourToi, 'Both', 'non touché : films et séries');
 });
 
 await test('réglages sans effet : grisés, désactivés, avec la raison (une fois par boîte si elle est commune)', async () => {
@@ -331,8 +345,16 @@ await test('réglages sans effet : grisés, désactivés, avec la raison (une fo
     const off = (id) => d.getElementById(id).closest('.rp-field').classList.contains('rp-off');
     const why = (id) => d.getElementById(id).closest('.rp-field').getAttribute('data-why');
     assert.ok(off('rp_c_ExtendedEnabled') && d.getElementById('rp_c_ExtendedEnabled').disabled);
-    assert.equal(why('rp_c_SourceFilms'), 'Seerr non utilisé (onglet Seerr)');
-    const box = d.querySelector('[data-fields="exthome"]').closest('.rp-box');
+    assert.equal(why('rp_c_SourceFilms'), 'Seerr non utilisé (onglet Seerr) : bibliothèque seule');
+    assert.ok(!off('rp_c_RowMoviesTitle') && !off('rp_c_KindPourToi'), 'sans Seerr, les rangées de la bibliothèque restent réglables');
+    // listes du moment : sans Seerr, ces rangées n'existent pas
+    for (const id of ['rp_c__RowTrending', 'rp_c_RowTrendingTitle', 'rp_c_KindTendances', 'rp_c_SourceAVenir', 'rp_c_TrendingWindow', 'rp_c_UpcomingTaste']) {
+        assert.equal(why(id), 'Seerr non utilisé (onglet Seerr) : rangée absente de l\'accueil', id);
+    }
+    const lbox = d.querySelector('[data-fields="lt"]').closest('.rp-box');
+    assert.equal(lbox.querySelector('.rp-boxwhy').textContent, 'Sans effet : Seerr non utilisé (onglet Seerr) : rangée absente de l\'accueil.');
+    assert.ok(off('rp_e_TrendingShare'), 'tendance dans la popularité : Seerr');
+    const box = d.getElementById('rpMixBox');
     assert.ok(box.classList.contains('rp-box-off'));
     assert.equal(box.querySelector('.rp-boxwhy').textContent, 'Sans effet : Seerr non utilisé (onglet Seerr).');
     assert.ok(off('rp_e_RequestWeight'), 'demandes Seerr sans Seerr');
@@ -343,7 +365,12 @@ await test('réglages sans effet : grisés, désactivés, avec la raison (une fo
     assert.ok(!off('rp_e_ShortTermTitles') && !d.getElementById('rp_e_ShortTermTitles').disabled);
     // Seerr activé : tout se rallume
     const se = d.getElementById('rp_c_SeerrEnabled'); se.checked = true; se.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
-    assert.ok(!off('rp_c_SourceFilms') && !box.classList.contains('rp-box-off'));
+    assert.ok(!off('rp_c_SourceFilms') && !box.classList.contains('rp-box-off') && !off('rp_c_KindTendances'));
+    // mode étendu coupé : contenu = bibliothèque seule, mais les rangées de listes restent (titres de la bibliothèque)
+    const ee = d.getElementById('rp_c_ExtendedEnabled'); ee.checked = false; ee.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.equal(why('rp_c_SourceTendances'), 'mode étendu coupé (onglet Mode étendu) : bibliothèque seule');
+    assert.ok(!off('rp_c_KindTendances') && !off('rp_c_TrendingCount'));
+    ee.checked = true; ee.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
     // plugin coupé : tout est grisé sauf l'interrupteur
     const en = d.getElementById('rp_c_Enabled'); en.checked = false; en.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
     assert.ok(!off('rp_c_Enabled') && off('rp_c_ListSize') && off('rp_e_HalfLifeDays'));
@@ -635,8 +662,10 @@ await test('langue : page en anglais (réglage ou langue de Jellyfin), textes du
     assert.equal(d.querySelector('#rpRecompute span').textContent, 'Recompute now');
     assert.match(d.getElementById('rp_c_Enabled').closest('label').textContent, /Plugin enabled/);
     assert.equal(d.getElementById('rp_c_HssSectionTitle').getAttribute('placeholder'), 'For you');
-    assert.match(d.getElementById('rp_c_SourceFilms').closest('.rp-field').querySelector('label').textContent, /“Movies for you” row/);
-    assert.match(d.getElementById('rp_c_SourceParceQue').closest('.rp-field').querySelector('label').textContent, /“Because you liked…” rows/);
+    assert.equal(d.getElementById('rp_c_SourceFilms').closest('.rp-field').querySelector('label').textContent, 'Content');
+    assert.deepEqual([...d.getElementById('rp_c_KindTendances').options].map((o) => o.textContent), ['movies and series', 'movies only', 'series only', 'movies and series apart (2 rows)']);
+    const k = d.getElementById('rp_c_KindParceQue'); k.value = 'Split'; k.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.match(d.getElementById('rp_c_KindParceQue_split').textContent, /“Because you liked…: movies” and “Because you liked…: series”/);
     assert.equal(d.getElementById('rp_e_Mmr').closest('.rp-factor').querySelector('.rp-mult').textContent, '×1.00 · normal');
     assert.deepEqual([...d.getElementById('rp_c_Language').options].map((o) => o.textContent), ["Jellyfin's", 'French', 'English']);
     // plus aucun texte de la page resté en français

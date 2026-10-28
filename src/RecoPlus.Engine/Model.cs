@@ -187,6 +187,12 @@ public sealed class Dataset
     /// <summary>Instant de référence (secondes Unix).</summary>
     public double Now { get; init; }
 
+    /// <summary>
+    /// Tendances TMDb du moment : titre → intensité 0..1 (1 = premier de la liste ; voir <see cref="Trending"/>). Vide hors
+    /// du plugin (calibrage, prototype) : les tendances d'aujourd'hui ne disent rien des choix passés.
+    /// </summary>
+    public Dictionary<string, double> Trending { get; init; } = new(StringComparer.Ordinal);
+
     /// <summary>Avis notés du foyer (Jellyfin Enhanced) : titre → compte → étoiles (1 à 5).</summary>
     public Dictionary<string, Dictionary<string, double>> Reviews { get; init; } = new(StringComparer.Ordinal);
 
