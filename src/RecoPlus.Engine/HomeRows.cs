@@ -626,6 +626,28 @@ public static class HomeRows
     }
 
     /// <summary>
+    /// Rangée mélangée trop courte (peu de titres de la bibliothèque, comme une liste du moment) : les titres hors
+    /// bibliothèque non placés la complètent, à la suite, dans leur ordre de classement, jusqu'à sa taille. Rien si la
+    /// bibliothèque a été coupée (la rangée est déjà pleine).
+    /// </summary>
+    /// <param name="after">Places issues de <see cref="PlaceRow"/> (≥ <paramref name="libCount"/> = non placé).</param>
+    /// <param name="libCount">Titres de la bibliothèque de la rangée.</param>
+    /// <param name="kept">Titres de la bibliothèque gardés.</param>
+    /// <param name="size">Cartes de la rangée.</param>
+    /// <returns>Indices des titres à ajouter en fin de rangée, dans l'ordre.</returns>
+    public static List<int> FillTail(IReadOnlyList<int> after, int libCount, int kept, int size)
+    {
+        int placed = after.Count(a => a >= 0 && a < libCount);
+        int room = size - kept - placed;
+        if (kept < libCount || room <= 0)
+        {
+            return new List<int>();
+        }
+
+        return Enumerable.Range(0, after.Count).Where(i => after[i] >= libCount).Take(room).ToList();
+    }
+
+    /// <summary>
     /// Au plus <paramref name="max"/> titres hors bibliothèque dans la rangée : les mieux classés (ordre des indices)
     /// gardent leur place, les autres passent derrière la rangée. Garde la bibliothèque présente même quand
     /// l'exploration trouve beaucoup de titres mieux classés.

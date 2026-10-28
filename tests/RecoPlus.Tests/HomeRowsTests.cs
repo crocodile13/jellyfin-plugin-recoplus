@@ -324,4 +324,25 @@ public class HomeRowsTests
         Assert.Equal(after, HomeRows.ForcePlaces((int[])after.Clone(), 17, new[] { 4 }, 0));
         Assert.Equal(after, HomeRows.ForcePlaces((int[])after.Clone(), 0, new[] { 4 }, 2));
     }
+
+    [Fact]
+    public void ShortMixedRowsAreCompletedWithOutsideTitles()
+    {
+        // 3 titres de la bibliothèque, 10 hors bibliothèque tous moins bien classés : avant, la rangée restait à 3 cartes
+        var lib = new[] { 0.9, 0.8, 0.7 };
+        var ext = Enumerable.Range(0, 10).Select(i => 0.5 - (i * 0.01)).ToList();
+        var (after, kept) = HomeRows.PlaceRow(lib, ext, RowSource.Mix, new MixOptions { Free = true }, null, 8);
+        Assert.Equal(3, kept);
+        Assert.All(after, a => Assert.Equal(3, a));                                  // aucun placé d'eux-mêmes
+        Assert.Equal(new[] { 0, 1, 2, 3, 4 }, HomeRows.FillTail(after, lib.Length, kept, 8));   // complétée à 8, dans l'ordre
+
+        // un titre mieux classé que la bibliothèque compte déjà dans la rangée
+        var (a2, k2) = HomeRows.PlaceRow(lib, new[] { 0.95, 0.4, 0.3 }, RowSource.Mix, new MixOptions { Free = true }, null, 5);
+        Assert.Equal(new[] { 1 }, HomeRows.FillTail(a2, lib.Length, k2, 5));
+
+        // rangée pleine (bibliothèque coupée) : rien
+        var big = Enumerable.Range(0, 20).Select(i => 1.0 - (i * 0.01)).ToArray();
+        var (a3, k3) = HomeRows.PlaceRow(big, new[] { 0.5 }, RowSource.Mix, new MixOptions { Free = true }, null, 20);
+        Assert.Empty(HomeRows.FillTail(a3, big.Length, k3, 20));
+    }
 }
