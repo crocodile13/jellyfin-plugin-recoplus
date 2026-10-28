@@ -1,6 +1,6 @@
 # Reco+ — notes de travail
 
-Plugin Jellyfin 12.2 (.NET 10) : recommandations personnelles précalculées qui remplacent celles de Jellyfin, rangées
+Plugin Jellyfin 12.2 à 12.4 (.NET 10 ; compilé contre 12.2, la CI compile aussi contre les derniers paquets 12.x) : recommandations personnelles précalculées qui remplacent celles de Jellyfin, rangées
 Home Screen Sections (HSS), mode étendu (titres hors bibliothèque via Seerr), calibrage sur l'historique. Mainteneur :
 Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, d'adresse, de nom de machine ni de secret.
 
@@ -73,8 +73,15 @@ de la CI.
 
 ## Livraison
 
-- Un commit par version, sur une branche `reco-1.0.N` partant de `main` à jour ; livré en patch (`git format-patch`)
-  avec son sha256, appliqué par Marien (`git am -3`), PR, CI, merge `--rebase`, publication automatique.
+- Un commit par version, sur une branche `reco-1.0.N` partant de `origin/main` à jour ; livré en patch
+  (`git format-patch`) avec son sha256, appliqué par Marien (`git am -3`), PR, CI, merge `--rebase`, publication
+  automatique.
+- Le bloc d'application ne suppose rien : il vérifie le sha256, vérifie que la base existe (`git rev-parse -q --verify`)
+  et quelle version est sur `origin/main` (`meta.json`), applique seulement les patches plus récents, et travaille dans
+  un `git worktree` temporaire (jamais dans la copie de travail de Marien, souvent modifiée). Plusieurs versions en
+  attente : une série `format-patch` (une par version), pas des patches à appliquer sur des branches supposées.
+- Merge seulement CI verte (boucle `gh pr checks` sans `watch`) ; en cas d'échec, le bloc affiche `gh run view
+  --log-failed`. Une correction après push = un commit de plus sur la même branche avant merge.
 - Une version publiée ne se modifie pas : une correction est une nouvelle version.
 - Version : `Version`, `AssemblyVersion`, `FileVersion` du csproj, `meta.json` (version, changelog) et une entrée en tête
   de `manifest.json` (changelog en anglais commençant par « 1.0.N: », `sourceUrl`/`checksum`/`timestamp` vides).
@@ -122,8 +129,13 @@ de la CI.
   TMDb du cache, demandes et listes de suivi, avis et masquages de Jellyfin Enhanced), exploration Seerr (comptes
   actifs), vecteurs, puis chaque compte en parallèle : candidats (ni vus ni déjà connus), tranches horaires si
   l'heure de la journée est active, rangées, titres hors bibliothèque et composition des rangées.
-- Rangées d'accueil : `HomeRows.Allocate` remplit « Pour toi », Nouveautés, « Parce que … » 1-3, Films, Séries sans
-  doublon ; avec des titres hors bibliothèque, `PlaceExternals` choisit leur place selon le contenu de chaque rangée
+- Rangées d'accueil : `HomeRows.Allocate` remplit, sans doublon et dans l'ordre de `HomeRows.BaseRows` : « Pour
+  toi », les listes TMDb du moment (Tendances, Populaires, À venir ; avec Seerr, `TmdbListsAsync`, ordre
+  `Trending.Order`), Nouveautés, « Parce que … » 1-3, Films, Séries. Chaque rangée de `HomeRows.KindRows` se règle en
+  films / séries / les deux / séparée (`KindFilter.Split` : identifiants suffixés `Films` et `Series`, servis par
+  `HssSectionHandler.GetRow` via `additionalData`) ; à l'enregistrement, `ReconcileSplits` met à jour l'accueil HSS de
+  chaque compte (`SplitLayout.Apply`). La tendance TMDb entre aussi dans la popularité (`Dataset.Trending`,
+  `TrendingShare`, OU probabiliste avec la popularité du foyer, parité avec le prototype) ; avec des titres hors bibliothèque, `PlaceExternals` choisit leur place selon le contenu de chaque rangée
   (bibliothèque seule, Seerr seul, mélange) et les titres de la bibliothèque remplacés passent aux rangées suivantes.
   Le serveur compose (`UserRecs.Layouts`), le script applique ; chaque rangée garde sa taille.
 
@@ -151,8 +163,10 @@ de la CI.
 - Un réglage sans effet dans la configuration actuelle est **grisé et désactivé, avec la raison** (`WHY` / `reason`) ;
   une raison commune à toute une boîte est dite une fois en tête. Jamais masqué silencieusement ; valeur gardée.
 - Pas de réglage obsolète : un réglage retiré est migré (`Plugin.Migrate`) puis supprimé de la page.
-- Titres des rangées : tous dans l'onglet Général ; ailleurs, `{ROW}` (rangée principale) ou `{T:Champ}` reprennent le
-  titre saisi.
+- Onglet Accueil : une ligne de 4 cases par rangée (note, titre, sortes, contenu ; `blank` pour une case vide, `sep`
+  pour un intertitre), dans l'ordre de la répartition ; ailleurs, `{ROW}` (rangée principale) ou `{T:Champ}` reprennent
+  le titre saisi. Ce qui dépend de Seerr (`LIST_ROWS`, `NEEDS_SEERR`) ou du mode étendu est grisé avec la raison.
+- Un `enum:` absent de la configuration reçue prend sa première option (sa valeur par défaut) : la mettre en premier.
 - Trois niveaux : de base (visible) ; avancé (onglets Moteur et Calibrage, marqués « avancé », et sections repliées
   « Réglages avancés ») ; mode développeur (Journal, export et réglages statistiques du calibrage, chemin détaillé des
   méthodes, apport de chaque source dans l'aperçu). Un outil de diagnostic va en mode développeur, pas en avancé.
@@ -170,10 +184,36 @@ de la CI.
   (`/Movies/Recommendations`, `/Users/{id}/Suggestions`, `/Items/{id}/Similar`) ; bibliothèque seulement.
 - Jellyfin Enhanced : cartes et fiche Seerr réutilisées s'il est présent et relié à Seerr ; sinon cartes Reco+.
 
+## Travail propre (avant chaque livraison)
+
+- Une seule source de vérité : listes de rangées (`HomeRows.BaseRows`, `ListRows`, `KindRows`, `SourceRows`), titres
+  (`HomeScreenSectionsIntegration.DisplayTitle`), réglages par rangée (`PluginConfiguration.SourceOf` / `KindOf` /
+  `ListSettings`). Avant d'écrire une liste, un `switch` par rangée ou un petit utilitaire, chercher s'il existe déjà
+  (`grep`) ; deux copies d'un même calcul = le factoriser.
+- API Jellyfin : seulement des appels déjà utilisés dans le plugin (copier l'usage existant) ou vérifiés dans les
+  sources de la plus ancienne version prise en charge. La compilation partielle ne voit pas un membre Jellyfin
+  inexistant (`IUserManager.Users` n'existe pas : `GetUsers()`). Réflexion sur un autre plugin : vérifiée dans ses
+  sources, et protégée (`try`/`catch` ciblé, rien si la forme n'est pas celle attendue).
+- Vérifications, toutes, avant de livrer : tests du moteur (projet local, `RECOPLUS_ROOT` pointant le dépôt), tests
+  jsdom (`client`, `configpage`), diagnostics Roslyn du plugin comparés à la base, `golden.py` régénéré puis tests de
+  parité, cohérence des versions (csproj, `meta.json`, `manifest.json`), traductions, docs fr/en, ce fichier.
+- Tout nouveau comportement a son test (moteur : xUnit ; page : jsdom), y compris le cas sans Seerr, sans HSS et la
+  langue anglaise. Tests sans `[Theory]` (le substitut local de xUnit ne connaît que `[Fact]`).
+- Ce fichier se met à jour dans le même commit qu'un changement d'organisation, de convention ou un nouveau piège.
+- Ne jamais annoncer qu'une chose est faite, publiée ou testée sans l'avoir vérifiée.
+
+## Versions de Jellyfin
+
+- `Plugin.TestedFrom` / `TestedTo` : intervalle testé (avertissement hors intervalle). `targetAbi` et les paquets
+  restent sur la plus ancienne (`JellyfinVersion` du csproj) ; la CI compile aussi contre les derniers paquets 12.x.
+- Nouvelle version de Jellyfin : lire ses notes de version (changements d'API, de base de données, de plugins), CI
+  verte contre ses paquets, points d'accroche verts sur un serveur réel, puis élargir `TestedTo` (README, badge).
+
 ## Pièges rencontrés
 
 - Une recherche qui garde un index par valeur essayée épuise la mémoire : tout cache par réglage doit être borné.
 - Un test jsdom qui dépend d'une minuterie (journal toutes les 2 s) devient instable si la page ralentit : garder
   les recalculs de la page bon marché (éléments mis en cache, rien à refaire quand rien ne change).
 - `pkill -f motif` tue aussi le shell dont la ligne de commande contient le motif.
+- Patch livré sur une branche supposée (`reco-1.0.N-1` jamais créée) : toujours vérifier la base (voir Livraison).
 - `i18n.en.json` comme ressource incorporée : MSBuild y voit la culture « en » et la sort de l'assembly (satellite).

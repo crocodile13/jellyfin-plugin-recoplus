@@ -922,20 +922,32 @@ public sealed class RecoService : IDisposable
 
             // clé de classement : celle de la rangée (« Parce que … » : surtout la ressemblance avec le titre aimé ; listes
             // TMDb : la place dans la liste mêlée au goût du compte, comme pour leurs titres de la bibliothèque)
+            // score commun ramené à 0..1 parmi les titres de la rangée (bibliothèque et candidats) ; tous égaux : flat
+            Func<string, double> Normalized(double flat)
+            {
+                double min = double.PositiveInfinity, max = double.NegativeInfinity;
+                foreach (var k in lib.Concat(cand.Select(i => recs[i].Id)).Select(Key))
+                {
+                    min = Math.Min(min, k);
+                    max = Math.Max(max, k);
+                }
+
+                double span = max - min;
+                return id => span > 0 ? (Key(id) - min) / span : flat;
+            }
+
             Func<string, double> rank = Key;
             if (listRow)
             {
-                var all = lib.Concat(cand.Select(i => recs[i].Id)).Select(Key).ToList();
-                double min = all.Count > 0 ? all.Min() : 0, span = all.Count > 0 ? all.Max() - min : 0;
-                rank = id => ((1.0 - pool!.Taste) * pool.Score.GetValueOrDefault(id)) + (pool.Taste * (span > 0 ? (Key(id) - min) / span : 1.0));
+                var taste = Normalized(1.0);
+                rank = id => ((1.0 - pool!.Taste) * pool.Score.GetValueOrDefault(id)) + (pool.Taste * taste(id));
             }
             else if (anchor is not null && vec.TryGetValue(anchor, out var av))
             {
                 double Sim(string id) => vec.TryGetValue(id, out var v) ? av.Dot(v) : 0;
                 cand = cand.Where(i => Sim(recs[i].Id) >= HomeRows.MinSimilarity).ToList();
-                var all = lib.Concat(cand.Select(i => recs[i].Id)).Select(Key).ToList();
-                double min = all.Count > 0 ? all.Min() : 0, span = all.Count > 0 ? all.Max() - min : 0;
-                rank = id => (0.7 * Sim(id)) + (0.3 * (span > 0 ? (Key(id) - min) / span : 0));
+                var taste = Normalized(0.0);
+                rank = id => (0.7 * Sim(id)) + (0.3 * taste(id));
             }
 
             if (cand.Count == 0)
@@ -1253,6 +1265,7 @@ public sealed class RecoService : IDisposable
                 _ => "Bientôt à l'affiche",
             };
             var items = new List<(string, ExternalRec)>();
+            var noBecause = new Dictionary<string, string>();
             foreach (var id in tl.External)
             {
                 var k = id[5..];
@@ -1264,7 +1277,7 @@ public sealed class RecoService : IDisposable
                     continue;
                 }
 
-                if (ToExternalRec(id, titles, new Dictionary<string, string>(), new Dictionary<string, string> { [id] = reason }) is { } rec)
+                if (ToExternalRec(id, titles, noBecause, new Dictionary<string, string> { [id] = reason }) is { } rec)
                 {
                     rec.Source = "list";
                     items.Add((id, rec));
@@ -1461,14 +1474,12 @@ public sealed class RecoService : IDisposable
     public List<string> Preview(Guid user, string lang, int n = 20)
     {
         var r = For(user);
-        var lib = Library ?? _index.Current;
         if (r is null)
         {
             return new List<string>();
         }
 
-        string series = " (" + Texts.T("série", lang) + ")";
-        string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? t.Name + (t.Kind == TitleKind.Series ? series : string.Empty) : id;
+        var name = PreviewNamer(lang);
         // la rangée « Pour toi » telle que l'accueil la montre (titres en tête compris) ; à défaut, la liste classée
         var pins = new HashSet<string>(r.Pinned, StringComparer.Ordinal);
         // rangée séparée (films, séries) : les deux moitiés entrelacées
@@ -1476,14 +1487,21 @@ public sealed class RecoService : IDisposable
             .Select(k => r.Rows.GetValueOrDefault(k)).Where(l => l is { Count: > 0 }).Select(l => l!).ToList();
         var row = halves.Count == 0 ? r.Pinned.Concat(r.Ranked).ToList()
             : Enumerable.Range(0, halves.Max(l => l.Count)).SelectMany(i => halves.Where(l => i < l.Count).Select(l => l[i])).Distinct(StringComparer.Ordinal).ToList();
-        return row.Take(n).Select(id => (pins.Contains(id) ? "📌 " : string.Empty) + Name(id)).ToList();
+        return row.Take(n).Select(id => (pins.Contains(id) ? "📌 " : string.Empty) + name(id)).ToList();
+    }
+
+    /// <summary>Nom lisible d'un titre pour l'aperçu (« (série) » après une série ; l'identifiant s'il est inconnu).</summary>
+    private Func<string, string> PreviewNamer(string lang)
+    {
+        var lib = Library ?? _index.Current;
+        string series = " (" + Texts.T("série", lang) + ")";
+        return id => lib is not null && lib.Titles.TryGetValue(id, out var t) ? t.Name + (t.Kind == TitleKind.Series ? series : string.Empty) : id;
     }
 
     /// <summary>Aperçu des rangées d'accueil supplémentaires d'un compte : libellé → titres (page de configuration).</summary>
     public Dictionary<string, List<string>> PreviewRows(Guid user, string lang)
     {
         var r = For(user);
-        var lib = Library ?? _index.Current;
         var cfg = Plugin.Instance?.Configuration;
         var res = new Dictionary<string, List<string>>(StringComparer.Ordinal);
         if (r is null || cfg is null)
@@ -1491,13 +1509,12 @@ public sealed class RecoService : IDisposable
             return res;
         }
 
-        string series = " (" + Texts.T("série", lang) + ")";
-        string Name(string id) => lib is not null && lib.Titles.TryGetValue(id, out var t) ? t.Name + (t.Kind == TitleKind.Series ? series : string.Empty) : id;
+        var name = PreviewNamer(lang);
         int size = Math.Clamp(cfg.RowSize, 5, 60);
         foreach (var (row, ids) in r.Rows.Where(kv => HomeRows.KindOfRow(kv.Key) != HomeRows.PourToi && kv.Value.Count > 0))
         {
             string label = HomeScreenSectionsIntegration.DisplayTitle(cfg, row, r.RowAnchors.GetValueOrDefault(row), lang);
-            res[label] = ids.Take(size).Select(Name).ToList();
+            res[label] = ids.Take(size).Select(name).ToList();
         }
 
         return res;

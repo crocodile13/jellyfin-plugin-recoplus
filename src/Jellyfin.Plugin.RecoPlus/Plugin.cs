@@ -15,8 +15,14 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     /// <summary>Identifiant fixe du plugin.</summary>
     public static readonly Guid PluginGuid = Guid.Parse("6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8");
 
-    /// <summary>Version de Jellyfin sur laquelle ce plugin a été construit et testé (majeure.mineure).</summary>
-    public static readonly Version TestedJellyfin = new(12, 2);
+    /// <summary>
+    /// Versions de Jellyfin (majeure.mineure) pour lesquelles ce plugin est construit et testé : compilé contre la plus
+    /// ancienne (<c>targetAbi</c>), et en CI contre les paquets Jellyfin 12 les plus récents.
+    /// </summary>
+    public static readonly Version TestedFrom = new(12, 2), TestedTo = new(12, 4);
+
+    /// <summary>La version de Jellyfin est dans l'intervalle testé.</summary>
+    public static bool IsTested(Version v) => new Version(v.Major, v.Minor) >= TestedFrom && new Version(v.Major, v.Minor) <= TestedTo;
 
     public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer)
         : base(applicationPaths, xmlSerializer)

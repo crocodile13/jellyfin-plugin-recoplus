@@ -39,6 +39,15 @@ jobs:
       - name: Build, test and package
         run: ./build.sh
 
+      - name: Build against the latest Jellyfin 12 packages
+        # The plugin targets the oldest supported version (targetAbi); this catches APIs removed or
+        # changed since then (obsolete members fail the build: warnings are errors).
+        run: |
+          V=$(curl -fsS https://api.nuget.org/v3-flatcontainer/jellyfin.controller/index.json | jq -r '.versions[]' | grep -E '^12\.[0-9]+\.[0-9]+$' | sort -V | tail -1)
+          echo "Jellyfin.Controller $V"
+          test -n "$V"
+          dotnet build src/Jellyfin.Plugin.RecoPlus -c Release -nologo -p:JellyfinVersion=$V -o "$RUNNER_TEMP/latest"
+
       - name: Web client tests (jsdom)
         run: cd tests/client && npm install --no-save --no-package-lock --silent jsdom@24.1.3 && node client.test.mjs && node configpage.test.mjs
 

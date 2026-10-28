@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/crocodile13/jellyfin-plugin-recoplus?sort=semver"></a>
   <a href="https://github.com/crocodile13/jellyfin-plugin-recoplus/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/crocodile13/jellyfin-plugin-recoplus/ci.yml?branch=main&label=CI"></a>
-  <img alt="Jellyfin 12.2" src="https://img.shields.io/badge/Jellyfin-12.2-00a4dc">
+  <img alt="Jellyfin 12.2 to 12.4" src="https://img.shields.io/badge/Jellyfin-12.2%E2%80%9312.4-00a4dc">
   <a href="LICENSE"><img alt="License: GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-blue"></a>
 </p>
 
@@ -56,7 +56,7 @@ Reco+ is a Jellyfin plugin that replaces the built-in recommendations — Sugges
 
 ## Requirements
 
-- **Jellyfin 12.2** (other versions are detected and each hook is checked, but they are not tested).
+- **Jellyfin 12.2 to 12.4** (other versions are detected and each hook is checked, but they are not tested).
 - Optional: [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) for home rows, [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) for reviews, hidden titles and Seerr cards, [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) for precise first-play dates, and a [Seerr](https://github.com/seerr-team/seerr) instance for requests and extended mode.
 
 ## Installation
@@ -145,7 +145,7 @@ CI builds and tests on every push. When `manifest.json` gets a new version, a re
 
 ## Limitations
 
-- Built and tested for Jellyfin 12.2 only.
+- Built and tested for Jellyfin 12.2 to 12.4 only.
 - The defaults were chosen on a single, small household: use Calibration on yours.
 - Titles outside the library are added by a script in the web client; TV and mobile apps get library recommendations only.
 

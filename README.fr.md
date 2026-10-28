@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/crocodile13/jellyfin-plugin-recoplus?sort=semver"></a>
   <a href="https://github.com/crocodile13/jellyfin-plugin-recoplus/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/crocodile13/jellyfin-plugin-recoplus/ci.yml?branch=main&label=CI"></a>
-  <img alt="Jellyfin 12.2" src="https://img.shields.io/badge/Jellyfin-12.2-00a4dc">
+  <img alt="Jellyfin 12.2 à 12.4" src="https://img.shields.io/badge/Jellyfin-12.2%E2%80%9312.4-00a4dc">
   <a href="LICENSE"><img alt="Licence : GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-blue"></a>
 </p>
 
@@ -56,7 +56,7 @@ Reco+ est un plugin Jellyfin qui remplace les recommandations intégrées — Su
 
 ## Prérequis
 
-- **Jellyfin 12.2** (les autres versions sont détectées et chaque point d'accroche est vérifié, mais elles ne sont pas testées).
+- **Jellyfin 12.2 à 12.4** (les autres versions sont détectées et chaque point d'accroche est vérifié, mais elles ne sont pas testées).
 - Facultatif : [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) pour les rangées d'accueil, [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) pour les avis, titres masqués et cartes Seerr, [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) pour dater précisément les premières lectures, et une instance [Seerr](https://github.com/seerr-team/seerr) pour les demandes et le mode étendu.
 
 ## Installation
@@ -145,7 +145,7 @@ La CI compile et teste à chaque push. Quand une nouvelle version apparaît dans
 
 ## Limites
 
-- Construit et testé pour Jellyfin 12.2 uniquement.
+- Construit et testé pour Jellyfin 12.2 à 12.4 uniquement.
 - Les valeurs par défaut ont été choisies sur un seul petit foyer : utilisez le Calibrage sur le vôtre.
 - Les titres hors bibliothèque sont ajoutés par un script du client web ; les applications TV et mobiles ne reçoivent que les recommandations de la bibliothèque.
 

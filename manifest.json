@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.38.0",
+        "changelog": "1.0.38: Jellyfin 12.3 and 12.4 (bugfix releases, no plugin API change) are now tested versions: no more 'untested Jellyfin version' warning; CI also builds the plugin against the latest Jellyfin 12 packages.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.37.0",
         "changelog": "1.0.37: new home rows \"Trending\", \"Popular right now\" and \"Upcoming\" (TMDb lists through Seerr, sorted by each account's taste, library and/or titles outside the library); TMDb trends now also raise the popularity bonus in every row; every row can show movies, series, both, or be split into two rows, and accounts' Home Screen Sections layouts follow automatically; new \"Home\" settings tab gathering titles, kinds and content of every row, with Seerr-dependent settings greyed out when Seerr is not used.",
         "targetAbi": "12.2.0.0",

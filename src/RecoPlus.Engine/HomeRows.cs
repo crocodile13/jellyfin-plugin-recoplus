@@ -111,6 +111,34 @@ public static class HomeRows
     /// <summary>Rangées dont la sorte de titres se règle (les autres sont « Films » et « Séries », déjà d'une seule sorte).</summary>
     public static readonly string[] KindRows = { PourToi, Tendances, Populaires, AVenir, Nouveautes, ParceQue };
 
+    /// <summary>Contenus réglables, un par sorte de rangée (« ParceQue » vaut pour les trois rangées « Parce que … »).</summary>
+    public static readonly string[] SourceRows = { PourToi, Tendances, Populaires, AVenir, Nouveautes, ParceQue, Films, Series };
+
+    /// <summary>
+    /// Rangées de base, dans l'ordre de la répartition (et de la liste de Home Screen Sections) ; les listes TMDb seulement
+    /// si elles existent (<paramref name="lists"/>), sinon elles seraient vides.
+    /// </summary>
+    public static IEnumerable<string> BaseRows(bool lists)
+    {
+        yield return PourToi;
+        if (lists)
+        {
+            foreach (var l in ListRows)
+            {
+                yield return l;
+            }
+        }
+
+        yield return Nouveautes;
+        for (int i = 1; i <= 3; i++)
+        {
+            yield return ParceQue + i;
+        }
+
+        yield return Films;
+        yield return Series;
+    }
+
     /// <summary>Suffixes des deux rangées d'une rangée séparée (films, séries).</summary>
     public const string MoviesSuffix = "Films", SeriesSuffix = "Series";
 
