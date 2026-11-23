@@ -82,16 +82,45 @@ public class ExplorationTests
     [Fact]
     public void TopKeepsRecurringItemsWeightedByTaste()
     {
-        var liked = new (IEnumerable<int>, double)[]
+        var liked = new (IEnumerable<int>, double, string)[]
         {
-            (new[] { 1, 2, 3 }, 1.0),
-            (new[] { 1, 2, 2 }, 0.5),          // doublon dans un titre : compté une fois
-            (new[] { 1, 4 }, 2.0),
+            (new[] { 1, 2, 3 }, 1.0, "a"),
+            (new[] { 1, 2, 2 }, 0.5, "b"),          // doublon dans un titre : compté une fois
+            (new[] { 1, 4 }, 2.0, "c"),
         };
         var top = Exploration.Top(liked, 2, 10);
         Assert.Equal(new[] { 1, 2 }, top.Select(t => t.Item));
         Assert.Equal(3.5, top[0].Weight, 9);
         Assert.Equal(new[] { 1, 4 }, Exploration.Top(liked, 1, 2).Select(t => t.Item));      // 3,5 puis 2,0 (1,5 et 1,0 écartés)
+    }
+
+    [Fact]
+    public void ASagaIsOneWorkForTheTrailsItLeads()
+    {
+        // Harry Potter 1 et 2 (même saga) partagent leur réalisateur (7) ; Toy Story et Nemo (deux œuvres) le leur (9)
+        var liked = new (IEnumerable<int>, double, string)[]
+        {
+            (new[] { 7 }, 1.0, "c:1241"),
+            (new[] { 7 }, 0.8, "c:1241"),
+            (new[] { 9 }, 0.6, "c:10194"),
+            (new[] { 9 }, 0.5, "t:nemo"),
+        };
+        var top = Exploration.Top(liked, 2, 10);
+        Assert.Equal(new[] { 9 }, top.Select(t => t.Item));                   // la saga seule ne suffit pas à 2 œuvres
+        Assert.Equal(1.1, top[0].Weight, 9);
+        var one = Exploration.Top(liked, 1, 10);
+        Assert.Equal(1.0, one.Single(t => t.Item == 7).Weight, 9);           // une saga pèse son volet le plus aimé
+    }
+
+    [Fact]
+    public void AFilmographyKeepsOnlyWhatSharesAGenreWithTheLikedTitles()
+    {
+        int[] liked = { 16, 10751 };                                            // animation, familial (films)
+        Assert.True(Exploration.SharesGenre(liked, new[] { 16, 12 }, "movie"));     // Wall-E
+        Assert.False(Exploration.SharesGenre(liked, new[] { 10765, 18 }, "tv"));    // 3 Body Problem
+        Assert.True(Exploration.SharesGenre(liked, new[] { 16 }, "tv"));            // une série d'animation
+        Assert.True(Exploration.SharesGenre(liked, null, "movie"));                // genres inconnus : gardée
+        Assert.True(Exploration.SharesGenre(new[] { 28 }, new[] { 10759 }, "tv"));  // action (film) → Action & Adventure (série)
     }
 
     [Fact]

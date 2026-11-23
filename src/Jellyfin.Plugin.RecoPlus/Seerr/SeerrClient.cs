@@ -44,7 +44,8 @@ public sealed record SeerrRequest(int RequestedBy, string MediaType, int TmdbId,
 public sealed record SeerrWatch(string MediaType, int TmdbId, DateTime CreatedAt);
 
 /// <summary>Résultat d'une liste TMDb (recommandations, similaires, découverte, saga, filmographie).</summary>
-public sealed record SeerrResult(string MediaType, int TmdbId, string Name, bool Adult, int MediaStatus, double Vote, string? PosterPath, string? Date, int VoteCount = 0, double Popularity = 0);
+/// <remarks><c>Genres</c> : identifiants de genre TMDb de la sorte du titre ; null quand la liste ne les donne pas (ou cache d'avant 1.0.48).</remarks>
+public sealed record SeerrResult(string MediaType, int TmdbId, string Name, bool Adult, int MediaStatus, double Vote, string? PosterPath, string? Date, int VoteCount = 0, double Popularity = 0, IReadOnlyList<int>? Genres = null);
 
 /// <summary>Élément TMDb nommé (genre, mot-clé, personne, studio, chaîne).</summary>
 public sealed record SeerrRef(int Id, string Name);
@@ -318,7 +319,10 @@ public sealed class SeerrClient
                 var type = Str(r, "mediaType") is { Length: > 0 } t ? t : defaultType;
                 bool movie = type == "movie";
                 return new SeerrResult(type, Int(r, "id"), Str(r, movie ? "title" : "name"), Bool(r, "adult"), MediaStatusOf(r),
-                    Dbl(r, "voteAverage"), Str(r, "posterPath"), Str(r, movie ? "releaseDate" : "firstAirDate"), Int(r, "voteCount"), Dbl(r, "popularity"));
+                    Dbl(r, "voteAverage"), Str(r, "posterPath"), Str(r, movie ? "releaseDate" : "firstAirDate"), Int(r, "voteCount"), Dbl(r, "popularity"),
+                    r.TryGetProperty("genreIds", out var g) && g.ValueKind == JsonValueKind.Array
+                        ? g.EnumerateArray().Where(x => x.ValueKind == JsonValueKind.Number && x.TryGetInt32(out _)).Select(x => x.GetInt32()).ToList()
+                        : null);
             })
             .Where(r => r.TmdbId > 0 && r.MediaType is "movie" or "tv")
             .ToList();

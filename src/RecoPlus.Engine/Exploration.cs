@@ -187,25 +187,32 @@ public static class Exploration
 
     /// <summary>
     /// Pistes les plus fortes : chaque élément reçoit le poids des titres aimés qui l'ont ; on garde ceux présents dans
-    /// au moins <paramref name="minTitles"/> titres, les <paramref name="max"/> plus lourds (à égalité, le plus petit
-    /// identifiant).
+    /// au moins <paramref name="minTitles"/> œuvres, les <paramref name="max"/> plus lourds (à égalité, le plus petit
+    /// identifiant). Une œuvre est un titre, ou une saga entière (même <c>Work</c>) : deux volets d'une saga ne sont pas
+    /// deux preuves d'aimer son réalisateur, son studio ou ses mots-clés (Harry Potter 1 et 2 ne font pas aimer toute la
+    /// filmographie de Chris Columbus) ; une saga pèse le poids de son volet le plus aimé.
     /// </summary>
-    public static List<(T Item, double Weight)> Top<T>(IEnumerable<(IEnumerable<T> Items, double Weight)> liked, int minTitles, int max)
+    public static List<(T Item, double Weight)> Top<T>(IEnumerable<(IEnumerable<T> Items, double Weight, string Work)> liked, int minTitles, int max)
         where T : notnull
     {
-        var w = new Dictionary<T, (double W, int N)>();
-        foreach (var (items, weight) in liked)
+        var w = new Dictionary<T, Dictionary<string, double>>();
+        foreach (var (items, weight, work) in liked)
         {
             foreach (var it in items.Distinct())
             {
-                var cur = w.TryGetValue(it, out var c) ? c : (0.0, 0);
-                w[it] = (cur.Item1 + weight, cur.Item2 + 1);
+                if (!w.TryGetValue(it, out var works))
+                {
+                    w[it] = works = new Dictionary<string, double>(StringComparer.Ordinal);
+                }
+
+                works[work] = Math.Max(works.GetValueOrDefault(work, double.NegativeInfinity), weight);
             }
         }
 
-        return w.Where(kv => kv.Value.N >= Math.Max(1, minTitles))
-            .OrderByDescending(kv => kv.Value.W).ThenBy(kv => kv.Key.ToString(), StringComparer.Ordinal)
-            .Take(Math.Max(0, max)).Select(kv => (kv.Key, kv.Value.W)).ToList();
+        return w.Where(kv => kv.Value.Count >= Math.Max(1, minTitles))
+            .Select(kv => (Item: kv.Key, W: kv.Value.Values.Sum()))
+            .OrderByDescending(x => x.W).ThenBy(x => x.Item.ToString(), StringComparer.Ordinal)
+            .Take(Math.Max(0, max)).Select(x => (x.Item, x.W)).ToList();
     }
 
     /// <summary>
@@ -293,6 +300,14 @@ public static class Exploration
     private static readonly HashSet<int> MovieGenres = new() { 28, 12, 16, 35, 80, 99, 18, 10751, 14, 36, 27, 10402, 9648, 10749, 878, 53, 10752, 37 };
 
     private static readonly HashSet<int> TvGenres = new() { 10759, 16, 35, 80, 99, 18, 10751, 10762, 9648, 10765, 10768, 37 };
+
+    /// <summary>
+    /// Une œuvre d'une filmographie partage-t-elle un genre avec les titres aimés qui ont désigné la personne ? Genres de
+    /// l'œuvre inconnus : oui (rien d'écarté sans preuve). Andrew Stanton, venu de Toy Story et du Monde de Nemo, ne mène
+    /// pas à 3 Body Problem.
+    /// </summary>
+    public static bool SharesGenre(IEnumerable<int> likedGenres, IReadOnlyList<int>? workGenres, string workType)
+        => workGenres is not { Count: > 0 } || likedGenres.SelectMany(g => GenreFor(g, workType)).Any(workGenres.Contains);
 
     /// <summary>
     /// Identifiants de genre TMDb à utiliser pour une sorte (« movie » / « tv ») à partir d'un genre d'un titre aimé
