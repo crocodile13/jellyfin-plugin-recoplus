@@ -23,7 +23,7 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     séries, les deux, séparées), `SplitLayout` (accueil HSS d'un compte quand une rangée est séparée ou réunie).
   - `ListPolicy.cs` (présentation : hasard du jour, minimums films/séries, filtres), `Exploration.cs` (mode étendu :
     sources, bruit du jour, note fiable ; `Top` compte les pistes par œuvre, une saga = une œuvre ; `SharesGenre` filtre
-    les filmographies), `SimilarityIndex.cs` (produits scalaires précalculés), `Cpu.cs` (fils).
+    les filmographies ; `IsThemeKeyword` écarte les mots-clés de fabrication, `IsReEdit` les remontages), `SimilarityIndex.cs` (produits scalaires précalculés), `Cpu.cs` (fils).
   - `Calibrator.cs` / `ChoiceModel.cs` / `NeuralNet.cs` : calibrage (voir plus bas). `Settings.cs` : `EngineSettings`
     (+ `Sanitized()`, bornes de chaque réglage).
   - `Texts.cs` + `english.json` : textes français / anglais (voir Conventions).

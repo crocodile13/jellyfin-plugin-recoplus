@@ -301,6 +301,29 @@ public static class Exploration
 
     private static readonly HashSet<int> TvGenres = new() { 10759, 16, 35, 80, 99, 18, 10751, 10762, 9648, 10765, 10768, 37 };
 
+    // Mots-clés TMDb qui décrivent la fabrication d'un titre, pas son contenu : ils ne font pas un thème à explorer
+    // (« based on novel or book » menait un fan de Harry Potter au montage télé du Parrain, « aftercreditsstinger » un
+    // fan de Marvel à n'importe quel film avec une scène après le générique). Noms TMDb (données, pas des textes).
+    private static readonly HashSet<string> MetaKeywords = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "based on novel or book", "based on comic", "based on manga", "based on true story", "based on play or musical", // i18n:skip
+        "based on short story", "based on video game", "based on young adult novel", "based on tv series", "based on movie", // i18n:skip
+        "aftercreditsstinger", "duringcreditsstinger", "sequel", "prequel", "remake", "reboot", "spin off", "woman director", // i18n:skip
+        "edited from film", "edited from tv series", "compilation film", "live action remake", // i18n:skip
+    };
+
+    // Remontage de films ou d'épisodes existants (« The Godfather Trilogy: 1901-1980 », 9 h 43) : pas une découverte.
+    private static readonly HashSet<string> ReEditKeywords = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "edited from film", "edited from tv series", "compilation film", // i18n:skip
+    };
+
+    /// <summary>Le mot-clé décrit-il le contenu (thème à explorer) plutôt que la fabrication du titre ?</summary>
+    public static bool IsThemeKeyword(string name) => !MetaKeywords.Contains(name.Trim());
+
+    /// <summary>Le titre est-il un remontage de films ou d'épisodes existants (jamais proposé hors bibliothèque) ?</summary>
+    public static bool IsReEdit(IEnumerable<string> keywordNames) => keywordNames.Any(k => ReEditKeywords.Contains(k.Trim()));
+
     /// <summary>
     /// Une œuvre d'une filmographie est-elle dans la veine des titres aimés qui ont désigné la personne ? Elle doit
     /// partager deux genres avec eux (ou tous, si l'œuvre ou ces titres en ont moins) : un seul genre large comme
