@@ -12,9 +12,9 @@
         "version": "1.0.45.0",
         "changelog": "1.0.45: the settings page gets three levels — essential (default), advanced, expert — so it shows what matters first while keeping every fine setting; the State tab opens with a health summary and a start-up checklist with one-click actions (run the first computation, add the Reco+ rows to Home Screen Sections and enable it, connect Seerr); after Save, a banner offers to recompute and shows the Preview as soon as it is done.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.45.0/RecoPlus_1.0.45.0.zip",
+        "checksum": "62764350aeeaecd88064362195ffc256",
+        "timestamp": "2026-11-23T12:18:27Z"
       },
       {
         "version": "1.0.44.0",
