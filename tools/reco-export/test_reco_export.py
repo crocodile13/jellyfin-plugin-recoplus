@@ -1,5 +1,5 @@
 """Tests de reco-export : faux serveur Jellyfin + fausse base Playback Reporting."""
-import gzip, importlib.util, json, os, sqlite3, sys, tempfile, threading, unittest
+import gzip, importlib.util, json, os, shutil, sqlite3, sys, tempfile, threading, unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit, parse_qs
@@ -65,7 +65,9 @@ class T(unittest.TestCase):
         db.execute("INSERT INTO PlaybackActivity VALUES ('2026-09-01 20:00', ?, 'ffffffffffffffffffffffffffffffff', 'Movie', 'Film remplacé', 'DirectPlay', 'Firefox', 'PC d’Alice', 4000)",
                    ("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",))
         db.commit(); db.close()
-    def tearDown(self): self.srv.shutdown()
+    def tearDown(self):
+        self.srv.shutdown()
+        shutil.rmtree(self.tmp, ignore_errors=True)   # rien ne reste dans le dossier temporaire du système
 
     def run_main(self, *extra):
         return rx.main(["--env", str(self.env), "--out", str(self.tmp / "out"), *extra])

@@ -30,6 +30,25 @@ public class SagasTests
     private static Dictionary<string, Title> Ts(params Title[] ts) => ts.ToDictionary(t => t.Id, t => t, StringComparer.Ordinal);
 
     [Fact]
+    public void NextPartComesFromTheSmallestSagaNeverAThematicGroup()
+    {
+        // « Plus comme ceci » : le volet suivant vient des sagas reconstruites (ordre de sortie), pas d'un regroupement
+        var colls = new Dictionary<string, List<string>>(StringComparer.Ordinal)
+        {
+            ["tmdbc:1"] = new() { "a", "b", "c" },
+            ["marvel"] = new() { "a", "z" },
+            ["big"] = Enumerable.Range(0, 20).Select(i => "x" + i).ToList(),
+        };
+        var thematic = new HashSet<string>(StringComparer.Ordinal) { "marvel" };
+        Assert.Equal("b", Sagas.Next(colls, thematic, 12, "a", _ => true));
+        Assert.Equal("c", Sagas.Next(colls, thematic, 12, "a", x => x != "b"));   // volet qui ne convient pas : le suivant
+        Assert.Null(Sagas.Next(colls, thematic, 12, "c", _ => true));              // dernier volet
+        Assert.Null(Sagas.Next(colls, thematic, 12, "z", _ => true));              // regroupement thématique seul
+        Assert.Null(Sagas.Next(colls, thematic, 12, "x3", _ => true));             // trop grande : pas une saga
+        Assert.Equal("x4", Sagas.Next(colls, thematic, 30, "x3", _ => true));
+    }
+
+    [Fact]
     public void TmdbCollectionCatchesAVolumeJellyfinDidNotFile()
     {
         var t = Ts(M("ts1", "Toy Story", 1995, studio: "Pixar"), M("ts2", "Toy Story 2", 1999, studio: "Pixar"),

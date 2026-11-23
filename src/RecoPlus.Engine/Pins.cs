@@ -8,7 +8,8 @@ namespace RecoPlus.Engine;
 /// <param name="Max">Nombre maximal de titres placés en tête (0 = aucun).</param>
 /// <param name="MaxDays">Fenêtre (jours) : arrivés dans la bibliothèque depuis, et pour un titre aimé sans être vu ici, sortis depuis.</param>
 /// <param name="SagaMax">Au-delà de ce nombre de titres, une collection n'est pas une saga mais un regroupement.</param>
-public sealed record PinOptions(int Max, double MaxDays, int SagaMax);
+/// <param name="Filters">Filtres des listes (genres exclus, note et année minimales) : un titre filtré n'est jamais placé en tête.</param>
+public sealed record PinOptions(int Max, double MaxDays, int SagaMax, ListOptions? Filters = null);
 
 /// <summary>
 /// Titres placés en tête : les nouveautés de ce que le compte suit déjà, seulement. Une nouveauté qu'il ne connaît pas
@@ -48,11 +49,12 @@ public static class Pins
         var found = new Dictionary<string, double>(StringComparer.Ordinal);   // titre → date d'arrivée de la nouveauté
 
         static bool SeenHere(Interaction x) => x.Played || x.Episodes > 0 || x.Completion > 0;
+        bool Shown(Title t) => o.Filters is null || ListPolicy.Allows(t, o.Filters);
 
         // nouveaux épisodes, nouvelle saison
         foreach (var (id, x) in h)
         {
-            if (x.Hidden || sig.GetValueOrDefault(id) <= 0 || !ds.Titles.TryGetValue(id, out var t) || t.External || t.Kind != TitleKind.Series || !allowed(id)
+            if (x.Hidden || sig.GetValueOrDefault(id) <= 0 || !ds.Titles.TryGetValue(id, out var t) || t.External || t.Kind != TitleKind.Series || !allowed(id) || !Shown(t)
                 || episodes(id) is not { Count: > 0 } eps)
             {
                 continue;
@@ -89,7 +91,7 @@ public static class Pins
         // volet suivant d'une saga
         foreach (var m in ds.Titles.Values)
         {
-            if (m.External || m.Kind != TitleKind.Movie || (m.Added ?? 0) < cut || !allowed(m.Id)
+            if (m.External || m.Kind != TitleKind.Movie || (m.Added ?? 0) < cut || !allowed(m.Id) || !Shown(m)
                 || (h.TryGetValue(m.Id, out var mx) && (SeenHere(mx) || mx.Hidden || mx.Requested > 0 || mx.Watchlisted > 0 || mx.Favorite || mx.Rating is not null))
                 || Recommender.Franchise(ds, m.Id) is not { } fr || !Sagas.IsSaga(ds, fr, o.SagaMax) || !ds.Collections.TryGetValue(fr.Id, out var parts))
             {

@@ -112,6 +112,25 @@ public class MeasurementTests
     }
 
     [Fact]
+    public void DeletedAccountsAreForgottenByBothRegisters()
+    {
+        using var led = new RecoLedger(() => null, NullLogger<RecoLedger>.Instance);
+        led.Record("u", Rows(("PourToi", new[] { "a" })), _ => true, Now);
+        led.Record("gone", Rows(("PourToi", new[] { "a" })), _ => true, Now);
+        var keep = new HashSet<string>(StringComparer.Ordinal) { "u" };
+        Assert.Equal(1, led.Retain(keep));
+        Assert.Equal(new[] { "u" }, led.Snapshot().Keys.ToArray());
+        Assert.Equal(0, led.Retain(keep));
+
+        using var imp = new ImpressionStore(() => null, NullLogger<ImpressionStore>.Instance);
+        imp.Record("u", new[] { "tmdb:movie:1" }, null, Now);
+        imp.Record("gone", new[] { "tmdb:movie:1" }, null, Now);
+        Assert.Equal(1, imp.Retain(keep));
+        Assert.Empty(imp.For("gone", Now));
+        Assert.Single(imp.For("u", Now));
+    }
+
+    [Fact]
     public void LedgerIsPersistedPerAccountAndBrokenEntriesAreDropped()
     {
         var dir = Path.Combine(Path.GetTempPath(), "recoplus-led-" + Guid.NewGuid().ToString("N"));

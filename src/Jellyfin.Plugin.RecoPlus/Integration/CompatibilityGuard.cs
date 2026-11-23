@@ -217,7 +217,29 @@ public sealed class CompatibilityGuard : IHostedService
             Disable(Feature.Suggestions, Texts.Pack("Le contrôleur des suggestions de Jellyfin a changé ({0}).", badText));
         }
 
-        // 3. dépendances facultatives
+        // 3. lecture de l'historique directement dans la base de Jellyfin (table des données utilisateur)
+        string? dbProblem = null;
+        try
+        {
+            (_sp.GetService(typeof(Data.UserDataReader)) as Data.UserDataReader)?.Probe();
+        }
+        catch (Exception ex)
+        {
+            dbProblem = (ex.InnerException ?? ex).GetType().Name + ": " + (ex.InnerException ?? ex).Message;
+        }
+
+        Checks.Add(("Lecture de l'historique (base de Jellyfin)", dbProblem is null, dbProblem is null ? Texts.Pack("conforme") : Texts.Pack("illisible : {0}", dbProblem)));
+        if (dbProblem is not null)
+        {
+            _notifier.Raise("database", "historique illisible",
+                Texts.Pack("La table des données utilisateur de Jellyfin n'a pas la forme attendue ({0}) : aucun calcul ne peut aboutir, les listes précédentes restent servies. Une mise à jour du plugin est à prévoir.", dbProblem));
+        }
+        else
+        {
+            _notifier.Clear("database");
+        }
+
+        // 4. dépendances facultatives
         var asm = AssemblyLoadContext.All.SelectMany(c => c.Assemblies).Select(a => a.GetName()).ToList();
         string Opt(string name) => asm.FirstOrDefault(a => a.Name == name)?.Version?.ToString() ?? string.Empty;
         var hss = Opt("Jellyfin.Plugin.HomeScreenSections");

@@ -16,7 +16,7 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     `ScoreAll` (titres demandés ou en liste de suivi notés sans leur propre signal puis écartés selon `IntentFactor`),
     `Rank` (diversité MMR / personnalisée / calibrée, règle de saga).
   - `Pins.cs` : titres en tête (nouveautés de ce que le compte suit : nouveaux épisodes, volet suivant d'une saga ;
-    jamais un titre demandé).
+    jamais un titre demandé ; filtres des listes appliqués).
   - `HomeRows.cs` : répartition des rangées sans doublon (`Allocate`, rappel `fit`), placement des titres hors
     bibliothèque (`PlaceRow`, `FitRow`, `FreePlaces`, `CapPlaces`, `ForcePlaces`), `RowSource`, `MixOptions`.
   - `Trending.cs` : listes TMDb du moment (intensité 1/√(1 + place), ordre tendance × goût), `KindFilter` (films,
@@ -31,7 +31,8 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     aperçu. `RecoWorker.cs` : quand recalculer (activité du compte regroupée, écart minimal, au démarrage).
     `CalibrationService.cs` : tâche de calibrage. `RecoModels.cs` : `UserRecs` (listes, rangées, compositions).
   - `Integration/` : HSS par réflexion (aucune dépendance de compilation), injection du script dans `index.html`,
-    décorateur de « Plus comme ceci », filtre des suggestions, garde de compatibilité (coupe une partie qui ne colle
+    décorateur de « Plus comme ceci » (volet suivant : `Sagas.Next` sur les sagas du dernier calcul,
+    `RecoService.SagaCollections`), filtre des suggestions, garde de compatibilité (coupe une partie qui ne colle
     plus à Jellyfin et prévient), notifications (webhook).
   - `Seerr/` : client et service (relevé des demandes et listes de suivi, fiches et listes TMDb en cache, rythme
     borné, disjoncteur après échecs répétés).
@@ -182,6 +183,10 @@ de la CI.
   pour un intertitre), dans l'ordre de la répartition ; ailleurs, `{ROW}` (rangée principale) ou `{T:Champ}` reprennent
   le titre saisi. Ce qui dépend de Seerr (`LIST_ROWS`, `NEEDS_SEERR`) ou du mode étendu est grisé avec la raison.
 - Un `enum:` absent de la configuration reçue prend sa première option (sa valeur par défaut) : la mettre en premier.
+- Le formulaire est en `novalidate` : un champ grisé (désactivé, donc non validé) qui redevient actif, ou une valeur écrite
+  par le calibrage hors du pas, bloquait l'enregistrement sans message (ticket #44). Le serveur borne chaque valeur ;
+  `configpage.test.mjs` vérifie que chaque défaut respecte min / max / pas, et soumet le formulaire pour de vrai
+  (`requestSubmit`, pas un événement `submit` qui contourne la validation).
 - Trois niveaux : de base (visible) ; avancé (onglets Moteur et Calibrage, marqués « avancé », et sections repliées
   « Réglages avancés ») ; mode développeur (Journal, export et réglages statistiques du calibrage, chemin détaillé des
   méthodes, apport de chaque source dans l'aperçu). Un outil de diagnostic va en mode développeur, pas en avancé.
@@ -241,4 +246,8 @@ de la CI.
 - `UpdateUserSettings` de HSS appelé pour tous les comptes : ceux qui suivaient le tableau ont été figés. Seulement
   les comptes présents dans `ModularHomeSettings.json`.
 - Patch livré sur une branche supposée (`reco-1.0.N-1` jamais créée) : toujours vérifier la base (voir Livraison).
+- `<input type=number min=30 step=30>` avec un défaut de 365 : invalide pour le navigateur, invisible tant que le champ
+  est désactivé (voir Page de configuration).
+- `git stash` avec le lien `tests/client/node_modules` (anciennement suivi) supprimé : le lien revient à la place du
+  dossier installé. Le lien n'est plus suivi ; `npm install --no-save` dans `tests/client` suffit.
 - `i18n.en.json` comme ressource incorporée : MSBuild y voit la culture « en » et la sort de l'assembly (satellite).

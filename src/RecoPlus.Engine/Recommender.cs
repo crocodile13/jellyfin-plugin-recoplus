@@ -479,10 +479,14 @@ public static class Recommender
     /// <param name="exposure">Facultatif : affichages sans ouverture, par titre.</param>
     /// <param name="signals">Facultatif : signaux du compte à utiliser à la place des siens.</param>
     /// <param name="prior">Poids de l'a priori d'un compte qui démarre (<see cref="ColdStart"/>) ; 0 = aucun.</param>
+    /// <param name="priorPopularity">
+    /// Part de la popularité dans cet a priori (le reste : la note de la communauté). 0 pour comparer des titres de la
+    /// bibliothèque à des titres hors bibliothèque (<see cref="Shared"/>) : la popularité n'existe que d'un côté.
+    /// </param>
     public static Dictionary<string, double> Score(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
         IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null,
         Dictionary<string, ScoreParts>? parts = null, SimilarityIndex? sim = null, IReadOnlyDictionary<string, Exposure>? exposure = null,
-        IReadOnlyDictionary<string, double>? signals = null, double prior = 0)
+        IReadOnlyDictionary<string, double>? signals = null, double prior = 0, double priorPopularity = ColdStartPopularity)
     {
         var c = Compute(ctx, vec, user, cands, w, tmdbAgreement, sim, signals);
         var taste = new double[cands.Count];
@@ -521,7 +525,7 @@ public static class Recommender
             if (prior > 0)
             {
                 // a priori sans goût connu : ce que le foyer regarde, puis la note de la communauté
-                sc += prior * ((0.6 * c.Pop[ci]) + (0.4 * (c.Q[ci] + 1.0) / 2.0));
+                sc += prior * ((priorPopularity * c.Pop[ci]) + ((1.0 - priorPopularity) * (c.Q[ci] + 1.0) / 2.0));
             }
 
             if (exposure is not null && exposure.TryGetValue(cands[ci], out var ex))
@@ -569,12 +573,14 @@ public static class Recommender
     /// ceux-ci sont notés sans leur propre signal (sinon ils ressembleraient parfaitement à eux-mêmes), puis réduits
     /// selon <see cref="IntentFactor"/>. Les autres titres gardent leur score normal.
     /// </summary>
+    /// <param name="shared">Classement commun bibliothèque / hors bibliothèque (<see cref="Shared"/>) : a priori sans popularité.</param>
     public static Dictionary<string, double> ScoreAll(Context ctx, IReadOnlyDictionary<string, SparseVector> vec, string user,
         IReadOnlyList<string> cands, EngineSettings w, IReadOnlyDictionary<string, double>? tmdbAgreement = null, SimilarityIndex? sim = null,
-        IReadOnlyDictionary<string, Exposure>? exposure = null)
+        IReadOnlyDictionary<string, Exposure>? exposure = null, bool shared = false)
     {
         double prior = ColdStart(ctx.Sig.TryGetValue(user, out var s0) ? s0 : null);
-        var sc = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure, null, prior);
+        double priorPop = shared ? 0.0 : ColdStartPopularity;
+        var sc = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure, null, prior, priorPop);
         var hist = ctx.Hist.TryGetValue(user, out var h) ? h : null;
         if (hist is null)
         {
@@ -589,7 +595,7 @@ public static class Recommender
 
         var sig = ctx.Sig.TryGetValue(user, out var su) ? su : new Dictionary<string, double>();
         var without = sig.Where(kv => !wanted.Contains(kv.Key)).ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
-        var alone = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure, without, prior);
+        var alone = Score(ctx, vec, user, cands, w, tmdbAgreement, null, sim, exposure, without, prior, priorPop);
         foreach (var id in wanted)
         {
             double v = alone[id];
@@ -604,6 +610,9 @@ public static class Recommender
 
     /// <summary>Poids de l'a priori pour un compte sans aucun goût connu.</summary>
     public const double ColdStartWeight = 0.3;
+
+    /// <summary>Part de la popularité dans l'a priori d'un compte qui démarre (le reste : la note de la communauté).</summary>
+    public const double ColdStartPopularity = 0.6;
 
     /// <summary>
     /// Poids de l'a priori d'un compte qui démarre : sans goût connu, tous les titres ont le même score de goût et le

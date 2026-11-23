@@ -733,5 +733,43 @@ await test('langue : sans dictionnaire (serveur injoignable ou français), la pa
     assert.equal(d.getElementById('rp_c_HssSectionTitle').getAttribute('placeholder'), 'Pour toi');
 });
 
+await test('enregistrer : un champ réactivé ou écrit par le calibrage ne bloque jamais (ticket #44)', async () => {
+    // configuration telle que le serveur l'envoie : nouveautés hors bibliothèque à 365 j, mode étendu coupé ; puis des
+    // valeurs du moteur écrites par la recherche par curseurs (hors du pas des champs)
+    const base = { ...cfg, ExtendedEnabled: false, SourceNouveautes: 'Mix', RowNewReleasedDays: 365, Engine: { ...cfg.Engine, HalfLifeDays: 54.04, GateTop: 32, RecencyFloor: 0.137 } };
+    const { d, saved } = await open(base);
+    await wait(50);
+    const box = d.getElementById('rp_c_ExtendedEnabled');
+    box.checked = true;
+    box.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.equal(d.getElementById('rp_c_RowNewReleasedDays').disabled, false);
+    d.getElementById('rpForm').requestSubmit();                       // vraie soumission : validation du navigateur comprise
+    await wait(50);
+    assert.equal(saved.length, 1, 'la configuration doit être enregistrée');
+    assert.equal(saved[0].ExtendedEnabled, true);
+    assert.equal(saved[0].RowNewReleasedDays, 365);
+    assert.equal(saved[0].Engine.HalfLifeDays, 54.04);
+    assert.equal(saved[0].Engine.GateTop, 32);
+});
+
+await test('chaque valeur par défaut d\'un champ numérique respecte ses bornes et son pas', async () => {
+    const F = (0, eval)(HTML.match(/var F = (\[[\s\S]*?\n\s*\]);/)[1]);
+    const defaults = {};
+    for (const file of ['src/Jellyfin.Plugin.RecoPlus/Configuration/PluginConfiguration.cs', 'src/RecoPlus.Engine/Settings.cs', 'src/RecoPlus.Engine/ListPolicy.cs']) {
+        for (const m of readFileSync(join(root, file), 'utf8').matchAll(/public\s+(?:int|double)\??\s+(\w+)\s*\{\s*get;\s*set;\s*\}(?:\s*=\s*([^;]+);)?/g)) {
+            defaults[m[1]] = m[2] === undefined ? 0 : Number(m[2].replace(/_/g, ''));
+        }
+    }
+    const bad = [];
+    for (const [key, , type, , step, min, max] of F) {
+        if (type !== 'int' && type !== 'num') { continue; }
+        const v = defaults[key];
+        if (v === undefined || Number.isNaN(v)) { continue; }
+        const q = (v - min) / step;
+        if (v < min || v > max || Math.abs(q - Math.round(q)) > 1e-9) { bad.push(`${key}=${v} (min ${min}, max ${max}, pas ${step})`); }
+    }
+    assert.deepEqual(bad, []);
+});
+
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');
 process.exit(failures ? 1 : 0);

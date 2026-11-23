@@ -24,6 +24,7 @@
   - nouveaux épisodes ou nouvelle saison d'une série vue sur ce serveur et presque rattrapée (pas besoin de l'avoir aimée, juste un poids positif : ni abandonnée, ni masquée) ;
   - pour une série aimée sans être vue ici (on ignore jusqu'où il l'a vue), seulement les épisodes diffusés récemment ;
   - le volet suivant d'une saga dont les volets précédents sont vus (ou aimés) — pour une saga seulement aimée, seulement une sortie récente. Une saga vue en entier n'a plus rien à placer.
+  - Les filtres des listes (genres exclus, note et année minimales) s'appliquent ici aussi.
 - **Le contenu.** Vecteurs TF-IDF sur genres, mots-clés, studios, acteurs principaux, réalisateurs, scénaristes, créateurs, décennie et type — et, en option, langue originale et pays de production. Le goût du compte combine son profil d'ensemble et le titre aimé le plus proche.
 - **En option, coupés par défaut** (aucun gain mesurable sur l'historique de référence ; le Calibrage peut les proposer sur le vôtre) : revisionnages, sortie *récente* (et non ajout récent), langue originale et pays. Le bonus de qualité peut utiliser la note de la communauté, celle des critiques, la meilleure des deux ou leur moyenne.
 - **Confiance dans les notes.** La note de la communauté est tirée vers 6,5 quand elle repose sur peu de votes (moyenne bayésienne, 150 votes fictifs ; nombre de votes TMDb lu via Seerr) : 9/10 sur 12 votes ≈ 6,7, sur 20 000 votes = 9. **Les avis du foyer** (Jellyfin Enhanced, autres comptes seulement) donnent un bonus réservé selon la même idée : 2 avis neutres fictifs, donc un seul 5 étoiles pèse peu et cinq avis concordants beaucoup.
@@ -74,8 +75,9 @@ Le test : chaque fois qu'un compte a commencé un nouveau titre, ce titre figura
 ## Sécurité et robustesse
 
 - **Garde-fou de version.**
-  - Au démarrage, Reco+ vérifie la version de Jellyfin et chaque point d'accroche qu'il utilise : enregistrement des services, actions et paramètres des contrôleurs, plugins facultatifs.
+  - Au démarrage, Reco+ vérifie la version de Jellyfin et chaque point d'accroche qu'il utilise : enregistrement des services, actions et paramètres des contrôleurs, lecture de l'historique dans la base de Jellyfin, plugins facultatifs.
   - Une partie qui ne colle plus se coupe seule, et Jellyfin reprend son comportement normal pour elle. C'est aussi le cas d'une partie qui fait 5 erreurs en 10 minutes.
+  - Un calcul qui échoue lève aussi une alerte (les listes précédentes restent servies).
   - Vous êtes prévenu par le journal d'activité de Jellyfin, par une bannière rouge sur la page du plugin et, en option, par un webhook (ntfy, Gotify, Discord ou JSON).
 - **Droits.**
   - Toutes les listes passent par les règles d'accès de Jellyfin pour le compte (bibliothèques, contrôle parental).
@@ -88,7 +90,7 @@ Le test : chaque fois qu'un compte a commencé un nouveau titre, ce titre figura
   - Rien n'est jamais demandé automatiquement.
 - **Léger pour le serveur.**
   - L'historique est lu en une seule requête, en lecture seule.
-  - Un seul calcul tourne à la fois. Le recalcul complet est une tâche planifiée, avec sa progression visible, lancée après des ajouts à la bibliothèque (au plus une fois par heure), au démarrage seulement si aucun compte n'a de liste (un compte sans liste est calculé seul), ou à la main (« Recalculer maintenant »). Pas de recalcul nocturne par défaut.
+  - Un seul calcul tourne à la fois. Le recalcul complet est une tâche planifiée, avec sa progression visible, lancée après des ajouts à la bibliothèque, nouveaux épisodes compris (au plus une fois par heure), au démarrage seulement si aucun compte n'a de liste (un compte sans liste est calculé seul), ou à la main (« Recalculer maintenant »). Pas de recalcul nocturne par défaut.
   - Un compte est recalculé une fois son activité calmée (2 minutes sans nouvelle fin de lecture, marque vu, favori ou note), et au plus une fois toutes les 15 minutes.
   - Enregistrer les réglages ou appliquer un calibrage ne relance rien : « Recalculer maintenant », sinon chaque compte en profite à sa prochaine activité.
   - La bibliothèque est réindexée après des ajouts, en regroupant les changements rapprochés.

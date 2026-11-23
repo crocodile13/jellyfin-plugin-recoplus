@@ -17,7 +17,7 @@ namespace Jellyfin.Plugin.RecoPlus.Service;
 /// <summary>
 /// Planifie les recalculs, sans réagir à tout : un compte est recalculé après son activité (lecture terminée, vu, favori,
 /// note), une fois l'activité calmée (délai regroupant les actions rapprochées) et au plus une fois par écart minimal ;
-/// tous les comptes après des ajouts à la bibliothèque (au plus une fois par heure). Au démarrage, seulement les comptes
+/// tous les comptes après des ajouts à la bibliothèque, épisodes compris (au plus une fois par heure). Au démarrage, seulement les comptes
 /// sans liste (tous d'un coup s'il n'y en a aucune). Enregistrer les réglages ou appliquer un calibrage ne relance rien :
 /// bouton « Recalculer ».
 /// </summary>
@@ -92,7 +92,8 @@ public sealed class RecoWorker : BackgroundService
 
     private void OnItemAdded(object? sender, ItemChangeEventArgs e)
     {
-        if (e.Item is Movie or Series && Enabled)
+        // un épisode compte aussi : nouvelle saison ou nouveaux épisodes d'une série suivie (titres placés en tête)
+        if (e.Item is Movie or Series or Episode && Enabled)
         {
             // ajouts en rafale regroupés ; au plus un recalcul complet par heure pour cette raison
             lock (_allLock)
@@ -227,11 +228,9 @@ public sealed class PlaybackStartConsumer : IEventConsumer<PlaybackStartEventArg
 
         foreach (var u in e.Users)
         {
-            _store.Record(u.Id, e.Item.Id, DateTime.UtcNow);
-            if (e.Item is Episode ep && ep.SeriesId != Guid.Empty)
-            {
-                _store.Record(u.Id, ep.SeriesId, DateTime.UtcNow);
-            }
+            // un épisode : seule la série est notée (c'est elle que lit l'historique ; noter chaque épisode ferait grossir
+            // le fichier sans rien apporter)
+            _store.Record(u.Id, e.Item is Episode ep && ep.SeriesId != Guid.Empty ? ep.SeriesId : e.Item.Id, DateTime.UtcNow);
         }
 
         return Task.CompletedTask;

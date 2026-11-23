@@ -9,6 +9,22 @@ namespace RecoPlus.Tests;
 public class HistoryMathTests
 {
     [Fact]
+    public void FirstPlayRegisterIsBoundedOldestFirst()
+    {
+        var first = new System.Collections.Concurrent.ConcurrentDictionary<string, double>(StringComparer.Ordinal);
+        for (int i = 0; i < 10; i++)
+        {
+            first["k" + i] = 1000 + i;
+        }
+
+        Assert.Equal(0, HistoryStore.Prune(first, 10));
+        Assert.Equal(3, HistoryStore.Prune(first, 7));
+        Assert.Equal(7, first.Count);
+        Assert.False(first.ContainsKey("k0"));
+        Assert.True(first.ContainsKey("k3") && first.ContainsKey("k9"));
+    }
+
+    [Fact]
     public void RewatchAndExplicitRatings()
     {
         Assert.Equal(0.0, HistoryMath.MovieRewatch(0));

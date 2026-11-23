@@ -156,6 +156,26 @@ public static class Sagas
         => ds.Titles.TryGetValue(id, out var t) && t.Tags.Any(x => string.Equals(x, "sequel", StringComparison.OrdinalIgnoreCase))
            && !(Recommender.Franchise(ds, id) is { } f && !ds.Thematic.Contains(f.Id));
 
+    /// <summary>
+    /// Volet suivant d'un titre dans sa saga (collections de <see cref="Refine"/>, dans l'ordre de sortie) : le premier
+    /// titre après lui qui convient (<paramref name="ok"/>), dans la plus petite saga qui le contient. Les regroupements
+    /// thématiques et les collections plus grandes que <paramref name="sagaMax"/> ne comptent pas. Null s'il n'y en a pas.
+    /// </summary>
+    public static string? Next(IReadOnlyDictionary<string, List<string>> collections, IReadOnlySet<string> thematic, int sagaMax, string id, Func<string, bool> ok)
+    {
+        foreach (var (_, items) in collections.Where(kv => !thematic.Contains(kv.Key) && kv.Value.Count >= 2 && kv.Value.Count <= sagaMax)
+                     .OrderBy(kv => kv.Value.Count).ThenBy(kv => kv.Key, StringComparer.Ordinal))
+        {
+            int i = items.IndexOf(id);
+            if (i >= 0)
+            {
+                return items.Skip(i + 1).FirstOrDefault(ok);
+            }
+        }
+
+        return null;
+    }
+
     /// <summary>Saga (et non regroupement thématique) : taille au plus <paramref name="sagaMax"/>, collection non mélangée.</summary>
     public static bool IsSaga(Dataset ds, (int Size, string Id) f, int sagaMax) => f.Size <= sagaMax && !ds.Thematic.Contains(f.Id);
 

@@ -107,10 +107,13 @@ public sealed class SimilarItemsManagerDecorator : ISimilarItemsManager
             scored.Add((tid, ((1 - pers) * sim) + (pers * tasteN * sim)));
         }
 
-        // saga : le volet suivant (par année) de la même collection passe devant
-        var sagaNext = lib.Collections.Where(c => c.Value.Count <= 12 && c.Value.Contains(id))
-            .SelectMany(c => c.Value).Where(x => x != id && lib.Titles.TryGetValue(x, out var t) && t.Kind == src.Kind && (t.Year ?? 9999) >= (src.Year ?? 0))
-            .OrderBy(x => lib.Titles[x].Year ?? 9999).Take(1).ToHashSet(StringComparer.Ordinal);
+        // saga : le volet suivant passe devant (sagas du dernier calcul : collections TMDb, de Jellyfin, règle du nom ;
+        // avant le premier calcul, les collections de Jellyfin)
+        var cfg = Plugin.Instance!.Configuration;
+        int sagaMax = (cfg.Engine ?? new EngineSettings()).Sanitized().SagaMax;
+        var sagas = Reco.SagaCollections ?? new Sagas.Result(lib.Collections, new HashSet<string>(StringComparer.Ordinal));
+        var next = Sagas.Next(sagas.Collections, sagas.Thematic, sagaMax, id, x => lib.Titles.TryGetValue(x, out var t) && !t.External && t.Kind == src.Kind);
+        var sagaNext = next is null ? new HashSet<string>(StringComparer.Ordinal) : new HashSet<string>(StringComparer.Ordinal) { next };
         var ids = scored.OrderByDescending(x => sagaNext.Contains(x.Id) ? double.MaxValue : x.S)
             .Take(Math.Clamp(limit, 1, 200) * 2)
             .Select(x => Guid.ParseExact(x.Id, "N"))

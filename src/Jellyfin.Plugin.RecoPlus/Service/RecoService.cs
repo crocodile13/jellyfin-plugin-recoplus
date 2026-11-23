@@ -76,6 +76,7 @@ public sealed class RecoService : IDisposable
     private readonly ImpressionStore _impressions;
     private readonly RecoLedger _ledger;
     private readonly IServiceProvider _services;
+    private readonly Notifier _notifier;
     private readonly ConcurrentDictionary<string, UserRecs> _recs = new(StringComparer.Ordinal);
     private Dictionary<string, Dictionary<string, Interaction>> _lastHist = new(StringComparer.Ordinal);
     private PrDates? _prCache;
@@ -101,9 +102,11 @@ public sealed class RecoService : IDisposable
     private LibrarySnapshot? _library;
 
     public RecoService(LibraryIndex index, UserHistory history, UserDataReader userData, PlaybackReportingReader pr, SeerrService seerr,
-        JellyfinEnhancedReader je, ImpressionStore impressions, RecoLedger ledger, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log, IServiceProvider services)
+        JellyfinEnhancedReader je, ImpressionStore impressions, RecoLedger ledger, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log, IServiceProvider services,
+        Notifier notifier)
     {
         _services = services;
+        _notifier = notifier;
         _je = je;
         _impressions = impressions;
         _ledger = ledger;
@@ -154,6 +157,12 @@ public sealed class RecoService : IDisposable
             }
         }
     }
+
+    /// <summary>
+    /// Sagas du dernier calcul (<see cref="Sagas.Refine"/> : collections TMDb, collections de Jellyfin cohérentes, règle du
+    /// nom) et regroupements thématiques, pour « Plus comme ceci » ; null avant le premier calcul.
+    /// </summary>
+    public Sagas.Result? SagaCollections { get; private set; }
 
     /// <summary>Instantané de la bibliothèque des vecteurs ci-dessus.</summary>
     public LibrarySnapshot? Library
@@ -377,6 +386,7 @@ public sealed class RecoService : IDisposable
             }
 
             Status.LastError = null;
+            _notifier.Clear(ComputeAlert);
         }
         catch (OperationCanceledException) when (ct.IsCancellationRequested)
         {
@@ -386,6 +396,10 @@ public sealed class RecoService : IDisposable
         {
             Status.LastError = $"{DateTime.UtcNow:u} {ex.GetType().Name}: {ex.Message}";
             _log.LogError(ex, "Reco+: computation failed (previous lists are still served)");
+            // prévenir (bannière, journal d'activité, webhook) : un calcul qui échoue à chaque fois, par exemple après un
+            // changement de la base de Jellyfin, laisserait sinon des listes figées sans que personne le sache
+            _notifier.Raise(ComputeAlert, Texts.Pack("échec du calcul des recommandations"),
+                Texts.Pack("{0} Les listes précédentes restent servies. Si l'erreur revient à chaque calcul, la version de Jellyfin ne correspond probablement plus au plugin.", ex.GetType().Name + ": " + ex.Message));
         }
         finally
         {
@@ -393,6 +407,9 @@ public sealed class RecoService : IDisposable
             _gate.Release();
         }
     }
+
+    /// <summary>Clé de l'alerte « échec du calcul ».</summary>
+    private const string ComputeAlert = "compute";
 
     /// <summary>
     /// Déjà vu ou écarté : regardé (même un peu), masqué ou mal noté. Un titre seulement voulu (liste de suivi, demande
@@ -429,10 +446,24 @@ public sealed class RecoService : IDisposable
         var lib = _index.Get(metadata: only is null);
         var pr = PlaybackReporting(only is null);
         // comptes exclus : ni recommandations, ni historique pris en compte pour le foyer
-        var users = _users.GetUsers().Where(u => !Excluded(u.Id.ToString("N"))).ToList();
+        var all = _users.GetUsers().ToList();
+        var users = all.Where(u => !Excluded(u.Id.ToString("N"))).ToList();
         foreach (var gone in _recs.Keys.Where(Excluded).ToList())
         {
             _recs.TryRemove(gone, out _);
+        }
+
+        // comptes supprimés de Jellyfin : leurs listes, propositions et affichages sont oubliés
+        var existing = all.Select(u => u.Id.ToString("N")).ToHashSet(StringComparer.Ordinal);
+        if (only is null && existing.Count > 0)
+        {
+            foreach (var gone in _recs.Keys.Where(k => !existing.Contains(k)).ToList())
+            {
+                _recs.TryRemove(gone, out _);
+            }
+
+            _ledger.Retain(existing);
+            _impressions.Retain(existing);
         }
 
         var lo = cfg.Lists.Sanitized(cfg.RowSize);
@@ -557,6 +588,7 @@ public sealed class RecoService : IDisposable
 
         Status.ExternalTitles = titles.Values.Count(t => t.External);
         ApplySagas(ds, lib, tmdbOf);
+        SagaCollections = new Sagas.Result(new Dictionary<string, List<string>>(ds.Collections, StringComparer.Ordinal), new HashSet<string>(ds.Thematic, StringComparer.Ordinal));
         var vec = Core.BuildVectors(titles, s);
         // produits scalaires gardés le temps du calcul (classement avec diversité : ~10× plus rapide, mêmes listes) ;
         // budget mémoire borné, au-delà calcul direct
@@ -597,7 +629,7 @@ public sealed class RecoService : IDisposable
                 id => Guid.TryParse(id, out var sg) && lib.EpisodeDates.TryGetValue(sg, out var ed)
                     ? ed.Where(e => !(urows is not null && urows.TryGetValue(e.Id, out var er) && er.Played)).Select(e => (e.Added, e.Aired)).ToList()
                     : null, now,
-                new PinOptions(Math.Clamp(cfg.NewEpisodesPinned, 0, 20), Math.Clamp(cfg.NewEpisodesMaxDays, 1, 365), s.SagaMax));
+                new PinOptions(Math.Clamp(cfg.NewEpisodesPinned, 0, 20), Math.Clamp(cfg.NewEpisodesMaxDays, 1, 365), s.SagaMax, lo));
             r.Pinned = pinned;
 
             // rangées que HSS montre à ce compte : les autres ne « réservent » aucun titre
@@ -737,7 +769,7 @@ public sealed class RecoService : IDisposable
                     var d = _seerr.CachedDetails(e.MediaType, e.TmdbId);
                     return !Known(h, "tmdb:" + k, cfg.ProposeMarked) && !lib.ByTmdb.ContainsKey(k) && !seerr.Requested.Contains(k) && hid?.Contains(k) != true
                            && (d is null || (d.MediaStatus is not (2 or 3 or 4 or 5 or 6) && ParentalAllowed(policy, d, country)));
-                }).ToList();
+                }).Select(e => e.Copy()).ToList();   // copies : la liste précédente est encore servie pendant le calcul
                 r.Sources = prevRecs.Sources;
                 r.ExtendedAt = prevRecs.ExtendedAt;
                 // leur place dans les rangées aussi (une rangée recalculée depuis se recompose sans ce qui a disparu)
@@ -913,7 +945,7 @@ public sealed class RecoService : IDisposable
         }
 
         // score commun (ce que bibliothèque et hors bibliothèque ont en commun), même bruit du jour pour les titres hors bibliothèque
-        var joint = Recommender.ScoreAll(ctx, vec, key, hv.Ordered.Concat(recs.Select(p => p.Id)).Distinct().ToList(), Recommender.Shared(s), exposure: expo);
+        var joint = Recommender.ScoreAll(ctx, vec, key, hv.Ordered.Concat(recs.Select(p => p.Id)).Distinct().ToList(), Recommender.Shared(s), exposure: expo, shared: true);
         var jointExt = Exploration.Noisy(recs.ToDictionary(p => p.Id, p => joint[p.Id], StringComparer.Ordinal), noise, noiseSeed);
         double Key(string id) => jointExt.TryGetValue(id, out var e) ? e : joint.GetValueOrDefault(id);
 

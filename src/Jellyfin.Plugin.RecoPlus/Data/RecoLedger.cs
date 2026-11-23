@@ -61,6 +61,24 @@ public sealed class RecoLedger : IDisposable
         }
     }
 
+    /// <summary>Oublie les propositions des comptes qui n'existent plus (seuls ceux de <paramref name="users"/> restent).</summary>
+    /// <returns>Nombre de comptes oubliés.</returns>
+    public int Retain(IReadOnlySet<string> users)
+    {
+        EnsureLoaded();
+        lock (_lock)
+        {
+            var gone = _byUser.Keys.Where(u => !users.Contains(u)).ToList();
+            foreach (var u in gone)
+            {
+                _byUser.Remove(u);
+            }
+
+            _dirty |= gone.Count > 0;
+            return gone.Count;
+        }
+    }
+
     /// <summary>Oublie tout pour un compte.</summary>
     public void Forget(string userKey)
     {

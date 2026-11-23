@@ -21,6 +21,7 @@
   - new episodes or a new season of a series watched on this server that the account had nearly caught up with (no like needed, just a positive weight: not abandoned, not hidden);
   - for a series liked but not watched here (we do not know how far the account got), only episodes that aired recently;
   - the next part of a saga whose earlier parts were watched (or liked) — for a saga only liked, only a recent release. A fully watched saga has nothing left to place.
+  - The list filters (excluded genres, minimum rating and year) apply here too.
 - **Content.** TF-IDF vectors over genres, keywords, studios, main actors, directors, writers, creators, decade and kind — plus, optionally, original language and production countries. The account's taste combines its overall profile with the closest title it liked.
 - **Optional, off by default** (no measurable gain on the reference history; Calibration can propose them on yours): rewatches, recent *release* (as opposed to recent addition), original language and countries. The quality bonus can use the community rating, the critics' rating, the better of the two or their mean.
 - **Confidence in ratings.** The community rating is pulled towards 6.5 when it rests on few votes (Bayesian average, 150 virtual votes; TMDb vote counts read through Seerr): 9/10 on 12 votes ≈ 6.7, on 20,000 votes = 9. **Household reviews** (Jellyfin Enhanced, other accounts only) are a reserved bonus with the same idea: 2 neutral virtual reviews, so one 5-star review weighs little and five matching reviews a lot.
@@ -72,9 +73,10 @@ Protocol: every time an account started a new title, would that title have been 
 
 ## Safety and robustness
 
-- **Version guard.** At start-up Reco+ checks the Jellyfin version and every hook it uses (service registration, controller actions and parameters, optional plugins).
+- **Version guard.** At start-up Reco+ checks the Jellyfin version and every hook it uses (service registration, controller actions and parameters, reading the watch history from Jellyfin's database, optional plugins).
   - A part that no longer matches is disabled on its own, and Jellyfin's normal behaviour comes back for it.
   - So is a part that throws 5 errors within 10 minutes.
+  - A failed computation raises an alert too (the previous lists are still served).
   - You are told through the Jellyfin activity log, a red banner on the plugin page, and optionally a webhook (ntfy, Gotify, Discord or generic JSON).
 - **Rights.** Every list goes through Jellyfin's own access rules for the account (libraries, parental rating).
   - Titles outside the library must have a known certification no higher than the account's limit; this is stricter than Jellyfin.
@@ -85,7 +87,7 @@ Protocol: every time an account started a new title, would that title have been 
 - **Light on the server.**
   - History is read in a single read-only query.
   - One computation runs at a time.
-  - A full recompute is a scheduled task with visible progress, run after library additions (at most once an hour), at startup only if no account has a list yet (an account without a list is computed alone), or by hand ("Recompute now"). No nightly run by default.
+  - A full recompute is a scheduled task with visible progress, run after library additions, new episodes included (at most once an hour), at startup only if no account has a list yet (an account without a list is computed alone), or by hand ("Recompute now"). No nightly run by default.
   - Each account is recomputed once its activity calms down (2 minutes without a new playback end, watched mark, favourite or rating), and at most once every 15 minutes.
   - Saving settings or applying a calibration does not recompute by itself: use "Recompute now", otherwise each account picks it up at its next activity.
 - **Other plugins.** It cooperates with them rather than racing them.

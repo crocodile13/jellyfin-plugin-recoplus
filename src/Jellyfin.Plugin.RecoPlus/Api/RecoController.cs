@@ -549,9 +549,9 @@ public sealed class RecoController : ControllerBase
     /// </summary>
     [HttpGet("Calibration/Data")]
     [Authorize(Policy = Policies.RequiresElevation)]
-    public ActionResult CalibrationData()
+    public async Task<ActionResult> CalibrationData(CancellationToken ct)
     {
-        int n = _calib.CaseCount();
+        int n = await _calib.CaseCountAsync(ct).ConfigureAwait(false);
         return Ok(new
         {
             cases = n,
