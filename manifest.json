@@ -12,9 +12,9 @@
         "version": "1.0.51.0",
         "changelog": "1.0.51: calibration is more honest about its gains — the step along each method's path and the method itself were chosen on the same cross-validation measurements that then reported the gain, which flatters the winner (the best of several noisy draws). The announced gain and the recommendation now come from the whole choice made again without each group of accounts and judged on it (no extra training).",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.51.0/RecoPlus_1.0.51.0.zip",
+        "checksum": "e82424fcbe5e9247eba492006e8ba585",
+        "timestamp": "2026-11-23T17:57:47Z"
       },
       {
         "version": "1.0.50.0",
