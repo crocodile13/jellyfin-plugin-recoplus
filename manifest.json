@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.53.0",
+        "changelog": "1.0.53: the Preview tab now shows what an account actually sees — its home rows in order, as posters, with titles outside the library in their place and, under each title, why it is proposed — instead of plain lists of names.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.52.0",
         "changelog": "1.0.52: extended mode no longer proposes re-edits of existing films (The Godfather Trilogy: 1901-1980 came out as a \"hidden gem\"), and TMDb keywords that describe how a title was made rather than what it is about (based on a novel, after-credits scene, sequel, remake…) no longer count as themes to explore.",
         "targetAbi": "12.2.0.0",

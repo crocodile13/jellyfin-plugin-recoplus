@@ -212,6 +212,9 @@ de la CI.
   du calibrage). Un réglage caché garde sa valeur et reste enregistré. Mode développeur à part (outils, pas réglages :
   Journal, export, chemin du calibrage, apport des sources). Un nouveau réglage : choisir son niveau en se demandant
   « faut-il le toucher pour que ça marche ? » (1), « pour ajuster ? » (2), sinon 3.
+- Aperçu : `RecoService.PreviewCards` compose chaque rangée comme le script de l'accueil (`Layouts` : « » = carte
+  suivante de la bibliothèque), avec la raison de chaque titre ; la page la montre en affiches (`renderCards`, affiche
+  TMDb seulement d'un chemin d'image valide). `items` / `rows` restent dans la réponse : le test d'intégration les lit.
 - Onglet État : résumé de santé et mise en route (`renderHealth`) — chaque point dit ce qui manque et propose l'action
   (premier calcul, rangées dans HSS par `RecoPlus/HomeSections/Setup`, Seerr). Après Enregistrer : bandeau « recalculer
   et voir l'aperçu ».
