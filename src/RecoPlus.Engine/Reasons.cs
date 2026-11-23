@@ -11,8 +11,12 @@ namespace RecoPlus.Engine;
 /// </summary>
 public static class Reasons
 {
-    /// <summary>Ressemblance minimale avec un titre aimé pour dire « parce que tu as aimé » (plus exigeant qu'une rangée).</summary>
-    public const double ExplainSimilarity = 0.25;
+    /// <summary>
+    /// Ressemblance minimale avec un titre aimé pour dire « parce que tu as aimé ». Mesurée sur une bibliothèque réelle
+    /// (métadonnées TMDb, 136 titres) : titres liés 0,15 à 0,33 (Ghibli entre eux ~0,18, Iron Man et Avengers 0,16), sans
+    /// rapport ~0 ; 95 % des paires sous 0,05, 99 % sous 0,15. 0,12 garde les vrais liens, jamais le bruit.
+    /// </summary>
+    public const double ExplainSimilarity = 0.12;
 
     /// <summary>Titres aimés examinés comme explication (les plus forts).</summary>
     public const int Anchors = 30;
