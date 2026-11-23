@@ -235,7 +235,22 @@ de la CI.
 ## Versions de Jellyfin
 
 - À chaque session, avant le reste : dernière version de Jellyfin (releases GitHub, paquets NuGet, images Docker),
-  ses notes de version, et mise à jour de compatibilité si elle dépasse `TestedTo`.
+  ses notes de version, et mise à jour de compatibilité si elle dépasse `TestedTo` ; de même pour les plugins et services
+  utilisés (tableau ci-dessous) : notes de version, et test d'intégration (`integration.yml`) avec leur dernière version.
+- Fenêtre de compatibilité : les 3 dernières versions mineures de Jellyfin. Une nouvelle version entre, la plus ancienne
+  sort : `JellyfinVersion` (donc `targetAbi`) remonte, ses chemins de repli et ses tests partent, le changelog dit
+  « nécessite Jellyfin ≥ … ». Les anciennes entrées de `manifest.json` restent : un serveur plus ancien garde la dernière
+  version de Reco+ qui lui convient. Une nouvelle majeure (ABI des plugins) ouvre une nouvelle ligne de versions.
+- Suivis (dernière vérification 2026-11-23) :
+
+  | Projet | Ce que Reco+ en utilise | Version |
+  |---|---|---|
+  | Jellyfin | API des plugins, base (`UserData`), contrôleurs | 12.4 |
+  | Home Screen Sections (+ File Transformation, Plugin Pages) | réflexion : `RegisterSection`, `GetUserSettings`, `UpdateUserSettings`, `SectionSettings`, `ModularHomeSettings.json` | 3.0.4.0 (3.0.3.0, 3.0.3.0) |
+  | Jellyfin Enhanced | `hidden-content.json`, `reviews.json`, cartes et proxy Seerr côté client | 12.17.0.0 |
+  | Playback Reporting | base SQLite `PlaybackActivity` | v19 |
+  | Media Bar Enhanced | appelle les routes remplacées | 3.0.2.0 |
+  | Seerr | API v1 (demandes, listes de suivi, découverte, fiches) | v3.5.2 |
 - `Plugin.TestedFrom` / `TestedTo` : intervalle testé (avertissement hors intervalle). `targetAbi` et les paquets
   restent sur la plus ancienne (`JellyfinVersion` du csproj) ; la CI compile aussi contre les derniers paquets 12.x.
 - Nouvelle version de Jellyfin : lire ses notes de version (changements d'API, de base de données, de plugins), CI
