@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.50.0",
+        "changelog": "1.0.50: new \"Discovery boldness\" slider in the Extended mode tab, from cautious to bold: it sets in one move the minimum TMDb votes and rating of the exploration, the genres explored for hidden gems and the daily randomness (the middle keeps today's values). Measured with a real Seerr, bold divides the median votes of the proposed titles by 2 to 7 while their average rating and the fit with each account's tastes stay the same.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.49.0",
         "changelog": "1.0.49: in extended mode, outside-library titles on the home screen use Jellyfin Enhanced's own cards and Request button again — JE 12.17 only loads its Seerr module on its own pages, so Reco+ now asks JE's loader for it (Reco+'s cards remain the fallback without JE or without Seerr). The web page Reco+ adds its script to is now revalidated on every load, so a browser no longer keeps an old script after an update.",
         "targetAbi": "12.2.0.0",
