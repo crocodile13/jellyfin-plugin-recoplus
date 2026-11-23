@@ -64,6 +64,9 @@
                 /* niveaux d'affichage : 1 essentiel, 2 avancé, 3 expert (réglages cachés gardés et enregistrés) */
                 #RecoPlusConfigPage.rp-lvl-1 [data-level="2"], #RecoPlusConfigPage.rp-lvl-1 [data-level="3"], #RecoPlusConfigPage.rp-lvl-2 [data-level="3"] { display: none !important; }
                 #RecoPlusConfigPage .rp-level { align-self: center; font-size: .9em; }
+                #RecoPlusConfigPage .rp-slider input[type=range] { width: 100%; accent-color: #00a4dc; }
+                #RecoPlusConfigPage .rp-slider-ends { display: flex; justify-content: space-between; font-size: .85em; opacity: .75; }
+                #RecoPlusConfigPage .rp-slider-ends output { font-weight: 600; opacity: 1; }
                 #RecoPlusConfigPage .rp-level select { background: transparent; color: inherit; border: 1px solid var(--rp-line); border-radius: 4px; padding: .2em .4em; font: inherit; }
                 #RecoPlusConfigPage .rp-health { border-radius: 8px; padding: .9em 1.2em; margin: 0 0 1em; background: var(--rp-soft); border-left: 4px solid #5cc46a; }
                 #RecoPlusConfigPage .rp-health.warn { border-left-color: #e6a23c; }
@@ -643,6 +646,7 @@
 
             // ---- Mode étendu
             ['ExtendedEnabled', 'Activer le mode étendu', 'bool', 'Recommande aussi des titres absents de la bibliothèque. Contrôle parental du compte respecté, avec les règles de Jellyfin (classification du pays choisi, titres non classés et étiquettes bloquées selon le compte).', 0, 0, 0, 'ext', 'c'],
+            ['ExtendedBoldness', 'Audace des découvertes', 'slider', 'Prudente : des titres connus et très bien notés (beaucoup de votes TMDb), peu de hasard. Aventureuse : des titres plus confidentiels et plus de hasard du jour, toujours classés selon les goûts du compte. Règle d\'un geste les votes et la note TMDb minimum de l\'exploration, les genres explorés pour les pépites et le hasard du jour (réglages experts : les modifier fait passer l\'audace en « réglée à la main »).', 5, 0, 100, 'ext', 'c', '50'],
             ['ExtendedCount', 'Titres proposés', 'int', 'Nombre maximal de titres hors bibliothèque trouvés par l\'exploration, par compte, toutes rangées confondues : chacun ne va que dans une rangée. Les listes du moment (Tendances, Populaires, À venir) ont leurs propres titres, en plus.', 1, 1, 100, 'ext', 'c', '40'],
             ['RowNewReleasedDays', 'Nouveautés hors bibliothèque : sorties depuis (jours)', 'int', 'Seuls les titres hors bibliothèque sortis depuis ce nombre de jours vont dans la rangée des nouveautés (dans la bibliothèque, c\'est la date d\'ajout qui compte).', 1, 1, 3650, 'rowsadv', 'c', '365'],
             // Mélange (rangées réglées sur « mélange »)
@@ -797,7 +801,17 @@
                     host.appendChild(n);
                     return;
                 }
-                if (type === 'bool') {
+                if (type === 'slider') {
+                    inner = el('div', { 'class': 'inputContainer' });
+                    inner.classList.add('rp-slider');
+                    inner.appendChild(tpl(el('label', { 'class': 'inputLabel', 'for': id }), t(f[1])));
+                    inner.appendChild(el('input', { type: 'range', id: id, step: f[4], min: f[5], max: f[6] }));
+                    var ends = el('div', { 'class': 'rp-slider-ends' });
+                    ends.appendChild(el('span', null, t('prudente')));
+                    ends.appendChild(el('output', { id: id + '_lbl' }));
+                    ends.appendChild(el('span', null, t('aventureuse')));
+                    inner.appendChild(ends);
+                } else if (type === 'bool') {
                     inner = el('div', { 'class': 'checkboxContainer' });
                     var lab = el('label');
                     lab.appendChild(el('input', { type: 'checkbox', is: 'emby-checkbox', id: id }));
@@ -822,6 +836,8 @@
                 host.appendChild(wrap);
             });
             page.querySelectorAll('[data-fields="rows"] input').forEach(function (i) { i.addEventListener('input', applyTpl); });
+            $('#rp_c_ExtendedBoldness').addEventListener('input', function () { boldApply(); boldLabel(); });
+            BOLD.forEach(function (b) { $('#rp_c_' + b[0]).addEventListener('input', boldLabel); });
             // rangée séparée : ce que HSS montrera, sous la ligne de la rangée
             F.filter(function (f) { return /^Kind/.test(f[0]); }).forEach(function (f) {
                 var src = $('#' + idOf(f[0] === 'KindSuite' ? 'SourceFilms' : 'Source' + f[0].slice(4))).closest('.rp-field');
@@ -973,6 +989,29 @@
             BOXES = Array.prototype.map.call(page.querySelectorAll('.rp-box'), function (b) { return { b: b, hs: b.querySelectorAll('.rp-field, .rp-factor') }; })
                 .filter(function (x) { return x.hs.length > 0; });
         }
+        // Audace des découvertes : 0 prudente, 50 équilibrée (valeurs par défaut), 100 aventureuse. Chaque réglage suit
+        // une courbe en deux moitiés (votes : échelle logarithmique), arrondie à son pas.
+        var BOLD = [
+            ['ExtendedMinVotes', 2000, 500, 100, 50, true],
+            ['ExtendedMinRating', 7.8, 7.5, 7.0, 0.1, false],
+            ['ExtendedGemGenres', 1, 3, 6, 1, false],
+            ['ExtendedNoise', 0.1, 0.3, 0.6, 0.05, false]
+        ];
+        function boldValue(b, a) {
+            var lo = a <= 50 ? b[1] : b[2], hi = a <= 50 ? b[2] : b[3], x = a <= 50 ? a / 50 : (a - 50) / 50;
+            var v = b[5] ? Math.exp(Math.log(lo) + (Math.log(hi) - Math.log(lo)) * x) : lo + (hi - lo) * x;
+            return Math.round(Math.round(v / b[4]) * b[4] * 1000) / 1000;
+        }
+        function boldApply() {
+            var a = num('ExtendedBoldness');
+            BOLD.forEach(function (b) { $('#rp_c_' + b[0]).value = String(boldValue(b, a)); });
+        }
+        function boldLabel() {
+            var a = num('ExtendedBoldness');
+            var custom = BOLD.some(function (b) { return Math.abs(num(b[0]) - boldValue(b, a)) > 1e-9; });
+            $('#rp_c_ExtendedBoldness_lbl').textContent = custom ? t('réglée à la main') : a < 35 ? t('prudente') : a > 65 ? t('aventureuse') : t('équilibrée');
+        }
+
         function applyWhen() {
             holders();
             G = { enabled: sw('Enabled'), seerr: sw('SeerrEnabled'), ext: sw('ExtendedEnabled') };
@@ -1063,6 +1102,7 @@
             applyTpl();
             applyWhen();
             splitNotes();
+            boldLabel();
         }
 
         function read(cfg) {
@@ -1082,7 +1122,7 @@
                 }
                 if (f[2] === 'bool') { dst[f[0]] = e.checked; }
                 else if (f[2].indexOf('enum:') === 0 && /^\d+$/.test(e.value)) { dst[f[0]] = parseInt(e.value, 10); }
-                else if (f[2] === 'int') { var i = parseInt(e.value, 10); dst[f[0]] = isNaN(i) ? 0 : i; }
+                else if (f[2] === 'int' || f[2] === 'slider') { var i = parseInt(e.value, 10); dst[f[0]] = isNaN(i) ? 0 : i; }
                 else if (f[2] === 'num') { var n = parseFloat(String(e.value).replace(',', '.')); dst[f[0]] = isNaN(n) ? 0 : n; }
                 else { dst[f[0]] = String(e.value).trim(); }
             });
