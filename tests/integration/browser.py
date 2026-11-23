@@ -16,6 +16,8 @@ SECTIONS_JS = """() => {
     sections: secs.length,
     reco: secs.filter(s => [...s.classList].some(c => c.startsWith('RecoPlus'))).length,
     ext: document.querySelectorAll('.recoplus-ext').length,
+    own: document.querySelectorAll('.recoplus-own').length,
+    je: !!(window.JellyfinEnhanced && window.JellyfinEnhanced.jellyseerrUI),
     titles: secs.map(s => (s.querySelector('.sectionTitle') || {}).textContent || '').map(t => t.trim()).slice(0, 30),
   };
 }"""

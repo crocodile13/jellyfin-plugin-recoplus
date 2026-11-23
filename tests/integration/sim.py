@@ -372,6 +372,14 @@ def setup_seerr(users):
                 "ExtendedAnchors": 15, "ExtendedDetails": 120})
     call("POST", f"/Plugins/{pid}/Configuration", cfg)
     call("POST", "/RecoPlus/Secret", {"Name": "SeerrApiKey", "Value": key})   # jamais dans la configuration
+    if "je" in EXPECT:
+        # Jellyfin Enhanced relié à Seerr, comme chez la plupart des utilisateurs du mode étendu : Reco+ réutilise alors ses
+        # cartes et sa fiche (chemin du ticket #50, jamais vu dans un navigateur auparavant)
+        jid = plugin_id("Jellyfin Enhanced")
+        je = call("GET", f"/Plugins/{jid}/Configuration")
+        je.update({"JellyseerrEnabled": True, "JellyseerrUrls": "http://seerr:5055", "JellyseerrApiKey": key})
+        call("POST", f"/Plugins/{jid}/Configuration", je)
+        log("Jellyfin Enhanced relié à Seerr")
     t = call("POST", "/RecoPlus/TestSeerr", {}, query={"lang": "fr"})
     log(f"Reco+ → Seerr : {t.get('message')}")
     if not t.get("ok"):
@@ -640,7 +648,7 @@ def markdown(r) -> str:
         L.append(f"Seerr, {k} : {v}  ")
     for k, v in (r.get("navigateur") or {}).items():
         if isinstance(v, dict):
-            L.append(f"Navigateur, {k} : {v.get('sections')} sections ({v.get('reco')} Reco+), {v.get('ext')} cartes hors bibliothèque, "
+            L.append(f"Navigateur, {k} : {v.get('sections')} sections ({v.get('reco')} Reco+), {v.get('ext')} cartes hors bibliothèque ({v.get('own')} de Reco+, Jellyfin Enhanced {'prêt' if v.get('je') else 'absent'}), "
                      f"script {'chargé' if v.get('script') else 'absent'}, {len(v.get('erreurs') or [])} erreur(s) JavaScript  ")
             L += [f"  - {e}  " for e in (v.get("erreurs") or [])[:5]]
         else:
