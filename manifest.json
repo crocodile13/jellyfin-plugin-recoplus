@@ -12,9 +12,9 @@
         "version": "1.0.47.0",
         "changelog": "1.0.47: new setting Home › Rows › \"Repeat across rows\" (off by default): a title already shown in one row may come back in another when it is among that row's best titles for what the row is about, never in the row right above, never as its first card, in a limited number of rows; the rest of the ranking never repeats \"For you\". Measured on a realistic bench of 30 accounts, it barely changes relevance, so it stays a matter of taste. The integration test now also opens the home screen in a real browser, with and without extended mode.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.47.0/RecoPlus_1.0.47.0.zip",
+        "checksum": "42e945cedeaa4a58a60ee22eb4060ad9",
+        "timestamp": "2026-11-23T14:28:59Z"
       },
       {
         "version": "1.0.46.0",
