@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.55.0",
+        "changelog": "1.0.55: internal cleanup — TMDb identifiers are read in one place, strictly (a malformed one is now ignored instead of failing that part of the computation), the calibration's two bootstrap computations share one implementation, and duplicated settings reads are gone. Recommendations are unchanged.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.54.0",
         "changelog": "1.0.54: the interface is now also in German and Spanish (settings page, home rows, cards, reasons and notifications), chosen automatically from each person's Jellyfin language or set in the plugin; a text missing in either falls back to English. The settings page also drops the remaining technical terms from its essential and advanced levels.",
         "targetAbi": "12.2.0.0",

@@ -317,6 +317,13 @@ public sealed class RecoService : IDisposable
         Persist();
     }
 
+    /// <summary>Recommandations et titres similaires TMDb d'un titre (clé « movie:123 ») ; liste vide pour une clé mal formée.</summary>
+    private Task<List<SeerrResult>> Related(SeerrClient cl, string? key, int pages, CancellationToken ct)
+        => Exploration.TryTmdbKey(key, out var type, out var tid) ? _seerr.RelatedAsync(cl, type, tid, pages, ct) : Task.FromResult(new List<SeerrResult>());
+
+    /// <summary>Hasard du jour sur le classement des titres hors bibliothèque (réglage borné entre 0 et 1).</summary>
+    private static double NoiseOf(Configuration.PluginConfiguration cfg) => double.IsFinite(cfg.ExtendedNoise) ? Math.Clamp(cfg.ExtendedNoise, 0, 1) : 0;
+
     /// <summary>Œuvre d'un titre aimé pour les pistes d'exploration : sa saga TMDb, sinon le titre lui-même.</summary>
     private static string WorkOf(SeerrDetails d, string id) => d.CollectionId is int c ? "c:" + c : "t:" + id;
 
@@ -739,7 +746,7 @@ public sealed class RecoService : IDisposable
             if (ex is not null && extIds.Count > 0)
             {
                 // bruit du jour (réglable) : les titres de valeur proche changent de place d'un jour à l'autre
-                double noise = double.IsFinite(cfg.ExtendedNoise) ? Math.Clamp(cfg.ExtendedNoise, 0, 1) : 0;
+                double noise = NoiseOf(cfg);
                 string noiseSeed = key + "|" + Exploration.Day(DateTime.UtcNow);
                 var sc = Exploration.Noisy(Recommender.Score(uc, vec, key, extIds, s, ex.Agree, exposure: expo), noise, noiseSeed);
                 var extRanked = Recommender.Rank(uc, vec, extIds, sc, Math.Clamp(cfg.ExtendedCount, 1, 100), s, key, simIdx);
@@ -799,7 +806,7 @@ public sealed class RecoService : IDisposable
                         (e.Row, e.After) = (string.Empty, -1);   // replacés ci-dessous, ou plus dans une rangée
                     }
 
-                    double noise = double.IsFinite(cfg.ExtendedNoise) ? Math.Clamp(cfg.ExtendedNoise, 0, 1) : 0;
+                    double noise = NoiseOf(cfg);
                     PlaceAll(kept, pools, noise, key + "|" + Exploration.Day(DateTime.UtcNow));
                 }
             }
@@ -1134,10 +1141,9 @@ public sealed class RecoService : IDisposable
             var keys = new List<(Title T, string Type, int Tmdb)>();
             foreach (var (id, t) in titles)
             {
-                var parts = !t.External && tmdbOf.TryGetValue(id, out var tk) ? tk.Split(':') : null;
-                if (parts is { Length: 2 } && int.TryParse(parts[1], out var tid))
+                if (!t.External && tmdbOf.TryGetValue(id, out var tk) && Exploration.TryTmdbKey(tk, out var type, out var tid))
                 {
-                    keys.Add((t, parts[0], tid));
+                    keys.Add((t, type, tid));
                 }
             }
 
@@ -1376,8 +1382,7 @@ public sealed class RecoService : IDisposable
             foreach (var id in tl.External)
             {
                 var k = id[5..];
-                var p = k.Split(':');
-                var d = int.TryParse(p[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var tid) ? _seerr.CachedDetails(p[0], tid) : null;
+                var d = Exploration.TryTmdbKey(k, out var type, out var tid) ? _seerr.CachedDetails(type, tid) : null;
                 if (d is null || !titles.TryGetValue(id, out var t) || Known(h, id, cfg.ProposeMarked) || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || wished.Contains(k)
                     || hidden?.Contains(k) == true || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ListPolicy.Allows(t, lo) || !ParentalAllowed(policy, d, country)
                     || (minRuntime > 0 && d.Runtime is int rt && rt < minRuntime) || Exploration.IsReEdit(d.KeywordRefs.Select(x => x.Name)) || !nextPart(id))
@@ -1475,9 +1480,8 @@ public sealed class RecoService : IDisposable
                 var ext = ids.Where(id => id.StartsWith("tmdb:", StringComparison.Ordinal)).ToList();
                 var details = await Task.WhenAll(ext.Select(id =>
                 {
-                    var p = id.Split(':');
-                    return int.TryParse(p[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out var tid)
-                        ? _seerr.DetailsAsync(cl, p[1], tid, ct)
+                    return Exploration.TryTmdbKey(id, out var type, out var tid)
+                        ? _seerr.DetailsAsync(cl, type, tid, ct)
                         : Task.FromResult<SeerrDetails?>(null);
                 })).ConfigureAwait(false);
                 for (int i = 0; i < ext.Count; i++)
@@ -1530,10 +1534,7 @@ public sealed class RecoService : IDisposable
         var keys = anchorsOf.Values.SelectMany(l => l.Select(a => a.Key)).Distinct(StringComparer.Ordinal).OrderBy(k => k, StringComparer.Ordinal).ToList();
         var fetched = await Task.WhenAll(keys.Select(k =>
         {
-            var p = k.Split(':');
-            return p.Length == 2 && int.TryParse(p[1], System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var tid)
-                ? _seerr.RelatedAsync(cl, p[0], tid, pages, ct)
-                : Task.FromResult(new List<SeerrResult>());
+            return Related(cl, k, pages, ct);
         })).ConfigureAwait(false);
         _seerr.SaveCache();
 
@@ -1714,17 +1715,16 @@ public sealed class RecoService : IDisposable
     private ExternalRec? ToExternalRec(string id, Dictionary<string, Title> titles, Dictionary<string, string> because, Dictionary<string, string> reasons)
     {
         // id = "tmdb:movie:123"
-        var parts = id.Split(':');
-        if (parts.Length != 3 || !int.TryParse(parts[2], out var tmdb))
+        if (!Exploration.TryTmdbKey(id, out var kind, out var tmdb))
         {
             return null;
         }
 
-        var d = _seerr.CachedDetails(parts[1], tmdb);
+        var d = _seerr.CachedDetails(kind, tmdb);
         var t = titles[id];
         return new ExternalRec
         {
-            MediaType = parts[1],
+            MediaType = kind,
             TmdbId = tmdb,
             Name = t.Name,
             Year = t.Year,
@@ -1903,10 +1903,7 @@ public sealed class RecoService : IDisposable
         int pages = Math.Clamp(cfg.ExtendedPages, 1, 10);
         var related = await Task.WhenAll(anchors.Select(a =>
         {
-            var p = a.Tmdb!.Split(':');
-            return p.Length == 2 && int.TryParse(p[1], out var tid)
-                ? _seerr.RelatedAsync(cl, p[0], tid, pages, ct)
-                : Task.FromResult(new List<SeerrResult>());
+            return Related(cl, a.Tmdb, pages, ct);
         })).ConfigureAwait(false);
         var count = new Dictionary<string, int>(StringComparer.Ordinal);
         var because = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -1938,8 +1935,7 @@ public sealed class RecoService : IDisposable
         var likedDetails = needLiked
             ? await Task.WhenAll(anchors.Select(a =>
             {
-                var p = a.Tmdb!.Split(':');
-                return p.Length == 2 && int.TryParse(p[1], out var tid) ? _seerr.DetailsAsync(cl, p[0], tid, ct) : Task.FromResult<SeerrDetails?>(null);
+                return Exploration.TryTmdbKey(a.Tmdb, out var type, out var tid) ? _seerr.DetailsAsync(cl, type, tid, ct) : Task.FromResult<SeerrDetails?>(null);
             })).ConfigureAwait(false)
             : Array.Empty<SeerrDetails?>();
         var liked = anchors.Zip(likedDetails).Where(x => x.Second is not null).Select(x => (A: x.First, D: x.Second!)).ToList();
@@ -2166,8 +2162,7 @@ public sealed class RecoService : IDisposable
         var merged = Exploration.Merge(sources, Math.Clamp(cfg.ExtendedDetails, 10, 2000));
         var details = await Task.WhenAll(merged.Select(m =>
         {
-            var p = m.Key.Split(':');
-            return _seerr.DetailsAsync(cl, p[0], int.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture), ct);
+            return Exploration.TryTmdbKey(m.Key, out var type, out var tid) ? _seerr.DetailsAsync(cl, type, tid, ct) : Task.FromResult<SeerrDetails?>(null);
         })).ConfigureAwait(false);
 
         var policy = PolicyOf(u);

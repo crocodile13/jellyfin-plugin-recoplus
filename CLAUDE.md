@@ -255,6 +255,8 @@ de la CI.
 
 ## Travail propre (avant chaque livraison)
 
+- Clé TMDb « movie:123 » (ou « tmdb:movie:123 ») : toujours `Exploration.TryTmdbKey` (lecture invariante, sorte
+  vérifiée, clé mal formée ignorée), jamais un `Split(':')` à la main. Bootstrap par compte : `BootstrapByAccount`.
 - Une seule source de vérité : listes de rangées (`HomeRows.BaseRows`, `ListRows`, `KindRows`, `SourceRows`), titres
   (`HomeScreenSectionsIntegration.DisplayTitle`), réglages par rangée (`PluginConfiguration.SourceOf` / `KindOf` /
   `ListSettings`). Avant d'écrire une liste, un `switch` par rangée ou un petit utilitaire, chercher s'il existe déjà
