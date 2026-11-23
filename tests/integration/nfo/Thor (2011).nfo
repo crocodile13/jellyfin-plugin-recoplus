@@ -1,0 +1,111 @@
+<movie>
+  <title>Thor</title>
+  <originaltitle>Thor</originaltitle>
+  <year>2011</year>
+  <premiered>2011-04-27</premiered>
+  <rating>6.772</rating>
+  <criticrating>77</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <genre>Action</genre>
+  <tag>new mexico</tag>
+  <tag>superhero</tag>
+  <tag>redemption</tag>
+  <tag>banishment</tag>
+  <tag>based on comic</tag>
+  <tag>brother against brother</tag>
+  <tag>norse mythology</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>worlds collide</tag>
+  <tag>god of thunder</tag>
+  <tag>fantasy</tag>
+  <studio>Marvel Studios</studio>
+  <studio>Marvel Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">10195</uniqueid>
+  <uniqueid type="imdb">tt0800369</uniqueid>
+  <set tmdbcolid="131296">
+    <name>131296</name>
+  </set>
+  <actor>
+    <name>Chris Hemsworth</name>
+    <role>Thor</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Natalie Portman</name>
+    <role>Jane Foster</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Hiddleston</name>
+    <role>Loki</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Hopkins</name>
+    <role>Odin</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Stellan Skarsgård</name>
+    <role>Erik Selvig</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kat Dennings</name>
+    <role>Darcy Lewis</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Clark Gregg</name>
+    <role>Agent Coulson</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Colm Feore</name>
+    <role>King Laufey</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Idris Elba</name>
+    <role>Heimdall</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ray Stevenson</name>
+    <role>Volstagg</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Tadanobu Asano</name>
+    <role>Hogun</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Dallas</name>
+    <role>Fandral</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jaimie Alexander</name>
+    <role>Sif</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Rene Russo</name>
+    <role>Frigga</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Adriana Barraza</name>
+    <role>Isabela Alvarez</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Kenneth Branagh</director>
+  <credits>Zack Stentz</credits>
+  <credits>Ashley Miller</credits>
+  <credits>Don Payne</credits>
+</movie>

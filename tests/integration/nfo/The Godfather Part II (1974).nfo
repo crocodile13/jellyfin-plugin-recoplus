@@ -1,0 +1,123 @@
+<movie>
+  <title>The Godfather Part II</title>
+  <originaltitle>The Godfather Part II</originaltitle>
+  <year>1974</year>
+  <premiered>1974-12-20</premiered>
+  <rating>8.6</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Crime</genre>
+  <tag>new year's eve</tag>
+  <tag>new york city</tag>
+  <tag>based on novel or book</tag>
+  <tag>italian american</tag>
+  <tag>cuba</tag>
+  <tag>italy</tag>
+  <tag>gangster</tag>
+  <tag>praise</tag>
+  <tag>blackmail</tag>
+  <tag>symbolism</tag>
+  <tag>senator</tag>
+  <tag>sequel</tag>
+  <tag>revenge</tag>
+  <tag>murder</tag>
+  <tag>betrayal</tag>
+  <tag>organized crime</tag>
+  <tag>extortion</tag>
+  <tag>mafia</tag>
+  <tag>lawyer</tag>
+  <tag>suburb</tag>
+  <tag>sicilian mafia</tag>
+  <tag>corrupt politician</tag>
+  <tag>1950s</tag>
+  <tag>new year</tag>
+  <tag>violence</tag>
+  <studio>Paramount Pictures</studio>
+  <studio>The Coppola Company</studio>
+  <studio>American Zoetrope</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">240</uniqueid>
+  <uniqueid type="imdb">tt0071562</uniqueid>
+  <set tmdbcolid="230">
+    <name>230</name>
+  </set>
+  <actor>
+    <name>Al Pacino</name>
+    <role>Don Michael Corleone</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Duvall</name>
+    <role>Tom Hagen</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Diane Keaton</name>
+    <role>Kay Corleone</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robert De Niro</name>
+    <role>Vito Corleone</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>John Cazale</name>
+    <role>Frederico 'Fredo' Corleone</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Talia Shire</name>
+    <role>Constanzia 'Connie' Corleone</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Strasberg</name>
+    <role>Hyman Roth</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Michael V. Gazzo</name>
+    <role>Frank Pentangeli</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>G.D. Spradlin</name>
+    <role>Senator Pat Geary</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Bright</name>
+    <role>Al Neri</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Gastone Moschin</name>
+    <role>Don Fanucci</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Rosqui</name>
+    <role>Rocco Lampone</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Bruno Kirby</name>
+    <role>Young Clemenza</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Sivero</name>
+    <role>Genco Abbandando</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Francesca De Sapio</name>
+    <role>Young Mama Corleone</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Francis Ford Coppola</director>
+  <credits>Mario Puzo</credits>
+  <credits>Mario Puzo</credits>
+  <credits>Francis Ford Coppola</credits>
+</movie>

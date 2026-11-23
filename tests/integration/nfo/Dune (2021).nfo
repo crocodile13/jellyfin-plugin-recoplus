@@ -1,0 +1,126 @@
+<movie>
+  <title>Dune</title>
+  <originaltitle>Dune</originaltitle>
+  <year>2021</year>
+  <premiered>2021-09-15</premiered>
+  <rating>7.8</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Science Fiction</genre>
+  <genre>Adventure</genre>
+  <tag>empire</tag>
+  <tag>future</tag>
+  <tag>army</tag>
+  <tag>based on novel or book</tag>
+  <tag>prophecy</tag>
+  <tag>dystopia</tag>
+  <tag>emperor</tag>
+  <tag>sand</tag>
+  <tag>spice</tag>
+  <tag>chosen one</tag>
+  <tag>hallucinogen</tag>
+  <tag>treason</tag>
+  <tag>baron</tag>
+  <tag>revenge</tag>
+  <tag>premonition</tag>
+  <tag>betrayal</tag>
+  <tag>space</tag>
+  <tag>water shortage</tag>
+  <tag>creature</tag>
+  <tag>desert</tag>
+  <tag>knife fight</tag>
+  <tag>destiny</tag>
+  <tag>giant worm</tag>
+  <tag>space opera</tag>
+  <tag>sand dune</tag>
+  <tag>messiah</tag>
+  <tag>complex</tag>
+  <tag>mother son relationship</tag>
+  <tag>giant creature</tag>
+  <studio>Legendary Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">438631</uniqueid>
+  <uniqueid type="imdb">tt1160419</uniqueid>
+  <set tmdbcolid="726871">
+    <name>726871</name>
+  </set>
+  <actor>
+    <name>Timothée Chalamet</name>
+    <role>Paul Atreides</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rebecca Ferguson</name>
+    <role>Lady Jessica Atreides</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Oscar Isaac</name>
+    <role>Duke Leto Atreides</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Momoa</name>
+    <role>Duncan Idaho</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Stellan Skarsgård</name>
+    <role>Baron Vladimir Harkonnen</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen McKinley Henderson</name>
+    <role>Thufir Hawat</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Brolin</name>
+    <role>Gurney Halleck</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Javier Bardem</name>
+    <role>Stilgar</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sharon Duncan-Brewster</name>
+    <role>Dr. Liet Kynes</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chang Chen</name>
+    <role>Dr. Wellington Yueh</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Dave Bautista</name>
+    <role>Beast Rabban Harkonnen</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David Dastmalchian</name>
+    <role>Piter de Vries</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Zendaya</name>
+    <role>Chani</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Charlotte Rampling</name>
+    <role>Reverend Mother Mohiam</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Babs Olusanmokun</name>
+    <role>Jamis</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Denis Villeneuve</director>
+  <credits>Frank Herbert</credits>
+  <credits>Denis Villeneuve</credits>
+  <credits>Eric Roth</credits>
+  <credits>Jon Spaihts</credits>
+</movie>

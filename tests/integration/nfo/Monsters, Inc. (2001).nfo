@@ -1,0 +1,125 @@
+<movie>
+  <title>Monsters, Inc.</title>
+  <originaltitle>Monsters, Inc.</originaltitle>
+  <year>2001</year>
+  <premiered>2001-11-01</premiered>
+  <rating>7.86</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <genre>Fantasy</genre>
+  <tag>monster</tag>
+  <tag>panic</tag>
+  <tag>cheating</tag>
+  <tag>kidnapping</tag>
+  <tag>door</tag>
+  <tag>infant</tag>
+  <tag>villain</tag>
+  <tag>portal</tag>
+  <tag>rivalry</tag>
+  <tag>energy supply</tag>
+  <tag>friends</tag>
+  <tag>hijinks</tag>
+  <tag>best friend</tag>
+  <tag>chameleon</tag>
+  <tag>family</tag>
+  <tag>parallel world</tag>
+  <tag>conveyor belt</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>villain arrested</tag>
+  <tag>invisibility</tag>
+  <tag>angry</tag>
+  <tag>energy company</tag>
+  <tag>conspirators</tag>
+  <tag>playful</tag>
+  <tag>3d animation</tag>
+  <tag>lighthearted</tag>
+  <tag>cheerful</tag>
+  <tag>gentle</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">585</uniqueid>
+  <uniqueid type="imdb">tt0198781</uniqueid>
+  <set tmdbcolid="137696">
+    <name>137696</name>
+  </set>
+  <actor>
+    <name>John Goodman</name>
+    <role>Sullivan (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Billy Crystal</name>
+    <role>Mike (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Mary Gibbs</name>
+    <role>Boo (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Buscemi</name>
+    <role>Randall (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>James Coburn</name>
+    <role>Waternoose (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jennifer Tilly</name>
+    <role>Celia (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Peterson</name>
+    <role>Roz (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>John Ratzenberger</name>
+    <role>Yeti (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Oz</name>
+    <role>Jeff Fungus (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Gerson</name>
+    <role>Needleman / Smitty (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Susskind</name>
+    <role>Floor Manager (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Bonnie Hunt</name>
+    <role>Flint (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Pidgeon</name>
+    <role>Bile (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel Lord Black</name>
+    <role>George (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Angel</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Pete Docter</director>
+  <credits>Andrew Stanton</credits>
+  <credits>Daniel Gerson</credits>
+</movie>

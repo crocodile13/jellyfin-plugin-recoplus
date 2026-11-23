@@ -1,0 +1,112 @@
+<movie>
+  <title>Parasite</title>
+  <originaltitle>기생충</originaltitle>
+  <year>2019</year>
+  <premiered>2019-05-30</premiered>
+  <rating>8.489</rating>
+  <criticrating>99</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <genre>Thriller</genre>
+  <genre>Drama</genre>
+  <tag>dark comedy</tag>
+  <tag>con artist</tag>
+  <tag>social commentary</tag>
+  <tag>working class</tag>
+  <tag>infiltration</tag>
+  <tag>psychological thriller</tag>
+  <tag>class differences</tag>
+  <tag>family</tag>
+  <tag>unemployed</tag>
+  <tag>disturbed</tag>
+  <tag>domestic worker</tag>
+  <tag>wealthy family</tag>
+  <tag>complex</tag>
+  <tag>south korea</tag>
+  <tag>caste violence</tag>
+  <tag>seoul, south korea</tag>
+  <tag>critical</tag>
+  <tag>anti-capitalist</tag>
+  <studio>Barunson E&amp;A</studio>
+  <country>South Korea</country>
+  <uniqueid type="tmdb" default="true">496243</uniqueid>
+  <uniqueid type="imdb">tt6751668</uniqueid>
+  <actor>
+    <name>Song Kang-ho</name>
+    <role>Kim Ki-taek</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Sun-kyun</name>
+    <role>Park Dong-ik</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Cho Yeo-jeong</name>
+    <role>Yeon-kyo</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Woo-shik</name>
+    <role>Ki-woo</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Park So-dam</name>
+    <role>Ki-jung</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Jung-eun</name>
+    <role>Moon-gwang</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jang Hye-jin</name>
+    <role>Chung-sook</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Park Myung-hoon</name>
+    <role>Geun-se</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jung Zi-so</name>
+    <role>Da-hye</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jung Hyeon-jun</name>
+    <role>Da-song</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Park Keun-rok</name>
+    <role>Driver Yoon</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jung Yi-seo</name>
+    <role>Pizza Manager</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Cho Jae-myung</name>
+    <role>Pizza Man</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jeong Ik-han</name>
+    <role>Neighbor</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Kyu-baek</name>
+    <role>Drunk 1</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Bong Joon Ho</director>
+  <credits>Han Jin-won</credits>
+  <credits>Bong Joon Ho</credits>
+</movie>

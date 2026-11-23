@@ -1,0 +1,114 @@
+<movie>
+  <title>Insidious</title>
+  <originaltitle>Insidious</originaltitle>
+  <year>2011</year>
+  <premiered>2011-03-31</premiered>
+  <rating>6.958</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Horror</genre>
+  <genre>Thriller</genre>
+  <tag>supernatural</tag>
+  <tag>medium</tag>
+  <tag>halloween</tag>
+  <tag>haunted house</tag>
+  <tag>evil spirit</tag>
+  <tag>house warming</tag>
+  <tag>demon</tag>
+  <tag>new home</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>other dimension</tag>
+  <tag>insidious</tag>
+  <tag>supernatural power</tag>
+  <tag>supernatural horror</tag>
+  <tag>horror</tag>
+  <tag>distressing</tag>
+  <tag>possessed child</tag>
+  <studio>Alliance Films</studio>
+  <studio>IM Global</studio>
+  <studio>Haunted Movies</studio>
+  <studio>FilmDistrict</studio>
+  <country>Canada</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">49018</uniqueid>
+  <uniqueid type="imdb">tt1591095</uniqueid>
+  <set tmdbcolid="228446">
+    <name>228446</name>
+  </set>
+  <actor>
+    <name>Patrick Wilson</name>
+    <role>Josh Lambert</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rose Byrne</name>
+    <role>Renai Lambert</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Lin Shaye</name>
+    <role>Elise Rainier</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ty Simpkins</name>
+    <role>Dalton Lambert</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Barbara Hershey</name>
+    <role>Lorraine Lambert</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Leigh Whannell</name>
+    <role>Specs</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Angus Sampson</name>
+    <role>Tucker</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Astor</name>
+    <role>Foster Lambert</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Corbett Tuck</name>
+    <role>Nurse Adele / Doll Girl #2</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Heather Tocquigny</name>
+    <role>Nurse Kelly</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ruben Pla</name>
+    <role>Dr. Sercarz</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>John Henry Binder</name>
+    <role>Father Martin</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Joseph Bishara</name>
+    <role>Lipstick-Face Demon</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Philip Friedman</name>
+    <role>Old Woman</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>J. LaRose</name>
+    <role>Long Haired Fiend</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>James Wan</director>
+  <credits>Leigh Whannell</credits>
+</movie>

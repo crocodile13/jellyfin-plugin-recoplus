@@ -1,0 +1,113 @@
+<movie>
+  <title>The Intouchables</title>
+  <originaltitle>Intouchables</originaltitle>
+  <year>2011</year>
+  <premiered>2011-11-02</premiered>
+  <rating>8.274</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Comedy</genre>
+  <tag>friendship</tag>
+  <tag>male friendship</tag>
+  <tag>based on true story</tag>
+  <tag>inspiring story</tag>
+  <tag>aristocrat</tag>
+  <tag>paragliding</tag>
+  <tag>unlikely friendship</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>quadriplegic</tag>
+  <tag>quadriplegia</tag>
+  <tag>feelgood</tag>
+  <tag>witty</tag>
+  <tag>cheerful</tag>
+  <tag>empathetic</tag>
+  <tag>emotional</tag>
+  <studio>Gaumont</studio>
+  <studio>Quad Productions</studio>
+  <studio>Chaocorp</studio>
+  <studio>Ten Films</studio>
+  <studio>TF1 Films Production</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">77338</uniqueid>
+  <uniqueid type="imdb">tt1675434</uniqueid>
+  <actor>
+    <name>François Cluzet</name>
+    <role>Philippe</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Omar Sy</name>
+    <role>Driss</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Le Ny</name>
+    <role>Yvonne</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Audrey Fleurot</name>
+    <role>Magalie</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Joséphine de Meaux</name>
+    <role>La DRH société de courses</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Clotilde Mollet</name>
+    <role>Marcelle</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Alba Gaïa Bellugi</name>
+    <role>Elisa</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Cyril Mendy</name>
+    <role>Adama</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Salimata Kamate</name>
+    <role>Fatou</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Absa Diatou Toure</name>
+    <role>Mina</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Grégoire Oestermann</name>
+    <role>Antoine</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Dominique Daguier</name>
+    <role>Ami Philippe</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>François Caron</name>
+    <role>Ami Philippe</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Christian Ameri</name>
+    <role>Albert</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas Solivérès</name>
+    <role>Bastien</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Éric Toledano</director>
+  <director>Olivier Nakache</director>
+  <credits>Éric Toledano</credits>
+  <credits>Olivier Nakache</credits>
+  <credits>Philippe Pozzo di Borgo</credits>
+</movie>

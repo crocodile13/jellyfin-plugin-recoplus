@@ -1,0 +1,118 @@
+<tvshow>
+  <title>Breaking Bad</title>
+  <originaltitle>Breaking Bad</originaltitle>
+  <year>2008</year>
+  <premiered>2008-01-20</premiered>
+  <rating>8.96</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Crime</genre>
+  <tag>new mexico</tag>
+  <tag>drug dealer</tag>
+  <tag>narcissism</tag>
+  <tag>psychopath</tag>
+  <tag>terminal illness</tag>
+  <tag>outlaw</tag>
+  <tag>dark comedy</tag>
+  <tag>cancer</tag>
+  <tag>tragedy</tag>
+  <tag>drugs</tag>
+  <tag>criminal</tag>
+  <tag>meth lab</tag>
+  <tag>drug lord</tag>
+  <tag>high school teacher</tag>
+  <tag>dea agent</tag>
+  <tag>neo-western</tag>
+  <tag>albuquerque, new mexico</tag>
+  <tag>criminal lawyer</tag>
+  <tag>hard</tag>
+  <tag>fall from grace</tag>
+  <tag>cartel</tag>
+  <tag>mexican cartel</tag>
+  <tag>crystal meth</tag>
+  <tag>dark</tag>
+  <tag>methamphetamine</tag>
+  <tag>thriller</tag>
+  <tag>violent</tag>
+  <studio>AMC</studio>
+  <studio>Sony Pictures Television</studio>
+  <studio>High Bridge Productions</studio>
+  <studio>Gran Via Productions</studio>
+  <uniqueid type="tmdb" default="true">1396</uniqueid>
+  <uniqueid type="imdb">tt0903747</uniqueid>
+  <actor>
+    <name>Bryan Cranston</name>
+    <role>Walter White</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Aaron Paul</name>
+    <role>Jesse Pinkman</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Anna Gunn</name>
+    <role>Skyler White</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>RJ Mitte</name>
+    <role>Walter White Jr.</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Dean Norris</name>
+    <role>Hank Schrader</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Betsy Brandt</name>
+    <role>Marie Schrader</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Giancarlo Esposito</name>
+    <role>Gustavo Fring</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Odenkirk</name>
+    <role>Saul Goodman</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Steven Michael Quezada</name>
+    <role>Steven Gomez</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Banks</name>
+    <role>Mike Ehrmantraut</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Aaron Hill</name>
+    <role>Jock</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Groener</name>
+    <role>Dr. Chavez</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Gregory Chase</name>
+    <role>Dr. Belknap</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle Bornheimer</name>
+    <role>Ken Wins</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Max Arciniega</name>
+    <role>Krazy-8</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

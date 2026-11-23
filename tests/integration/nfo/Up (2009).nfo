@@ -1,0 +1,112 @@
+<movie>
+  <title>Up</title>
+  <originaltitle>Up</originaltitle>
+  <year>2009</year>
+  <premiered>2009-05-28</premiered>
+  <rating>7.96</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <genre>Adventure</genre>
+  <tag>central and south america</tag>
+  <tag>age difference</tag>
+  <tag>villain</tag>
+  <tag>balloon</tag>
+  <tag>travel</tag>
+  <tag>dog</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>pets</tag>
+  <tag>death of wife</tag>
+  <tag>exploring</tag>
+  <tag>wonder</tag>
+  <tag>senior</tag>
+  <tag>3d animation</tag>
+  <tag>inspirational</tag>
+  <tag>floating house</tag>
+  <tag>cheerful</tag>
+  <tag>disheartening</tag>
+  <tag>enthusiastic</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">14160</uniqueid>
+  <uniqueid type="imdb">tt1049413</uniqueid>
+  <actor>
+    <name>Ed Asner</name>
+    <role>Carl Fredricksen (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Plummer</name>
+    <role>Charles Muntz (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jordan Nagai</name>
+    <role>Russell (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Peterson</name>
+    <role>Dug / Alpha (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Delroy Lindo</name>
+    <role>Beta (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jerome Ranft</name>
+    <role>Gamma (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>John Ratzenberger</name>
+    <role>Construction Foreman Tom (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>David Kaye</name>
+    <role>Newsreel Announcer (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Elie Docter</name>
+    <role>Young Ellie (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Leary</name>
+    <role>Young Carl (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Mickie McGowan</name>
+    <role>Police Officer Edith (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Danny Mann</name>
+    <role>Construction Worker Steve (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Donald Fullilove</name>
+    <role>Nurse George (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jess Harnell</name>
+    <role>Nurse AJ (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Cooley</name>
+    <role>Omega (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Pete Docter</director>
+  <credits>Bob Peterson</credits>
+  <credits>Pete Docter</credits>
+</movie>

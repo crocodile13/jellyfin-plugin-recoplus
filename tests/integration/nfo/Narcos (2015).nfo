@@ -1,0 +1,112 @@
+<tvshow>
+  <title>Narcos</title>
+  <originaltitle>Narcos</originaltitle>
+  <year>2015</year>
+  <premiered>2015-08-28</premiered>
+  <rating>8.096</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>cocaine</tag>
+  <tag>drug dealer</tag>
+  <tag>outlaw</tag>
+  <tag>based on true story</tag>
+  <tag>drug cartel</tag>
+  <tag>conflict</tag>
+  <tag>drugs</tag>
+  <tag>drug lord</tag>
+  <tag>illegal drugs</tag>
+  <tag>dea</tag>
+  <tag>narcotics</tag>
+  <tag>angry</tag>
+  <tag>cartel</tag>
+  <tag>1980s</tag>
+  <tag>escobar</tag>
+  <tag>pablo escobar</tag>
+  <tag>dark</tag>
+  <tag>narcos</tag>
+  <tag>colombia</tag>
+  <tag>gritty</tag>
+  <tag>thriller</tag>
+  <tag>action</tag>
+  <tag>harsh</tag>
+  <studio>Netflix</studio>
+  <studio>Gaumont International Television</studio>
+  <uniqueid type="tmdb" default="true">63351</uniqueid>
+  <uniqueid type="imdb">tt2707408</uniqueid>
+  <actor>
+    <name>Wagner Moura</name>
+    <role>Pablo Escobar</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Pedro Pascal</name>
+    <role>Javier Peña</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Matias Varela</name>
+    <role>Jorge Salcedo</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Boyd Holbrook</name>
+    <role>Steve Murphy</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Damián Alcázar</name>
+    <role>Gilberto Rodríguez Orejuela</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Joanna Christie</name>
+    <role>Connie Murphy</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Francisco Denis</name>
+    <role>Miguel Rodríguez Orejuela</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Maurice Compte</name>
+    <role>Horacio Carrillo</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Paulina Gaitán</name>
+    <role>Tata Escobar</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Alberto Ammann</name>
+    <role>Pacho Herrera</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Stephanie Sigman</name>
+    <role>Valeria Velez</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Pêpê Rapazote</name>
+    <role>Chepe Santacruz Londoño</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Arturo Castro</name>
+    <role>David Rodriguez</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Stahl-David</name>
+    <role>Chris Feistl</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Whelan</name>
+    <role>Daniel Van Ness</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,44 @@
+<movie>
+  <title>My Octopus Teacher</title>
+  <originaltitle>My Octopus Teacher</originaltitle>
+  <year>2020</year>
+  <premiered>2020-09-04</premiered>
+  <rating>7.888</rating>
+  <mpaa>TV-G</mpaa>
+  <genre>Documentary</genre>
+  <tag>diving</tag>
+  <tag>octopus</tag>
+  <tag>intelligence</tag>
+  <tag>atlantic ocean</tag>
+  <tag>human animal relationship</tag>
+  <tag>south africa</tag>
+  <tag>based on true story</tag>
+  <tag>underwater</tag>
+  <tag>shark</tag>
+  <tag>western cape</tag>
+  <tag>nature documentary</tag>
+  <tag>marine life</tag>
+  <tag>animal behaviour</tag>
+  <tag>animal intelligence</tag>
+  <tag>pretentious</tag>
+  <studio>The Sea Change Project</studio>
+  <studio>Off the Fence</studio>
+  <country>South Africa</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">682110</uniqueid>
+  <uniqueid type="imdb">tt12888462</uniqueid>
+  <actor>
+    <name>Craig Foster</name>
+    <role>Self</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Foster</name>
+    <role>Self</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <director>Pippa Ehrlich</director>
+  <director>James Reed</director>
+  <credits>Pippa Ehrlich</credits>
+  <credits>James Reed</credits>
+</movie>

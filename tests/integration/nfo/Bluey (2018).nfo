@@ -1,0 +1,115 @@
+<tvshow>
+  <title>Bluey</title>
+  <originaltitle>Bluey</originaltitle>
+  <year>2018</year>
+  <premiered>2018-10-01</premiered>
+  <rating>8.579</rating>
+  <mpaa>TV-Y</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <genre>Kids</genre>
+  <tag>friendship</tag>
+  <tag>cartoon</tag>
+  <tag>growing up</tag>
+  <tag>dog</tag>
+  <tag>family</tag>
+  <tag>toddler</tag>
+  <tag>childhood</tag>
+  <tag>pre-school</tag>
+  <tag>kids</tag>
+  <tag>lighthearted</tag>
+  <tag>heartwarming</tag>
+  <tag>cheerful</tag>
+  <tag>vibrant</tag>
+  <studio>ABC Kids</studio>
+  <studio>Ludo Studio</studio>
+  <studio>Australian Broadcasting Corporation</studio>
+  <studio>Screen Australia</studio>
+  <studio>Screen Queensland</studio>
+  <studio>CBeebies</studio>
+  <studio>BBC Worldwide</studio>
+  <studio>BBC Studios Distribution</studio>
+  <uniqueid type="tmdb" default="true">82728</uniqueid>
+  <uniqueid type="imdb">tt7678620</uniqueid>
+  <actor>
+    <name>Dave McCormack</name>
+    <role>Bandit Heeler (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Melanie Zanetti</name>
+    <role>Chilli Heeler (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Simmons</name>
+    <role>Bob (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Brammall</name>
+    <role>Uncle Rad (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Claudia O'Doherty</name>
+    <role>Aunt Frisky (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lawrie Newman</name>
+    <role>Grandad (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Brumm</name>
+    <role>Nana (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Moor</name>
+    <role>Daisy (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Dan Brumm</name>
+    <role>Uncle Stripe (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Rose Byrne</name>
+    <role>Brandy (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Megan Washington</name>
+    <role>Calypso (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Myf Warhurst</name>
+    <role>Aunt Trixie (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Myf Warhurst</name>
+    <role>Indy's Mum (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Charlie Aspinwall</name>
+    <role>Marcus (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Brad Elliott</name>
+    <role>Pat (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Samson Hyland</name>
+    <role>Snickers (voice)</role>
+    <sortorder>15</sortorder>
+  </actor>
+</tvshow>

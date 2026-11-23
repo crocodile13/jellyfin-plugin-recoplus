@@ -1,0 +1,111 @@
+<movie>
+  <title>GoodFellas</title>
+  <originaltitle>GoodFellas</originaltitle>
+  <year>1990</year>
+  <premiered>1990-09-12</premiered>
+  <rating>8.5</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Crime</genre>
+  <tag>prison</tag>
+  <tag>florida</tag>
+  <tag>new york city</tag>
+  <tag>based on novel or book</tag>
+  <tag>gangster</tag>
+  <tag>mass murder</tag>
+  <tag>drug trafficking</tag>
+  <tag>1970s</tag>
+  <tag>irish-american</tag>
+  <tag>gore</tag>
+  <tag>biography</tag>
+  <tag>based on true story</tag>
+  <tag>murder</tag>
+  <tag>organized crime</tag>
+  <tag>mafia</tag>
+  <tag>brooklyn, new york city</tag>
+  <tag>crime epic</tag>
+  <tag>tampa, florida</tag>
+  <studio>Winkler Films</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">769</uniqueid>
+  <uniqueid type="imdb">tt0099685</uniqueid>
+  <actor>
+    <name>Robert De Niro</name>
+    <role>James Conway</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ray Liotta</name>
+    <role>Henry Hill</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Pesci</name>
+    <role>Tommy DeVito</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lorraine Bracco</name>
+    <role>Karen Hill</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Sorvino</name>
+    <role>Paul Cicero</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Sivero</name>
+    <role>Frankie Carbone</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Darrow</name>
+    <role>Sonny Bunz</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mike Starr</name>
+    <role>Frenchy</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Vincent</name>
+    <role>Billy Batts</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chuck Low</name>
+    <role>Morris Kessler</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Frank DiLeo</name>
+    <role>Tuddy Cicero</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Henny Youngman</name>
+    <role>Henny Youngman</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Gina Mastrogiacomo</name>
+    <role>Janice Rossi</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Catherine Scorsese</name>
+    <role>Tommy's Mother</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Scorsese</name>
+    <role>Vinnie</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Martin Scorsese</director>
+  <credits>Nicholas Pileggi</credits>
+  <credits>Martin Scorsese</credits>
+</movie>

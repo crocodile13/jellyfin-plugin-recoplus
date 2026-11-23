@@ -1,0 +1,109 @@
+<movie>
+  <title>Moana</title>
+  <originaltitle>Moana</originaltitle>
+  <year>2016</year>
+  <premiered>2016-10-13</premiered>
+  <rating>7.564</rating>
+  <criticrating>96</criticrating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <genre>Animation</genre>
+  <tag>sailboat</tag>
+  <tag>sea</tag>
+  <tag>island</tag>
+  <tag>saving the world</tag>
+  <tag>ocean</tag>
+  <tag>cartoon</tag>
+  <tag>mythology</tag>
+  <tag>villain</tag>
+  <tag>musical</tag>
+  <tag>coming of age</tag>
+  <tag>curse</tag>
+  <tag>sailor</tag>
+  <tag>explorer</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>demigod</tag>
+  <tag>polynesia</tag>
+  <tag>voyage</tag>
+  <tag>pacific  ocean</tag>
+  <tag>quest</tag>
+  <tag>island life</tag>
+  <tag>giant crab</tag>
+  <tag>animal sidekick</tag>
+  <tag>seafarer</tag>
+  <tag>3d animation</tag>
+  <tag>admiring</tag>
+  <tag>female explorer</tag>
+  <studio>Walt Disney Animation Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">277834</uniqueid>
+  <uniqueid type="imdb">tt3521164</uniqueid>
+  <set tmdbcolid="1241984">
+    <name>1241984</name>
+  </set>
+  <actor>
+    <name>Auliʻi Cravalho</name>
+    <role>Moana (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Dwayne Johnson</name>
+    <role>Maui (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel House</name>
+    <role>Gramma Tala (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Temuera Morrison</name>
+    <role>Chief Tui (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jemaine Clement</name>
+    <role>Tamatoa (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Nicole Scherzinger</name>
+    <role>Sina (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Tudyk</name>
+    <role>Heihei / Villager #3 (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Louise Bush</name>
+    <role>Toddler Moana (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Oscar Kightley</name>
+    <role>Fisherman (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Troy Polamalu</name>
+    <role>Villager #1 (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Puanani Cravalho</name>
+    <role>Villager #2 (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Jackson</name>
+    <role>Chief Tui (singing voice) (uncredited)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <director>John Musker</director>
+  <director>Ron Clements</director>
+  <credits>Jared Bush</credits>
+</movie>

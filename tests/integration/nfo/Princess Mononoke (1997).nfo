@@ -1,0 +1,119 @@
+<movie>
+  <title>Princess Mononoke</title>
+  <originaltitle>もののけ姫</originaltitle>
+  <year>1997</year>
+  <premiered>1997-07-12</premiered>
+  <rating>8.322</rating>
+  <criticrating>94</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <genre>Animation</genre>
+  <tag>friendship</tag>
+  <tag>human vs nature</tag>
+  <tag>wolf</tag>
+  <tag>fight</tag>
+  <tag>wild boar</tag>
+  <tag>territory</tag>
+  <tag>leprosy</tag>
+  <tag>feral child</tag>
+  <tag>decapitation</tag>
+  <tag>rural area</tag>
+  <tag>historical fiction</tag>
+  <tag>spirit</tag>
+  <tag>demon</tag>
+  <tag>nature</tag>
+  <tag>environmentalism</tag>
+  <tag>adult animation</tag>
+  <tag>deforestation</tag>
+  <tag>anime</tag>
+  <tag>thoughtful</tag>
+  <tag>philosophical</tag>
+  <tag>industrialization</tag>
+  <tag>fantasy</tag>
+  <tag>adventure</tag>
+  <studio>Studio Ghibli</studio>
+  <studio>dentsu</studio>
+  <studio>Tokuma Shoten</studio>
+  <studio>Nippon Television Network Corporation</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">128</uniqueid>
+  <uniqueid type="imdb">tt0119698</uniqueid>
+  <actor>
+    <name>Yoji Matsuda</name>
+    <role>Ashitaka (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Yuriko Ishida</name>
+    <role>San / Kaya (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Yuko Tanaka</name>
+    <role>Eboshi Gozen (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kaoru Kobayashi</name>
+    <role>Jikobo (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Masahiko Nishimura</name>
+    <role>Kouroku (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tsunehiko Kamijou</name>
+    <role>Gonza (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Akihiro Miwa</name>
+    <role>Mrs. Moro (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mitsuko Mori</name>
+    <role>Mrs. Hii (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Hisaya Morishige</name>
+    <role>Chief of Affairs (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sumi Shimamoto</name>
+    <role>Toki (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Tetsu Watanabe</name>
+    <role>Wild Dog (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Makoto Satou</name>
+    <role>Tatari God (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Akira Nagoya</name>
+    <role>Cowherd (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kei Iinuma</name>
+    <role>Chief of the Sick (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Tsuzuki Kayako</name>
+    <role>Kiyo (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Hayao Miyazaki</credits>
+</movie>

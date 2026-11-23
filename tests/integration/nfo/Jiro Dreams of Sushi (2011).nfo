@@ -1,0 +1,74 @@
+<movie>
+  <title>Jiro Dreams of Sushi</title>
+  <originaltitle>Jiro Dreams of Sushi</originaltitle>
+  <year>2011</year>
+  <premiered>2011-06-11</premiered>
+  <rating>7.725</rating>
+  <mpaa>PG</mpaa>
+  <genre>Documentary</genre>
+  <tag>japan</tag>
+  <tag>restaurant</tag>
+  <tag>sushi restaurant</tag>
+  <tag>apprentice</tag>
+  <tag>based on true story</tag>
+  <tag>sushi</tag>
+  <tag>food</tag>
+  <tag>tokyo, japan</tag>
+  <tag>family</tag>
+  <tag>master</tag>
+  <tag>japanese cuisine</tag>
+  <studio>Preferred Content</studio>
+  <studio>Sundial Pictures</studio>
+  <studio>Pellegrini Productions</studio>
+  <studio>Weaver Productions</studio>
+  <country>United States of America</country>
+  <country>Canada</country>
+  <uniqueid type="tmdb" default="true">80767</uniqueid>
+  <uniqueid type="imdb">tt1772925</uniqueid>
+  <actor>
+    <name>Jiro Ono</name>
+    <role>Self</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Masuhiro Yamamoto</name>
+    <role>Self</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Yoshikazu Ono</name>
+    <role>Self</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Takashi Ono</name>
+    <role>Self</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Daisuke Nakazama</name>
+    <role>Self</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Hachiro Mizutani</name>
+    <role>Self</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Harutaki Takahashi</name>
+    <role>Self</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroki Fujita</name>
+    <role>Self</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Tsunenori Ida</name>
+    <role>Self</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <director>David Gelb</director>
+</movie>

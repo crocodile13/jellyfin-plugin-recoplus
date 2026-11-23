@@ -1,0 +1,105 @@
+<tvshow>
+  <title>The Haunting of Hill House</title>
+  <originaltitle>The Haunting of Hill House</originaltitle>
+  <year>2018</year>
+  <premiered>2018-10-12</premiered>
+  <rating>8.102</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Mystery</genre>
+  <genre>Drama</genre>
+  <tag>sibling relationship</tag>
+  <tag>based on novel or book</tag>
+  <tag>halloween</tag>
+  <tag>haunted house</tag>
+  <tag>supernatural</tag>
+  <tag>family relationships</tag>
+  <tag>miniseries</tag>
+  <tag>old dark house</tag>
+  <tag>ghost</tag>
+  <tag>curious</tag>
+  <tag>supernatural power</tag>
+  <tag>supernatural horror</tag>
+  <tag>horror</tag>
+  <studio>Netflix</studio>
+  <studio>Amblin Television</studio>
+  <studio>FlanaganFilm</studio>
+  <studio>Paramount Television Studios</studio>
+  <uniqueid type="tmdb" default="true">72844</uniqueid>
+  <uniqueid type="imdb">tt6763664</uniqueid>
+  <actor>
+    <name>Michiel Huisman</name>
+    <role>Steven Crain</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Reaser</name>
+    <role>Shirley Crain</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Siegel</name>
+    <role>Theodora Crain</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Oliver Jackson-Cohen</name>
+    <role>Luke Crain</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Victoria Pedretti</name>
+    <role>Nell Crain</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Timothy Hutton</name>
+    <role>Hugh Crain</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Carla Gugino</name>
+    <role>Olivia Crain</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Henry Thomas</name>
+    <role>Young Hugh Crain</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Lulu Wilson</name>
+    <role>Young Shirley</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Paxton Singleton</name>
+    <role>Young Steven</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Mckenna Grace</name>
+    <role>Young Theodora</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Julian Hilliard</name>
+    <role>Young Luke</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Violet McGraw</name>
+    <role>Young Nell</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Olive Abercrombie</name>
+    <role>Abigail</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Becka</name>
+    <role>Aunt Janet</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <credits>Shirley Jackson</credits>
+</tvshow>

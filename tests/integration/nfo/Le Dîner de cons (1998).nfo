@@ -1,0 +1,96 @@
+<movie>
+  <title>The Dinner Game</title>
+  <originaltitle>Le Dîner de cons</originaltitle>
+  <year>1998</year>
+  <premiered>1998-04-15</premiered>
+  <rating>7.8</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Comedy</genre>
+  <tag>tax inspector</tag>
+  <tag>fool</tag>
+  <tag>comedy</tag>
+  <studio>Gaumont</studio>
+  <studio>EFVE</studio>
+  <studio>TPS Cinéma</studio>
+  <studio>TF1 Films Production</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">9421</uniqueid>
+  <uniqueid type="imdb">tt0119038</uniqueid>
+  <actor>
+    <name>Jacques Villeret</name>
+    <role>François Pignon</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Thierry Lhermitte</name>
+    <role>Pierre Brochant</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Francis Huster</name>
+    <role>Juste Leblanc</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Prévost</name>
+    <role>Lucien Cheval</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Alexandra Vandernoot</name>
+    <role>Christine Brochant</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Catherine Frot</name>
+    <role>Marlène Sasseur</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Edgar Givry</name>
+    <role>Jean Cordier</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Christian Pereira</name>
+    <role>Doctor Sorbier</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Benoît Bellal</name>
+    <role>Bichaud, first animator</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jacques Bleu</name>
+    <role>Third animator</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Philippe Brigaud</name>
+    <role>Boomerang enthusiast guest</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Caccia</name>
+    <role>Guest</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Laurent Gendron</name>
+    <role>Guest</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Pétronille Moss</name>
+    <role>Louisette Blond</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Pierre-Arnaud Juin</name>
+    <role>Boissonade</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Francis Veber</director>
+  <credits>Francis Veber</credits>
+</movie>

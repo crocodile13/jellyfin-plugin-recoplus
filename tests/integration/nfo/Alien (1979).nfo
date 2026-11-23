@@ -1,0 +1,83 @@
+<movie>
+  <title>Alien</title>
+  <originaltitle>Alien</originaltitle>
+  <year>1979</year>
+  <premiered>1979-05-25</premiered>
+  <rating>8.176</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Science Fiction</genre>
+  <tag>android</tag>
+  <tag>spacecraft</tag>
+  <tag>space marine</tag>
+  <tag>biology</tag>
+  <tag>dystopia</tag>
+  <tag>countdown</tag>
+  <tag>space suit</tag>
+  <tag>beheading</tag>
+  <tag>space travel</tag>
+  <tag>cowardice</tag>
+  <tag>alien</tag>
+  <tag>space</tag>
+  <tag>female protagonist</tag>
+  <tag>parasite</tag>
+  <tag>space opera</tag>
+  <tag>cosmos</tag>
+  <studio>Brandywine Productions</studio>
+  <studio>Twentieth Century-Fox Productions</studio>
+  <studio>Ronald Shusett Productions</studio>
+  <country>United States of America</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">348</uniqueid>
+  <uniqueid type="imdb">tt0078748</uniqueid>
+  <set tmdbcolid="8091">
+    <name>8091</name>
+  </set>
+  <actor>
+    <name>Tom Skerritt</name>
+    <role>Dallas</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Sigourney Weaver</name>
+    <role>Ripley</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Veronica Cartwright</name>
+    <role>Lambert</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Dean Stanton</name>
+    <role>Brett</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>John Hurt</name>
+    <role>Kane</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ian Holm</name>
+    <role>Ash</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Yaphet Kotto</name>
+    <role>Parker</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Bolaji Badejo</name>
+    <role>Alien</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Helen Horton</name>
+    <role>Mother (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <director>Ridley Scott</director>
+  <credits>Dan O'Bannon</credits>
+</movie>

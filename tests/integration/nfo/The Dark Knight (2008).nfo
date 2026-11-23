@@ -1,0 +1,118 @@
+<movie>
+  <title>The Dark Knight</title>
+  <originaltitle>The Dark Knight</originaltitle>
+  <year>2008</year>
+  <premiered>2008-07-16</premiered>
+  <rating>8.54</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Thriller</genre>
+  <genre>Crime</genre>
+  <tag>sadism</tag>
+  <tag>chaos</tag>
+  <tag>secret identity</tag>
+  <tag>crime fighter</tag>
+  <tag>superhero</tag>
+  <tag>anti hero</tag>
+  <tag>scarecrow</tag>
+  <tag>based on comic</tag>
+  <tag>vigilante</tag>
+  <tag>organized crime</tag>
+  <tag>tragic hero</tag>
+  <tag>anti villain</tag>
+  <tag>criminal mastermind</tag>
+  <tag>district attorney</tag>
+  <tag>super power</tag>
+  <tag>super villain</tag>
+  <tag>neo-noir</tag>
+  <tag>bold</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Legendary Pictures</studio>
+  <studio>Syncopy</studio>
+  <studio>DC</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">155</uniqueid>
+  <uniqueid type="imdb">tt0468569</uniqueid>
+  <set tmdbcolid="263">
+    <name>263</name>
+  </set>
+  <actor>
+    <name>Christian Bale</name>
+    <role>Bruce Wayne</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Heath Ledger</name>
+    <role>Joker</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Aaron Eckhart</name>
+    <role>Harvey Dent</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Caine</name>
+    <role>Alfred</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Maggie Gyllenhaal</name>
+    <role>Rachel</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Gary Oldman</name>
+    <role>Gordon</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Morgan Freeman</name>
+    <role>Lucius Fox</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Monique Gabriela Curnen</name>
+    <role>Ramirez</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Ron Dean</name>
+    <role>Wuertz</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Cillian Murphy</name>
+    <role>Scarecrow</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Chin Han</name>
+    <role>Lau</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Nestor Carbonell</name>
+    <role>Mayor</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Eric Roberts</name>
+    <role>Maroni</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ritchie Coster</name>
+    <role>Chechen</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Michael Hall</name>
+    <role>Engel</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Christopher Nolan</director>
+  <credits>Jonathan Nolan</credits>
+  <credits>Christopher Nolan</credits>
+</movie>

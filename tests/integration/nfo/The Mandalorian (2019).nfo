@@ -1,0 +1,107 @@
+<tvshow>
+  <title>The Mandalorian</title>
+  <originaltitle>The Mandalorian</originaltitle>
+  <year>2019</year>
+  <premiered>2019-11-12</premiered>
+  <rating>8.396</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Action &amp; Adventure</genre>
+  <tag>bounty hunter</tag>
+  <tag>affectation</tag>
+  <tag>space western</tag>
+  <tag>space opera</tag>
+  <tag>space exploration</tag>
+  <tag>quest</tag>
+  <studio>Disney+</studio>
+  <studio>Lucasfilm Ltd.</studio>
+  <studio>Golem Creations</studio>
+  <studio>Fairview Entertainment</studio>
+  <uniqueid type="tmdb" default="true">82856</uniqueid>
+  <uniqueid type="imdb">tt8111088</uniqueid>
+  <actor>
+    <name>Pedro Pascal</name>
+    <role>Din Djarin / The Mandalorian</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle Pacek</name>
+    <role>Jawa (uncredited)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Werner Herzog</name>
+    <role>The Client</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Katee Sackhoff</name>
+    <role>Bo-Katan Kryze</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>John Beasley</name>
+    <role>Bartender</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Dmitrious Bistrevsky</name>
+    <role>Quarren Trawler</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Posehn</name>
+    <role>Speeder Pilot</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ryan Watson</name>
+    <role>Beta Trawler</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Jackson Powers Jr.</name>
+    <role>Jawa Elder</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Jones</name>
+    <role>Omera</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Isla Farris</name>
+    <role>Winta</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Eugene Cordero</name>
+    <role>Stoke</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Aydrea Walden</name>
+    <role>Sorgan Farmer #4</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tiffany Thomas</name>
+    <role>Sorgan Farmer #3</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Tait Fletcher</name>
+    <role>Paz Vizsla</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Tait Fletcher</name>
+    <role>Heavy Infantry Mando</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>Tait Fletcher</name>
+    <role>Alpha Trawler</role>
+    <sortorder>16</sortorder>
+  </actor>
+</tvshow>

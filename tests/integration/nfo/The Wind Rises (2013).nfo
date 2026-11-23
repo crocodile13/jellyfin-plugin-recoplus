@@ -1,0 +1,115 @@
+<movie>
+  <title>The Wind Rises</title>
+  <originaltitle>風立ちぬ</originaltitle>
+  <year>2013</year>
+  <premiered>2013-07-20</premiered>
+  <rating>7.783</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Animation</genre>
+  <genre>Drama</genre>
+  <genre>History</genre>
+  <genre>Romance</genre>
+  <tag>japan</tag>
+  <tag>airplane</tag>
+  <tag>flying</tag>
+  <tag>world war ii</tag>
+  <tag>earthquake</tag>
+  <tag>biography</tag>
+  <tag>great depression</tag>
+  <tag>pacific war</tag>
+  <tag>love</tag>
+  <tag>tuberculosis</tag>
+  <tag>adult animation</tag>
+  <tag>anime</tag>
+  <tag>meiji period</tag>
+  <tag>taisho period</tag>
+  <tag>great kantō earthquake</tag>
+  <studio>Studio Ghibli</studio>
+  <studio>Nippon Television Network Corporation</studio>
+  <studio>dentsu</studio>
+  <studio>Hakuhodo DY Media Partners</studio>
+  <studio>d-rights</studio>
+  <studio>TOHO</studio>
+  <studio>Walt Disney Japan</studio>
+  <studio>KDDI</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">149870</uniqueid>
+  <uniqueid type="imdb">tt2013293</uniqueid>
+  <actor>
+    <name>Hideaki Anno</name>
+    <role>Jiro Horikoshi (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hidetoshi Nishijima</name>
+    <role>Honjô (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Miori Takimoto</name>
+    <role>Naoko Satomi (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Masahiko Nishimura</name>
+    <role>Kurokawa (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Alpert</name>
+    <role>Castorp (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Mansai Nomura</name>
+    <role>Giovanni Battista (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jun Kunimura</name>
+    <role>Hattori (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mirai Shida</name>
+    <role>Kayo Horikoshi (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Shinobu Otake</name>
+    <role>Mrs. Kurokawa (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Morio Kazama</name>
+    <role>Satomi (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Keiko Takeshita</name>
+    <role>Jirô's mother (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Sascha</name>
+    <role>German Security Guard / Flight Engineer (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kaichi Kaburagi</name>
+    <role>Young Jiro Horikoshi (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Maki Shinta</name>
+    <role>Young Kayo Horikoshi (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Berndt Otto</name>
+    <role>(voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Hayao Miyazaki</credits>
+</movie>

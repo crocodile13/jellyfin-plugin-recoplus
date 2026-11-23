@@ -1,0 +1,128 @@
+<tvshow>
+  <title>The Sopranos</title>
+  <originaltitle>The Sopranos</originaltitle>
+  <year>1999</year>
+  <premiered>1999-01-10</premiered>
+  <rating>8.7</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>new jersey</tag>
+  <tag>italian american</tag>
+  <tag>drug dealer</tag>
+  <tag>strip club</tag>
+  <tag>mafia boss</tag>
+  <tag>dysfunctional family</tag>
+  <tag>dysfunctional marriage</tag>
+  <tag>family relationships</tag>
+  <tag>organized crime</tag>
+  <tag>mafia</tag>
+  <tag>mobster</tag>
+  <tag>football (soccer)</tag>
+  <tag>psychiatrist</tag>
+  <tag>family</tag>
+  <tag>cynical</tag>
+  <tag>criminal organization</tag>
+  <tag>grim</tag>
+  <tag>thoughtful</tag>
+  <tag>somber</tag>
+  <tag>philosophical</tag>
+  <tag>satirical</tag>
+  <tag>cosa nostra</tag>
+  <tag>complex</tag>
+  <tag>depressed</tag>
+  <tag>tense</tag>
+  <tag>witty</tag>
+  <tag>appreciative</tag>
+  <tag>complicated</tag>
+  <tag>excited</tag>
+  <tag>powerful</tag>
+  <tag>sympathetic</tag>
+  <tag>tragic</tag>
+  <tag>fascinating</tag>
+  <studio>HBO</studio>
+  <studio>Chase Films</studio>
+  <studio>Brad Grey Television</studio>
+  <uniqueid type="tmdb" default="true">1398</uniqueid>
+  <uniqueid type="imdb">tt0141842</uniqueid>
+  <actor>
+    <name>James Gandolfini</name>
+    <role>Tony Soprano</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Edie Falco</name>
+    <role>Carmela Soprano</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jamie-Lynn Sigler</name>
+    <role>Meadow Soprano</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Iler</name>
+    <role>A.J. Soprano</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Lorraine Bracco</name>
+    <role>Jennifer Melfi</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Imperioli</name>
+    <role>Christopher Moltisanti</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Steven Van Zandt</name>
+    <role>Silvio Dante</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Sirico</name>
+    <role>Paulie Gualtieri</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Dominic Chianese</name>
+    <role>Corrado 'Junior' Soprano</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Aida Turturro</name>
+    <role>Janice Soprano</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Federico Castelluccio</name>
+    <role>Furio Giunta</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Schirripa</name>
+    <role>Bobby 'Bacala' Baccalieri</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Vincent Pastore</name>
+    <role>Salvatore 'Big Pussy' Bonpensiero</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Drea de Matteo</name>
+    <role>Adriana La Cerva</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Nancy Marchand</name>
+    <role>Livia Soprano</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Nancy Marchand</name>
+    <role>Livia Soprano (archive footage)</role>
+    <sortorder>15</sortorder>
+  </actor>
+</tvshow>

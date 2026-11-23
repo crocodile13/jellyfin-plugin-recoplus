@@ -1,0 +1,119 @@
+<movie>
+  <title>About Time</title>
+  <originaltitle>About Time</originaltitle>
+  <year>2013</year>
+  <premiered>2013-06-27</premiered>
+  <rating>7.897</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <genre>Fantasy</genre>
+  <tag>london, england</tag>
+  <tag>soulmates</tag>
+  <tag>parent child relationship</tag>
+  <tag>time travel</tag>
+  <tag>family secrets</tag>
+  <tag>cornwall, england</tag>
+  <tag>family</tag>
+  <tag>second chance</tag>
+  <tag>time-manipulation</tag>
+  <tag>reflective</tag>
+  <tag>playful</tag>
+  <tag>introspective</tag>
+  <tag>intimate</tag>
+  <tag>whimsical</tag>
+  <tag>admiring</tag>
+  <tag>adoring</tag>
+  <tag>appreciative</tag>
+  <tag>celebratory</tag>
+  <tag>comforting</tag>
+  <tag>compassionate</tag>
+  <tag>exuberant</tag>
+  <tag>hopeful</tag>
+  <tag>viajes en el tiempo</tag>
+  <tag>viaje en el tiempo</tag>
+  <studio>Universal Pictures</studio>
+  <studio>Relativity Media</studio>
+  <studio>Working Title</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">122906</uniqueid>
+  <uniqueid type="imdb">tt2194499</uniqueid>
+  <actor>
+    <name>Domhnall Gleeson</name>
+    <role>Tim Lake</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel McAdams</name>
+    <role>Mary</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Nighy</name>
+    <role>Dad</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Hollander</name>
+    <role>Harry</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Margot Robbie</name>
+    <role>Charlotte</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lydia Wilson</name>
+    <role>Kit Kat</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lindsay Duncan</name>
+    <role>Mum</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Cordery</name>
+    <role>Uncle D</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Joshua McGuire</name>
+    <role>Rory</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Will Merrick</name>
+    <role>Jay</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Vanessa Kirby</name>
+    <role>Joanna</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Hughes</name>
+    <role>Jimmy Kincade</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Clemmie Dugdale</name>
+    <role>Ginger Jenny</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Hadden-Paton</name>
+    <role>Rupert</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Mitchell Mullen</name>
+    <role>Mary's Father, Fitz</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Richard Curtis</director>
+  <credits>Richard Curtis</credits>
+</movie>

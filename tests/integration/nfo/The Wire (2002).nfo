@@ -1,0 +1,124 @@
+<tvshow>
+  <title>The Wire</title>
+  <originaltitle>The Wire</originaltitle>
+  <year>2002</year>
+  <premiered>2002-06-02</premiered>
+  <rating>8.637</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>corruption</tag>
+  <tag>newspaper</tag>
+  <tag>drug trafficking</tag>
+  <tag>drug dealer</tag>
+  <tag>baltimore, usa</tag>
+  <tag>gangster</tag>
+  <tag>police</tag>
+  <tag>organized crime</tag>
+  <tag>police detective</tag>
+  <tag>surveillance</tag>
+  <tag>power politics</tag>
+  <tag>urban decay</tag>
+  <tag>newspaper reporter</tag>
+  <tag>wiretapping</tag>
+  <tag>workers union</tag>
+  <tag>angry</tag>
+  <tag>education system</tag>
+  <tag>docks</tag>
+  <tag>black project</tag>
+  <tag>clinical</tag>
+  <tag>mayoral election</tag>
+  <tag>violence</tag>
+  <tag>tense</tag>
+  <tag>sinister</tag>
+  <tag>depressing</tag>
+  <tag>admiring</tag>
+  <tag>appreciative</tag>
+  <tag>awestruck</tag>
+  <tag>commanding</tag>
+  <tag>dignified</tag>
+  <tag>hopeful</tag>
+  <tag>horrified</tag>
+  <tag>informative</tag>
+  <tag>objective</tag>
+  <tag>ominous</tag>
+  <studio>HBO</studio>
+  <studio>Blown Deadline Productions</studio>
+  <uniqueid type="tmdb" default="true">1438</uniqueid>
+  <uniqueid type="imdb">tt0306414</uniqueid>
+  <actor>
+    <name>Dominic West</name>
+    <role>Jimmy McNulty</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Lance Reddick</name>
+    <role>Cedric Daniels</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sonja Sohn</name>
+    <role>Kima Greggs</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Wood Harris</name>
+    <role>Avon Barksdale</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Wendell Pierce</name>
+    <role>Bunk Moreland</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Kenneth Williams</name>
+    <role>Omar Little</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Deirdre Lovejoy</name>
+    <role>Rhonda Pearlman</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Idris Elba</name>
+    <role>Stringer Bell</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Andre Royo</name>
+    <role>Bubbles</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>J.D. Williams</name>
+    <role>Bodie Broadus</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>John Doman</name>
+    <role>William Rawls</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Clarke Peters</name>
+    <role>Lester Freamon</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Frankie Faison</name>
+    <role>Ervin Burrell</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jamie Hector</name>
+    <role>Marlo Stanfield</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Lawrence Gilliard Jr.</name>
+    <role>D'Angelo Barksdale</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

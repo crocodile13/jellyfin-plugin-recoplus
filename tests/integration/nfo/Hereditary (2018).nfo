@@ -1,0 +1,125 @@
+<movie>
+  <title>Hereditary</title>
+  <originaltitle>Hereditary</originaltitle>
+  <year>2018</year>
+  <premiered>2018-06-07</premiered>
+  <rating>7.297</rating>
+  <criticrating>90</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Mystery</genre>
+  <genre>Thriller</genre>
+  <tag>daughter</tag>
+  <tag>funeral</tag>
+  <tag>parent child relationship</tag>
+  <tag>loss of loved one</tag>
+  <tag>ritual</tag>
+  <tag>supernatural</tag>
+  <tag>possession</tag>
+  <tag>dysfunctional family</tag>
+  <tag>sleeplessness</tag>
+  <tag>murder</tag>
+  <tag>family drama</tag>
+  <tag>fear</tag>
+  <tag>demon</tag>
+  <tag>attic</tag>
+  <tag>evil</tag>
+  <tag>ritual murder</tag>
+  <tag>demonic possession</tag>
+  <tag>satanic ritual</tag>
+  <tag>dollhouse</tag>
+  <tag>coven (akelarre)</tag>
+  <tag>séance</tag>
+  <tag>grieving</tag>
+  <tag>psychological disorders</tag>
+  <tag>matriarch</tag>
+  <tag>miniatures</tag>
+  <tag>traumatized woman</tag>
+  <tag>didactic</tag>
+  <tag>commanding</tag>
+  <studio>PalmStar Media</studio>
+  <studio>Pulse Films</studio>
+  <studio>Finch Entertainment</studio>
+  <studio>Windy Hill Pictures</studio>
+  <country>United States of America</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">493922</uniqueid>
+  <uniqueid type="imdb">tt7784604</uniqueid>
+  <actor>
+    <name>Toni Collette</name>
+    <role>Annie Graham</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Alex Wolff</name>
+    <role>Peter Graham</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Gabriel Byrne</name>
+    <role>Steve Graham</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Milly Shapiro</name>
+    <role>Charlie Graham</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ann Dowd</name>
+    <role>Joan</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Mallory Bechtel</name>
+    <role>Bridget</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Brock McKinney</name>
+    <role>Aaron</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jake Brown</name>
+    <role>Brendan</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Morgan Lund</name>
+    <role>Mr. Davis</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Christy Summerhays</name>
+    <role>Charlie's Teacher</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Bus Riley</name>
+    <role>History Teacher</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jarrod Phillips</name>
+    <role>Group Leader</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Heidi Mendez</name>
+    <role>Spanish Speaking Woman</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Zachary Arthur</name>
+    <role>Boy in Room</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>David Stanley</name>
+    <role>Man at Wake</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Ari Aster</director>
+  <credits>Ari Aster</credits>
+</movie>

@@ -1,0 +1,115 @@
+<movie>
+  <title>The Conjuring</title>
+  <originaltitle>The Conjuring</originaltitle>
+  <year>2013</year>
+  <premiered>2013-07-18</premiered>
+  <rating>7.546</rating>
+  <criticrating>86</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Thriller</genre>
+  <tag>sibling relationship</tag>
+  <tag>1970s</tag>
+  <tag>cellar</tag>
+  <tag>exorcism</tag>
+  <tag>halloween</tag>
+  <tag>haunted house</tag>
+  <tag>possession</tag>
+  <tag>rhode island</tag>
+  <tag>based on true story</tag>
+  <tag>paranormal investigation</tag>
+  <tag>crucifix</tag>
+  <tag>ghost</tag>
+  <tag>demonic</tag>
+  <tag>demonic spirit</tag>
+  <tag>demonology</tag>
+  <tag>psychic vision</tag>
+  <tag>malevolent spirit</tag>
+  <studio>Evergreen Media Group</studio>
+  <studio>The Safran Company</studio>
+  <studio>New Line Cinema</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">138843</uniqueid>
+  <uniqueid type="imdb">tt1457767</uniqueid>
+  <set tmdbcolid="313086">
+    <name>313086</name>
+  </set>
+  <actor>
+    <name>Vera Farmiga</name>
+    <role>Lorraine Warren</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Wilson</name>
+    <role>Ed Warren</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Lili Taylor</name>
+    <role>Carolyn Perron</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ron Livingston</name>
+    <role>Roger Perron</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Hayley McFarland</name>
+    <role>Nancy</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Sterling Jerins</name>
+    <role>Judy Warren</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Shanley Caswell</name>
+    <role>Andrea</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mackenzie Foy</name>
+    <role>Cindy</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Joey King</name>
+    <role>Christine</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kyla Deaver</name>
+    <role>April</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Shannon Kook</name>
+    <role>Drew</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>John Brotherton</name>
+    <role>Brad</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Marion Guyot</name>
+    <role>Georgiana</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Morganna Bridgers</name>
+    <role>Debbie</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Tipton</name>
+    <role>Camilla</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>James Wan</director>
+  <credits>Chad Hayes</credits>
+  <credits>Carey Hayes</credits>
+</movie>

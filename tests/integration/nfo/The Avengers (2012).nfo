@@ -1,0 +1,104 @@
+<movie>
+  <title>The Avengers</title>
+  <originaltitle>The Avengers</originaltitle>
+  <year>2012</year>
+  <premiered>2012-04-25</premiered>
+  <rating>8.086</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Science Fiction</genre>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <tag>new york city</tag>
+  <tag>superhero</tag>
+  <tag>shield</tag>
+  <tag>based on comic</tag>
+  <tag>alien invasion</tag>
+  <tag>superhero team</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <studio>Marvel Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">24428</uniqueid>
+  <uniqueid type="imdb">tt0848228</uniqueid>
+  <set tmdbcolid="86311">
+    <name>86311</name>
+  </set>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Tony Stark / Iron Man</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Evans</name>
+    <role>Steve Rogers / Captain America</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Ruffalo</name>
+    <role>Bruce Banner / The Hulk</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Hemsworth</name>
+    <role>Thor</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Scarlett Johansson</name>
+    <role>Natasha Romanoff / Black Widow</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Renner</name>
+    <role>Clint Barton / Hawkeye</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Hiddleston</name>
+    <role>Loki</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Clark Gregg</name>
+    <role>Agent Phil Coulson</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Cobie Smulders</name>
+    <role>Agent Maria Hill</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Stellan Skarsgård</name>
+    <role>Selvig</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel L. Jackson</name>
+    <role>Nick Fury</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Gwyneth Paltrow</name>
+    <role>Pepper Potts</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Bettany</name>
+    <role>Jarvis (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Alexis Denisof</name>
+    <role>The Other</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Tina Benko</name>
+    <role>NASA Scientist</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Joss Whedon</director>
+  <credits>Joss Whedon</credits>
+</movie>

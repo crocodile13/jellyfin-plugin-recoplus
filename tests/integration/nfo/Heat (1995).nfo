@@ -1,0 +1,123 @@
+<movie>
+  <title>Heat</title>
+  <originaltitle>Heat</originaltitle>
+  <year>1995</year>
+  <premiered>1995-12-15</premiered>
+  <rating>7.949</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>Action</genre>
+  <tag>robbery</tag>
+  <tag>chase</tag>
+  <tag>suicide attempt</tag>
+  <tag>gangster</tag>
+  <tag>obsession</tag>
+  <tag>detective</tag>
+  <tag>heist</tag>
+  <tag>remake</tag>
+  <tag>thief</tag>
+  <tag>honor</tag>
+  <tag>murder</tag>
+  <tag>betrayal</tag>
+  <tag>gang</tag>
+  <tag>los angeles, california</tag>
+  <tag>cat and mouse</tag>
+  <tag>bank robbery</tag>
+  <tag>criminal mastermind</tag>
+  <tag>ex-con</tag>
+  <tag>one last job</tag>
+  <tag>loner</tag>
+  <tag>bank job</tag>
+  <tag>neo-noir</tag>
+  <tag>crime epic</tag>
+  <tag>assertive</tag>
+  <tag>authoritarian</tag>
+  <tag>bold</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Regency Enterprises</studio>
+  <studio>Forward Pass</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">949</uniqueid>
+  <uniqueid type="imdb">tt0113277</uniqueid>
+  <set tmdbcolid="1048282">
+    <name>1048282</name>
+  </set>
+  <actor>
+    <name>Al Pacino</name>
+    <role>Lt. Vincent Hanna</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Robert De Niro</name>
+    <role>Neil McCauley</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Val Kilmer</name>
+    <role>Chris Shiherlis</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Voight</name>
+    <role>Nate</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Sizemore</name>
+    <role>Michael Cheritto</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Diane Venora</name>
+    <role>Justine</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Brenneman</name>
+    <role>Eady</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ashley Judd</name>
+    <role>Charlene Shiherlis</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mykelti Williamson</name>
+    <role>Drucker</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Wes Studi</name>
+    <role>Casals</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ted Levine</name>
+    <role>Bosko</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Dennis Haysbert</name>
+    <role>Donald Breedan</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>William Fichtner</name>
+    <role>Roger Van Zant</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Natalie Portman</name>
+    <role>Lauren Gustafson</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Noonan</name>
+    <role>Kelso</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Michael Mann</director>
+  <credits>Michael Mann</credits>
+</movie>

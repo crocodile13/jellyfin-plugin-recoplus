@@ -1,0 +1,125 @@
+<movie>
+  <title>Interstellar</title>
+  <originaltitle>Interstellar</originaltitle>
+  <year>2014</year>
+  <premiered>2014-11-04</premiered>
+  <rating>8.5</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Drama</genre>
+  <genre>Science Fiction</genre>
+  <tag>spacecraft</tag>
+  <tag>race against time</tag>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>nasa</tag>
+  <tag>time warp</tag>
+  <tag>dystopia</tag>
+  <tag>expedition</tag>
+  <tag>time travel</tag>
+  <tag>space travel</tag>
+  <tag>wormhole</tag>
+  <tag>famine</tag>
+  <tag>hibernation</tag>
+  <tag>black hole</tag>
+  <tag>quantum mechanics</tag>
+  <tag>family relationships</tag>
+  <tag>space</tag>
+  <tag>planet</tag>
+  <tag>astronaut</tag>
+  <tag>scientist</tag>
+  <tag>single father</tag>
+  <tag>space station</tag>
+  <tag>gravity</tag>
+  <tag>space adventure</tag>
+  <tag>time-manipulation</tag>
+  <tag>cryonics</tag>
+  <tag>father daughter relationship</tag>
+  <tag>2060s</tag>
+  <tag>audacious</tag>
+  <tag>enthusiastic</tag>
+  <studio>Legendary Pictures</studio>
+  <studio>Syncopy</studio>
+  <studio>Lynda Obst Productions</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">157336</uniqueid>
+  <uniqueid type="imdb">tt0816692</uniqueid>
+  <actor>
+    <name>Matthew McConaughey</name>
+    <role>Cooper</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Hathaway</name>
+    <role>Brand</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Caine</name>
+    <role>Professor Brand</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jessica Chastain</name>
+    <role>Murph</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Casey Affleck</name>
+    <role>Tom</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Wes Bentley</name>
+    <role>Doyle</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Topher Grace</name>
+    <role>Getty</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mackenzie Foy</name>
+    <role>Murph (10 Yrs.)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Ellen Burstyn</name>
+    <role>Murph (older)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>John Lithgow</name>
+    <role>Donald</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Irwin</name>
+    <role>TARS (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David Gyasi</name>
+    <role>Romilly</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Timothée Chalamet</name>
+    <role>Tom (15 Yrs.)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Damon</name>
+    <role>Mann</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Stewart</name>
+    <role>CASE (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Christopher Nolan</director>
+  <credits>Jonathan Nolan</credits>
+  <credits>Christopher Nolan</credits>
+</movie>

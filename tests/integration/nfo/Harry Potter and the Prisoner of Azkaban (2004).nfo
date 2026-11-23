@@ -1,0 +1,128 @@
+<movie>
+  <title>Harry Potter and the Prisoner of Azkaban</title>
+  <originaltitle>Harry Potter and the Prisoner of Azkaban</originaltitle>
+  <year>2004</year>
+  <premiered>2004-05-31</premiered>
+  <rating>8</rating>
+  <criticrating>90</criticrating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <tag>witch</tag>
+  <tag>school friend</tag>
+  <tag>friendship</tag>
+  <tag>based on novel or book</tag>
+  <tag>flying</tag>
+  <tag>magic</tag>
+  <tag>bus</tag>
+  <tag>traitor</tag>
+  <tag>child hero</tag>
+  <tag>school of witchcraft</tag>
+  <tag>black magic</tag>
+  <tag>time travel</tag>
+  <tag>sequel</tag>
+  <tag>school</tag>
+  <tag>best friend</tag>
+  <tag>werewolf</tag>
+  <tag>muggle</tag>
+  <tag>ghost</tag>
+  <tag>wizard</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>magical creature</tag>
+  <tag>night bus</tag>
+  <tag>teenage life</tag>
+  <tag>school class</tag>
+  <tag>based on young adult novel</tag>
+  <tag>magic spell</tag>
+  <tag>enchant</tag>
+  <tag>teen fantasy</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>1492 Pictures</studio>
+  <studio>Heyday Films</studio>
+  <studio>P of A Productions</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">673</uniqueid>
+  <uniqueid type="imdb">tt0304141</uniqueid>
+  <set tmdbcolid="1241">
+    <name>1241</name>
+  </set>
+  <actor>
+    <name>Daniel Radcliffe</name>
+    <role>Harry Potter</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rupert Grint</name>
+    <role>Ron Weasley</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Emma Watson</name>
+    <role>Hermione Granger</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robbie Coltrane</name>
+    <role>Rubeus Hagrid</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Gambon</name>
+    <role>Albus Dumbledore</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Gary Oldman</name>
+    <role>Sirius Black</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>David Thewlis</name>
+    <role>Remus Lupin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Timothy Spall</name>
+    <role>Peter Pettigrew</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Rickman</name>
+    <role>Severus Snape</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Felton</name>
+    <role>Draco Malfoy</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Emma Thompson</name>
+    <role>Sybill Trelawney</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Walters</name>
+    <role>Molly Weasley</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Griffiths</name>
+    <role>Vernon Dursley</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Fiona Shaw</name>
+    <role>Petunia Dursley</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Maggie Smith</name>
+    <role>Minerva McGonagall</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Alfonso Cuarón</director>
+  <credits>J.K. Rowling</credits>
+  <credits>Steve Kloves</credits>
+</movie>

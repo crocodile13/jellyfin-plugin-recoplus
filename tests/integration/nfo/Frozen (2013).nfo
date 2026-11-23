@@ -1,0 +1,124 @@
+<movie>
+  <title>Frozen</title>
+  <originaltitle>Frozen</originaltitle>
+  <year>2013</year>
+  <premiered>2013-11-20</premiered>
+  <rating>7.249</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <tag>princess</tag>
+  <tag>magic</tag>
+  <tag>mistake in person</tag>
+  <tag>queen</tag>
+  <tag>cartoon</tag>
+  <tag>villain</tag>
+  <tag>melancholy</tag>
+  <tag>musical</tag>
+  <tag>betrayal</tag>
+  <tag>snowman</tag>
+  <tag>reindeer</tag>
+  <tag>curse</tag>
+  <tag>snow</tag>
+  <tag>troll</tag>
+  <tag>based on children's book</tag>
+  <tag>mountain climbing</tag>
+  <tag>evil prince</tag>
+  <tag>based on fairy tale</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>frozen</tag>
+  <tag>woman director</tag>
+  <tag>sister sister relationship</tag>
+  <tag>magic land</tag>
+  <tag>3d animation</tag>
+  <tag>whimsical</tag>
+  <tag>enthusiastic</tag>
+  <tag>hopeful</tag>
+  <studio>Walt Disney Animation Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">109445</uniqueid>
+  <uniqueid type="imdb">tt2294629</uniqueid>
+  <set tmdbcolid="386382">
+    <name>386382</name>
+  </set>
+  <actor>
+    <name>Kristen Bell</name>
+    <role>Anna (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Idina Menzel</name>
+    <role>Elsa (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Groff</name>
+    <role>Kristoff (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Gad</name>
+    <role>Olaf (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Santino Fontana</name>
+    <role>Hans (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Tudyk</name>
+    <role>Duke (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ciarán Hinds</name>
+    <role>Pabbie / Grandpa (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Williams</name>
+    <role>Oaken (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen J. Anderson</name>
+    <role>Kai (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Maia Wilson</name>
+    <role>Bulda (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Edie McClurg</name>
+    <role>Gerda (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Pine</name>
+    <role>Bishop (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Maurice LaMarche</name>
+    <role>King (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Livvy Stubenrauch</name>
+    <role>Young Anna (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Eva Bella</name>
+    <role>Young Elsa (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Chris Buck</director>
+  <director>Jennifer Lee</director>
+  <credits>Jennifer Lee</credits>
+</movie>

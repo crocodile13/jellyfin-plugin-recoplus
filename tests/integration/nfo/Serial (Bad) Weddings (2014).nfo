@@ -1,0 +1,100 @@
+<movie>
+  <title>Serial (Bad) Weddings</title>
+  <originaltitle>Qu'est-ce qu'on a fait au Bon Dieu ?</originaltitle>
+  <year>2014</year>
+  <premiered>2014-04-16</premiered>
+  <rating>6.654</rating>
+  <mpaa>PG</mpaa>
+  <genre>Comedy</genre>
+  <tag>marriage</tag>
+  <tag>racism</tag>
+  <tag>wedding ceremony</tag>
+  <tag>racial prejudice</tag>
+  <tag>amused</tag>
+  <tag>joyful</tag>
+  <studio>UGC</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">262391</uniqueid>
+  <uniqueid type="imdb">tt2800240</uniqueid>
+  <set tmdbcolid="579870">
+    <name>579870</name>
+  </set>
+  <actor>
+    <name>Christian Clavier</name>
+    <role>Claude Verneuil</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Chantal Lauby</name>
+    <role>Marie Verneuil</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ary Abittan</name>
+    <role>David Benichou</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Medi Sadoun</name>
+    <role>Rachid Benassem</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Frédéric Chau</name>
+    <role>Chao Ling</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Noom Diawara</name>
+    <role>Charles Koffi</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Frédérique Bel</name>
+    <role>Isabelle Verneuil</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Piaton</name>
+    <role>Odile Verneuil</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Émilie Caen</name>
+    <role>Ségolène Verneuil</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Élodie Fontan</name>
+    <role>Laure Verneuil</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Pascal N'Zonzi</name>
+    <role>André Koffi</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Salimata Kamate</name>
+    <role>Madeleine Koffi</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tatiana Rojo</name>
+    <role>Viviane Koffi</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Élie Semoun</name>
+    <role>Psychologist</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Loïc Legendre</name>
+    <role>Priest of Chinon</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Philippe de Chauveron</director>
+  <credits>Philippe de Chauveron</credits>
+  <credits>Guy Laurent</credits>
+</movie>

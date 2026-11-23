@@ -1,0 +1,127 @@
+<movie>
+  <title>Welcome to the Sticks</title>
+  <originaltitle>Bienvenue chez les Ch'tis</originaltitle>
+  <year>2008</year>
+  <premiered>2008-02-20</premiered>
+  <rating>6.7</rating>
+  <mpaa>Not Rated</mpaa>
+  <genre>Comedy</genre>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>jealousy</tag>
+  <tag>clock tower</tag>
+  <tag>provence</tag>
+  <tag>southern france</tag>
+  <tag>lie</tag>
+  <tag>postman</tag>
+  <tag>mama's boy</tag>
+  <tag>bias</tag>
+  <tag>local speciality</tag>
+  <tag>relocation</tag>
+  <tag>prejudice</tag>
+  <tag>cultural difference</tag>
+  <tag>job transfer</tag>
+  <tag>northern france</tag>
+  <tag>bell tower</tag>
+  <tag>postal worker</tag>
+  <tag>hospitality</tag>
+  <tag>community spirit</tag>
+  <tag>dialect</tag>
+  <tag>small community</tag>
+  <tag>wine drinking</tag>
+  <tag>unhappy marriage</tag>
+  <tag>social prejudice</tag>
+  <tag>accents</tag>
+  <tag>disability fraud</tag>
+  <studio>Pathé Renn Productions</studio>
+  <studio>Hirsch</studio>
+  <studio>Pathé</studio>
+  <studio>TF1 Films Production</studio>
+  <studio>Les Productions du Ch'timi</studio>
+  <studio>Pictanovo</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">8265</uniqueid>
+  <uniqueid type="imdb">tt1064932</uniqueid>
+  <set tmdbcolid="1530834">
+    <name>1530834</name>
+  </set>
+  <actor>
+    <name>Kad Merad</name>
+    <role>Philippe Abrams</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Dany Boon</name>
+    <role>Antoine Bailleul</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Zoé Félix</name>
+    <role>Julie Abrams</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lorenzo Ausilia-Foret</name>
+    <role>Raphaël Abrams</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Marivin</name>
+    <role>Annabelle Deconninck</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Philippe Duquesne</name>
+    <role>Fabrice Canoli</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Guy Lecluyse</name>
+    <role>Yann Vandernoout</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Line Renaud</name>
+    <role>Mrs. Bailleul</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Galabru</name>
+    <role>Julie's Great Uncle</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Stéphane Freiss</name>
+    <role>Jean</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Bosso</name>
+    <role>Policeman on A7</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jérôme Commandeur</name>
+    <role>Inspector Lebic</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Alexandre Carrière</name>
+    <role>Tony</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Fred Personne</name>
+    <role>Mr. Vasseur</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Franck Andrieux</name>
+    <role>Mr. Leborgne</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Dany Boon</director>
+  <credits>Dany Boon</credits>
+  <credits>Alexandre Charlot</credits>
+  <credits>Franck Magnier</credits>
+</movie>

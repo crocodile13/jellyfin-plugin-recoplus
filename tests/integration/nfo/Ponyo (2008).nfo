@@ -1,0 +1,114 @@
+<movie>
+  <title>Ponyo</title>
+  <originaltitle>崖の上のポニョ</originaltitle>
+  <year>2008</year>
+  <premiered>2008-07-19</premiered>
+  <rating>7.759</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Fantasy</genre>
+  <genre>Family</genre>
+  <tag>princess</tag>
+  <tag>fish</tag>
+  <tag>fairy tale</tag>
+  <tag>cliff</tag>
+  <tag>mermaid</tag>
+  <tag>heart warming</tag>
+  <tag>quest</tag>
+  <tag>anime</tag>
+  <tag>good feeling</tag>
+  <tag>light-hearted</tag>
+  <tag>different species</tag>
+  <tag>happy</tag>
+  <tag>adventure</tag>
+  <tag>cute</tag>
+  <tag>optimistic</tag>
+  <tag>family bonds</tag>
+  <studio>Studio Ghibli</studio>
+  <studio>TOHO</studio>
+  <studio>Nippon Television Network Corporation</studio>
+  <studio>dentsu</studio>
+  <studio>Hakuhodo DY Media Partners</studio>
+  <studio>Mitsubishi</studio>
+  <studio>Walt Disney Japan</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">12429</uniqueid>
+  <uniqueid type="imdb">tt0876563</uniqueid>
+  <actor>
+    <name>Yuria Kozuki</name>
+    <role>Ponyo (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroki Doi</name>
+    <role>Sosuke (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>George Tokoro</name>
+    <role>Fujimoto (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Tomoko Yamaguchi</name>
+    <role>Risa (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yuki Amami</name>
+    <role>Gran Mamare (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kazushige Nagashima</name>
+    <role>Koichi (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Akiko Yano</name>
+    <role>Ponyo's Sister (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Shin'ichi Hatori</name>
+    <role>Anchorman (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Tokie Hidari</name>
+    <role>Kayo (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Rumi Hiiragi</name>
+    <role>Young Mother (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Tomoko Naraoka</name>
+    <role>Yoshie (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuko Yoshiyuki</name>
+    <role>Toki (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Eimi Hiraoka</name>
+    <role>Kumiko (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Nozomi Ōhashi</name>
+    <role>Karen (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Akiko Takeguchi</name>
+    <role>Noriko (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Hayao Miyazaki</credits>
+</movie>

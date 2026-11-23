@@ -1,0 +1,120 @@
+<movie>
+  <title>Akira</title>
+  <originaltitle>AKIRA</originaltitle>
+  <year>1988</year>
+  <premiered>1988-07-16</premiered>
+  <rating>7.938</rating>
+  <mpaa>R</mpaa>
+  <genre>Animation</genre>
+  <genre>Science Fiction</genre>
+  <genre>Action</genre>
+  <tag>army</tag>
+  <tag>street gang</tag>
+  <tag>saving the world</tag>
+  <tag>total destruction</tag>
+  <tag>experiment</tag>
+  <tag>general</tag>
+  <tag>megacity</tag>
+  <tag>atomic bomb</tag>
+  <tag>stadium</tag>
+  <tag>underground</tag>
+  <tag>mutation</tag>
+  <tag>dystopia</tag>
+  <tag>cyberpunk</tag>
+  <tag>based on manga</tag>
+  <tag>motorcycle gang</tag>
+  <tag>adult animation</tag>
+  <tag>psychotronic</tag>
+  <tag>anime</tag>
+  <tag>2010s</tag>
+  <tag>vibrant</tag>
+  <studio>MBS</studio>
+  <studio>Sumitomo Corporation</studio>
+  <studio>TOHO</studio>
+  <studio>Kodansha</studio>
+  <studio>Tokyo Movie Shinsha</studio>
+  <studio>Bandai</studio>
+  <studio>Hakuhodo</studio>
+  <studio>LaserDisc Corporation</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">149</uniqueid>
+  <uniqueid type="imdb">tt0094625</uniqueid>
+  <actor>
+    <name>Mitsuo Iwata</name>
+    <role>Shotaro Kaneda (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Nozomu Sasaki</name>
+    <role>Tetsuo Shima (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Mami Koyama</name>
+    <role>Kei (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Taro Ishida</name>
+    <role>Colonel Shikishima</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Mizuho Suzuki</name>
+    <role>Doctor Ônishi</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tessyo Genda</name>
+    <role>Ryûsaku (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Koichi Kitamura</name>
+    <role>Priestess Miyako / Council A (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Yuriko Fuchizaki</name>
+    <role>Kaori (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Masaaki Okura</name>
+    <role>Yamagata (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Takeshi Kusao</name>
+    <role>Kai (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuhiro Kamifuji</name>
+    <role>Masaru / No. 27 (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Tatsuhiko Nakamura</name>
+    <role>Takashi / No. 26 (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Fukue Itô</name>
+    <role>Kiyoko / No. 25 (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroshi Otake</name>
+    <role>Nezu (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kazumi Tanaka</name>
+    <role>Army (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Katsuhiro Otomo</director>
+  <credits>Izo Hashimoto</credits>
+  <credits>Katsuhiro Otomo</credits>
+</movie>

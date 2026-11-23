@@ -1,0 +1,119 @@
+<movie>
+  <title>Your Name.</title>
+  <originaltitle>君の名は。</originaltitle>
+  <year>2016</year>
+  <premiered>2016-07-01</premiered>
+  <rating>8.492</rating>
+  <criticrating>98</criticrating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Romance</genre>
+  <genre>Drama</genre>
+  <tag>high school</tag>
+  <tag>race against time</tag>
+  <tag>dreams</tag>
+  <tag>afterlife</tag>
+  <tag>natural disaster</tag>
+  <tag>supernatural</tag>
+  <tag>time travel</tag>
+  <tag>comet</tag>
+  <tag>romance</tag>
+  <tag>tragedy</tag>
+  <tag>school</tag>
+  <tag>body swap</tag>
+  <tag>high school student</tag>
+  <tag>nonlinear timeline</tag>
+  <tag>star crossed lovers</tag>
+  <tag>power of love</tag>
+  <tag>anime</tag>
+  <tag>japanese high school</tag>
+  <tag>urban fantasy</tag>
+  <tag>powerful</tag>
+  <studio>CoMix Wave Films</studio>
+  <studio>TOHO</studio>
+  <studio>KADOKAWA</studio>
+  <studio>jeki</studio>
+  <studio>AMUSE</studio>
+  <studio>voque ting</studio>
+  <studio>Lawson Entertainment</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">372058</uniqueid>
+  <uniqueid type="imdb">tt5311514</uniqueid>
+  <actor>
+    <name>Ryunosuke Kamiki</name>
+    <role>Taki Tachibana (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Mone Kamishiraishi</name>
+    <role>Mitsuha Miyamizu (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ryo Narita</name>
+    <role>Katsuhiko Teshigawara (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Aoi Yuki</name>
+    <role>Sayaka Natori (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Nobunaga Shimazaki</name>
+    <role>Tsukasa Fujii (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kaito Ishikawa</name>
+    <role>Shinta Takagi (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kanon Tani</name>
+    <role>Yotsuha Miyamizu (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Masaki Terasoma</name>
+    <role>Toshiki Miyamizu (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sayaka Ohara</name>
+    <role>Futaha Miyamizu (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuhiko Inoue</name>
+    <role>Taki's Father (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Chafurin</name>
+    <role>Teshigawara's Father (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Yuka Kato</name>
+    <role>Teshigawara's Mother (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kana Hanazawa</name>
+    <role>Teacher Yuki-chan (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Masami Nagasawa</name>
+    <role>Miki Okudera (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Etsuko Ichihara</name>
+    <role>Hitoha Miyamizu (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Makoto Shinkai</director>
+  <credits>Makoto Shinkai</credits>
+</movie>

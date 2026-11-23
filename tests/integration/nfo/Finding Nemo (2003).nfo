@@ -1,0 +1,119 @@
+<movie>
+  <title>Finding Nemo</title>
+  <originaltitle>Finding Nemo</originaltitle>
+  <year>2003</year>
+  <premiered>2003-05-30</premiered>
+  <rating>7.823</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Adventure</genre>
+  <tag>fish</tag>
+  <tag>sydney, australia</tag>
+  <tag>parent child relationship</tag>
+  <tag>anthropomorphism</tag>
+  <tag>harbor</tag>
+  <tag>underwater</tag>
+  <tag>shark</tag>
+  <tag>pelican</tag>
+  <tag>fish tank</tag>
+  <tag>great barrier reef</tag>
+  <tag>sea turtle</tag>
+  <tag>missing child</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>short-term memory loss</tag>
+  <tag>clownfish</tag>
+  <tag>father son reunion</tag>
+  <tag>protective father</tag>
+  <tag>3d animation</tag>
+  <tag>enthusiastic</tag>
+  <tag>hopeful</tag>
+  <tag>sympathetic</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">12</uniqueid>
+  <uniqueid type="imdb">tt0266543</uniqueid>
+  <set tmdbcolid="137697">
+    <name>137697</name>
+  </set>
+  <actor>
+    <name>Albert Brooks</name>
+    <role>Marlin (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ellen DeGeneres</name>
+    <role>Dory (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Alexander Gould</name>
+    <role>Nemo (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Willem Dafoe</name>
+    <role>Gill (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Geoffrey Rush</name>
+    <role>Nigel (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Brad Garrett</name>
+    <role>Bloat (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Allison Janney</name>
+    <role>Peach (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Austin Pendleton</name>
+    <role>Gurgle (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Root</name>
+    <role>Bubbles (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Vicki Lewis</name>
+    <role>Deb / Flo (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Ranft</name>
+    <role>Jacques (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Stanton</name>
+    <role>Crush (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Perkins</name>
+    <role>Coral (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Nicholas Bird</name>
+    <role>Squirt (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Peterson</name>
+    <role>Mr. Ray / Additional Voices (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Andrew Stanton</director>
+  <credits>Andrew Stanton</credits>
+  <credits>Bob Peterson</credits>
+  <credits>David Reynolds</credits>
+</movie>

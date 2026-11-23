@@ -1,0 +1,78 @@
+<movie>
+  <title>A Quiet Place</title>
+  <originaltitle>A Quiet Place</originaltitle>
+  <year>2018</year>
+  <premiered>2018-04-03</premiered>
+  <rating>7.394</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Horror</genre>
+  <genre>Drama</genre>
+  <genre>Science Fiction</genre>
+  <tag>pregnancy</tag>
+  <tag>fireworks</tag>
+  <tag>deaf</tag>
+  <tag>post-apocalyptic future</tag>
+  <tag>alien life-form</tag>
+  <tag>child in peril</tag>
+  <tag>creature</tag>
+  <tag>alien invasion</tag>
+  <tag>parenting</tag>
+  <tag>survival horror</tag>
+  <tag>alien monster</tag>
+  <tag>human vs alien</tag>
+  <tag>sign languages</tag>
+  <tag>hostile</tag>
+  <tag>dreary</tag>
+  <tag>quiet</tag>
+  <tag>upstate new york</tag>
+  <tag>psychological horror</tag>
+  <tag>sci-fi horror</tag>
+  <studio>Paramount Pictures</studio>
+  <studio>Platinum Dunes</studio>
+  <studio>Sunday Night Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">447332</uniqueid>
+  <uniqueid type="imdb">tt6644200</uniqueid>
+  <set tmdbcolid="521226">
+    <name>521226</name>
+  </set>
+  <actor>
+    <name>Emily Blunt</name>
+    <role>Evelyn Abbott</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>John Krasinski</name>
+    <role>Lee Abbott</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Millicent Simmonds</name>
+    <role>Regan Abbott</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Noah Jupe</name>
+    <role>Marcus Abbott</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Cade Woodward</name>
+    <role>Beau Abbott</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Leon Russom</name>
+    <role>Man in the Woods</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Rhoda Pell</name>
+    <role>Old Man's Dead Wife (uncredited)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <director>John Krasinski</director>
+  <credits>Bryan Woods</credits>
+  <credits>Scott Beck</credits>
+  <credits>John Krasinski</credits>
+</movie>

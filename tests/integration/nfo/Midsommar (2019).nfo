@@ -1,0 +1,118 @@
+<movie>
+  <title>Midsommar</title>
+  <originaltitle>Midsommar</originaltitle>
+  <year>2019</year>
+  <premiered>2019-07-03</premiered>
+  <rating>7.139</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Drama</genre>
+  <genre>Mystery</genre>
+  <tag>loss of loved one</tag>
+  <tag>ritual</tag>
+  <tag>paranoia</tag>
+  <tag>sweden</tag>
+  <tag>cult</tag>
+  <tag>hallucinogenic drug</tag>
+  <tag>magic mushroom</tag>
+  <tag>anthropology</tag>
+  <tag>human sacrifice</tag>
+  <tag>paganism</tag>
+  <tag>death of family</tag>
+  <tag>boyfriend girlfriend relationship</tag>
+  <tag>grieving</tag>
+  <tag>midsummer</tag>
+  <tag>cultural conflict</tag>
+  <tag>bad trip</tag>
+  <tag>folk horror</tag>
+  <tag>psychological disorders</tag>
+  <tag>toxic relationship</tag>
+  <tag>midnight sun</tag>
+  <tag>isolated community</tag>
+  <tag>summer festival</tag>
+  <tag>traumatized woman</tag>
+  <tag>violence</tag>
+  <studio>B-Reel Films</studio>
+  <studio>Square Peg</studio>
+  <country>Sweden</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">530385</uniqueid>
+  <uniqueid type="imdb">tt8772262</uniqueid>
+  <actor>
+    <name>Florence Pugh</name>
+    <role>Dani</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Reynor</name>
+    <role>Christian</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>William Jackson Harper</name>
+    <role>Josh</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Will Poulter</name>
+    <role>Mark</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Vilhelm Blomgren</name>
+    <role>Pelle</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Isabelle Grill</name>
+    <role>Maja</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Gunnel Fred</name>
+    <role>Siv</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ellora Torchia</name>
+    <role>Connie</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Archie Madekwe</name>
+    <role>Simon</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Henrik Norlén</name>
+    <role>Ulf</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Agnes Westerlund Rase</name>
+    <role>Dagny</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Ragnarsson</name>
+    <role>Inga</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Mats Blomgren</name>
+    <role>Odd</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Lars Väringer</name>
+    <role>Stev</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Anna Åström</name>
+    <role>Karin</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Ari Aster</director>
+  <credits>Ari Aster</credits>
+</movie>

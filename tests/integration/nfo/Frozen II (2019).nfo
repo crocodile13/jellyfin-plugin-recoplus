@@ -1,0 +1,118 @@
+<movie>
+  <title>Frozen II</title>
+  <originaltitle>Frozen II</originaltitle>
+  <year>2019</year>
+  <premiered>2019-11-20</premiered>
+  <rating>7.217</rating>
+  <mpaa>PG</mpaa>
+  <genre>Family</genre>
+  <genre>Animation</genre>
+  <genre>Adventure</genre>
+  <genre>Comedy</genre>
+  <genre>Fantasy</genre>
+  <tag>princess</tag>
+  <tag>magic</tag>
+  <tag>kingdom</tag>
+  <tag>winter</tag>
+  <tag>queen</tag>
+  <tag>castle</tag>
+  <tag>musical</tag>
+  <tag>sequel</tag>
+  <tag>dam</tag>
+  <tag>spirit</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>frozen</tag>
+  <tag>personification</tag>
+  <tag>thoughtful</tag>
+  <tag>mother daughter relationship</tag>
+  <tag>3d animation</tag>
+  <tag>whimsical</tag>
+  <tag>appreciative</tag>
+  <tag>compassionate</tag>
+  <studio>Walt Disney Animation Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">330457</uniqueid>
+  <uniqueid type="imdb">tt4520988</uniqueid>
+  <set tmdbcolid="386382">
+    <name>386382</name>
+  </set>
+  <actor>
+    <name>Kristen Bell</name>
+    <role>Anna (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Idina Menzel</name>
+    <role>Elsa (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Gad</name>
+    <role>Olaf (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Evan Rachel Wood</name>
+    <role>Iduna (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Groff</name>
+    <role>Kristoff / Sven / Reindeers (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Sterling K. Brown</name>
+    <role>Mattias (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Alfred Molina</name>
+    <role>Agnarr (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel Matthews</name>
+    <role>Honeymaren (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Ritter</name>
+    <role>Ryder (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Martha Plimpton</name>
+    <role>Yelena (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ciarán Hinds</name>
+    <role>Pabbie (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Sisto</name>
+    <role>King Runeard (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen J. Anderson</name>
+    <role>Kai (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Williams</name>
+    <role>Oaken (uncredited)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Maia Wilson</name>
+    <role>Bulda (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jennifer Lee</director>
+  <director>Chris Buck</director>
+  <credits>Allison Schroeder</credits>
+  <credits>Jennifer Lee</credits>
+</movie>

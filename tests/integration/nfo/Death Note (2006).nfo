@@ -1,0 +1,118 @@
+<tvshow>
+  <title>Death Note</title>
+  <originaltitle>DEATH NOTE</originaltitle>
+  <year>2006</year>
+  <premiered>2006-10-04</premiered>
+  <rating>8.615</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Animation</genre>
+  <genre>Mystery</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>detective</tag>
+  <tag>journalism</tag>
+  <tag>secret identity</tag>
+  <tag>police</tag>
+  <tag>supernatural</tag>
+  <tag>sociopath</tag>
+  <tag>rivalry</tag>
+  <tag>murder</tag>
+  <tag>serial killer</tag>
+  <tag>grim reaper</tag>
+  <tag>psychological thriller</tag>
+  <tag>based on manga</tag>
+  <tag>justice</tag>
+  <tag>death</tag>
+  <tag>ethical dilemma</tag>
+  <tag>shounen</tag>
+  <tag>anime</tag>
+  <tag>shinigami</tag>
+  <tag>time skip</tag>
+  <tag>magic book</tag>
+  <tag>psychological</tag>
+  <tag>fantastic</tag>
+  <tag>prosocial psychopath</tag>
+  <tag>horror</tag>
+  <studio>Nippon TV</studio>
+  <studio>Madhouse</studio>
+  <studio>Nippon Television Network Corporation</studio>
+  <studio>D.N. Dream Partners</studio>
+  <studio>VAP</studio>
+  <studio>Shueisha</studio>
+  <uniqueid type="tmdb" default="true">13916</uniqueid>
+  <uniqueid type="imdb">tt0877057</uniqueid>
+  <actor>
+    <name>Mamoru Miyano</name>
+    <role>Light Yagami (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kappei Yamaguchi</name>
+    <role>L (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Shidou Nakamura</name>
+    <role>Ryuk (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Aya Hirano</name>
+    <role>Misa Amane (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Noriko Hidaka</name>
+    <role>Near (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Nozomu Sasaki</name>
+    <role>Mello (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kimiko Saito</name>
+    <role>Rem (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Naoya Uchida</name>
+    <role>Soichiro Yagami (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kiyoshi Kobayashi</name>
+    <role>Watari (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ryou Naitou</name>
+    <role>Touta Matsuda (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Keiji Fujiwara</name>
+    <role>Shuichi Aizawa (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuya Nakai</name>
+    <role>Kanzo Mogi (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tomohiro Nishimura</name>
+    <role>Shibuimaru Takuo (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Takeharu Oonishi</name>
+    <role>Gukku (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Tetsuo Goto</name>
+    <role>Deridovely (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

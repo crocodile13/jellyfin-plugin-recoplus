@@ -1,0 +1,113 @@
+<movie>
+  <title>Reservoir Dogs</title>
+  <originaltitle>Reservoir Dogs</originaltitle>
+  <year>1992</year>
+  <premiered>1992-09-02</premiered>
+  <rating>8.107</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Thriller</genre>
+  <tag>escape</tag>
+  <tag>jewelry</tag>
+  <tag>psychopath</tag>
+  <tag>traitor</tag>
+  <tag>ear</tag>
+  <tag>heist</tag>
+  <tag>thief</tag>
+  <tag>betrayal</tag>
+  <tag>plan gone wrong</tag>
+  <tag>gang</tag>
+  <tag>nonlinear timeline</tag>
+  <tag>warehouse</tag>
+  <tag>told in flashback</tag>
+  <tag>heist gone wrong</tag>
+  <tag>botched robbery</tag>
+  <tag>angry</tag>
+  <tag>aggressive</tag>
+  <tag>desperate</tag>
+  <tag>based on short film</tag>
+  <tag>suspenseful</tag>
+  <tag>antagonistic</tag>
+  <studio>Live Entertainment</studio>
+  <studio>Dog Eat Dog Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">500</uniqueid>
+  <uniqueid type="imdb">tt0105236</uniqueid>
+  <actor>
+    <name>Harvey Keitel</name>
+    <role>Mr. White / Larry Dimmick</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Roth</name>
+    <role>Mr. Orange / Freddy Newandyke</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Madsen</name>
+    <role>Mr. Blonde / Vic Vega</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Penn</name>
+    <role>"Nice Guy" Eddie Cabot</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Buscemi</name>
+    <role>Mr. Pink</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lawrence Tierney</name>
+    <role>Joe Cabot</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Randy Brooks</name>
+    <role>Detective Holdaway</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kirk Baltz</name>
+    <role>Officer Marvin Nash</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Edward Bunker</name>
+    <role>Mr. Blue</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Quentin Tarantino</name>
+    <role>Mr. Brown</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Rich Turner</name>
+    <role>Sheriff #1</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David Steen</name>
+    <role>Sheriff #2</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Cosmo</name>
+    <role>Sheriff #3</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Stevo Polyi</name>
+    <role>Sheriff #4</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Sottile</name>
+    <role>Teddy</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Quentin Tarantino</director>
+  <credits>Quentin Tarantino</credits>
+</movie>

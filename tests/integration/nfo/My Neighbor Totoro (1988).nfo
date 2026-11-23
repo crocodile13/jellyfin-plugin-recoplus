@@ -1,0 +1,109 @@
+<movie>
+  <title>My Neighbor Totoro</title>
+  <originaltitle>となりのトトロ</originaltitle>
+  <year>1988</year>
+  <premiered>1988-04-16</premiered>
+  <rating>8.07</rating>
+  <mpaa>G</mpaa>
+  <genre>Fantasy</genre>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <tag>mother</tag>
+  <tag>sibling relationship</tag>
+  <tag>village</tag>
+  <tag>leave</tag>
+  <tag>rural area</tag>
+  <tag>hospital</tag>
+  <tag>new neighbor</tag>
+  <tag>new home</tag>
+  <tag>super power</tag>
+  <tag>nostalgic</tag>
+  <tag>magical creature</tag>
+  <tag>anime</tag>
+  <tag>sick mother</tag>
+  <tag>whimsical</tag>
+  <tag>magical realism</tag>
+  <tag>rural japan</tag>
+  <studio>Studio Ghibli</studio>
+  <studio>Tokuma Shoten</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">8392</uniqueid>
+  <uniqueid type="imdb">tt0096283</uniqueid>
+  <actor>
+    <name>Noriko Hidaka</name>
+    <role>Satsuki Kusakabe (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Chika Sakamoto</name>
+    <role>Mei Kusakabe (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Hitoshi Takagi</name>
+    <role>Totoro (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Shigesato Itoi</name>
+    <role>Tatsuo Kusakabe (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sumi Shimamoto</name>
+    <role>Yasuko Kusakabe (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tanie Kitabayashi</name>
+    <role>Granny (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Toshiyuki Amagasa</name>
+    <role>Kanta Ogaki (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Yuko Maruyama</name>
+    <role>Kanta's Mother (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Masashi Hirose</name>
+    <role>Kanta's Father (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Reiko Suzuki</name>
+    <role>Kanta's Aunt (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Machiko Washio</name>
+    <role>Teacher (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Naoki Tatsuta</name>
+    <role>Catbus (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tomohiro Nishimura</name>
+    <role>Postman (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Chie Koujiro</name>
+    <role>Michiko (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Yuko Mizutani</name>
+    <role>Ryoko (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Hayao Miyazaki</credits>
+</movie>

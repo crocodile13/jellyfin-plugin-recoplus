@@ -1,0 +1,100 @@
+<tvshow>
+  <title>The Office</title>
+  <originaltitle>The Office</originaltitle>
+  <year>2005</year>
+  <premiered>2005-03-24</premiered>
+  <rating>8.581</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Comedy</genre>
+  <tag>office</tag>
+  <tag>work</tag>
+  <tag>boss</tag>
+  <tag>remake</tag>
+  <tag>employer employee relationship</tag>
+  <tag>sitcom</tag>
+  <tag>employment</tag>
+  <tag>workplace comedy</tag>
+  <studio>NBC</studio>
+  <studio>Universal Television</studio>
+  <studio>Deedle-Dee Productions</studio>
+  <studio>Reveille Productions</studio>
+  <studio>Shine America</studio>
+  <studio>Universal Media Studios</studio>
+  <uniqueid type="tmdb" default="true">2316</uniqueid>
+  <uniqueid type="imdb">tt0386676</uniqueid>
+  <actor>
+    <name>Steve Carell</name>
+    <role>Michael Scott</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rainn Wilson</name>
+    <role>Dwight Schrute</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>John Krasinski</name>
+    <role>Jim Halpert</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jenna Fischer</name>
+    <role>Pam Beesly</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>B.J. Novak</name>
+    <role>Ryan Howard</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ed Helms</name>
+    <role>Andy Bernard</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Rashida Jones</name>
+    <role>Karen Filippelli</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>James Spader</name>
+    <role>Robert California</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>David Denman</name>
+    <role>Roy Anderson</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Melora Hardin</name>
+    <role>Jan Levinson</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Zach Woods</name>
+    <role>Gabe Lewis</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ellie Kemper</name>
+    <role>Erin Hannon</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Creed Bratton</name>
+    <role>Creed Bratton</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Mindy Kaling</name>
+    <role>Kelly Kapoor</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Flannery</name>
+    <role>Meredith Palmer</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

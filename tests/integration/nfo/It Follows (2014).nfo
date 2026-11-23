@@ -1,0 +1,116 @@
+<movie>
+  <title>It Follows</title>
+  <originaltitle>It Follows</originaltitle>
+  <year>2015</year>
+  <premiered>2015-02-04</premiered>
+  <rating>6.581</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Mystery</genre>
+  <tag>beach</tag>
+  <tag>chase</tag>
+  <tag>supernatural</tag>
+  <tag>friends</tag>
+  <tag>vision</tag>
+  <tag>teenage girl</tag>
+  <tag>school</tag>
+  <tag>detroit, michigan</tag>
+  <tag>entity</tag>
+  <tag>evil</tag>
+  <tag>voyeurism</tag>
+  <tag>sexually transmitted disease</tag>
+  <tag>young adult</tag>
+  <tag>followed</tag>
+  <tag>nudity</tag>
+  <tag>ambiguity</tag>
+  <tag>psychological horror</tag>
+  <tag>pastiche</tag>
+  <tag>suspenseful</tag>
+  <tag>horrified</tag>
+  <studio>Two Flints</studio>
+  <studio>Northern Lights Films</studio>
+  <studio>Animal Kingdom</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">270303</uniqueid>
+  <uniqueid type="imdb">tt3235888</uniqueid>
+  <set tmdbcolid="1198581">
+    <name>1198581</name>
+  </set>
+  <actor>
+    <name>Maika Monroe</name>
+    <role>Jay Height</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Keir Gilchrist</name>
+    <role>Paul</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Zovatto</name>
+    <role>Greg Hannigan</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jake Weary</name>
+    <role>Hugh</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Olivia Luccardi</name>
+    <role>Yara</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lili Sepe</name>
+    <role>Kelly Height</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Bailey Spry</name>
+    <role>Annie</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Carollette Phillips</name>
+    <role>Woman with Groceries</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Loren Bass</name>
+    <role>Annie's Father</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Gertner</name>
+    <role>Neighbor Boy</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Debbie Williams</name>
+    <role>Mrs. Height</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ruby Harris</name>
+    <role>Mrs. Redmond</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Leisa Pulido</name>
+    <role>Mrs. Hannigan</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>D.J. Oliver</name>
+    <role>Police Officer</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Linda Boston</name>
+    <role>Teacher</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>David Robert Mitchell</director>
+  <credits>David Robert Mitchell</credits>
+</movie>

@@ -1,0 +1,117 @@
+<movie>
+  <title>Kiki's Delivery Service</title>
+  <originaltitle>魔女の宅急便</originaltitle>
+  <year>1989</year>
+  <premiered>1989-07-29</premiered>
+  <rating>7.84</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Fantasy</genre>
+  <tag>witch</tag>
+  <tag>clock tower</tag>
+  <tag>magic</tag>
+  <tag>bicycle accident</tag>
+  <tag>female friendship</tag>
+  <tag>bakery</tag>
+  <tag>coming of age</tag>
+  <tag>female protagonist</tag>
+  <tag>based on children's book</tag>
+  <tag>cartoon cat</tag>
+  <tag>cartoon dog</tag>
+  <tag>baking</tag>
+  <tag>seaside town</tag>
+  <tag>talking cat</tag>
+  <tag>courier service</tag>
+  <tag>delivery service</tag>
+  <tag>anime</tag>
+  <tag>lighthearted</tag>
+  <tag>adventure</tag>
+  <tag>empathetic</tag>
+  <tag>gentle</tag>
+  <studio>Studio Ghibli</studio>
+  <studio>Tokuma Shoten</studio>
+  <studio>Nippon Television Network Corporation</studio>
+  <studio>Yamato Transport</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">16859</uniqueid>
+  <uniqueid type="imdb">tt0097814</uniqueid>
+  <actor>
+    <name>Minami Takayama</name>
+    <role>Kiki / Ursula (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rei Sakuma</name>
+    <role>Jiji (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kappei Yamaguchi</name>
+    <role>Tombo (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Keiko Toda</name>
+    <role>Osono (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Mieko Nobusawa</name>
+    <role>Kokiri (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Koichi Miura</name>
+    <role>Okino (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Haruko Katou</name>
+    <role>Old Lady (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroko Seki</name>
+    <role>Bertha (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Yuriko Fuchizaki</name>
+    <role>Ketto (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Koichi Yamadera</name>
+    <role>Bakery Worker / Policeman (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kikuko Inoue</name>
+    <role>Maki (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Yuko Kobayashi</name>
+    <role>Young Senpai Witch (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Mika Doi</name>
+    <role>Ketto's Mother (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Takaya Hashi</name>
+    <role>Ketto's Father (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Chika Sakamoto</name>
+    <role>Baby (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Eiko Kadono</credits>
+  <credits>Hayao Miyazaki</credits>
+</movie>

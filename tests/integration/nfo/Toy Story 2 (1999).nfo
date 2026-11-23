@@ -1,0 +1,118 @@
+<movie>
+  <title>Toy Story 2</title>
+  <originaltitle>Toy Story 2</originaltitle>
+  <year>1999</year>
+  <premiered>1999-10-30</premiered>
+  <rating>7.623</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <tag>friendship</tag>
+  <tag>airplane</tag>
+  <tag>museum</tag>
+  <tag>prosecution</tag>
+  <tag>identity crisis</tag>
+  <tag>villain</tag>
+  <tag>flea market</tag>
+  <tag>collector</tag>
+  <tag>sequel</tag>
+  <tag>buddy</tag>
+  <tag>rescue team</tag>
+  <tag>prospector</tag>
+  <tag>garage sale</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>toy comes to life</tag>
+  <tag>personification</tag>
+  <tag>inanimate objects come to life</tag>
+  <tag>3d animation</tag>
+  <tag>hilarious</tag>
+  <tag>cheerful</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">863</uniqueid>
+  <uniqueid type="imdb">tt0120363</uniqueid>
+  <set tmdbcolid="10194">
+    <name>10194</name>
+  </set>
+  <actor>
+    <name>Tom Hanks</name>
+    <role>Woody (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Allen</name>
+    <role>Buzz Lightyear (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Joan Cusack</name>
+    <role>Jessie (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kelsey Grammer</name>
+    <role>Prospector (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Don Rickles</name>
+    <role>Mr. Potato Head (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Varney</name>
+    <role>Slinky Dog (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Wallace Shawn</name>
+    <role>Rex (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>John Ratzenberger</name>
+    <role>Hamm (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Annie Potts</name>
+    <role>Bo Peep (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Wayne Knight</name>
+    <role>Al McWhiggin (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>John Morris</name>
+    <role>Andy (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Laurie Metcalf</name>
+    <role>Andy's Mom (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Estelle Harris</name>
+    <role>Mrs. Potato Head (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>R. Lee Ermey</name>
+    <role>Sarge (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jodi Benson</name>
+    <role>Barbie (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>John Lasseter</director>
+  <credits>Andrew Stanton</credits>
+  <credits>Doug Chamberlin</credits>
+  <credits>Rita Hsiao</credits>
+  <credits>Chris Webb</credits>
+</movie>

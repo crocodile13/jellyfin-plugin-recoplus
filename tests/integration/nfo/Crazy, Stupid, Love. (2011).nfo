@@ -1,0 +1,108 @@
+<movie>
+  <title>Crazy, Stupid, Love.</title>
+  <originaltitle>Crazy, Stupid, Love.</originaltitle>
+  <year>2011</year>
+  <premiered>2011-07-28</premiered>
+  <rating>7.278</rating>
+  <criticrating>79</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Comedy</genre>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>friendship</tag>
+  <tag>soulmates</tag>
+  <tag>marriage crisis</tag>
+  <tag>midlife crisis</tag>
+  <tag>babysitter</tag>
+  <tag>womanizer</tag>
+  <tag>law school</tag>
+  <tag>los angeles, california</tag>
+  <tag>middle school</tag>
+  <tag>relationship</tag>
+  <tag>love affair</tag>
+  <tag>divorcee</tag>
+  <tag>teenage love</tag>
+  <tag>romantic</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">50646</uniqueid>
+  <uniqueid type="imdb">tt1570728</uniqueid>
+  <actor>
+    <name>Steve Carell</name>
+    <role>Cal</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ryan Gosling</name>
+    <role>Jacob</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Julianne Moore</name>
+    <role>Emily</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Emma Stone</name>
+    <role>Hannah</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Lio Tipton</name>
+    <role>Jessica</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jonah Bobo</name>
+    <role>Robbie</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Joey King</name>
+    <role>Molly</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Marisa Tomei</name>
+    <role>Kate</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Beth Littleford</name>
+    <role>Claire</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>John Carroll Lynch</name>
+    <role>Bernie</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Bacon</name>
+    <role>David Lindhagen</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Liza Lapira</name>
+    <role>Liz</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Groban</name>
+    <role>Richard</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Mekia Cox</name>
+    <role>Hip Hairdresser aka Tiffany</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Julianna Guill</name>
+    <role>Madison</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Glenn Ficarra</director>
+  <director>John Requa</director>
+  <credits>Dan Fogelman</credits>
+</movie>

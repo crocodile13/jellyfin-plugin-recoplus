@@ -1,0 +1,111 @@
+<movie>
+  <title>Iron Man</title>
+  <originaltitle>Iron Man</originaltitle>
+  <year>2008</year>
+  <premiered>2008-04-30</premiered>
+  <rating>7.669</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Science Fiction</genre>
+  <genre>Adventure</genre>
+  <tag>middle east</tag>
+  <tag>kidnapping</tag>
+  <tag>superhero</tag>
+  <tag>arms dealer</tag>
+  <tag>based on comic</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>aggressive</tag>
+  <tag>counterterrorism</tag>
+  <tag>antagonistic</tag>
+  <tag>bold</tag>
+  <studio>Marvel Studios</studio>
+  <studio>Marvel Entertainment</studio>
+  <studio>Fairview Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">1726</uniqueid>
+  <uniqueid type="imdb">tt0371746</uniqueid>
+  <set tmdbcolid="131292">
+    <name>131292</name>
+  </set>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Tony Stark</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Terrence Howard</name>
+    <role>Rhodey</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Bridges</name>
+    <role>Obadiah Stane</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Gwyneth Paltrow</name>
+    <role>Pepper Potts</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Leslie Bibb</name>
+    <role>Christine Everhart</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Shaun Toub</name>
+    <role>Yinsen</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Faran Tahir</name>
+    <role>Raza</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Clark Gregg</name>
+    <role>Agent Coulson</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Smitrovich</name>
+    <role>General Gabriel</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sayed Badreya</name>
+    <role>Abu Bakaar</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Bettany</name>
+    <role>Jarvis (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Favreau</name>
+    <role>Hogan</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Billingsley</name>
+    <role>William Ginter Riva</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Guinee</name>
+    <role>Major Allen</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Will Lyman</name>
+    <role>Award Ceremony Narrator (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jon Favreau</director>
+  <credits>Mark Fergus</credits>
+  <credits>Hawk Ostby</credits>
+  <credits>Matt Holloway</credits>
+  <credits>Art Marcum</credits>
+</movie>

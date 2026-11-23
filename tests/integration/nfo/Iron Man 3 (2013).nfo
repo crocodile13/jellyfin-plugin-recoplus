@@ -1,0 +1,107 @@
+<movie>
+  <title>Iron Man 3</title>
+  <originaltitle>Iron Man 3</originaltitle>
+  <year>2013</year>
+  <premiered>2013-04-18</premiered>
+  <rating>6.932</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Science Fiction</genre>
+  <tag>california</tag>
+  <tag>war on terror</tag>
+  <tag>superhero</tag>
+  <tag>malibu</tag>
+  <tag>based on comic</tag>
+  <tag>sequel</tag>
+  <tag>tennessee</tag>
+  <tag>billionaire</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>america</tag>
+  <studio>Marvel Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">68721</uniqueid>
+  <uniqueid type="imdb">tt1300854</uniqueid>
+  <set tmdbcolid="131292">
+    <name>131292</name>
+  </set>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Tony Stark</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Gwyneth Paltrow</name>
+    <role>Pepper Potts</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Don Cheadle</name>
+    <role>Colonel James Rhodes</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Guy Pearce</name>
+    <role>Aldrich Killian</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Rebecca Hall</name>
+    <role>Maya Hansen</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Favreau</name>
+    <role>Happy Hogan</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Kingsley</name>
+    <role>Trevor Slattery</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>James Badge Dale</name>
+    <role>Savin</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Stephanie Szostak</name>
+    <role>Brandt</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Bettany</name>
+    <role>Jarvis (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>William Sadler</name>
+    <role>President Ellis</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Dale Dickey</name>
+    <role>Mrs. Davis</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ty Simpkins</name>
+    <role>Harley Keener</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Miguel Ferrer</name>
+    <role>Vice President Rodriguez</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Wang Xueqi</name>
+    <role>Doctor Wu</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Shane Black</director>
+  <credits>Drew Pearce</credits>
+  <credits>Shane Black</credits>
+</movie>

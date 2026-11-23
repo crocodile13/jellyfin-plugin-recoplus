@@ -1,0 +1,140 @@
+<movie>
+  <title>The Shining</title>
+  <originaltitle>The Shining</originaltitle>
+  <year>1980</year>
+  <premiered>1980-05-23</premiered>
+  <rating>8.2</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Thriller</genre>
+  <tag>hotel</tag>
+  <tag>child abuse</tag>
+  <tag>based on novel or book</tag>
+  <tag>isolation</tag>
+  <tag>telepathy</tag>
+  <tag>delusion</tag>
+  <tag>snowstorm</tag>
+  <tag>colorado</tag>
+  <tag>seclusion</tag>
+  <tag>surrealism</tag>
+  <tag>writer's block</tag>
+  <tag>alcoholism</tag>
+  <tag>premonition</tag>
+  <tag>psychic power</tag>
+  <tag>caretaker</tag>
+  <tag>loneliness</tag>
+  <tag>vision</tag>
+  <tag>domestic violence</tag>
+  <tag>postmodern</tag>
+  <tag>psychological thriller</tag>
+  <tag>writer</tag>
+  <tag>twins</tag>
+  <tag>labyrinth</tag>
+  <tag>alcoholic</tag>
+  <tag>blizzard</tag>
+  <tag>extrasensory perception</tag>
+  <tag>motherhood</tag>
+  <tag>haunted hotel</tag>
+  <tag>psychological disintegration</tag>
+  <tag>mother son relationship</tag>
+  <tag>supernatural power</tag>
+  <tag>supernatural horror</tag>
+  <tag>ghost child</tag>
+  <tag>dreary</tag>
+  <tag>nuclear family</tag>
+  <tag>avant garde</tag>
+  <tag>identical twins</tag>
+  <tag>ambiguous</tag>
+  <tag>empathetic</tag>
+  <tag>subjective</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Peregrine</studio>
+  <studio>Hawk Films</studio>
+  <studio>The Producer Circle Co.</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">694</uniqueid>
+  <uniqueid type="imdb">tt0081505</uniqueid>
+  <set tmdbcolid="530064">
+    <name>530064</name>
+  </set>
+  <actor>
+    <name>Jack Nicholson</name>
+    <role>Jack Torrance</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Shelley Duvall</name>
+    <role>Wendy Torrance</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Danny Lloyd</name>
+    <role>Danny</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Scatman Crothers</name>
+    <role>Hallorann</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Nelson</name>
+    <role>Ullman</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Philip Stone</name>
+    <role>Grady</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Turkel</name>
+    <role>Lloyd</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Jackson</name>
+    <role>Doctor</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Burton</name>
+    <role>Durkin</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Lia Beldam</name>
+    <role>Young Woman in Bath</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Billie Gibson</name>
+    <role>Old Woman in Bath</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Dennen</name>
+    <role>Watson</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>David Baxt</name>
+    <role>Forest Ranger 1</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Manning Redwood</name>
+    <role>Forest Ranger 2</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Burns</name>
+    <role>Grady Daughter</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Stanley Kubrick</director>
+  <credits>Diane Johnson</credits>
+  <credits>Stanley Kubrick</credits>
+  <credits>Stephen King</credits>
+</movie>
