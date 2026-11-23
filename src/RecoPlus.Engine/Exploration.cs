@@ -302,12 +302,22 @@ public static class Exploration
     private static readonly HashSet<int> TvGenres = new() { 10759, 16, 35, 80, 99, 18, 10751, 10762, 9648, 10765, 10768, 37 };
 
     /// <summary>
-    /// Une œuvre d'une filmographie partage-t-elle un genre avec les titres aimés qui ont désigné la personne ? Genres de
-    /// l'œuvre inconnus : oui (rien d'écarté sans preuve). Andrew Stanton, venu de Toy Story et du Monde de Nemo, ne mène
-    /// pas à 3 Body Problem.
+    /// Une œuvre d'une filmographie est-elle dans la veine des titres aimés qui ont désigné la personne ? Elle doit
+    /// partager deux genres avec eux (ou tous, si l'œuvre ou ces titres en ont moins) : un seul genre large comme
+    /// « aventure » ne suffit pas (Andrew Stanton, venu de Toy Story et du Monde de Nemo, mène à 1001 pattes, pas à John
+    /// Carter ni à Obi-Wan Kenobi). Genres de l'œuvre inconnus : gardée (rien d'écarté sans preuve).
     /// </summary>
     public static bool SharesGenre(IEnumerable<int> likedGenres, IReadOnlyList<int>? workGenres, string workType)
-        => workGenres is not { Count: > 0 } || likedGenres.SelectMany(g => GenreFor(g, workType)).Any(workGenres.Contains);
+    {
+        if (workGenres is not { Count: > 0 })
+        {
+            return true;
+        }
+
+        var mine = likedGenres.SelectMany(g => GenreFor(g, workType)).ToHashSet();
+        int shared = workGenres.Distinct().Count(mine.Contains);
+        return mine.Count > 0 && shared >= Math.Min(2, Math.Min(workGenres.Distinct().Count(), mine.Count));
+    }
 
     /// <summary>
     /// Identifiants de genre TMDb à utiliser pour une sorte (« movie » / « tv ») à partir d'un genre d'un titre aimé
