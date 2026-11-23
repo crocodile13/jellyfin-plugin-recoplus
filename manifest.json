@@ -12,9 +12,9 @@
         "version": "1.0.50.0",
         "changelog": "1.0.50: new \"Discovery boldness\" slider in the Extended mode tab, from cautious to bold: it sets in one move the minimum TMDb votes and rating of the exploration, the genres explored for hidden gems and the daily randomness (the middle keeps today's values). Measured with a real Seerr, bold divides the median votes of the proposed titles by 2 to 7 while their average rating and the fit with each account's tastes stay the same.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.50.0/RecoPlus_1.0.50.0.zip",
+        "checksum": "c6a56eeafcdc7cafdc0905bdcef98362",
+        "timestamp": "2026-11-23T17:46:10Z"
       },
       {
         "version": "1.0.49.0",
