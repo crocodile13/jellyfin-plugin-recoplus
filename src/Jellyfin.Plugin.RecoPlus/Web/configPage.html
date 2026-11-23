@@ -249,7 +249,7 @@
                 <div class="rp-pane" data-pane="etendu">
                     <div class="rp-box">
                         <h3>Titres absents de la bibliothèque</h3>
-                        <p>Titres du catalogue TMDb (via Seerr) trouvés à partir de ce que chaque compte aime, triés par le même moteur et le même garde-fou. Rien n'est jamais demandé automatiquement. Nécessite Seerr.</p>
+                        <p>Titres du catalogue TMDb (via Seerr) trouvés à partir de ce que chaque compte aime, classés par le même moteur, selon les goûts de chaque compte. Rien n'est jamais demandé automatiquement. Nécessite Seerr.</p>
                         <div class="rp-grid" data-fields="ext"></div>
                     </div>
                     <p class="rp-sub">Où vont ces titres sur l'accueil : colonne « Contenu » de l'onglet Accueil. Un titre hors bibliothèque ne va que dans une rangée, celle du haut d'abord ; chaque rangée garde sa taille. Avec Jellyfin Enhanced relié à Seerr : ses cartes, sa fiche et son bouton Demander.</p>
@@ -305,7 +305,7 @@
                             <option value="Coordinate">Recherche par curseurs</option>
                             <option value="Neural">Réseau de neurones (expérimental)</option>
                         </select>
-                    </div><span class="rp-tip" tabindex="0" role="note" aria-label="Modèle de choix appris : apprend d'un coup les 10 poids du score (logit conditionnel : « quel titre a été choisi parmi tous ceux proposables »), régularisé vers les réglages actuels, force choisie par validation croisée ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages (grille puis section dorée), contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux ; long et gourmand (jusqu'à une heure de processeur). Par défaut : modèle de choix appris.">?<span class="rp-bubble">Modèle de choix appris : apprend d'un coup les 10 poids du score (logit conditionnel : « quel titre a été choisi parmi tous ceux proposables »), régularisé vers les réglages actuels, force choisie par validation croisée ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages (grille puis section dorée), contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux ; long et gourmand (jusqu'à une heure de processeur). Par défaut : modèle de choix appris.</span></span></div></div>
+                    </div><span class="rp-tip" tabindex="0" role="note" aria-label="Modèle de choix appris : apprend d'un coup les 10 poids du score (« quel titre a été choisi parmi tous ceux proposables »), en restant près des réglages actuels faute de preuve ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages, contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux ; long et gourmand (jusqu'à une heure de processeur). Par défaut : modèle de choix appris.">?<span class="rp-bubble">Modèle de choix appris : apprend d'un coup les 10 poids du score (« quel titre a été choisi parmi tous ceux proposables »), en restant près des réglages actuels faute de preuve ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages, contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux ; long et gourmand (jusqu'à une heure de processeur). Par défaut : modèle de choix appris.</span></span></div></div>
                     <details class="rp-adv" data-level="3"><summary>Réglages du calibrage <span>— validation croisée, prudence, recherche (0 = automatique) ; enregistrés aussitôt</span></summary>
                         <div class="rp-grid" data-fields="calib"></div>
                         <span id="rpCalOptState" class="mute rp-result"></span>
@@ -389,12 +389,13 @@
         function t(s) { return LANG !== 'fr' && Object.prototype.hasOwnProperty.call(DICT, s) && DICT[s] ? DICT[s] : s; }
         // modèle traduit puis rempli : tf('… {0} …', x)
         function tf(s) { var a = arguments; return t(s).replace(/\{(\d+)\}/g, function (m, i) { var x = a[+i + 1]; return x === undefined ? m : String(x); }); }
-        // nombres : virgule décimale en français, point sinon
-        function dec(s) { return LANG === 'fr' ? String(s) : String(s).replace(/(\d),(\d)/g, '$1.$2'); }
-        function fixed(x, d) { var s = Number(x).toFixed(d); return LANG === 'fr' ? s.replace('.', ',') : s; }
-        function percent(s) { return LANG === 'fr' ? s + ' %' : s + '%'; }
-        // titre cité : « … » en français, “…” en anglais
-        function quote(s) { return LANG === 'fr' ? '« ' + s + ' »' : '“' + s + '”'; }
+        // nombres : virgule décimale et « 50 % » en français, allemand et espagnol ; point et « 50% » en anglais
+        function comma() { return LANG !== 'en'; }
+        function dec(s) { return comma() ? String(s) : String(s).replace(/(\d),(\d)/g, '$1.$2'); }
+        function fixed(x, d) { var s = Number(x).toFixed(d); return comma() ? s.replace('.', ',') : s; }
+        function percent(s) { return comma() ? s + ' %' : s + '%'; }
+        // titre cité : « … » en français, „…“ en allemand, «…» en espagnol, “…” en anglais
+        function quote(s) { return LANG === 'fr' ? '« ' + s + ' »' : LANG === 'de' ? '„' + s + '“' : LANG === 'es' ? '«' + s + '»' : '“' + s + '”'; }
         // textes de la page (nœuds texte, title, placeholder, aria-label, modèles {ROW}) : traduits une fois, avant build()
         function translateDom(root) {
             if (LANG === 'fr') { return; }
@@ -411,9 +412,10 @@
         }
         function loadLanguage() {
             return api('GET', 'I18n?lang=' + encodeURIComponent(CLIENT_LANG)).then(function (r) {
-                if (r && (r.lang === 'en' || r.lang === 'fr')) { LANG = r.lang; DICT = r.dict || {}; }
+                if (r && /^(fr|en|de|es)$/.test(r.lang)) { LANG = r.lang; DICT = r.dict || {}; }
             }, function () { /* serveur injoignable : français */ }).then(function () {
-                LOCALE = LANG === 'fr' ? 'fr-FR' : (/^en/i.test(CLIENT_LANG) ? CLIENT_LANG : 'en-US');
+                // région du navigateur quand elle va avec la langue (de-AT, es-MX, en-GB…), sinon celle par défaut
+                LOCALE = new RegExp('^' + LANG + '(-|$)', 'i').test(CLIENT_LANG) ? CLIENT_LANG : { fr: 'fr-FR', en: 'en-US', de: 'de-DE', es: 'es-ES' }[LANG];
                 page.setAttribute('lang', LANG);
             });
         }
@@ -542,7 +544,7 @@
             ['UseSeerrWatchlist', 'Listes de suivi Seerr', 'bool', 'Lit la liste de suivi Seerr de chaque compte lié (une requête par compte au calcul complet).', 0, 0, 0, 'sources', 'c', 'activé'],
             ['UseTmdbLibrarySignal', 'Recommandations TMDb pour la bibliothèque', 'bool', 'Lit, via Seerr, les recommandations TMDb des titres les plus aimés de chaque compte (en cache, partagées avec le mode étendu) et en tire l\'« Accord TMDb » des titres de la bibliothèque (onglet Moteur) : ce que TMDb associe à ce que le compte aime, appris sur tous ses utilisateurs. Un titre recommandé partout pèse moins.', 0, 0, 0, 'sources', 'c', 'activé'],
             ['TmdbLibraryAnchors', 'Titres aimés lus pour la bibliothèque', 'int', 'Les N titres les plus aimés de chaque compte dont on lit les recommandations TMDb pour classer la bibliothèque.', 1, 1, 200, 'sources', 'c', '30'],
-            ['Language', 'Langue de l\'interface', 'enum:System=celle de Jellyfin,French=français,English=English', 'Langue de cette page, des rangées et des cartes de l\'accueil, et des notifications. Celle de Jellyfin : la langue de l\'interface de chacun (sinon celle du serveur). Les rangées vues par les applications TV changent au prochain redémarrage de Jellyfin.', 0, 0, 0, 'lang', 'c', 'celle de Jellyfin'],
+            ['Language', 'Langue de l\'interface', 'enum:System=celle de Jellyfin,French=français,English=English,German=Deutsch,Spanish=Español', 'Langue de cette page, des rangées et des cartes de l\'accueil, et des notifications. Celle de Jellyfin : la langue de l\'interface de chacun (sinon celle du serveur). Les rangées vues par les applications TV changent au prochain redémarrage de Jellyfin.', 0, 0, 0, 'lang', 'c', 'celle de Jellyfin'],
             ['SimilarPersonalization', 'Personnalisation de « Plus comme ceci »', 'num', '0 = pure ressemblance avec le titre affiché. 1 = surtout les goûts du compte. 0,25 : la fiche reste le sujet, les goûts départagent.', 0.05, 0, 1, 'genadv', 'c', '0,25'],
             ['DebounceSeconds', 'Recalcul d\'un compte après son activité (s)', 'int', 'Délai sans nouvelle action (lecture terminée, vu, favori, note) avant de recalculer le compte : chaque action repousse le recalcul, pour regrouper les actions rapprochées (zapping, épisodes enchaînés, plusieurs favoris d\'affilée).', 10, 10, 3600, 'genadv', 'c', '120'],
             ['UserMinIntervalMinutes', 'Écart minimal entre deux recalculs d\'un compte (min)', 'int', 'Un compte n\'est jamais recalculé plus souvent que ça, même très actif. 0 = pas de limite. Le bouton « Recalculer maintenant » l\'ignore.', 5, 0, 1440, 'genadv', 'c', '15'],
@@ -589,7 +591,7 @@
             ['WRelease', 'Sortie récente', 'factor', 'Bonus des titres sortis récemment (date de sortie, pas d\'ajout à la bibliothèque), uniquement s\'ils collent déjà aux goûts. Coupé par défaut : non évalué sur un historique réel — le Calibrage peut le proposer.', 0, 0, 3, 'fbonus', 'e', 'coupé (×1 = 1)', 1],
             ['WHousehold', 'Avis du foyer', 'factor', 'Bonus des titres bien notés par les AUTRES comptes (avis Jellyfin Enhanced), uniquement s\'ils collent déjà aux goûts. La confiance croît avec le nombre d\'avis : un seul 5 étoiles pèse peu, cinq avis concordants pleinement (voir « Avis neutres ajoutés »).', 0, 0, 3, 'fbonus', 'e', '0,3', 0.3],
             ['Diversity', 'Diversité', 'enum:Personalized=personnalisée (suit la variété du compte),Calibrated=calibrée (part des genres de l\'historique),Fixed=fixe (la même pour tous)', 'Personnalisée : plusieurs forces de diversité sont essayées et la liste gardée est celle dont la variété ressemble le plus à celle de ce que le compte aime — un éclectique reçoit une liste variée, un fan d\'un seul genre une liste resserrée (la mieux évaluée sur l\'historique de référence). Calibrée (Steck, RecSys 2018) : la part de chaque genre dans la liste suit celle de l\'historique (70 % de thrillers vus → environ 70 % proposés, pas 100 %). Fixe : la même pénalité de redondance pour tous.', 0, 0, 0, 'diversmode', 'e', 'personnalisée'],
-            ['Mmr', 'Pénalité de redondance', 'factor', 'Pénalise un titre trop proche de ceux déjà placés au-dessus (Maximal Marginal Relevance). En diversité personnalisée, c\'est la force de base, multipliée selon le compte (×0 à ×4). Sans effet en diversité calibrée. Coupé : ordre pur des goûts, au risque de 5 films du même genre d\'affilée.', 0, 0, 3, 'divers', 'e', '0,3', 0.3],
+            ['Mmr', 'Pénalité de redondance', 'factor', 'Pénalise un titre trop proche de ceux déjà placés au-dessus. En diversité personnalisée, c\'est la force de base, multipliée selon le compte (×0 à ×4). Sans effet en diversité calibrée. Coupé : ordre pur des goûts, au risque de 5 films du même genre d\'affilée.', 0, 0, 3, 'divers', 'e', '0,3', 0.3],
             ['CalibrationStrength', 'Diversité calibrée : force', 'num', 'De 0 (ordre des goûts) à 1 (seule la répartition des genres compte). Seulement en diversité calibrée.', 0.05, 0, 1, 'listadv', 'e', '0,5'],
             ['FeatGenre', 'Genres', 'factor', 'Poids des genres dans la ressemblance entre deux titres.', 0, 0, 3, 'contentadv', 'e', '1', 1],
             ['FeatTag', 'Mots-clés', 'factor', 'Poids des mots-clés (tags) dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,5', 0.5],
@@ -1215,7 +1217,7 @@
                     [[t('Méthode'), t('Sur l\'historique'), t('Validation croisée'), t('IC 95 %'), t('Historique'), '']].concat(r.methods.map(function (m) {
                         var tag = (m.method === r.method ? t('retenue') : '') + (m.recommended ? ' ✔' : '');
                         if (m.noChange) { return [m.name, ((m.cvPath || []).length > 1 ? t('aucune étape ne tient en validation croisée') : t('aucun changement appris')), '—', '—', t(m.sufficiency), tag]; }
-                        return [m.name, rel((m.gain || 0) - (r.current.gain || 0)), rel(m.cvDelta), '[' + rel(m.ciLow) + (LANG === 'fr' ? ' ; ' : ', ') + rel(m.ciHigh) + ']', t(m.sufficiency), tag];
+                        return [m.name, rel((m.gain || 0) - (r.current.gain || 0)), rel(m.cvDelta), '[' + rel(m.ciLow) + (comma() ? ' ; ' : ', ') + rel(m.ciHigh) + ']', t(m.sufficiency), tag];
                     })).forEach(function (row, i) { var tr = el('tr'); row.forEach(function (c) { tr.appendChild(el(i === 0 ? 'th' : 'td', {}, c)); }); mt.appendChild(tr); });
                     rep.appendChild(mt);
                     // chemin de chaque méthode : ce qu'elle gagne sur l'historique et ce qui en reste en validation croisée

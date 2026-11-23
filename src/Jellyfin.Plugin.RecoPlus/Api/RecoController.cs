@@ -129,7 +129,9 @@ public sealed class RecoController : ControllerBase
     public ActionResult Translations()
     {
         Response.Headers.CacheControl = "no-cache";
-        return Ok(new { lang = Lang, dict = Lang == "en" ? Texts.English : new Dictionary<string, string>() });
+        // allemand, espagnol : leur dictionnaire, complété par l'anglais pour un texte qu'il n'aurait pas
+        var dict = Lang == "fr" ? new Dictionary<string, string>() : Texts.English.ToDictionary(kv => kv.Key, kv => Texts.T(kv.Key, Lang), StringComparer.Ordinal);
+        return Ok(new { lang = Lang, dict });
     }
 
     /// <summary>Script client (rangée du mode étendu). Public, comme tout fichier de l'interface web.</summary>

@@ -26,7 +26,7 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     les filmographies ; `IsThemeKeyword` écarte les mots-clés de fabrication, `IsReEdit` les remontages), `SimilarityIndex.cs` (produits scalaires précalculés), `Cpu.cs` (fils).
   - `Calibrator.cs` / `ChoiceModel.cs` / `NeuralNet.cs` : calibrage (voir plus bas). `Settings.cs` : `EngineSettings`
     (+ `Sanitized()`, bornes de chaque réglage).
-  - `Texts.cs` + `english.json` : textes français / anglais (voir Conventions).
+  - `Texts.cs` + `english.json`, `german.json`, `spanish.json` : textes de l'interface (voir Conventions).
 - `src/Jellyfin.Plugin.RecoPlus/` : intégration.
   - `Service/RecoService.cs` : calcul complet ou d'un compte (`ComputeCore`), données (`Assemble`), jeu de calibrage,
     aperçu. `RecoWorker.cs` : quand recalculer (activité du compte regroupée, écart minimal, au démarrage).
@@ -101,11 +101,17 @@ de la CI.
 
 ## Conventions
 
-- Commentaires et docs XML : français, phrases complètes. Interface : français (langue source) et anglais.
+- Commentaires et docs XML : français, phrases complètes. Interface : français (langue source), anglais, allemand,
+  espagnol.
 - Par défaut, tout ce qui sort du plugin est en anglais : journaux du serveur, changelog, catalogue (`manifest.json`,
   `meta.json`), image du plugin, textes de repli du script de l'accueil, noms de fichiers exportés. Seule la langue de
   l'interface suit Jellyfin (réglage « celle de Jellyfin »).
-- Traduction (`Texts`, `english.json` dans le moteur) : le texte français est la clé, `english.json` sa traduction.
+- Traduction (`Texts`, `english.json`, `german.json`, `spanish.json` dans le moteur) : le texte français est la clé,
+  chaque fichier sa traduction ; un texte absent en allemand ou en espagnol se rabat sur l'anglais (`Texts.T`, et
+  `RecoPlus/I18n` envoie à la page le dictionnaire complété). Un nouveau texte se traduit dans les trois langues (test
+  `GermanAndSpanishCoverEveryTextWithTheSamePlaceholders`). Page : virgule décimale et « 50 % » hors anglais (`comma()`),
+  guillemets propres à chaque langue (`quote`). Ton : vouvoiement dans la page (Sie, usted), tutoiement dans les
+  rangées de l'accueil (du, tú). Langues de `UiLanguage` ajoutées en fin d'énumération (valeurs enregistrées stables).
   - Un texte affiché passe par `Texts.Pack` (message avec paramètres `{0}`, rendu plus tard dans la langue du lecteur ;
     `Texts.Pack("texte")` sans paramètre marque un texte simple), `Texts.T` (rendu tout de suite), `Texts.Translatable`
     (paramètre à traduire lui aussi) ; jamais de `$"…"` ni de concaténation pour un texte affiché.
