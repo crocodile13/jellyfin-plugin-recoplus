@@ -373,7 +373,9 @@ def setup_seerr(users):
     wished = eco.wishes(PERSONAS, eco.seerr_users(), problems)
     pid = plugin_id("Reco+")
     cfg = call("GET", f"/Plugins/{pid}/Configuration")
-    cfg.update({"SeerrEnabled": True, "SeerrUrl": "http://seerr:5055", "ExtendedEnabled": True})
+    # test seulement : Seerr ne sert personne d'autre (rythme plus élevé) et une exploration plus courte suffit au circuit
+    cfg.update({"SeerrEnabled": True, "SeerrUrl": "http://seerr:5055", "ExtendedEnabled": True, "SeerrRate": 30,
+                "ExtendedAnchors": 15, "ExtendedDetails": 120})
     call("POST", f"/Plugins/{pid}/Configuration", cfg)
     call("POST", "/RecoPlus/Secret", {"Name": "SeerrApiKey", "Value": key})   # jamais dans la configuration
     t = call("POST", "/RecoPlus/TestSeerr", {}, query={"lang": "fr"})
@@ -507,6 +509,16 @@ def report(lib, users):
                 problems.append(f"{name} : titre demandé ou en liste de suivi reproposé hors bibliothèque")
             if name != "nouveau" and not ext.get("items"):
                 problems.append(f"{name} : aucun titre hors bibliothèque (mode étendu)")
+            # « tu as aimé » seulement pour un titre vu ou aimé ; un titre demandé : « tu attends »
+            for title, _, _ in p.get("requests", []) + p.get("watchlist", []):
+                if any(f"Parce que tu as aimé {title}" in e for e in acc["hors_bibliotheque"]):
+                    problems.append(f"{name} : « Parce que tu as aimé {title} » alors qu'il est seulement demandé")
+            # saga : jamais un volet plus loin que le premier pas encore vu (Harry Potter 3 et 4 sont dans la bibliothèque)
+            if name == "potter" and any(e.startswith("Harry Potter") for e in acc["hors_bibliotheque"]):
+                problems.append(f"{name} : volet de Harry Potter hors bibliothèque proposé avant les tomes 3 et 4 {[e for e in acc['hors_bibliotheque'] if e.startswith('Harry Potter')]}")
+            # sans goût connu : pas de pépite tirée au hasard dans tout TMDb
+            if name == "nouveau" and any(re.search(r"— Pépite peu connue( ·|$)", e) for e in acc["hors_bibliotheque"]):
+                problems.append(f"{name} : pépites tous genres proposées à un compte sans goût connu")
         if "hss" in EXPECT:
             acc["hss_pour_toi"] = hss_row(name, users[name], "RecoPlusPourToi")
             if not acc["hss_pour_toi"]:

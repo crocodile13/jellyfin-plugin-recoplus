@@ -36,6 +36,8 @@ jobs:
       matrix:
         jellyfin: ['12.2', '12.4']
         plugins: ['reco', 'hss', 'full', 'eco']
+        # pull requests : l'écosystème (Seerr, le plus long) sur la dernière version seulement ; chaque lundi et à la main : partout
+        exclude: ${{ github.event_name == 'pull_request' && fromJSON('[{"jellyfin":"12.2","plugins":"eco"}]') || fromJSON('[]') }}
     env:
       SIM_OUT: ${{ github.workspace }}/sim-out
       SIM_MEDIA: ${{ github.workspace }}/media
