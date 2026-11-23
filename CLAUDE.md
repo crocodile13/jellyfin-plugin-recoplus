@@ -233,7 +233,9 @@ de la CI.
   bibliothèque.
 - Media Bar Enhanced : n'utilise Reco+ que si son option « Personalized Recommendations » est active
   (`/Movies/Recommendations`, `/Users/{id}/Suggestions`, `/Items/{id}/Similar`) ; bibliothèque seulement.
-- Jellyfin Enhanced : cartes et fiche Seerr réutilisées s'il est présent et relié à Seerr ; sinon cartes Reco+.
+- Jellyfin Enhanced : cartes et fiche Seerr réutilisées s'il est présent et relié à Seerr ; sinon cartes Reco+. Depuis
+  12.17, son module Seerr n'est chargé que sur ses pages : `client.js` le demande par son chargeur public
+  (`JE.loader.ensure(['seerr-api', 'seerr'])`, une fois). Le test d'intégration le vérifie dans un vrai navigateur.
 
 ## Travail propre (avant chaque livraison)
 
@@ -292,3 +294,5 @@ de la CI.
 - `git stash` avec le lien `tests/client/node_modules` (anciennement suivi) supprimé : le lien revient à la place du
   dossier installé. Le lien n'est plus suivi ; `npm install --no-save` dans `tests/client` suffit.
 - `i18n.en.json` comme ressource incorporée : MSBuild y voit la culture « en » et la sort de l'assembly (satellite).
+- `index.html` réécrite (Reco+, Jellyfin Enhanced) sans `ETag` ni date : un navigateur gardait l'ancienne page, donc
+  l'ancien script, après une mise à jour (#50, réglé en vidant le cache). La page réécrite porte `Cache-Control: no-cache`.

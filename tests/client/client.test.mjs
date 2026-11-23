@@ -358,6 +358,28 @@ await test('Jellyfin Enhanced chargé après coup : ses cartes remplacent celles
     assert.ok(p.sections.querySelectorAll('.RecoPlusPourToi .jellyseerr-card').length > 0);
 });
 
+await test('Jellyfin Enhanced 12.17 : son module Seerr demandé à son chargeur, puis ses cartes', async () => {
+    const full = jeStub();
+    const lazy = (w) => {
+        const asked = [];
+        const j = { pluginConfig: { JellyseerrEnabled: true }, asked, loader: { ensure(ids) { asked.push(...ids); Object.assign(j, full(w)); return Promise.resolve(); } } };
+        return j;
+    };
+    const p = page({ hssCards: 6, data: base, je: lazy, jeWait: 2000 });
+    await wait(1200);
+    assert.deepEqual(p.w.JellyfinEnhanced.asked, ['seerr-api', 'seerr'], 'demandé une fois');
+    assert.equal(p.sections.querySelectorAll('.RecoPlusPourToi .recoplus-own').length, 0);
+    assert.ok(p.sections.querySelectorAll('.RecoPlusPourToi .jellyseerr-card').length > 0);
+});
+
+await test('Jellyfin Enhanced sans Seerr : rien demandé à son chargeur, cartes Reco+', async () => {
+    let asked = 0;
+    const p = page({ hssCards: 6, data: base, je: () => ({ pluginConfig: { JellyseerrEnabled: false }, loader: { ensure() { asked++; return Promise.resolve(); } } }), jeWait: 300 });
+    await wait(1000);
+    assert.equal(asked, 0);
+    assert.ok(p.sections.querySelector('.RecoPlusPourToi .recoplus-own'));
+});
+
 await test('Jellyfin Enhanced attendu quelques instants avant de se rabattre sur les cartes Reco+', async () => {
     const p = page({ hssCards: 6, data: base, jeWait: 2000 });
     setTimeout(() => { p.w.JellyfinEnhanced = jeStub()(p.w); }, 500);

@@ -87,12 +87,25 @@
         return Promise.all(ws).then(function () { return out; });
     }
 
+    // Jellyfin Enhanced (12.17 et après) ne charge son module Seerr que sur ses propres pages : on le lui demande par son
+    // chargeur public (JE.loader.ensure), une fois, s'il est relié à Seerr. Sans chargeur ou sans Seerr : rien.
+    var jeAsked = false;
+    function jeLoad() {
+        var j = je();
+        if (jeAsked || jeReady() || !j || !j.loader || typeof j.loader.ensure !== 'function') { return; }
+        if (j.pluginConfig && !j.pluginConfig.JellyseerrEnabled) { return; }
+        jeAsked = true;
+        try { Promise.resolve(j.loader.ensure(['seerr-api', 'seerr'])).catch(function () {}); } catch (e) { /* chargeur d'une autre forme : cartes Reco+ */ }
+    }
+
     // Attend Jellyfin Enhanced (il charge ses modules après coup) : jusqu'à 6 s, sinon cartes Reco+ (remplacées dès qu'il arrive)
     function jeWait(ms) {
+        jeLoad();
         if (jeReady()) { return Promise.resolve(true); }
         return new Promise(function (resolve) {
             var t0 = Date.now();
             var id = setInterval(function () {
+                jeLoad();
                 if (jeReady() || Date.now() - t0 >= ms) { clearInterval(id); resolve(jeReady()); }
             }, 250);
         });
