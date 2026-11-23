@@ -674,7 +674,7 @@ public static class Recommender
             double bestGap = double.PositiveInfinity;
             foreach (var f in PersonalFactors)
             {
-                var l = Greedy(ctx, cands, pool, k, w, new MmrPicker(sc, dot, w.Mmr * f));
+                var l = Greedy(ctx, cands, pool, k, w, new WindowPicker(new MmrPicker(sc, dot, w.Mmr * f), sc));
                 double gap = Math.Abs(ListSimilarity(dot, l.Take(ShownForVariety).ToList()) - target);
                 if (gap < bestGap - 1e-12)
                 {
@@ -687,10 +687,10 @@ public static class Recommender
 
         if (mode == DiversityMode.Calibrated && GenreDistribution(ctx, user!) is { Count: > 0 } p)
         {
-            return Greedy(ctx, cands, pool, k, w, new CalibratedPicker(sc, ctx.Ds.Titles, p, w.CalibrationStrength, pool));
+            return Greedy(ctx, cands, pool, k, w, new WindowPicker(new CalibratedPicker(sc, ctx.Ds.Titles, p, w.CalibrationStrength, pool), sc));
         }
 
-        return Greedy(ctx, cands, pool, k, w, new MmrPicker(sc, dot, w.Mmr));
+        return Greedy(ctx, cands, pool, k, w, new WindowPicker(new MmrPicker(sc, dot, w.Mmr), sc));
     }
 
     /// <summary>Produit scalaire entre deux titres : lu dans l'index s'il porte sur ces vecteurs, calculé sinon (même valeur).</summary>
@@ -710,6 +710,14 @@ public static class Recommender
 
     /// <summary>Diversité personnalisée : la variété se juge sur le début de la liste, celui qui est affiché.</summary>
     public const int ShownForVariety = 20;
+
+    /// <summary>
+    /// La diversité ne s'applique qu'au début de la liste (ce que montre la rangée principale, réserves comprises) ; au-delà,
+    /// l'ordre suit le score. Sinon, une fois les titres les plus proches des goûts pris, la pénalité de redondance pousse
+    /// devant tout ce qui ne leur ressemble pas : les rangées suivantes (« Films / Séries pour toi ») et la suite des
+    /// Suggestions se remplissaient de titres sans rapport (banc réaliste).
+    /// </summary>
+    public const int DiversityWindow = 30;
 
     /// <summary>Forces essayées par la diversité personnalisée (multiples de Mmr), la force de base d'abord.</summary>
     internal static readonly double[] PersonalFactors = { 1.0, 0.5, 2.0, 0.0, 4.0 };
@@ -806,6 +814,49 @@ public static class Recommender
         int Pick(List<string> pool);
 
         void Added(string id, List<string> pool);
+    }
+
+    /// <summary>Le sélecteur de diversité pour les <see cref="DiversityWindow"/> premiers titres, puis le meilleur score.</summary>
+    private sealed class WindowPicker : IPicker
+    {
+        private readonly IPicker _inner;
+        private readonly IReadOnlyDictionary<string, double> _sc;
+        private int _n;
+
+        public WindowPicker(IPicker inner, IReadOnlyDictionary<string, double> sc)
+        {
+            _inner = inner;
+            _sc = sc;
+        }
+
+        public int Pick(List<string> pool)
+        {
+            if (_n < DiversityWindow)
+            {
+                return _inner.Pick(pool);
+            }
+
+            int bi = 0;
+            double bv = double.NegativeInfinity;
+            for (int i = 0; i < pool.Count; i++)
+            {
+                if (_sc[pool[i]] > bv)
+                {
+                    bv = _sc[pool[i]];
+                    bi = i;
+                }
+            }
+
+            return bi;
+        }
+
+        public void Added(string id, List<string> pool)
+        {
+            if (++_n < DiversityWindow)
+            {
+                _inner.Added(id, pool);
+            }
+        }
     }
 
     /// <summary>MMR : score − λ × ressemblance maximale avec la liste déjà formée.</summary>

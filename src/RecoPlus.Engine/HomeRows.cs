@@ -43,6 +43,16 @@ public sealed class RowOptions
     /// </summary>
     public Dictionary<string, KindFilter> Kinds { get; set; } = new(StringComparer.Ordinal);
 
+    /// <summary>
+    /// Reprises entre rangées : un titre déjà montré dans une rangée peut revenir dans une autre s'il fait partie de cette
+    /// part des meilleurs titres de celle-ci, selon sa propre question (ressemblance au titre aimé, place dans la liste,
+    /// goût…), jamais dans la rangée juste au-dessus. 0 = aucun titre dans deux rangées.
+    /// </summary>
+    public double RepeatShare { get; set; }
+
+    /// <summary>Reprises entre rangées : nombre maximal de rangées où un même titre apparaît (1 = aucune reprise).</summary>
+    public int RepeatMax { get; set; } = 1;
+
     /// <summary>Rangées que Home Screen Sections montre au compte (identifiants complets) ; null = toutes.</summary>
     public HashSet<string>? Shown { get; set; }
 
@@ -261,9 +271,17 @@ public static class HomeRows
         var anchors = new Dictionary<string, string>(StringComparer.Ordinal);
         var anchorIds = new Dictionary<string, string>(StringComparer.Ordinal);
 
-        List<string> Take(IEnumerable<string> src, int n)
+        // reprises : rangées où chaque titre apparaît déjà ; un titre déjà pris revient dans une rangée s'il est parmi ses
+        // `strong` premiers (dans l'ordre propre de la rangée, titres déjà pris compris), jamais dans la rangée juste au-dessus
+        var seen = new Dictionary<string, int>(StringComparer.Ordinal);
+        int maxRows = Math.Clamp(o.RepeatMax, 1, 10);
+        int strong = maxRows > 1 ? (int)Math.Round(size * Math.Clamp(o.RepeatShare, 0.0, 1.0), MidpointRounding.AwayFromZero) : 0;
+        IReadOnlyCollection<string> above = Array.Empty<string>();
+
+        List<string> Take(IEnumerable<string> src, int n, HashSet<string> repeats)
         {
             var l = new List<string>();
+            int pos = 0;
             foreach (var id in src)
             {
                 if (l.Count >= n)
@@ -275,6 +293,13 @@ public static class HomeRows
                 {
                     l.Add(id);
                 }
+                else if (pos < strong && l.Count < size && seen.GetValueOrDefault(id) < maxRows && !above.Contains(id) && !l.Contains(id))
+                {
+                    l.Add(id);
+                    repeats.Add(id);
+                }
+
+                pos++;
             }
 
             return l;
@@ -282,25 +307,39 @@ public static class HomeRows
 
         List<string> Row(string id, string? anchor, IEnumerable<string> src)
         {
-            var l = Take(src, keep);
-            if (fit is null || l.Count == 0)
+            var repeats = new HashSet<string>(StringComparer.Ordinal);
+            var l = Take(src, keep, repeats);
+            if (fit is not null && l.Count > 0)
             {
-                return l;
+                var shown = l.Take(size).ToList();
+                int k = fit(id, anchor, shown);
+                if (k >= 0 && k < shown.Count)
+                {
+                    foreach (var x in l.Skip(k).Where(x => !repeats.Contains(x)))
+                    {
+                        used.Remove(x);
+                    }
+
+                    l = l.Take(k).Concat(l.Skip(k).Where(x => !repeats.Contains(x)).Take(Spare)).ToList();
+                }
             }
 
-            var shown = l.Take(size).ToList();
-            int k = fit(id, anchor, shown);
-            if (k < 0 || k >= shown.Count)
+            if (repeats.Count > 0)
             {
-                return l;
+                l = Interleave(l, repeats);
             }
 
-            foreach (var x in l.Skip(k))
+            foreach (var x in l)
             {
-                used.Remove(x);
+                seen[x] = seen.GetValueOrDefault(x) + 1;
             }
 
-            return l.Take(k).Concat(l.Skip(k).Take(Spare)).ToList();
+            if (l.Count > 0)
+            {
+                above = l;
+            }
+
+            return l;
         }
 
         // règle de saga d'une rangée : un seul volet par saga, et jamais un volet dont un précédent n'est pas encore vu —
@@ -393,7 +432,7 @@ public static class HomeRows
         {
             if (o.Lists.TryGetValue(lr, out var list))
             {
-                Emit(lr, null, k => Sagaed(list.Where(id => candidates.Contains(id) && !used.Contains(id) && Kind(k, id)), id => Kind(k, id)));
+                Emit(lr, null, k => Sagaed(list.Where(id => candidates.Contains(id) && Kind(k, id)), id => Kind(k, id)));
             }
         }
 
@@ -405,9 +444,9 @@ public static class HomeRows
             foreach (var id in Expand(Nouveautes, o.KindSetting(Nouveautes)).Where(Visible))
             {
                 var k = o.KindOf(id);
-                var fresh = ordered.Where(x => Kind(k, x) && (T[x].Added ?? 0) >= cut && !used.Contains(x) && sc.GetValueOrDefault(x, double.NegativeInfinity) >= bar).ToList();
+                var fresh = ordered.Where(x => Kind(k, x) && (T[x].Added ?? 0) >= cut && sc.GetValueOrDefault(x, double.NegativeInfinity) >= bar).ToList();
                 var freshRow = Sagaed(fresh, null).ToList();
-                rows[id] = freshRow.Count >= 4 ? Row(id, null, freshRow) : new List<string>();
+                rows[id] = freshRow.Count(x => !used.Contains(x)) >= 4 ? Row(id, null, freshRow) : new List<string>();
             }
         }
 
@@ -437,16 +476,17 @@ public static class HomeRows
                 }
 
                 var av = vec[a];
-                var free = ordered.Where(id => id != a && !used.Contains(id) && Kind(kb, id))     // jamais le titre aimé dans sa propre rangée
+                var free = ordered.Where(id => id != a && Kind(kb, id))     // jamais le titre aimé dans sa propre rangée
                     .Select(id => (Id: id, Sim: av.Dot(vec[id]))).ToList();
-                double best = free.Count > 0 ? free.Max(x => x.Sim) : 0;
+                double best = free.Where(x => !used.Contains(x.Id)).Select(x => x.Sim).DefaultIfEmpty(0).Max();
                 double floor = Math.Max(MinSimilarity, RelativeSimilarity * best);
                 var near = Sagaed(free
                     .Where(x => x.Sim >= floor)
                     .OrderByDescending(x => (0.7 * x.Sim) + (0.3 * (span > 0 ? (sc[x.Id] - min) / span : 0)))
                     .ThenBy(x => x.Id, StringComparer.Ordinal)
                     .Select(x => x.Id), null).ToList();
-                if (near.Count < MinBecause)
+                // titres que la rangée montrerait : libres, ou repris (parmi ses premiers, pas dans la rangée au-dessus)
+                if (near.Where((x, i) => !used.Contains(x) || (i < strong && seen.GetValueOrDefault(x) < maxRows && !above.Contains(x))).Count() < MinBecause)
                 {
                     continue;
                 }
@@ -485,6 +525,39 @@ public static class HomeRows
         }
 
         return new Result(rows, anchors) { AnchorIds = anchorIds };
+    }
+
+    /// <summary>
+    /// Reprises intercalées : jamais en première carte ni deux de suite (sinon les meilleurs titres de la rangée, souvent
+    /// des reprises, ouvrent la rangée avec ce qu'une rangée précédente vient de montrer) ; l'ordre est gardé autrement.
+    /// Une reprise sans titre neuf après elle reste en fin de rangée.
+    /// </summary>
+    public static List<string> Interleave(IReadOnlyList<string> row, IReadOnlySet<string> repeats)
+    {
+        var res = new List<string>(row.Count);
+        var wait = new Queue<string>();
+        foreach (var id in row)
+        {
+            if (!repeats.Contains(id))
+            {
+                res.Add(id);
+                if (wait.Count > 0)
+                {
+                    res.Add(wait.Dequeue());
+                }
+            }
+            else if (res.Count > 0 && !repeats.Contains(res[^1]) && wait.Count == 0)
+            {
+                res.Add(id);
+            }
+            else
+            {
+                wait.Enqueue(id);
+            }
+        }
+
+        res.AddRange(wait);
+        return res;
     }
 
     /// <summary>

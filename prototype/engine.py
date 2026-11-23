@@ -520,6 +520,30 @@ def genre_distribution(ctx, user):
     return {g: v / tot for g, v in p.items()}
 
 
+DIVERSITY_WINDOW = 30   # diversité au début de la liste seulement ; au-delà, l'ordre suit le score (Recommender.DiversityWindow)
+
+
+class WindowPicker:
+    """Le sélecteur de diversité pour les DIVERSITY_WINDOW premiers titres, puis le meilleur score."""
+
+    def __init__(self, inner, sc):
+        self.inner, self.sc, self.n = inner, sc, 0
+
+    def pick(self, pool):
+        if self.n < DIVERSITY_WINDOW:
+            return self.inner.pick(pool)
+        bi, bv = 0, -math.inf
+        for i, c in enumerate(pool):
+            if self.sc[c] > bv:
+                bi, bv = i, self.sc[c]
+        return bi
+
+    def added(self, t, pool):
+        self.n += 1
+        if self.n < DIVERSITY_WINDOW:
+            self.inner.added(t, pool)
+
+
 class MmrPicker:
     def __init__(self, sc, vec, lam):
         self.sc, self.vec, self.lam, self.pen = sc, vec, lam, {}
@@ -632,7 +656,7 @@ def rec_engine(ctx, vec, user, cands, k, W=ENGINE_W, mmr=0.0, saga=True, sc=None
         if target is not None:
             best, gap = None, math.inf
             for f in PERSONAL_FACTORS:
-                l = _greedy(ctx, vec, cands, pool, k, saga, MmrPicker(sc, vec, mmr * f))
+                l = _greedy(ctx, vec, cands, pool, k, saga, WindowPicker(MmrPicker(sc, vec, mmr * f), sc))
                 g = abs(list_similarity(vec, l[:SHOWN_FOR_VARIETY]) - target)
                 if g < gap - 1e-12:
                     best, gap = l, g
@@ -640,5 +664,5 @@ def rec_engine(ctx, vec, user, cands, k, W=ENGINE_W, mmr=0.0, saga=True, sc=None
     if div == "calibrated":
         p = genre_distribution(ctx, user)
         if p:
-            return _greedy(ctx, vec, cands, pool, k, saga, CalibratedPicker(sc, ctx.ds.titles, p, cal_strength, pool))
-    return _greedy(ctx, vec, cands, pool, k, saga, MmrPicker(sc, vec, mmr))
+            return _greedy(ctx, vec, cands, pool, k, saga, WindowPicker(CalibratedPicker(sc, ctx.ds.titles, p, cal_strength, pool), sc))
+    return _greedy(ctx, vec, cands, pool, k, saga, WindowPicker(MmrPicker(sc, vec, mmr), sc))

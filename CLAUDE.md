@@ -14,7 +14,8 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     titre aimé le plus proche, vus ensemble, écart aux abandons, goût du moment, heure de la journée, nouveauté,
     popularité, note, sortie, avis du foyer), `Score` (goût + bonus réservés aux N premiers par goût : le garde-fou),
     `ScoreAll` (titres demandés ou en liste de suivi notés sans leur propre signal puis écartés selon `IntentFactor`),
-    `Rank` (diversité MMR / personnalisée / calibrée, règle de saga).
+    `Rank` (diversité MMR / personnalisée / calibrée sur les `DiversityWindow` = 30 premiers titres, ensuite l'ordre du
+    score ; règle de saga).
   - `Pins.cs` : titres en tête (nouveautés de ce que le compte suit : nouveaux épisodes, volet suivant d'une saga ;
     jamais un titre demandé ; filtres des listes appliqués).
   - `HomeRows.cs` : répartition des rangées sans doublon (`Allocate`, rappel `fit`), placement des titres hors
@@ -139,7 +140,7 @@ de la CI.
   TMDb du cache, demandes et listes de suivi, avis et masquages de Jellyfin Enhanced), exploration Seerr (comptes
   actifs), vecteurs, puis chaque compte en parallèle : candidats (ni vus ni déjà connus), tranches horaires si
   l'heure de la journée est active, rangées, titres hors bibliothèque et composition des rangées.
-- Rangées d'accueil : `HomeRows.Allocate` remplit, sans doublon et dans l'ordre de `HomeRows.BaseRows` : « Pour
+- Rangées d'accueil : `HomeRows.Allocate` remplit, dans l'ordre de `HomeRows.BaseRows` : « Pour
   toi », les listes TMDb du moment (Tendances, Populaires, À venir ; avec Seerr, `TmdbListsAsync`, ordre
   `Trending.Order`), Nouveautés, « Parce que … » 1-3, suite du classement (`HomeRows.Suite` : séparée par défaut, ses
   moitiés gardent les identifiants historiques `Films` et `Series` ; réunie : `Suite`). Chaque rangée de
@@ -149,6 +150,11 @@ de la CI.
   `TrendingShare`, OU probabiliste avec la popularité du foyer, parité avec le prototype) ; avec des titres hors bibliothèque, `PlaceExternals` choisit leur place selon le contenu de chaque rangée
   (bibliothèque seule, Seerr seul, mélange) et les titres de la bibliothèque remplacés passent aux rangées suivantes.
   Le serveur compose (`UserRecs.Layouts`), le script applique ; chaque rangée garde sa taille.
+- Reprises entre rangées (`RowOptions.RepeatShare` / `RepeatMax`, réglages `RowRepeatPercent` 25 % / `RowRepeatMax` 3) :
+  chaque source de rangée garde tous ses titres dans son ordre propre (ne pas filtrer `used` d'avance) ; `Take` prend un
+  titre déjà montré seulement parmi les premiers de la rangée, jamais de la rangée juste au-dessus, dans la limite de
+  rangées par titre ; `Interleave` les éloigne de la première carte et les sépare. 0 % / 1 = aucun doublon (avant 1.0.47).
+  Mesuré sur le banc : « Films pour toi » 37 % → 50 % dans les goûts, accueil 33 % → 38 %.
 
 ## Calibrage
 

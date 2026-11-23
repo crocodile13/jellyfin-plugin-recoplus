@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.46: the page of a title opened from a Reco+ row now says, in a discreet grey line under its name, why it was proposed (\"Because you liked X\", \"Sequel to X\", \"New episodes\", \"Trending this week\", \"Recently added\") — only when the reason is clear, never on the home cards; outside-library cards keep their own reason.",
+  "changelog": "1.0.47: home rows are more relevant — a title that fits another row very well may now appear there too (among that row's best 25%, never in the row right above, never as its first card, in at most 3 rows; both adjustable in Home › Rows, 0% = no repeats as before), and the diversity of the main list stops after its first 30 titles so the following rows follow taste. Measured on a realistic bench of 30 accounts: titles matching the account's tastes rise from 37% to 50% in \"Movies for you\" and from 33% to 38% across the home screen.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.46.0",
+  "version": "1.0.47.0",
   "status": "Active",
   "autoUpdate": true,
   "assemblies": [
