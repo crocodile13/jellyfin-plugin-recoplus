@@ -593,6 +593,40 @@ def after_report(lib, users):
     return out
 
 
+def browser_check():
+    """Accueil d'un compte dans un vrai navigateur, mode étendu actif puis coupé (ticket #50) ; captures dans l'artifact."""
+    try:
+        import browser
+    except ImportError:
+        return {"absent": "Playwright non installé"}
+    name = "anime"
+    info = call("GET", "/System/Info/Public")
+    uid = {u["Name"]: u["Id"] for u in call("GET", "/Users")}[name]
+    pid = plugin_id("Reco+")
+    out = {}
+    for label, ext in (("mode étendu", True), ("sans mode étendu", False), ("mode étendu remis", True)):
+        cfg = call("GET", f"/Plugins/{pid}/Configuration")
+        if cfg.get("ExtendedEnabled") != ext:
+            cfg["ExtendedEnabled"] = ext
+            call("POST", f"/Plugins/{pid}/Configuration", cfg)
+            time.sleep(3)
+        errors: list = []
+        try:
+            res = browser.home(BASE, info.get("Id", ""), uid, as_user(name), name, PASSWORDS[name],
+                               OUT / f"accueil-{safe(label)}.png", errors)
+        except Exception as e:
+            res = {"sections": 0, "echec": str(e)[:300]}
+        res["erreurs"] = errors[:15]
+        out[label] = res
+        log(f"navigateur, {label} : {res.get('sections')} sections, {res.get('reco')} rangées Reco+, {res.get('ext')} cartes hors bibliothèque, erreurs {len(errors)}")
+    on, off = out["mode étendu"].get("sections", 0), out["sans mode étendu"].get("sections", 0)
+    if off == 0:
+        problems.append(f"navigateur : aucune section affichée même sans mode étendu ({out['sans mode étendu']})")
+    elif on < off:
+        problems.append(f"navigateur : {on} sections avec le mode étendu contre {off} sans (ticket #50)")
+    return out
+
+
 def markdown(r) -> str:
     L = [f"## Reco+ {r['status']['version']} sur Jellyfin {r['jellyfin']} ({', '.join(sorted(EXPECT)) or 'Reco+ seul'})", ""]
     L.append("| Vérification | | Détail |\n|---|---|---|")
@@ -604,6 +638,13 @@ def markdown(r) -> str:
     L.append("")
     for k, v in (r.get("seerr") or {}).items():
         L.append(f"Seerr, {k} : {v}  ")
+    for k, v in (r.get("navigateur") or {}).items():
+        if isinstance(v, dict):
+            L.append(f"Navigateur, {k} : {v.get('sections')} sections ({v.get('reco')} Reco+), {v.get('ext')} cartes hors bibliothèque, "
+                     f"script {'chargé' if v.get('script') else 'absent'}, {len(v.get('erreurs') or [])} erreur(s) JavaScript  ")
+            L += [f"  - {e}  " for e in (v.get("erreurs") or [])[:5]]
+        else:
+            L.append(f"Navigateur : {v}  ")
     bench_rows = [(n, a["mesure"]) for n, a in r["accounts"].items() if a.get("mesure") and a["mesure"]["gardes"]]
     if bench_rows:
         def hit(m, key, k):
@@ -669,6 +710,8 @@ def run():
             r["seerr"] = after_report(lib, users)
         except Exception as e:   # le rapport s'écrit quand même ; l'erreur est un problème du test
             problems.append(f"Seerr, après le rapport : {e}")
+    if "hss" in EXPECT and os.environ.get("SIM_BROWSER"):
+        r["navigateur"] = browser_check()
     r["problems"] = problems
     (OUT / "report.json").write_text(json.dumps(r, ensure_ascii=False, indent=2), encoding="utf-8")
     md = markdown(r)
