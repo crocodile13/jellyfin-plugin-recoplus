@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.47: home rows are more relevant — a title that fits another row very well may now appear there too (among that row's best 25%, never in the row right above, never as its first card, in at most 3 rows; both adjustable in Home › Rows, 0% = no repeats as before), and the diversity of the main list stops after its first 30 titles so the following rows follow taste. Measured on a realistic bench of 30 accounts: titles matching the account's tastes rise from 37% to 50% in \"Movies for you\" and from 33% to 38% across the home screen.",
+  "changelog": "1.0.47: new setting Home › Rows › \"Repeat across rows\" (off by default): a title already shown in one row may come back in another when it is among that row's best titles for what the row is about, never in the row right above, never as its first card, in a limited number of rows; the rest of the ranking never repeats \"For you\". Measured on a realistic bench of 30 accounts, it barely changes relevance, so it stays a matter of taste. The integration test now also opens the home screen in a real browser, with and without extended mode.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",

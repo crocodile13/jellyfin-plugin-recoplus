@@ -648,7 +648,7 @@ def markdown(r) -> str:
         L.append(f"Seerr, {k} : {v}  ")
     for k, v in (r.get("navigateur") or {}).items():
         if isinstance(v, dict):
-            L.append(f"Navigateur, {k} : {v.get('sections')} sections ({v.get('reco')} Reco+), {v.get('ext')} cartes hors bibliothèque ({v.get('own')} de Reco+, Jellyfin Enhanced {'prêt' if v.get('je') else 'absent'}), "
+            L.append(f"Navigateur, {k} : {v.get('sections')} sections ({v.get('reco')} Reco+), {v.get('ext')} cartes hors bibliothèque ({v.get('own')} de Reco+, Jellyfin Enhanced {'prêt' if v.get('je') else 'chargé sans Seerr' if v.get('je_obj') else 'balise sans script' if v.get('je_tag') else 'absent'}), "
                      f"script {'chargé' if v.get('script') else 'absent'}, {len(v.get('erreurs') or [])} erreur(s) JavaScript  ")
             L += [f"  - {e}  " for e in (v.get("erreurs") or [])[:5]]
         else:

@@ -18,6 +18,8 @@ SECTIONS_JS = """() => {
     ext: document.querySelectorAll('.recoplus-ext').length,
     own: document.querySelectorAll('.recoplus-own').length,
     je: !!(window.JellyfinEnhanced && window.JellyfinEnhanced.jellyseerrUI),
+    je_tag: !!document.querySelector('script[src*="JellyfinEnhanced/script"]'),
+    je_obj: !!window.JellyfinEnhanced,
     titles: secs.map(s => (s.querySelector('.sectionTitle') || {}).textContent || '').map(t => t.trim()).slice(0, 30),
   };
 }"""

@@ -88,7 +88,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// Reprises entre rangées : un titre déjà montré revient dans une autre rangée s'il fait partie de ce pourcentage de
     /// ses meilleurs titres (0 = aucun titre dans deux rangées).
     /// </summary>
-    public int RowRepeatPercent { get; set; } = 25;
+    public int RowRepeatPercent { get; set; }
 
     /// <summary>Reprises entre rangées : nombre maximal de rangées où un même titre apparaît (1 = aucune reprise).</summary>
     public int RowRepeatMax { get; set; } = 3;

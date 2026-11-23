@@ -14,8 +14,7 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     titre aimé le plus proche, vus ensemble, écart aux abandons, goût du moment, heure de la journée, nouveauté,
     popularité, note, sortie, avis du foyer), `Score` (goût + bonus réservés aux N premiers par goût : le garde-fou),
     `ScoreAll` (titres demandés ou en liste de suivi notés sans leur propre signal puis écartés selon `IntentFactor`),
-    `Rank` (diversité MMR / personnalisée / calibrée sur les `DiversityWindow` = 30 premiers titres, ensuite l'ordre du
-    score ; règle de saga).
+    `Rank` (diversité MMR / personnalisée / calibrée, règle de saga).
   - `Pins.cs` : titres en tête (nouveautés de ce que le compte suit : nouveaux épisodes, volet suivant d'une saga ;
     jamais un titre demandé ; filtres des listes appliqués).
   - `HomeRows.cs` : répartition des rangées sans doublon (`Allocate`, rappel `fit`), placement des titres hors
@@ -150,11 +149,13 @@ de la CI.
   `TrendingShare`, OU probabiliste avec la popularité du foyer, parité avec le prototype) ; avec des titres hors bibliothèque, `PlaceExternals` choisit leur place selon le contenu de chaque rangée
   (bibliothèque seule, Seerr seul, mélange) et les titres de la bibliothèque remplacés passent aux rangées suivantes.
   Le serveur compose (`UserRecs.Layouts`), le script applique ; chaque rangée garde sa taille.
-- Reprises entre rangées (`RowOptions.RepeatShare` / `RepeatMax`, réglages `RowRepeatPercent` 25 % / `RowRepeatMax` 3) :
+- Reprises entre rangées (`RowOptions.RepeatShare` / `RepeatMax`, réglages `RowRepeatPercent` 0 % / `RowRepeatMax` 3) :
   chaque source de rangée garde tous ses titres dans son ordre propre (ne pas filtrer `used` d'avance) ; `Take` prend un
-  titre déjà montré seulement parmi les premiers de la rangée, jamais de la rangée juste au-dessus, dans la limite de
-  rangées par titre ; `Interleave` les éloigne de la première carte et les sépare. 0 % / 1 = aucun doublon (avant 1.0.47).
-  Mesuré sur le banc : « Films pour toi » 37 % → 50 % dans les goûts, accueil 33 % → 38 %.
+  titre déjà montré seulement parmi les premiers de la rangée, jamais de la rangée juste au-dessus (`above`), jamais de
+  `forbid` (la suite ne reprend pas « Pour toi », dont elle est la continuation), dans la limite de rangées par titre ;
+  `Interleave` les éloigne de la première carte et les sépare. Coupé par défaut : sur le banc, 25 % ne change presque
+  rien (accueil 33 % → 35 % dans les goûts). Piège : une première mesure à 37 % → 50 % venait de la suite qui répétait
+  « Pour toi » ; relire les listes, pas seulement les chiffres.
 
 ## Calibrage
 
