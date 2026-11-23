@@ -82,11 +82,11 @@ Les nouvelles versions sont ensuite installées par la tâche planifiée **Mettr
 
 1. Ouvrez **Reco+** dans la section Extensions du menu du tableau de bord (ou **Tableau de bord → Extensions → Reco+**). Les valeurs par défaut sont celles qui ont été évaluées : Reco+ fonctionne dès l'installation.
 2. Cliquez sur **Recalculer maintenant** dans l'onglet État (sinon chaque compte est calculé à sa prochaine activité).
-3. Avec Home Screen Sections : ajoutez les rangées Reco+ voulues dans ses réglages (« Add Section ») ; leurs titres se règlent dans l'onglet Général.
+3. Avec Home Screen Sections : cliquez **Les ajouter pour moi** dans l'onglet État (ou ajoutez vous-même les rangées Reco+ dans ses réglages) ; leurs titres se règlent dans l'onglet Accueil.
 4. Avec Seerr : saisissez son URL et sa clé d'API dans l'onglet Seerr, cliquez sur **Tester**, puis activez le mode étendu si vous voulez des titres hors bibliothèque.
 5. Vérifiez ce que reçoit un compte dans l'onglet **Aperçu**.
 
-Les réglages de base sont visibles d'emblée ; les avancés sont repliés ou dans les onglets **Moteur** et **Calibrage** ; les outils de diagnostic (journal, export du jeu de calibrage) sont en **mode développeur**. Survolez le **?** d'un réglage pour son aide.
+Les réglages ont trois niveaux — **essentiels** (par défaut), **avancés**, **experts** — à choisir à droite des onglets ; les outils de diagnostic (journal, export du jeu de calibrage) sont en **mode développeur**. Survolez le **?** d'un réglage pour son aide.
 
 ## Questions fréquentes
 

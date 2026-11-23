@@ -326,6 +326,10 @@ public sealed class RecoController : ControllerBase
             checks = g?.Checks.ToList().Select(c => new { check = L(c.Check), ok = c.Ok, detail = L(c.Detail) }),
             disabled = g?.Disabled.ToDictionary(kv => L(CompatibilityGuard.Label(kv.Key)), kv => L(kv.Value)),
             hss = L(HomeScreenSectionsIntegration.State),
+            // assistant de mise en route : Home Screen Sections installé, activé, rangées Reco+ dans son tableau
+            hssSetup = HomeScreenSectionsIntegration.Setup(Plugin.Instance!.Configuration),
+            seerrEnabled = Plugin.Instance!.Configuration.SeerrEnabled,
+            seerrOk = _seerr.Configured && _seerr.Last.Ok,
             secrets = new
             {
                 seerrApiKey = L(_secrets.Describe(SecretStore.SeerrApiKey)),
@@ -431,6 +435,25 @@ public sealed class RecoController : ControllerBase
     {
         RecoWorker.Instance?.ScheduleAll(TimeSpan.Zero);   // → tâche planifiée « Recalcul des recommandations »
         return Accepted();
+    }
+
+    /// <summary>
+    /// Assistant de mise en route : ajoute les rangées Reco+ au tableau de Home Screen Sections (et l'active), comme le ferait
+    /// l'administrateur dans sa configuration. Les rangées déjà présentes ne bougent pas.
+    /// </summary>
+    [HttpPost("HomeSections/Setup")]
+    [Authorize(Policy = Policies.RequiresElevation)]
+    public ActionResult HomeSectionsSetup()
+    {
+        try
+        {
+            int n = HomeScreenSectionsIntegration.AddRowsToAdminTable(Plugin.Instance!.Configuration);
+            return Ok(new { added = n, message = L(n > 0 ? Texts.Pack("{0} rangées Reco+ ajoutées à Home Screen Sections", n) : "les rangées Reco+ étaient déjà dans Home Screen Sections") });
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or TargetInvocationException or InvalidCastException or ArgumentException or MemberAccessException or MissingMethodException)
+        {
+            return Ok(new { added = -1, message = L(Texts.Pack("Home Screen Sections n'a pas pu être configuré : {0}", (ex.InnerException ?? ex).Message)) });
+        }
     }
 
     /// <summary>Rejoue les vérifications de compatibilité.</summary>

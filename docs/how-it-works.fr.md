@@ -116,11 +116,14 @@ Tableau de bord → Extensions → Reco+. La page est organisée en onglets :
 | Aperçu | ce que voit actuellement un compte, rangée par rangée (et, en mode développeur, l'apport de chaque source du mode étendu) |
 | Journal | mode développeur : le journal de Reco+ en temps réel (ou de tout Jellyfin), filtrable, secrets masqués |
 
-Trois niveaux :
+Niveau des réglages (sélecteur à droite des onglets, retenu par navigateur) ; un réglage caché garde sa valeur et reste enregistré :
 
-- **De base** : les onglets ci-dessus, sauf Moteur, Calibrage et Journal.
-- **Avancé** : les onglets Moteur et Calibrage (toujours visibles, marqués *avancé*), et les sections repliées « Réglages avancés » de chaque onglet.
-- **Mode développeur** (case à droite des onglets, retenue par navigateur) : l'onglet Journal, l'export du jeu de calibrage, les réglages statistiques du calibrage et le chemin étape par étape de chaque méthode, et l'apport de chaque source du mode étendu dans l'Aperçu.
+- **Essentiels** (par défaut) : ce qu'il faut pour que tout marche — ce que Reco+ remplace, les rangées d'accueil (titre, films/séries, contenu), Seerr, le mode étendu, les filtres et genres exclus, les comptes ignorés, la langue.
+- **Avancés** : pour ajuster — les onglets Moteur (facteurs de classement, durées) et Calibrage, les listes du moment, le mélange, la tête de liste, les sagas, les sources de découverte.
+- **Experts** : tous les réglages fins du moteur, de l'exploration et des statistiques du calibrage.
+- **Mode développeur** (case à part : des outils, pas des réglages) : l'onglet Journal, l'export du jeu de calibrage, le chemin étape par étape de chaque méthode de calibrage, et l'apport de chaque source du mode étendu dans l'Aperçu.
+
+L'onglet État s'ouvre sur un résumé (« Tout fonctionne » ou ce qu'il faut regarder) et une liste de mise en route avec des actions en un clic : lancer le premier calcul, **ajouter les rangées Reco+ à Home Screen Sections** (l'active et ajoute les rangées manquantes, comme le ferait l'administrateur dans ses réglages), relier Seerr. Après **Enregistrer**, un bandeau propose de recalculer et affiche l'Aperçu dès que le calcul est terminé.
 
 **Langue.** Le plugin est en français et en anglais : page, rangées et cartes de l'accueil, notifications. *Celle de Jellyfin* (par défaut) suit la langue de l'interface Jellyfin de chacun (sinon celle du serveur) ; français ou anglais l'imposent à tous. Un titre de rangée laissé vide prend le titre par défaut dans la langue de celui qui le lit.
 

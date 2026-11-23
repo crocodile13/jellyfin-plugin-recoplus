@@ -347,6 +347,95 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
         return res;
     }
 
+    /// <summary>État de Home Screen Sections pour l'assistant de mise en route : installé, activé, rangées Reco+ dans son tableau.</summary>
+    /// <param name="Present">Plugin installé (et de la forme attendue).</param>
+    /// <param name="Enabled">Activé dans sa configuration.</param>
+    /// <param name="InTable">Rangées Reco+ déclarées présentes dans le tableau de l'administrateur.</param>
+    /// <param name="Declared">Rangées Reco+ déclarées.</param>
+    public sealed record SetupState(bool Present, bool Enabled, int InTable, int Declared);
+
+    /// <summary>Configuration de Home Screen Sections, lue par réflexion (vérifiée dans ses sources) ; null si absent ou d'une autre forme.</summary>
+    private static (object Inst, MethodInfo? Save, object Conf, PropertyInfo Table, Type Row, PropertyInfo Id, PropertyInfo? Enabled)? AdminConfig()
+    {
+        var asm = AssemblyLoadContext.All.SelectMany(c => c.Assemblies).FirstOrDefault(a => a.GetName().Name == "Jellyfin.Plugin.HomeScreenSections");
+        var pt = asm?.GetType("Jellyfin.Plugin.HomeScreenSections.HomeScreenSectionsPlugin");
+        var inst = pt?.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static)?.GetValue(null);
+        var conf = inst is null ? null : pt!.GetProperty("Configuration")?.GetValue(inst);
+        var table = conf?.GetType().GetProperty("SectionSettings");
+        if (inst is null || conf is null || table?.PropertyType.GetElementType() is not { } row || row.GetProperty("SectionId") is not { } id)
+        {
+            return null;
+        }
+
+        return (inst, pt!.GetMethod("SaveConfiguration", Type.EmptyTypes), conf, table, row, id, conf.GetType().GetProperty("Enabled"));
+    }
+
+    /// <summary>État de Home Screen Sections pour les rangées Reco+ déclarées (<see cref="Sections"/>).</summary>
+    public static SetupState Setup(Configuration.PluginConfiguration cfg)
+    {
+        var declared = Sections(cfg).Select(x => x.Id).ToHashSet(StringComparer.Ordinal);
+        try
+        {
+            if (AdminConfig() is not { } a)
+            {
+                return new SetupState(false, false, 0, declared.Count);
+            }
+
+            var ids = (a.Table.GetValue(a.Conf) as Array ?? Array.Empty<object>()).Cast<object>().Select(o => a.Id.GetValue(o) as string ?? string.Empty);
+            return new SetupState(true, a.Enabled?.GetValue(a.Conf) as bool? ?? true, ids.Count(declared.Contains), declared.Count);
+        }
+        catch (Exception ex) when (ex is TargetInvocationException or InvalidOperationException or InvalidCastException or ArgumentException or MemberAccessException)
+        {
+            return new SetupState(false, false, 0, declared.Count);
+        }
+    }
+
+    /// <summary>
+    /// Ce que ferait l'administrateur dans Home Screen Sections : l'activer et ajouter au tableau les rangées Reco+ qui n'y
+    /// sont pas (affichées, modifiables par chaque compte, à la suite des autres). Les rangées déjà présentes ne changent
+    /// pas. Renvoie le nombre de rangées ajoutées ; exception si Home Screen Sections est absent ou d'une autre forme.
+    /// </summary>
+    public static int AddRowsToAdminTable(Configuration.PluginConfiguration cfg)
+    {
+        var a = AdminConfig() ?? throw new InvalidOperationException("Home Screen Sections absent");
+        var items = (a.Table.GetValue(a.Conf) as Array ?? Array.CreateInstance(a.Row, 0)).Cast<object>().ToList();
+        var have = items.Select(o => a.Id.GetValue(o) as string ?? string.Empty).ToHashSet(StringComparer.Ordinal);
+        var order = a.Row.GetProperty("OrderIndex");
+        int next = items.Count == 0 || order is null ? 0 : items.Max(o => order.GetValue(o) is int i ? i : 0) + 1;
+        int added = 0;
+        foreach (var (id, _, _, _) in Sections(cfg).Where(x => !have.Contains(x.Id)))
+        {
+            var row = Activator.CreateInstance(a.Row)!;
+            a.Id.SetValue(row, id);
+            void Set(string name, object v)
+            {
+                if (a.Row.GetProperty(name) is { CanWrite: true } p && p.PropertyType == v.GetType())
+                {
+                    p.SetValue(row, v);
+                }
+            }
+
+            Set("Enabled", true);
+            Set("AllowUserOverride", true);
+            Set("LowerLimit", 1);
+            Set("UpperLimit", 1);
+            Set("OrderIndex", next++);
+            items.Add(row);
+            added++;
+        }
+
+        a.Enabled?.SetValue(a.Conf, true);
+        var arr = Array.CreateInstance(a.Row, items.Count);
+        for (int i = 0; i < items.Count; i++)
+        {
+            arr.SetValue(items[i], i);
+        }
+
+        a.Table.SetValue(a.Conf, arr);
+        a.Save?.Invoke(a.Inst, null);
+        return added;
+    }
+
     /// <summary>
     /// Tableau des sections de l'administrateur (Home Screen Sections) : une rangée séparée ou réunie y prend la place de
     /// l'ancienne forme, avec ses réglages (ordre, affichage, droits). Sans cela, les comptes qui suivent le tableau par

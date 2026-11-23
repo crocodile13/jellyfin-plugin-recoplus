@@ -61,6 +61,18 @@
                 #RecoPlusConfigPage .rp-box-off .rp-why { display: none; }
                 #RecoPlusConfigPage .rp-boxwhy { font-style: italic; color: #e6a23c !important; }
                 #RecoPlusConfigPage:not(.rp-devmode) .rp-dev { display: none !important; }
+                /* niveaux d'affichage : 1 essentiel, 2 avancé, 3 expert (réglages cachés gardés et enregistrés) */
+                #RecoPlusConfigPage.rp-lvl-1 [data-level="2"], #RecoPlusConfigPage.rp-lvl-1 [data-level="3"], #RecoPlusConfigPage.rp-lvl-2 [data-level="3"] { display: none !important; }
+                #RecoPlusConfigPage .rp-level { align-self: center; font-size: .9em; }
+                #RecoPlusConfigPage .rp-level select { background: transparent; color: inherit; border: 1px solid var(--rp-line); border-radius: 4px; padding: .2em .4em; font: inherit; }
+                #RecoPlusConfigPage .rp-health { border-radius: 8px; padding: .9em 1.2em; margin: 0 0 1em; background: var(--rp-soft); border-left: 4px solid #5cc46a; }
+                #RecoPlusConfigPage .rp-health.warn { border-left-color: #e6a23c; }
+                #RecoPlusConfigPage .rp-health h3 { margin: 0 0 .4em; }
+                #RecoPlusConfigPage .rp-steps { list-style: none; margin: .4em 0 0; padding: 0; }
+                #RecoPlusConfigPage .rp-steps li { display: flex; gap: .7em; align-items: center; flex-wrap: wrap; padding: .35em 0; border-top: 1px solid var(--rp-line); }
+                #RecoPlusConfigPage .rp-steps li > b { min-width: 1.4em; }
+                #RecoPlusConfigPage .rp-steps .rp-result { margin-left: auto; }
+                #RecoPlusConfigPage .rp-saved { display: flex; gap: 1em; align-items: center; flex-wrap: wrap; margin-top: .6em; }
                 #RecoPlusConfigPage .rp-tabtag { font-size: .72em; color: var(--rp-mute); border: 1px solid var(--rp-line); border-radius: 4px; padding: 0 .35em; margin-left: .3em; vertical-align: middle; }
                 #RecoPlusConfigPage .rp-devtoggle { margin-left: auto; align-self: center; font-size: .9em; opacity: .8; cursor: pointer; white-space: nowrap; }
                 #RecoPlusConfigPage .rp-log { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8em; line-height: 1.45; white-space: pre-wrap; word-break: break-word; max-height: 65vh; overflow: auto; padding: .6em; border: 1px solid var(--rp-line); border-radius: 6px; margin-top: .8em; }
@@ -97,14 +109,16 @@
                 <button type="button" class="rp-tab" data-tab="etendu">Mode étendu</button>
                 <button type="button" class="rp-tab" data-tab="notif">Notifications</button>
                 <button type="button" class="rp-tab" data-tab="apercu">Aperçu</button>
-                <button type="button" class="rp-tab rp-advtab" data-tab="moteur">Moteur <span class="rp-tabtag">avancé</span></button>
-                <button type="button" class="rp-tab rp-advtab" data-tab="calibrage">Calibrage <span class="rp-tabtag">avancé</span></button>
+                <button type="button" class="rp-tab" data-tab="moteur" data-level="2">Moteur</button>
+                <button type="button" class="rp-tab" data-tab="calibrage" data-level="2">Calibrage</button>
                 <button type="button" class="rp-tab rp-dev" data-tab="journal">Journal</button>
-                <label class="rp-devtoggle" title="Outils de développement : journal en temps réel, export du jeu de calibrage, réglages statistiques et chemin détaillé du calibrage, apport de chaque source dans l'aperçu. Réglage de ce navigateur."><input type="checkbox" id="rpDev"> Mode développeur</label>
+                <label class="rp-level rp-devtoggle" title="Essentiel : ce qu'il faut pour que tout marche. Avancé : pour ajuster (facteurs du moteur, listes du moment, sources de découverte, calibrage). Expert : tous les réglages fins. Les réglages cachés gardent leur valeur. Réglage de ce navigateur.">Réglages : <select id="rpLevel"><option value="1">essentiels</option><option value="2">avancés</option><option value="3">experts</option></select></label>
+                <label class="rp-devtoggle" style="margin-left:1em" title="Outils de développement : journal en temps réel, export du jeu de calibrage, réglages statistiques et chemin détaillé du calibrage, apport de chaque source dans l'aperçu. Réglage de ce navigateur."><input type="checkbox" id="rpDev"> Mode développeur</label>
             </div>
 
             <!-- ÉTAT -->
             <div class="rp-pane on" data-pane="etat">
+                <div class="rp-health" id="rpHealth"><h3 id="rpHealthTitle">…</h3><ul class="rp-steps" id="rpSteps"></ul></div>
                 <div class="rp-kpis" id="rpKpis"></div>
                 <div class="rp-box">
                     <h3>Compatibilité et dépendances</h3>
@@ -128,10 +142,10 @@
                 <!-- GÉNÉRAL -->
                 <div class="rp-pane" data-pane="general">
                     <div class="rp-box"><h3>Ce que Reco+ remplace</h3><p>Chaque interrupteur coupé rend la main à Jellyfin pour cette partie.</p><div class="rp-grid" data-fields="replace"></div></div>
-                    <div class="rp-box"><h3>Ce qui est lu en plus de l'historique</h3><p>En plus de l'historique de lecture et des favoris (films, séries, saisons et épisodes) : ce que les comptes ont dit explicitement, et des données TMDb lues via Seerr.</p><div class="rp-grid" data-fields="sources"></div></div>
+                    <div class="rp-box" data-level="2"><h3>Ce qui est lu en plus de l'historique</h3><p>En plus de l'historique de lecture et des favoris (films, séries, saisons et épisodes) : ce que les comptes ont dit explicitement, et des données TMDb lues via Seerr.</p><div class="rp-grid" data-fields="sources"></div></div>
                     <div class="rp-box"><h3>Comptes ignorés</h3><p>Ces comptes n'ont pas de recommandations Reco+ (Jellyfin leur répond normalement) et leur historique ne compte pas pour le foyer : compte invité, de test, d'un enfant…</p><div data-fields="users"></div></div>
                     <div class="rp-box"><h3>Langue</h3><div class="rp-grid" data-fields="lang"></div></div>
-                    <details class="rp-adv"><summary>Réglages avancés <span>— « Plus comme ceci », recalculs, fuseau, performances</span></summary>
+                    <details class="rp-adv" data-level="3"><summary>Réglages experts <span>— « Plus comme ceci », recalculs, fuseau, performances</span></summary>
                         <div class="rp-box"><h3>Fonctionnement</h3><div class="rp-grid" data-fields="genadv"></div></div>
                     </details>
                 </div>
@@ -143,19 +157,19 @@
                         <p><b>Films et séries, en deux rangées</b> : la rangée devient deux rangées dans Home Screen Sections, « … : films » et « … : séries ». À l'enregistrement, chaque compte qui affichait la rangée reçoit les deux à sa place (et les retrouve réunies si l'on revient en arrière) ; un compte qui n'en a gardé qu'une moitié la garde. Contenu : bibliothèque seule, titres hors bibliothèque seuls (mode étendu, interface web seulement : les applications TV gardent la bibliothèque), ou les deux mélangés.</p>
                         <div class="rp-rows" data-fields="rows"></div>
                     </div>
-                    <div class="rp-box"><h3>Listes du moment (TMDb)</h3>
+                    <div class="rp-box" data-level="2"><h3>Listes du moment (TMDb)</h3>
                         <p>Rangées Tendances, Populaires et À venir : les listes de TMDb lues via Seerr à chaque calcul complet (en cache 6 heures), pour les films et pour les séries. Chaque compte n'y voit que ce qu'il n'a pas vu, rangé selon ses goûts autant que réglé ici. Sans Seerr, ces rangées n'existent pas dans Home Screen Sections.</p>
                         <h4 class="rp-h4">Tendances</h4><div class="rp-grid" data-fields="lt"></div>
                         <h4 class="rp-h4">Populaires</h4><div class="rp-grid" data-fields="lp"></div>
                         <h4 class="rp-h4">À venir</h4><div class="rp-grid" data-fields="lu"></div>
                     </div>
-                    <div class="rp-box" id="rpMixBox">
+                    <div class="rp-box" id="rpMixBox" data-level="2">
                         <h3>Mélange</h3>
                         <p>Pour les rangées dont le contenu est « mélange » : comment les titres hors bibliothèque s'y glissent.</p>
                         <div class="rp-grid" data-fields="extmix"></div>
                     </div>
-                    <details class="rp-adv"><summary>Réglages avancés <span>— listes du moment hors bibliothèque, taille des rangées, nouveautés</span></summary>
-                        <div class="rp-box"><h3>Listes du moment : titres hors bibliothèque</h3>
+                    <details class="rp-adv" data-level="2"><summary>Réglages avancés <span>— taille des rangées, nouveautés, listes du moment hors bibliothèque</span></summary>
+                        <div class="rp-box" data-level="3"><h3>Listes du moment : titres hors bibliothèque</h3>
                             <p>Seuls les titres qui comptent et qui conviennent au compte : popularité et votes TMDb minimum, goût minimal. Les titres de la bibliothèque ne sont pas filtrés.</p>
                             <h4 class="rp-h4">Tendances</h4><div class="rp-grid" data-fields="lta"></div>
                             <h4 class="rp-h4">Populaires</h4><div class="rp-grid" data-fields="lpa"></div>
@@ -168,17 +182,17 @@
                 <!-- LISTES -->
                 <div class="rp-pane" data-pane="listes">
                     <p class="rp-sub" data-tpl="Ce qui est montré, sans changer le calcul des goûts : ces réglages s'appliquent après le classement (ils n'entrent ni dans l'évaluation ni dans le calibrage). Ils valent pour {ROW}, les Suggestions et le mode étendu ; « Plus comme ceci » n'est filtré que par les comptes ignorés."></p>
-                    <div class="rp-box"><h3>Composition du haut de liste</h3><p data-tpl="Les premiers titres de la liste (« Haut de liste » : par défaut, autant que la rangée {ROW} en montre)."></p><div class="rp-grid" data-fields="mix"></div></div>
+                    <div class="rp-box" data-level="2"><h3>Composition du haut de liste</h3><p data-tpl="Les premiers titres de la liste (« Haut de liste » : par défaut, autant que la rangée {ROW} en montre)."></p><div class="rp-grid" data-fields="mix"></div></div>
                     <div class="rp-box"><h3>Filtres</h3><p>Un titre filtré n'est jamais proposé. Un titre sans note ou sans année passe.</p><div class="rp-grid" data-fields="filters"></div><h4 class="rp-h4">Genres jamais proposés</h4><div data-fields="genres"></div></div>
-                    <div class="rp-box"><h3>Diversité et sagas</h3><p>Personnalisée (par défaut, la mieux évaluée) : la liste est aussi variée que ce que le compte regarde. Calibrée : la part de chaque genre suit celle de son historique. Fixe : la même pénalité de redondance pour tous.</p><div class="rp-grid" data-fields="diversmode"></div><div class="rp-factors" data-fields="divers"></div><div class="rp-grid" data-fields="sagas"></div></div>
-                    <div class="rp-box"><h3>En tête de liste</h3><p>Les nouveautés de ce que le compte suit passent devant tout le reste, pendant un temps : nouveaux épisodes ou nouvelle saison d'une série qu'il a rattrapée, volet suivant d'une saga. Un titre qu'il a demandé n'y est jamais : il sait déjà qu'il le veut ; il est classé comme les autres, d'abord écarté, puis peut revenir s'il n'est toujours pas vu.</p><div class="rp-grid" data-fields="pinned"></div></div>
-                    <details class="rp-adv"><summary>Réglages avancés <span>— taille des listes, sagas, diversité calibrée</span></summary>
+                    <div class="rp-box" data-level="2"><h3>Diversité et sagas</h3><p>Personnalisée (par défaut, la mieux évaluée) : la liste est aussi variée que ce que le compte regarde. Calibrée : la part de chaque genre suit celle de son historique. Fixe : la même pénalité de redondance pour tous.</p><div class="rp-grid" data-fields="diversmode"></div><div class="rp-factors" data-fields="divers"></div><div class="rp-grid" data-fields="sagas"></div></div>
+                    <div class="rp-box" data-level="2"><h3>En tête de liste</h3><p>Les nouveautés de ce que le compte suit passent devant tout le reste, pendant un temps : nouveaux épisodes ou nouvelle saison d'une série qu'il a rattrapée, volet suivant d'une saga. Un titre qu'il a demandé n'y est jamais : il sait déjà qu'il le veut ; il est classé comme les autres, d'abord écarté, puis peut revenir s'il n'est toujours pas vu.</p><div class="rp-grid" data-fields="pinned"></div></div>
+                    <details class="rp-adv" data-level="3"><summary>Réglages experts <span>— taille des listes, sagas, diversité calibrée</span></summary>
                         <div class="rp-box"><div class="rp-grid" data-fields="listadv"></div></div>
                     </details>
                 </div>
 
                 <!-- MOTEUR -->
-                <div class="rp-pane" data-pane="moteur">
+                <div class="rp-pane" data-pane="moteur" data-level="2">
                     <p class="rp-sub">Valeurs par défaut = réglage retenu après évaluation. Le garde-fou (bonus de nouveauté, de popularité et de note réservés aux titres qui collent déjà aux goûts du compte) est toujours actif ; la nouveauté est plafonnée à 4. Pour ajuster sur vos données, préférez l'onglet Calibrage.</p>
                     <div class="rp-box"><h3>Facteurs de classement</h3><p>Chaque facteur s'active ou se coupe, et se renforce ou s'atténue (×1 = valeur évaluée, ×0,25 à ×3). Survolez le ? pour ce qu'il fait.</p>
                         <h4 class="rp-h4">Ce qui compte comme un goût</h4><div class="rp-factors" data-fields="fsig"></div>
@@ -186,7 +200,7 @@
                         <h4 class="rp-h4">Bonus réservés aux titres qui collent déjà aux goûts (garde-fou)</h4><div class="rp-factors" data-fields="fbonus"></div>
                     </div>
                     <div class="rp-box"><h3>Durées</h3><p>Combien de temps un signal compte.</p><div class="rp-grid" data-fields="durees"></div></div>
-                    <details class="rp-adv"><summary>Réglages avancés <span>— signaux fins, bonus, contenu, « vus ensemble »</span></summary>
+                    <details class="rp-adv" data-level="3"><summary>Réglages experts <span>— signaux fins, bonus, contenu, « vus ensemble »</span></summary>
                         <div class="rp-box"><h3>Signaux</h3><div class="rp-grid" data-fields="sigadv"></div></div>
                         <div class="rp-box"><h3>Goût du moment et titres montrés sans être ouverts</h3><div class="rp-grid" data-fields="momentadv"></div></div>
                         <div class="rp-box"><h3>Séries</h3><div class="rp-grid" data-fields="seriesadv"></div></div>
@@ -215,7 +229,7 @@
                         </div>
                         <div class="rp-result" id="rpSeerrTestResult"></div>
                     </div>
-                    <details class="rp-adv"><summary>Réglages avancés <span>— langue, classifications</span></summary>
+                    <details class="rp-adv" data-level="2"><summary>Réglages avancés <span>— langue, classifications</span></summary>
                         <div class="rp-box"><div class="rp-grid" data-fields="seerradv"></div></div>
                     </details>
                 </div>
@@ -228,12 +242,12 @@
                         <div class="rp-grid" data-fields="ext"></div>
                     </div>
                     <p class="rp-sub">Où vont ces titres sur l'accueil : colonne « Contenu » de l'onglet Accueil. Un titre hors bibliothèque ne va que dans une rangée, celle du haut d'abord ; chaque rangée garde sa taille. Avec Jellyfin Enhanced relié à Seerr : ses cartes, sa fiche et son bouton Demander.</p>
-                    <div class="rp-box">
+                    <div class="rp-box" data-level="2">
                         <h3>Où chercher</h3>
                         <p>Sources des titres proposés, en plus des recommandations des titres aimés. Chacune apporte sa part, puis le moteur les classe toutes de la même façon, selon les goûts du compte.</p>
                         <div class="rp-grid" data-fields="extsrc"></div>
                     </div>
-                    <details class="rp-adv"><summary>Réglages avancés <span>— sans HSS ni Jellyfin Enhanced, recherche et exploration</span></summary>
+                    <details class="rp-adv" data-level="3"><summary>Réglages experts <span>— sans HSS ni Jellyfin Enhanced, recherche et exploration</span></summary>
                         <div class="rp-box"><div class="rp-grid" data-fields="extadv"></div></div>
                     </details>
                 </div>
@@ -262,11 +276,13 @@
 
                 <div class="rp-save" id="rpSaveBar">
                     <button is="emby-button" type="submit" class="raised button-submit block"><span>Enregistrer</span></button>
+                    <div class="rp-saved rp-hidden" id="rpSaved"><span>Réglages enregistrés. Ils s'appliquent à chaque compte à son prochain calcul.</span>
+                        <button is="emby-button" type="button" class="raised" id="rpSavedRecompute"><span>Recalculer maintenant et voir l'aperçu</span></button></div>
                 </div>
             </form>
 
             <!-- CALIBRAGE -->
-            <div class="rp-pane" data-pane="calibrage">
+            <div class="rp-pane" data-pane="calibrage" data-level="2">
                 <div class="rp-box">
                     <h3>Calibrage sur l'historique</h3>
                     <p>Rejoue l'historique : chaque fois qu'un compte a commencé un nouveau titre, à quel rang ce titre figurait-il dans les recommandations calculées juste avant, avec seulement ce qui était connu alors ? Chaque cas pèse selon l'historique déjà connu du compte, et les comptes sont équilibrés. Chaque méthode est refaite sans un groupe de comptes et mesurée sur ce groupe, pour chaque groupe (validation croisée ; par défaut, la racine carrée du nombre de comptes en groupes), à chaque étape de son chemin vers le réglage appris ; on garde l'étape la plus prudente qui fait presque aussi bien que la meilleure. Un réglage n'est recommandé que si son gain se retrouve, de façon sûre et d'au moins le gain minimal (1 % par défaut), chez des comptes qui n'ont pas servi à le choisir (en dessous, rien ne se verrait). Rien n'est appliqué sans votre clic ; les onglets Listes et Général n'entrent pas en jeu. Visible aussi dans Tâches planifiées.</p>
@@ -279,7 +295,7 @@
                             <option value="Neural">Réseau de neurones (expérimental)</option>
                         </select>
                     </div><span class="rp-tip" tabindex="0" role="note" aria-label="Modèle de choix appris : apprend d'un coup les 10 poids du score (logit conditionnel : « quel titre a été choisi parmi tous ceux proposables »), régularisé vers les réglages actuels, force choisie par validation croisée ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages (grille puis section dorée), contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux ; long et gourmand (jusqu'à une heure de processeur). Par défaut : modèle de choix appris.">?<span class="rp-bubble">Modèle de choix appris : apprend d'un coup les 10 poids du score (logit conditionnel : « quel titre a été choisi parmi tous ceux proposables »), régularisé vers les réglages actuels, force choisie par validation croisée ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages (grille puis section dorée), contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux ; long et gourmand (jusqu'à une heure de processeur). Par défaut : modèle de choix appris.</span></span></div></div>
-                    <details class="rp-adv rp-dev"><summary>Réglages du calibrage <span>— validation croisée, prudence, recherche (0 = automatique) ; enregistrés aussitôt</span></summary>
+                    <details class="rp-adv" data-level="3"><summary>Réglages du calibrage <span>— validation croisée, prudence, recherche (0 = automatique) ; enregistrés aussitôt</span></summary>
                         <div class="rp-grid" data-fields="calib"></div>
                         <span id="rpCalOptState" class="mute rp-result"></span>
                     </details>
@@ -330,6 +346,7 @@
                 <div class="rp-box">
                     <h3>Ce que voit un compte</h3>
                     <p>Liste actuellement servie (après filtres, hasard du jour et minimums). Après un Enregistrer, cliquez sur « Recalculer maintenant » (sinon chaque compte est recalculé à sa prochaine activité).</p>
+                    <p class="rp-result mute rp-hidden" id="rpPreviewWait">Calcul en cours… l'aperçu s'affichera dès qu'il sera terminé.</p>
                     <div class="rp-row">
                         <select is="emby-select" id="rpPreviewUser"></select>
                         <button is="emby-button" type="button" class="raised" id="rpPreviewBtn"><span>Afficher</span></button>
@@ -1098,6 +1115,13 @@
         }
 
         function renderStatus(s) {
+            lastStatus = s;
+            renderHealth(s);
+            if (waitPreview && s.engine && !s.engine.Running && s.engine.LastFullRun && s.engine.LastFullRun !== waitPreview.last) {
+                waitPreview = null;
+                $('#rpPreviewWait').classList.add('rp-hidden');
+                $('#rpPreviewBtn').click();
+            }
             $('#rpVersion').textContent = tf('version {0}', s.version);
             var al = $('#rpAlerts'); al.innerHTML = '';
             (s.alerts || []).forEach(function (a) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, '⚠ ' + a.Title)); d.appendChild(el('span', {}, a.Message)); al.appendChild(d); });
@@ -1213,6 +1237,74 @@
         $('#rpDev').addEventListener('change', function () { setDev($('#rpDev').checked); });
         setDev(devStored());
 
+        // niveaux d'affichage : essentiel (1), avancé (2), expert (3) ; un réglage caché garde sa valeur et reste enregistré
+        function levelStored() { try { var v = window.localStorage.getItem('recoplus.level'); return /^[123]$/.test(v || '') ? v : '1'; } catch (e) { return '1'; } }
+        function setLevel(v) {
+            try { window.localStorage.setItem('recoplus.level', v); } catch (e) { /* navigation privée : pour cette page seulement */ }
+            ['1', '2', '3'].forEach(function (n) { page.classList.toggle('rp-lvl-' + n, n === v); });
+            $('#rpLevel').value = v;
+            var cur = page.querySelector('.rp-tab.on');
+            if (cur && +(cur.getAttribute('data-level') || 1) > +v) { page.querySelector('.rp-tab[data-tab="etat"]').click(); }
+        }
+        $('#rpLevel').addEventListener('change', function () { setLevel($('#rpLevel').value); });
+        setLevel(levelStored());
+
+        // état d'un coup d'œil et mise en route : chaque point dit ce qui manque et propose de le faire
+        var lastStatus = null, waitPreview = null;
+        function goTab(name) { page.querySelector('.rp-tab[data-tab="' + name + '"]').click(); }
+        function step(list, state, text, label, action) {
+            var li = el('li');
+            li.appendChild(el('b', { 'class': state === 'ok' ? 'ok' : state === 'warn' ? 'ko' : 'mute' }, state === 'ok' ? '✔' : state === 'warn' ? '⚠' : 'ℹ'));
+            li.appendChild(el('span', {}, text));
+            if (label) {
+                var b = el('button', { type: 'button', 'class': 'raised emby-button' }, label);
+                var out = el('span', { 'class': 'rp-result mute' });
+                b.addEventListener('click', function () { action(b, out); });
+                li.appendChild(b);
+                li.appendChild(out);
+            }
+            list.appendChild(li);
+            return state === 'warn' ? 1 : 0;
+        }
+        function renderHealth(s) {
+            var e = s.engine || {}, list = $('#rpSteps'), warn = 0;
+            list.innerHTML = '';
+            var total = (s.users || []).length, ready = (s.users || []).filter(function (u) { return u.ready; }).length;
+            if (e.Running) { warn += step(list, 'info', t('Calcul en cours…')); }
+            else if (!e.UsersWithRecs) {
+                warn += step(list, 'warn', t('Aucune recommandation encore : lancez le premier calcul.'), t('Lancer le calcul'), function (b, out) {
+                    b.disabled = true; api('POST', 'Recompute').then(function () { out.textContent = t('lancé'); refresh(); }, function () { b.disabled = false; });
+                });
+            } else { warn += step(list, 'ok', tf('Recommandations prêtes : {0} compte(s) sur {1}.', ready, total)); }
+            if (e.LastError) { warn += step(list, 'warn', t('Le dernier calcul a échoué : voir « Dernière erreur de calcul » plus haut.')); }
+            var optional = /Home Screen Sections|Jellyfin Enhanced|Media Bar|LocalRecs/;
+            var bad = (s.checks || []).filter(function (c) { return !c.ok && !optional.test(c.check); }).length + Object.keys(s.disabled || {}).length;
+            warn += bad ? step(list, 'warn', tf('{0} point(s) d\'accroche à regarder : voir « Compatibilité et dépendances » plus bas.', bad))
+                : step(list, 'ok', t('Tous les points d\'accroche de Jellyfin sont en place.'));
+            var h = s.hssSetup || {};
+            var addRows = function (b, out) {
+                b.disabled = true;
+                api('POST', 'HomeSections/Setup').then(function (r) { out.textContent = r.message; refresh(); }, function () { b.disabled = false; out.textContent = t('échec de l\'appel'); });
+            };
+            if (!h.Present) { warn += step(list, 'info', t('Home Screen Sections absent : pas de rangées d\'accueil (facultatif, le reste fonctionne).')); }
+            else if (!h.Enabled || !h.InTable) { warn += step(list, 'warn', t('Les rangées Reco+ ne sont pas dans Home Screen Sections : rien n\'apparaît sur l\'accueil.'), t('Les ajouter pour moi'), addRows); }
+            else if (h.InTable < h.Declared) { warn += step(list, 'info', tf('{0} rangées Reco+ sur {1} dans Home Screen Sections.', h.InTable, h.Declared), t('Ajouter les autres'), addRows); }
+            else { warn += step(list, 'ok', tf('{0} rangées Reco+ dans Home Screen Sections : chaque compte choisit les siennes.', h.InTable)); }
+            if (!s.seerrEnabled) { warn += step(list, 'info', t('Seerr non relié : seulement des titres de la bibliothèque (facultatif).'), t('Relier Seerr'), function () { goTab('seerr'); }); }
+            else if (!s.seerrOk) { warn += step(list, 'warn', t('Seerr ne répond pas : titres hors bibliothèque et demandes en pause.'), t('Vérifier'), function () { goTab('seerr'); }); }
+            else { warn += step(list, 'ok', t('Seerr relié.')); }
+            $('#rpHealth').classList.toggle('warn', warn > 0);
+            $('#rpHealthTitle').textContent = warn ? tf('{0} point(s) à regarder', warn) : t('Tout fonctionne');
+        }
+        // « Recalculer maintenant et voir l'aperçu » : l'aperçu se rafraîchit à la fin du calcul
+        function recomputeAndPreview() {
+            waitPreview = { last: lastStatus && lastStatus.engine ? lastStatus.engine.LastFullRun : null };
+            $('#rpSaved').classList.add('rp-hidden');
+            $('#rpPreviewWait').classList.remove('rp-hidden');
+            goTab('apercu');
+            api('POST', 'Recompute').then(refresh, refresh);
+        }
+
         // journal en temps réel
         var LV = { VRB: 0, DBG: 1, INF: 2, WRN: 3, ERR: 4, FTL: 5 };
         var logs = { cursor: null, all: false, paused: false, busy: false, timer: null };
@@ -1279,6 +1371,7 @@
                         secrets.forEach(function (p) { $(p[1]).value = ''; });
                         Dashboard.processPluginConfigurationUpdateResult(r);
                         if ((lastCfg.Language || 'System') !== langBefore) { window.location.reload(); return; }   // nouvelle langue : page reconstruite
+                        $('#rpSaved').classList.remove('rp-hidden');   // la suite logique : recalculer et voir l'effet
                         refresh();
                     })
                     .catch(function () { Dashboard.hideLoadingMsg(); Dashboard.alert(t('Enregistrement impossible.')); });
@@ -1307,6 +1400,7 @@
             });
 
             $('#rpRecompute').addEventListener('click', function () { api('POST', 'Recompute').then(refresh, refresh); });
+            $('#rpSavedRecompute').addEventListener('click', recomputeAndPreview);
             $('#rpRecheck').addEventListener('click', function () { api('POST', 'Checks').then(refresh, refresh); });
             $('#rpEngineReset').addEventListener('click', function () {
                 if (confirm(t('Remettre les réglages du moteur par défaut ? (l\'actuel est gardé pour revenir en arrière ; les onglets Général et Listes ne changent pas)'))) { api('POST', 'Engine/Reset').then(load, load); }

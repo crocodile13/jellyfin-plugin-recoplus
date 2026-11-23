@@ -517,7 +517,7 @@ await test('aperçu : tableau des sources, dans l\'ordre, « — » sans mélang
     assert.ok(!d.getElementById('rpPreviewSourcesBox').classList.contains('rp-hidden'));
 });
 
-await test('mode développeur : Journal et détail par source cachés par défaut ; Moteur et Calibrage visibles (avancés)', async () => {
+await test('mode développeur : Journal et détail par source cachés par défaut ; Moteur et Calibrage au niveau avancé', async () => {
     const { d, w } = await open(cfg);
     await wait(50);
     const page = d.getElementById('RecoPlusConfigPage');
@@ -526,13 +526,13 @@ await test('mode développeur : Journal et détail par source cachés par défau
     assert.ok(d.querySelector('.rp-tab[data-tab="journal"]').classList.contains('rp-dev'));
     // outils de développement : export et réglages statistiques du calibrage ; la langue est un réglage de base
     assert.ok(d.getElementById('rpCalExport').closest('.rp-dev'), 'export du jeu de calibrage : développeur');
-    assert.ok(d.querySelector('[data-fields="calib"]').closest('.rp-dev'), 'réglages statistiques du calibrage : développeur');
+    assert.equal(d.querySelector('[data-fields="calib"]').closest('[data-level]').getAttribute('data-level'), '3', 'réglages statistiques du calibrage : expert (des réglages, pas un outil)');
     assert.ok(!d.getElementById('rpCalStart').closest('.rp-dev') && !d.getElementById('rpCalMethod').closest('.rp-dev'), 'lancer et choisir la méthode : avancé');
     assert.ok(!d.getElementById('rp_c_Language').closest('details') && !d.getElementById('rp_c_Language').closest('.rp-dev'), 'langue : de base');
     for (const t of ['moteur', 'calibrage']) {
         const tab = d.querySelector('.rp-tab[data-tab="' + t + '"]');
-        assert.ok(!tab.classList.contains('rp-dev') && shown('.rp-tab[data-tab="' + t + '"]'), t + ' visible sans mode développeur');
-        assert.ok(tab.querySelector('.rp-tabtag'), t + ' marqué avancé');
+        assert.ok(!tab.classList.contains('rp-dev'), t + ' : pas un outil de développement');
+        assert.equal(tab.getAttribute('data-level'), '2', t + ' : niveau avancé');
     }
     assert.ok(!d.querySelector('.rp-tab[data-tab="general"]').classList.contains('rp-dev'));
     assert.ok(d.getElementById('rpPreviewSourcesBox').classList.contains('rp-dev'));
@@ -769,6 +769,83 @@ await test('chaque valeur par défaut d\'un champ numérique respecte ses bornes
         if (v < min || v > max || Math.abs(q - Math.round(q)) > 1e-9) { bad.push(`${key}=${v} (min ${min}, max ${max}, pas ${step})`); }
     }
     assert.deepEqual(bad, []);
+});
+
+await test('niveaux : essentiel par défaut, avancé et expert dévoilent leurs réglages, valeurs cachées gardées à l\'enregistrement', async () => {
+    const { d, w, saved } = await open({ ...cfg, Engine: { ...cfg.Engine, GateTop: 77 } });
+    await wait(50);
+    const page = d.getElementById('RecoPlusConfigPage');
+    // visible au niveau courant : aucun ancêtre d'un niveau supérieur
+    const shown = (e) => {
+        const cur = +(['1', '2', '3'].find((n) => page.classList.contains('rp-lvl-' + n)) || 1);
+        for (let n = e; n && n !== page; n = n.parentElement) { if (+(n.getAttribute('data-level') || 0) > cur) { return false; } }
+        return true;
+    };
+    const level = (v) => { const sel = d.getElementById('rpLevel'); sel.value = v; sel.dispatchEvent(new w.Event('change', { bubbles: true })); };
+    assert.ok(page.classList.contains('rp-lvl-1'), 'essentiel par défaut');
+    assert.ok(shown(d.getElementById('rp_c_HssSectionTitle')) && shown(d.getElementById('rp_c_SeerrUrl')), 'titres des rangées, Seerr : essentiels');
+    assert.ok(!shown(d.querySelector('.rp-tab[data-tab="moteur"]')) && !shown(d.getElementById('rp_l_RandomPercent')), 'moteur, hasard : cachés');
+    level('2');
+    assert.ok(shown(d.querySelector('.rp-tab[data-tab="moteur"]')) && shown(d.getElementById('rp_l_RandomPercent')), 'avancé : moteur et composition');
+    assert.ok(!shown(d.getElementById('rp_e_Bm25K1')), 'BM25 : expert');
+    level('3');
+    assert.ok(shown(d.getElementById('rp_e_Bm25K1')) && shown(d.getElementById('rp_e_GateTop')));
+    d.querySelector('.rp-tab[data-tab="moteur"]').click();
+    level('1');
+    assert.ok(d.querySelector('.rp-pane[data-pane="etat"]').classList.contains('on'), 'onglet devenu caché : retour à État');
+    d.getElementById('rpForm').requestSubmit();
+    await wait(50);
+    assert.equal(saved[0].Engine.GateTop, 77, 'un réglage caché garde sa valeur');
+    assert.equal(w.localStorage.getItem('recoplus.level'), '1');
+});
+
+await test('mise en route : ce qui manque est dit et se fait d\'un clic (rangées HSS, premier calcul, Seerr)', async () => {
+    const posted = [];
+    const st = { ...status, engine: { UsersWithRecs: 0 }, hssSetup: { Present: true, Enabled: false, InTable: 0, Declared: 7 }, seerrEnabled: false, seerrOk: false, checks: [] };
+    const { d } = await open(cfg, { '/RecoPlus/Status': st, '/RecoPlus/HomeSections/Setup': (o) => { posted.push(o.url); return { added: 7, message: '7 rangées Reco+ ajoutées à Home Screen Sections' }; },
+        '/RecoPlus/Recompute': (o) => { posted.push(o.url); return {}; } });
+    await wait(80);
+    assert.match(d.getElementById('rpHealthTitle').textContent, /2 point\(s\) à regarder/);
+    const steps = [...d.querySelectorAll('#rpSteps li')];
+    const hss = steps.find((li) => /Home Screen Sections/.test(li.textContent));
+    assert.match(hss.textContent, /rien n'apparaît sur l'accueil/);
+    hss.querySelector('button').click();
+    await wait(30);
+    assert.ok(posted.some((u) => u.includes('HomeSections/Setup')));
+    assert.match(hss.textContent, /7 rangées Reco\+ ajoutées/);
+    steps.find((li) => /premier calcul/.test(li.textContent)).querySelector('button').click();
+    await wait(30);
+    assert.ok(posted.some((u) => u.includes('Recompute')));
+    assert.ok(steps.some((li) => /Seerr non relié/.test(li.textContent) && li.querySelector('button')), 'Seerr : facultatif, avec un lien');
+
+    const ok = await open(cfg, { '/RecoPlus/Status': { ...status, engine: { UsersWithRecs: 2 }, hssSetup: { Present: true, Enabled: true, InTable: 7, Declared: 7 }, seerrEnabled: true, seerrOk: true, checks: [] } });
+    await wait(80);
+    assert.equal(ok.d.getElementById('rpHealthTitle').textContent, 'Tout fonctionne');
+    assert.ok(!ok.d.getElementById('rpHealth').classList.contains('warn'));
+});
+
+await test('après Enregistrer : recalculer et voir l\'aperçu, qui s\'affiche à la fin du calcul', async () => {
+    let last = '2026-01-01T00:00:00Z', running = false;
+    const previews = [];
+    const { d } = await open(cfg, {
+        '/RecoPlus/Status': () => ({ ...status, engine: { UsersWithRecs: 1, LastFullRun: last, Running: running } }),
+        '/RecoPlus/Recompute': () => { running = true; return {}; },
+        '/RecoPlus/Preview': (o) => { previews.push(o.url); return { items: ['Spirited Away'], rows: {}, extended: [] }; },
+    });
+    await wait(50);
+    d.getElementById('rpForm').requestSubmit();
+    await wait(50);
+    const bar = d.getElementById('rpSaved');
+    assert.ok(!bar.classList.contains('rp-hidden'), 'bandeau après enregistrement');
+    d.getElementById('rpSavedRecompute').click();
+    await wait(30);
+    assert.ok(d.querySelector('.rp-pane[data-pane="apercu"]').classList.contains('on'));
+    assert.ok(!d.getElementById('rpPreviewWait').classList.contains('rp-hidden'), 'calcul en cours annoncé');
+    assert.equal(previews.length, 0);
+    running = false; last = '2026-01-02T00:00:00Z';
+    await wait(5600);   // le prochain état (toutes les 5 s) voit la fin du calcul
+    assert.ok(d.getElementById('rpPreviewWait').classList.contains('rp-hidden'));
+    assert.equal(previews.length, 1, 'aperçu affiché une fois le calcul fini');
 });
 
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');

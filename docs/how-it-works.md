@@ -112,11 +112,14 @@ Dashboard → Plugins → Reco+. The page has one tab per topic:
 | Preview | what an account currently gets, row by row (and, in developer mode, what each extended-mode source brought) |
 | Log | developer mode: Reco+'s log in real time (or all of Jellyfin's), filterable, secrets masked |
 
-Three levels:
+Settings level (selector at the right of the tabs, remembered per browser); hidden settings keep their value and are saved:
 
-- **Basic**: the tabs above, except Engine, Calibration and Log.
-- **Advanced**: the Engine and Calibration tabs (always visible, tagged *advanced*), and the folded "Advanced settings" sections of every tab.
-- **Developer mode** (checkbox at the right of the tabs, remembered per browser): the Log tab, the calibration data export, the statistical settings of the calibration and the step-by-step path of each method, and what each extended-mode source brought in the Preview.
+- **Essential** (default): what it takes for everything to work — what Reco+ replaces, the home rows (title, movies/series, content), Seerr, extended mode on/off, filters and excluded genres, ignored accounts, language.
+- **Advanced**: to fine-tune — the Engine (ranking factors, durations) and Calibration tabs, current lists, mixing, top of the list, sagas, discovery sources.
+- **Expert**: every detailed setting of the engine, the exploration and the calibration statistics.
+- **Developer mode** (separate checkbox: tools, not settings): the Log tab, the calibration data export, the step-by-step path of each calibration method, and what each extended-mode source brought in the Preview.
+
+The State tab opens with a summary ("Everything works" or what to look at) and a start-up checklist with one-click actions: run the first computation, **add the Reco+ rows to Home Screen Sections** (enables it and adds the missing rows, as an administrator would in its settings), connect Seerr. After **Save**, a banner offers to recompute and shows the Preview as soon as the computation is done.
 
 **Language.** The plugin is in English and French: page, home rows and cards, notifications. *Jellyfin's* (default) follows each person's Jellyfin interface language (otherwise the server's); English or French force it for everyone. Row titles left empty use the default title in the reader's language.
 
