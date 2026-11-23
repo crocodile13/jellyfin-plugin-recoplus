@@ -1,0 +1,26 @@
+name: Jellyfin watch
+
+# Every Monday: has a Jellyfin minor version newer than the supported window (compat.json) been released? If so this
+# job fails with the exact steps (read its release notes, then `python tools/compat.py set <oldest> <newest>`, CI and
+# integration green) and GitHub notifies the maintainer. It opens nothing by itself: moving the window needs a human
+# reading the release notes, and a pull request opened with the workflow token would not even trigger CI.
+on:
+  schedule:
+    - cron: '41 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  latest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Latest Jellyfin release against the window
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python tools/compat.py latest

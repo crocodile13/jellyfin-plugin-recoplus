@@ -35,6 +35,9 @@ jobs:
           echo "meta=$META csproj=$CSPROJ manifest=$MANIFEST"
           test "$META" = "$CSPROJ" && test "$META" = "$MANIFEST"
 
+      - name: Jellyfin compatibility window (compat.json, every place that repeats it)
+        run: python tools/compat.py check
+
       - name: Regenerate reference data from the Python prototype
         # The C# engine must reproduce the prototype exactly: regenerate the synthetic reference
         # on this machine, then the C# parity tests below compare against it.
