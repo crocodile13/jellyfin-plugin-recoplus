@@ -141,6 +141,19 @@ public class ExplorationTests
     }
 
     [Fact]
+    public void TmdbKeysAreReadStrictlyAndBadOnesAreIgnored()
+    {
+        Assert.True(Exploration.TryTmdbKey("movie:603", out var t, out var id) && t == "movie" && id == 603);
+        Assert.True(Exploration.TryTmdbKey("tmdb:tv:1399", out t, out id) && t == "tv" && id == 1399);
+        foreach (var bad in new[] { null, "", "movie", "movie:", ":12", "movie:abc", "movie:-3", "movie:0", "person:12", "movie:1 2", "tmdb:", "movie:12:3" })
+        {
+            Assert.False(Exploration.TryTmdbKey(bad, out t, out id), bad ?? "null");
+            Assert.Equal(string.Empty, t);
+            Assert.Equal(0, id);
+        }
+    }
+
+    [Fact]
     public void PairsKeepTheStrongestCrossings()
     {
         var g = new (int, double)[] { (18, 3.0), (16, 2.0), (35, 0.5) };

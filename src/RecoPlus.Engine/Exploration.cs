@@ -318,6 +318,33 @@ public static class Exploration
         "edited from film", "edited from tv series", "compilation film", // i18n:skip
     };
 
+    /// <summary>
+    /// Lit une clé TMDb « movie:123 » ou « tv:123 » (aussi avec le préfixe « tmdb: »). Faux pour toute autre forme : une
+    /// clé mal formée est ignorée, jamais une exception.
+    /// </summary>
+    public static bool TryTmdbKey(string? key, out string type, out int id)
+    {
+        type = string.Empty;
+        id = 0;
+        var k = key is not null && key.StartsWith("tmdb:", StringComparison.Ordinal) ? key[5..] : key;
+        int c = k?.IndexOf(':') ?? -1;
+        if (k is null || c <= 0 || !int.TryParse(k.AsSpan(c + 1), System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out id) || id <= 0)
+        {
+            id = 0;
+            return false;
+        }
+
+        type = k[..c];
+        if (type is not ("movie" or "tv"))
+        {
+            type = string.Empty;
+            id = 0;
+            return false;
+        }
+
+        return true;
+    }
+
     /// <summary>Le mot-clé décrit-il le contenu (thème à explorer) plutôt que la fabrication du titre ?</summary>
     public static bool IsThemeKeyword(string name) => !MetaKeywords.Contains(name.Trim());
 

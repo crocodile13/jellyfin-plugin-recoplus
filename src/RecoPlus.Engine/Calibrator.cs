@@ -332,30 +332,36 @@ public static class Calibrator
 
     /// <summary>Intervalle de confiance à 95 % de l'écart (a − b) sur le top 10, bootstrap en tirant des comptes.</summary>
     public static (double Low, double High) BootstrapCi(IReadOnlyList<EvalEvent> ev, bool[] a, bool[] b, int rounds = 2000, int seed = 0)
+        => BootstrapByAccount(ev.Count, i => ev[i].User, _ => 1.0, i => (a[i] ? 1 : 0) - (b[i] ? 1 : 0), rounds, seed);
+
+    /// <summary>
+    /// IC95 d'une moyenne pondérée par bootstrap en tirant des comptes (avec remise, autant que de comptes) : les cas d'un
+    /// même compte ne sont pas indépendants. Déterministe pour une graine donnée.
+    /// </summary>
+    private static (double Low, double High) BootstrapByAccount(int n, Func<int, string> userOf, Func<int, double> weight, Func<int, double> value, int rounds, int seed)
     {
-        var users = ev.Select(e => e.User).Distinct().OrderBy(x => x, StringComparer.Ordinal).ToList();
+        var users = Enumerable.Range(0, n).Select(userOf).Distinct().OrderBy(x => x, StringComparer.Ordinal).ToList();
         if (users.Count == 0)
         {
             return (0, 0);
         }
 
-        var by = users.ToDictionary(u => u, u => Enumerable.Range(0, ev.Count).Where(i => ev[i].User == u).ToArray(), StringComparer.Ordinal);
+        var by = users.ToDictionary(u => u, u => Enumerable.Range(0, n).Where(i => userOf(i) == u).ToArray(), StringComparer.Ordinal);
         var rng = new Random(seed);
         var d = new double[rounds];
         for (int r = 0; r < rounds; r++)
         {
-            int cnt = 0;
-            int diff = 0;
+            double sw = 0, s = 0;
             for (int k = 0; k < users.Count; k++)
             {
                 foreach (var i in by[users[rng.Next(users.Count)]])
                 {
-                    diff += (a[i] ? 1 : 0) - (b[i] ? 1 : 0);
-                    cnt++;
+                    sw += weight(i);
+                    s += weight(i) * value(i);
                 }
             }
 
-            d[r] = cnt == 0 ? 0 : diff / (double)cnt;
+            d[r] = sw > 0 ? s / sw : 0;
         }
 
         Array.Sort(d);
@@ -1217,32 +1223,5 @@ public static class Calibrator
 
     /// <summary>IC95 de l'écart pondéré moyen (a − b), bootstrap en tirant des comptes.</summary>
     public static (double Low, double High) BootstrapDelta(IReadOnlyList<Case> cases, double[] a, double[] b, int rounds = 2000, int seed = 0)
-    {
-        var users = cases.Select(c => c.Ev.User).Distinct().OrderBy(x => x, StringComparer.Ordinal).ToList();
-        if (users.Count == 0)
-        {
-            return (0, 0);
-        }
-
-        var by = users.ToDictionary(u => u, u => Enumerable.Range(0, cases.Count).Where(i => cases[i].Ev.User == u).ToArray(), StringComparer.Ordinal);
-        var rng = new Random(seed);
-        var d = new double[rounds];
-        for (int r = 0; r < rounds; r++)
-        {
-            double sw = 0, s = 0;
-            for (int k = 0; k < users.Count; k++)
-            {
-                foreach (var i in by[users[rng.Next(users.Count)]])
-                {
-                    sw += cases[i].Weight;
-                    s += cases[i].Weight * (a[i] - b[i]);
-                }
-            }
-
-            d[r] = sw > 0 ? s / sw : 0;
-        }
-
-        Array.Sort(d);
-        return (d[(int)(rounds * 0.025)], d[(int)(rounds * 0.975)]);
-    }
+        => BootstrapByAccount(cases.Count, i => cases[i].Ev.User, i => cases[i].Weight, i => a[i] - b[i], rounds, seed);
 }
