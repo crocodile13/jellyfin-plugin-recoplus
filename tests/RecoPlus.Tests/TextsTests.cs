@@ -66,8 +66,8 @@ public class TextsTests
     public void VerdictIsRenderedInBothLanguages()
     {
         var rep = Calibrator.Sufficiency(CalibrationMethod.ChoiceModel, 30);
-        Assert.True(Texts.Render(rep.Message, "fr").StartsWith("30 cas pour", StringComparison.Ordinal));
-        Assert.True(Texts.Render(rep.Message, "en").StartsWith("30 cases for", StringComparison.Ordinal));
+        Assert.StartsWith("30 cas pour", Texts.Render(rep.Message, "fr"), StringComparison.Ordinal);
+        Assert.StartsWith("30 cases for", Texts.Render(rep.Message, "en"), StringComparison.Ordinal);
         Assert.Equal("insufficient", Texts.Render(rep.Level, "en"));
     }
 

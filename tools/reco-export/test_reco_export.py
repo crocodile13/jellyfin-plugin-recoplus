@@ -67,6 +67,7 @@ class T(unittest.TestCase):
         db.commit(); db.close()
     def tearDown(self):
         self.srv.shutdown()
+        self.srv.server_close()                       # socket fermé (aucun ResourceWarning)
         shutil.rmtree(self.tmp, ignore_errors=True)   # rien ne reste dans le dossier temporaire du système
 
     def run_main(self, *extra):

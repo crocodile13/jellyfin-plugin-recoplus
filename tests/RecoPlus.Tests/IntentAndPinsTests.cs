@@ -321,7 +321,7 @@ public class IntentAndPinsTests
         w.Movie("p1", Now - (400 * Day), Now - (3000 * Day), "saga");
         w.Movie("p2", Now - (5 * Day), Now - (2000 * Day), "saga");          // vieux film ajouté récemment
         w.H["p1"] = new Interaction { Title = "p1", Favorite = true };
-        Assert.Empty(w.Pins().Where(id => id == "p2"));
+        Assert.DoesNotContain("p2", w.Pins());
 
         var n = new World();
         n.Movie("p1", Now - (400 * Day), Now - (3000 * Day), "saga");

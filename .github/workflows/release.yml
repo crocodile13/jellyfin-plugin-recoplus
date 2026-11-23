@@ -3,11 +3,13 @@ name: Release
 # Publishes the version declared in manifest.json when no release exists for it yet:
 # build + tests, zip, GitHub release, then manifest.json (checksum, URL, date) is updated so that
 # the repository URL below can be added to Jellyfin as a plugin repository.
+# Runs only after CI succeeded on a push to main (every check: jsdom, latest Jellyfin build, parity...),
+# and only for the commit main is still at: a newer commit gets its own CI and release run.
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
-    paths:
-      - 'manifest.json'
   workflow_dispatch:
 
 permissions:
@@ -19,12 +21,26 @@ concurrency:
 
 jobs:
   release:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Same commit as the successful CI run
+        id: fresh
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ] && [ "$(git rev-parse HEAD)" != "${{ github.event.workflow_run.head_sha }}" ]; then
+            echo "main has moved since this CI run: the newer commit's own run will publish."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Read version
         id: v
+        if: steps.fresh.outputs.ok == 'true'
         run: |
           VERSION=$(jq -r '.[0].versions[0].version' manifest.json)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
@@ -37,7 +53,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         if: steps.v.outputs.exists == 'false'
         with:
           dotnet-version: '10.0.x'
