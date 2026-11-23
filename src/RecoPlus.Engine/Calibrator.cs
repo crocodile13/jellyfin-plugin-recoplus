@@ -192,6 +192,9 @@ public sealed class MethodResult
     /// <summary>Même chose en validation croisée : appris sans chaque groupe de comptes, mesuré sur lui.</summary>
     public double[] CvPath { get; init; } = Array.Empty<double>();
 
+    /// <summary>Gain de chaque cas, hors échantillon, à chaque étape du chemin (0 = actuel) : sert au choix honnête.</summary>
+    internal double[][] Oof { get; init; } = Array.Empty<double[]>();
+
     /// <summary>Étape retenue (règle 1-SE ; 0 = garder l'actuel).</summary>
     public int Picked { get; init; }
 }
@@ -1028,6 +1031,7 @@ public static class Calibrator
                 Steps = pick == 0 ? new List<CalibrationStep>() : stepsUpTo(pick),
                 CvDelta = delta[pick],
                 Ci = pick == 0 ? (0, 0) : BootstrapDelta(cases, oof[pick], baseG),
+                Oof = oof,
                 Sufficiency = Sufficiency(m, cases.Count).Level,
             };
         }
@@ -1108,19 +1112,29 @@ public static class Calibrator
 
         // la méthode retenue : recommandée d'abord, puis meilleure généralisation (validation croisée)
         var pick = results.OrderByDescending(r => r.Recommended).ThenByDescending(r => r.CvDelta).First();
+
+        // Le pas de chaque chemin et la méthode sont choisis sur les mesures hors échantillon elles-mêmes : le gain du
+        // gagnant est donc un peu flatteur (le meilleur de plusieurs tirages bruités). Gain honnête de toute la procédure :
+        // pour chaque groupe de comptes, le même choix refait sans lui, jugé sur lui (sans rien réapprendre). C'est ce gain-là
+        // qui est annoncé et qui doit être sûr pour recommander.
+        var honest = HonestSelection(cases, baseG, results.Select(r => r.Oof).ToList(), kf, opt.SeMultiplier);
+        if (pick.Recommended && !(honest.Delta > 0 && honest.Ci.Low > 0 && honest.Delta / Math.Max(cur.Gain, 1e-9) >= minGain))
+        {
+            pick.Recommended = false;
+        }
         string Pct(double x) => (x * 100).ToString("+0.0;-0.0", System.Globalization.CultureInfo.InvariantCulture) + " %";
         double rel(double x) => x / Math.Max(cur.Gain, 1e-9);
         bool improved = pick.Result.Gain > cur.Gain + 1e-9;
         // textes emballés (Texts.Pack) : traduits à l'affichage, dans la langue de celui qui lit
         string lead = results.Count > 1 ? Texts.Pack("{0} (la meilleure des {1} méthodes) : ", Texts.Translatable(pick.Name), results.Count) : string.Empty;
-        bool sureButTiny = !pick.Recommended && improved && pick.CvDelta > 0 && pick.Ci.Low > 0;
+        bool sureButTiny = !pick.Recommended && improved && honest.Delta > 0 && honest.Ci.Low > 0;
         string verdict = pick.NoChange || !improved
             ? Texts.Pack("aucun réglage ne fait mieux que l'actuel : on garde l'actuel.")
             : sureButTiny
-                ? Texts.Pack("gain réel mais négligeable ({0} en validation croisée, IC95 [{1} ; {2}], moins de {3}) : rien de visible, inutile de l'appliquer.", Pct(rel(pick.CvDelta)), Pct(rel(pick.Ci.Low)), Pct(rel(pick.Ci.High)), Pct(minGain).TrimStart('+'))
+                ? Texts.Pack("gain réel mais négligeable ({0} en validation croisée, IC95 [{1} ; {2}], moins de {3}) : rien de visible, inutile de l'appliquer.", Pct(rel(honest.Delta)), Pct(rel(honest.Ci.Low)), Pct(rel(honest.Ci.High)), Pct(minGain).TrimStart('+'))
             : pick.Recommended
-                ? Texts.Pack("gain probable et qui se généralise : appris sans chaque groupe de comptes, il fait mieux sur ce groupe ({0} de qualité de classement, IC95 [{1} ; {2}]).", Pct(rel(pick.CvDelta)), Pct(rel(pick.Ci.Low)), Pct(rel(pick.Ci.High)))
-                : Texts.Pack("gain sur cet historique ({0}), mais il ne se généralise pas à des comptes qui n'ont pas servi à l'apprendre (validation croisée {1}, IC95 [{2} ; {3}]) : application déconseillée.", Pct(rel(pick.Result.Gain - cur.Gain)), Pct(rel(pick.CvDelta)), Pct(rel(pick.Ci.Low)), Pct(rel(pick.Ci.High)));
+                ? Texts.Pack("gain probable et qui se généralise : appris sans chaque groupe de comptes, il fait mieux sur ce groupe ({0} de qualité de classement, IC95 [{1} ; {2}]).", Pct(rel(honest.Delta)), Pct(rel(honest.Ci.Low)), Pct(rel(honest.Ci.High)))
+                : Texts.Pack("gain sur cet historique ({0}), mais il ne se généralise pas à des comptes qui n'ont pas servi à l'apprendre (validation croisée {1}, IC95 [{2} ; {3}]) : application déconseillée.", Pct(rel(pick.Result.Gain - cur.Gain)), Pct(rel(honest.Delta)), Pct(rel(honest.Ci.Low)), Pct(rel(honest.Ci.High)));
         return new CalibrationReport
         {
             Folds = kf,
@@ -1128,14 +1142,65 @@ public static class Calibrator
             Current = cur,
             Proposed = pick.Result,
             ProposedSettings = pick.Settings,
-            DeltaCi = pick.Ci,
+            DeltaCi = honest.Ci,
             Steps = pick.Steps,
             Recommended = pick.Recommended,
             Verdict = lead.Length > 0 ? Texts.Pack("{0}{1}", lead, verdict) : verdict,
-            CvDelta = pick.CvDelta,
+            CvDelta = honest.Delta,
             Method = pick.Method,
             Methods = results,
         };
+    }
+
+    /// <summary>
+    /// Gain honnête d'une procédure de choix (pas du chemin selon la règle 1-SE, puis meilleure méthode) appliquée à des
+    /// mesures hors échantillon : pour chaque groupe de comptes, le choix est refait sur les autres groupes et jugé sur
+    /// celui-ci. <paramref name="paths"/> : pour chaque méthode, le gain de chaque cas à chaque étape (0 = actuel).
+    /// Renvoie l'écart pondéré à l'actuel et son IC95 (bootstrap par compte).
+    /// </summary>
+    public static (double Delta, (double Low, double High) Ci) HonestSelection(IReadOnlyList<Case> cases, double[] baseG, IReadOnlyList<double[][]> paths, int k, double seMultiplier)
+    {
+        var fold = Folds(cases, Math.Max(2, k));
+        var sel = (double[])baseG.Clone();
+        for (int f = 0; f < Math.Max(2, k); f++)
+        {
+            var trainIdx = Enumerable.Range(0, cases.Count).Where(i => fold[cases[i].Ev.User] != f).ToList();
+            var testIdx = Enumerable.Range(0, cases.Count).Where(i => fold[cases[i].Ev.User] == f).ToList();
+            if (trainIdx.Count == 0 || testIdx.Count == 0)
+            {
+                continue;
+            }
+
+            var trainCases = trainIdx.Select(i => cases[i]).ToList();
+            double[] Sub(double[] a) => trainIdx.Select(i => a[i]).ToArray();
+            var subBase = Sub(baseG);
+            double bestValue = 0;
+            double[]? chosen = null;
+            foreach (var oof in paths.Where(p => p.Length > 0))
+            {
+                var d = oof.Select(o => Weighted(cases, trainIdx, i => o[i] - baseG[i])).ToArray();
+                int best = Enumerable.Range(0, d.Length).OrderByDescending(x => d[x]).ThenBy(x => x).First();
+                var ci = BootstrapDelta(trainCases, Sub(oof[best]), subBase);
+                double se = seMultiplier * Math.Max(0, (ci.High - ci.Low) / (2 * 1.96));
+                int pick = Enumerable.Range(0, d.Length).First(x => d[x] >= d[best] - se);
+                if (pick > 0 && d[pick] > bestValue)
+                {
+                    bestValue = d[pick];
+                    chosen = oof[pick];
+                }
+            }
+
+            if (chosen is not null)
+            {
+                foreach (var i in testIdx)
+                {
+                    sel[i] = chosen[i];
+                }
+            }
+        }
+
+        var all = Enumerable.Range(0, cases.Count).ToList();
+        return (Weighted(cases, all, i => sel[i] - baseG[i]), BootstrapDelta(cases, sel, baseG));
     }
 
     private static double Weighted(IReadOnlyList<Case> cases, IEnumerable<int> idx, Func<int, double> f)

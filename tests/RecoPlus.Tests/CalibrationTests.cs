@@ -188,6 +188,27 @@ public class CalibrationTests
     }
 
     [Fact]
+    public void HonestSelectionDoesNotRewardTheLuckiestOfNoisyMethods()
+    {
+        var cases = Calibrator.Cases(Golden());
+        int n = cases.Count;
+        var rng = new Random(7);
+        var baseG = Enumerable.Range(0, n).Select(_ => 0.3).ToArray();
+        // trois méthodes de quatre étapes, chacune du pur bruit autour de l'actuel
+        var paths = Enumerable.Range(0, 3).Select(_ => Enumerable.Range(0, 5)
+            .Select(step => step == 0 ? (double[])baseG.Clone() : baseG.Select(b => b + (0.2 * (rng.NextDouble() - 0.5))).ToArray()).ToArray()).ToList();
+        double naive = paths.SelectMany(p => p.Skip(1)).Max(o => o.Zip(baseG, (a, b) => a - b).Average());
+        var h = Calibrator.HonestSelection(cases, baseG, paths, 3, 1.0);
+        Assert.True(h.Delta <= naive + 1e-12, $"honnête {h.Delta} ≤ meilleur tirage {naive}");
+        Assert.True(h.Ci.Low <= 0, "du bruit ne prouve rien");
+
+        // une méthode qui gagne vraiment partout : retrouvée
+        var real = new[] { (double[])baseG.Clone(), baseG.Select(b => b + 0.05).ToArray() };
+        var g = Calibrator.HonestSelection(cases, baseG, paths.Append(real).ToList(), 3, 1.0);
+        Assert.True(g.Delta > 0.03 && g.Ci.Low > 0, $"gain réel retrouvé : {g.Delta} [{g.Ci.Low} ; {g.Ci.High}]");
+    }
+
+    [Fact]
     public void BootstrapDeltaOfIdenticalIsZero()
     {
         var cases = Calibrator.Cases(Golden());
