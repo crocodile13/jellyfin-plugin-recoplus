@@ -279,9 +279,13 @@ de la CI.
 - À chaque session, avant le reste : dernière version de Jellyfin (releases GitHub, paquets NuGet, images Docker),
   ses notes de version, et mise à jour de compatibilité si elle dépasse `TestedTo` ; de même pour les plugins et services
   utilisés (tableau ci-dessous) : notes de version, et test d'intégration (`integration.yml`) avec leur dernière version.
-- Fenêtre de compatibilité : les 3 dernières versions mineures de Jellyfin. Une nouvelle version entre, la plus ancienne
-  sort : `JellyfinVersion` (donc `targetAbi`) remonte, ses chemins de repli et ses tests partent, le changelog dit
-  « nécessite Jellyfin ≥ … ». Les anciennes entrées de `manifest.json` restent : un serveur plus ancien garde la dernière
+- Fenêtre de compatibilité : les 3 dernières versions mineures de Jellyfin, écrite une seule fois dans `compat.json`.
+  `python tools/compat.py check` (CI) vérifie chaque endroit qui la répète (csproj, `meta.json`, `Plugin.TestedFrom/To`,
+  README fr/en, matrice et exclusions de `integration.yml`, ce fichier, ABI de l'entrée en tête de `manifest.json`) ;
+  `set 12.3 12.5` les réécrit tous ; `latest` (workflow `jellyfin-watch.yml`, chaque lundi) échoue quand une version
+  mineure plus récente sort, avec la marche à suivre. Un nouvel endroit qui cite la fenêtre = une règle de plus dans
+  `RULES`. Une nouvelle version entre, la plus ancienne sort : `JellyfinVersion` (donc `targetAbi`) remonte, ses
+  chemins de repli et ses tests partent, le changelog dit « nécessite Jellyfin ≥ … ». Les anciennes entrées de `manifest.json` restent : un serveur plus ancien garde la dernière
   version de Reco+ qui lui convient. Une nouvelle majeure (ABI des plugins) ouvre une nouvelle ligne de versions.
 - Suivis (dernière vérification 2026-11-23) :
 
