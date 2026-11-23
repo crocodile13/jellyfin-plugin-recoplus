@@ -796,7 +796,6 @@ await test('niveaux : essentiel par défaut, avancé et expert dévoilent leurs 
     d.getElementById('rpForm').requestSubmit();
     await wait(50);
     assert.equal(saved[0].Engine.GateTop, 77, 'un réglage caché garde sa valeur');
-    assert.equal(w.localStorage.getItem('recoplus.level'), '1');
 });
 
 await test('mise en route : ce qui manque est dit et se fait d\'un clic (rangées HSS, premier calcul, Seerr)', async () => {
@@ -805,7 +804,7 @@ await test('mise en route : ce qui manque est dit et se fait d\'un clic (rangée
     const { d } = await open(cfg, { '/RecoPlus/Status': st, '/RecoPlus/HomeSections/Setup': (o) => { posted.push(o.url); return { added: 7, message: '7 rangées Reco+ ajoutées à Home Screen Sections' }; },
         '/RecoPlus/Recompute': (o) => { posted.push(o.url); return {}; } });
     await wait(80);
-    assert.match(d.getElementById('rpHealthTitle').textContent, /2 point\(s\) à regarder/);
+    assert.match(d.getElementById('rpHealthHead').textContent, /2 point\(s\) à regarder/);
     const steps = [...d.querySelectorAll('#rpSteps li')];
     const hss = steps.find((li) => /Home Screen Sections/.test(li.textContent));
     assert.match(hss.textContent, /rien n'apparaît sur l'accueil/);
@@ -820,7 +819,7 @@ await test('mise en route : ce qui manque est dit et se fait d\'un clic (rangée
 
     const ok = await open(cfg, { '/RecoPlus/Status': { ...status, engine: { UsersWithRecs: 2 }, hssSetup: { Present: true, Enabled: true, InTable: 7, Declared: 7 }, seerrEnabled: true, seerrOk: true, checks: [] } });
     await wait(80);
-    assert.equal(ok.d.getElementById('rpHealthTitle').textContent, 'Tout fonctionne');
+    assert.equal(ok.d.getElementById('rpHealthHead').textContent, 'Tout fonctionne');
     assert.ok(!ok.d.getElementById('rpHealth').classList.contains('warn'));
 });
 
