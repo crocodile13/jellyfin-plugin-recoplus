@@ -72,21 +72,22 @@ class HttpError(RuntimeError):
 TOKEN: str | None = None
 
 
-def call(method: str, path: str, body=None, query: dict | None = None, timeout=60, tries=20):
-    """Appel de l'API ; 503 (serveur qui démarre ou occupé) : nouvel essai, jusqu'à `tries` fois."""
+def call(method: str, path: str, body=None, query: dict | None = None, timeout=60, tries=20, token: str | None = None):
+    """Appel de l'API (administrateur, ou le compte du jeton donné) ; 503 (serveur qui démarre ou occupé) : nouvel essai."""
     for k in range(tries):
         try:
-            return _call(method, path, body, query, timeout)
+            return _call(method, path, body, query, timeout, token)
         except HttpError as e:
             if e.status != 503 or k == tries - 1:
                 raise
             time.sleep(3)
 
 
-def _call(method: str, path: str, body=None, query: dict | None = None, timeout=60):
+def _call(method: str, path: str, body=None, query: dict | None = None, timeout=60, token: str | None = None):
     url = BASE + path + ("?" + urllib.parse.urlencode({k: v for k, v in query.items() if v is not None}) if query else "")
     data = None if body is None else json.dumps(body).encode()
-    auth = CLIENT + (f', Token="{TOKEN}"' if TOKEN else "")
+    tok = token or TOKEN
+    auth = CLIENT + (f', Token="{tok}"' if tok else "")
     req = urllib.request.Request(url, data=data, method=method,
                                  headers={"Authorization": auth, "Content-Type": "application/json", "Accept": "application/json"})
     try:
@@ -149,7 +150,21 @@ def setup():
     wait("analyse de la bibliothèque", scanned, timeout=1500, every=20)
 
     for name in PERSONAS:
-        call("POST", "/Users/New", {"Name": name, "Password": secrets.token_urlsafe(18)})
+        PASSWORDS[name] = secrets.token_urlsafe(18)   # en mémoire seulement
+        call("POST", "/Users/New", {"Name": name, "Password": PASSWORDS[name]})
+
+
+PASSWORDS: dict[str, str] = {}
+_tokens: dict[str, str] = {}
+
+
+def as_user(name: str) -> str:
+    """Jeton d'un compte simulé (masqué dans le journal de la CI)."""
+    if name not in _tokens:
+        t = call("POST", "/Users/AuthenticateByName", {"Username": name, "Pw": PASSWORDS[name]})["AccessToken"]
+        print(f"::add-mask::{t}", flush=True)
+        _tokens[name] = t
+    return _tokens[name]
 
 
 def refreshing() -> bool:
@@ -161,7 +176,7 @@ def refreshing() -> bool:
 
 def library():
     r = call("GET", "/Items", query={"IncludeItemTypes": "Movie,Series", "Recursive": "true",
-                                       "Fields": "Path,ProductionYear,Genres,OfficialRating", "Limit": 2000})
+                                       "Fields": "Path,ProductionYear,Genres,OfficialRating,ProviderIds", "Limit": 2000})
     by_folder = {}
     for it in r["Items"]:
         folder = Path(it.get("Path") or "").name if it["Type"] == "Series" else Path(it.get("Path") or "").parent.name
@@ -226,6 +241,58 @@ def episodes(series, uid, n, days):
                     {"userId": uid, "datePlayed": iso(days + len(eps) - 1 - k)})
 
 
+# ------------------------------------------------------------------ plugins compagnons
+
+RECO_SECTIONS = ["PourToi", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Films", "Series"]
+
+
+def plugin_id(name_part: str):
+    return next((p["Id"] for p in call("GET", "/Plugins") if name_part.lower() in p["Name"].lower()), None)
+
+
+def setup_hss():
+    """Comme un administrateur : Home Screen Sections activé, les rangées Reco+ ajoutées à son tableau."""
+    pid = plugin_id("Home Screen Sections")
+    if not pid:
+        problems.append("Home Screen Sections : plugin introuvable")
+        return
+    cfg = call("GET", f"/Plugins/{pid}/Configuration")
+    cfg["Enabled"] = True
+    have = {s.get("SectionId") for s in cfg.get("SectionSettings") or []}
+    base = len(cfg.get("SectionSettings") or [])
+    for i, r in enumerate(RECO_SECTIONS):
+        sid = "RecoPlus" + r
+        if sid not in have:
+            cfg.setdefault("SectionSettings", []).append({"SectionId": sid, "Enabled": True, "AllowUserOverride": True, "LowerLimit": 1,
+                                                          "UpperLimit": 1, "OrderIndex": base + i, "ViewMode": "Landscape"})
+    call("POST", f"/Plugins/{pid}/Configuration", cfg)
+    log(f"Home Screen Sections : {len(RECO_SECTIONS)} rangées Reco+ ajoutées au tableau")
+
+
+def setup_je(lib, users):
+    """Masquages (« pas intéressé ») et avis notés, faits par chaque compte avec les routes de Jellyfin Enhanced."""
+    for name, p in PERSONAS.items():
+        tok = None
+        items = {}
+        for title in p.get("hidden", []):
+            it = find(lib, title)
+            items[it["Id"]] = {"ItemId": it["Id"], "Name": it["Name"], "Type": it["Type"], "TmdbId": (it.get("ProviderIds") or {}).get("Tmdb", ""),
+                               "HideScope": "global", "HiddenAt": iso(1)}
+        if items:
+            tok = tok or as_user(name)
+            call("POST", f"/JellyfinEnhanced/user-settings/{users[name]}/hidden-content.json", {"Items": items}, token=tok)
+        for title, stars in p.get("reviews", []):
+            it = find(lib, title)
+            tmdb = (it.get("ProviderIds") or {}).get("Tmdb")
+            if not tmdb:
+                problems.append(f"{name} : pas d'identifiant TMDb pour {title} (avis impossible)")
+                continue
+            tok = tok or as_user(name)
+            call("POST", f"/JellyfinEnhanced/reviews/{'tv' if it['Type'] == 'Series' else 'movie'}/{tmdb}", {"Content": "", "Rating": stars}, token=tok)
+        if items or p.get("reviews"):
+            log(f"  compte {name} : {len(items)} masqué(s), {len(p.get('reviews', []))} avis (Jellyfin Enhanced)")
+
+
 # ------------------------------------------------------------------ Reco+
 
 def task(key):
@@ -246,6 +313,16 @@ def recompute():
         problems.append(f"calcul complet : {res.get('Status')} {res.get('ErrorMessage') or ''}")
 
 
+def hss_row(name, uid, section):
+    """Ce que Home Screen Sections renvoie au compte pour une rangée Reco+ (sa propre route, en tant que ce compte)."""
+    try:
+        r = call("GET", f"/HomeScreen/Section/{section}", query={"userId": uid}, token=as_user(name))
+    except HttpError as e:
+        problems.append(f"{name} : Home Screen Sections, rangée {section} : {e}")
+        return []
+    return [i["Name"] for i in (r or {}).get("Items", [])]
+
+
 def names(ids_or_items):
     return [i["Name"] for i in ids_or_items]
 
@@ -264,6 +341,9 @@ def report(lib, users):
             problems.append(f"vérification « {name} » : {c['detail']}")
     if status.get("disabled"):
         problems.append(f"parties coupées : {status['disabled']}")
+    je_state = status["engine"].get("JellyfinEnhanced") or ""
+    if "je" in EXPECT and not re.search(r"[1-9]\d* titres masqués, [1-9]\d* avis", je_state):
+        problems.append(f"Jellyfin Enhanced : masquages ou avis non lus ({je_state})")
     if "hss" in EXPECT and "déclarées" not in (status.get("hss") or ""):
         problems.append(f"Home Screen Sections : {status.get('hss')}")
 
@@ -283,6 +363,16 @@ def report(lib, users):
             "plus_comme_ceci": {"de": anchor["Name"], "titres": names(similar.get("Items", []))} if anchor else None,
         }
         out["accounts"][name] = acc
+        hidden = {find(lib, t)["Name"] for t in p.get("hidden", [])} if "je" in EXPECT else set()
+        everywhere = set(items) | set(acc["suggestions"]) | {x for v in acc["rangees"].values() for x in v}
+        if hidden & everywhere:
+            problems.append(f"{name} : titre masqué (Jellyfin Enhanced) proposé {sorted(hidden & everywhere)}")
+        if "hss" in EXPECT:
+            acc["hss_pour_toi"] = hss_row(name, users[name], "RecoPlusPourToi")
+            if not acc["hss_pour_toi"]:
+                problems.append(f"{name} : rangée « Pour toi » vide dans Home Screen Sections")
+            elif seen & set(acc["hss_pour_toi"]):
+                problems.append(f"{name} : titres déjà vus dans la rangée HSS {sorted(seen & set(acc['hss_pour_toi']))}")
         if not items:
             problems.append(f"{name} : aucune liste")
         bad = seen & (set(items) | set(acc["suggestions"]))
@@ -312,6 +402,8 @@ def markdown(r) -> str:
         L.append(f"- **/Items/Suggestions** : {', '.join(a['suggestions'][:10])}")
         for c in a["recommandations_films"]:
             L.append(f"- **/Movies/Recommendations — parce que {c['parce_que']}** : {', '.join(c['titres'])}")
+        if a.get("hss_pour_toi") is not None:
+            L.append(f"- **Home Screen Sections, « Pour toi » vu par le compte** : {', '.join(a['hss_pour_toi'][:10]) or '(vide)'}")
         if a["plus_comme_ceci"]:
             L.append(f"- **Plus comme ceci ({a['plus_comme_ceci']['de']})** : {', '.join(a['plus_comme_ceci']['titres'])}")
     return "\n".join(L) + "\n"
@@ -324,6 +416,10 @@ def run():
     log(f"bibliothèque indexée : {len(lib)} titres")
     users = {u["Name"]: u["Id"] for u in call("GET", "/Users")}
     simulate(lib, users)
+    if "je" in EXPECT:
+        setup_je(lib, users)
+    if "hss" in EXPECT:
+        setup_hss()
     # Reco+ : vérifications de compatibilité 20 s après le démarrage, planificateur 60 s après
     wait("vérifications de Reco+", lambda: call("GET", "/RecoPlus/Status").get("checks"), timeout=300)
     recompute()

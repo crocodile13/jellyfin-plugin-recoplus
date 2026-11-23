@@ -68,6 +68,8 @@ SERIES = [
 #   abandoned : [(film, part, jours)]     film arrêté à cette part, jamais repris
 #   favorites : [titre]
 #   dislikes : [titre]                    pouce vers le bas
+#   hidden : [titre]                      masqué partout (Jellyfin Enhanced, configuration complète seulement)
+#   reviews : [(titre, étoiles)]          avis noté 1-5 (Jellyfin Enhanced, configuration complète seulement)
 PERSONAS = {
     "anime": {
         "attendu": "Ghibli et animation japonaise (films et séries d'anime) en tête ; pas de super-héros ni d'horreur",
@@ -76,6 +78,8 @@ PERSONAS = {
         "episodes": [("Attack on Titan", 12, 60), ("Death Note", 8, 15)],
         "favorites": ["Spirited Away", "Death Note"],
         "abandoned": [("Love Actually", 0.2, 80)],
+        "hidden": ["Weathering with You"],
+        "reviews": [("Your Name.", 5)],
     },
     "action": {
         "attendu": "Marvel, John Wick 3, action ; la suite logique des sagas commencées",
@@ -91,6 +95,8 @@ PERSONAS = {
                     ("Zootopia", 12)],
         "episodes": [("Bluey", 8, 5)],
         "favorites": ["Moana"],
+        "hidden": ["Toy Story 3"],
+        "reviews": [("Frozen", 1)],
     },
     "horreur": {
         "attendu": "horreur et épouvante (Conjuring 2 en suite logique), Hill House ; pas d'animation familiale",
@@ -98,6 +104,7 @@ PERSONAS = {
                     ("It Follows", 30), ("The Shining", 10)],
         "episodes": [("The Haunting of Hill House", 3, 7)],
         "dislikes": ["Frozen"],
+        "reviews": [("The Shining", 5), ("Insidious", 2)],
     },
     "cinephile": {
         "attendu": "policier / drame d'auteur (Godfather II, Heat, Taxi Driver, Oldboy…), The Wire, True Detective",
