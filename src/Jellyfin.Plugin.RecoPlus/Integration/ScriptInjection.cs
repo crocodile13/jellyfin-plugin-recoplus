@@ -91,6 +91,9 @@ public sealed class ScriptInjection : IStartupFilter
         ctx.Response.Headers.Remove("ETag");
         ctx.Response.Headers.Remove("Last-Modified");
         ctx.Response.Headers.Remove("Accept-Ranges");
+        // sans ETag ni date, un navigateur pouvait garder l'ancienne page (donc l'ancien script) après une mise à jour,
+        // jusqu'à ce qu'on vide son cache (ticket #50) : la page réécrite est revérifiée à chaque chargement
+        ctx.Response.Headers["Cache-Control"] = "no-cache";
         await original.WriteAsync(bytes).ConfigureAwait(false);
     }
 }

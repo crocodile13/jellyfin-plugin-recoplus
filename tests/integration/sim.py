@@ -601,6 +601,17 @@ def after_report(lib, users):
     return out
 
 
+def index_check():
+    """index.html servie par Jellyfin : balise du script Reco+, et revérifiée à chaque chargement (ticket #50)."""
+    with urllib.request.urlopen(BASE + "/web/index.html", timeout=30) as r:
+        page, cc = r.read().decode("utf-8", "replace"), r.headers.get("Cache-Control", "")
+    if "RecoPlus/client.js" not in page:
+        problems.append("index.html : balise du script Reco+ absente")
+    if "no-cache" not in cc:
+        problems.append(f"index.html : Cache-Control « {cc} » (no-cache attendu : sinon un navigateur garde l'ancien script)")
+    return {"script": "RecoPlus/client.js" in page, "cache": cc, "je": "JellyfinEnhanced/script" in page}
+
+
 def browser_check():
     """Accueil d'un compte dans un vrai navigateur, mode étendu actif puis coupé (ticket #50) ; captures dans l'artifact."""
     try:
@@ -628,6 +639,9 @@ def browser_check():
         out[label] = res
         log(f"navigateur, {label} : {res.get('sections')} sections, {res.get('reco')} rangées Reco+, {res.get('ext')} cartes hors bibliothèque, erreurs {len(errors)}")
     on, off = out["mode étendu"].get("sections", 0), out["sans mode étendu"].get("sections", 0)
+    m = out["mode étendu"]
+    if "seerr" in EXPECT and "je" in EXPECT and m.get("je_obj") and m.get("own", 0) > 0:
+        problems.append(f"navigateur : Jellyfin Enhanced relié à Seerr, mais {m.get('own')} cartes de secours Reco+ (ses cartes attendues)")
     if off == 0:
         problems.append(f"navigateur : aucune section affichée même sans mode étendu ({out['sans mode étendu']})")
     elif on < off:
@@ -646,6 +660,9 @@ def markdown(r) -> str:
     L.append("")
     for k, v in (r.get("seerr") or {}).items():
         L.append(f"Seerr, {k} : {v}  ")
+    if r.get("index"):
+        i = r["index"]
+        L.append(f"index.html : script Reco+ {'présent' if i['script'] else 'absent'}, Jellyfin Enhanced {'présent' if i['je'] else 'absent'}, Cache-Control « {i['cache']} »  ")
     for k, v in (r.get("navigateur") or {}).items():
         if isinstance(v, dict):
             L.append(f"Navigateur, {k} : {v.get('sections')} sections ({v.get('reco')} Reco+), {v.get('ext')} cartes hors bibliothèque ({v.get('own')} de Reco+, Jellyfin Enhanced {'prêt' if v.get('je') else 'chargé sans Seerr' if v.get('je_obj') else 'balise sans script' if v.get('je_tag') else 'absent'}), "
@@ -713,6 +730,10 @@ def run():
     wait("vérifications de Reco+", lambda: call("GET", "/RecoPlus/Status").get("checks"), timeout=300)
     recompute()
     r = report(lib, users)
+    try:
+        r["index"] = index_check()
+    except Exception as e:
+        problems.append(f"index.html : {e}")
     if "seerr" in EXPECT:
         try:
             r["seerr"] = after_report(lib, users)
