@@ -394,12 +394,27 @@ def arrive(lib_before):
             d.mkdir(parents=True, exist_ok=True)
             sample = next((media / "movies").rglob("*.mkv"))
             shutil.copyfile(sample, d / f"{safe(title)} ({year}).mkv")
+            # fiche du titre (comme Radarr la laisserait avec ses métadonnées) : la bibliothèque est analysée hors ligne
+            tid = eco.tmdb_id(title, year, "movie")
+            det = eco.seerr("GET", f"/api/v1/movie/{tid}") if tid else {}
+            root = ET.Element("movie")
+            for tag, val in (("title", det.get("title") or title), ("year", year), ("premiered", det.get("releaseDate")), ("rating", det.get("voteAverage"))):
+                if val:
+                    ET.SubElement(root, tag).text = str(val)
+            for g in det.get("genres") or []:
+                ET.SubElement(root, "genre").text = g.get("name")
+            for k in ((det.get("keywords") or [])[:15]):
+                ET.SubElement(root, "tag").text = k.get("name")
+            if tid:
+                ET.SubElement(root, "uniqueid", {"type": "tmdb", "default": "true"}).text = str(tid)
+            ET.indent(root)
+            (d / "movie.nfo").write_text(ET.tostring(root, encoding="unicode"), encoding="utf-8")
             arrived[name] = f"{safe(title)} ({year})"
     if not arrived:
         return {}
     call("POST", "/Library/Refresh")
-    lib = wait("arrivée dans la bibliothèque", lambda: (lambda l: l if all(k in l and l[k].get("Genres") for k in arrived.values()) else None)(library()),
-               timeout=900, every=15)
+    lib = wait("arrivée dans la bibliothèque", lambda: (lambda l: l if all(k in l for k in arrived.values()) else None)(library()),
+               timeout=300, every=5)
     return {name: lib[folder]["Name"] for name, folder in arrived.items()}
 
 
@@ -590,7 +605,10 @@ def run():
     recompute()
     r = report(lib, users)
     if "seerr" in EXPECT:
-        r["seerr"] = after_report(lib, users)
+        try:
+            r["seerr"] = after_report(lib, users)
+        except Exception as e:   # le rapport s'écrit quand même ; l'erreur est un problème du test
+            problems.append(f"Seerr, après le rapport : {e}")
     r["problems"] = problems
     (OUT / "report.json").write_text(json.dumps(r, ensure_ascii=False, indent=2), encoding="utf-8")
     md = markdown(r)
