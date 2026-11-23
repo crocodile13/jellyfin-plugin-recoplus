@@ -1,0 +1,105 @@
+<movie>
+  <title>Guardians of the Galaxy Vol. 2</title>
+  <originaltitle>Guardians of the Galaxy Vol. 2</originaltitle>
+  <year>2017</year>
+  <premiered>2017-04-25</premiered>
+  <rating>7.6</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Science Fiction</genre>
+  <genre>Adventure</genre>
+  <genre>Action</genre>
+  <tag>hero</tag>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>sequel</tag>
+  <tag>alien</tag>
+  <tag>space</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>father son relationship</tag>
+  <studio>Marvel Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">283995</uniqueid>
+  <uniqueid type="imdb">tt3896198</uniqueid>
+  <set tmdbcolid="284433">
+    <name>284433</name>
+  </set>
+  <actor>
+    <name>Chris Pratt</name>
+    <role>Peter Quill / Star-Lord</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Zoe Saldaña</name>
+    <role>Gamora</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Dave Bautista</name>
+    <role>Drax</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Vin Diesel</name>
+    <role>Baby Groot (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Bradley Cooper</name>
+    <role>Rocket (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kurt Russell</name>
+    <role>Ego</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Rooker</name>
+    <role>Yondu</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Karen Gillan</name>
+    <role>Nebula</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Pom Klementieff</name>
+    <role>Mantis</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sylvester Stallone</name>
+    <role>Stakar Ogord</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Debicki</name>
+    <role>Ayesha</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Sullivan</name>
+    <role>Taserface</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Sean Gunn</name>
+    <role>Kraglin / On-Set Rocket</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tommy Flanagan</name>
+    <role>Tullk</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Laura Haddock</name>
+    <role>Meredith Quill</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>James Gunn</director>
+  <credits>James Gunn</credits>
+</movie>

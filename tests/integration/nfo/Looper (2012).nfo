@@ -1,0 +1,109 @@
+<movie>
+  <title>Looper</title>
+  <originaltitle>Looper</originaltitle>
+  <year>2012</year>
+  <premiered>2012-09-26</premiered>
+  <rating>6.918</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Thriller</genre>
+  <genre>Science Fiction</genre>
+  <tag>future</tag>
+  <tag>suicide</tag>
+  <tag>assassin</tag>
+  <tag>dystopia</tag>
+  <tag>drug addiction</tag>
+  <tag>time travel</tag>
+  <tag>retirement</tag>
+  <tag>tragedy</tag>
+  <tag>murder</tag>
+  <tag>organized crime</tag>
+  <tag>execution</tag>
+  <tag>criminal</tag>
+  <tag>contract killer</tag>
+  <tag>neo-noir</tag>
+  <tag>2040s</tag>
+  <studio>Endgame Entertainment</studio>
+  <studio>DMG Entertainment</studio>
+  <studio>Ram Bergman Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">59967</uniqueid>
+  <uniqueid type="imdb">tt1276104</uniqueid>
+  <actor>
+    <name>Joseph Gordon-Levitt</name>
+    <role>Joe</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Bruce Willis</name>
+    <role>Old Joe</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Emily Blunt</name>
+    <role>Sara</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Dano</name>
+    <role>Seth</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Noah Segan</name>
+    <role>Kid Blue</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Piper Perabo</name>
+    <role>Suzie</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Daniels</name>
+    <role>Abe</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Pierce Gagnon</name>
+    <role>Cid</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Xu Qing</name>
+    <role>Old Joe's Wife</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tracie Thoms</name>
+    <role>Beatrix</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Brennan</name>
+    <role>Old Seth</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Garret Dillahunt</name>
+    <role>Jesse</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Nick Gomez</name>
+    <role>Dale</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Marcus Hester</name>
+    <role>Zach</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Eyez</name>
+    <role>Gat Man</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Rian Johnson</director>
+  <credits>Rian Johnson</credits>
+</movie>

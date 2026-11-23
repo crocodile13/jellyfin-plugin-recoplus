@@ -1,0 +1,117 @@
+<movie>
+  <title>Memories of Murder</title>
+  <originaltitle>살인의 추억</originaltitle>
+  <year>2003</year>
+  <premiered>2003-04-25</premiered>
+  <rating>8.065</rating>
+  <mpaa>Not Rated</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>Thriller</genre>
+  <tag>assassin</tag>
+  <tag>police brutality</tag>
+  <tag>rape</tag>
+  <tag>corruption</tag>
+  <tag>police</tag>
+  <tag>detective</tag>
+  <tag>investigation</tag>
+  <tag>victim</tag>
+  <tag>based on true story</tag>
+  <tag>based on play or musical</tag>
+  <tag>murder</tag>
+  <tag>serial killer</tag>
+  <tag>torture</tag>
+  <tag>brutality</tag>
+  <tag>killer</tag>
+  <tag>neo-noir</tag>
+  <tag>frantic</tag>
+  <tag>1980s</tag>
+  <tag>anxious</tag>
+  <tag>south korea</tag>
+  <tag>dramatic</tag>
+  <tag>杀人回忆</tag>
+  <studio>CJ Entertainment</studio>
+  <studio>Muhan Investment</studio>
+  <studio>Sidus</studio>
+  <country>South Korea</country>
+  <uniqueid type="tmdb" default="true">11423</uniqueid>
+  <uniqueid type="imdb">tt0353969</uniqueid>
+  <actor>
+    <name>Song Kang-ho</name>
+    <role>Detective Park Doo-man</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Sang-kyung</name>
+    <role>Detective Seo Tae-yoon</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Roi-ha</name>
+    <role>Detective Cho Yong-koo</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Song Jae-ho</name>
+    <role>Sergeant Shin Dong-chul</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Byun Hee-bong</name>
+    <role>Sergeant Koo Hee-bong</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Go Seo-hee</name>
+    <role>Officer Kwon Kwi-ok</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ryu Tae-ho</name>
+    <role>Jo Byung-soon</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Park No-shik</name>
+    <role>Baek Kwang-ho</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Park Hae-il</name>
+    <role>Park Hyeon-gyu</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jeon Mi-seon</name>
+    <role>Kwok Seol-yung</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Seo Young-hwa</name>
+    <role>Eon Deok-nyeo</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Woo Go-na</name>
+    <role>Kim So-hyun</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Ok-ju</name>
+    <role>Oh Nam-joo</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Jong-ryul</name>
+    <role>Kwang-ho's Father</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Yoo Seung-mok</name>
+    <role>Journalist</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Bong Joon Ho</director>
+  <credits>Bong Joon Ho</credits>
+  <credits>Shim Sung-bo</credits>
+</movie>

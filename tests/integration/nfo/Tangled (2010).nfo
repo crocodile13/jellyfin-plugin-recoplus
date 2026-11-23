@@ -1,0 +1,119 @@
+<movie>
+  <title>Tangled</title>
+  <originaltitle>Tangled</originaltitle>
+  <year>2010</year>
+  <premiered>2010-11-24</premiered>
+  <rating>7.616</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Adventure</genre>
+  <tag>princess</tag>
+  <tag>magic</tag>
+  <tag>hostage</tag>
+  <tag>fairy tale</tag>
+  <tag>horse</tag>
+  <tag>villain</tag>
+  <tag>musical</tag>
+  <tag>blonde</tag>
+  <tag>coming of age</tag>
+  <tag>tower</tag>
+  <tag>selfishness</tag>
+  <tag>healing power</tag>
+  <tag>female villain</tag>
+  <tag>adventurer</tag>
+  <tag>based on fairy tale</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>healing gift</tag>
+  <tag>animal sidekick</tag>
+  <tag>magic land</tag>
+  <tag>3d animation</tag>
+  <tag>amused</tag>
+  <tag>hopeful</tag>
+  <studio>Walt Disney Animation Studios</studio>
+  <studio>Walt Disney Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">38757</uniqueid>
+  <uniqueid type="imdb">tt0398286</uniqueid>
+  <set tmdbcolid="1268789">
+    <name>1268789</name>
+  </set>
+  <actor>
+    <name>Mandy Moore</name>
+    <role>Rapunzel (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Zachary Levi</name>
+    <role>Flynn Rider (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Donna Murphy</name>
+    <role>Mother Gothel (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ron Perlman</name>
+    <role>Stabbington Brother (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>M.C. Gainey</name>
+    <role>Captain of the Guard (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey Tambor</name>
+    <role>Big Nose Thug (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Brad Garrett</name>
+    <role>Hook Hand Thug (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Paul F. Tompkins</name>
+    <role>Short Thug (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Kiel</name>
+    <role>Vlad (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Delaney Rose Stein</name>
+    <role>Young Rapunzel / Little Girl (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Nathan Greno</name>
+    <role>Guard 1 / Thug 1 (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Byron Howard</name>
+    <role>Guard 2 / Thug 2 (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Mertens</name>
+    <role>Guard 3 (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Bell</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Bergen</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Byron Howard</director>
+  <director>Nathan Greno</director>
+  <credits>Dan Fogelman</credits>
+</movie>

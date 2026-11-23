@@ -1,0 +1,117 @@
+<movie>
+  <title>Bridesmaids</title>
+  <originaltitle>Bridesmaids</originaltitle>
+  <year>2011</year>
+  <premiered>2011-05-13</premiered>
+  <rating>6.508</rating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <genre>Romance</genre>
+  <tag>jealousy</tag>
+  <tag>parent child relationship</tag>
+  <tag>fight</tag>
+  <tag>competition</tag>
+  <tag>materialism</tag>
+  <tag>bridesmaid</tag>
+  <tag>female friendship</tag>
+  <tag>sexual humor</tag>
+  <tag>wealth</tag>
+  <tag>fear of commitment</tag>
+  <tag>wedding party</tag>
+  <tag>best friend</tag>
+  <tag>maid of honor</tag>
+  <tag>drunk</tag>
+  <tag>wedding dress</tag>
+  <tag>group of friends</tag>
+  <tag>missing person</tag>
+  <tag>casual sex</tag>
+  <tag>vanity</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>out of control</tag>
+  <tag>intimate</tag>
+  <tag>amused</tag>
+  <tag>awestruck</tag>
+  <studio>Apatow Productions</studio>
+  <studio>Relativity Media</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">55721</uniqueid>
+  <uniqueid type="imdb">tt1478338</uniqueid>
+  <actor>
+    <name>Kristen Wiig</name>
+    <role>Annie</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Maya Rudolph</name>
+    <role>Lillian</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Rose Byrne</name>
+    <role>Helen</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Chris O'Dowd</name>
+    <role>Rhodes</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Melissa McCarthy</name>
+    <role>Megan</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Wendi McLendon-Covey</name>
+    <role>Rita</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ellie Kemper</name>
+    <role>Becca</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jill Clayburgh</name>
+    <role>Annie's Mom</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Lucas</name>
+    <role>Gil</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Rebel Wilson</name>
+    <role>Brynn</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Hitchcock</name>
+    <role>Don Cholodecki</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Terry Crews</name>
+    <role>Boot Camp Instructor</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Yi</name>
+    <role>Jewelry Store Couple</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Elaine Kao</name>
+    <role>Jewelry Store Couple</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kali Hawk</name>
+    <role>Kahlua</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Paul Feig</director>
+  <credits>Annie Mumolo</credits>
+  <credits>Kristen Wiig</credits>
+</movie>

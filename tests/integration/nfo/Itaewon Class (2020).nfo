@@ -1,0 +1,103 @@
+<tvshow>
+  <title>Itaewon Class</title>
+  <originaltitle>이태원 클라쓰</originaltitle>
+  <year>2020</year>
+  <premiered>2020-01-31</premiered>
+  <rating>8.3</rating>
+  <mpaa>15</mpaa>
+  <genre>Drama</genre>
+  <tag>restaurant</tag>
+  <tag>rags to riches</tag>
+  <tag>based on comic</tag>
+  <tag>revenge</tag>
+  <tag>romance</tag>
+  <tag>itaewon</tag>
+  <tag>south korea</tag>
+  <tag>based on webcomic or webtoon</tag>
+  <tag>seoul, south korea</tag>
+  <tag>dignified</tag>
+  <tag>forceful</tag>
+  <studio>JTBC</studio>
+  <studio>Showbox</studio>
+  <studio>Content Zium</studio>
+  <studio>JTBC Studios</studio>
+  <uniqueid type="tmdb" default="true">96162</uniqueid>
+  <uniqueid type="imdb">tt11239552</uniqueid>
+  <actor>
+    <name>Park Seo-jun</name>
+    <role>Park Sae-ro-yi</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Da-mi</name>
+    <role>Jo Yi-seo</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kwon Na-ra</name>
+    <role>Oh Soo-ah</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Yoo Jae-myung</name>
+    <role>Jang Dae-hee</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ahn Bo-hyun</name>
+    <role>Jang Geun-won</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Dong-hee</name>
+    <role>Jang Geun-soo</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ahn Sol-bin</name>
+    <role>Sae Ro-yi's Classmate</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Joo-young</name>
+    <role>Ma Hyun-yi</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Ryu Kyung-soo</name>
+    <role>Choi Seung-gwon</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Lyon</name>
+    <role>Kim Tony</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Hye-eun</name>
+    <role>Kang Min-jung</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David Lee</name>
+    <role>Lee Ho-jin</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Yoon Kyung-ho</name>
+    <role>Oh Byeong-heon</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Won Hyun-jun</name>
+    <role>Kim Hui-hun</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Cha Mi-kyung</name>
+    <role>Kim Soon-rye</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Kim Seong-yoon</director>
+  <credits>Cho Kwang-jin</credits>
+</tvshow>

@@ -1,0 +1,115 @@
+<movie>
+  <title>Past Lives</title>
+  <originaltitle>Past Lives</originaltitle>
+  <year>2023</year>
+  <premiered>2023-06-02</premiered>
+  <rating>7.691</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>new york city</tag>
+  <tag>immigrant</tag>
+  <tag>friendship</tag>
+  <tag>nostalgia</tag>
+  <tag>woman between two men</tag>
+  <tag>interracial marriage</tag>
+  <tag>fate</tag>
+  <tag>playwright</tag>
+  <tag>married woman</tag>
+  <tag>childhood friends</tag>
+  <tag>semi autobiographical</tag>
+  <tag>woman director</tag>
+  <tag>childhood sweetheart</tag>
+  <tag>korean american</tag>
+  <tag>memories</tag>
+  <tag>dreary</tag>
+  <tag>korean</tag>
+  <tag>asian american</tag>
+  <tag>independent film</tag>
+  <tag>seoul, south korea</tag>
+  <studio>A24</studio>
+  <studio>Killer Films</studio>
+  <studio>2AM</studio>
+  <studio>CJ ENM</studio>
+  <country>United States of America</country>
+  <country>South Korea</country>
+  <uniqueid type="tmdb" default="true">666277</uniqueid>
+  <uniqueid type="imdb">tt13238346</uniqueid>
+  <actor>
+    <name>Greta Lee</name>
+    <role>Nora</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Teo Yoo</name>
+    <role>Hae Sung</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>John Magaro</name>
+    <role>Arthur</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Moon Seung-ah</name>
+    <role>Young Nora</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Leem Seung-min</name>
+    <role>Young Hae Sung</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Yoon Ji-hye</name>
+    <role>Nora's Mom</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Won-young</name>
+    <role>Nora's Dad</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>An Min-young</name>
+    <role>Hae Sung's Mom</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Seo Yeon-woo</name>
+    <role>Young Si Young</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chang Ki-ha</name>
+    <role>Hae Sung's Friend 1</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Shin Hee-cheol</name>
+    <role>Hae Sung's Friend 2</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Park Jun-hyuk</name>
+    <role>Hae Sung's Friend 3</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Alberts</name>
+    <role>CBP Officer</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jane Yubin Kim</name>
+    <role>Actress</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Noo Ri Song</name>
+    <role>Na Young's Childhood Friend 1</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Celine Song</director>
+  <credits>Celine Song</credits>
+</movie>

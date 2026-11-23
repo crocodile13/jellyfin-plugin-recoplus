@@ -1,0 +1,105 @@
+<movie>
+  <title>Deadpool</title>
+  <originaltitle>Deadpool</originaltitle>
+  <year>2016</year>
+  <premiered>2016-02-09</premiered>
+  <rating>7.6</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Comedy</genre>
+  <tag>superhero</tag>
+  <tag>anti hero</tag>
+  <tag>mercenary</tag>
+  <tag>based on comic</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <studio>20th Century Fox</studio>
+  <studio>The Donners' Company</studio>
+  <studio>Genre Films</studio>
+  <studio>Marvel Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">293660</uniqueid>
+  <uniqueid type="imdb">tt1431045</uniqueid>
+  <set tmdbcolid="448150">
+    <name>448150</name>
+  </set>
+  <actor>
+    <name>Ryan Reynolds</name>
+    <role>Wade / Deadpool</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Morena Baccarin</name>
+    <role>Vanessa</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ed Skrein</name>
+    <role>Ajax</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>T.J. Miller</name>
+    <role>Weasel</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Gina Carano</name>
+    <role>Angel Dust</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Leslie Uggams</name>
+    <role>Blind Al</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Brianna Hildebrand</name>
+    <role>Negasonic Teenage Warhead</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Stefan Kapičić</name>
+    <role>Colossus (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Karan Soni</name>
+    <role>Dopinder</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Randal Reeder</name>
+    <role>Buck</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Benyaer</name>
+    <role>Warlord</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Style Dayne</name>
+    <role>Jeremy (Pizza Guy)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle Cassie</name>
+    <role>Gavin Merchant</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Taylor Hickson</name>
+    <role>Meghan Orlovsky</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ayzee</name>
+    <role>Teen Girl #1</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Tim Miller</director>
+  <credits>Rhett Reese</credits>
+  <credits>Paul Wernick</credits>
+</movie>

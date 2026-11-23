@@ -1,0 +1,110 @@
+<movie>
+  <title>Captain America: Civil War</title>
+  <originaltitle>Captain America: Civil War</originaltitle>
+  <year>2016</year>
+  <premiered>2016-04-27</premiered>
+  <rating>7.456</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Action</genre>
+  <genre>Science Fiction</genre>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>sequel</tag>
+  <tag>super soldier</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>superhero teamup</tag>
+  <tag>versus fighting</tag>
+  <tag>versus</tag>
+  <studio>Marvel Studios</studio>
+  <studio>Vita-Ray Dutch Productions III</studio>
+  <studio>Studio Babelsberg</studio>
+  <country>United States of America</country>
+  <country>Germany</country>
+  <uniqueid type="tmdb" default="true">271110</uniqueid>
+  <uniqueid type="imdb">tt3498820</uniqueid>
+  <set tmdbcolid="131295">
+    <name>131295</name>
+  </set>
+  <actor>
+    <name>Chris Evans</name>
+    <role>Steve Rogers / Captain America</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Tony Stark / Iron Man</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Scarlett Johansson</name>
+    <role>Natasha Romanoff / Black Widow</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sebastian Stan</name>
+    <role>Bucky Barnes / Winter Soldier</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Mackie</name>
+    <role>Sam Wilson / Falcon</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Don Cheadle</name>
+    <role>Lieutenant James Rhodes / War Machine</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Renner</name>
+    <role>Clint Barton / Hawkeye</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Chadwick Boseman</name>
+    <role>T'Challa / Black Panther</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Bettany</name>
+    <role>Vision</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Olsen</name>
+    <role>Wanda Maximoff / Scarlet Witch</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Rudd</name>
+    <role>Scott Lang / Ant-Man</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Emily VanCamp</name>
+    <role>Sharon Carter</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Holland</name>
+    <role>Peter Parker / Spider-Man</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Brühl</name>
+    <role>Zemo</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Grillo</name>
+    <role>Brock Rumlow / Crossbones</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Joe Russo</director>
+  <director>Anthony Russo</director>
+  <credits>Stephen McFeely</credits>
+  <credits>Christopher Markus</credits>
+</movie>

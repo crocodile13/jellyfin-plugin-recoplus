@@ -1,0 +1,116 @@
+<movie>
+  <title>Titanic</title>
+  <originaltitle>Titanic</originaltitle>
+  <year>1997</year>
+  <premiered>1997-12-18</premiered>
+  <rating>7.9</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>ship</tag>
+  <tag>soulmates</tag>
+  <tag>shipwreck</tag>
+  <tag>atlantic ocean</tag>
+  <tag>evacuation</tag>
+  <tag>iceberg</tag>
+  <tag>titanic</tag>
+  <tag>forbidden love</tag>
+  <tag>ocean liner</tag>
+  <tag>based on true story</tag>
+  <tag>rich woman poor man</tag>
+  <tag>tragedy</tag>
+  <tag>tragic love</tag>
+  <tag>historical fiction</tag>
+  <tag>class differences</tag>
+  <tag>love affair</tag>
+  <tag>historical event</tag>
+  <tag>sinking ship</tag>
+  <tag>rich snob</tag>
+  <tag>tragic romance</tag>
+  <tag>disaster movie</tag>
+  <tag>1910s</tag>
+  <studio>Paramount Pictures</studio>
+  <studio>20th Century Fox</studio>
+  <studio>Lightstorm Entertainment</studio>
+  <studio>Baja Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">597</uniqueid>
+  <uniqueid type="imdb">tt0120338</uniqueid>
+  <actor>
+    <name>Leonardo DiCaprio</name>
+    <role>Jack Dawson</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Winslet</name>
+    <role>Rose DeWitt Bukater</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Billy Zane</name>
+    <role>Cal Hockley</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kathy Bates</name>
+    <role>Molly Brown</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Frances Fisher</name>
+    <role>Ruth DeWitt Bukater</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Gloria Stuart</name>
+    <role>Old Rose</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Paxton</name>
+    <role>Brock Lovett</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Bernard Hill</name>
+    <role>Captain Smith</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>David Warner</name>
+    <role>Spicer Lovejoy</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Victor Garber</name>
+    <role>Thomas Andrews</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Hyde</name>
+    <role>Bruce Ismay</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Suzy Amis</name>
+    <role>Lizzy Calvert</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lewis Abernathy</name>
+    <role>Lewis Bodine</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Nicholas Cascone</name>
+    <role>Bobby Buell</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Anatoly M. Sagalevitch</name>
+    <role>Anatoly Milkailavich</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>James Cameron</director>
+  <credits>James Cameron</credits>
+</movie>

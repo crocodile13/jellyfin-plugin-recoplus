@@ -1,0 +1,129 @@
+<tvshow>
+  <title>One-Punch Man</title>
+  <originaltitle>ワンパンマン</originaltitle>
+  <year>2015</year>
+  <premiered>2015-10-05</premiered>
+  <rating>8.361</rating>
+  <mpaa>TV-PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>cyborg</tag>
+  <tag>martial arts</tag>
+  <tag>monster</tag>
+  <tag>karate</tag>
+  <tag>supernatural</tag>
+  <tag>superhero</tag>
+  <tag>parody</tag>
+  <tag>giant monster</tag>
+  <tag>social commentary</tag>
+  <tag>based on manga</tag>
+  <tag>alien invasion</tag>
+  <tag>fighting</tag>
+  <tag>super power</tag>
+  <tag>seinen</tag>
+  <tag>anime</tag>
+  <tag>philosophical</tag>
+  <tag>superhuman abilities</tag>
+  <tag>amused</tag>
+  <tag>exhilarated</tag>
+  <tag>joyful</tag>
+  <tag>sympathetic</tag>
+  <studio>TV Tokyo</studio>
+  <studio>TV Aichi</studio>
+  <studio>TVQ</studio>
+  <studio>TV Osaka</studio>
+  <studio>TVh</studio>
+  <studio>TSC</studio>
+  <studio>Madhouse</studio>
+  <studio>J.C.STAFF</studio>
+  <studio>Bandai Visual</studio>
+  <studio>ADK</studio>
+  <studio>jeki</studio>
+  <studio>Shueisha</studio>
+  <studio>Lantis</studio>
+  <studio>Banpresto</studio>
+  <studio>Good Smile Company</studio>
+  <studio>ADK Marketing Solutions</studio>
+  <studio>Bandai Spirits</studio>
+  <studio>Bandai Namco Music Live</studio>
+  <studio>Bandai Namco Filmworks</studio>
+  <uniqueid type="tmdb" default="true">63926</uniqueid>
+  <uniqueid type="imdb">tt4508902</uniqueid>
+  <actor>
+    <name>Makoto Furukawa</name>
+    <role>Saitama (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kaito Ishikawa</name>
+    <role>Genos (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroki Yasumoto</name>
+    <role>King (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuhiro Yamaji</name>
+    <role>Silverfang (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yuichi Nakamura</name>
+    <role>License-less Rider (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Minami Takayama</name>
+    <role>Child Emperor (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kenjiro Tsuda</name>
+    <role>Atomic Samurai (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Aoi Yuki</name>
+    <role>Terrible Tornado (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Takahiro Sakurai</name>
+    <role>Zombieman (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Saori Hayami</name>
+    <role>Hellish Blizzard (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Hikaru Midorikawa</name>
+    <role>Garou (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Satoshi Hino</name>
+    <role>Superalloy Blackluster (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Yuji Ueda</name>
+    <role>Watchdog Man (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kohsuke Toriumi</name>
+    <role>Flashy Flash (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Katsuyuki Konishi</name>
+    <role>Tank-Top Master (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

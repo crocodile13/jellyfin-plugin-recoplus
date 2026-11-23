@@ -1,0 +1,108 @@
+<movie>
+  <title>Les Misérables</title>
+  <originaltitle>Les Misérables</originaltitle>
+  <year>2019</year>
+  <premiered>2019-11-14</premiered>
+  <rating>7.561</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>Thriller</genre>
+  <tag>police brutality</tag>
+  <tag>paris, france</tag>
+  <tag>based on novel or book</tag>
+  <tag>police</tag>
+  <tag>ghetto</tag>
+  <tag>riot</tag>
+  <tag>drone</tag>
+  <tag>football (soccer)</tag>
+  <tag>suburb</tag>
+  <tag>juvenile delinquent</tag>
+  <tag>police officer</tag>
+  <tag>2000s</tag>
+  <studio>Srab Films</studio>
+  <studio>Rectangle Productions</studio>
+  <studio>Lyly Films</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">586863</uniqueid>
+  <uniqueid type="imdb">tt10199590</uniqueid>
+  <actor>
+    <name>Damien Bonnard</name>
+    <role>Stéphane</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Alexis Manenti</name>
+    <role>Chris</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Djebril Zonga</name>
+    <role>Gwada</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Tientcheu</name>
+    <role>The Mayor</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jeanne Balibar</name>
+    <role>The Comissioner</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Issa Perica</name>
+    <role>Issa</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Al-Hassan Ly</name>
+    <role>Buzz</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Almamy Kanoute</name>
+    <role>Salah</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Nizar Ben Fatma</name>
+    <role>'La Pince'</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Raymond Lopez</name>
+    <role>Zorro</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Luciano Lopez</name>
+    <role>Luciano</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jaihson Lopez</name>
+    <role>Jaihson</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Diego Lopez</name>
+    <role>Diego</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Sana Joachaim</name>
+    <role>Bintou</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Lucas Omiri</name>
+    <role>Slim</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Ladj Ly</director>
+  <credits>Ladj Ly</credits>
+  <credits>Giordano Gederlini</credits>
+  <credits>Alexis Manenti</credits>
+</movie>

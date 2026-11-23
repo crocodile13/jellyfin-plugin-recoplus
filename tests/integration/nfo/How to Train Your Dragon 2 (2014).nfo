@@ -1,0 +1,140 @@
+<movie>
+  <title>How to Train Your Dragon 2</title>
+  <originaltitle>How to Train Your Dragon 2</originaltitle>
+  <year>2014</year>
+  <premiered>2014-06-05</premiered>
+  <rating>7.683</rating>
+  <mpaa>PG</mpaa>
+  <genre>Fantasy</genre>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <tag>rescue</tag>
+  <tag>husband wife relationship</tag>
+  <tag>sacrifice</tag>
+  <tag>parent child relationship</tag>
+  <tag>loss of loved one</tag>
+  <tag>villain</tag>
+  <tag>melancholy</tag>
+  <tag>vikings (norsemen)</tag>
+  <tag>sequel</tag>
+  <tag>dragon</tag>
+  <tag>nostalgic</tag>
+  <tag>warrior</tag>
+  <tag>mysterious</tag>
+  <tag>philosophical</tag>
+  <tag>reflective</tag>
+  <tag>mother son relationship</tag>
+  <tag>loving</tag>
+  <tag>3d animation</tag>
+  <tag>inspirational</tag>
+  <tag>wistful</tag>
+  <tag>intimate</tag>
+  <tag>dramatic</tag>
+  <tag>sentimental</tag>
+  <tag>intense</tag>
+  <tag>romantic</tag>
+  <tag>whimsical</tag>
+  <tag>adoring</tag>
+  <tag>amused</tag>
+  <tag>appreciative</tag>
+  <tag>awestruck</tag>
+  <tag>bewildered</tag>
+  <tag>celebratory</tag>
+  <tag>comforting</tag>
+  <tag>commanding</tag>
+  <tag>compassionate</tag>
+  <tag>enthusiastic</tag>
+  <tag>euphoric</tag>
+  <tag>excited</tag>
+  <tag>exhilarated</tag>
+  <tag>optimistic</tag>
+  <tag>sincere</tag>
+  <tag>tragic</tag>
+  <tag>vibrant</tag>
+  <studio>DreamWorks Animation</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">82702</uniqueid>
+  <uniqueid type="imdb">tt1646971</uniqueid>
+  <set tmdbcolid="89137">
+    <name>89137</name>
+  </set>
+  <actor>
+    <name>Jay Baruchel</name>
+    <role>Hiccup (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Cate Blanchett</name>
+    <role>Valka (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Gerard Butler</name>
+    <role>Stoick (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Craig Ferguson</name>
+    <role>Gobber (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>America Ferrera</name>
+    <role>Astrid (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jonah Hill</name>
+    <role>Snotlout (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Mintz-Plasse</name>
+    <role>Fishlegs (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>T.J. Miller</name>
+    <role>Tuffnut (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kristen Wiig</name>
+    <role>Ruffnut (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Djimon Hounsou</name>
+    <role>Drago (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kit Harington</name>
+    <role>Eret (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kieron Elliott</name>
+    <role>Hoark the Haggard (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Philip McGrade</name>
+    <role>Starkard (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Ableson</name>
+    <role>Ug (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Gideon Emery</name>
+    <role>Teeny (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Dean DeBlois</director>
+  <credits>Dean DeBlois</credits>
+</movie>

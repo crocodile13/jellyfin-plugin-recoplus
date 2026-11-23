@@ -1,0 +1,101 @@
+<tvshow>
+  <title>Cosmos</title>
+  <originaltitle>Cosmos</originaltitle>
+  <year>2014</year>
+  <premiered>2014-03-09</premiered>
+  <rating>8.5</rating>
+  <mpaa>TV-G</mpaa>
+  <genre>Documentary</genre>
+  <tag>melancholy</tag>
+  <tag>biology</tag>
+  <tag>space</tag>
+  <tag>cosmology</tag>
+  <tag>astronomy</tag>
+  <tag>astrophysics</tag>
+  <tag>curious</tag>
+  <tag>astrobiology</tag>
+  <tag>spacetime</tag>
+  <tag>cosmos</tag>
+  <tag>admiring</tag>
+  <studio>FOX</studio>
+  <studio>National Geographic</studio>
+  <studio>Fuzzy Door Productions</studio>
+  <studio>Cosmos Studios</studio>
+  <uniqueid type="tmdb" default="true">58474</uniqueid>
+  <uniqueid type="imdb">tt2395695</uniqueid>
+  <actor>
+    <name>Neil deGrasse Tyson</name>
+    <role>Self - Host</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ann Druyan</name>
+    <role />
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>John Steven Rocha</name>
+    <role>Bellaramine (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Telfer</name>
+    <role>Angry Scholar #2 (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Morgan Heit</name>
+    <role>John Herschel (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Cary Elwes</name>
+    <role>Edmond Halley / Robert Hooke (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Konkle</name>
+    <role>Samuel Pepys (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Alexander Siddig</name>
+    <role>Isaac Newton (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Alfred Molina</name>
+    <role>Ibn al-Haytham (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Gere</name>
+    <role>Clair Patterson (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Marc Worden</name>
+    <role>Harrison Brown (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kirsten Dunst</name>
+    <role>Cecilia Payne (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Marlee Matlin</name>
+    <role>Annie Jump Cannon (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Peggy Jo Jacobs</name>
+    <role>Margaret Harwood (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Amanda Seyfried</name>
+    <role>Marie Tharp (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

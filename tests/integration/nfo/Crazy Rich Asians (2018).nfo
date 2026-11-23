@@ -1,0 +1,105 @@
+<movie>
+  <title>Crazy Rich Asians</title>
+  <originaltitle>Crazy Rich Asians</originaltitle>
+  <year>2018</year>
+  <premiered>2018-08-15</premiered>
+  <rating>7.036</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Comedy</genre>
+  <genre>Romance</genre>
+  <tag>based on novel or book</tag>
+  <tag>professor</tag>
+  <tag>singapore</tag>
+  <tag>wedding</tag>
+  <tag>east asian lead</tag>
+  <tag>wealthy family</tag>
+  <tag>asian american</tag>
+  <studio>SK Global Entertainment</studio>
+  <studio>Color Force</studio>
+  <studio>Ivanhoe Pictures</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Starlight Culture Entertainment Group</studio>
+  <country>United States of America</country>
+  <country>Hong Kong</country>
+  <uniqueid type="tmdb" default="true">455207</uniqueid>
+  <uniqueid type="imdb">tt3104988</uniqueid>
+  <actor>
+    <name>Constance Wu</name>
+    <role>Rachel Chu</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Henry Golding</name>
+    <role>Nick Young</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Michelle Yeoh</name>
+    <role>Eleanor Young</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Gemma Chan</name>
+    <role>Astrid Young Teo</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Lu</name>
+    <role>Ah Ma</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Awkwafina</name>
+    <role>Peik Lin Goh</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Shum Jr.</name>
+    <role>Charlie Wu</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ken Jeong</name>
+    <role>Wye Mun Goh</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sonoya Mizuno</name>
+    <role>Araminta Lee</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Pang</name>
+    <role>Colin Khoo</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jimmy O. Yang</name>
+    <role>Bernard Tai</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ronny Chieng</name>
+    <role>Eddie Cheng</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Remy Hii</name>
+    <role>Alistair Cheng</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Nico Santos</name>
+    <role>Oliver T'sien</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jing Lusi</name>
+    <role>Amanda Ling</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jon M. Chu</director>
+  <credits>Peter Chiarelli</credits>
+  <credits>Kevin Kwan</credits>
+  <credits>Adele Lim</credits>
+</movie>

@@ -1,0 +1,108 @@
+<movie>
+  <title>Spider-Man: Into the Spider-Verse</title>
+  <originaltitle>Spider-Man: Into the Spider-Verse</originaltitle>
+  <year>2018</year>
+  <premiered>2018-12-06</premiered>
+  <rating>8.4</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Science Fiction</genre>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>alternate universe</tag>
+  <studio>Columbia Pictures</studio>
+  <studio>Lord Miller</studio>
+  <studio>Pascal Pictures</studio>
+  <studio>Sony Pictures Animation</studio>
+  <studio>Arad Productions</studio>
+  <studio>Marvel Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">324857</uniqueid>
+  <uniqueid type="imdb">tt4633694</uniqueid>
+  <set tmdbcolid="573436">
+    <name>573436</name>
+  </set>
+  <actor>
+    <name>Shameik Moore</name>
+    <role>Miles Morales (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jake Johnson</name>
+    <role>Peter B. Parker (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Hailee Steinfeld</name>
+    <role>Gwen Stacy (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Mahershala Ali</name>
+    <role>Uncle Aaron (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Tyree Henry</name>
+    <role>Jefferson Davis (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lily Tomlin</name>
+    <role>Aunt May (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Luna Lauren Vélez</name>
+    <role>Rio Morales (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Zoë Kravitz</name>
+    <role>Mary Jane (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>John Mulaney</name>
+    <role>Spider-Ham (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kimiko Glenn</name>
+    <role>Peni Parker (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Nicolas Cage</name>
+    <role>Spider-Man Noir (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kathryn Hahn</name>
+    <role>Doc Ock (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Liev Schreiber</name>
+    <role>Wilson Fisk (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Pine</name>
+    <role>Peter Parker (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Natalie Morales</name>
+    <role>Miss Calleros (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Bob Persichetti</director>
+  <director>Peter Ramsey</director>
+  <director>Rodney Rothman</director>
+  <credits>Phil Lord</credits>
+  <credits>Rodney Rothman</credits>
+</movie>

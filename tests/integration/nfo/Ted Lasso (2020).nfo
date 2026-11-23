@@ -1,0 +1,109 @@
+<tvshow>
+  <title>Ted Lasso</title>
+  <originaltitle>Ted Lasso</originaltitle>
+  <year>2020</year>
+  <premiered>2020-08-14</premiered>
+  <rating>8.368</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Comedy</genre>
+  <tag>england</tag>
+  <tag>male friendship</tag>
+  <tag>friendship</tag>
+  <tag>fish out of water</tag>
+  <tag>football (soccer)</tag>
+  <tag>american abroad</tag>
+  <tag>teammate</tag>
+  <tag>professional sports</tag>
+  <tag>football (soccer) team</tag>
+  <tag>workplace comedy</tag>
+  <tag>team owner</tag>
+  <tag>football (soccer) coach</tag>
+  <tag>optimist</tag>
+  <tag>coaching</tag>
+  <tag>nice guy</tag>
+  <tag>premier league</tag>
+  <tag>ambivalent</tag>
+  <studio>Apple TV</studio>
+  <studio>Doozer</studio>
+  <studio>Warner Bros. Television</studio>
+  <studio>Universal Television</studio>
+  <studio>Ruby's Tuna</studio>
+  <uniqueid type="tmdb" default="true">97546</uniqueid>
+  <uniqueid type="imdb">tt10986410</uniqueid>
+  <actor>
+    <name>Jason Sudeikis</name>
+    <role>Ted Lasso</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hannah Waddingham</name>
+    <role>Rebecca Welton</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Swift</name>
+    <role>Leslie Higgins</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Phil Dunster</name>
+    <role>Jamie Tartt</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Brett Goldstein</name>
+    <role>Roy Kent</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Brendan Hunt</name>
+    <role>Coach Beard</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Nick Mohammed</name>
+    <role>Nathan Shelley</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Niles</name>
+    <role>Sharon Fieldstone</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Stewart Head</name>
+    <role>Rupert Mannion</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Toheeb Jimoh</name>
+    <role>Sam Obisanya</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Cristo Fernández</name>
+    <role>Dani Rojas</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kola Bokinni</name>
+    <role>Isaac McAdoo</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Billy Harris</name>
+    <role>Colin Hughes</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>James Lance</name>
+    <role>Trent Crimm</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Juno Temple</name>
+    <role>Keeley Jones</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,99 @@
+<tvshow>
+  <title>Schitt's Creek</title>
+  <originaltitle>Schitt's Creek</originaltitle>
+  <year>2015</year>
+  <premiered>2015-01-13</premiered>
+  <rating>7.805</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Comedy</genre>
+  <tag>small town</tag>
+  <tag>motel</tag>
+  <tag>spoiled child</tag>
+  <tag>family conflict</tag>
+  <tag>sitcom</tag>
+  <tag>riches to rags</tag>
+  <tag>spoiled</tag>
+  <tag>loving</tag>
+  <tag>hometown friends</tag>
+  <tag>comforting</tag>
+  <studio>CBC Television</studio>
+  <studio>Not A Real Company</studio>
+  <studio>CBC</studio>
+  <uniqueid type="tmdb" default="true">61662</uniqueid>
+  <uniqueid type="imdb">tt3526078</uniqueid>
+  <actor>
+    <name>Eugene Levy</name>
+    <role>Johnny Rose</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Catherine O'Hara</name>
+    <role>Moira Rose</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Dan Levy</name>
+    <role>David Rose</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Annie Murphy</name>
+    <role>Alexis Rose</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Emily Hampshire</name>
+    <role>Stevie Budd</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Elliott</name>
+    <role>Roland Schitt</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jennifer Robertson</name>
+    <role>Jocelyn Schitt</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Rozon</name>
+    <role>Mutt Schitt</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Noah Reid</name>
+    <role>Patrick Brewer</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Dustin Milligan</name>
+    <role>Ted Mullens</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Levy</name>
+    <role>Twyla Sands</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Mishka Thébaud</name>
+    <role>Dane</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Stacey Farber</name>
+    <role>Rachel</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Brandon Rollo</name>
+    <role>Eric</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Scott Farley</name>
+    <role>Improviser #1</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

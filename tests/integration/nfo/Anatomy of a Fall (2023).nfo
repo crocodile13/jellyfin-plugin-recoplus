@@ -1,0 +1,116 @@
+<movie>
+  <title>Anatomy of a Fall</title>
+  <originaltitle>Anatomie d'une chute</originaltitle>
+  <year>2023</year>
+  <premiered>2023-08-23</premiered>
+  <rating>7.507</rating>
+  <mpaa>R</mpaa>
+  <genre>Thriller</genre>
+  <genre>Mystery</genre>
+  <genre>Crime</genre>
+  <tag>husband wife relationship</tag>
+  <tag>winter</tag>
+  <tag>bisexuality</tag>
+  <tag>moral conflict</tag>
+  <tag>autopsy</tag>
+  <tag>blind</tag>
+  <tag>courtroom</tag>
+  <tag>lgbt</tag>
+  <tag>death of husband</tag>
+  <tag>woman director</tag>
+  <tag>moral dilemma</tag>
+  <tag>courtroom drama</tag>
+  <tag>mother son relationship</tag>
+  <tag>introspective</tag>
+  <tag>bisexual woman</tag>
+  <tag>grenoble</tag>
+  <tag>suspenseful</tag>
+  <tag>intense</tag>
+  <tag>amused</tag>
+  <tag>human mystery</tag>
+  <studio>Les Films de Pierre</studio>
+  <studio>Les Films Pelléas</studio>
+  <studio>France 2 Cinéma</studio>
+  <studio>Auvergne-Rhône-Alpes Cinéma</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">915935</uniqueid>
+  <uniqueid type="imdb">tt17009710</uniqueid>
+  <actor>
+    <name>Sandra Hüller</name>
+    <role>Sandra Voyter</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Swann Arlaud</name>
+    <role>Maître Vincent Renzi</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Milo Machado-Graner</name>
+    <role>Daniel</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Antoine Reinartz</name>
+    <role>Advocate General</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel Theis</name>
+    <role>Samuel Maleski</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jehnny Beth</name>
+    <role>Marge Berger</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Saadia Bentaïeb</name>
+    <role>Maître Nour Boudaoud</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Camille Rutherford</name>
+    <role>Zoé Solidor</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Rotger</name>
+    <role>President of the Court</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sophie Fillières</name>
+    <role>Monica</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Julien Comte</name>
+    <role>Forensic Pathologist</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Pierre-François Garel</name>
+    <role>Judge Janvier</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Savannah Rol</name>
+    <role>Constable / Sandra</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Iliès Kadri</name>
+    <role>Constable / Samuel</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Vincent Courcelle-Labrousse</name>
+    <role>Prosecutor</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Justine Triet</director>
+  <credits>Arthur Harari</credits>
+  <credits>Justine Triet</credits>
+</movie>

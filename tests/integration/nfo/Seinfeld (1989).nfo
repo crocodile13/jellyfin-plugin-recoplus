@@ -1,0 +1,99 @@
+<tvshow>
+  <title>Seinfeld</title>
+  <originaltitle>Seinfeld</originaltitle>
+  <year>1989</year>
+  <premiered>1989-07-05</premiered>
+  <rating>8.245</rating>
+  <mpaa>TV-PG</mpaa>
+  <genre>Comedy</genre>
+  <tag>new york city</tag>
+  <tag>observational comedy</tag>
+  <tag>manhattan, new york city</tag>
+  <tag>sitcom</tag>
+  <tag>domineering</tag>
+  <tag>stand-up comedian</tag>
+  <tag>irreverent</tag>
+  <tag>sharp</tag>
+  <studio>NBC</studio>
+  <studio>Castle Rock Entertainment</studio>
+  <studio>West/Shapiro Productions</studio>
+  <studio>Fred Barron Productions</studio>
+  <studio>Giggling Goose Productions</studio>
+  <uniqueid type="tmdb" default="true">1400</uniqueid>
+  <uniqueid type="imdb">tt0098904</uniqueid>
+  <actor>
+    <name>Jerry Seinfeld</name>
+    <role>Jerry Seinfeld</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Alexander</name>
+    <role>George Costanza</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Richards</name>
+    <role>Cosmo Kramer</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Louis-Dreyfus</name>
+    <role>Elaine Benes</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Barbara Stock</name>
+    <role>Scam Woman</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Mariska Hargitay</name>
+    <role>Melissa (Elaine)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Carol Kane</name>
+    <role>Corinne</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Judge Reinhold</name>
+    <role>Aaron</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Timothy Stack</name>
+    <role>Dwayne</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Scott Patterson</name>
+    <role>Billy</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Marisa Tomei</name>
+    <role>Marisa Tomei</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Debbie Lee Carrington</name>
+    <role>Tammy</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Michelle Forbes</name>
+    <role>Julie</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kathy Griffin</name>
+    <role>Sally Weaver</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Van Gorkum</name>
+    <role>Craig</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

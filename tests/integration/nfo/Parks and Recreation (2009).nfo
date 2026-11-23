@@ -1,0 +1,101 @@
+<tvshow>
+  <title>Parks and Recreation</title>
+  <originaltitle>Parks and Recreation</originaltitle>
+  <year>2009</year>
+  <premiered>2009-04-09</premiered>
+  <rating>8.039</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Comedy</genre>
+  <tag>indiana, usa</tag>
+  <tag>politics</tag>
+  <tag>satire</tag>
+  <tag>female protagonist</tag>
+  <tag>mockumentary</tag>
+  <tag>employer employee relationship</tag>
+  <tag>political satire</tag>
+  <tag>office romance</tag>
+  <tag>sitcom</tag>
+  <tag>workplace comedy</tag>
+  <studio>NBC</studio>
+  <studio>Universal Television</studio>
+  <studio>Deedle-Dee Productions</studio>
+  <studio>Fremulon</studio>
+  <studio>3 Arts Entertainment</studio>
+  <uniqueid type="tmdb" default="true">8592</uniqueid>
+  <uniqueid type="imdb">tt1266020</uniqueid>
+  <actor>
+    <name>Amy Poehler</name>
+    <role>Leslie Knope</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rashida Jones</name>
+    <role>Ann Perkins</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Aziz Ansari</name>
+    <role>Tom Haverford</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Schneider</name>
+    <role>Mark Brendanawicz</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Nick Offerman</name>
+    <role>Ron Swanson</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Aubrey Plaza</name>
+    <role>April Ludgate</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Pratt</name>
+    <role>Andy Dwyer</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Scott</name>
+    <role>Ben Wyatt</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Rob Lowe</name>
+    <role>Chris Traeger</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jim O'Heir</name>
+    <role>Jerry Gergich</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Retta</name>
+    <role>Donna Meagle</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Lucy Lawless</name>
+    <role>Diane Lewis</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Patricia Clarkson</name>
+    <role>Tammy One</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Gross</name>
+    <role>Michael</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Bonita Friedericy</name>
+    <role>Maria</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,99 @@
+<movie>
+  <title>Won't You Be My Neighbor?</title>
+  <originaltitle>Won't You Be My Neighbor?</originaltitle>
+  <year>2018</year>
+  <premiered>2018-06-29</premiered>
+  <rating>7.969</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Documentary</genre>
+  <tag>puppeteer</tag>
+  <tag>biography</tag>
+  <tag>based on true story</tag>
+  <tag>childhood</tag>
+  <tag>puppet show</tag>
+  <tag>tv host</tag>
+  <tag>tv show set</tag>
+  <studio>Tremolo Productions</studio>
+  <studio>Impact Partners</studio>
+  <studio>Independent Lens</studio>
+  <studio>PBS</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">490003</uniqueid>
+  <uniqueid type="imdb">tt7681902</uniqueid>
+  <actor>
+    <name>Margaret Whitmer</name>
+    <role>Self - TV Producer</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Junod</name>
+    <role>Self - Journalist and Fred's Friend</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Joanne Rogers</name>
+    <role>Self - Fred's Wife</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Rogers</name>
+    <role>Self - Fred's Son</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Max King</name>
+    <role>Self - Fred's Biographer</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Hedda Sharapan</name>
+    <role>Self - Child Development Advisor</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Betty Seamans</name>
+    <role>Self - Actress / Mrs. McFeely</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Junlei Li</name>
+    <role>Self - Fred Rogers Center Co-director</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Negri</name>
+    <role>Self - Actor / Handyman Negri</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>David Newell</name>
+    <role>Self - Actor / Mr. McFeely</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Isler</name>
+    <role>Self - Fred's Colleague and Friend</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>John Rogers</name>
+    <role>Self - Fred's Son</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Elaine Crozier</name>
+    <role>Self - Fred's Sister</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>George Wirth</name>
+    <role>Self - Pastor and Fred's Friend</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>David Bianculli</name>
+    <role>Self - Television Critic</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Morgan Neville</director>
+</movie>

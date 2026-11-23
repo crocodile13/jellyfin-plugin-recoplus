@@ -1,0 +1,111 @@
+<movie>
+  <title>Nomadland</title>
+  <originaltitle>Nomadland</originaltitle>
+  <year>2021</year>
+  <premiered>2021-01-29</premiered>
+  <rating>7.158</rating>
+  <criticrating>93</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <tag>factory worker</tag>
+  <tag>van</tag>
+  <tag>based on novel or book</tag>
+  <tag>nevada</tag>
+  <tag>recession</tag>
+  <tag>homelessness</tag>
+  <tag>road trip</tag>
+  <tag>unemployment</tag>
+  <tag>recreational vehicle</tag>
+  <tag>road movie</tag>
+  <tag>death of husband</tag>
+  <tag>western usa</tag>
+  <tag>woman director</tag>
+  <tag>nomad</tag>
+  <tag>reflective</tag>
+  <tag>late stage capitalism</tag>
+  <tag>intimate</tag>
+  <tag>comforting</tag>
+  <studio>Cor Cordium Productions</studio>
+  <studio>Hear/Say Productions</studio>
+  <studio>Highwayman Films</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">581734</uniqueid>
+  <uniqueid type="imdb">tt9770150</uniqueid>
+  <actor>
+    <name>Frances McDormand</name>
+    <role>Fern</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>David Strathairn</name>
+    <role>Dave</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Linda May</name>
+    <role>Linda</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Swankie</name>
+    <role>Swankie</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Gay DeForest</name>
+    <role>Gay</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Patricia Grier</name>
+    <role>Patty</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Angela Reyes</name>
+    <role>Angela</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Carl R. Hughes</name>
+    <role>Carl</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Douglas G. Soul</name>
+    <role>Doug</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ryan Aquino</name>
+    <role>Ryan</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Teresa Buchanan</name>
+    <role>Teresa</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Karie Lynn McDermott Wilder</name>
+    <role>Karie</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Brandy Wilber</name>
+    <role>Brandy</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Makenzie Etcheverry</name>
+    <role>Makenzie</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Wells</name>
+    <role>Bob</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Chloé Zhao</director>
+  <credits>Chloé Zhao</credits>
+</movie>

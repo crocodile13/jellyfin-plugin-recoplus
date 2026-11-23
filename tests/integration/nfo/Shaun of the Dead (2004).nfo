@@ -1,0 +1,109 @@
+<movie>
+  <title>Shaun of the Dead</title>
+  <originaltitle>Shaun of the Dead</originaltitle>
+  <year>2004</year>
+  <premiered>2004-04-09</premiered>
+  <rating>7.546</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Comedy</genre>
+  <tag>london, england</tag>
+  <tag>dark comedy</tag>
+  <tag>satire</tag>
+  <tag>surrey</tag>
+  <tag>parody</tag>
+  <tag>slacker</tag>
+  <tag>friends</tag>
+  <tag>survival</tag>
+  <tag>zombie</tag>
+  <tag>survival horror</tag>
+  <tag>british pub</tag>
+  <tag>boyfriend girlfriend relationship</tag>
+  <tag>zombie apocalypse</tag>
+  <tag>cornetto trilogy</tag>
+  <tag>zombie comedy</tag>
+  <tag>zom-com</tag>
+  <studio>WT² Productions</studio>
+  <studio>Big Talk Studios</studio>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">747</uniqueid>
+  <uniqueid type="imdb">tt0365748</uniqueid>
+  <actor>
+    <name>Simon Pegg</name>
+    <role>Shaun</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Nick Frost</name>
+    <role>Ed</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Ashfield</name>
+    <role>Liz</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lucy Davis</name>
+    <role>Dianne</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Dylan Moran</name>
+    <role>David</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jessica Hynes</name>
+    <role>Yvonne</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Penelope Wilton</name>
+    <role>Barbara</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Nighy</name>
+    <role>Phillip</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Martin Freeman</name>
+    <role>Declan</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Lucas</name>
+    <role>Cousin Tom</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Serafinowicz</name>
+    <role>Pete</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Rafe Spall</name>
+    <role>Noel</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Reece Shearsmith</name>
+    <role>Mark</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tamsin Greig</name>
+    <role>Maggie</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Deakin</name>
+    <role>Yvonne's Mum</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Edgar Wright</director>
+  <credits>Simon Pegg</credits>
+  <credits>Edgar Wright</credits>
+</movie>

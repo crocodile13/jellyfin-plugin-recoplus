@@ -1,0 +1,117 @@
+<movie>
+  <title>Speed</title>
+  <originaltitle>Speed</originaltitle>
+  <year>1994</year>
+  <premiered>1994-06-09</premiered>
+  <rating>7.161</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Thriller</genre>
+  <tag>s.w.a.t.</tag>
+  <tag>bomber</tag>
+  <tag>bus bomb</tag>
+  <tag>los angeles, california</tag>
+  <tag>falling elevator</tag>
+  <tag>bomb planting</tag>
+  <tag>lapd</tag>
+  <tag>trapped in an elevator</tag>
+  <tag>subway train</tag>
+  <tag>bomb explosion</tag>
+  <tag>ransom demand</tag>
+  <tag>aggressive</tag>
+  <tag>extortionist</tag>
+  <tag>santa monica, california</tag>
+  <tag>bomb vest</tag>
+  <tag>suspenseful</tag>
+  <tag>bold</tag>
+  <tag>excited</tag>
+  <tag>city bus</tag>
+  <tag>bus passengers</tag>
+  <tag>trapped in a vehicle</tag>
+  <studio>20th Century Fox</studio>
+  <studio>The Mark Gordon Company</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">1637</uniqueid>
+  <uniqueid type="imdb">tt0111257</uniqueid>
+  <set tmdbcolid="43064">
+    <name>43064</name>
+  </set>
+  <actor>
+    <name>Keanu Reeves</name>
+    <role>Jack Traven</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Dennis Hopper</name>
+    <role>Howard Payne</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sandra Bullock</name>
+    <role>Annie</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Morton</name>
+    <role>Capt. McMahon</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Daniels</name>
+    <role>Harry</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Ruck</name>
+    <role>Stephens</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Glenn Plummer</name>
+    <role>Jaguar Owner</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Lineback</name>
+    <role>Norwood</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Beth Grant</name>
+    <role>Helen</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Hawthorne James</name>
+    <role>Sam</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Carlos Carrasco</name>
+    <role>Ortiz</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David Kriegel</name>
+    <role>Terry</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Natsuko Ohama</name>
+    <role>Mrs. Kamino</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Villarreal</name>
+    <role>Ray</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Simone Gad</name>
+    <role>Bus Passenger #1</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jan de Bont</director>
+  <credits>Graham Yost</credits>
+  <credits>Joss Whedon</credits>
+</movie>

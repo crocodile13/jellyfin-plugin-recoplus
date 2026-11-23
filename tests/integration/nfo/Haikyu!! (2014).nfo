@@ -1,0 +1,122 @@
+<tvshow>
+  <title>Haikyu!!</title>
+  <originaltitle>ハイキュー!!</originaltitle>
+  <year>2014</year>
+  <premiered>2014-04-06</premiered>
+  <rating>8.61</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Drama</genre>
+  <tag>competition</tag>
+  <tag>training</tag>
+  <tag>volleyball</tag>
+  <tag>sports</tag>
+  <tag>high school</tag>
+  <tag>high school sports</tag>
+  <tag>rivalry</tag>
+  <tag>slice of life</tag>
+  <tag>tournament</tag>
+  <tag>bromance</tag>
+  <tag>based on manga</tag>
+  <tag>high school student</tag>
+  <tag>high school rivalry</tag>
+  <tag>school life</tag>
+  <tag>shounen</tag>
+  <tag>anime</tag>
+  <tag>school club</tag>
+  <tag>prodigy</tag>
+  <tag>japanese high school</tag>
+  <tag>teamwork</tag>
+  <tag>team sports</tag>
+  <tag>miyagi, japan</tag>
+  <tag>bukatsu</tag>
+  <studio>MBS</studio>
+  <studio>TBS</studio>
+  <studio>CBC</studio>
+  <studio>BSN</studio>
+  <studio>tys</studio>
+  <studio>Production I.G</studio>
+  <studio>TOHO</studio>
+  <studio>Shueisha</studio>
+  <studio>dentsu</studio>
+  <studio>movic</studio>
+  <studio>Sony Music Entertainment (Japan)</studio>
+  <uniqueid type="tmdb" default="true">60863</uniqueid>
+  <uniqueid type="imdb">tt3398540</uniqueid>
+  <actor>
+    <name>Ayumu Murase</name>
+    <role>Shoyo Hinata (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kaito Ishikawa</name>
+    <role>Tobio Kageyama (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ryota Takeuchi</name>
+    <role>Wakatoshi Ushijima (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Satoshi Hino</name>
+    <role>Daichi Sawamura (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Miyu Irino</name>
+    <role>Koshi Sugawara (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Yoshimasa Hosoya</name>
+    <role>Asahi Azumane (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Yuu Hayashi</name>
+    <role>Ryunosuke Tanaka (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Nobuhiko Okamoto</name>
+    <role>Yu Nishinoya (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Koki Uchiyama</name>
+    <role>Kei Tsukishima (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Soma Saito</name>
+    <role>Tadashi Yamaguchi (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Toshiki Masuda</name>
+    <role>Chikara Ennoshita (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Sumire Morohoshi</name>
+    <role>Hitoka Yachi (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroshi Kamiya</name>
+    <role>Ittetsu Takeda (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kazunari Tanaka</name>
+    <role>Keishin Ukai (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Hisao Egawa</name>
+    <role>Keishin Ukai (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

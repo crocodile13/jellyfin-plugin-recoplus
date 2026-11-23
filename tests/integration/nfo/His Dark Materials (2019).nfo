@@ -1,0 +1,128 @@
+<tvshow>
+  <title>His Dark Materials</title>
+  <originaltitle>His Dark Materials</originaltitle>
+  <year>2019</year>
+  <premiered>2019-11-03</premiered>
+  <rating>7.801</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Drama</genre>
+  <genre>Action &amp; Adventure</genre>
+  <tag>witch</tag>
+  <tag>genesis</tag>
+  <tag>magic</tag>
+  <tag>knife</tag>
+  <tag>portal</tag>
+  <tag>airship</tag>
+  <tag>orphan</tag>
+  <tag>child kidnapping</tag>
+  <tag>alternative reality</tag>
+  <tag>dark fantasy</tag>
+  <tag>depiction of god</tag>
+  <tag>adam and eve</tag>
+  <tag>other world</tag>
+  <tag>abyss</tag>
+  <tag>parallel universe</tag>
+  <tag>end times</tag>
+  <tag>based on young adult novel</tag>
+  <tag>talking animal</tag>
+  <tag>creation myths</tag>
+  <tag>moral dust</tag>
+  <tag>angelic war</tag>
+  <tag>child of destiny</tag>
+  <tag>prophesy</tag>
+  <tag>mortal sin</tag>
+  <tag>good witch</tag>
+  <tag>magical device</tag>
+  <tag>truth‑seeking mission</tag>
+  <tag>anti biblical ethics</tag>
+  <tag>many worlds</tag>
+  <tag>fate and destiny</tag>
+  <tag>god character</tag>
+  <tag>the golden compass</tag>
+  <tag>der goldene kompass</tag>
+  <studio>BBC One</studio>
+  <studio>Bad Wolf</studio>
+  <studio>New Line Cinema</studio>
+  <studio>Katja Motion Picture Corp.</studio>
+  <studio>BBC Studios Distribution</studio>
+  <studio>Anton</studio>
+  <uniqueid type="tmdb" default="true">68507</uniqueid>
+  <uniqueid type="imdb">tt5607976</uniqueid>
+  <actor>
+    <name>Dafne Keen</name>
+    <role>Lyra Silvertongue</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Amir Wilson</name>
+    <role>Will Parry</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ruth Wilson</name>
+    <role>Mrs Coulter</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ariyon Bakare</name>
+    <role>Lord Carlo Boreal</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Simone Kirby</name>
+    <role>Mary Malone</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lewin Lloyd</name>
+    <role>Roger Parslow</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ruta Gedmintas</name>
+    <role>Serafina Pekkala</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>James McAvoy</name>
+    <role>Lord Asriel</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Lin-Manuel Miranda</name>
+    <role>Lee Scoresby</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jade Anouka</name>
+    <role>Ruta Skadi</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lia Williams</name>
+    <role>Dr Cooper</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Will Keen</name>
+    <role>Father MacPhail</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Adewale Akinnuoye-Agbaje</name>
+    <role>Ogunwe</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jamie Ward</name>
+    <role>Father Gomez</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Chipo Chung</name>
+    <role>Xaphania</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <credits>Philip Pullman</credits>
+</tvshow>

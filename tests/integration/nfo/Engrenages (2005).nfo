@@ -1,0 +1,107 @@
+<tvshow>
+  <title>Spiral</title>
+  <originaltitle>Engrenages</originaltitle>
+  <year>2005</year>
+  <premiered>2005-12-13</premiered>
+  <rating>7.838</rating>
+  <mpaa>18</mpaa>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>Mystery</genre>
+  <tag>paris, france</tag>
+  <tag>lawyer</tag>
+  <tag>series of murders</tag>
+  <tag>police station</tag>
+  <tag>legal drama</tag>
+  <tag>french police</tag>
+  <tag>police procedural</tag>
+  <tag>magistrate</tag>
+  <tag>intense</tag>
+  <tag>powerful</tag>
+  <studio>Canal+</studio>
+  <studio>Son et Lumière</studio>
+  <studio>Ciné+</studio>
+  <uniqueid type="tmdb" default="true">11726</uniqueid>
+  <uniqueid type="imdb">tt0477507</uniqueid>
+  <actor>
+    <name>Caroline Proust</name>
+    <role>Laure Berthaud</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Audrey Fleurot</name>
+    <role>Joséphine Karlsson</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Philippe Duclos</name>
+    <role>François Roban</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Thierry Godard</name>
+    <role>Gilles "Gilou" Escoffier</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Grégory Fitoussi</name>
+    <role>Pierre Clément</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tewfik Jallab</name>
+    <role>Ali Amrani</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Valentin Merlet</name>
+    <role>Commissaire Beckriche</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Clara Bonnet</name>
+    <role>Lucie Bourdieu</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Fred Bianconi</name>
+    <role>Frédéric "Tintin" Fromentin</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Nicolas Briançon</name>
+    <role>Commissaire Herville</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Louis-Do de Lencquesaing</name>
+    <role>Maître Eric Edelman</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Bruno Debrandt</name>
+    <role>Brémont</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kool Shen</name>
+    <role>Cisco</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Lionel Erdogan</name>
+    <role>Tom</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Samir Boitard</name>
+    <role>Samy Bouchara</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Samir Boitard</name>
+    <role>Samy Bouchara / Jamal Haroun</role>
+    <sortorder>15</sortorder>
+  </actor>
+</tvshow>

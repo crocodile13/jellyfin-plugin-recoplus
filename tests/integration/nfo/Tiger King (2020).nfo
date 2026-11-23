@@ -1,0 +1,122 @@
+<tvshow>
+  <title>Tiger King</title>
+  <originaltitle>Tiger King</originaltitle>
+  <year>2020</year>
+  <premiered>2020-03-20</premiered>
+  <rating>6.904</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Documentary</genre>
+  <genre>Crime</genre>
+  <tag>oklahoma</tag>
+  <tag>fraud</tag>
+  <tag>tiger</tag>
+  <tag>cult</tag>
+  <tag>rivalry</tag>
+  <tag>animal rights</tag>
+  <tag>eccentric</tag>
+  <tag>true crime</tag>
+  <tag>thought provoking</tag>
+  <tag>big cats</tag>
+  <tag>gay theme</tag>
+  <tag>riveting</tag>
+  <tag>investigative</tag>
+  <studio>Netflix</studio>
+  <studio>Goode Films</studio>
+  <uniqueid type="tmdb" default="true">100698</uniqueid>
+  <uniqueid type="imdb">tt11823076</uniqueid>
+  <actor>
+    <name>Joel McHale</name>
+    <role>Self - Host</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>O. J. Simpson</name>
+    <role>Self (archive footage)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Mike Busey</name>
+    <role>Self - Podcaster, The Sausage Castle</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Donald Trump</name>
+    <role>Self (archive footage)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jerry Mitchell</name>
+    <role>Self - Investigative Reporter</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Doc Antle</name>
+    <role>Self - Myrtle Beach Safari</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Saff Saffery</name>
+    <role>Self - Animal Keeper, G.W. Zoo</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Zuzana Kukol</name>
+    <role>Self - Tiger Owner, Rexano</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Howard Baskin</name>
+    <role>Self</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Howard Baskin</name>
+    <role>Self (archive footage)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Scott Shoemaker</name>
+    <role>Self - Tiger Owner, Rexano</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>John Reinke</name>
+    <role>Self - Manager, G.W. Zoo</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>John Reinke</name>
+    <role>Self - Former Manager, G.W. Zoo</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Brittany Peet</name>
+    <role>Self - Captive Animal Law Enforcement, PETA</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Exotic</name>
+    <role>Self</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Carole Baskin</name>
+    <role>Self</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>Carole Baskin</name>
+    <role>Self (archive footage)</role>
+    <sortorder>16</sortorder>
+  </actor>
+  <actor>
+    <name>Erik Cowie</name>
+    <role>Self - Head Keeper, G.W. Zoo</role>
+    <sortorder>17</sortorder>
+  </actor>
+  <actor>
+    <name>Erik Cowie</name>
+    <role>Self</role>
+    <sortorder>18</sortorder>
+  </actor>
+</tvshow>

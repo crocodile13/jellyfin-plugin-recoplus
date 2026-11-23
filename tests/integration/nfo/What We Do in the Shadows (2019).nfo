@@ -1,0 +1,106 @@
+<tvshow>
+  <title>What We Do in the Shadows</title>
+  <originaltitle>What We Do in the Shadows</originaltitle>
+  <year>2019</year>
+  <premiered>2019-03-27</premiered>
+  <rating>8.005</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Comedy</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>vampire</tag>
+  <tag>mockumentary</tag>
+  <tag>based on movie</tag>
+  <tag>staten island, new york city</tag>
+  <tag>candid</tag>
+  <tag>playful</tag>
+  <tag>whimsical</tag>
+  <tag>amused</tag>
+  <tag>audacious</tag>
+  <tag>exuberant</tag>
+  <studio>FX</studio>
+  <studio>FX Productions</studio>
+  <studio>Two Canoes Pictures</studio>
+  <studio>343</studio>
+  <uniqueid type="tmdb" default="true">83631</uniqueid>
+  <uniqueid type="imdb">tt7908628</uniqueid>
+  <actor>
+    <name>Kayvan Novak</name>
+    <role>Nandor the Relentless</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Berry</name>
+    <role>Laszlo Cravensworth</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Natasia Demetriou</name>
+    <role>Nadja</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Harvey Guillén</name>
+    <role>Guillermo de la Cruz</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Proksch</name>
+    <role>Colin Robinson</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Proksch</name>
+    <role>Colin Robinson / Baby Colin</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kristen Schaal</name>
+    <role>Floating Woman / The Guide</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jamison Webb</name>
+    <role>Park Man</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Comer</name>
+    <role>Park Woman</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Warren Barrow</name>
+    <role>Cashier</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Casey Feigh</name>
+    <role>Game Master</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Perfetti</name>
+    <role>Kyle</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Hayden Szeto</name>
+    <role>Jonathan</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Marceline Hugot</name>
+    <role>Barbara Lazarro</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Richie Moriarty</name>
+    <role>Doug Peterson</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>KhaRå Martin</name>
+    <role>Cheyenne</role>
+    <sortorder>15</sortorder>
+  </actor>
+</tvshow>

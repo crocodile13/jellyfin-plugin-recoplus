@@ -1,0 +1,116 @@
+<movie>
+  <title>Wonder Woman</title>
+  <originaltitle>Wonder Woman</originaltitle>
+  <year>2017</year>
+  <premiered>2017-05-30</premiered>
+  <rating>7.197</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <tag>island</tag>
+  <tag>hero</tag>
+  <tag>strong woman</tag>
+  <tag>world war i</tag>
+  <tag>empowerment</tag>
+  <tag>superhero</tag>
+  <tag>feminism</tag>
+  <tag>greek mythology</tag>
+  <tag>based on comic</tag>
+  <tag>female protagonist</tag>
+  <tag>period drama</tag>
+  <tag>super power</tag>
+  <tag>heroine</tag>
+  <tag>woman director</tag>
+  <tag>female empowerment</tag>
+  <tag>1910s</tag>
+  <tag>dc extended universe (dceu)</tag>
+  <studio>Atlas Entertainment</studio>
+  <studio>Cruel &amp; Unusual Films</studio>
+  <studio>DC Films</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>RatPac-Dune Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">297762</uniqueid>
+  <uniqueid type="imdb">tt0451279</uniqueid>
+  <set tmdbcolid="468552">
+    <name>468552</name>
+  </set>
+  <actor>
+    <name>Gal Gadot</name>
+    <role>Diana</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Pine</name>
+    <role>Steve Trevor</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Connie Nielsen</name>
+    <role>Hippolyta</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robin Wright</name>
+    <role>Antiope</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Danny Huston</name>
+    <role>Ludendorff</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>David Thewlis</name>
+    <role>Sir Patrick</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Saïd Taghmaoui</name>
+    <role>Sameer</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ewen Bremner</name>
+    <role>Charlie</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Eugene Brave Rock</name>
+    <role>The Chief</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Lucy Davis</name>
+    <role>Etta</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Elena Anaya</name>
+    <role>Dr. Maru</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Lilly Aspell</name>
+    <role>Young Diana (8)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Loven Kongsli</name>
+    <role>Menalippe</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ann Wolfe</name>
+    <role>Artemis</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ann Ogbomo</name>
+    <role>Phillipus</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Patty Jenkins</director>
+  <credits>Allan Heinberg</credits>
+</movie>

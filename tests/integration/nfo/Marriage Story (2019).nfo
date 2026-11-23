@@ -1,0 +1,100 @@
+<movie>
+  <title>Marriage Story</title>
+  <originaltitle>Marriage Story</originaltitle>
+  <year>2019</year>
+  <premiered>2019-09-28</premiered>
+  <rating>7.735</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <tag>infidelity</tag>
+  <tag>new york city</tag>
+  <tag>husband wife relationship</tag>
+  <tag>parent child relationship</tag>
+  <tag>theatre group</tag>
+  <tag>theater director</tag>
+  <tag>lawyer</tag>
+  <tag>los angeles, california</tag>
+  <tag>divorce</tag>
+  <tag>divorce lawyer</tag>
+  <studio>Heyday Films</studio>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">492188</uniqueid>
+  <uniqueid type="imdb">tt7653254</uniqueid>
+  <actor>
+    <name>Adam Driver</name>
+    <role>Charlie Barber</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Scarlett Johansson</name>
+    <role>Nicole Barber</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Laura Dern</name>
+    <role>Nora Fanshaw</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Alda</name>
+    <role>Bert Spitz</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ray Liotta</name>
+    <role>Jay Marotta</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Hagerty</name>
+    <role>Sandra</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Merritt Wever</name>
+    <role>Cassie</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Azhy Robertson</name>
+    <role>Henry Barber</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Wallace Shawn</name>
+    <role>Frank</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Martha Kelly</name>
+    <role>The Evaluator</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Mark O'Brien</name>
+    <role>Carter Mitchum</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Greer</name>
+    <role>Street Solicitor #1</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Maher</name>
+    <role>Theater Actor</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Eric Berryman</name>
+    <role>Theater Actor</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Mickey Sumner</name>
+    <role>Beth - Theater Actor</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Noah Baumbach</director>
+  <credits>Noah Baumbach</credits>
+</movie>

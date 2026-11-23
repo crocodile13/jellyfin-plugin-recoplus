@@ -1,0 +1,107 @@
+<movie>
+  <title>Grave of the Fireflies</title>
+  <originaltitle>火垂るの墓</originaltitle>
+  <year>1988</year>
+  <premiered>1988-04-16</premiered>
+  <rating>8.449</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Animation</genre>
+  <genre>Drama</genre>
+  <genre>War</genre>
+  <tag>sibling relationship</tag>
+  <tag>hunger</tag>
+  <tag>world war ii</tag>
+  <tag>wartime</tag>
+  <tag>shelter</tag>
+  <tag>struggle for survival</tag>
+  <tag>brother sister</tag>
+  <tag>pacific theater</tag>
+  <tag>adult animation</tag>
+  <tag>semi autobiographical</tag>
+  <tag>anti war</tag>
+  <tag>anime</tag>
+  <tag>orphan siblings</tag>
+  <tag>children in wartime</tag>
+  <tag>hyōgo, japan</tag>
+  <studio>Studio Ghibli</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">12477</uniqueid>
+  <uniqueid type="imdb">tt0095327</uniqueid>
+  <actor>
+    <name>Tsutomu Tatsumi</name>
+    <role>Seita (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ayano Shiraishi</name>
+    <role>Setsuko (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Yoshiko Shinohara</name>
+    <role>Mother (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Akemi Yamaguchi</name>
+    <role>Auntie (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Masayo Sakai</name>
+    <role>Woman who takes care of Setsuko (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kozo Hashida</name>
+    <role>Obayashi Chairman (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kazumi Nozaki</name>
+    <role>Cousin (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Yoshio Matsuoka</name>
+    <role>Gosaku (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Masahiro Kanetake</name>
+    <role>Aunt's House Guest (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kiyoshi Yanagawa</name>
+    <role>Patrolman (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Hajime Maki</name>
+    <role>Man who arrests Seita (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Atsuo Omotem</name>
+    <role>Person in Bank (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Teruhisa Harita</name>
+    <role>Station Worker (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroshi Tanaka</name>
+    <role>Person in Bank (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Michio Denpo</name>
+    <role>Station Worker / Doctor (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Isao Takahata</director>
+  <credits>Isao Takahata</credits>
+</movie>

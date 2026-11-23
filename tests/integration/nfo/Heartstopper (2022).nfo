@@ -1,0 +1,110 @@
+<tvshow>
+  <title>Heartstopper</title>
+  <originaltitle>Heartstopper</originaltitle>
+  <year>2022</year>
+  <premiered>2022-04-22</premiered>
+  <rating>8.6</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Drama</genre>
+  <tag>coming out</tag>
+  <tag>friendship</tag>
+  <tag>high school</tag>
+  <tag>love</tag>
+  <tag>growing up</tag>
+  <tag>romance</tag>
+  <tag>coming of age</tag>
+  <tag>based on graphic novel</tag>
+  <tag>first love</tag>
+  <tag>lgbt</tag>
+  <tag>lgbt teen</tag>
+  <tag>eating disorder</tag>
+  <tag>teen drama</tag>
+  <tag>asexuality</tag>
+  <tag>non-binary</tag>
+  <tag>gay theme</tag>
+  <tag>gay relationship</tag>
+  <tag>sapphic</tag>
+  <tag>boys' love (bl)</tag>
+  <tag>transgender</tag>
+  <tag>kent, england</tag>
+  <studio>Netflix</studio>
+  <studio>See-Saw Films</studio>
+  <uniqueid type="tmdb" default="true">124834</uniqueid>
+  <uniqueid type="imdb">tt10638036</uniqueid>
+  <actor>
+    <name>Joe Locke</name>
+    <role>Charlie Spring</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kit Connor</name>
+    <role>Nick Nelson</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>William Gao</name>
+    <role>Tao Xu</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Yasmin Finney</name>
+    <role>Elle Argent</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Corinna Brown</name>
+    <role>Tara Jones</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Cormac Hyde-Corrin</name>
+    <role>Harry Greene</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kizzy Edgell</name>
+    <role>Darcy Olsson</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Tobie Donovan</name>
+    <role>Isaac Henderson</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Rhea Norwood</name>
+    <role>Imogen Heaney</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sebastian Croft</name>
+    <role>Benjamin Hope</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Momo Yeung</name>
+    <role>Yan Xu</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jenny Walser</name>
+    <role>Tori Spring</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Leila Khan</name>
+    <role>Sahar Zahid</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Fry</name>
+    <role>Headmaster Barnes (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Turkington</name>
+    <role>Mr Lange</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Andy Newbery</director>
+</tvshow>

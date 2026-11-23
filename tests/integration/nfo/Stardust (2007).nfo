@@ -1,0 +1,118 @@
+<movie>
+  <title>Stardust</title>
+  <originaltitle>Stardust</originaltitle>
+  <year>2007</year>
+  <premiered>2007-08-10</premiered>
+  <rating>7.297</rating>
+  <criticrating>77</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <genre>Romance</genre>
+  <genre>Family</genre>
+  <tag>witch</tag>
+  <tag>new love</tag>
+  <tag>based on novel or book</tag>
+  <tag>kingdom</tag>
+  <tag>transformation</tag>
+  <tag>prince</tag>
+  <tag>beauty</tag>
+  <tag>wall</tag>
+  <tag>falling star</tag>
+  <tag>goat</tag>
+  <tag>royalty</tag>
+  <tag>unrequited love</tag>
+  <tag>pirate</tag>
+  <tag>fratricide</tag>
+  <tag>air pirate</tag>
+  <tag>turned into animal</tag>
+  <studio>Paramount Pictures</studio>
+  <studio>Marv</studio>
+  <studio>Vaughn Productions</studio>
+  <studio>di Bonaventura Pictures</studio>
+  <studio>Ingenious Media</studio>
+  <country>Iceland</country>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">2270</uniqueid>
+  <uniqueid type="imdb">tt0486655</uniqueid>
+  <actor>
+    <name>Charlie Cox</name>
+    <role>Tristan Thorn</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Claire Danes</name>
+    <role>Yvaine</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Michelle Pfeiffer</name>
+    <role>Lamia</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Strong</name>
+    <role>Septimus</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Flemyng</name>
+    <role>Primus</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Robert De Niro</name>
+    <role>Captain Shakespeare</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Sienna Miller</name>
+    <role>Victoria</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Alexander</name>
+    <role>Empusa</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Joanna Scanlan</name>
+    <role>Mormo</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Melanie Hill</name>
+    <role>Ditchwater Sal</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Heap</name>
+    <role>Tertius</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Rupert Everett</name>
+    <role>Secundus</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>David Walliams</name>
+    <role>Sextus</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Buxton</name>
+    <role>Quintus</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Julian Rhind-Tutt</name>
+    <role>Quartus</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Matthew Vaughn</director>
+  <credits>Neil Gaiman</credits>
+  <credits>Jane Goldman</credits>
+  <credits>Matthew Vaughn</credits>
+</movie>

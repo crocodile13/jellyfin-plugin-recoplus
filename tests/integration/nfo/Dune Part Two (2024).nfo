@@ -1,0 +1,118 @@
+<movie>
+  <title>Dune: Part Two</title>
+  <originaltitle>Dune: Part Two</originaltitle>
+  <year>2024</year>
+  <premiered>2024-02-27</premiered>
+  <rating>8.1</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Science Fiction</genre>
+  <genre>Adventure</genre>
+  <tag>based on novel or book</tag>
+  <tag>sandstorm</tag>
+  <tag>chosen one</tag>
+  <tag>sequel</tag>
+  <tag>distant future</tag>
+  <tag>creature</tag>
+  <tag>planet</tag>
+  <tag>desert</tag>
+  <tag>destiny</tag>
+  <tag>giant worm</tag>
+  <tag>space opera</tag>
+  <tag>sand dune</tag>
+  <tag>allegorical</tag>
+  <tag>messiah</tag>
+  <tag>fall from grace</tag>
+  <tag>vengeance</tag>
+  <tag>religious allegory</tag>
+  <tag>giant creature</tag>
+  <tag>power</tag>
+  <tag>ambiguous</tag>
+  <tag>antagonistic</tag>
+  <tag>melodramatic</tag>
+  <studio>Legendary Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">693134</uniqueid>
+  <uniqueid type="imdb">tt15239678</uniqueid>
+  <set tmdbcolid="726871">
+    <name>726871</name>
+  </set>
+  <actor>
+    <name>Timothée Chalamet</name>
+    <role>Paul Atreides</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Zendaya</name>
+    <role>Chani</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Rebecca Ferguson</name>
+    <role>Jessica</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Javier Bardem</name>
+    <role>Stilgar</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Brolin</name>
+    <role>Gurney Halleck</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Austin Butler</name>
+    <role>Feyd-Rautha</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Florence Pugh</name>
+    <role>Princess Irulan</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Dave Bautista</name>
+    <role>Beast Rabban</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Walken</name>
+    <role>Emperor</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Léa Seydoux</name>
+    <role>Lady Margot Fenring</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Stellan Skarsgård</name>
+    <role>Baron Harkonnen</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Charlotte Rampling</name>
+    <role>Reverend Mother Mohiam</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Souheila Yacoub</name>
+    <role>Shishakli</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Roger Yuan</name>
+    <role>Lanville</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Babs Olusanmokun</name>
+    <role>Jamis</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Denis Villeneuve</director>
+  <credits>Denis Villeneuve</credits>
+  <credits>Frank Herbert</credits>
+  <credits>Jon Spaihts</credits>
+</movie>

@@ -1,0 +1,116 @@
+<movie>
+  <title>Wolf Children</title>
+  <originaltitle>おおかみこどもの雨と雪</originaltitle>
+  <year>2012</year>
+  <premiered>2012-07-21</premiered>
+  <rating>8.214</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Drama</genre>
+  <genre>Fantasy</genre>
+  <tag>wolf</tag>
+  <tag>forest</tag>
+  <tag>death of father</tag>
+  <tag>growing up</tag>
+  <tag>rural area</tag>
+  <tag>werewolf</tag>
+  <tag>single mother</tag>
+  <tag>adult animation</tag>
+  <tag>werewolf child</tag>
+  <tag>farming community</tag>
+  <tag>farming</tag>
+  <tag>anime</tag>
+  <tag>mother son relationship</tag>
+  <tag>mother daughter relationship</tag>
+  <tag>brother sister relationship</tag>
+  <studio>Studio Chizu</studio>
+  <studio>Madhouse</studio>
+  <studio>Nippon Television Network Corporation</studio>
+  <studio>KADOKAWA Shoten</studio>
+  <studio>VAP</studio>
+  <studio>D.N. Dream Partners</studio>
+  <studio>Yomiuri Telecasting Corporation</studio>
+  <studio>TOHO</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">110420</uniqueid>
+  <uniqueid type="imdb">tt2140203</uniqueid>
+  <actor>
+    <name>Aoi Miyazaki</name>
+    <role>Hana (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Takao Osawa</name>
+    <role>Wolf Man (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Haru Kuroki</name>
+    <role>Yuki (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Yukito Nishii</name>
+    <role>Ame (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Momoka Ohno</name>
+    <role>Yuki as a Child (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Amon Kabe</name>
+    <role>Ame as a Child (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Takuma Hiraoka</name>
+    <role>Sohei (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Megumi Hayashibara</name>
+    <role>Sohei's Mother (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mone Kamishiraishi</name>
+    <role>Keno (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tadashi Nakamura</name>
+    <role>Hosokawa (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Tamio Ohki</name>
+    <role>Yamaoka (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Tomie Kataoka</name>
+    <role>Mrs. Nirasaki (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Hajime Inoue</name>
+    <role>Tendo (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Shota Sometani</name>
+    <role>Mr. Tanabe (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Taichi Masu</name>
+    <role>Radio Announcer (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Mamoru Hosoda</director>
+  <credits>Satoko Okudera</credits>
+  <credits>Mamoru Hosoda</credits>
+</movie>

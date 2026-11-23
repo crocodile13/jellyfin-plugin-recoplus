@@ -1,0 +1,122 @@
+<movie>
+  <title>The Irishman</title>
+  <originaltitle>The Irishman</originaltitle>
+  <year>2019</year>
+  <premiered>2019-11-01</premiered>
+  <rating>7.565</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>History</genre>
+  <tag>chicago, illinois</tag>
+  <tag>philadelphia, pennsylvania</tag>
+  <tag>based on novel or book</tag>
+  <tag>hitman</tag>
+  <tag>war veteran</tag>
+  <tag>pennsylvania, usa</tag>
+  <tag>gangster</tag>
+  <tag>1970s</tag>
+  <tag>irish-american</tag>
+  <tag>male friendship</tag>
+  <tag>aging</tag>
+  <tag>family relationships</tag>
+  <tag>murder</tag>
+  <tag>organized crime</tag>
+  <tag>mafia</tag>
+  <tag>religion</tag>
+  <tag>detroit, michigan</tag>
+  <tag>sicilian mafia</tag>
+  <tag>nonlinear timeline</tag>
+  <tag>character study</tag>
+  <tag>labor union</tag>
+  <tag>1950s</tag>
+  <tag>1960s</tag>
+  <tag>mob family</tag>
+  <tag>jimmy hoffa</tag>
+  <tag>voiceover</tag>
+  <tag>complex</tag>
+  <tag>father daughter relationship</tag>
+  <studio>Tribeca Productions</studio>
+  <studio>Sikelia Productions</studio>
+  <studio>Winkler Films</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">398978</uniqueid>
+  <uniqueid type="imdb">tt1302006</uniqueid>
+  <actor>
+    <name>Robert De Niro</name>
+    <role>Frank Sheeran</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Al Pacino</name>
+    <role>Jimmy Hoffa</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Pesci</name>
+    <role>Russell Bufalino</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Harvey Keitel</name>
+    <role>Angelo Bruno</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ray Romano</name>
+    <role>Bill Bufalino</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Bobby Cannavale</name>
+    <role>Skinny Razor</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Anna Paquin</name>
+    <role>Older Peggy Sheeran</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Graham</name>
+    <role>Anthony 'Tony Pro' Provenzano</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Stephanie Kurtzuba</name>
+    <role>Irene Sheeran</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Huston</name>
+    <role>Robert Kennedy / RFK</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kathrine Narducci</name>
+    <role>Carrie Bufalino</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jesse Plemons</name>
+    <role>Chuckie O'Brien</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Domenick Lombardozzi</name>
+    <role>Fat Tony Salerno</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Herman</name>
+    <role>Whispers DiTullio</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Gary Basaraba</name>
+    <role>Frank 'Fitz' Fitzsimmons</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Martin Scorsese</director>
+  <credits>Steven Zaillian</credits>
+</movie>

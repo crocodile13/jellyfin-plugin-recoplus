@@ -1,0 +1,121 @@
+<movie>
+  <title>Aladdin</title>
+  <originaltitle>Aladdin</originaltitle>
+  <year>1992</year>
+  <premiered>1992-11-25</premiered>
+  <rating>7.657</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <genre>Romance</genre>
+  <tag>princess</tag>
+  <tag>magic</tag>
+  <tag>tiger</tag>
+  <tag>cartoon</tag>
+  <tag>villain</tag>
+  <tag>parrot</tag>
+  <tag>sultan</tag>
+  <tag>flying carpet</tag>
+  <tag>wish</tag>
+  <tag>musical</tag>
+  <tag>love</tag>
+  <tag>monkey</tag>
+  <tag>arab</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>genie</tag>
+  <tag>arabian nights</tag>
+  <tag>animal sidekick</tag>
+  <tag>magic lamp</tag>
+  <tag>good versus evil</tag>
+  <tag>enchant</tag>
+  <studio>Walt Disney Feature Animation</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">812</uniqueid>
+  <uniqueid type="imdb">tt0103639</uniqueid>
+  <set tmdbcolid="86027">
+    <name>86027</name>
+  </set>
+  <actor>
+    <name>Scott Weinger</name>
+    <role>Aladdin (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Robin Williams</name>
+    <role>Genie / Peddler (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Linda Larkin</name>
+    <role>Jasmine (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Freeman</name>
+    <role>Jafar (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Gilbert Gottfried</name>
+    <role>Iago (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Douglas Seale</name>
+    <role>Sultan (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Welker</name>
+    <role>Abu / Cave of Wonders / Rajah (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Brad Caleb Kane</name>
+    <role>Aladdin (singing voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Lea Salonga</name>
+    <role>Jasmine (singing voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Bruce Adler</name>
+    <role>Peddler (singing voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Charlie Adler</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Angel</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Corey Burton</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Philip L. Clarke</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Cummings</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>John Musker</director>
+  <director>Ron Clements</director>
+  <credits>Ron Clements</credits>
+  <credits>Ted Elliott</credits>
+  <credits>Terry Rossio</credits>
+  <credits>John Musker</credits>
+</movie>

@@ -1,0 +1,110 @@
+<movie>
+  <title>Kill Bill: Vol. 1</title>
+  <originaltitle>Kill Bill: Vol. 1</originaltitle>
+  <year>2003</year>
+  <premiered>2003-10-10</premiered>
+  <rating>7.969</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Crime</genre>
+  <tag>martial arts</tag>
+  <tag>japan</tag>
+  <tag>kung fu</tag>
+  <tag>sword</tag>
+  <tag>yakuza</tag>
+  <tag>katana</tag>
+  <tag>sword fight</tag>
+  <tag>revenge</tag>
+  <tag>vigilante</tag>
+  <tag>female yakuza</tag>
+  <tag>female protagonist</tag>
+  <tag>retribution</tag>
+  <tag>dreary</tag>
+  <tag>extreme violence</tag>
+  <studio>Miramax</studio>
+  <studio>A Band Apart</studio>
+  <studio>Super Cool ManChu</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">24</uniqueid>
+  <uniqueid type="imdb">tt0266697</uniqueid>
+  <set tmdbcolid="2883">
+    <name>2883</name>
+  </set>
+  <actor>
+    <name>Uma Thurman</name>
+    <role>The Bride</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Lucy Liu</name>
+    <role>O-Ren Ishii</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Vivica A. Fox</name>
+    <role>Vernita Green</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Daryl Hannah</name>
+    <role>Elle Driver</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>David Carradine</name>
+    <role>Bill</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Madsen</name>
+    <role>Budd</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Dreyfus</name>
+    <role>Sofie Fatale</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Chiaki Kuriyama</name>
+    <role>Gogo Yubari</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sonny Chiba</name>
+    <role>Hattori Hanzo</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Gordon Liu Chia-hui</name>
+    <role>Johnny Mo</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Parks</name>
+    <role>Earl McGraw</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Bowen</name>
+    <role>Buck</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jun Kunimura</name>
+    <role>Boss Tanaka</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kenji Ohba</name>
+    <role>Bald Guy (Sushi Shop)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Yuki Kazamatsuri</name>
+    <role>Proprietor</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Quentin Tarantino</director>
+  <credits>Quentin Tarantino</credits>
+</movie>

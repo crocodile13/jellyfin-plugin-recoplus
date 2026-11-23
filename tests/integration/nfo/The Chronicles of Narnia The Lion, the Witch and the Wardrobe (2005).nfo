@@ -1,0 +1,129 @@
+<movie>
+  <title>The Chronicles of Narnia: The Lion, the Witch and the Wardrobe</title>
+  <originaltitle>The Chronicles of Narnia: The Lion, the Witch and the Wardrobe</originaltitle>
+  <year>2005</year>
+  <premiered>2005-12-07</premiered>
+  <rating>7.146</rating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Family</genre>
+  <genre>Fantasy</genre>
+  <tag>witch</tag>
+  <tag>sibling relationship</tag>
+  <tag>saving the world</tag>
+  <tag>based on novel or book</tag>
+  <tag>self sacrifice</tag>
+  <tag>winter</tag>
+  <tag>fairy tale</tag>
+  <tag>christianity</tag>
+  <tag>allegory</tag>
+  <tag>cupboard</tag>
+  <tag>beaver</tag>
+  <tag>lion</tag>
+  <tag>surrealism</tag>
+  <tag>battle</tag>
+  <tag>based on children's book</tag>
+  <tag>christ allegory</tag>
+  <tag>fantasy world</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>1940s</tag>
+  <tag>high fantasy</tag>
+  <tag>isekai</tag>
+  <tag>christ figure</tag>
+  <tag>based on young adult novel</tag>
+  <tag>faun</tag>
+  <tag>good versus evil</tag>
+  <tag>christian allegory</tag>
+  <studio>Walt Disney Pictures</studio>
+  <studio>Walden Media</studio>
+  <studio>Gran Via Productions</studio>
+  <studio>Lamp-Post Productions</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">411</uniqueid>
+  <uniqueid type="imdb">tt0363771</uniqueid>
+  <set tmdbcolid="420">
+    <name>420</name>
+  </set>
+  <actor>
+    <name>Georgie Henley</name>
+    <role>Lucy Pevensie</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Skandar Keynes</name>
+    <role>Edmund Pevensie</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>William Moseley</name>
+    <role>Peter Pevensie</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Anna Popplewell</name>
+    <role>Susan Pevensie</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Tilda Swinton</name>
+    <role>White Witch</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Liam Neeson</name>
+    <role>Aslan (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>James McAvoy</name>
+    <role>Mr. Tumnus</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Broadbent</name>
+    <role>Prof. Digory Kirke</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Ray Winstone</name>
+    <role>Mr. Beaver (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Dawn French</name>
+    <role>Mrs. Beaver (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>James Cosmo</name>
+    <role>Father Christmas</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Judy McIntosh</name>
+    <role>Helen Pevensie</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kiran Shah</name>
+    <role>Ginarrbrik</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Hawthorne</name>
+    <role>Mrs. MacReady</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Madsen</name>
+    <role>Maugrim (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Andrew Adamson</director>
+  <credits>Andrew Adamson</credits>
+  <credits>Christopher Markus</credits>
+  <credits>Ann Peacock</credits>
+  <credits>Stephen McFeely</credits>
+  <credits>C. S. Lewis</credits>
+</movie>

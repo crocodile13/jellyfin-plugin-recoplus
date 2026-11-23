@@ -1,0 +1,122 @@
+<movie>
+  <title>Oppenheimer</title>
+  <originaltitle>Oppenheimer</originaltitle>
+  <year>2023</year>
+  <premiered>2023-07-19</premiered>
+  <rating>8.023</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>History</genre>
+  <genre>War</genre>
+  <tag>husband wife relationship</tag>
+  <tag>based on novel or book</tag>
+  <tag>atomic bomb</tag>
+  <tag>patriotism</tag>
+  <tag>new mexico</tag>
+  <tag>world war ii</tag>
+  <tag>atomic bomb test</tag>
+  <tag>physics</tag>
+  <tag>biography</tag>
+  <tag>based on true story</tag>
+  <tag>antisemitism</tag>
+  <tag>interrogation</tag>
+  <tag>guilt</tag>
+  <tag>historical event</tag>
+  <tag>nuclear weapons</tag>
+  <tag>communism</tag>
+  <tag>red scare</tag>
+  <tag>mccarthyism</tag>
+  <tag>top secret project</tag>
+  <tag>moral dilemma</tag>
+  <tag>usa politics</tag>
+  <tag>1940s</tag>
+  <tag>20th century</tag>
+  <tag>manhattan project</tag>
+  <tag>los alamos</tag>
+  <studio>Syncopy</studio>
+  <studio>Universal Pictures</studio>
+  <studio>Atlas Entertainment</studio>
+  <studio>Breakheart Films</studio>
+  <studio>Peters Creek Entertainment</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">872585</uniqueid>
+  <uniqueid type="imdb">tt15398776</uniqueid>
+  <actor>
+    <name>Cillian Murphy</name>
+    <role>J. Robert Oppenheimer</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Emily Blunt</name>
+    <role>Kitty Oppenheimer</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Damon</name>
+    <role>Leslie Groves</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Lewis Strauss</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Florence Pugh</name>
+    <role>Jean Tatlock</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Hartnett</name>
+    <role>Ernest Lawrence</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Casey Affleck</name>
+    <role>Boris Pash</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rami Malek</name>
+    <role>David Hill</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kenneth Branagh</name>
+    <role>Niels Bohr</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Benny Safdie</name>
+    <role>Edward Teller</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Clarke</name>
+    <role>Roger Robb</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Dylan Arnold</name>
+    <role>Frank Oppenheimer</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Conti</name>
+    <role>Albert Einstein</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>James D'Arcy</name>
+    <role>Patrick Blackett</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>David Dastmalchian</name>
+    <role>William Borden</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Christopher Nolan</director>
+  <credits>Christopher Nolan</credits>
+</movie>

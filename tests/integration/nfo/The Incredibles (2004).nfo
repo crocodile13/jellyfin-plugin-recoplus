@@ -1,0 +1,104 @@
+<movie>
+  <title>The Incredibles</title>
+  <originaltitle>The Incredibles</originaltitle>
+  <year>2004</year>
+  <premiered>2004-10-27</premiered>
+  <rating>7.729</rating>
+  <mpaa>PG</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <tag>hero</tag>
+  <tag>secret identity</tag>
+  <tag>superhero</tag>
+  <tag>villain</tag>
+  <tag>family relationships</tag>
+  <tag>super power</tag>
+  <tag>supervillain</tag>
+  <tag>3d animation</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">9806</uniqueid>
+  <uniqueid type="imdb">tt0317705</uniqueid>
+  <set tmdbcolid="468222">
+    <name>468222</name>
+  </set>
+  <actor>
+    <name>Craig T. Nelson</name>
+    <role>Bob Parr / Mr. Incredible (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Holly Hunter</name>
+    <role>Helen Parr / Elastigirl (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Vowell</name>
+    <role>Violet Parr (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Spencer Fox</name>
+    <role>Dashiell 'Dash' Parr (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Lee</name>
+    <role>Buddy Pine / Syndrome (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel L. Jackson</name>
+    <role>Lucius Best / Frozone (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Peña</name>
+    <role>Mirage (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Eli Fucile</name>
+    <role>Jack-Jack Parr (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Maeve Andrews</name>
+    <role>Jack-Jack Parr (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Brad Bird</name>
+    <role>Edna 'E' Mode (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Dominique Louis</name>
+    <role>Bomb Voyage (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Teddy Newton</name>
+    <role>Newsreel Narrator (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jean Sincere</name>
+    <role>Mrs. Hogenson (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Wallace Shawn</name>
+    <role>Gilbert Huph (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Lou Romano</name>
+    <role>Bernie Kropp (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Brad Bird</director>
+  <credits>Brad Bird</credits>
+</movie>

@@ -1,0 +1,124 @@
+<movie>
+  <title>The Batman</title>
+  <originaltitle>The Batman</originaltitle>
+  <year>2022</year>
+  <premiered>2022-03-01</premiered>
+  <rating>7.675</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Crime</genre>
+  <genre>Mystery</genre>
+  <genre>Thriller</genre>
+  <tag>police</tag>
+  <tag>psychopath</tag>
+  <tag>secret identity</tag>
+  <tag>crime fighter</tag>
+  <tag>superhero</tag>
+  <tag>nightclub</tag>
+  <tag>politician</tag>
+  <tag>based on comic</tag>
+  <tag>vigilante</tag>
+  <tag>organized crime</tag>
+  <tag>serial killer</tag>
+  <tag>millionaire</tag>
+  <tag>social injustice</tag>
+  <tag>murder investigation</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>masked superhero</tag>
+  <tag>political corruption</tag>
+  <tag>neo-noir</tag>
+  <tag>urban gothic</tag>
+  <tag>vengeance</tag>
+  <tag>mayoral election</tag>
+  <tag>wistful</tag>
+  <tag>suspenseful</tag>
+  <tag>tense</tag>
+  <tag>gloomy</tag>
+  <studio>6th &amp; Idaho Motion Picture Company</studio>
+  <studio>Dylan Clark Productions</studio>
+  <studio>DC Films</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">414906</uniqueid>
+  <uniqueid type="imdb">tt1877830</uniqueid>
+  <set tmdbcolid="948485">
+    <name>948485</name>
+  </set>
+  <actor>
+    <name>Robert Pattinson</name>
+    <role>Bruce Wayne / The Batman</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Zoë Kravitz</name>
+    <role>Selina Kyle</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey Wright</name>
+    <role>Lt. James Gordon</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Colin Farrell</name>
+    <role>Oz / The Penguin</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Dano</name>
+    <role>The Riddler</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>John Turturro</name>
+    <role>Carmine Falcone</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Andy Serkis</name>
+    <role>Alfred</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Sarsgaard</name>
+    <role>District Attorney Gil Colson</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Keoghan</name>
+    <role>Unseen Arkham Prisoner</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jayme Lawson</name>
+    <role>Bella Reál</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Gil Perez-Abraham</name>
+    <role>Officer Martinez</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Peter McDonald</name>
+    <role>Kenzie</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Con O'Neill</name>
+    <role>Chief Mackenzie Bock</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Alex Ferns</name>
+    <role>Commissioner Pete Savage</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rupert Penry-Jones</name>
+    <role>Mayor Don Mitchell, Jr.</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Matt Reeves</director>
+  <credits>Matt Reeves</credits>
+  <credits>Peter Craig</credits>
+</movie>

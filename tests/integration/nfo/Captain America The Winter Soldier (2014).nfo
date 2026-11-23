@@ -1,0 +1,106 @@
+<movie>
+  <title>Captain America: The Winter Soldier</title>
+  <originaltitle>Captain America: The Winter Soldier</originaltitle>
+  <year>2014</year>
+  <premiered>2014-03-20</premiered>
+  <rating>7.7</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Science Fiction</genre>
+  <tag>washington dc, usa</tag>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>sequel</tag>
+  <tag>super soldier</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>political thriller</tag>
+  <studio>Marvel Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">100402</uniqueid>
+  <uniqueid type="imdb">tt1843866</uniqueid>
+  <set tmdbcolid="131295">
+    <name>131295</name>
+  </set>
+  <actor>
+    <name>Chris Evans</name>
+    <role>Steve Rogers / Captain America</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel L. Jackson</name>
+    <role>Nick Fury</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Scarlett Johansson</name>
+    <role>Natasha Romanoff / Black Widow</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Redford</name>
+    <role>Alexander Pierce</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sebastian Stan</name>
+    <role>Bucky Barnes / Winter Soldier</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Mackie</name>
+    <role>Sam Wilson / Falcon</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Cobie Smulders</name>
+    <role>Maria Hill</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Grillo</name>
+    <role>Brock Rumlow</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Maximiliano Hernández</name>
+    <role>Jasper Sitwell</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Emily VanCamp</name>
+    <role>Kate / Agent 13</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Hayley Atwell</name>
+    <role>Peggy Carter</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Toby Jones</name>
+    <role>Dr. Arnim Zola</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Stan Lee</name>
+    <role>Smithsonian Guard</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Callan Mulvey</name>
+    <role>Jack Rollins</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jenny Agutter</name>
+    <role>Councilwoman Hawley</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Joe Russo</director>
+  <director>Anthony Russo</director>
+  <credits>Christopher Markus</credits>
+  <credits>Stephen McFeely</credits>
+</movie>

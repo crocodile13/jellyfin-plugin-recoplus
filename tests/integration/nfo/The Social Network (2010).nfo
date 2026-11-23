@@ -1,0 +1,111 @@
+<movie>
+  <title>The Social Network</title>
+  <originaltitle>The Social Network</originaltitle>
+  <year>2010</year>
+  <premiered>2010-10-01</premiered>
+  <rating>7.379</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Drama</genre>
+  <tag>hacker</tag>
+  <tag>based on novel or book</tag>
+  <tag>boston, massachusetts</tag>
+  <tag>ex-girlfriend</tag>
+  <tag>biography</tag>
+  <tag>based on true story</tag>
+  <tag>historical fiction</tag>
+  <tag>university</tag>
+  <tag>twins</tag>
+  <tag>docudrama</tag>
+  <tag>blunt</tag>
+  <tag>social media</tag>
+  <tag>legal drama</tag>
+  <tag>conceited</tag>
+  <studio>Columbia Pictures</studio>
+  <studio>Relativity Media</studio>
+  <studio>Scott Rudin Productions</studio>
+  <studio>Michael De Luca Productions</studio>
+  <studio>Trigger Street Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">37799</uniqueid>
+  <uniqueid type="imdb">tt1285016</uniqueid>
+  <set tmdbcolid="1504252">
+    <name>1504252</name>
+  </set>
+  <actor>
+    <name>Jesse Eisenberg</name>
+    <role>Mark Zuckerberg</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Garfield</name>
+    <role>Eduardo Saverin</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Armie Hammer</name>
+    <role>Cameron Winklevoss / Tyler Winklevoss</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Justin Timberlake</name>
+    <role>Sean Parker</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Rooney Mara</name>
+    <role>Erica Albright</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Max Minghella</name>
+    <role>Divya Narendra</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Brenda Song</name>
+    <role>Christy Ling</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Pence</name>
+    <role>Tyler Winklevoss (Body Double)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Rashida Jones</name>
+    <role>Marylin Delpy</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>John Getz</name>
+    <role>Sy</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>David Selby</name>
+    <role>Gage</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Denise Grayson</name>
+    <role>Gretchen</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Douglas Urbanski</name>
+    <role>Larry Summers</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Bryan Barter</name>
+    <role>Billy Olsen</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Dustin Fitzsimons</name>
+    <role>Phoenix Club President</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>David Fincher</director>
+  <credits>Aaron Sorkin</credits>
+</movie>

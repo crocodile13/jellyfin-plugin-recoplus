@@ -1,0 +1,111 @@
+<tvshow>
+  <title>Fargo</title>
+  <originaltitle>Fargo</originaltitle>
+  <year>2014</year>
+  <premiered>2014-04-15</premiered>
+  <rating>8.29</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>detective</tag>
+  <tag>minnesota</tag>
+  <tag>winter</tag>
+  <tag>deputy</tag>
+  <tag>north dakota</tag>
+  <tag>anthology</tag>
+  <tag>dark comedy</tag>
+  <tag>criminal</tag>
+  <tag>police officer</tag>
+  <tag>psychotic</tag>
+  <tag>murder investigation</tag>
+  <tag>based on movie</tag>
+  <tag>neo-noir</tag>
+  <tag>absurd</tag>
+  <tag>violence</tag>
+  <tag>baffled</tag>
+  <tag>compassionate</tag>
+  <tag>disgusted</tag>
+  <studio>FX</studio>
+  <studio>26 Keys Productions</studio>
+  <studio>The Littlefield Company</studio>
+  <studio>Mike Zoss Productions</studio>
+  <studio>MGM Television</studio>
+  <studio>FX Productions</studio>
+  <uniqueid type="tmdb" default="true">60622</uniqueid>
+  <uniqueid type="imdb">tt2802850</uniqueid>
+  <actor>
+    <name>Juno Temple</name>
+    <role>Dorothy 'Dot' Lyon</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Wilson</name>
+    <role>Lou Solverson</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jennifer Jason Leigh</name>
+    <role>Lorraine Lyon</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>David Rysdahl</name>
+    <role>Wayne Lyon</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Allison Tolman</name>
+    <role>Molly Solverson</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Colin Hanks</name>
+    <role>Deputy Gus Grimly</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Keery</name>
+    <role>Gator Tillman</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ewan McGregor</name>
+    <role>Emmit Stussy / Ray Stussy</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Lamorne Morris</name>
+    <role>North Dakota Deputy Witt Farr</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Rock</name>
+    <role>Loy Cannon</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Richa Shukla Moorjani</name>
+    <role>Minnesota Police Deputy Indira Olmstead</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Spruell</name>
+    <role>Ole Munch</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ted Danson</name>
+    <role>Sheriff Hank Larsson</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Sienna King</name>
+    <role>Scotty Lyon</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Stuhlbarg</name>
+    <role>Sy Feltz</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

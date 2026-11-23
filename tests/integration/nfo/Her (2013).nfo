@@ -1,0 +1,111 @@
+<movie>
+  <title>Her</title>
+  <originaltitle>Her</originaltitle>
+  <year>2013</year>
+  <premiered>2013-12-18</premiered>
+  <rating>7.832</rating>
+  <mpaa>R</mpaa>
+  <genre>Romance</genre>
+  <genre>Science Fiction</genre>
+  <genre>Drama</genre>
+  <tag>future</tag>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>computer</tag>
+  <tag>satire</tag>
+  <tag>love</tag>
+  <tag>loneliness</tag>
+  <tag>transhumanism</tag>
+  <tag>los angeles, california</tag>
+  <tag>heartbreak</tag>
+  <tag>semi autobiographical</tag>
+  <tag>speculative</tag>
+  <tag>singularity</tag>
+  <tag>near future</tag>
+  <tag>serene</tag>
+  <tag>intimate</tag>
+  <tag>provocative</tag>
+  <tag>dramatic</tag>
+  <tag>comforting</tag>
+  <tag>operating system</tag>
+  <studio>Annapurna Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">152601</uniqueid>
+  <uniqueid type="imdb">tt1798709</uniqueid>
+  <actor>
+    <name>Joaquin Phoenix</name>
+    <role>Theodore</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Scarlett Johansson</name>
+    <role>Samantha (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Lynn Adrianna</name>
+    <role>Letter Writer #1</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Renee Pitts</name>
+    <role>Letter Writer #2</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Gabe Gomez</name>
+    <role>Letter Writer #3</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Pratt</name>
+    <role>Paul</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Artt Butler</name>
+    <role>Text Voice (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>May Lindstrom</name>
+    <role>Sexy Pregnant TV Star</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Rooney Mara</name>
+    <role>Catherine</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Hader</name>
+    <role>Chat Room Friend #2 (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kristen Wiig</name>
+    <role>SexyKitten (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Brian D. Johnson</name>
+    <role>OS1 Commercial Lead</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Adams</name>
+    <role>Amy</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Letscher</name>
+    <role>Charles</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Spike Jonze</name>
+    <role>Alien Child (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Spike Jonze</director>
+  <credits>Spike Jonze</credits>
+</movie>

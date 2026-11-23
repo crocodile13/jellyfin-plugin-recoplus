@@ -1,0 +1,104 @@
+<tvshow>
+  <title>Only Murders in the Building</title>
+  <originaltitle>Only Murders in the Building</originaltitle>
+  <year>2021</year>
+  <premiered>2021-08-31</premiered>
+  <rating>8.389</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Comedy</genre>
+  <genre>Mystery</genre>
+  <genre>Crime</genre>
+  <tag>deaf</tag>
+  <tag>friendship</tag>
+  <tag>female protagonist</tag>
+  <tag>murderer</tag>
+  <tag>lgbt</tag>
+  <tag>murder mystery</tag>
+  <tag>evidence</tag>
+  <tag>podcast</tag>
+  <tag>theater</tag>
+  <tag>bisexual woman</tag>
+  <tag>lighthearted</tag>
+  <studio>Hulu</studio>
+  <studio>Rhode Island Ave. Productions</studio>
+  <studio>40 Share Productions</studio>
+  <studio>Another Hoffman Story Productions</studio>
+  <studio>20th Television</studio>
+  <uniqueid type="tmdb" default="true">107113</uniqueid>
+  <uniqueid type="imdb">tt11691774</uniqueid>
+  <actor>
+    <name>Steve Martin</name>
+    <role>Charles-Haden Savage</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Martin Short</name>
+    <role>Oliver Putnam</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Selena Gomez</name>
+    <role>Mabel Mora</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Ryan</name>
+    <role>Jan Bellows</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Aaron Dominguez</name>
+    <role>Óscar Torres</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Cyril Creighton</name>
+    <role>Howard Morris</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Cara Delevingne</name>
+    <role>Alice Banks</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Quincy Dunn-Baker</name>
+    <role>Kev</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Adam DeCarlo</name>
+    <role>Guy on the Street</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Madeleine Valencia</name>
+    <role>Young Mabel Mora</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>John Sousa</name>
+    <role>Zeus</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Adriane Lenox</name>
+    <role>Roberta</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Alexander Blaise</name>
+    <role>Investor #2</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Evan Zes</name>
+    <role>Investor #1</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Sting</name>
+    <role>Sting</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

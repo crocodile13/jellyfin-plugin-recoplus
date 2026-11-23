@@ -1,0 +1,122 @@
+<movie>
+  <title>Terminator 2: Judgment Day</title>
+  <originaltitle>Terminator 2: Judgment Day</originaltitle>
+  <year>1991</year>
+  <premiered>1991-07-03</premiered>
+  <rating>8.178</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Thriller</genre>
+  <genre>Science Fiction</genre>
+  <tag>man vs machine</tag>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>cyborg</tag>
+  <tag>shotgun</tag>
+  <tag>dystopia</tag>
+  <tag>moral ambiguity</tag>
+  <tag>post-apocalyptic future</tag>
+  <tag>villain</tag>
+  <tag>time travel</tag>
+  <tag>sequel</tag>
+  <tag>mental institution</tag>
+  <tag>juvenile delinquent</tag>
+  <tag>fictional war</tag>
+  <tag>urban setting</tag>
+  <tag>troubled teen</tag>
+  <tag>morphing</tag>
+  <tag>nuclear weapons</tag>
+  <tag>shape shifter</tag>
+  <tag>savior</tag>
+  <tag>catch phrase</tag>
+  <tag>action hero</tag>
+  <tag>good versus evil</tag>
+  <studio>Carolco Pictures</studio>
+  <studio>Pacific Western</studio>
+  <studio>Lightstorm Entertainment</studio>
+  <studio>Le Studio Canal+</studio>
+  <country>France</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">280</uniqueid>
+  <uniqueid type="imdb">tt0103064</uniqueid>
+  <set tmdbcolid="528">
+    <name>528</name>
+  </set>
+  <actor>
+    <name>Arnold Schwarzenegger</name>
+    <role>The Terminator</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Linda Hamilton</name>
+    <role>Sarah Connor</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Edward Furlong</name>
+    <role>John Connor</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Patrick</name>
+    <role>T-1000</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Earl Boen</name>
+    <role>Dr. Silberman</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Morton</name>
+    <role>Miles Dyson</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>S. Epatha Merkerson</name>
+    <role>Tarissa Dyson</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Castulo Guerra</name>
+    <role>Enrique Salceda</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Danny Cooksey</name>
+    <role>Tim</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jenette Goldstein</name>
+    <role>Janelle Voight</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Xander Berkeley</name>
+    <role>Todd Voight</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Leslie Hamilton Gearren</name>
+    <role>Twin Sarah</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ken Gibbel</name>
+    <role>Douglas</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Winley</name>
+    <role>Cigar Biker</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Pete Schrum</name>
+    <role>Lloyd</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>James Cameron</director>
+  <credits>James Cameron</credits>
+  <credits>William Wisher</credits>
+</movie>

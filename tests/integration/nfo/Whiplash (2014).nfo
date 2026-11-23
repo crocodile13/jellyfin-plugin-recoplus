@@ -1,0 +1,115 @@
+<movie>
+  <title>Whiplash</title>
+  <originaltitle>Whiplash</originaltitle>
+  <year>2014</year>
+  <premiered>2014-10-10</premiered>
+  <rating>8.376</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Music</genre>
+  <genre>Thriller</genre>
+  <tag>new york city</tag>
+  <tag>jazz</tag>
+  <tag>musician</tag>
+  <tag>obsession</tag>
+  <tag>music teacher</tag>
+  <tag>conservatory</tag>
+  <tag>drums</tag>
+  <tag>montage</tag>
+  <tag>perfectionist</tag>
+  <tag>public humiliation</tag>
+  <tag>jazz band</tag>
+  <tag>young adult</tag>
+  <tag>music school</tag>
+  <tag>verbal abuse</tag>
+  <tag>emotional abuse</tag>
+  <tag>based on short film</tag>
+  <tag>psychological drama</tag>
+  <tag>romantic</tag>
+  <tag>bold</tag>
+  <tag>disapproving</tag>
+  <tag>drummer</tag>
+  <studio>Bold Films</studio>
+  <studio>Blumhouse Productions</studio>
+  <studio>Right of Way Films</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">244786</uniqueid>
+  <uniqueid type="imdb">tt2582802</uniqueid>
+  <actor>
+    <name>Miles Teller</name>
+    <role>Andrew</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>J.K. Simmons</name>
+    <role>Fletcher</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Reiser</name>
+    <role>Jim</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Melissa Benoist</name>
+    <role>Nicole</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Austin Stowell</name>
+    <role>Ryan</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Nate Lang</name>
+    <role>Carl</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Mulkey</name>
+    <role>Uncle Frank</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Damon Gupton</name>
+    <role>Mr. Kramer</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Suanne Spoke</name>
+    <role>Aunt Emma</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Max Kasch</name>
+    <role>Dorm Neighbor</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Charlie Ian</name>
+    <role>Dustin</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jayson Blair</name>
+    <role>Travis</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kofi Siriboe</name>
+    <role>Bassist (Nassau)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kavita Patil</name>
+    <role>Assistant - Sophie</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>C.J. Vana</name>
+    <role>Metz</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Damien Chazelle</director>
+  <credits>Damien Chazelle</credits>
+</movie>

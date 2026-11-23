@@ -1,0 +1,124 @@
+<movie>
+  <title>Back to the Future</title>
+  <originaltitle>Back to the Future</originaltitle>
+  <year>1985</year>
+  <premiered>1985-07-03</premiered>
+  <rating>8.332</rating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Comedy</genre>
+  <genre>Science Fiction</genre>
+  <tag>flying car</tag>
+  <tag>race against time</tag>
+  <tag>clock tower</tag>
+  <tag>car race</tag>
+  <tag>lightning</tag>
+  <tag>guitar</tag>
+  <tag>inventor</tag>
+  <tag>journey in the past</tag>
+  <tag>invention</tag>
+  <tag>time travel</tag>
+  <tag>bullying</tag>
+  <tag>time machine</tag>
+  <tag>mad scientist</tag>
+  <tag>love</tag>
+  <tag>fish out of water</tag>
+  <tag>terrorism</tag>
+  <tag>teenage love</tag>
+  <tag>destiny</tag>
+  <tag>burlesque</tag>
+  <tag>hidden identity</tag>
+  <tag>teenage life</tag>
+  <tag>changing the past or future</tag>
+  <tag>kids</tag>
+  <tag>1950s</tag>
+  <tag>lighthearted</tag>
+  <tag>excited</tag>
+  <tag>optimistic</tag>
+  <studio>Universal Pictures</studio>
+  <studio>Amblin Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">105</uniqueid>
+  <uniqueid type="imdb">tt0088763</uniqueid>
+  <set tmdbcolid="264">
+    <name>264</name>
+  </set>
+  <actor>
+    <name>Michael J. Fox</name>
+    <role>Marty McFly</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Lloyd</name>
+    <role>Emmett Brown</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Crispin Glover</name>
+    <role>George McFly</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lea Thompson</name>
+    <role>Lorraine Baines</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Claudia Wells</name>
+    <role>Jennifer Parker</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas F. Wilson</name>
+    <role>Biff Tannen</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Marc McClure</name>
+    <role>Dave McFly</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Wendie Jo Sperber</name>
+    <role>Linda McFly</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>George DiCenzo</name>
+    <role>Sam Baines</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Frances Lee McCain</name>
+    <role>Stella Baines</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>James Tolkan</name>
+    <role>Mr. Strickland</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>J.J. Cohen</name>
+    <role>Skinhead</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Casey Siemaszko</name>
+    <role>3-D</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Billy Zane</name>
+    <role>Match</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Waters, Jr.</name>
+    <role>Marvin Berry</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Robert Zemeckis</director>
+  <credits>Robert Zemeckis</credits>
+  <credits>Bob Gale</credits>
+</movie>

@@ -1,0 +1,98 @@
+<movie>
+  <title>Portrait of a Lady on Fire</title>
+  <originaltitle>Portrait de la jeune fille en feu</originaltitle>
+  <year>2019</year>
+  <premiered>2019-09-06</premiered>
+  <rating>8.086</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>island</tag>
+  <tag>fire</tag>
+  <tag>beach</tag>
+  <tag>arranged marriage</tag>
+  <tag>classical music</tag>
+  <tag>painting</tag>
+  <tag>melancholy</tag>
+  <tag>painter</tag>
+  <tag>greek mythology</tag>
+  <tag>lesbian relationship</tag>
+  <tag>person on fire</tag>
+  <tag>period drama</tag>
+  <tag>lesbian sex</tag>
+  <tag>portrait</tag>
+  <tag>lgbt</tag>
+  <tag>18th century</tag>
+  <tag>woman director</tag>
+  <tag>abortion</tag>
+  <tag>portrait drawing</tag>
+  <tag>posing for a portrait</tag>
+  <tag>women gathering</tag>
+  <tag>women in film</tag>
+  <tag>complex</tag>
+  <tag>walk</tag>
+  <tag>painting lesson</tag>
+  <tag>symphony orchestra</tag>
+  <tag>lesbian</tag>
+  <tag>woman falls in love</tag>
+  <tag>lesbian affair</tag>
+  <tag>vivaldi</tag>
+  <tag>women</tag>
+  <tag>bitter</tag>
+  <tag>admiring</tag>
+  <tag>adoring</tag>
+  <tag>awestruck</tag>
+  <tag>compassionate</tag>
+  <tag>empathetic</tag>
+  <tag>melodramatic</tag>
+  <tag>wlw</tag>
+  <tag>steamy romance</tag>
+  <studio>Lilies Films</studio>
+  <studio>ARTE France Cinéma</studio>
+  <studio>Hold Up Films</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">531428</uniqueid>
+  <uniqueid type="imdb">tt8613070</uniqueid>
+  <actor>
+    <name>Noémie Merlant</name>
+    <role>Marianne</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Adèle Haenel</name>
+    <role>Héloïse</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Luàna Bajrami</name>
+    <role>Sophie</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Valeria Golino</name>
+    <role>La Comtesse</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Christel Baras</name>
+    <role>La faiseuse d'ange</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Armande Boulanger</name>
+    <role>L'élève atelier</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Guy Delamarche</name>
+    <role>L'homme salon</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Clément Bouyssou</name>
+    <role>Le batelier</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <director>Céline Sciamma</director>
+  <credits>Céline Sciamma</credits>
+</movie>

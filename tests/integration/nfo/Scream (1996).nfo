@@ -1,0 +1,116 @@
+<movie>
+  <title>Scream</title>
+  <originaltitle>Scream</originaltitle>
+  <year>1996</year>
+  <premiered>1996-12-20</premiered>
+  <rating>7.4</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Horror</genre>
+  <genre>Mystery</genre>
+  <tag>high school</tag>
+  <tag>small town</tag>
+  <tag>california</tag>
+  <tag>killing</tag>
+  <tag>halloween</tag>
+  <tag>house party</tag>
+  <tag>serial killer</tag>
+  <tag>school</tag>
+  <tag>slasher</tag>
+  <tag>whodunit</tag>
+  <tag>killing spree</tag>
+  <tag>phone</tag>
+  <tag>tabloid</tag>
+  <tag>news reporter</tag>
+  <tag>self-referential</tag>
+  <tag>crime spree</tag>
+  <tag>halloween costume</tag>
+  <tag>young adult</tag>
+  <tag>teenager</tag>
+  <tag>awestruck</tag>
+  <studio>Dimension Films</studio>
+  <studio>Woods Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">4232</uniqueid>
+  <uniqueid type="imdb">tt0117571</uniqueid>
+  <set tmdbcolid="2602">
+    <name>2602</name>
+  </set>
+  <actor>
+    <name>Neve Campbell</name>
+    <role>Sidney</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Skeet Ulrich</name>
+    <role>Billy</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Rose McGowan</name>
+    <role>Tatum</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Lillard</name>
+    <role>Stuart</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>David Arquette</name>
+    <role>Deputy Dewey</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Courteney Cox</name>
+    <role>Gale Weathers</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jamie Kennedy</name>
+    <role>Randy</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Drew Barrymore</name>
+    <role>Casey</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>W. Earl Brown</name>
+    <role>Kenny</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Joseph Whipp</name>
+    <role>Sheriff Burke</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Liev Schreiber</name>
+    <role>Cotton Weary</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Roger L. Jackson</name>
+    <role>Phone Voice (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Patrick Walls</name>
+    <role>Steve</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>David Booth</name>
+    <role>Casey's Father</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Carla Hatley</name>
+    <role>Casey's Mother</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Wes Craven</director>
+  <credits>Kevin Williamson</credits>
+</movie>

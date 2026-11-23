@@ -1,0 +1,116 @@
+<movie>
+  <title>Manchester by the Sea</title>
+  <originaltitle>Manchester by the Sea</originaltitle>
+  <year>2016</year>
+  <premiered>2016-11-17</premiered>
+  <rating>7.549</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <tag>funeral</tag>
+  <tag>boston, massachusetts</tag>
+  <tag>brother</tag>
+  <tag>boat</tag>
+  <tag>sadness</tag>
+  <tag>massachusetts</tag>
+  <tag>melancholy</tag>
+  <tag>loss</tag>
+  <tag>dysfunctional family</tag>
+  <tag>grief</tag>
+  <tag>hospital</tag>
+  <tag>house fire</tag>
+  <tag>death</tag>
+  <tag>nephew</tag>
+  <tag>ex-wife</tag>
+  <tag>nonlinear timeline</tag>
+  <tag>mental health</tag>
+  <tag>ex-husband ex-wife relationship</tag>
+  <tag>legal guardian</tag>
+  <tag>dysfunctional life</tag>
+  <tag>tragic</tag>
+  <studio>Pearl Street Films</studio>
+  <studio>K Period Media</studio>
+  <studio>B Story</studio>
+  <studio>The Affleck/Middleton Project</studio>
+  <studio>The Media Farm</studio>
+  <studio>Big Indie Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">334541</uniqueid>
+  <uniqueid type="imdb">tt4034228</uniqueid>
+  <actor>
+    <name>Casey Affleck</name>
+    <role>Lee Chandler</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Lucas Hedges</name>
+    <role>Patrick Chandler</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Michelle Williams</name>
+    <role>Randi Chandler</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle Chandler</name>
+    <role>Joe Chandler</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>C.J. Wilson</name>
+    <role>George</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Gretchen Mol</name>
+    <role>Elise Henderson</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Broderick</name>
+    <role>Jeffrey Garner</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Anna Baryshnikov</name>
+    <role>Sandy</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Heather Burns</name>
+    <role>Jill</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ivy O'Brien</name>
+    <role>Young Patrick Chandler</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kara Hayward</name>
+    <role>Silvie McGann</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Kemp</name>
+    <role>Stan Chandler</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Hamilton</name>
+    <role>Wes (Joe's Lawyer)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tate Donovan</name>
+    <role>Hockey Coach</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ruibo Qian</name>
+    <role>Dr. Bethany</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Kenneth Lonergan</director>
+  <credits>Kenneth Lonergan</credits>
+</movie>

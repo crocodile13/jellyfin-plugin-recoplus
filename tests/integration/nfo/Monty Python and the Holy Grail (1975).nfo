@@ -1,0 +1,122 @@
+<movie>
+  <title>Monty Python and the Holy Grail</title>
+  <originaltitle>Monty Python and the Holy Grail</originaltitle>
+  <year>1975</year>
+  <premiered>1975-04-03</premiered>
+  <rating>7.798</rating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Comedy</genre>
+  <genre>Fantasy</genre>
+  <tag>holy grail</tag>
+  <tag>swordplay</tag>
+  <tag>england</tag>
+  <tag>monk</tag>
+  <tag>wedding reception</tag>
+  <tag>scotland yard</tag>
+  <tag>animal attack</tag>
+  <tag>camelot</tag>
+  <tag>round table</tag>
+  <tag>chapter</tag>
+  <tag>satire</tag>
+  <tag>parody</tag>
+  <tag>breaking the fourth wall</tag>
+  <tag>knight</tag>
+  <tag>king arthur</tag>
+  <tag>knights of the round table</tag>
+  <tag>10th century</tag>
+  <tag>anarchic comedy</tag>
+  <tag>hilarious</tag>
+  <tag>cheerful</tag>
+  <tag>shaggy dog story</tag>
+  <studio>Python (Monty) Pictures</studio>
+  <studio>Michael White Productions</studio>
+  <studio>National Film Trustee Company</studio>
+  <studio>EMI Films</studio>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">762</uniqueid>
+  <uniqueid type="imdb">tt0071853</uniqueid>
+  <actor>
+    <name>Graham Chapman</name>
+    <role>King Arthur / Voice of God / Middle Head / Hiccoughing Guard</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>John Cleese</name>
+    <role>Second Swallow-Savvy Guard / The Black Knight / Peasant 3 / Sir Launcelot the Brave / Taunting French Guard / Tim the Enchanter</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Eric Idle</name>
+    <role>Dead Collector / Peasant 1 / Sir Robin the Not-Quite-So-Brave-as-Sir Launcelot / First Swamp Castle Guard / Concorde / Roger the Shrubber / Brother Maynard</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Terry Gilliam</name>
+    <role>Patsy / Green Knight / Old Man from Scene 24 (Bridgekeeper) / Sir Bors / Animator / Gorilla Hand</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Terry Jones</name>
+    <role>Dennis's Mother / Sir Bedevere / Left Head / Prince Herbert / Voice of Cartoon Scribe</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Palin</name>
+    <role>First Swallow-Savvy Guard / Dennis / Peasant 2 / Right Head / Sir Galahad the Pure / Narrator / King of Swamp Castle / Brother Maynard's Brother / Leader of The Knights Who Say NI!</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Connie Booth</name>
+    <role>The Witch</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Carol Cleveland</name>
+    <role>Zoot / Dingo</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Neil Innes</name>
+    <role>First Monk / Singing Minstrel / Page Crushed by the Rabbit / Peasant #4</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Bee Duffell</name>
+    <role>Old Crone</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>John Young</name>
+    <role>Dead Body / Historian Frank</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Rita Davies</name>
+    <role>Historian's Wife</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Avril Stewart</name>
+    <role>Dr. Piglet</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Sally Kinghorn</name>
+    <role>Dr. Winston</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Zycon</name>
+    <role>Prisoner</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Terry Jones</director>
+  <director>Terry Gilliam</director>
+  <credits>Eric Idle</credits>
+  <credits>Terry Gilliam</credits>
+  <credits>Terry Jones</credits>
+  <credits>Michael Palin</credits>
+  <credits>Graham Chapman</credits>
+  <credits>John Cleese</credits>
+</movie>

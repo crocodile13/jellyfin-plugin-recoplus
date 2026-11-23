@@ -1,0 +1,112 @@
+<tvshow>
+  <title>Better Call Saul</title>
+  <originaltitle>Better Call Saul</originaltitle>
+  <year>2015</year>
+  <premiered>2015-02-08</premiered>
+  <rating>8.716</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>new mexico</tag>
+  <tag>moral conflict</tag>
+  <tag>crooked lawyer</tag>
+  <tag>prequel</tag>
+  <tag>romance</tag>
+  <tag>dark comedy</tag>
+  <tag>family relationships</tag>
+  <tag>tragedy</tag>
+  <tag>lawyer</tag>
+  <tag>brother against brother</tag>
+  <tag>spin off</tag>
+  <tag>neo-western</tag>
+  <tag>albuquerque, new mexico</tag>
+  <tag>criminal lawyer</tag>
+  <tag>fall from grace</tag>
+  <tag>neo-noir</tag>
+  <tag>mexican cartel</tag>
+  <tag>legal drama</tag>
+  <tag>gritty</tag>
+  <tag>offbeat</tag>
+  <studio>AMC</studio>
+  <studio>Sony Pictures Television</studio>
+  <studio>Gran Via Productions</studio>
+  <studio>High Bridge Productions</studio>
+  <studio>Crystal Diner</studio>
+  <uniqueid type="tmdb" default="true">60059</uniqueid>
+  <uniqueid type="imdb">tt3032476</uniqueid>
+  <actor>
+    <name>Bob Odenkirk</name>
+    <role>Jimmy McGill</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Banks</name>
+    <role>Mike Ehrmantraut</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Michael McKean</name>
+    <role>Chuck McGill</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Rhea Seehorn</name>
+    <role>Kim Wexler</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Fabian</name>
+    <role>Howard Hamlin</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Mando</name>
+    <role>Nacho Varga</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Dalton</name>
+    <role>Lalo Salamanca</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Giancarlo Esposito</name>
+    <role>Gus Fring</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Stoney Westmoreland</name>
+    <role>Officer Saxton</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Alex Désert</name>
+    <role>Officer Baker</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Elisha Yaffe</name>
+    <role>Lance</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Mulkey</name>
+    <role>Billy Gatwood</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Beaver</name>
+    <role>Lawson</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Raymond Cruz</name>
+    <role>Tuco Salamanca</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Teddy Eggleston</name>
+    <role>Mrs. Siemasko</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,107 @@
+<tvshow>
+  <title>Succession</title>
+  <originaltitle>Succession</originaltitle>
+  <year>2018</year>
+  <premiered>2018-06-03</premiered>
+  <rating>8.309</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Comedy</genre>
+  <tag>new york city</tag>
+  <tag>sibling relationship</tag>
+  <tag>media tycoon</tag>
+  <tag>businessman</tag>
+  <tag>patriarch</tag>
+  <tag>family business</tag>
+  <tag>dysfunctional family</tag>
+  <tag>wealth</tag>
+  <tag>sibling</tag>
+  <tag>succession</tag>
+  <tag>white collar criminal</tag>
+  <tag>failed marriage</tag>
+  <tag>baffled</tag>
+  <tag>commanding</tag>
+  <tag>media empire</tag>
+  <studio>HBO</studio>
+  <studio>Gary Sanchez Productions</studio>
+  <studio>Hyperobject Industries</studio>
+  <studio>Project Zeus</studio>
+  <studio>Hot Seat Productions</studio>
+  <uniqueid type="tmdb" default="true">76331</uniqueid>
+  <uniqueid type="imdb">tt7660850</uniqueid>
+  <actor>
+    <name>Jeremy Strong</name>
+    <role>Kendall Roy</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hiam Abbass</name>
+    <role>Marcia Roy</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kieran Culkin</name>
+    <role>Roman Roy</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Snook</name>
+    <role>Siobhan 'Shiv' Roy</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Cox</name>
+    <role>Logan Roy</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Macfadyen</name>
+    <role>Tom Wambsgans</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Ruck</name>
+    <role>Connor Roy</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Natalie Gold</name>
+    <role>Rava Roy</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>J. Smith-Cameron</name>
+    <role>Gerri Kellman</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Nicholas Braun</name>
+    <role>Greg Hirsch</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Arian Moayed</name>
+    <role>Stewy Hosseini</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Dagmara Dominczyk</name>
+    <role>Karolina Novotney</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Friedman</name>
+    <role>Frank Vernon</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Justine Lupe</name>
+    <role>Willa Ferreyra</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>David Rasche</name>
+    <role>Karl Muller</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,124 @@
+<movie>
+  <title>Kung Fu Panda</title>
+  <originaltitle>Kung Fu Panda</originaltitle>
+  <year>2008</year>
+  <premiered>2008-06-04</premiered>
+  <rating>7.346</rating>
+  <mpaa>PG</mpaa>
+  <genre>Action</genre>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <tag>martial arts</tag>
+  <tag>kung fu</tag>
+  <tag>strong woman</tag>
+  <tag>china</tag>
+  <tag>tiger</tag>
+  <tag>bravery</tag>
+  <tag>restaurant</tag>
+  <tag>villain</tag>
+  <tag>chosen one</tag>
+  <tag>shop</tag>
+  <tag>panda</tag>
+  <tag>sensei</tag>
+  <tag>anthropomorphism</tag>
+  <tag>fighting</tag>
+  <tag>master</tag>
+  <tag>destiny</tag>
+  <tag>crane</tag>
+  <tag>rope bridge</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>wuxia</tag>
+  <tag>monkey warrior</tag>
+  <tag>viper</tag>
+  <tag>3d animation</tag>
+  <tag>inspirational</tag>
+  <tag>whimsical</tag>
+  <tag>joyful</tag>
+  <studio>DreamWorks Animation</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">9502</uniqueid>
+  <uniqueid type="imdb">tt0441773</uniqueid>
+  <set tmdbcolid="77816">
+    <name>77816</name>
+  </set>
+  <actor>
+    <name>Jack Black</name>
+    <role>Po (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Dustin Hoffman</name>
+    <role>Shifu (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Angelina Jolie</name>
+    <role>Tigress (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ian McShane</name>
+    <role>Tai Lung (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Seth Rogen</name>
+    <role>Mantis (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lucy Liu</name>
+    <role>Viper (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>David Cross</name>
+    <role>Crane (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Randall Duk Kim</name>
+    <role>Oogway (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>James Hong</name>
+    <role>Mr. Ping (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Dan Fogler</name>
+    <role>Zeng (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Clarke Duncan</name>
+    <role>Commander Vachir (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jackie Chan</name>
+    <role>Monkey (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Wayne Knight</name>
+    <role>Gang Boss (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle Gass</name>
+    <role>KG Shaw (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>JR Reed</name>
+    <role>JR Shaw (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Mark Osborne</director>
+  <director>John Stevenson</director>
+  <credits>Glenn Berger</credits>
+  <credits>Jonathan Aibel</credits>
+</movie>

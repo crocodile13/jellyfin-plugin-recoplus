@@ -1,0 +1,104 @@
+<tvshow>
+  <title>Shadow and Bone</title>
+  <originaltitle>Shadow and Bone</originaltitle>
+  <year>2021</year>
+  <premiered>2021-04-23</premiered>
+  <rating>7.7</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Drama</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>based on novel or book</tag>
+  <tag>magic</tag>
+  <tag>crew</tag>
+  <tag>soldier</tag>
+  <tag>young woman</tag>
+  <tag>based on myths, legends or folklore</tag>
+  <tag>based on young adult novel</tag>
+  <tag>darkling</tag>
+  <tag>power</tag>
+  <tag>fantasy</tag>
+  <tag>teenager</tag>
+  <tag>adventure</tag>
+  <tag>middle ages</tag>
+  <studio>Netflix</studio>
+  <studio>21 Laps Entertainment</studio>
+  <studio>Chronology</studio>
+  <studio>Loom Studios</studio>
+  <uniqueid type="tmdb" default="true">85720</uniqueid>
+  <uniqueid type="imdb">tt2403776</uniqueid>
+  <actor>
+    <name>Jessie Mei Li</name>
+    <role>Alina Starkov</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Archie Renaux</name>
+    <role>Malyen 'Mal' Oretsev</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Freddy Carter</name>
+    <role>Kaz Brekker</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Amita Suman</name>
+    <role>Inej Ghafa</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Kit Young</name>
+    <role>Jesper Fahey</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Gibson</name>
+    <role>Sturmhond / Nikolai Lantsov</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Daisy Head</name>
+    <role>Genya Safin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Danielle Galligan</name>
+    <role>Nina Zenik</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Calahan Skogman</name>
+    <role>Matthias Helvar</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Lewis Tan</name>
+    <role>Tolya Yul-Bataar</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Wolfe</name>
+    <role>Wylan Hendricks</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Anna Leong Brophy</name>
+    <role>Tamar Kir-Bataar</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Zoë Wanamaker</name>
+    <role>Baghra</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Barnes</name>
+    <role>General Aleksander Kirigan / The Darkling</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Antonín Mašek</name>
+    <role>Alexei</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

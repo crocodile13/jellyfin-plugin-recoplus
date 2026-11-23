@@ -1,0 +1,104 @@
+<tvshow>
+  <title>Normal People</title>
+  <originaltitle>Normal People</originaltitle>
+  <year>2020</year>
+  <premiered>2020-04-26</premiered>
+  <rating>8.1</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <tag>based on novel or book</tag>
+  <tag>small town</tag>
+  <tag>dublin, ireland</tag>
+  <tag>high school</tag>
+  <tag>rich woman poor man</tag>
+  <tag>romance</tag>
+  <tag>coming of age</tag>
+  <tag>university</tag>
+  <tag>ireland</tag>
+  <tag>first love</tag>
+  <tag>opposites attract</tag>
+  <tag>bittersweet</tag>
+  <tag>heartfelt</tag>
+  <tag>psychological drama</tag>
+  <studio>BBC Three (Online)</studio>
+  <studio>Element Pictures</studio>
+  <studio>Fís Éireann/Screen Ireland</studio>
+  <uniqueid type="tmdb" default="true">89905</uniqueid>
+  <uniqueid type="imdb">tt9059760</uniqueid>
+  <actor>
+    <name>Paul Mescal</name>
+    <role>Connell Waldron</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Daisy Edgar-Jones</name>
+    <role>Marianne Sheridan</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Desmond Eastwood</name>
+    <role>Niall</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Anita Petry</name>
+    <role>Seminar Leader</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sebastian de Souza</name>
+    <role>Gareth</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Killian Coyle</name>
+    <role>Pat</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Roche</name>
+    <role>Bill Moran</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Muiris Crowley</name>
+    <role>Mr. Kerrigan</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Fiona Browne</name>
+    <role>Fiona Moran</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ciara Berkeley</name>
+    <role>Student 1</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lila Harper</name>
+    <role>Student 2</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Maya O'Shea</name>
+    <role>Jenny</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lauryn Canny</name>
+    <role>Teresa</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Abdelaziz Sanusi</name>
+    <role>Eoin</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ross Gaynor</name>
+    <role>Teaching Assistant 2</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <credits>Sally Rooney</credits>
+</tvshow>

@@ -1,0 +1,114 @@
+<tvshow>
+  <title>Call My Agent!</title>
+  <originaltitle>Dix pour cent</originaltitle>
+  <year>2015</year>
+  <premiered>2015-10-14</premiered>
+  <rating>7.68</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Comedy</genre>
+  <genre>Drama</genre>
+  <tag>paris, france</tag>
+  <tag>show business</tag>
+  <tag>movie business</tag>
+  <tag>office</tag>
+  <tag>artist</tag>
+  <tag>friendship</tag>
+  <tag>family relationships</tag>
+  <tag>lgbt</tag>
+  <tag>candid</tag>
+  <tag>satirical</tag>
+  <tag>talent agency</tag>
+  <tag>hilarious</tag>
+  <tag>audacious</tag>
+  <tag>compassionate</tag>
+  <tag>euphoric</tag>
+  <tag>tragic</tag>
+  <studio>France 2</studio>
+  <studio>France Télévisions</studio>
+  <studio>Mon Voisin Productions</studio>
+  <studio>Mother Production</studio>
+  <uniqueid type="tmdb" default="true">64165</uniqueid>
+  <uniqueid type="imdb">tt4277922</uniqueid>
+  <actor>
+    <name>Camille Cottin</name>
+    <role>Andréa Martel</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Thibault de Montalembert</name>
+    <role>Mathias Barneville</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Grégory Montel</name>
+    <role>Gabriel Sarda</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sigourney Weaver</name>
+    <role>Self</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Liliane Rovère</name>
+    <role>Arlette Azémar</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Laure Calamy</name>
+    <role>Noémie Leclerc</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Nicolas Maury</name>
+    <role>Hervé André-Jezack</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Fanny Sidney</name>
+    <role>Camille Valentini</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Stéfi Celma</name>
+    <role>Sophia Leprince</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Aleksandra Yermak</name>
+    <role>Anastasia, la fille de la compta</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ophélia Kolb</name>
+    <role>Colette Brancillon</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ophélia Kolb</name>
+    <role>Collette Brancillon</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Philippine Leroy-Beaulieu</name>
+    <role>Catherine Barneville</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Assaad Bouab</name>
+    <role>Hicham Janowski</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Marivin</name>
+    <role>Élise Formain</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Cécile de France</name>
+    <role>Self</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <director>Marc Fitoussi</director>
+  <director>Antoine Garceau</director>
+</tvshow>

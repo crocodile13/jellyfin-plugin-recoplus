@@ -1,0 +1,129 @@
+<movie>
+  <title>It</title>
+  <originaltitle>It</originaltitle>
+  <year>2017</year>
+  <premiered>2017-09-06</premiered>
+  <rating>7.241</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Thriller</genre>
+  <genre>Drama</genre>
+  <tag>small town</tag>
+  <tag>based on novel or book</tag>
+  <tag>halloween</tag>
+  <tag>haunted house</tag>
+  <tag>clown</tag>
+  <tag>bullying</tag>
+  <tag>abandoned house</tag>
+  <tag>coming of age</tag>
+  <tag>flashback</tag>
+  <tag>murder</tag>
+  <tag>balloon</tag>
+  <tag>maine</tag>
+  <tag>school</tag>
+  <tag>creature</tag>
+  <tag>fear</tag>
+  <tag>summer</tag>
+  <tag>killer</tag>
+  <tag>group of friends</tag>
+  <tag>missing person</tag>
+  <tag>death of brother</tag>
+  <tag>well</tag>
+  <tag>1980s</tag>
+  <tag>kids</tag>
+  <tag>creepy house</tag>
+  <tag>demonic</tag>
+  <tag>town history</tag>
+  <tag>frightened</tag>
+  <tag>ghoulish</tag>
+  <studio>New Line Cinema</studio>
+  <studio>Vertigo Entertainment</studio>
+  <studio>Lin Pictures</studio>
+  <studio>KatzSmith Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">346364</uniqueid>
+  <uniqueid type="imdb">tt1396484</uniqueid>
+  <set tmdbcolid="477962">
+    <name>477962</name>
+  </set>
+  <actor>
+    <name>Jaeden Martell</name>
+    <role>Bill Denbrough</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Ray Taylor</name>
+    <role>Ben Hanscom</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sophia Lillis</name>
+    <role>Beverly Marsh</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Finn Wolfhard</name>
+    <role>Richie Tozier</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Chosen Jacobs</name>
+    <role>Mike Hanlon</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Dylan Grazer</name>
+    <role>Eddie Kaspbrak</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Wyatt Oleff</name>
+    <role>Stanley Uris</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Skarsgård</name>
+    <role>Pennywise</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Nicholas Hamilton</name>
+    <role>Henry Bowers</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jake Sim</name>
+    <role>Belch Huggins</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Logan Thompson</name>
+    <role>Victor Criss</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Owen Teague</name>
+    <role>Patrick Hockstetter</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jackson Robert Scott</name>
+    <role>Georgie Denbrough</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Bogaert</name>
+    <role>Mr. Marsh</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Stuart Hughes</name>
+    <role>Officer Bowers</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Andy Muschietti</director>
+  <credits>Stephen King</credits>
+  <credits>Cary Joji Fukunaga</credits>
+  <credits>Chase Palmer</credits>
+  <credits>Gary Dauberman</credits>
+</movie>

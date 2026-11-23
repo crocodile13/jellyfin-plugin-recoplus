@@ -1,0 +1,88 @@
+<tvshow>
+  <title>Hilda</title>
+  <originaltitle>Hilda</originaltitle>
+  <year>2018</year>
+  <premiered>2018-09-21</premiered>
+  <rating>8.4</rating>
+  <mpaa>TV-Y7</mpaa>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>elves</tag>
+  <tag>fairy tale</tag>
+  <tag>mythical creature</tag>
+  <tag>female protagonist</tag>
+  <tag>dragon</tag>
+  <tag>single mother</tag>
+  <tag>supernatural creature</tag>
+  <tag>magic realism</tag>
+  <tag>female hero</tag>
+  <tag>magical creature</tag>
+  <tag>golem</tag>
+  <tag>modern fairy tale</tag>
+  <tag>mother daughter relationship</tag>
+  <tag>children cartoon</tag>
+  <tag>lighthearted</tag>
+  <studio>Netflix</studio>
+  <studio>Mercury Filmworks</studio>
+  <studio>Silvergate Media</studio>
+  <uniqueid type="tmdb" default="true">82456</uniqueid>
+  <uniqueid type="imdb">tt6385540</uniqueid>
+  <actor>
+    <name>Bella Ramsey</name>
+    <role>Hilda (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Daisy Haggard</name>
+    <role>Mum (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ameerah Falzon-Ojo</name>
+    <role>Frida (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Rasmus Hardiker</name>
+    <role>Alfur (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Oliver Nelson</name>
+    <role>David (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>John Hopkins</name>
+    <role>Erik Ahlberg (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lucy Montgomery</name>
+    <role>Gerda Gustav (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kathryn Drysdale</name>
+    <role>(voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Nina Sosanya</name>
+    <role>Additional Voices</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ilan Galkoff</name>
+    <role>David (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Dylan Mynett</name>
+    <role>Additional Voices</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <credits>Luke Pearson</credits>
+</tvshow>

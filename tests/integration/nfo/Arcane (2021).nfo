@@ -1,0 +1,134 @@
+<tvshow>
+  <title>Arcane</title>
+  <originaltitle>Arcane</originaltitle>
+  <year>2021</year>
+  <premiered>2021-11-06</premiered>
+  <rating>8.748</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Animation</genre>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>magic</tag>
+  <tag>war of independence</tag>
+  <tag>steampunk</tag>
+  <tag>class differences</tag>
+  <tag>battle</tag>
+  <tag>based on video game</tag>
+  <tag>death in family</tag>
+  <tag>adult animation</tag>
+  <tag>dark fantasy</tag>
+  <tag>warrior</tag>
+  <tag>broken family</tag>
+  <tag>lesbian</tag>
+  <tag>war</tag>
+  <tag>3d animation</tag>
+  <tag>sisters</tag>
+  <tag>power</tag>
+  <tag>league of legends</tag>
+  <tag>lol</tag>
+  <studio>Netflix</studio>
+  <studio>Fortiche Production</studio>
+  <studio>Riot Games</studio>
+  <uniqueid type="tmdb" default="true">94605</uniqueid>
+  <uniqueid type="imdb">tt11126994</uniqueid>
+  <actor>
+    <name>Hailee Steinfeld</name>
+    <role>Vi (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ella Purnell</name>
+    <role>Jinx (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Alejandro</name>
+    <role>Jayce (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Spisak</name>
+    <role>Silco (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Spisak</name>
+    <role>Pim (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Amirah Vann</name>
+    <role>Sevika (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Amirah Vann</name>
+    <role>Sevika / Apothecary (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mia Sinclair Jenness</name>
+    <role>Powder (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Yuri Lowenthal</name>
+    <role>Mylo (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Yuri Lowenthal</name>
+    <role>Mylo / Stall Holder (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Yuri Lowenthal</name>
+    <role>Mylo /  Thug #1 (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Reed Shannon</name>
+    <role>Ekko (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Reed Shannon</name>
+    <role>Firelight Leader (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Shohreh Aghdashloo</name>
+    <role>Grayson (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Roger Craig Smith</name>
+    <role>Claggor (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Miles Brown</name>
+    <role>Young Ekko (voice)</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>MIYAVI</name>
+    <role>Finn (voice)</role>
+    <sortorder>16</sortorder>
+  </actor>
+  <actor>
+    <name>Toks Olagundoye</name>
+    <role>Mel Medarda (voice)</role>
+    <sortorder>17</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Lloyd</name>
+    <role>Viktor (voice)</role>
+    <sortorder>18</sortorder>
+  </actor>
+  <actor>
+    <name>Katie Leung</name>
+    <role>Caitlyn (voice)</role>
+    <sortorder>19</sortorder>
+  </actor>
+</tvshow>

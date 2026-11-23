@@ -1,0 +1,129 @@
+<movie>
+  <title>The Thing</title>
+  <originaltitle>The Thing</originaltitle>
+  <year>1982</year>
+  <premiered>1982-06-25</premiered>
+  <rating>8.074</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Mystery</genre>
+  <genre>Science Fiction</genre>
+  <tag>spacecraft</tag>
+  <tag>helicopter</tag>
+  <tag>space marine</tag>
+  <tag>cold</tag>
+  <tag>based on novel or book</tag>
+  <tag>isolation</tag>
+  <tag>mutation</tag>
+  <tag>paranoia</tag>
+  <tag>halloween</tag>
+  <tag>snowstorm</tag>
+  <tag>research station</tag>
+  <tag>alien life-form</tag>
+  <tag>alien</tag>
+  <tag>remake</tag>
+  <tag>survival</tag>
+  <tag>creature</tag>
+  <tag>helicopter pilot</tag>
+  <tag>antarctica</tag>
+  <tag>shape shifting alien</tag>
+  <tag>alien infection</tag>
+  <tag>survival horror</tag>
+  <tag>sled dogs</tag>
+  <tag>alien monster</tag>
+  <tag>alien parasites</tag>
+  <tag>isolated place</tag>
+  <tag>uncertainty</tag>
+  <tag>blood test</tag>
+  <tag>body horror</tag>
+  <tag>ambiguity</tag>
+  <tag>lovecraftian</tag>
+  <tag>tense</tag>
+  <tag>horrified</tag>
+  <studio>Universal Pictures</studio>
+  <studio>The Turman-Foster Company</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">1091</uniqueid>
+  <uniqueid type="imdb">tt0084787</uniqueid>
+  <set tmdbcolid="479888">
+    <name>479888</name>
+  </set>
+  <actor>
+    <name>Kurt Russell</name>
+    <role>MacReady</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Wilford Brimley</name>
+    <role>Blair</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>T.K. Carter</name>
+    <role>Nauls</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>David Clennon</name>
+    <role>Palmer</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Keith David</name>
+    <role>Childs</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Dysart</name>
+    <role>Dr. Copper</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Hallahan</name>
+    <role>Norris</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Maloney</name>
+    <role>Bennings</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Masur</name>
+    <role>Clark</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Donald Moffat</name>
+    <role>Garry</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Joel Polis</name>
+    <role>Fuchs</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas G. Waites</name>
+    <role>Windows</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Norbert Weisser</name>
+    <role>Norwegian</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Larry Franco</name>
+    <role>Norwegian Passenger with Rifle</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Nate Irwin</name>
+    <role>Helicopter Pilot</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>John Carpenter</director>
+  <credits>Bill Lancaster</credits>
+  <credits>John W. Campbell Jr.</credits>
+</movie>

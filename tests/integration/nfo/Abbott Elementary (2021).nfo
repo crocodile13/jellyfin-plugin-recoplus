@@ -1,0 +1,99 @@
+<tvshow>
+  <title>Abbott Elementary</title>
+  <originaltitle>Abbott Elementary</originaltitle>
+  <year>2021</year>
+  <premiered>2021-12-07</premiered>
+  <rating>7.5</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Comedy</genre>
+  <tag>philadelphia, pennsylvania</tag>
+  <tag>elementary school</tag>
+  <tag>school</tag>
+  <tag>mockumentary</tag>
+  <tag>public school</tag>
+  <tag>sitcom</tag>
+  <tag>workplace comedy</tag>
+  <tag>elementary school teacher</tag>
+  <studio>ABC</studio>
+  <studio>Warner Bros. Television</studio>
+  <studio>Delicious Non-Sequitur</studio>
+  <studio>20th Television</studio>
+  <studio>Fifth Chance</studio>
+  <uniqueid type="tmdb" default="true">125935</uniqueid>
+  <uniqueid type="imdb">tt14218830</uniqueid>
+  <actor>
+    <name>Quinta Brunson</name>
+    <role>Janine Teagues</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tyler James Williams</name>
+    <role>Gregory Eddie</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sheryl Lee Ralph</name>
+    <role>Barbara Howard</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Ann Walter</name>
+    <role>Melissa Schemmenti</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Perfetti</name>
+    <role>Jacob Hill</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Janelle James</name>
+    <role>Ava Coleman</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>William Stanford Davis</name>
+    <role>Mr. Johnson</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Leila Geyfman</name>
+    <role>Brittany</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jaxon Thomas Williams</name>
+    <role>Rajon</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Orlando Jones</name>
+    <role>Martin Eddie</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Reatha Grey</name>
+    <role>Lorraine</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Mitra Jouhari</name>
+    <role>Sahar</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Reggie Conquest</name>
+    <role>Devin</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Reggie Hayes</name>
+    <role>Superintendent Collins</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Shirley Jordan</name>
+    <role>Delisha Sloss</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

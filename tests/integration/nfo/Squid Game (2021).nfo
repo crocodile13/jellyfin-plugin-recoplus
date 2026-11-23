@@ -1,0 +1,100 @@
+<tvshow>
+  <title>Squid Game</title>
+  <originaltitle>오징어 게임</originaltitle>
+  <year>2021</year>
+  <premiered>2021-09-17</premiered>
+  <rating>7.851</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Mystery</genre>
+  <genre>Drama</genre>
+  <tag>secret organization</tag>
+  <tag>challenge</tag>
+  <tag>survival</tag>
+  <tag>fictional game show</tag>
+  <tag>cruelty</tag>
+  <tag>game</tag>
+  <tag>prize</tag>
+  <tag>death game</tag>
+  <tag>thriller</tag>
+  <studio>Netflix</studio>
+  <studio>Siren Pictures</studio>
+  <studio>Firstman Studio</studio>
+  <uniqueid type="tmdb" default="true">93405</uniqueid>
+  <uniqueid type="imdb">tt10919420</uniqueid>
+  <actor>
+    <name>Lee Jung-jae</name>
+    <role>Seong Gi-hun / Player 456</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Yim Si-wan</name>
+    <role>Lee Myung-gi / Player 333</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Wi Ha-jun</name>
+    <role>Detective Hwang Jun-ho</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jo Yuri</name>
+    <role>Kim Jun-hee / Player 222</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Byung-hun</name>
+    <role>Front Man / Hwang In-ho</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Hoyeon</name>
+    <role>Kang Sae-byeok / Player 067</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Park Gyu-young</name>
+    <role>Kang No-eul / Guard 011</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kang Ae-sim</name>
+    <role>Jang Geum-ja / Player 149</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Park Hae-soo</name>
+    <role>Cho Sang-woo / Player 218</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Jin-uk</name>
+    <role>Park Gyeong-seok / Player 246</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Yang Dong-geun</name>
+    <role>Park Yong-sik / Player 007</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Park Sung-hoon</name>
+    <role>Cho Hyun-ju / Player 120</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Oh Young-soo</name>
+    <role>Oh Il-nam / Player 001</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kang Ha-neul</name>
+    <role>Kang Dae-ho / Player 388</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Heo Sung-tae</name>
+    <role>Jang Deok-su / Player 101</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

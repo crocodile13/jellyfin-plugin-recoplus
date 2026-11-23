@@ -1,0 +1,118 @@
+<movie>
+  <title>Suzume</title>
+  <originaltitle>すずめの戸締まり</originaltitle>
+  <year>2022</year>
+  <premiered>2022-11-11</premiered>
+  <rating>7.891</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Drama</genre>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <tag>magic</tag>
+  <tag>door</tag>
+  <tag>natural disaster</tag>
+  <tag>calamity</tag>
+  <tag>travel</tag>
+  <tag>teenage girl</tag>
+  <tag>female protagonist</tag>
+  <tag>shrine</tag>
+  <tag>supernatural creature</tag>
+  <tag>enviromental</tag>
+  <tag>journey</tag>
+  <tag>anime</tag>
+  <tag>great east japan earthquake</tag>
+  <tag>great kantō earthquake</tag>
+  <tag>adventure</tag>
+  <tag>miyagi, japan</tag>
+  <tag>bewildered</tag>
+  <tag>disaster aftermath</tag>
+  <studio>CoMix Wave Films</studio>
+  <studio>Story</studio>
+  <studio>Lawson Entertainment</studio>
+  <studio>jeki</studio>
+  <studio>voque ting</studio>
+  <studio>KADOKAWA</studio>
+  <studio>Aniplex</studio>
+  <studio>TOHO</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">916224</uniqueid>
+  <uniqueid type="imdb">tt16428256</uniqueid>
+  <actor>
+    <name>Nanoka Hara</name>
+    <role>Suzume Iwato (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hokuto Matsumura</name>
+    <role>Souta Munakata (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Eri Fukatsu</name>
+    <role>Tamaki Iwato (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Shota Sometani</name>
+    <role>Minoru Okabe (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sairi Ito</name>
+    <role>Rumi Ninomiya (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kotone Hanase</name>
+    <role>Chika Amabe (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kana Hanazawa</name>
+    <role>Tsubame Iwato (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Matsumoto Hakuō II</name>
+    <role>Hitsujiro Munakata (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Ryunosuke Kamiki</name>
+    <role>Tomoya Serizawa (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ann Yamane</name>
+    <role>Daijin (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Akari Miura</name>
+    <role>Young Suzume Iwato (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Yoji Ueda</name>
+    <role>(voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Aimi</name>
+    <role>(voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Yuu Ayase</name>
+    <role>(voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Akihiro Tajima</name>
+    <role>(voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Makoto Shinkai</director>
+  <credits>Makoto Shinkai</credits>
+</movie>

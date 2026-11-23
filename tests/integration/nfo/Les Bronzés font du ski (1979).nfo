@@ -1,0 +1,105 @@
+<movie>
+  <title>French Fried Vacation 2</title>
+  <originaltitle>Les Bronzés font du ski</originaltitle>
+  <year>1979</year>
+  <premiered>1979-11-22</premiered>
+  <rating>7.342</rating>
+  <mpaa>Not Rated</mpaa>
+  <genre>Comedy</genre>
+  <tag>sequel</tag>
+  <tag>alps mountains</tag>
+  <tag>ski resort</tag>
+  <tag>french alps</tag>
+  <tag>skiing</tag>
+  <studio>Ragewar Productions</studio>
+  <studio>Trinacra Films</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">33701</uniqueid>
+  <uniqueid type="imdb">tt0078907</uniqueid>
+  <set tmdbcolid="52835">
+    <name>52835</name>
+  </set>
+  <actor>
+    <name>Thierry Lhermitte</name>
+    <role>Robert "Popeye" Lespinasse</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Blanc</name>
+    <role>Jean-Claude "Jessy" Dusse</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Christian Clavier</name>
+    <role>Jérôme Tarayre</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Gérard Jugnot</name>
+    <role>Bernard Morin</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Josiane Balasko</name>
+    <role>Nathalie Morin</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Dominique Lavanant</name>
+    <role>Christiane Weissmuller</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Maurice Chevit</name>
+    <role>Marius Franceschini</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Marie-Anne Chazel</name>
+    <role>Gisèle "Gigi" André</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Bruno Moynot</name>
+    <role>Gilbert "Météo" Jambier</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Roland Giraud</name>
+    <role>Mr. Camus, the cuckold</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Fernand Bonnevie</name>
+    <role>Ski instructor</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Guy Laporte</name>
+    <role>The cousin</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Véronique Barrault</name>
+    <role>Jérôme's nurse</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Such</name>
+    <role>Co-owner of the apartment who leaves late</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Isabelle de Botton</name>
+    <role>Ex-partner of Popeye</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Patrice Leconte</director>
+  <credits>Josiane Balasko</credits>
+  <credits>Michel Blanc</credits>
+  <credits>Marie-Anne Chazel</credits>
+  <credits>Christian Clavier</credits>
+  <credits>Gérard Jugnot</credits>
+  <credits>Thierry Lhermitte</credits>
+  <credits>Bruno Moynot</credits>
+</movie>

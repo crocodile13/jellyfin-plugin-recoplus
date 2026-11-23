@@ -1,0 +1,100 @@
+<tvshow>
+  <title>24</title>
+  <originaltitle>24</originaltitle>
+  <year>2001</year>
+  <premiered>2001-11-06</premiered>
+  <rating>7.783</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Drama</genre>
+  <genre>Crime</genre>
+  <tag>biological weapon</tag>
+  <tag>traitor</tag>
+  <tag>revenge</tag>
+  <tag>los angeles, california</tag>
+  <tag>secret service</tag>
+  <tag>political intrigue</tag>
+  <tag>assassination of president</tag>
+  <studio>FOX</studio>
+  <studio>Imagine Television Studios</studio>
+  <studio>20th Century Fox Television</studio>
+  <studio>Teakwood Lane Productions</studio>
+  <studio>Real Time Productions</studio>
+  <uniqueid type="tmdb" default="true">1973</uniqueid>
+  <uniqueid type="imdb">tt0285331</uniqueid>
+  <actor>
+    <name>Kiefer Sutherland</name>
+    <role>Jack Bauer</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Mary Lynn Rajskub</name>
+    <role>Chloe O'Brian</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Raver</name>
+    <role>Audrey Raines</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Dennis Haysbert</name>
+    <role>David Palmer</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yvonne Strahovski</name>
+    <role>Kate Morgan</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Clarke</name>
+    <role>Nina Myers</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tate Donovan</name>
+    <role>Mark Boudreau</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>William Devane</name>
+    <role>James Heller</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Elisha Cuthbert</name>
+    <role>Kim Bauer</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Leslie Hope</name>
+    <role>Teri Bauer</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>John Terry</name>
+    <role>Bob Warner</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Wynter</name>
+    <role>Kate Warner</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Carlos Bernard</name>
+    <role>Tony Almeida</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Nestor Serrano</name>
+    <role>Navi Araz</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Alberta Watson</name>
+    <role>Erin Driscoll</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

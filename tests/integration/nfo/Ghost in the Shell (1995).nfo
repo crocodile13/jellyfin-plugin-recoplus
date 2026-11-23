@@ -1,0 +1,118 @@
+<movie>
+  <title>Ghost in the Shell</title>
+  <originaltitle>GHOST IN THE SHELL / 攻殻機動隊</originaltitle>
+  <year>1995</year>
+  <premiered>1995-11-18</premiered>
+  <rating>7.9</rating>
+  <mpaa>NR</mpaa>
+  <genre>Action</genre>
+  <genre>Animation</genre>
+  <genre>Science Fiction</genre>
+  <tag>android</tag>
+  <tag>man vs machine</tag>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>computer virus</tag>
+  <tag>cyborg</tag>
+  <tag>dystopia</tag>
+  <tag>implantat</tag>
+  <tag>fugitive</tag>
+  <tag>female protagonist</tag>
+  <tag>cyberpunk</tag>
+  <tag>transhumanism</tag>
+  <tag>based on manga</tag>
+  <tag>adult animation</tag>
+  <tag>tech noir</tag>
+  <tag>mysterious</tag>
+  <tag>anime</tag>
+  <tag>philosophical</tag>
+  <tag>public security</tag>
+  <tag>intense</tag>
+  <studio>Bandai Visual</studio>
+  <studio>Production I.G</studio>
+  <studio>Kodansha</studio>
+  <studio>Manga Entertainment</studio>
+  <country>Japan</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">9323</uniqueid>
+  <uniqueid type="imdb">tt0113568</uniqueid>
+  <set tmdbcolid="23026">
+    <name>23026</name>
+  </set>
+  <actor>
+    <name>Atsuko Tanaka</name>
+    <role>Motoko Kusanagi (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Akio Otsuka</name>
+    <role>Batou (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Koichi Yamadera</name>
+    <role>Togusa (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Yutaka Nakano</name>
+    <role>Ishikawa (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Iemasa Kayumi</name>
+    <role>Puppetmaster (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tamio Ohki</name>
+    <role>Aramaki (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tessyo Genda</name>
+    <role>Director Nakamura (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Masakazu Namaki</name>
+    <role>Dr. Willis (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Masato Yamanouchi</name>
+    <role>Minister of Foreign Affairs (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Shinji Ogawa</name>
+    <role>Diplomat (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Mitsuru Miyamoto</name>
+    <role>Mizuho Daita (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuhiro Yamaji</name>
+    <role>Garbage Collector A (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Shigeru Chiba</name>
+    <role>Garbage Collector B (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroshi Yanaka</name>
+    <role>Coroner (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ginzo Matsuo</name>
+    <role>Old Man (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Mamoru Oshii</director>
+  <credits>Kazunori Ito</credits>
+</movie>

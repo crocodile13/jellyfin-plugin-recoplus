@@ -1,0 +1,105 @@
+<tvshow>
+  <title>Ozark</title>
+  <originaltitle>Ozark</originaltitle>
+  <year>2017</year>
+  <premiered>2017-07-21</premiered>
+  <rating>8.191</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>money laundering</tag>
+  <tag>investigation</tag>
+  <tag>missouri</tag>
+  <tag>drug cartel</tag>
+  <tag>biting</tag>
+  <tag>kingpin</tag>
+  <tag>ozarks</tag>
+  <tag>bearer bonds</tag>
+  <tag>financial advisor</tag>
+  <tag>fbi agent</tag>
+  <tag>financial investor</tag>
+  <tag>bold</tag>
+  <studio>Netflix</studio>
+  <studio>MRC</studio>
+  <studio>Zero Gravity Management</studio>
+  <studio>Aggregate Films</studio>
+  <studio>Man, Woman &amp; Child Productions</studio>
+  <studio>Headhunter Films</studio>
+  <uniqueid type="tmdb" default="true">69740</uniqueid>
+  <uniqueid type="imdb">tt5071412</uniqueid>
+  <actor>
+    <name>Jason Bateman</name>
+    <role>Marty Byrde</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Laura Linney</name>
+    <role>Wendy Byrde</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sofia Hublitz</name>
+    <role>Charlotte Byrde</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Skylar Gaertner</name>
+    <role>Jonah Byrde</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Garner</name>
+    <role>Ruth Langmore</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jordana Spiro</name>
+    <role>Rachel Garrison</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Butler Harner</name>
+    <role>Roy Petty</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Charlie Tahan</name>
+    <role>Wyatt Langmore</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Janet McTeer</name>
+    <role>Helen Pierce</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Pelphrey</name>
+    <role>Ben Davis</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jessica Frances Dukes</name>
+    <role>Maya Miller</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Harris Yulin</name>
+    <role>Buddy Dieker</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Emery</name>
+    <role>Darlene Snell</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Mullan</name>
+    <role>Jacob Snell</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Felix Solis</name>
+    <role>Omar Navarro</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

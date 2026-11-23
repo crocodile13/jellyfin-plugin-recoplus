@@ -1,0 +1,109 @@
+<movie>
+  <title>Halloween</title>
+  <originaltitle>Halloween</originaltitle>
+  <year>1978</year>
+  <premiered>1978-10-25</premiered>
+  <rating>7.562</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Thriller</genre>
+  <tag>mask</tag>
+  <tag>police</tag>
+  <tag>halloween</tag>
+  <tag>babysitter</tag>
+  <tag>marijuana</tag>
+  <tag>stalking</tag>
+  <tag>serial killer</tag>
+  <tag>maniac</tag>
+  <tag>killing spree</tag>
+  <tag>family</tag>
+  <tag>evil</tag>
+  <tag>psychotic</tag>
+  <tag>escaped killer</tag>
+  <studio>Compass International Pictures</studio>
+  <studio>Falcon International Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">948</uniqueid>
+  <uniqueid type="imdb">tt0077651</uniqueid>
+  <set tmdbcolid="91361">
+    <name>91361</name>
+  </set>
+  <actor>
+    <name>Donald Pleasence</name>
+    <role>Loomis</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jamie Lee Curtis</name>
+    <role>Laurie</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Nancy Kyes</name>
+    <role>Annie</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>P. J. Soles</name>
+    <role>Lynda</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Cyphers</name>
+    <role>Brackett</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle Richards</name>
+    <role>Lindsey</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Andrews</name>
+    <role>Tommy</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>John Michael Graham</name>
+    <role>Bob</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Nancy Stephens</name>
+    <role>Marion</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Arthur Malet</name>
+    <role>Graveyard Keeper</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Mickey Yablans</name>
+    <role>Richie</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Brent Le Page</name>
+    <role>Lonnie</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Hollander</name>
+    <role>Keith</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Phalen</name>
+    <role>Dr.  Wynn</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Moran</name>
+    <role>Michael Myers age 23</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>John Carpenter</director>
+  <credits>Debra Hill</credits>
+  <credits>John Carpenter</credits>
+</movie>

@@ -1,0 +1,114 @@
+<movie>
+  <title>The Green Mile</title>
+  <originaltitle>The Green Mile</originaltitle>
+  <year>1999</year>
+  <premiered>1999-12-10</premiered>
+  <rating>8.504</rating>
+  <mpaa>R</mpaa>
+  <genre>Fantasy</genre>
+  <genre>Drama</genre>
+  <genre>Crime</genre>
+  <tag>mentally disabled</tag>
+  <tag>death penalty</tag>
+  <tag>based on novel or book</tag>
+  <tag>southern usa</tag>
+  <tag>psychopath</tag>
+  <tag>death row</tag>
+  <tag>jail guard</tag>
+  <tag>supernatural</tag>
+  <tag>great depression</tag>
+  <tag>prison guard</tag>
+  <tag>jail</tag>
+  <tag>electric chair</tag>
+  <tag>capital punishment</tag>
+  <tag>torture</tag>
+  <tag>magic realism</tag>
+  <tag>healing</tag>
+  <tag>1930s</tag>
+  <tag>abuse of power</tag>
+  <tag>compassionate</tag>
+  <tag>prison drama</tag>
+  <studio>Castle Rock Entertainment</studio>
+  <studio>Darkwoods Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">497</uniqueid>
+  <uniqueid type="imdb">tt0120689</uniqueid>
+  <actor>
+    <name>Tom Hanks</name>
+    <role>Paul Edgecomb</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>David Morse</name>
+    <role>Brutus 'Brutal' Howell</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Bonnie Hunt</name>
+    <role>Jan Edgecomb</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Clarke Duncan</name>
+    <role>John Coffey</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>James Cromwell</name>
+    <role>Warden Hal Moores</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Jeter</name>
+    <role>Eduard Delacroix</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Graham Greene</name>
+    <role>Arlen Bitterbuck</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Doug Hutchison</name>
+    <role>Percy Wetmore</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Rockwell</name>
+    <role>'Wild Bill' Wharton</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Pepper</name>
+    <role>Dean Stanton</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey DeMunn</name>
+    <role>Harry Terwilliger</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Patricia Clarkson</name>
+    <role>Melinda Moores</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Dean Stanton</name>
+    <role>Toot-Toot</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Dabbs Greer</name>
+    <role>Old Paul Edgecomb</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Eve Brent</name>
+    <role>Elaine Connelly</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Frank Darabont</director>
+  <credits>Stephen King</credits>
+  <credits>Frank Darabont</credits>
+</movie>

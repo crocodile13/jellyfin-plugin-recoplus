@@ -1,0 +1,117 @@
+<movie>
+  <title>A Prophet</title>
+  <originaltitle>Un prophète</originaltitle>
+  <year>2009</year>
+  <premiered>2009-08-26</premiered>
+  <rating>7.552</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>prison</tag>
+  <tag>muslim</tag>
+  <tag>gangster</tag>
+  <tag>arabian</tag>
+  <tag>protection</tag>
+  <tag>money</tag>
+  <tag>murder</tag>
+  <tag>mafia</tag>
+  <tag>spirit</tag>
+  <tag>cruelty</tag>
+  <tag>drugs</tag>
+  <tag>inmate</tag>
+  <tag>bribery</tag>
+  <tag>arab</tag>
+  <tag>corsican</tag>
+  <tag>french algerian</tag>
+  <tag>marseille</tag>
+  <tag>brutal violence</tag>
+  <studio>Why Not Productions</studio>
+  <studio>Chic Films</studio>
+  <studio>Page 114</studio>
+  <studio>UGC</studio>
+  <studio>France 2 Cinéma</studio>
+  <studio>BiM Distribuzione</studio>
+  <studio>Celluloid Dreams</studio>
+  <country>France</country>
+  <country>Italy</country>
+  <uniqueid type="tmdb" default="true">21575</uniqueid>
+  <uniqueid type="imdb">tt1235166</uniqueid>
+  <actor>
+    <name>Tahar Rahim</name>
+    <role>Malik El Djebena</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Niels Arestrup</name>
+    <role>César Luciani</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Adel Bencherif</name>
+    <role>Ryad</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Reda Kateb</name>
+    <role>Jordi</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Hichem Yacoubi</name>
+    <role>Reyeb</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-Philippe Ricci</name>
+    <role>Vettori</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Gilles Cohen</name>
+    <role>Prof</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Pierre Leccia</name>
+    <role>Sampierro</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Antoine Basler</name>
+    <role>Pilicci</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Foued Nassah</name>
+    <role>Antaro</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-Emmanuel Pagni</name>
+    <role>Santi</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Frédéric Graziani</name>
+    <role>Prison Warden</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Leïla Bekhti</name>
+    <role>Djamila</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Rabah Loucif</name>
+    <role>Malik's Lawyer</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Slimane Dazi</name>
+    <role>Lattrache</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jacques Audiard</director>
+  <credits>Jacques Audiard</credits>
+  <credits>Thomas Bidegain</credits>
+</movie>

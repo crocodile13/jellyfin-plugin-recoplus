@@ -1,0 +1,117 @@
+<movie>
+  <title>Paddington</title>
+  <originaltitle>Paddington</originaltitle>
+  <year>2014</year>
+  <premiered>2014-11-23</premiered>
+  <rating>7.127</rating>
+  <mpaa>PG</mpaa>
+  <genre>Comedy</genre>
+  <genre>Adventure</genre>
+  <genre>Family</genre>
+  <tag>london, england</tag>
+  <tag>based on novel or book</tag>
+  <tag>peru</tag>
+  <tag>anthropomorphism</tag>
+  <tag>bear</tag>
+  <tag>based on children's book</tag>
+  <tag>family</tag>
+  <tag>talking to animals</tag>
+  <tag>children's book</tag>
+  <tag>taxidermist</tag>
+  <tag>moving to a city</tag>
+  <tag>live action and animation</tag>
+  <tag>personification</tag>
+  <tag>natural history museum</tag>
+  <tag>cgi-live action hybrid</tag>
+  <tag>intense</tag>
+  <tag>cliché</tag>
+  <tag>harsh</tag>
+  <studio>StudioCanal</studio>
+  <studio>Anton Capital Entertainment</studio>
+  <studio>Heyday Films</studio>
+  <studio>TF1 Films Production</studio>
+  <country>France</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">116149</uniqueid>
+  <uniqueid type="imdb">tt1109624</uniqueid>
+  <set tmdbcolid="488924">
+    <name>488924</name>
+  </set>
+  <actor>
+    <name>Ben Whishaw</name>
+    <role>Paddington (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hugh Bonneville</name>
+    <role>Henry Brown</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sally Hawkins</name>
+    <role>Mary Brown</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Madeleine Harris</name>
+    <role>Judy Brown</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel Joslin</name>
+    <role>Jonathan Brown</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Walters</name>
+    <role>Mrs. Bird</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Nicole Kidman</name>
+    <role>Millicent</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Imelda Staunton</name>
+    <role>Aunt Lucy (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Capaldi</name>
+    <role>Reginald Curry</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Gambon</name>
+    <role>Uncle Pastuzo (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Broadbent</name>
+    <role>Samuel Gruber</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Madeleine Worrall</name>
+    <role>Agatha Clyde</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Downie</name>
+    <role>Montgomery Clyde</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Matt King</name>
+    <role>Andre the Thief</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Simon Farnaby</name>
+    <role>Barry</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Paul King</director>
+  <credits>Paul King</credits>
+</movie>

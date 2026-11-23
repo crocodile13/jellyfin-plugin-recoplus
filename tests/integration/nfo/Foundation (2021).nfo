@@ -1,0 +1,107 @@
+<tvshow>
+  <title>Foundation</title>
+  <originaltitle>Foundation</originaltitle>
+  <year>2021</year>
+  <premiered>2021-09-23</premiered>
+  <rating>7.708</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Drama</genre>
+  <tag>prophecy</tag>
+  <tag>based on novel or book</tag>
+  <tag>empire</tag>
+  <tag>distant future</tag>
+  <tag>space opera</tag>
+  <tag>aggressive</tag>
+  <tag>domineering</tag>
+  <tag>human clone</tag>
+  <tag>wonder</tag>
+  <tag>tense</tag>
+  <studio>Apple TV</studio>
+  <studio>Skydance Television</studio>
+  <studio>Phantom Four</studio>
+  <studio>Paramount Television Studios</studio>
+  <uniqueid type="tmdb" default="true">93740</uniqueid>
+  <uniqueid type="imdb">tt0804484</uniqueid>
+  <actor>
+    <name>Jared Harris</name>
+    <role>Hari Seldon</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Pace</name>
+    <role>Brother Day</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Lou Llobell</name>
+    <role>Gaal Dornick</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Leah Harvey</name>
+    <role>Salvor Hardin</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Laura Birn</name>
+    <role>Demerzel</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Cassian Bilton</name>
+    <role>Brother Dawn</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Terrence Mann</name>
+    <role>Brother Dusk</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Cherry Jones</name>
+    <role>Ambassador Quent</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Brandon P Bell</name>
+    <role>Han Pritcher</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Synnøve Karlsen</name>
+    <role>Bayta Mallow</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Cody Fern</name>
+    <role>Toran Mallow</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Yootha Wong-Loi-Sing</name>
+    <role>Song</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Pilou Asbæk</name>
+    <role>The Mule</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Alexander Siddig</name>
+    <role>Dr. Ebling Mis</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Alexander Siddig</name>
+    <role>Advocate Xylas</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Jade Harrison</name>
+    <role>Bayla</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <credits>Isaac Asimov</credits>
+</tvshow>

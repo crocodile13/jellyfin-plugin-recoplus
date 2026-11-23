@@ -1,0 +1,138 @@
+<movie>
+  <title>Annihilation</title>
+  <originaltitle>Annihilation</originaltitle>
+  <year>2018</year>
+  <premiered>2018-02-22</premiered>
+  <rating>6.454</rating>
+  <mpaa>R</mpaa>
+  <genre>Science Fiction</genre>
+  <genre>Horror</genre>
+  <tag>depression</tag>
+  <tag>florida</tag>
+  <tag>quarantine</tag>
+  <tag>coma</tag>
+  <tag>based on novel or book</tag>
+  <tag>mutation</tag>
+  <tag>self-destruction</tag>
+  <tag>professor</tag>
+  <tag>dna</tag>
+  <tag>expedition</tag>
+  <tag>transformation</tag>
+  <tag>alligator</tag>
+  <tag>hybrid</tag>
+  <tag>swamp</tag>
+  <tag>meteor</tag>
+  <tag>grief</tag>
+  <tag>physicist</tag>
+  <tag>cancer</tag>
+  <tag>memory loss</tag>
+  <tag>psychologist</tag>
+  <tag>scientist</tag>
+  <tag>paramedic</tag>
+  <tag>missing person</tag>
+  <tag>mourning</tag>
+  <tag>beast</tag>
+  <tag>geologist</tag>
+  <tag>biologist</tag>
+  <tag>unusual phenomena</tag>
+  <tag>psychedelic</tag>
+  <tag>speculative</tag>
+  <tag>meditative</tag>
+  <tag>compound</tag>
+  <tag>missing husband</tag>
+  <tag>fauna</tag>
+  <tag>mysterious life form</tag>
+  <tag>flora</tag>
+  <tag>dreary</tag>
+  <tag>body horror</tag>
+  <tag>lovecraftian</tag>
+  <tag>psychological horror</tag>
+  <tag>absurd</tag>
+  <tag>ambiguous</tag>
+  <studio>Paramount Pictures</studio>
+  <studio>Skydance Media</studio>
+  <studio>DNA Films</studio>
+  <studio>Scott Rudin Productions</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">300668</uniqueid>
+  <uniqueid type="imdb">tt2798920</uniqueid>
+  <actor>
+    <name>Natalie Portman</name>
+    <role>Lena</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jennifer Jason Leigh</name>
+    <role>Dr Ventress</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Gina Rodriguez</name>
+    <role>Anya Thorensen</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Tessa Thompson</name>
+    <role>Josie Radek</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Tuva Novotny</name>
+    <role>Cass Sheppard</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Oscar Isaac</name>
+    <role>Kane</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Benedict Wong</name>
+    <role>Lomax</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Sonoya Mizuno</name>
+    <role>Humanoid / Katie (Med Student)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>David Gyasi</name>
+    <role>Daniel</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>John Schwab</name>
+    <role>Paramedic</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Sammy Hayman</name>
+    <role>Mayer</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Danford</name>
+    <role>Shelley</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kristen McGarrity</name>
+    <role>Lena Double</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kumud Pant</name>
+    <role>Scientist</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Honey Holmes</name>
+    <role>Scientist (uncredited)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Alex Garland</director>
+  <credits>Jeff VanderMeer</credits>
+  <credits>Alex Garland</credits>
+</movie>

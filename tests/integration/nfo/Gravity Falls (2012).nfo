@@ -1,0 +1,187 @@
+<tvshow>
+  <title>Gravity Falls</title>
+  <originaltitle>Gravity Falls</originaltitle>
+  <year>2012</year>
+  <premiered>2012-06-15</premiered>
+  <rating>8.625</rating>
+  <mpaa>TV-Y7</mpaa>
+  <genre>Animation</genre>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Comedy</genre>
+  <genre>Mystery</genre>
+  <genre>Family</genre>
+  <tag>small town</tag>
+  <tag>dreams</tag>
+  <tag>symbolism</tag>
+  <tag>oregon, usa</tag>
+  <tag>magic</tag>
+  <tag>time travel</tag>
+  <tag>uncle</tag>
+  <tag>alien</tag>
+  <tag>coming of age</tag>
+  <tag>summer</tag>
+  <tag>twins</tag>
+  <tag>gnome</tag>
+  <tag>supernatural phenomena</tag>
+  <tag>tourist trap</tag>
+  <tag>dreamscape</tag>
+  <tag>children cartoon</tag>
+  <tag>journal</tag>
+  <studio>Disney Channel</studio>
+  <studio>Disney XD</studio>
+  <studio>Disney Television Animation</studio>
+  <studio>Rough Draft Korea</studio>
+  <studio>Disney Enterprises</studio>
+  <uniqueid type="tmdb" default="true">40075</uniqueid>
+  <uniqueid type="imdb">tt1865718</uniqueid>
+  <actor>
+    <name>Jason Ritter</name>
+    <role>Dipper Pines (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kristen Schaal</name>
+    <role>Mabel Pines (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Alex Hirsch</name>
+    <role>Grunkle Stan / Soos Ramirez / Bill Cipher / Old Man McGucket (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Linda Cardellini</name>
+    <role>Wendy Corduroy (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Greg Cipes</name>
+    <role>Craz (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>John Roberts</name>
+    <role>Xyler (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Will Forte</name>
+    <role>Tyler Cutebiker (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Thurop Van Orman</name>
+    <role>Gideon Gleeful (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Gregg Turkington</name>
+    <role>Toby Determined (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Gregg Turkington</name>
+    <role>Young Toby Determined (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Carl Faruolo</name>
+    <role>Grenda (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Carl Faruolo</name>
+    <role>Grenda (voice) / Bully (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jennifer Coolidge</name>
+    <role>Lazy Susan (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jennifer Coolidge</name>
+    <role>Lazy Susan / Additional Voices (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jackie Buscarino</name>
+    <role>Pacifica Northwest (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Jackie Buscarino</name>
+    <role>Pacifica Northwest (voice) / Additional Voices (voice)</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>Jackie Buscarino</name>
+    <role>Trixandra (voice)</role>
+    <sortorder>16</sortorder>
+  </actor>
+  <actor>
+    <name>Keith Ferguson</name>
+    <role>Deputy Durland (voice)</role>
+    <sortorder>17</sortorder>
+  </actor>
+  <actor>
+    <name>Keith Ferguson</name>
+    <role>Deputy Durland / Additional Voices (voice)</role>
+    <sortorder>18</sortorder>
+  </actor>
+  <actor>
+    <name>Keith Ferguson</name>
+    <role>Deputy Durland (voice) / Testosteraur (voice) /  Glurk (voice)</role>
+    <sortorder>19</sortorder>
+  </actor>
+  <actor>
+    <name>Keith Ferguson</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>20</sortorder>
+  </actor>
+  <actor>
+    <name>Keith Ferguson</name>
+    <role>Teen (voice)</role>
+    <sortorder>21</sortorder>
+  </actor>
+  <actor>
+    <name>Dee Bradley Baker</name>
+    <role>Waddles (voice)</role>
+    <sortorder>22</sortorder>
+  </actor>
+  <actor>
+    <name>Dee Bradley Baker</name>
+    <role>Waddles (voice) / Additional Voices (voice)</role>
+    <sortorder>23</sortorder>
+  </actor>
+  <actor>
+    <name>Dee Bradley Baker</name>
+    <role>Sprott (voice)</role>
+    <sortorder>24</sortorder>
+  </actor>
+  <actor>
+    <name>Dee Bradley Baker</name>
+    <role>Waddles / Loinclothiclese (voice)</role>
+    <sortorder>25</sortorder>
+  </actor>
+  <actor>
+    <name>Dee Bradley Baker</name>
+    <role>Waddles (voice) / Pterodactyl (voice)</role>
+    <sortorder>26</sortorder>
+  </actor>
+  <actor>
+    <name>John DiMaggio</name>
+    <role>Manly Dan (voice)</role>
+    <sortorder>27</sortorder>
+  </actor>
+  <actor>
+    <name>John DiMaggio</name>
+    <role>Love God (voice)</role>
+    <sortorder>28</sortorder>
+  </actor>
+  <actor>
+    <name>John DiMaggio</name>
+    <role>Manly Dan / Pinball Cowboy Skeleton (voice)</role>
+    <sortorder>29</sortorder>
+  </actor>
+</tvshow>

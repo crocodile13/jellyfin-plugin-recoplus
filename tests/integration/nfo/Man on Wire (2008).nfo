@@ -1,0 +1,81 @@
+<movie>
+  <title>Man on Wire</title>
+  <originaltitle>Man on Wire</originaltitle>
+  <year>2008</year>
+  <premiered>2008-08-01</premiered>
+  <rating>7.375</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Documentary</genre>
+  <tag>judge</tag>
+  <tag>1970s</tag>
+  <tag>juggler</tag>
+  <tag>based on true story</tag>
+  <tag>street artist</tag>
+  <tag>jail</tag>
+  <tag>fame</tag>
+  <tag>hiding</tag>
+  <tag>tower</tag>
+  <tag>tightrope</tag>
+  <tag>world trade center</tag>
+  <tag>notre dame cathedral</tag>
+  <studio>Red Box Films</studio>
+  <studio>Discovery Films</studio>
+  <studio>BBC Storyville</studio>
+  <studio>UK Film Council</studio>
+  <studio>Wall to Wall</studio>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">14048</uniqueid>
+  <uniqueid type="imdb">tt1155592</uniqueid>
+  <actor>
+    <name>Philippe Petit</name>
+    <role>Himself</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jean François Heckel</name>
+    <role>Himself</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-Louis Blondeau</name>
+    <role>Himself</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Annie Allix</name>
+    <role>Herself</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>David Forman</name>
+    <role>Himself</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Welner</name>
+    <role>Himself</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Greenhouse</name>
+    <role>Himself</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Moore</name>
+    <role>Himself</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Lewis</name>
+    <role>Himself</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Nixon</name>
+    <role>Self (archive footage)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <director>James Marsh</director>
+  <credits>Philippe Petit</credits>
+</movie>

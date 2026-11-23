@@ -1,0 +1,106 @@
+<movie>
+  <title>The Boy and the Heron</title>
+  <originaltitle>君たちはどう生きるか</originaltitle>
+  <year>2023</year>
+  <premiered>2023-07-14</premiered>
+  <rating>7.383</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Animation</genre>
+  <genre>Fantasy</genre>
+  <genre>Drama</genre>
+  <tag>loss of loved one</tag>
+  <tag>world war ii</tag>
+  <tag>education</tag>
+  <tag>coming of age</tag>
+  <tag>spirituality</tag>
+  <tag>poverty</tag>
+  <tag>semi autobiographical</tag>
+  <tag>based on myths, legends or folklore</tag>
+  <tag>moving to a city</tag>
+  <tag>1940s</tag>
+  <tag>anime</tag>
+  <tag>imaginative</tag>
+  <tag>hand drawn animation</tag>
+  <tag>magic world</tag>
+  <tag>animation</tag>
+  <tag>tangled lineage</tag>
+  <tag>suspenseful</tag>
+  <tag>magical realism</tag>
+  <tag>disappointing son</tag>
+  <studio>Studio Ghibli</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">508883</uniqueid>
+  <uniqueid type="imdb">tt6587046</uniqueid>
+  <actor>
+    <name>Soma Santoki</name>
+    <role>Mahito Maki (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Masaki Suda</name>
+    <role>Gray Heron (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ko Shibasaki</name>
+    <role>Kiriko (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Aimyon</name>
+    <role>Lady Himi (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yoshino Kimura</name>
+    <role>Natsuko (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Takuya Kimura</name>
+    <role>Shoichi Maki (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Keiko Takeshita</name>
+    <role>Izumi (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jun Fubuki</name>
+    <role>Utako (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sawako Agawa</name>
+    <role>Eriko (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Karen Takizawa</name>
+    <role>Warawara (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Shinobu Otake</name>
+    <role>Aiko (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jun Kunimura</name>
+    <role>The Parakeet King (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kaoru Kobayashi</name>
+    <role>Noble Pelican (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Shōhei Hino</name>
+    <role>Granduncle (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Hayao Miyazaki</credits>
+</movie>

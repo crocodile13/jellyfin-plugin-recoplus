@@ -1,0 +1,109 @@
+<movie>
+  <title>The Mitchells vs. the Machines</title>
+  <originaltitle>The Mitchells vs. the Machines</originaltitle>
+  <year>2021</year>
+  <premiered>2021-04-22</premiered>
+  <rating>7.817</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Adventure</genre>
+  <genre>Comedy</genre>
+  <tag>man vs machine</tag>
+  <tag>technology</tag>
+  <tag>dysfunctional family</tag>
+  <tag>family relationships</tag>
+  <tag>family drama</tag>
+  <tag>father daughter conflict</tag>
+  <tag>evil robot</tag>
+  <tag>3d animation</tag>
+  <tag>cheerful</tag>
+  <studio>Lord Miller</studio>
+  <studio>Columbia Pictures</studio>
+  <studio>Sony Pictures Animation</studio>
+  <studio>One Cool Films</studio>
+  <country>Hong Kong</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">501929</uniqueid>
+  <uniqueid type="imdb">tt7979580</uniqueid>
+  <set tmdbcolid="1567035">
+    <name>1567035</name>
+  </set>
+  <actor>
+    <name>Abbi Jacobson</name>
+    <role>Katie / Dog Cop (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Danny McBride</name>
+    <role>Rick (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Maya Rudolph</name>
+    <role>Linda (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Mike Rianda</name>
+    <role>Aaron / Furbies / Talking Dog / Wifi Enthusiast (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Eric André</name>
+    <role>Mark (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Olivia Colman</name>
+    <role>PAL (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Fred Armisen</name>
+    <role>Deborahbot 5000 (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Beck Bennett</name>
+    <role>Eric / PAL Max Robots (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Chrissy Teigen</name>
+    <role>Hailey Posey (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>John Legend</name>
+    <role>Jim Posey (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lo Mutuc</name>
+    <role>Abbey Posey (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Blake Griffin</name>
+    <role>PAL Max Prime (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Conan O'Brien</name>
+    <role>Glaxxon 5000 (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Doug the Pug</name>
+    <role>Monchi (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Melissa Sturm</name>
+    <role>Sarge / Melissa (Woman In Pod) (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Mike Rianda</director>
+  <credits>Jeff Rowe</credits>
+  <credits>Mike Rianda</credits>
+</movie>

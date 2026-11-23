@@ -1,0 +1,108 @@
+<movie>
+  <title>Step Brothers</title>
+  <originaltitle>Step Brothers</originaltitle>
+  <year>2008</year>
+  <premiered>2008-07-25</premiered>
+  <rating>6.557</rating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <tag>becoming an adult</tag>
+  <tag>hostility</tag>
+  <tag>autonomy</tag>
+  <tag>childhood trauma</tag>
+  <tag>stepbrother</tag>
+  <tag>slacker</tag>
+  <tag>man child</tag>
+  <tag>buddy</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>absurd</tag>
+  <tag>disgusted</tag>
+  <tag>ridiculous</tag>
+  <studio>Columbia Pictures</studio>
+  <studio>Mosaic Media Group</studio>
+  <studio>Gary Sanchez Productions</studio>
+  <studio>Relativity Media</studio>
+  <studio>Apatow Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">12133</uniqueid>
+  <uniqueid type="imdb">tt0838283</uniqueid>
+  <actor>
+    <name>Will Ferrell</name>
+    <role>Brennan Huff</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>John C. Reilly</name>
+    <role>Dale Doback</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Jenkins</name>
+    <role>Dr. Robert Doback</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Mary Steenburgen</name>
+    <role>Nancy Huff</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Scott</name>
+    <role>Derek Huff</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kathryn Hahn</name>
+    <role>Alice</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Andrea Savage</name>
+    <role>Denise</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rob Riggle</name>
+    <role>Randy</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Lurie Poston</name>
+    <role>Tommy</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Yozamp</name>
+    <role>Tiffany</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Logan Manus</name>
+    <role>Chris Gardoki</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Travis T. Flory</name>
+    <role>Redheaded Kid</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lili Rose McKay</name>
+    <role>7-Year-Old Girl</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Shira Piven</name>
+    <role>Nurse</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Seth Morris</name>
+    <role>Doctor</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Adam McKay</director>
+  <credits>Will Ferrell</credits>
+  <credits>Adam McKay</credits>
+</movie>

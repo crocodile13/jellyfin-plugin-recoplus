@@ -1,0 +1,109 @@
+<movie>
+  <title>The Empire Strikes Back</title>
+  <originaltitle>The Empire Strikes Back</originaltitle>
+  <year>1980</year>
+  <premiered>1980-05-20</premiered>
+  <rating>8.393</rating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Action</genre>
+  <genre>Science Fiction</genre>
+  <tag>rebellion</tag>
+  <tag>android</tag>
+  <tag>spacecraft</tag>
+  <tag>asteroid</tag>
+  <tag>rebel</tag>
+  <tag>space battle</tag>
+  <tag>snowstorm</tag>
+  <tag>space colony</tag>
+  <tag>swamp</tag>
+  <tag>sequel</tag>
+  <tag>space opera</tag>
+  <tag>arctic</tag>
+  <tag>tuwaderalit</tag>
+  <studio>Lucasfilm Ltd.</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">1891</uniqueid>
+  <uniqueid type="imdb">tt0080684</uniqueid>
+  <set tmdbcolid="10">
+    <name>10</name>
+  </set>
+  <actor>
+    <name>Mark Hamill</name>
+    <role>Luke Skywalker</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Harrison Ford</name>
+    <role>Han Solo</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Carrie Fisher</name>
+    <role>Princess Leia</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Billy Dee Williams</name>
+    <role>Lando Calrissian</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Daniels</name>
+    <role>C-3PO</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>David Prowse</name>
+    <role>Darth Vader</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Mayhew</name>
+    <role>Chewbacca</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kenny Baker</name>
+    <role>R2-D2</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Oz</name>
+    <role>Yoda (Voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Alec Guinness</name>
+    <role>Obi-Wan Kenobi</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Bulloch</name>
+    <role>Boba Fett</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Wingreen</name>
+    <role>Boba Fett (voice - uncredited)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>John Hollis</name>
+    <role>Lando's Aide</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Purvis</name>
+    <role>Chief Ugnaught</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Des Webb</name>
+    <role>Snow Creature</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Irvin Kershner</director>
+  <credits>Leigh Brackett</credits>
+  <credits>Lawrence Kasdan</credits>
+</movie>

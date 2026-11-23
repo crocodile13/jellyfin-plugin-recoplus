@@ -1,0 +1,107 @@
+<movie>
+  <title>Barbarian</title>
+  <originaltitle>Barbarian</originaltitle>
+  <year>2022</year>
+  <premiered>2022-08-29</premiered>
+  <rating>6.886</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Mystery</genre>
+  <genre>Thriller</genre>
+  <tag>monster</tag>
+  <tag>sexual abuse</tag>
+  <tag>paranoia</tag>
+  <tag>flashback</tag>
+  <tag>basement</tag>
+  <tag>serial killer</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>airbnb</tag>
+  <tag>abduction</tag>
+  <tag>metoo</tag>
+  <tag>secret room</tag>
+  <studio>BoulderLight Pictures</studio>
+  <studio>Vertigo Entertainment</studio>
+  <studio>Regency Enterprises</studio>
+  <studio>Hammerstone Studios</studio>
+  <studio>Almost Never Films</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">913290</uniqueid>
+  <uniqueid type="imdb">tt15791034</uniqueid>
+  <actor>
+    <name>Georgina Campbell</name>
+    <role>Tess</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Justin Long</name>
+    <role>AJ</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Skarsgård</name>
+    <role>Keith</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Brake</name>
+    <role>Frank</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Patrick Davis</name>
+    <role>The Mother</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jaymes Butler</name>
+    <role>Andre</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kurt Braunohler</name>
+    <role>Doug</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Sophie Sörensen</name>
+    <role>Bonnie</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel Fowler</name>
+    <role>Meg</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>JR Esposito</name>
+    <role>Jeff</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Nichols</name>
+    <role>Catherine</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Bosworth</name>
+    <role>Melissa (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Brooke Dillman</name>
+    <role>AJ's Mom</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Sara Paxton</name>
+    <role>Nursing Video Narration / Assistant / Megan</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Will Greenberg</name>
+    <role>Robert</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Zach Cregger</director>
+  <credits>Zach Cregger</credits>
+</movie>

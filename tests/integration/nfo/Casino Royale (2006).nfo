@@ -1,0 +1,119 @@
+<movie>
+  <title>Casino Royale</title>
+  <originaltitle>Casino Royale</originaltitle>
+  <year>2006</year>
+  <premiered>2006-11-14</premiered>
+  <rating>7.581</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Action</genre>
+  <genre>Thriller</genre>
+  <tag>banker</tag>
+  <tag>casino</tag>
+  <tag>based on novel or book</tag>
+  <tag>poker</tag>
+  <tag>italy</tag>
+  <tag>spy</tag>
+  <tag>money</tag>
+  <tag>torture</tag>
+  <tag>terrorism</tag>
+  <tag>mi6</tag>
+  <tag>british secret service</tag>
+  <tag>montenegro</tag>
+  <tag>dramatic</tag>
+  <tag>suspenseful</tag>
+  <tag>action</tag>
+  <tag>adventure</tag>
+  <tag>earnest</tag>
+  <studio>Metro-Goldwyn-Mayer</studio>
+  <studio>Columbia Pictures</studio>
+  <studio>EON Productions</studio>
+  <studio>Casino Royale Productions</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">36557</uniqueid>
+  <uniqueid type="imdb">tt0381061</uniqueid>
+  <set tmdbcolid="645">
+    <name>645</name>
+  </set>
+  <actor>
+    <name>Daniel Craig</name>
+    <role>James Bond</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Eva Green</name>
+    <role>Vesper Lynd</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Mads Mikkelsen</name>
+    <role>Le Chiffre</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Judi Dench</name>
+    <role>M</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey Wright</name>
+    <role>Felix Leiter</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Giancarlo Giannini</name>
+    <role>Mathis</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Caterina Murino</name>
+    <role>Solange</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Simon Abkarian</name>
+    <role>Alex Dimitrios</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Isaach de Bankolé</name>
+    <role>Steven Obanno</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jesper Christensen</name>
+    <role>Mr. White</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ivana Miličević</name>
+    <role>Valenka</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Tobias Menzies</name>
+    <role>Villiers</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Claudio Santamaria</name>
+    <role>Carlos</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Sébastien Foucan</name>
+    <role>Mollaka</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Malcolm Sinclair</name>
+    <role>Dryden</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Martin Campbell</director>
+  <credits>Robert Wade</credits>
+  <credits>Neal Purvis</credits>
+  <credits>Paul Haggis</credits>
+  <credits>Ian Fleming</credits>
+</movie>

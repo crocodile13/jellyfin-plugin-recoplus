@@ -1,0 +1,113 @@
+<movie>
+  <title>The Grand Budapest Hotel</title>
+  <originaltitle>The Grand Budapest Hotel</originaltitle>
+  <year>2014</year>
+  <premiered>2014-02-08</premiered>
+  <rating>8.025</rating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <genre>Drama</genre>
+  <tag>hotel</tag>
+  <tag>painting</tag>
+  <tag>wartime</tag>
+  <tag>eastern europe</tag>
+  <tag>author</tag>
+  <tag>gunfight</tag>
+  <tag>theft</tag>
+  <tag>period drama</tag>
+  <tag>bellhop</tag>
+  <tag>mentor protégé relationship</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>european</tag>
+  <tag>hotel lobby</tag>
+  <tag>renaissance painting</tag>
+  <tag>1960s</tag>
+  <tag>1930s</tag>
+  <tag>hilarious</tag>
+  <studio>Fox Searchlight Pictures</studio>
+  <studio>Studio Babelsberg</studio>
+  <studio>Indian Paintbrush</studio>
+  <studio>TSG Entertainment</studio>
+  <studio>American Empirical Pictures</studio>
+  <country>United States of America</country>
+  <country>Germany</country>
+  <uniqueid type="tmdb" default="true">120467</uniqueid>
+  <uniqueid type="imdb">tt2278388</uniqueid>
+  <actor>
+    <name>Ralph Fiennes</name>
+    <role>M. Gustave</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>F. Murray Abraham</name>
+    <role>Mr. Moustafa</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Revolori</name>
+    <role>Zero</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Adrien Brody</name>
+    <role>Dmitri</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Willem Dafoe</name>
+    <role>Jopling</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Mathieu Amalric</name>
+    <role>Serge X.</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Goldblum</name>
+    <role>Deputy Kovacs</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Harvey Keitel</name>
+    <role>Ludwig</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jude Law</name>
+    <role>Young Author</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Murray</name>
+    <role>M. Ivan</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Edward Norton</name>
+    <role>Henckels</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Saoirse Ronan</name>
+    <role>Agatha</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Schwartzman</name>
+    <role>M. Jean</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Léa Seydoux</name>
+    <role>Clotilde</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Tilda Swinton</name>
+    <role>Madame D.</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Wes Anderson</director>
+  <credits>Wes Anderson</credits>
+</movie>

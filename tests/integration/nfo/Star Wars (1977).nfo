@@ -1,0 +1,116 @@
+<movie>
+  <title>Star Wars</title>
+  <originaltitle>Star Wars</originaltitle>
+  <year>1977</year>
+  <premiered>1977-05-25</premiered>
+  <rating>8.207</rating>
+  <criticrating>93</criticrating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Action</genre>
+  <genre>Science Fiction</genre>
+  <tag>empire</tag>
+  <tag>galaxy</tag>
+  <tag>rebellion</tag>
+  <tag>android</tag>
+  <tag>hermit</tag>
+  <tag>smuggling (contraband)</tag>
+  <tag>freedom</tag>
+  <tag>rebel</tag>
+  <tag>rescue mission</tag>
+  <tag>space</tag>
+  <tag>planet</tag>
+  <tag>desert</tag>
+  <tag>super power</tag>
+  <tag>oppression</tag>
+  <tag>space opera</tag>
+  <tag>wizard</tag>
+  <tag>totalitarianism</tag>
+  <tag>quest</tag>
+  <tag>powerful</tag>
+  <tag>tuwaderalit</tag>
+  <studio>Lucasfilm Ltd.</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">11</uniqueid>
+  <uniqueid type="imdb">tt0076759</uniqueid>
+  <set tmdbcolid="10">
+    <name>10</name>
+  </set>
+  <actor>
+    <name>Mark Hamill</name>
+    <role>Luke Skywalker</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Harrison Ford</name>
+    <role>Han Solo</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Carrie Fisher</name>
+    <role>Princess Leia Organa</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Cushing</name>
+    <role>Grand Moff Tarkin</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Alec Guinness</name>
+    <role>Obi-Wan "Ben" Kenobi</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Daniels</name>
+    <role>C-3PO</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kenny Baker</name>
+    <role>R2-D2</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Mayhew</name>
+    <role>Chewbacca</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>David Prowse</name>
+    <role>Darth Vader (performer)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>James Earl Jones</name>
+    <role>Darth Vader (voice) (uncredited)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Phil Brown</name>
+    <role>Uncle Owen</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Shelagh Fraser</name>
+    <role>Aunt Beru</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Purvis</name>
+    <role>Chief Jawa</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Alex McCrindle</name>
+    <role>General Dodonna</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Eddie Byrne</name>
+    <role>General Willard</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>George Lucas</director>
+  <credits>George Lucas</credits>
+</movie>

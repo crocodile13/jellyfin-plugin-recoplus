@@ -1,0 +1,127 @@
+<movie>
+  <title>Blade Runner</title>
+  <originaltitle>Blade Runner</originaltitle>
+  <year>1982</year>
+  <premiered>1982-06-25</premiered>
+  <rating>7.937</rating>
+  <mpaa>R</mpaa>
+  <genre>Science Fiction</genre>
+  <genre>Drama</genre>
+  <genre>Thriller</genre>
+  <tag>android</tag>
+  <tag>flying car</tag>
+  <tag>bounty hunter</tag>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>genetics</tag>
+  <tag>based on novel or book</tag>
+  <tag>dystopia</tag>
+  <tag>futuristic</tag>
+  <tag>fugitive</tag>
+  <tag>cyberpunk</tag>
+  <tag>los angeles, california</tag>
+  <tag>alcoholic</tag>
+  <tag>origami</tag>
+  <tag>unicorn</tag>
+  <tag>tech noir</tag>
+  <tag>humanity</tag>
+  <tag>neo-noir</tag>
+  <tag>grim</tag>
+  <tag>human clone</tag>
+  <tag>humanoid robot</tag>
+  <tag>blade runner</tag>
+  <tag>2010s</tag>
+  <tag>suspenseful</tag>
+  <tag>admiring</tag>
+  <tag>excited</tag>
+  <tag>cult movie</tag>
+  <studio>Shaw Brothers</studio>
+  <studio>The Ladd Company</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <country>United States of America</country>
+  <country>Hong Kong</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">78</uniqueid>
+  <uniqueid type="imdb">tt0083658</uniqueid>
+  <set tmdbcolid="422837">
+    <name>422837</name>
+  </set>
+  <actor>
+    <name>Harrison Ford</name>
+    <role>Deckard</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rutger Hauer</name>
+    <role>Batty</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sean Young</name>
+    <role>Rachael</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Edward James Olmos</name>
+    <role>Gaff</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>M. Emmet Walsh</name>
+    <role>Bryant</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Daryl Hannah</name>
+    <role>Pris</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>William Sanderson</name>
+    <role>Sebastian</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Brion James</name>
+    <role>Leon</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Turkel</name>
+    <role>Tyrell</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Joanna Cassidy</name>
+    <role>Zhora</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>James Hong</name>
+    <role>Chew</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Morgan Paull</name>
+    <role>Holden</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Thompson</name>
+    <role>Bear</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>John Edward Allen</name>
+    <role>Kaiser</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Hy Pyke</name>
+    <role>Taffey Lewis</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Ridley Scott</director>
+  <credits>Hampton Fancher</credits>
+  <credits>David Webb Peoples</credits>
+  <credits>Philip K. Dick</credits>
+</movie>

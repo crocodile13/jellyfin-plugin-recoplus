@@ -1,0 +1,112 @@
+<movie>
+  <title>The Hangover</title>
+  <originaltitle>The Hangover</originaltitle>
+  <year>2009</year>
+  <premiered>2009-06-02</premiered>
+  <rating>7.34</rating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <tag>amnesia</tag>
+  <tag>blackjack</tag>
+  <tag>stag night</tag>
+  <tag>lost weekend</tag>
+  <tag>chapel</tag>
+  <tag>hit with tire iron</tag>
+  <tag>memory loss</tag>
+  <tag>las vegas</tag>
+  <tag>drugs</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>joyous</tag>
+  <tag>absurd</tag>
+  <tag>amused</tag>
+  <tag>cheerful</tag>
+  <tag>shaggy dog story</tag>
+  <studio>Legendary Pictures</studio>
+  <studio>Green Hat Films</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">18785</uniqueid>
+  <uniqueid type="imdb">tt1119646</uniqueid>
+  <set tmdbcolid="86119">
+    <name>86119</name>
+  </set>
+  <actor>
+    <name>Bradley Cooper</name>
+    <role>Phil Wenneck</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ed Helms</name>
+    <role>Stu Price</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Zach Galifianakis</name>
+    <role>Alan Garner</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Justin Bartha</name>
+    <role>Doug Billings</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Heather Graham</name>
+    <role>Jade</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Sasha Barrese</name>
+    <role>Tracy</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey Tambor</name>
+    <role>Sid Garner</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ken Jeong</name>
+    <role>Mr. Chow</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Rachael Harris</name>
+    <role>Melissa</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Mike Tyson</name>
+    <role>Mike Tyson</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Mike Epps</name>
+    <role>Black Doug</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jernard Burks</name>
+    <role>Leonard</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Rob Riggle</name>
+    <role>Officer Franklin</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Cleo King</name>
+    <role>Officer Garden</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Bryan Callen</name>
+    <role>Eddie Palermo</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Todd Phillips</director>
+  <credits>Jon Lucas</credits>
+  <credits>Scott Moore</credits>
+  <credits>Todd Phillips</credits>
+</movie>

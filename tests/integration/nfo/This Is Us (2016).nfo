@@ -1,0 +1,101 @@
+<tvshow>
+  <title>This Is Us</title>
+  <originaltitle>This Is Us</originaltitle>
+  <year>2016</year>
+  <premiered>2016-09-20</premiered>
+  <rating>8.222</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Drama</genre>
+  <tag>sibling relationship</tag>
+  <tag>loss of loved one</tag>
+  <tag>adoption</tag>
+  <tag>addiction</tag>
+  <tag>romance</tag>
+  <tag>flashback</tag>
+  <tag>grief</tag>
+  <tag>family relationships</tag>
+  <tag>family conflict</tag>
+  <tag>grieving</tag>
+  <studio>NBC</studio>
+  <studio>20th Century Fox Television</studio>
+  <studio>Rhode Island Ave. Productions</studio>
+  <studio>Zaftig Films</studio>
+  <studio>20th Television</studio>
+  <uniqueid type="tmdb" default="true">67136</uniqueid>
+  <uniqueid type="imdb">tt5555260</uniqueid>
+  <actor>
+    <name>Milo Ventimiglia</name>
+    <role>Jack Pearson</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Mandy Moore</name>
+    <role>Rebecca Pearson</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sterling K. Brown</name>
+    <role>Randall Pearson</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Chrissy Metz</name>
+    <role>Kate Pearson</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Justin Hartley</name>
+    <role>Kevin Pearson</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Susan Kelechi Watson</name>
+    <role>Beth Pearson</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Sullivan</name>
+    <role>Toby Damon</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Huertas</name>
+    <role>Miguel Rivas</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Alexandra Breckenridge</name>
+    <role>Sophie</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Melanie Liburd</name>
+    <role>Zoe Baker</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lyric Ross</name>
+    <role>Déjà Pearson</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Asante Blackk</name>
+    <role>Malik Hodges</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Eris Baker</name>
+    <role>Tess Pearson</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Caitlin Thompson</name>
+    <role>Madison Simons</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Faithe Herman</name>
+    <role>Annie Pearson</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

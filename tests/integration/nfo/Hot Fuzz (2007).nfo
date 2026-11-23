@@ -1,0 +1,113 @@
+<movie>
+  <title>Hot Fuzz</title>
+  <originaltitle>Hot Fuzz</originaltitle>
+  <year>2007</year>
+  <premiered>2007-02-14</premiered>
+  <rating>7.572</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Action</genre>
+  <genre>Comedy</genre>
+  <tag>countryside</tag>
+  <tag>police</tag>
+  <tag>village</tag>
+  <tag>arrest</tag>
+  <tag>parody</tag>
+  <tag>partner</tag>
+  <tag>murder</tag>
+  <tag>rural area</tag>
+  <tag>conspiracy</tag>
+  <tag>serial killer</tag>
+  <tag>gunfight</tag>
+  <tag>police force</tag>
+  <tag>buddy cop</tag>
+  <tag>buddy comedy</tag>
+  <tag>accident</tag>
+  <tag>cornetto trilogy</tag>
+  <studio>Big Talk Studios</studio>
+  <studio>StudioCanal</studio>
+  <studio>Working Title</studio>
+  <studio>Ingenious Media</studio>
+  <country>France</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">4638</uniqueid>
+  <uniqueid type="imdb">tt0425112</uniqueid>
+  <actor>
+    <name>Simon Pegg</name>
+    <role>Nicholas Angel</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Nick Frost</name>
+    <role>PC Danny Butterman</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Broadbent</name>
+    <role>Inspector Frank Butterman</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Paddy Considine</name>
+    <role>DS Andy Wainwright</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Rafe Spall</name>
+    <role>DC Andy Cartwright</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Eldon</name>
+    <role>Sergeant Tony Fisher</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Olivia Colman</name>
+    <role>PC Doris Thatcher</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Bailey</name>
+    <role>Sergeant Turner</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Karl Johnson</name>
+    <role>PC Bob Walker</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Timothy Dalton</name>
+    <role>Simon Skinner</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Edward Woodward</name>
+    <role>Tom Weaver</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Billie Whitelaw</name>
+    <role>Joyce Cooper</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Stuart Wilson</name>
+    <role>Dr. Robin Hatcher</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Freeman</name>
+    <role>Rev. Philip Shooter</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rory McCann</name>
+    <role>Michael Armstrong</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Edgar Wright</director>
+  <credits>Edgar Wright</credits>
+  <credits>Simon Pegg</credits>
+</movie>

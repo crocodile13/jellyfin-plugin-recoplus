@@ -1,0 +1,107 @@
+<tvshow>
+  <title>Crash Landing on You</title>
+  <originaltitle>사랑의 불시착</originaltitle>
+  <year>2019</year>
+  <premiered>2019-12-14</premiered>
+  <rating>8.5</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Comedy</genre>
+  <tag>love triangle</tag>
+  <tag>spy</tag>
+  <tag>con man</tag>
+  <tag>romance</tag>
+  <tag>tension</tag>
+  <tag>fate</tag>
+  <tag>soldier</tag>
+  <tag>heiress</tag>
+  <tag>paragliding</tag>
+  <tag>star crossed lovers</tag>
+  <tag>accident</tag>
+  <tag>accidental love</tag>
+  <tag>north korea</tag>
+  <tag>inter-korean relations</tag>
+  <tag>chaebol</tag>
+  <studio>tvN</studio>
+  <studio>Studio Dragon</studio>
+  <studio>Culture Depot</studio>
+  <uniqueid type="tmdb" default="true">94796</uniqueid>
+  <uniqueid type="imdb">tt10850932</uniqueid>
+  <actor>
+    <name>Hyun Bin</name>
+    <role>Ri Jeong-hyeok</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Son Ye-jin</name>
+    <role>Yoon Se-ri</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Seo Ji-hye</name>
+    <role>Seo Dan</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Jung-hyun</name>
+    <role>Goo Seung-joon</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yang Kyung-won</name>
+    <role>Pyo Chi-soo</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Yoo Su-bin</name>
+    <role>Kim Joo-meok</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Sin-young</name>
+    <role>Park Gwang-beom</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Tang Joon-sang</name>
+    <role>Geum Eun-dong</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Sun-young</name>
+    <role>Na Wol-sook</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Jung-nan</name>
+    <role>Ma Young-ae</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jang So-yeon</name>
+    <role>Hyun Myung-sook</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Joo Ye-rin</name>
+    <role>NK Neighborhood Woman</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jung Kyung-ho</name>
+    <role>Cha Sang-woo</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ha Seok-jin</name>
+    <role>Lee Moo-hyeok</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Ji-woo</name>
+    <role>Choi Ji-woo</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Kim Hee-won</director>
+  <credits>Park Ji-eun</credits>
+</tvshow>

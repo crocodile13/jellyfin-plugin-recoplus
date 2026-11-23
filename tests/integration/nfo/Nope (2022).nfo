@@ -1,0 +1,111 @@
+<movie>
+  <title>Nope</title>
+  <originaltitle>Nope</originaltitle>
+  <year>2022</year>
+  <premiered>2022-07-20</premiered>
+  <rating>6.826</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Science Fiction</genre>
+  <genre>Thriller</genre>
+  <tag>california</tag>
+  <tag>horse</tag>
+  <tag>exploitation</tag>
+  <tag>death of father</tag>
+  <tag>alien</tag>
+  <tag>ufo</tag>
+  <tag>social commentary</tag>
+  <tag>alien invasion</tag>
+  <tag>alien contact</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>horse farm</tag>
+  <tag>african american man</tag>
+  <tag>racial issues</tag>
+  <tag>brother sister relationship</tag>
+  <tag>horror western</tag>
+  <tag>psychological horror</tag>
+  <tag>sci-fi horror</tag>
+  <tag>sci-fi western</tag>
+  <studio>Universal Pictures</studio>
+  <studio>Monkeypaw Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">762504</uniqueid>
+  <uniqueid type="imdb">tt10954984</uniqueid>
+  <actor>
+    <name>Daniel Kaluuya</name>
+    <role>OJ Haywood</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Keke Palmer</name>
+    <role>Emerald Haywood</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Brandon Perea</name>
+    <role>Angel Torres</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Wincott</name>
+    <role>Antlers Holst</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Steven Yeun</name>
+    <role>Ricky 'Jupe' Park</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Wrenn Schmidt</name>
+    <role>Amber Park</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Keith David</name>
+    <role>Otis Haywood Sr.</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Devon Graye</name>
+    <role>Ryder Muybridge</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Terry Notary</name>
+    <role>Gordy</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Barbie Ferreira</name>
+    <role>Nessie</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Donna Mills</name>
+    <role>Bonnie Clayton</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Osgood Perkins</name>
+    <role>Fynn Bachman</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Eddie Jemison</name>
+    <role>Buster</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jacob Kim</name>
+    <role>Young Ricky 'Jupe' Park</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Sophia Coto</name>
+    <role>Mary Jo Elliot</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jordan Peele</director>
+  <credits>Jordan Peele</credits>
+</movie>

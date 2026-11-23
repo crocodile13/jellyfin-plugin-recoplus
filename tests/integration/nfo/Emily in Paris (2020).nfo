@@ -1,0 +1,101 @@
+<tvshow>
+  <title>Emily in Paris</title>
+  <originaltitle>Emily in Paris</originaltitle>
+  <year>2020</year>
+  <premiered>2020-10-02</premiered>
+  <rating>7.531</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Comedy</genre>
+  <tag>paris, france</tag>
+  <tag>marketing</tag>
+  <tag>friendship</tag>
+  <tag>love</tag>
+  <tag>romcom</tag>
+  <tag>female protagonist</tag>
+  <tag>american abroad</tag>
+  <tag>arrogant</tag>
+  <tag>bold</tag>
+  <studio>Netflix</studio>
+  <studio>MTV Entertainment Studios</studio>
+  <studio>Jax Media</studio>
+  <studio>Darren Star Productions</studio>
+  <studio>Paramount Television Studios</studio>
+  <uniqueid type="tmdb" default="true">82596</uniqueid>
+  <uniqueid type="imdb">tt8962124</uniqueid>
+  <actor>
+    <name>Lily Collins</name>
+    <role>Emily Cooper</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Philippine Leroy-Beaulieu</name>
+    <role>Sylvie Grateau</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ashley Park</name>
+    <role>Mindy Chen</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lucas Bravo</name>
+    <role>Gabriel</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Camille Razat</name>
+    <role>Camille de Lalisse</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel Arnold</name>
+    <role>Julien</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Bruno Gouery</name>
+    <role>Luc</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>William Abadie</name>
+    <role>Antoine Lambert</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Lucien Laviscount</name>
+    <role>Alfie Peterson</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Eugenio Franceschini</name>
+    <role>Marcello Muratori</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Biel</name>
+    <role>Fabien</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Gauthier Battoue</name>
+    <role>Gilles</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Vladimir Houbart</name>
+    <role>Taxi Driver</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Raphaël Kahn</name>
+    <role>Handsome Man</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Claude Perron</name>
+    <role>Patricia</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

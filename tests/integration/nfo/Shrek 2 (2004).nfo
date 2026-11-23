@@ -1,0 +1,128 @@
+<movie>
+  <title>Shrek 2</title>
+  <originaltitle>Shrek 2</originaltitle>
+  <year>2004</year>
+  <premiered>2004-05-19</premiered>
+  <rating>7.3</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <genre>Fantasy</genre>
+  <genre>Romance</genre>
+  <tag>prison</tag>
+  <tag>princess</tag>
+  <tag>magic</tag>
+  <tag>kingdom</tag>
+  <tag>fairy tale</tag>
+  <tag>liberation</tag>
+  <tag>transformation</tag>
+  <tag>honeymoon</tag>
+  <tag>prince</tag>
+  <tag>villain</tag>
+  <tag>parents-in-law</tag>
+  <tag>enchantment</tag>
+  <tag>sequel</tag>
+  <tag>anthropomorphism</tag>
+  <tag>dragon</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>ogre</tag>
+  <tag>fairy godmother</tag>
+  <tag>3d animation</tag>
+  <tag>casual</tag>
+  <tag>cartoon donkey</tag>
+  <tag>hilarious</tag>
+  <tag>post-credits scene</tag>
+  <tag>dreamworks</tag>
+  <tag>blockbuster</tag>
+  <studio>DreamWorks Animation</studio>
+  <studio>Pacific Data Images</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">809</uniqueid>
+  <uniqueid type="imdb">tt0298148</uniqueid>
+  <set tmdbcolid="2150">
+    <name>2150</name>
+  </set>
+  <actor>
+    <name>Mike Myers</name>
+    <role>Shrek (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Eddie Murphy</name>
+    <role>Donkey (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Cameron Diaz</name>
+    <role>Princess Fiona (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Andrews</name>
+    <role>Queen Lillian (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Antonio Banderas</name>
+    <role>Puss in Boots (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>John Cleese</name>
+    <role>King Harold (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Rupert Everett</name>
+    <role>Prince Charming (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jennifer Saunders</name>
+    <role>Fairy Godmother (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Larry King</name>
+    <role>Ugly Stepsister (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Aron Warner</name>
+    <role>Wolf (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kelly Asbury</name>
+    <role>Page / Elf / Nobleman / Nobleman's Son (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kelly Cooney Cilella</name>
+    <role>Fast Food Clerk (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Cody Cameron</name>
+    <role>Pinocchio / Three Pigs (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Alina Phelan</name>
+    <role>Maiden #1 / Generic Female #2 (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Guillaume Aretos</name>
+    <role>Receptionist (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Andrew Adamson</director>
+  <director>Kelly Asbury</director>
+  <director>Conrad Vernon</director>
+  <credits>Andrew Adamson</credits>
+  <credits>Joe Stillman</credits>
+  <credits>J. David Stem</credits>
+  <credits>David N. Weiss</credits>
+</movie>

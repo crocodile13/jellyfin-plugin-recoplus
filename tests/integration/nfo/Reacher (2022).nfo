@@ -1,0 +1,104 @@
+<tvshow>
+  <title>Reacher</title>
+  <originaltitle>Reacher</originaltitle>
+  <year>2022</year>
+  <premiered>2022-02-03</premiered>
+  <rating>8.1</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Crime</genre>
+  <tag>assassin</tag>
+  <tag>based on novel or book</tag>
+  <tag>gun</tag>
+  <tag>espionage</tag>
+  <tag>police</tag>
+  <tag>newfoundland and labrador</tag>
+  <tag>conspiracy</tag>
+  <tag>agent</tag>
+  <tag>reboot</tag>
+  <tag>military police</tag>
+  <tag>callous</tag>
+  <tag>commanding</tag>
+  <studio>Prime Video</studio>
+  <studio>Amazon Studios</studio>
+  <studio>Skydance Television</studio>
+  <studio>Paramount Television Studios</studio>
+  <studio>Amazon MGM Studios</studio>
+  <uniqueid type="tmdb" default="true">108978</uniqueid>
+  <uniqueid type="imdb">tt9288030</uniqueid>
+  <actor>
+    <name>Alan Ritchson</name>
+    <role>Jack Reacher</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Malcolm Goodwin</name>
+    <role>Oscar Finlay</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Maria Sten</name>
+    <role>Frances Neagley</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Willa Fitzgerald</name>
+    <role>Roscoe Conklin</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Serinda Swan</name>
+    <role>Karla Dixon</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Webster</name>
+    <role>KJ</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Shaun Sipos</name>
+    <role>David O'Donnell</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Bruce McGill</name>
+    <role>Mayor Teale</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Ferdinand Kingsley</name>
+    <role>A.M.</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Patrick</name>
+    <role>Shane Langston</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Sonya Cassidy</name>
+    <role>Susan Duffy</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Johnny Berchtold</name>
+    <role>Richard Beck</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Roberto Montesinos</name>
+    <role>Guillermo Villanueva</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Olivier Richters</name>
+    <role>Paulie</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Tee</name>
+    <role>Xavier Quinn</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

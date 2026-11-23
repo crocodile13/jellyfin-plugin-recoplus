@@ -1,0 +1,100 @@
+<tvshow>
+  <title>Severance</title>
+  <originaltitle>Severance</originaltitle>
+  <year>2022</year>
+  <premiered>2022-02-17</premiered>
+  <rating>8.388</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Mystery</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>office</tag>
+  <tag>workplace</tag>
+  <tag>memory</tag>
+  <tag>office politics</tag>
+  <tag>brain surgery</tag>
+  <tag>thriller</tag>
+  <studio>Apple TV</studio>
+  <studio>Endeavor Content</studio>
+  <studio>Red Hour</studio>
+  <studio>Fifth Season</studio>
+  <studio>Animals &amp; People</studio>
+  <studio>Westward</studio>
+  <uniqueid type="tmdb" default="true">95396</uniqueid>
+  <uniqueid type="imdb">tt11280740</uniqueid>
+  <actor>
+    <name>Adam Scott</name>
+    <role>Mark Scout</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Britt Lower</name>
+    <role>Helly Riggs</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Tramell Tillman</name>
+    <role>Seth Milchick</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Zach Cherry</name>
+    <role>Dylan George</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Patricia Arquette</name>
+    <role>Harmony Cobel</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jen Tullock</name>
+    <role>Devon Scout-Hale</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Chernus</name>
+    <role>Ricken Hale</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Dichen Lachman</name>
+    <role>Ms. Casey</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Bock</name>
+    <role>Eustice Huang</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>John Turturro</name>
+    <role>Irving Bailiff</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Walken</name>
+    <role>Burt Goodman</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff McCarthy</name>
+    <role>Nature Documentary Voice (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Hudson Flynn</name>
+    <role>WMC Activist 1</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ruby Stevens</name>
+    <role>WMC Activist 2</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Alexis Cofield</name>
+    <role>Checkout Girl</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

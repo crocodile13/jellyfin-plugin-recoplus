@@ -1,0 +1,113 @@
+<movie>
+  <title>Extraction</title>
+  <originaltitle>Extraction</originaltitle>
+  <year>2020</year>
+  <premiered>2020-04-23</premiered>
+  <rating>7.274</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Thriller</genre>
+  <tag>drug dealer</tag>
+  <tag>self sacrifice</tag>
+  <tag>mercenary</tag>
+  <tag>crime boss</tag>
+  <tag>mumbai (bombay), india</tag>
+  <tag>rescue mission</tag>
+  <tag>based on comic</tag>
+  <tag>one man army</tag>
+  <tag>based on graphic novel</tag>
+  <tag>behind enemy lines</tag>
+  <tag>child kidnapping</tag>
+  <tag>dhaka (dacca), bangladesh</tag>
+  <tag>close‑quarters combat</tag>
+  <tag>hidden safehouses</tag>
+  <tag>urban warfare</tag>
+  <tag>broken hero</tag>
+  <tag>crowded streets</tag>
+  <studio>AGBO</studio>
+  <studio>Thematic Entertainment</studio>
+  <studio>TGIM Films</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">545609</uniqueid>
+  <uniqueid type="imdb">tt8936646</uniqueid>
+  <set tmdbcolid="735127">
+    <name>735127</name>
+  </set>
+  <actor>
+    <name>Chris Hemsworth</name>
+    <role>Tyler Rake</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rudhraksh Jaiswal</name>
+    <role>Ovi Mahajan</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Randeep Hooda</name>
+    <role>Saju</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Golshifteh Farahani</name>
+    <role>Nik Khan</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Pankaj Tripathi</name>
+    <role>Ovi Mahajan Sr.</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>David Harbour</name>
+    <role>Gaspar</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Bryon Lerum</name>
+    <role>Rake's Son</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ryder Lerum</name>
+    <role>Rake's Son</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Shivam Vichare</name>
+    <role>Sachin</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Piyush Khati</name>
+    <role>Arjun</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Sara Rumao</name>
+    <role>Cute Girl</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Aarti Kulkarni</name>
+    <role>Pari - Ovi's Maid</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Umakant Patil</name>
+    <role>Cop #1 - Candie's Cafe</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Praveen Indu</name>
+    <role>Cop #2 - Candie's Cafe</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Swapnil Kokam</name>
+    <role>Prison Guard</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Sam Hargrave</director>
+  <credits>Joe Russo</credits>
+</movie>
