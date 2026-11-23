@@ -234,6 +234,8 @@ de la CI.
 
 ## Versions de Jellyfin
 
+- À chaque session, avant le reste : dernière version de Jellyfin (releases GitHub, paquets NuGet, images Docker),
+  ses notes de version, et mise à jour de compatibilité si elle dépasse `TestedTo`.
 - `Plugin.TestedFrom` / `TestedTo` : intervalle testé (avertissement hors intervalle). `targetAbi` et les paquets
   restent sur la plus ancienne (`JellyfinVersion` du csproj) ; la CI compile aussi contre les derniers paquets 12.x.
 - Nouvelle version de Jellyfin : lire ses notes de version (changements d'API, de base de données, de plugins), CI
