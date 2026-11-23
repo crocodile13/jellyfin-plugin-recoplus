@@ -12,9 +12,9 @@
         "version": "1.0.54.0",
         "changelog": "1.0.54: the interface is now also in German and Spanish (settings page, home rows, cards, reasons and notifications), chosen automatically from each person's Jellyfin language or set in the plugin; a text missing in either falls back to English. The settings page also drops the remaining technical terms from its essential and advanced levels.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.54.0/RecoPlus_1.0.54.0.zip",
+        "checksum": "952df1320a92b6892535014c8a90820b",
+        "timestamp": "2026-11-23T20:05:50Z"
       },
       {
         "version": "1.0.53.0",
