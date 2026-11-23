@@ -12,9 +12,9 @@
         "version": "1.0.48.0",
         "changelog": "1.0.48: discovery from authors (extended mode) is more to the point — two parts of the same saga no longer count as two reasons to like its director, studio or themes (Harry Potter 1 and 2 no longer bring Chris Columbus's whole filmography), and an author's works must share two genres with the liked titles that led to them (Andrew Stanton, found through Toy Story and Finding Nemo, leads to A Bug's Life, no longer to John Carter or Obi-Wan Kenobi).",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.48.0/RecoPlus_1.0.48.0.zip",
+        "checksum": "15aa7d4f63f77fd3deaa2261b4ad5358",
+        "timestamp": "2026-11-23T14:59:50Z"
       },
       {
         "version": "1.0.47.0",
