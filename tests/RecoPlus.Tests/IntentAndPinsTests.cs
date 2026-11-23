@@ -166,6 +166,18 @@ public class IntentAndPinsTests
         var sc = Recommender.ScoreAll(ctx, Core.BuildVectors(titles, w), "new", titles.Keys.ToList(), w);
         Assert.Equal("t2", sc.OrderByDescending(kv => kv.Value).First().Key);   // ce que le foyer regarde
         Assert.True(sc["t5"] > sc["t0"]);                                          // puis la mieux notée
+
+        // classement commun avec les titres hors bibliothèque : la popularité dans le foyer n'existe que d'un côté, l'a
+        // priori ne garde que la note (à note égale, même score)
+        titles["tmdb:movie:1"] = new Title { Id = "tmdb:movie:1", Kind = TitleKind.Movie, Name = "ext", Genres = new[] { "g9" }, Community = 6.5, External = true };
+        var ds2 = new Dataset { Titles = titles, Users = users, Now = Now };
+        var ctx2 = new Context(ds2, Now, users, w);
+        var vec2 = Core.BuildVectors(titles, w);
+        var both = new List<string> { "t2", "tmdb:movie:1" };
+        var plain = Recommender.ScoreAll(ctx2, vec2, "new", both, Recommender.Shared(w));
+        Assert.True(plain["t2"] > plain["tmdb:movie:1"]);
+        var shared = Recommender.ScoreAll(ctx2, vec2, "new", both, Recommender.Shared(w), shared: true);
+        Assert.Equal(shared["t2"], shared["tmdb:movie:1"], 12);
     }
 
     // ------------------------------------------------------------------ en tête
@@ -181,6 +193,8 @@ public class IntentAndPinsTests
         public Dictionary<string, List<string>> Colls { get; } = new(StringComparer.Ordinal);
 
         public HashSet<string> Denied { get; } = new(StringComparer.Ordinal);
+
+        public ListOptions? Filters { get; set; }
 
         public void Series(string id, int old, double oldAt, int fresh, double freshAt, double aired = 0)
         {
@@ -214,7 +228,7 @@ public class IntentAndPinsTests
             ds.LinkCollections();
             var s = new EngineSettings();
             var sig = new Context(ds, Now, users, s).Sig["u"];
-            return RecoPlus.Engine.Pins.Select(ds, H, sig, id => !Denied.Contains(id), id => Eps.TryGetValue(id, out var e) ? e : null, Now, new PinOptions(max, 45, s.SagaMax));
+            return RecoPlus.Engine.Pins.Select(ds, H, sig, id => !Denied.Contains(id), id => Eps.TryGetValue(id, out var e) ? e : null, Now, new PinOptions(max, 45, s.SagaMax, Filters));
         }
     }
 
@@ -239,6 +253,25 @@ public class IntentAndPinsTests
         w.Denied.Add("denied");
         Assert.Equal(new[] { "caught" }, w.Pins());
         Assert.Empty(w.Pins(0));
+    }
+
+    [Fact]
+    public void PinnedNewsRespectTheListFilters()
+    {
+        // « un titre filtré n'est jamais proposé » : pas plus en tête qu'ailleurs
+        var w = new World();
+        w.Series("anime", 10, Now - (200 * Day), 3, Now - (2 * Day));
+        w.H["anime"] = Watched("anime", Now - (30 * Day), 10);
+        Assert.Equal(new[] { "anime" }, w.Pins());
+
+        var t = w.Titles["anime"];
+        w.Titles["anime"] = new Title { Id = t.Id, Kind = t.Kind, Name = t.Name, Added = t.Added, Genres = new[] { "Animation" }, Year = 2001 };
+        w.Filters = new ListOptions { ExcludedGenres = new() { "animation" } }.Sanitized();
+        Assert.Empty(w.Pins());
+        w.Filters = new ListOptions { MinYear = 2010 }.Sanitized();
+        Assert.Empty(w.Pins());
+        w.Filters = new ListOptions { MinYear = 1990 }.Sanitized();
+        Assert.Equal(new[] { "anime" }, w.Pins());
     }
 
     [Fact]

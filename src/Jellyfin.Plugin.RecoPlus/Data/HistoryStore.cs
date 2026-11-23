@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using Microsoft.Extensions.Logging;
@@ -14,6 +15,9 @@ namespace Jellyfin.Plugin.RecoPlus.Data;
 /// </summary>
 public sealed class HistoryStore : IDisposable
 {
+    /// <summary>Entrées gardées au plus (mémoire bornée) : au-delà, les plus anciens premiers lancements sont oubliés.</summary>
+    public const int MaxEntries = 200_000;
+
     private readonly ILogger<HistoryStore> _log;
     private readonly ConcurrentDictionary<string, double> _first = new(StringComparer.Ordinal);
     private readonly Timer _flush;
@@ -54,6 +58,7 @@ public sealed class HistoryStore : IDisposable
             return;
         }
 
+        Prune(_first, MaxEntries);
         try
         {
             var tmp = PathOnDisk + ".tmp";
@@ -66,6 +71,24 @@ public sealed class HistoryStore : IDisposable
             Interlocked.Exchange(ref _dirty, 1);
             _log.LogWarning(ex, "Reco+: could not write the first-play history");
         }
+    }
+
+    /// <summary>Ramène le registre à <paramref name="max"/> entrées en oubliant les plus anciennes. Renvoie le nombre retiré.</summary>
+    public static int Prune(ConcurrentDictionary<string, double> first, int max)
+    {
+        int extra = first.Count - Math.Max(0, max);
+        if (extra <= 0)
+        {
+            return 0;
+        }
+
+        int n = 0;
+        foreach (var k in first.OrderBy(kv => kv.Value).ThenBy(kv => kv.Key, StringComparer.Ordinal).Take(extra).Select(kv => kv.Key).ToList())
+        {
+            n += first.TryRemove(k, out _) ? 1 : 0;
+        }
+
+        return n;
     }
 
     private void EnsureLoaded()

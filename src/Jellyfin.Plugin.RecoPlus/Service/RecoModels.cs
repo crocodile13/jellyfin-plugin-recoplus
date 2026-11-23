@@ -55,6 +55,9 @@ public sealed class ExternalRec
         return c;
     }
 
+    /// <summary>Copie indépendante (sa rangée et sa place changent d'un calcul à l'autre).</summary>
+    public ExternalRec Copy() => (ExternalRec)MemberwiseClone();
+
     /// <summary>Source d'exploration qui l'a apporté (related, saga, people, keyword, genre, cross, gems, studio, language, top).</summary>
     public string Source { get; set; } = string.Empty;
 

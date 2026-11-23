@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.43.0",
+        "changelog": "1.0.43: settings could not be saved after enabling extended mode (issue #44) or after applying a coordinate-search calibration — a re-enabled field failed the browser's validation silently; the page no longer blocks and the server keeps every value in range; titles pinned at the top (new episodes, next part of a saga) now respect the list filters; a new episode triggers a recomputation like other additions; \"More like this\" puts the next part first from the same sagas as the rest of the plugin (TMDb collections, name rule); free mix no longer favours library titles for brand-new accounts; deleted Jellyfin accounts are forgotten; a failed computation and an unreadable watch history now raise an alert; the first-play register is bounded.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.42.0",
         "changelog": "1.0.42: mixed rows shorter than their size (Trending, Popular, a quiet month of new arrivals) are now completed with titles outside the library, which used to appear only when they outranked the few library titles; current lists get their titles outside the library even for accounts without a recent exploration; the preview shows how many list titles each account could get and how many were placed.",
         "targetAbi": "12.2.0.0",

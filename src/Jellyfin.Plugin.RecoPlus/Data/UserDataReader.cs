@@ -47,6 +47,17 @@ public sealed class UserDataReader
         _log = log;
     }
 
+    /// <summary>
+    /// Vérifie que la table des données utilisateur se lit comme attendu (une ligne au plus, mêmes colonnes que
+    /// <see cref="ReadAll"/>) : vérification de démarrage. Lève l'exception de la base si sa forme a changé.
+    /// </summary>
+    public void Probe()
+    {
+        using var ctx = _db.CreateDbContext();
+        _ = ctx.UserData.Select(u => new { u.UserId, u.ItemId, u.Played, u.IsFavorite, u.PlayCount, u.PlaybackPositionTicks, u.LastPlayedDate, u.Rating, u.Likes })
+            .Take(1).ToList();
+    }
+
     /// <summary>Compte → (élément → données), uniquement les lignes avec une activité ou un favori.</summary>
     public Dictionary<Guid, Dictionary<Guid, UserDataRow>> ReadAll(Guid? onlyUser = null)
     {

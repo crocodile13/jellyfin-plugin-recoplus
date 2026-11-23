@@ -49,18 +49,22 @@ public sealed class CalibrationService
     /// <summary>Interrompt.</summary>
     public void Cancel() => _tasks.CancelIfRunning<CalibrationTask>();
 
-    private (int N, DateTime At) _cases = (-1, DateTime.MinValue);
+    private sealed record CaseCount(int N, DateTime At);
 
-    /// <summary>Nombre de cas d'évaluation disponibles (relu au plus toutes les 10 minutes).</summary>
-    public int CaseCount()
+    private CaseCount _cases = new(-1, DateTime.MinValue);   // remplacé d'un bloc : jamais lu à moitié
+
+    /// <summary>Nombre de cas d'évaluation disponibles (relu au plus toutes les 10 minutes, hors du fil de la requête).</summary>
+    public async Task<int> CaseCountAsync(CancellationToken ct = default)
     {
-        if (_cases.N < 0 || DateTime.UtcNow - _cases.At > TimeSpan.FromMinutes(10))
+        var c = _cases;
+        if (c.N < 0 || DateTime.UtcNow - c.At > TimeSpan.FromMinutes(10))
         {
-            // aucun appel réseau (Seerr : cache seul) : se termine sans attente réelle
-            _cases = (Calibrator.Cases(_reco.BuildCalibrationDatasetAsync().GetAwaiter().GetResult()).Count, DateTime.UtcNow);
+            // aucun appel réseau (Seerr : cache seul), mais lecture de tout l'historique : sur un fil de travail
+            var ds = await Task.Run(() => _reco.BuildCalibrationDatasetAsync(ct), ct).ConfigureAwait(false);
+            _cases = c = new CaseCount(Calibrator.Cases(ds).Count, DateTime.UtcNow);
         }
 
-        return _cases.N;
+        return c.N;
     }
 
     /// <summary>Corps de la tâche.</summary>
