@@ -1,0 +1,103 @@
+<tvshow>
+  <title>The Wheel of Time</title>
+  <originaltitle>The Wheel of Time</originaltitle>
+  <year>2021</year>
+  <premiered>2021-11-18</premiered>
+  <rating>7.582</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Drama</genre>
+  <tag>based on novel or book</tag>
+  <tag>magic</tag>
+  <tag>reincarnation</tag>
+  <tag>quest</tag>
+  <tag>high fantasy</tag>
+  <tag>good versus evil</tag>
+  <tag>power</tag>
+  <studio>Prime Video</studio>
+  <studio>Sony Pictures Television</studio>
+  <studio>Radar Pictures</studio>
+  <studio>Amazon Studios</studio>
+  <studio>IWOT Productions</studio>
+  <studio>Little Island Productions</studio>
+  <studio>Long Weekend Productions</studio>
+  <studio>Amazon MGM Studios</studio>
+  <uniqueid type="tmdb" default="true">71914</uniqueid>
+  <uniqueid type="imdb">tt7462410</uniqueid>
+  <actor>
+    <name>Rosamund Pike</name>
+    <role>Moiraine Damodred</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Henney</name>
+    <role>al'Lan Mandragoran</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Josha Stradowski</name>
+    <role>Rand al'Thor</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Zoë Robins</name>
+    <role>Nynaeve al'Meara</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Madeleine Madden</name>
+    <role>Egwene al'Vere</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Marcus Rutherford</name>
+    <role>Perrin Aybara</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Dónal Finn</name>
+    <role>Mat Cauthon</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Barney Harris</name>
+    <role>Mat Cauthon</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Ceara Coveney</name>
+    <role>Elayne Trakand</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ayoola Smart</name>
+    <role>Aviendha</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kae Alexander</name>
+    <role>Min Farshaw</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Fleetwood</name>
+    <role>Liandrin Guirale</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Sophie Okonedo</name>
+    <role>Siuan Sanche</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Priyanka Bose</name>
+    <role>Alanna Mosvani</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Taylor Napier</name>
+    <role>Maksim</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <credits>Robert Jordan</credits>
+</tvshow>

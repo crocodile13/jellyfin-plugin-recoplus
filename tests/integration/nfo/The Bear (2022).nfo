@@ -1,0 +1,106 @@
+<tvshow>
+  <title>The Bear</title>
+  <originaltitle>The Bear</originaltitle>
+  <year>2022</year>
+  <premiered>2022-06-23</premiered>
+  <rating>8.151</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Comedy</genre>
+  <tag>suicide</tag>
+  <tag>chicago, illinois</tag>
+  <tag>restaurant</tag>
+  <tag>group therapy</tag>
+  <tag>family business</tag>
+  <tag>community</tag>
+  <tag>workplace</tag>
+  <tag>grief</tag>
+  <tag>food industry</tag>
+  <tag>chef</tag>
+  <tag>death of brother</tag>
+  <tag>small business</tag>
+  <tag>culinary arts</tag>
+  <tag>fine dining</tag>
+  <tag>panic attack</tag>
+  <tag>chosen family</tag>
+  <tag>drama</tag>
+  <studio>Hulu</studio>
+  <studio>FX Productions</studio>
+  <uniqueid type="tmdb" default="true">136315</uniqueid>
+  <uniqueid type="imdb">tt14452776</uniqueid>
+  <actor>
+    <name>Jeremy Allen White</name>
+    <role>Carmen 'Carmy' Berzatto</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ebon Moss-Bachrach</name>
+    <role>Richard 'Richie' Jerimovich</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ayo Edebiri</name>
+    <role>Sydney Adamu</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lionel Boyce</name>
+    <role>Marcus Brooks</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Abby Elliott</name>
+    <role>Natalie 'Sugar' Berzatto</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Matty Matheson</name>
+    <role>Neil Fak</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Liza Colón-Zayas</name>
+    <role>Bettina 'Tina' Marrero</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Callahan</name>
+    <role>Very Old Man</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Edwin Lee Gibson</name>
+    <role>Ebraheim</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Oliver Platt</name>
+    <role>Uncle Jimmy 'Cicero' Kalinowski</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Morton</name>
+    <role>Nancy Chore</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Molly Ringwald</name>
+    <role>Moderator</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Joel McHale</name>
+    <role>David Fields</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Zucchero</name>
+    <role>Chi-Chi</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Dunham</name>
+    <role>Evil Carrot</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

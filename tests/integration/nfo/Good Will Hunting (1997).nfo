@@ -1,0 +1,114 @@
+<movie>
+  <title>Good Will Hunting</title>
+  <originaltitle>Good Will Hunting</originaltitle>
+  <year>1997</year>
+  <premiered>1997-12-05</premiered>
+  <rating>8.169</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <tag>boston, massachusetts</tag>
+  <tag>mathematics</tag>
+  <tag>genius</tag>
+  <tag>male friendship</tag>
+  <tag>flashback</tag>
+  <tag>psychologist</tag>
+  <tag>janitor</tag>
+  <tag>dating</tag>
+  <tag>courtroom</tag>
+  <tag>group of friends</tag>
+  <tag>southie</tag>
+  <tag>college professor</tag>
+  <tag>prodigy</tag>
+  <tag>math genius</tag>
+  <tag>foster kid</tag>
+  <tag>fear of change</tag>
+  <tag>witty</tag>
+  <tag>admiring</tag>
+  <tag>abused as a child</tag>
+  <tag>massachusetts institute of technology (mit)</tag>
+  <tag>math professor</tag>
+  <studio>Lawrence Bender Productions</studio>
+  <studio>Be Gentlemen Limited Partnership</studio>
+  <studio>Miramax</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">489</uniqueid>
+  <uniqueid type="imdb">tt0119217</uniqueid>
+  <actor>
+    <name>Matt Damon</name>
+    <role>Will Hunting</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Robin Williams</name>
+    <role>Sean Maguire</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Affleck</name>
+    <role>Chuckie Sullivan</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Stellan Skarsgård</name>
+    <role>Gerald Lambeau</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Minnie Driver</name>
+    <role>Skylar</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Casey Affleck</name>
+    <role>Morgan O'Mally</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Cole Hauser</name>
+    <role>Billy McBride</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Vik Sahay</name>
+    <role>MIT Student</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>John Mighton</name>
+    <role>Tom</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel Majorowski</name>
+    <role>Krystyn</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Colleen McCauley</name>
+    <role>Cathy</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Mercier</name>
+    <role>Barbershop Quartet #1</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ralph St. George</name>
+    <role>Barbershop Quartet #2</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Rob Lynds</name>
+    <role>Barbershop Quartet #3</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Dan Washington</name>
+    <role>Barbershop Quartet #4</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Gus Van Sant</director>
+  <credits>Ben Affleck</credits>
+  <credits>Matt Damon</credits>
+</movie>

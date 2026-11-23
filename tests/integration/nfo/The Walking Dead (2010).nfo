@@ -1,0 +1,102 @@
+<tvshow>
+  <title>The Walking Dead</title>
+  <originaltitle>The Walking Dead</originaltitle>
+  <year>2010</year>
+  <premiered>2010-10-31</premiered>
+  <rating>8.076</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Drama</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>post-apocalyptic future</tag>
+  <tag>gore</tag>
+  <tag>undead</tag>
+  <tag>survival</tag>
+  <tag>zombie</tag>
+  <tag>based on graphic novel</tag>
+  <tag>horror</tag>
+  <studio>AMC</studio>
+  <studio>AMC Studios</studio>
+  <studio>Circle of Confusion</studio>
+  <studio>Valhalla Motion Pictures</studio>
+  <studio>Darkwoods Productions</studio>
+  <studio>Skybound Entertainment</studio>
+  <studio>Idiotbox</studio>
+  <uniqueid type="tmdb" default="true">1402</uniqueid>
+  <uniqueid type="imdb">tt1520211</uniqueid>
+  <actor>
+    <name>Andrew Lincoln</name>
+    <role>Rick Grimes</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Bernthal</name>
+    <role>Shane Walsh</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>David Morrissey</name>
+    <role>Philip Blake</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lauren Cohan</name>
+    <role>Maggie Greene</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Norman Reedus</name>
+    <role>Daryl Dixon</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Laurie Holden</name>
+    <role>Andrea Harrison</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Danai Gurira</name>
+    <role>Michonne Hawthorne</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Steven Yeun</name>
+    <role>Glenn Rhee</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey Dean Morgan</name>
+    <role>Negan Smith</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Melissa McBride</name>
+    <role>Carol Peletier</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey DeMunn</name>
+    <role>Dale Horvath</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Wayne Callies</name>
+    <role>Lori Grimes</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Samantha Morton</name>
+    <role>Alpha</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ryan Hurst</name>
+    <role>Beta</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Rooker</name>
+    <role>Merle Dixon</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

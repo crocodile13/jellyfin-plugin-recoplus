@@ -1,0 +1,119 @@
+<movie>
+  <title>Mamma Mia!</title>
+  <originaltitle>Mamma Mia!</originaltitle>
+  <year>2008</year>
+  <premiered>2008-07-03</premiered>
+  <rating>6.955</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Comedy</genre>
+  <genre>Romance</genre>
+  <tag>single parent</tag>
+  <tag>parent child relationship</tag>
+  <tag>greece</tag>
+  <tag>musical</tag>
+  <tag>romcom</tag>
+  <tag>based on play or musical</tag>
+  <tag>unknown father</tag>
+  <tag>single mother</tag>
+  <tag>based on song, poem or rhyme</tag>
+  <tag>hotel manager</tag>
+  <tag>nostalgic</tag>
+  <tag>young love</tag>
+  <tag>greek island</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>woman director</tag>
+  <tag>imminent wedding</tag>
+  <tag>mother daughter relationship</tag>
+  <tag>jukebox musical</tag>
+  <tag>daughter's wedding</tag>
+  <tag>abba</tag>
+  <tag>enthusiastic</tag>
+  <studio>Littlestar</studio>
+  <studio>Playtone</studio>
+  <studio>Internationale Filmproduktion Richter</studio>
+  <country>Germany</country>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">11631</uniqueid>
+  <uniqueid type="imdb">tt0795421</uniqueid>
+  <set tmdbcolid="458558">
+    <name>458558</name>
+  </set>
+  <actor>
+    <name>Amanda Seyfried</name>
+    <role>Sophie Sheridan</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Meryl Streep</name>
+    <role>Donna Sheridan</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Pierce Brosnan</name>
+    <role>Sam Carmichael</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Colin Firth</name>
+    <role>Harry Bright</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Stellan Skarsgård</name>
+    <role>Bill Anderson</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Christine Baranski</name>
+    <role>Tanya Chesham-Leigh</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Walters</name>
+    <role>Rosie Mulligan</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Dominic Cooper</name>
+    <role>Sky Rymand</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Niall Buggy</name>
+    <role>Father Alex</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ashley Lilley</name>
+    <role>Ali</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel McDowall</name>
+    <role>Lisa</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Jarvis</name>
+    <role>Eddie</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Philip Michael</name>
+    <role>Pepper</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Juan Pablo Di Pace</name>
+    <role>Petros</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Enzo Squillino Jr.</name>
+    <role>Gregoris</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Phyllida Lloyd</director>
+  <credits>Catherine Johnson</credits>
+</movie>

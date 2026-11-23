@@ -1,0 +1,106 @@
+<movie>
+  <title>Train to Busan</title>
+  <originaltitle>부산행</originaltitle>
+  <year>2016</year>
+  <premiered>2016-07-20</premiered>
+  <rating>7.7</rating>
+  <mpaa>NR</mpaa>
+  <genre>Action</genre>
+  <genre>Horror</genre>
+  <genre>Thriller</genre>
+  <genre>Adventure</genre>
+  <tag>zombie</tag>
+  <tag>train</tag>
+  <tag>survival horror</tag>
+  <tag>pandemic</tag>
+  <tag>busan, south korea</tag>
+  <tag>south korea</tag>
+  <studio>Next Entertainment World</studio>
+  <studio>RedPeter Films</studio>
+  <studio>Contents Panda</studio>
+  <studio>Union Investment Partners</studio>
+  <studio>KTB Network</studio>
+  <country>South Korea</country>
+  <uniqueid type="tmdb" default="true">396535</uniqueid>
+  <uniqueid type="imdb">tt5700672</uniqueid>
+  <set tmdbcolid="619537">
+    <name>619537</name>
+  </set>
+  <actor>
+    <name>Gong Yoo</name>
+    <role>Seok-woo</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Su-an</name>
+    <role>Seo Soo-ahn</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jung Yu-mi</name>
+    <role>Sung-gyeong</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Don Lee</name>
+    <role>Sang-hwa</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Woo-shik</name>
+    <role>Min Yeong-guk</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>An So-hee</name>
+    <role>Jin-hee</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Eui-sung</name>
+    <role>Yong-suk</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ye Su-jeong</name>
+    <role>In-gil</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Park Myung-shin</name>
+    <role>Jong-gil</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Gwi-hwa</name>
+    <role>Homeless Man</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jeong Seok-yong</name>
+    <role>Captain of KTX</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Chang-hwan</name>
+    <role>Kim Jin-mo</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jang Hyuk-jin</name>
+    <role>Ki-chul</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Shim Eun-kyung</name>
+    <role>Stowaway</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Joo-sil</name>
+    <role>Seok-woo's Mother</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Yeon Sang-ho</director>
+  <credits>Park Joo-suk</credits>
+</movie>

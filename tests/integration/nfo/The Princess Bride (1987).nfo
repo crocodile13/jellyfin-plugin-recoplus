@@ -1,0 +1,119 @@
+<movie>
+  <title>The Princess Bride</title>
+  <originaltitle>The Princess Bride</originaltitle>
+  <year>1987</year>
+  <premiered>1987-09-25</premiered>
+  <rating>7.711</rating>
+  <mpaa>PG</mpaa>
+  <genre>Fantasy</genre>
+  <genre>Comedy</genre>
+  <genre>Romance</genre>
+  <genre>Adventure</genre>
+  <tag>dreams</tag>
+  <tag>based on novel or book</tag>
+  <tag>narration</tag>
+  <tag>wrestling</tag>
+  <tag>miracle</tag>
+  <tag>sword fight</tag>
+  <tag>revenge</tag>
+  <tag>boat chase</tag>
+  <tag>pirate</tag>
+  <tag>wedding</tag>
+  <tag>swashbuckler</tag>
+  <tag>evil prince</tag>
+  <tag>screwball</tag>
+  <tag>impersonation</tag>
+  <tag>giant man</tag>
+  <tag>story within the story</tag>
+  <tag>hidden identity</tag>
+  <tag>fictitious country</tag>
+  <tag>grandfather grandson relationship</tag>
+  <tag>battle of wits</tag>
+  <tag>adoring</tag>
+  <tag>enchant</tag>
+  <tag>fairytale</tag>
+  <studio>The Princess Bride</studio>
+  <studio>Buttercup Films</studio>
+  <studio>Act III Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">2493</uniqueid>
+  <uniqueid type="imdb">tt0093779</uniqueid>
+  <actor>
+    <name>Cary Elwes</name>
+    <role>Westley</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Robin Wright</name>
+    <role>The Princess Bride</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Mandy Patinkin</name>
+    <role>Inigo Montoya</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Sarandon</name>
+    <role>Prince Humperdinck</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Guest</name>
+    <role>Count Rugen</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Wallace Shawn</name>
+    <role>Vizzini</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>André Roussimoff</name>
+    <role>Fezzik</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Fred Savage</name>
+    <role>The Grandson</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Falk</name>
+    <role>The Grandfather</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Cook</name>
+    <role>The Impressive Clergyman</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Mel Smith</name>
+    <role>The Albino</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Carol Kane</name>
+    <role>Valerie</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Billy Crystal</name>
+    <role>Miracle Max</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Dyson</name>
+    <role>The Queen</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Margery Mason</name>
+    <role>The Ancient Booer</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Rob Reiner</director>
+  <credits>William Goldman</credits>
+  <credits>William Goldman</credits>
+</movie>

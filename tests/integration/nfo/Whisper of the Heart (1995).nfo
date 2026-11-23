@@ -1,0 +1,113 @@
+<movie>
+  <title>Whisper of the Heart</title>
+  <originaltitle>耳をすませば</originaltitle>
+  <year>1995</year>
+  <premiered>1995-07-15</premiered>
+  <rating>7.939</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Drama</genre>
+  <genre>Family</genre>
+  <tag>dreams</tag>
+  <tag>library</tag>
+  <tag>italy</tag>
+  <tag>violin</tag>
+  <tag>writing</tag>
+  <tag>education</tag>
+  <tag>love</tag>
+  <tag>train</tag>
+  <tag>based on manga</tag>
+  <tag>cartoon cat</tag>
+  <tag>high school student</tag>
+  <tag>nostalgic</tag>
+  <tag>violin maker</tag>
+  <tag>grade</tag>
+  <tag>shoujo</tag>
+  <tag>anime</tag>
+  <tag>japanese junior high schooler</tag>
+  <tag>whimsical</tag>
+  <studio>Studio Ghibli</studio>
+  <studio>Nippon Television Network Corporation</studio>
+  <studio>Tokuma Shoten</studio>
+  <studio>Hakuhodo</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">37797</uniqueid>
+  <uniqueid type="imdb">tt0113824</uniqueid>
+  <actor>
+    <name>Yoko Honna</name>
+    <role>Shizuku Tsukishima (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Issey Takahashi</name>
+    <role>Seiji Amasawa (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Takashi Tachibana</name>
+    <role>Seiya Tsukishima (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Shigeru Muroi</name>
+    <role>Asako Tsukishima (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Shigeru Tsuyuguchi</name>
+    <role>Baron (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Keiju Kobayashi</name>
+    <role>Shiro Nishi (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Yorie Yamashita</name>
+    <role>Shiho Tsukishima (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Minami Takayama</name>
+    <role>Ms. Kosaka (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Maiko Kayama</name>
+    <role>Yuko Harada (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Yoshimi Nakajima</name>
+    <role>Sugimura (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Mayumi Izuka</name>
+    <role>Kinuyo (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Mai Chiba</name>
+    <role>Nao (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Miku Kuga</name>
+    <role>Gaya (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tadamasa Murano</name>
+    <role>(voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kosuke Yoshida</name>
+    <role>(voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Yoshifumi Kondo</director>
+  <credits>Hayao Miyazaki</credits>
+</movie>

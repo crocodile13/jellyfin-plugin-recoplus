@@ -1,0 +1,113 @@
+<movie>
+  <title>Eternal Sunshine of the Spotless Mind</title>
+  <originaltitle>Eternal Sunshine of the Spotless Mind</originaltitle>
+  <year>2004</year>
+  <premiered>2004-03-19</premiered>
+  <rating>8.091</rating>
+  <mpaa>R</mpaa>
+  <genre>Science Fiction</genre>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>new york city</tag>
+  <tag>regret</tag>
+  <tag>jealousy</tag>
+  <tag>deja vu</tag>
+  <tag>amnesia</tag>
+  <tag>dreams</tag>
+  <tag>operation</tag>
+  <tag>melancholy</tag>
+  <tag>relationship problems</tag>
+  <tag>love</tag>
+  <tag>memory</tag>
+  <tag>brainwashing</tag>
+  <tag>relationship</tag>
+  <tag>heartbreak</tag>
+  <tag>nonlinear timeline</tag>
+  <tag>2000s</tag>
+  <tag>memory manipulation</tag>
+  <tag>psychological drama</tag>
+  <tag>absurd</tag>
+  <studio>Focus Features</studio>
+  <studio>Anonymous Content</studio>
+  <studio>This is that</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">38</uniqueid>
+  <uniqueid type="imdb">tt0338013</uniqueid>
+  <actor>
+    <name>Jim Carrey</name>
+    <role>Joel Barish</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Winslet</name>
+    <role>Clementine Kruczynski</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kirsten Dunst</name>
+    <role>Mary</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Ruffalo</name>
+    <role>Stan</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Elijah Wood</name>
+    <role>Patrick</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Wilkinson</name>
+    <role>Dr. Mierzwiak</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jane Adams</name>
+    <role>Carrie</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>David Cross</name>
+    <role>Rob</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Deirdre O'Connell</name>
+    <role>Hollis</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas Jay Ryan</name>
+    <role>Frank</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ryan Whitney</name>
+    <role>Young Joel</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Lola Daehler</name>
+    <role>Young Clementine</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Debbon Ayer</name>
+    <role>Joel's Mother</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Gerry Robert Byrne</name>
+    <role>Train Conductor</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Price</name>
+    <role>Young Bully</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Michel Gondry</director>
+  <credits>Charlie Kaufman</credits>
+</movie>

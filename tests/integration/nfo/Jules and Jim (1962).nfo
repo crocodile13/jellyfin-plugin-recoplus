@@ -1,0 +1,106 @@
+<movie>
+  <title>Jules and Jim</title>
+  <originaltitle>Jules et Jim</originaltitle>
+  <year>1962</year>
+  <premiered>1962-01-23</premiered>
+  <rating>7.535</rating>
+  <mpaa>NR</mpaa>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>adultery</tag>
+  <tag>friendship</tag>
+  <tag>prostitute</tag>
+  <tag>jealousy</tag>
+  <tag>paris, france</tag>
+  <tag>based on novel or book</tag>
+  <tag>love triangle</tag>
+  <tag>musician</tag>
+  <tag>marriage</tag>
+  <tag>love</tag>
+  <tag>black and white</tag>
+  <tag>polyamory</tag>
+  <tag>austrian</tag>
+  <tag>1910s</tag>
+  <studio>Les Films du Carrosse</studio>
+  <studio>Sédif Productions (as S.E.D.I.F.)</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">1628</uniqueid>
+  <uniqueid type="imdb">tt0055032</uniqueid>
+  <actor>
+    <name>Jeanne Moreau</name>
+    <role>Catherine</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Oskar Werner</name>
+    <role>Jules</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Henri Serre</name>
+    <role>Jim</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Marie Dubois</name>
+    <role>Thérèse</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sabine Haudepin</name>
+    <role>Sabine</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Vanna Urbino</name>
+    <role>Gilberte</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Serge Rezvani</name>
+    <role>Albert</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Anny Nelsen</name>
+    <role>Lucie</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Subor</name>
+    <role>Récitant / Narrator (voix)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Danielle Bassiak</name>
+    <role>Le compagnon d'Albert</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Elen Bober</name>
+    <role>Mathilde</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Pierre Fabre</name>
+    <role>Homme Ivre au café</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Dominique Lacarrière</name>
+    <role>Une des femmes</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Bernard Largemains</name>
+    <role>Merlin</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Noelle</name>
+    <role>Birgitta</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>François Truffaut</director>
+  <credits>Henri-Pierre Roché</credits>
+</movie>

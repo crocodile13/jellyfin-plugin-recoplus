@@ -1,0 +1,117 @@
+<movie>
+  <title>Asterix &amp; Obelix: Mission Cleopatra</title>
+  <originaltitle>Astérix &amp; Obélix : Mission Cléopâtre</originaltitle>
+  <year>2002</year>
+  <premiered>2002-01-30</premiered>
+  <rating>7.363</rating>
+  <mpaa>PG</mpaa>
+  <genre>Family</genre>
+  <genre>Fantasy</genre>
+  <genre>Comedy</genre>
+  <genre>Adventure</genre>
+  <tag>egypt</tag>
+  <tag>magic</tag>
+  <tag>palace</tag>
+  <tag>civil engineer</tag>
+  <tag>cleopatra</tag>
+  <tag>ancient rome</tag>
+  <tag>ancient world</tag>
+  <tag>based on children's book</tag>
+  <tag>ancient egypt</tag>
+  <tag>grand</tag>
+  <tag>sympathetic</tag>
+  <studio>Pathé</studio>
+  <studio>La Petite Reine</studio>
+  <studio>Katharina</studio>
+  <studio>Renn Productions</studio>
+  <studio>TF1 Films Production</studio>
+  <studio>Chez Wam</studio>
+  <studio>CP Medien</studio>
+  <studio>KC Medien</studio>
+  <studio>Mediterranean Films</studio>
+  <country>France</country>
+  <country>Germany</country>
+  <country>Malta</country>
+  <uniqueid type="tmdb" default="true">2899</uniqueid>
+  <uniqueid type="imdb">tt0250223</uniqueid>
+  <set tmdbcolid="2396">
+    <name>2396</name>
+  </set>
+  <actor>
+    <name>Gérard Depardieu</name>
+    <role>Obélix</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Christian Clavier</name>
+    <role>Astérix</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jamel Debbouze</name>
+    <role>Numérobis</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Monica Bellucci</name>
+    <role>Cléopâtre</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Alain Chabat</name>
+    <role>Jules César</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Claude Rich</name>
+    <role>Panoramix</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Gérard Darmon</name>
+    <role>Amonbofils</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Édouard Baer</name>
+    <role>Otis</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Dieudonné</name>
+    <role>Caius Céplus</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Mouss Diouf</name>
+    <role>Baba, pirate lookout</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Marina Foïs</name>
+    <role>Sucettalanis</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Bernard Farcy</name>
+    <role>Captain Barbe-Rouge</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jean Benguigui</name>
+    <role>Malococsis</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Crémadès</name>
+    <role>Triple-Patte</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-Paul Rouve</name>
+    <role>Caius antivirus</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Alain Chabat</director>
+  <credits>Alain Chabat</credits>
+</movie>

@@ -1,0 +1,103 @@
+<tvshow>
+  <title>The Last of Us</title>
+  <originaltitle>The Last of Us</originaltitle>
+  <year>2023</year>
+  <premiered>2023-01-15</premiered>
+  <rating>8.391</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <tag>people smuggling</tag>
+  <tag>post-apocalyptic future</tag>
+  <tag>infection</tag>
+  <tag>survival</tag>
+  <tag>epidemic</tag>
+  <tag>based on video game</tag>
+  <studio>HBO</studio>
+  <studio>PlayStation Productions</studio>
+  <studio>Sony Pictures Television</studio>
+  <studio>Naughty Dog</studio>
+  <studio>Word Games</studio>
+  <studio>The Mighty Mint</studio>
+  <uniqueid type="tmdb" default="true">100088</uniqueid>
+  <uniqueid type="imdb">tt3581920</uniqueid>
+  <actor>
+    <name>Bella Ramsey</name>
+    <role>Ellie Williams</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Gabriel Luna</name>
+    <role>Tommy Miller</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Isabela Merced</name>
+    <role>Dina</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Young Mazino</name>
+    <role>Jesse</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Pedro Pascal</name>
+    <role>Joel Miller</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Pedro Pascal</name>
+    <role>Joel Miller (uncredited)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>John Hannah</name>
+    <role>Dr. Newman - Scientist #2</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Brener</name>
+    <role>Murray</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Heyerdahl</name>
+    <role>Dr. Schoenheist - Scientist #1</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Brad Leland</name>
+    <role>Mr. Adler</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Marcia Bennett</name>
+    <role>Mrs. Adler</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Brendan Fletcher</name>
+    <role>Robert</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jerry Wasserman</name>
+    <role>Abe</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Wendy Gorling</name>
+    <role>Nana</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jessica Belbin</name>
+    <role>Mrs. Lauterstein</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Haysam Kadri</name>
+    <role>Nasir</role>
+    <sortorder>15</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,118 @@
+<movie>
+  <title>Mystic River</title>
+  <originaltitle>Mystic River</originaltitle>
+  <year>2003</year>
+  <premiered>2003-10-08</premiered>
+  <rating>7.743</rating>
+  <mpaa>R</mpaa>
+  <genre>Thriller</genre>
+  <genre>Drama</genre>
+  <genre>Mystery</genre>
+  <genre>Crime</genre>
+  <tag>child abuse</tag>
+  <tag>sexual abuse</tag>
+  <tag>workers' quarter</tag>
+  <tag>based on novel or book</tag>
+  <tag>loss of loved one</tag>
+  <tag>suppressed past</tag>
+  <tag>boston, massachusetts</tag>
+  <tag>repayment</tag>
+  <tag>arbitrary law</tag>
+  <tag>loyalty</tag>
+  <tag>massachusetts</tag>
+  <tag>psychological thriller</tag>
+  <tag>whodunit</tag>
+  <tag>biting</tag>
+  <tag>guilt</tag>
+  <tag>childhood sexual abuse</tag>
+  <tag>grim</tag>
+  <tag>vengeance</tag>
+  <tag>poker race</tag>
+  <tag>sex abuse</tag>
+  <tag>forceful</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Village Roadshow Pictures</studio>
+  <studio>NPV Entertainment</studio>
+  <studio>Malpaso Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">322</uniqueid>
+  <uniqueid type="imdb">tt0327056</uniqueid>
+  <actor>
+    <name>Sean Penn</name>
+    <role>Jimmy Markum</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Robbins</name>
+    <role>Dave Boyle</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Bacon</name>
+    <role>Sean Devine</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Laurence Fishburne</name>
+    <role>Whitey Powers</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Marcia Gay Harden</name>
+    <role>Celeste Boyle</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Laura Linney</name>
+    <role>Annabeth Markum</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Chapman</name>
+    <role>Val Savage</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Guiry</name>
+    <role>Brendan Harris</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Emmy Rossum</name>
+    <role>Katie Markum</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Spencer Treat Clark</name>
+    <role>Silent Ray Harris</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Mackin</name>
+    <role>John O'Shea</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Nelson</name>
+    <role>Nick Savage</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Wahlberg</name>
+    <role>Kevin Savage</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jenny O'Hara</name>
+    <role>Esther Harris</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>John Doman</name>
+    <role>Driver</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Clint Eastwood</director>
+  <credits>Dennis Lehane</credits>
+  <credits>Brian Helgeland</credits>
+</movie>

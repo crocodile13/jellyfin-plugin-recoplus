@@ -1,0 +1,118 @@
+<movie>
+  <title>Despicable Me</title>
+  <originaltitle>Despicable Me</originaltitle>
+  <year>2010</year>
+  <premiered>2010-07-08</premiered>
+  <rating>7.264</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Crime</genre>
+  <genre>Science Fiction</genre>
+  <genre>Family</genre>
+  <tag>moon</tag>
+  <tag>parent child relationship</tag>
+  <tag>orphanage</tag>
+  <tag>villain</tag>
+  <tag>adoptive father</tag>
+  <tag>satire</tag>
+  <tag>life's dream</tag>
+  <tag>rivalry</tag>
+  <tag>ballet</tag>
+  <tag>stealing</tag>
+  <tag>little girl</tag>
+  <tag>orphan</tag>
+  <tag>tomboy</tag>
+  <tag>intelligent</tag>
+  <tag>evil doctor</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>supervillain</tag>
+  <tag>3d animation</tag>
+  <studio>Illumination</studio>
+  <studio>Universal Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">20352</uniqueid>
+  <uniqueid type="imdb">tt1323594</uniqueid>
+  <set tmdbcolid="86066">
+    <name>86066</name>
+  </set>
+  <actor>
+    <name>Steve Carell</name>
+    <role>Gru (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Segel</name>
+    <role>Vector (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Russell Brand</name>
+    <role>Dr Nefario (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Miranda Cosgrove</name>
+    <role>Margo (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Dana Gaier Ellis</name>
+    <role>Edith (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Elsie Fisher</name>
+    <role>Agnes (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Pierre Coffin</name>
+    <role>Tim the Minion / Bob the Minion / Mark the Minion / Phil the Minion / Stuart the Minion (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Andrews</name>
+    <role>Gru's Mom (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Will Arnett</name>
+    <role>Mr. Perkins (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kristen Wiig</name>
+    <role>Miss Hattie (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Renaud</name>
+    <role>Dave the Minion (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jemaine Clement</name>
+    <role>Jerry the Minion (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jack McBrayer</name>
+    <role>Carnival Barker / Tourist Dad (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Danny McBride</name>
+    <role>Fred McDade (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Mindy Kaling</name>
+    <role>Tourist Mom (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Pierre Coffin</director>
+  <director>Chris Renaud</director>
+  <credits>Ken Daurio</credits>
+  <credits>Cinco Paul</credits>
+</movie>

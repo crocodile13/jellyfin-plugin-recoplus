@@ -1,0 +1,122 @@
+<movie>
+  <title>Everything Everywhere All at Once</title>
+  <originaltitle>Everything Everywhere All at Once</originaltitle>
+  <year>2022</year>
+  <premiered>2022-03-24</premiered>
+  <rating>7.713</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Science Fiction</genre>
+  <tag>mother</tag>
+  <tag>martial arts</tag>
+  <tag>kung fu</tag>
+  <tag>nihilism</tag>
+  <tag>philosophy</tag>
+  <tag>generations conflict</tag>
+  <tag>chinese woman</tag>
+  <tag>surrealism</tag>
+  <tag>laundromat</tag>
+  <tag>chinese</tag>
+  <tag>east asian lead</tag>
+  <tag>divorce</tag>
+  <tag>family</tag>
+  <tag>lgbt</tag>
+  <tag>hot dog</tag>
+  <tag>asian woman</tag>
+  <tag>chinese immigrant</tag>
+  <tag>mother daughter relationship</tag>
+  <tag>action comedy</tag>
+  <tag>asian american</tag>
+  <tag>intergenerational trauma</tag>
+  <tag>internal revenue service</tag>
+  <tag>interdimensional travel</tag>
+  <tag>multiverse</tag>
+  <studio>IAC Films</studio>
+  <studio>AGBO</studio>
+  <studio>Ley Line Entertainment</studio>
+  <studio>Year of the Rat</studio>
+  <studio>A24</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">545611</uniqueid>
+  <uniqueid type="imdb">tt6710474</uniqueid>
+  <actor>
+    <name>Michelle Yeoh</name>
+    <role>Evelyn Wang</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Stephanie Hsu</name>
+    <role>Joy Wang / Jobu Tupaki</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ke Huy Quan</name>
+    <role>Waymond Wang</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>James Hong</name>
+    <role>Gong Gong</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jamie Lee Curtis</name>
+    <role>Deirdre Beaubeirdre</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tallie Medel</name>
+    <role>Becky Sregor</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jenny Slate</name>
+    <role>Big Nose</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Shum Jr.</name>
+    <role>Chad</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Biff Wiff</name>
+    <role>Rick</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sunita Mani</name>
+    <role>TV Musical - Queen</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Aaron Lazar</name>
+    <role>TV Musical - Soldier</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Le</name>
+    <role>Alpha Jumper - Trophy</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Andy Le</name>
+    <role>Alpha Jumper - Bigger Trophy</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Narayana Cabral</name>
+    <role>Security Guard</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Chelsey Goldsmith</name>
+    <role>Security Guard</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Daniel Scheinert</director>
+  <director>Daniel Kwan</director>
+  <credits>Daniel Kwan</credits>
+  <credits>Daniel Scheinert</credits>
+</movie>

@@ -1,0 +1,108 @@
+<tvshow>
+  <title>Midnight Mass</title>
+  <originaltitle>Midnight Mass</originaltitle>
+  <year>2021</year>
+  <premiered>2021-09-24</premiered>
+  <rating>7.566</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Mystery</genre>
+  <genre>Drama</genre>
+  <tag>sheriff</tag>
+  <tag>island</tag>
+  <tag>drug dealer</tag>
+  <tag>miracle</tag>
+  <tag>vampire</tag>
+  <tag>addiction</tag>
+  <tag>alcoholism</tag>
+  <tag>priest</tag>
+  <tag>mysterious man</tag>
+  <tag>religion</tag>
+  <tag>miniseries</tag>
+  <tag>church</tag>
+  <tag>ex-con</tag>
+  <tag>catholicism</tag>
+  <tag>fishing boat</tag>
+  <tag>shocking</tag>
+  <tag>complex</tag>
+  <tag>horror</tag>
+  <tag>intense</tag>
+  <studio>Netflix</studio>
+  <studio>Intrepid Pictures</studio>
+  <uniqueid type="tmdb" default="true">97400</uniqueid>
+  <uniqueid type="imdb">tt10574558</uniqueid>
+  <actor>
+    <name>Hamish Linklater</name>
+    <role>Father Paul Hill</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Zach Gilford</name>
+    <role>Riley Flynn</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Siegel</name>
+    <role>Erin Greene</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Samantha Sloyan</name>
+    <role>Bev Keane</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Rahul Kohli</name>
+    <role>Sheriff Hassan</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Henry Thomas</name>
+    <role>Ed Flynn</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kristin Lehman</name>
+    <role>Annie Flynn</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Igby Rigney</name>
+    <role>Warren Flynn</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Annarah Cymone</name>
+    <role>Leeza Scarborough</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Annabeth Gish</name>
+    <role>Dr. Sarah Gunning</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Alex Essoe</name>
+    <role>Mildred Gunning</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Biedel</name>
+    <role>Sturge</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Trucco</name>
+    <role>Wade Scarborough</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Crystal Balint</name>
+    <role>Dolly Scarborough</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rahul Abburi</name>
+    <role>Ali Hassan</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

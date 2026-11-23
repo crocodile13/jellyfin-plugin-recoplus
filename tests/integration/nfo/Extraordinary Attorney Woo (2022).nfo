@@ -1,0 +1,108 @@
+<tvshow>
+  <title>Extraordinary Attorney Woo</title>
+  <originaltitle>이상한 변호사 우영우</originaltitle>
+  <year>2022</year>
+  <premiered>2022-06-29</premiered>
+  <rating>8.49</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Drama</genre>
+  <tag>autism</tag>
+  <tag>court case</tag>
+  <tag>court</tag>
+  <tag>workplace</tag>
+  <tag>romance</tag>
+  <tag>slice of life</tag>
+  <tag>lawyer</tag>
+  <tag>female protagonist</tag>
+  <tag>courtroom</tag>
+  <tag>law firm</tag>
+  <tag>inspiring</tag>
+  <tag>social issues</tag>
+  <tag>father daughter relationship</tag>
+  <tag>slight romance</tag>
+  <tag>slow burn romance</tag>
+  <tag>heartfelt</tag>
+  <tag>legal</tag>
+  <tag>romantic</tag>
+  <studio>ENA</studio>
+  <studio>AStory</studio>
+  <studio>Nangman Crew</studio>
+  <studio>KT Studio Genie</studio>
+  <uniqueid type="tmdb" default="true">197067</uniqueid>
+  <uniqueid type="imdb">tt20869502</uniqueid>
+  <actor>
+    <name>Park Eun-bin</name>
+    <role>Woo Young-woo</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kang Tae-oh</name>
+    <role>Lee Jun-ho</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kang Ki-young</name>
+    <role>Jung Myeong-seok</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jeon Bae-soo</name>
+    <role>Woo Gwang-ho</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ha Yoon-kyung</name>
+    <role>Choi Su-yeon</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Joo Jong-hyuk</name>
+    <role>Kwon Min-woo</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Baek Ji-won</name>
+    <role>Han Seon-young</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jin Kyung</name>
+    <role>Tae Su-mi</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Joo Hyun-young</name>
+    <role>Dong Geu-ra-mi</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Im Sung-jae</name>
+    <role>Kim Min-sik</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Do-gyeong</name>
+    <role>Park Gyu-sik</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kang Ae-sim</name>
+    <role>Choi Yeong-ran</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Yun Ju-sang</name>
+    <role>Kim Jeong-gu</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ahn Ha-young</name>
+    <role>Kim Hwa-yeong</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Park Ji-hoon</name>
+    <role>Hong Jin-uk</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

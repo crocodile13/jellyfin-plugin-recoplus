@@ -1,0 +1,136 @@
+<movie>
+  <title>The Hobbit: An Unexpected Journey</title>
+  <originaltitle>The Hobbit: An Unexpected Journey</originaltitle>
+  <year>2012</year>
+  <premiered>2012-12-12</premiered>
+  <rating>7.4</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <genre>Action</genre>
+  <tag>based on novel or book</tag>
+  <tag>elves</tag>
+  <tag>dwarf</tag>
+  <tag>magic</tag>
+  <tag>horseback riding</tag>
+  <tag>sword</tag>
+  <tag>burglar</tag>
+  <tag>legend</tag>
+  <tag>riddle</tag>
+  <tag>mountain</tag>
+  <tag>contract</tag>
+  <tag>travel</tag>
+  <tag>troll</tag>
+  <tag>creature</tag>
+  <tag>thunderstorm</tag>
+  <tag>fantasy world</tag>
+  <tag>wizard</tag>
+  <tag>epic battle</tag>
+  <tag>lost ring</tag>
+  <tag>journey</tag>
+  <tag>ring</tag>
+  <tag>tunnel</tag>
+  <tag>underground lake</tag>
+  <tag>buried treasure</tag>
+  <tag>invisibility</tag>
+  <tag>quest</tag>
+  <tag>live action and animation</tag>
+  <tag>high fantasy</tag>
+  <tag>sword and sorcery</tag>
+  <tag>trekking</tag>
+  <tag>goblins</tag>
+  <tag>good versus evil</tag>
+  <tag>fantasy creature</tag>
+  <tag>hobbit</tag>
+  <studio>New Line Cinema</studio>
+  <studio>Metro-Goldwyn-Mayer</studio>
+  <studio>WingNut Films</studio>
+  <country>New Zealand</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">49051</uniqueid>
+  <uniqueid type="imdb">tt0903624</uniqueid>
+  <set tmdbcolid="121938">
+    <name>121938</name>
+  </set>
+  <actor>
+    <name>Martin Freeman</name>
+    <role>Bilbo Baggins</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ian McKellen</name>
+    <role>Gandalf the Grey</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Armitage</name>
+    <role>Thorin Oakenshield</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>James Nesbitt</name>
+    <role>Bofur</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ken Stott</name>
+    <role>Balin</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Sylvester McCoy</name>
+    <role>Radagast the Brown</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Humphries</name>
+    <role>The Great Goblin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Dean O'Gorman</name>
+    <role>Fili</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Aidan Turner</name>
+    <role>Kili</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Graham McTavish</name>
+    <role>Dwalin</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Brown</name>
+    <role>Ori</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Hambleton</name>
+    <role>Gloin / William Troll</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>John Callen</name>
+    <role>Oin</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Hadlow</name>
+    <role>Dori / Bert Troll</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jed Brophy</name>
+    <role>Nori</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Peter Jackson</director>
+  <credits>Guillermo del Toro</credits>
+  <credits>Fran Walsh</credits>
+  <credits>Philippa Boyens</credits>
+  <credits>Peter Jackson</credits>
+  <credits>J. R. R. Tolkien</credits>
+</movie>

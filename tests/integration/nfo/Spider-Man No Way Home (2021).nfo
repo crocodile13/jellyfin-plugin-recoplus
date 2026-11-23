@@ -1,0 +1,124 @@
+<movie>
+  <title>Spider-Man: No Way Home</title>
+  <originaltitle>Spider-Man: No Way Home</originaltitle>
+  <year>2021</year>
+  <premiered>2021-12-15</premiered>
+  <rating>7.944</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Science Fiction</genre>
+  <tag>new york city</tag>
+  <tag>hero</tag>
+  <tag>showdown</tag>
+  <tag>magic</tag>
+  <tag>loss of loved one</tag>
+  <tag>secret identity</tag>
+  <tag>superhero</tag>
+  <tag>villain</tag>
+  <tag>portal</tag>
+  <tag>based on comic</tag>
+  <tag>sequel</tag>
+  <tag>vigilante</tag>
+  <tag>superhero team</tag>
+  <tag>masked vigilante</tag>
+  <tag>alternative reality</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>masked superhero</tag>
+  <tag>fight for justice</tag>
+  <tag>grim</tag>
+  <tag>teen superhero</tag>
+  <tag>superhero teamup</tag>
+  <tag>returning hero</tag>
+  <tag>teamwork</tag>
+  <tag>multiverse</tag>
+  <studio>Marvel Studios</studio>
+  <studio>Pascal Pictures</studio>
+  <studio>Columbia Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">634649</uniqueid>
+  <uniqueid type="imdb">tt10872600</uniqueid>
+  <set tmdbcolid="531241">
+    <name>531241</name>
+  </set>
+  <actor>
+    <name>Tom Holland</name>
+    <role>Peter Parker / Spider-Man</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Zendaya</name>
+    <role>MJ</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Benedict Cumberbatch</name>
+    <role>Doctor Strange</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jacob Batalon</name>
+    <role>Ned Leeds</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Favreau</name>
+    <role>Happy Hogan</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jamie Foxx</name>
+    <role>Max Dillon / Electro</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Willem Dafoe</name>
+    <role>Norman Osborn / Green Goblin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Alfred Molina</name>
+    <role>Dr. Otto Octavius / Doc Ock</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Benedict Wong</name>
+    <role>Wong</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Revolori</name>
+    <role>Flash Thompson</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Marisa Tomei</name>
+    <role>May Parker</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Garfield</name>
+    <role>Peter Parker / Spider-Man</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tobey Maguire</name>
+    <role>Peter Parker / Spider-Man</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Angourie Rice</name>
+    <role>Betty Brant</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Arian Moayed</name>
+    <role>Agent Cleary</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jon Watts</director>
+  <credits>Chris McKenna</credits>
+  <credits>Erik Sommers</credits>
+</movie>

@@ -1,0 +1,129 @@
+<movie>
+  <title>Casino</title>
+  <originaltitle>Casino</originaltitle>
+  <year>1995</year>
+  <premiered>1995-11-22</premiered>
+  <rating>8</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>drug abuse</tag>
+  <tag>casino</tag>
+  <tag>based on novel or book</tag>
+  <tag>poker</tag>
+  <tag>italian american</tag>
+  <tag>gambling</tag>
+  <tag>1970s</tag>
+  <tag>fbi</tag>
+  <tag>pimp</tag>
+  <tag>greed</tag>
+  <tag>cocaine</tag>
+  <tag>overdose</tag>
+  <tag>marriage</tag>
+  <tag>melancholy</tag>
+  <tag>car bomb</tag>
+  <tag>rise and fall</tag>
+  <tag>money</tag>
+  <tag>murder</tag>
+  <tag>organized crime</tag>
+  <tag>mafia</tag>
+  <tag>jewish american</tag>
+  <tag>las vegas</tag>
+  <tag>desert</tag>
+  <tag>control freak</tag>
+  <tag>safe deposit box</tag>
+  <tag>1980s</tag>
+  <tag>dysfunctional relationship</tag>
+  <tag>dramatic</tag>
+  <tag>suspenseful</tag>
+  <tag>brutal violence</tag>
+  <tag>fbi surveillance</tag>
+  <tag>trust &amp; betrayal</tag>
+  <studio>Universal Pictures</studio>
+  <studio>Syalis DA</studio>
+  <studio>Légende Films</studio>
+  <studio>Cappa/De Fina Productions</studio>
+  <country>France</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">524</uniqueid>
+  <uniqueid type="imdb">tt0112641</uniqueid>
+  <actor>
+    <name>Robert De Niro</name>
+    <role>Sam 'Ace' Rothstein</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Sharon Stone</name>
+    <role>Ginger McKenna</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Pesci</name>
+    <role>Nicky Santoro</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>James Woods</name>
+    <role>Lester Diamond</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Don Rickles</name>
+    <role>Billy Sherbert</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Alan King</name>
+    <role>Andy Stone</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Pollak</name>
+    <role>Phillip Green</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>L.Q. Jones</name>
+    <role>Pat Webb</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Dick Smothers</name>
+    <role>Senator</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Vincent</name>
+    <role>Frank Marino</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>John Bloom</name>
+    <role>Don Ward</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Pasquale Cajano</name>
+    <role>Remo Gaggi</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Melissa Prophet</name>
+    <role>Jennifer Santoro</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Allison</name>
+    <role>John Nance</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Vinny Vella</name>
+    <role>Artie Piscano</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Martin Scorsese</director>
+  <credits>Martin Scorsese</credits>
+  <credits>Nicholas Pileggi</credits>
+  <credits>Nicholas Pileggi</credits>
+</movie>

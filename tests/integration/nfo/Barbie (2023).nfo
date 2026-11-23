@@ -1,0 +1,125 @@
+<movie>
+  <title>Barbie</title>
+  <originaltitle>Barbie</originaltitle>
+  <year>2023</year>
+  <premiered>2023-07-19</premiered>
+  <rating>6.902</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Comedy</genre>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <tag>feminism</tag>
+  <tag>satire</tag>
+  <tag>patriarchy</tag>
+  <tag>social satire</tag>
+  <tag>based on toy</tag>
+  <tag>female protagonist</tag>
+  <tag>fish out of water</tag>
+  <tag>womanhood</tag>
+  <tag>doll</tag>
+  <tag>reality vs fantasy</tag>
+  <tag>fantasy world</tag>
+  <tag>motherhood</tag>
+  <tag>existentialism</tag>
+  <tag>woman director</tag>
+  <tag>satirical</tag>
+  <tag>misandry</tag>
+  <tag>mother daughter relationship</tag>
+  <tag>adventure comedy</tag>
+  <tag>introspective</tag>
+  <tag>inspirational</tag>
+  <tag>gender discrimination</tag>
+  <tag>hilarious</tag>
+  <tag>secret world</tag>
+  <tag>bold</tag>
+  <tag>celebratory</tag>
+  <tag>hopeful</tag>
+  <tag>powerful</tag>
+  <studio>LuckyChap Entertainment</studio>
+  <studio>Heyday Films</studio>
+  <studio>NB/GG Pictures</studio>
+  <studio>Mattel</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">346698</uniqueid>
+  <uniqueid type="imdb">tt1517268</uniqueid>
+  <actor>
+    <name>Margot Robbie</name>
+    <role>Barbie</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ryan Gosling</name>
+    <role>Ken</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>America Ferrera</name>
+    <role>Gloria</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ariana Greenblatt</name>
+    <role>Sasha</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Issa Rae</name>
+    <role>Barbie</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kate McKinnon</name>
+    <role>Barbie</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Alexandra Shipp</name>
+    <role>Barbie</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Emma Mackey</name>
+    <role>Barbie</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Hari Nef</name>
+    <role>Barbie</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sharon Rooney</name>
+    <role>Barbie</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ana Cruz Kayne</name>
+    <role>Barbie</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ritu Arya</name>
+    <role>Barbie</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Dua Lipa</name>
+    <role>Barbie</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Nicola Coughlan</name>
+    <role>Barbie</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Emerald Fennell</name>
+    <role>Midge</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Greta Gerwig</director>
+  <credits>Noah Baumbach</credits>
+  <credits>Greta Gerwig</credits>
+</movie>

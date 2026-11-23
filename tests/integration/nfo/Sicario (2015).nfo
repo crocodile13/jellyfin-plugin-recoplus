@@ -1,0 +1,135 @@
+<movie>
+  <title>Sicario</title>
+  <originaltitle>Sicario</originaltitle>
+  <year>2015</year>
+  <premiered>2015-09-17</premiered>
+  <rating>7.442</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Crime</genre>
+  <genre>Thriller</genre>
+  <tag>mission</tag>
+  <tag>assassin</tag>
+  <tag>central intelligence agency (cia)</tag>
+  <tag>mexico</tag>
+  <tag>corruption</tag>
+  <tag>bomb</tag>
+  <tag>fbi</tag>
+  <tag>smoking</tag>
+  <tag>texas</tag>
+  <tag>border</tag>
+  <tag>manipulation</tag>
+  <tag>cynicism</tag>
+  <tag>revenge</tag>
+  <tag>murder</tag>
+  <tag>dirty cop</tag>
+  <tag>brutality</tag>
+  <tag>drugs</tag>
+  <tag>special forces</tag>
+  <tag>interrogation</tag>
+  <tag>desert</tag>
+  <tag>surveillance</tag>
+  <tag>blunt</tag>
+  <tag>night vision</tag>
+  <tag>death of daughter</tag>
+  <tag>moral dilemma</tag>
+  <tag>neo-noir</tag>
+  <tag>death of wife</tag>
+  <tag>mexican cartel</tag>
+  <tag>reflective</tag>
+  <tag>serious</tag>
+  <tag>secret tunnel</tag>
+  <tag>dramatic</tag>
+  <tag>violence</tag>
+  <tag>suspenseful</tag>
+  <tag>awestruck</tag>
+  <tag>powerful</tag>
+  <tag>juárez, mexico</tag>
+  <studio>Lionsgate</studio>
+  <studio>Black Label Media</studio>
+  <studio>Thunder Road</studio>
+  <studio>Redrum</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">273481</uniqueid>
+  <uniqueid type="imdb">tt3397884</uniqueid>
+  <set tmdbcolid="496796">
+    <name>496796</name>
+  </set>
+  <actor>
+    <name>Emily Blunt</name>
+    <role>Kate Macer</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Benicio del Toro</name>
+    <role>Alejandro Gillick</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Brolin</name>
+    <role>Matt Graver</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Victor Garber</name>
+    <role>Dave Jennings</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Bernthal</name>
+    <role>Ted</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Kaluuya</name>
+    <role>Reggie Wayne</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey Donovan</name>
+    <role>Steve Forsing</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Raoul Max Trujillo</name>
+    <role>Rafael</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Julio Cesar Cedillo</name>
+    <role>Fausto Alarcon</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Hank Rogerson</name>
+    <role>Phil Coopers</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Bernardo P. Saracino</name>
+    <role>Manuel Diaz</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Maximiliano Hernández</name>
+    <role>Silvio</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Wiggins</name>
+    <role>Burnett</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Edgar Arreola</name>
+    <role>Guillermo</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Larrichio</name>
+    <role>Silvio's Wife</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Denis Villeneuve</director>
+  <credits>Taylor Sheridan</credits>
+</movie>

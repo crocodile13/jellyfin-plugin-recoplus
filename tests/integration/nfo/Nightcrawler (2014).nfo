@@ -1,0 +1,114 @@
+<movie>
+  <title>Nightcrawler</title>
+  <originaltitle>Nightcrawler</originaltitle>
+  <year>2014</year>
+  <premiered>2014-10-23</premiered>
+  <rating>7.708</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>Thriller</genre>
+  <tag>underground</tag>
+  <tag>psychopath</tag>
+  <tag>journalism</tag>
+  <tag>job interview</tag>
+  <tag>cynicism</tag>
+  <tag>sociopath</tag>
+  <tag>murder</tag>
+  <tag>serial killer</tag>
+  <tag>crime scene</tag>
+  <tag>psychological thriller</tag>
+  <tag>los angeles, california</tag>
+  <tag>home invasion</tag>
+  <tag>stakeout</tag>
+  <tag>newsreel footage</tag>
+  <tag>character study</tag>
+  <tag>neo-noir</tag>
+  <tag>frantic</tag>
+  <tag>ethics</tag>
+  <tag>stringer</tag>
+  <tag>police scanner</tag>
+  <tag>news business</tag>
+  <studio>Sierra/Affinity</studio>
+  <studio>Bold Films</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">242582</uniqueid>
+  <uniqueid type="imdb">tt2872718</uniqueid>
+  <actor>
+    <name>Jake Gyllenhaal</name>
+    <role>Louis Bloom</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rene Russo</name>
+    <role>Nina Romina</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Riz Ahmed</name>
+    <role>Rick</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Paxton</name>
+    <role>Joe Loder</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Rahm</name>
+    <role>Frank Kruse</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Hyatt</name>
+    <role>Detective Frontieri</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Price Carson</name>
+    <role>Detective Lieberman</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ann Cusack</name>
+    <role>Linda</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kent Shocknek</name>
+    <role>Kent Shocknek</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sharon Tay</name>
+    <role>Sharon Tay</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Carolyn Gilroy</name>
+    <role>Jenny</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Marco Rodríguez</name>
+    <role>Scrapyard Owner</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Papajohn</name>
+    <role>Security Guard</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jonny Coyne</name>
+    <role>Pawn Shop Owner</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rick Chambers</name>
+    <role>KWLA Anchor Ben Waterman</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Dan Gilroy</director>
+  <credits>Dan Gilroy</credits>
+</movie>

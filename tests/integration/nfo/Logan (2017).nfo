@@ -1,0 +1,121 @@
+<movie>
+  <title>Logan</title>
+  <originaltitle>Logan</originaltitle>
+  <year>2017</year>
+  <premiered>2017-02-28</premiered>
+  <rating>7.823</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Drama</genre>
+  <genre>Science Fiction</genre>
+  <tag>future</tag>
+  <tag>experiment</tag>
+  <tag>immortality</tag>
+  <tag>self-destruction</tag>
+  <tag>cyborg</tag>
+  <tag>dystopia</tag>
+  <tag>superhero</tag>
+  <tag>mutant</tag>
+  <tag>road trip</tag>
+  <tag>based on comic</tag>
+  <tag>sequel</tag>
+  <tag>spin off</tag>
+  <tag>super power</tag>
+  <tag>neo-western</tag>
+  <tag>troubled past</tag>
+  <tag>quest</tag>
+  <tag>aging superhero</tag>
+  <tag>life on the margin</tag>
+  <tag>grimdark</tag>
+  <studio>Hutch Parker Entertainment</studio>
+  <studio>The Donners' Company</studio>
+  <studio>Genre Films</studio>
+  <studio>20th Century Fox</studio>
+  <studio>Marvel Entertainment</studio>
+  <studio>TSG Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">263115</uniqueid>
+  <uniqueid type="imdb">tt3315342</uniqueid>
+  <set tmdbcolid="453993">
+    <name>453993</name>
+  </set>
+  <actor>
+    <name>Hugh Jackman</name>
+    <role>Logan / X-24</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Dafne Keen</name>
+    <role>Laura</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Stewart</name>
+    <role>Charles</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Rodriguez</name>
+    <role>Gabriela</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Boyd Holbrook</name>
+    <role>Pierce</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Merchant</name>
+    <role>Caliban</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Richard E. Grant</name>
+    <role>Dr. Rice</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Dunlevy</name>
+    <role>Macon</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Eriq La Salle</name>
+    <role>Will Munson</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Elise Neal</name>
+    <role>Kathryn Munson</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Quincy Fouse</name>
+    <role>Nate Munson</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Al Coronel</name>
+    <role>Federale Commander</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Gallegos</name>
+    <role>Federale Lieutenant</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Escobar</name>
+    <role>Federale</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Reynaldo Gallegos</name>
+    <role>Rey</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>James Mangold</director>
+  <credits>Michael Green</credits>
+  <credits>Scott Frank</credits>
+  <credits>James Mangold</credits>
+</movie>

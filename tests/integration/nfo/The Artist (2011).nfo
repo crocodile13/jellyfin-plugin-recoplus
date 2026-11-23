@@ -1,0 +1,115 @@
+<movie>
+  <title>The Artist</title>
+  <originaltitle>The Artist</originaltitle>
+  <year>2011</year>
+  <premiered>2011-10-12</premiered>
+  <rating>7.4</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Drama</genre>
+  <genre>Comedy</genre>
+  <genre>Romance</genre>
+  <tag>movie business</tag>
+  <tag>hollywood</tag>
+  <tag>black and white</tag>
+  <tag>dog</tag>
+  <tag>filmmaking</tag>
+  <tag>mustache</tag>
+  <tag>silent film</tag>
+  <tag>marquee</tag>
+  <tag>terrier</tag>
+  <tag>movie star</tag>
+  <tag>flapper</tag>
+  <tag>silent film star</tag>
+  <tag>1920s</tag>
+  <tag>pets</tag>
+  <tag>old hollywood</tag>
+  <tag>fading star</tag>
+  <studio>uFilm</studio>
+  <studio>La Petite Reine</studio>
+  <studio>Studio 37</studio>
+  <studio>La Classe américaine</studio>
+  <studio>JD Prod</studio>
+  <studio>France 3 Cinéma</studio>
+  <studio>Jouror Productions</studio>
+  <country>Belgium</country>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">74643</uniqueid>
+  <uniqueid type="imdb">tt1655442</uniqueid>
+  <actor>
+    <name>Jean Dujardin</name>
+    <role>George Valentin</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Bérénice Bejo</name>
+    <role>Peppy Miller</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>John Goodman</name>
+    <role>Al Zimmer</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>James Cromwell</name>
+    <role>Clifton</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Penelope Ann Miller</name>
+    <role>Doris Valentin</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Missi Pyle</name>
+    <role>Constance Gray</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Beth Grant</name>
+    <role>Peppy's Maid</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ed Lauter</name>
+    <role>Peppy's Butler</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Joel Murray</name>
+    <role>Policeman Fire</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Tulloch</name>
+    <role>Norma</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ken Davitian</name>
+    <role>Pawnbroker</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Malcolm McDowell</name>
+    <role>The Butler</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Basil Hoffman</name>
+    <role>Auctioneer</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Fagerbakke</name>
+    <role>Policeman Tuxedo</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Nina Siemaszko</name>
+    <role>Admiring Woman</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Michel Hazanavicius</director>
+  <credits>Michel Hazanavicius</credits>
+</movie>

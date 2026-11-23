@@ -1,0 +1,125 @@
+<movie>
+  <title>The Witch</title>
+  <originaltitle>The Witch</originaltitle>
+  <year>2016</year>
+  <premiered>2016-02-19</premiered>
+  <rating>7.007</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Fantasy</genre>
+  <genre>Mystery</genre>
+  <tag>witch</tag>
+  <tag>isolation</tag>
+  <tag>magic</tag>
+  <tag>possession</tag>
+  <tag>black magic</tag>
+  <tag>older woman seduces younger guy</tag>
+  <tag>new hampshire</tag>
+  <tag>woods</tag>
+  <tag>goat</tag>
+  <tag>puritan</tag>
+  <tag>religion</tag>
+  <tag>crying</tag>
+  <tag>false accusations</tag>
+  <tag>witchcraft</tag>
+  <tag>new england</tag>
+  <tag>praying</tag>
+  <tag>17th century</tag>
+  <tag>folk horror</tag>
+  <tag>evil force</tag>
+  <tag>english colony</tag>
+  <tag>grimdark</tag>
+  <tag>excited</tag>
+  <studio>Very Special Projects</studio>
+  <studio>Parts &amp; Labor</studio>
+  <studio>RT Features</studio>
+  <studio>Rooks Nest Entertainment</studio>
+  <studio>Maiden Voyage Pictures</studio>
+  <studio>Pulse Films</studio>
+  <studio>Scythia Films</studio>
+  <studio>Code Red Productions</studio>
+  <studio>Mott Street Pictures</studio>
+  <country>Brazil</country>
+  <country>Canada</country>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">310131</uniqueid>
+  <uniqueid type="imdb">tt4263482</uniqueid>
+  <actor>
+    <name>Anya Taylor-Joy</name>
+    <role>Thomasin</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ralph Ineson</name>
+    <role>William</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Dickie</name>
+    <role>Katherine</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Harvey Scrimshaw</name>
+    <role>Caleb</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ellie Grainger</name>
+    <role>Mercy</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lucas Dawson</name>
+    <role>Jonas</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Julian Richings</name>
+    <role>Governor</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Bathsheba Garnett</name>
+    <role>The Witch</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Stephens</name>
+    <role>The Witch, Young</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Malik</name>
+    <role>Black Phillip (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Axtun Henry Dube</name>
+    <role>Samuel</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Athan Conrad Dube</name>
+    <role>Samuel</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Vivien Moore</name>
+    <role>Lead Coven Witch</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Karen Kaeja</name>
+    <role>Coven Witch</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Brandy Leary</name>
+    <role>Coven Witch</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Robert Eggers</director>
+  <credits>Robert Eggers</credits>
+</movie>

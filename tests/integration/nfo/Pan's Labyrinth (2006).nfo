@@ -1,0 +1,117 @@
+<movie>
+  <title>Pan's Labyrinth</title>
+  <originaltitle>El laberinto del fauno</originaltitle>
+  <year>2006</year>
+  <premiered>2006-10-11</premiered>
+  <rating>7.77</rating>
+  <mpaa>R</mpaa>
+  <genre>Fantasy</genre>
+  <genre>Drama</genre>
+  <genre>War</genre>
+  <tag>princess</tag>
+  <tag>army</tag>
+  <tag>fairy tale</tag>
+  <tag>resistance</tag>
+  <tag>servant</tag>
+  <tag>anti hero</tag>
+  <tag>franco regime (francoism)</tag>
+  <tag>woods</tag>
+  <tag>cruelty</tag>
+  <tag>hiding</tag>
+  <tag>labyrinth</tag>
+  <tag>magic realism</tag>
+  <tag>dark fantasy</tag>
+  <tag>dark fairy tale</tag>
+  <tag>children in wartime</tag>
+  <tag>post spanish civil war</tag>
+  <tag>faun</tag>
+  <tag>horror</tag>
+  <tag>enchant</tag>
+  <tag>gloomy</tag>
+  <studio>Estudios Picasso</studio>
+  <studio>Esperanto Filmoj</studio>
+  <studio>Tequila Gang</studio>
+  <studio>Telecinco</studio>
+  <country>Mexico</country>
+  <country>Spain</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">1417</uniqueid>
+  <uniqueid type="imdb">tt0457430</uniqueid>
+  <actor>
+    <name>Ivana Baquero</name>
+    <role>Ofelia</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Sergi López</name>
+    <role>Capitán Vidal</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Maribel Verdú</name>
+    <role>Mercedes</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Doug Jones</name>
+    <role>Fauno / Pale Man</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ariadna Gil</name>
+    <role>Carmen</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Álex Angulo</name>
+    <role>Dr. Ferreiro</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Roger Casamajor</name>
+    <role>Pedro</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Manolo Solo</name>
+    <role>Garcés</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>César Vea</name>
+    <role>Serrano</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ivan Massagué</name>
+    <role>El Tarta</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Gonzalo Uriarte</name>
+    <role>Francés</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Eusebio Lázaro</name>
+    <role>Padre</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Francisco Vidal</name>
+    <role>Sacerdote</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Juanjo Cucalón</name>
+    <role>Alcalde</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Lina Mira</name>
+    <role>Esposa del alcalde</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Guillermo del Toro</director>
+  <credits>Guillermo del Toro</credits>
+</movie>

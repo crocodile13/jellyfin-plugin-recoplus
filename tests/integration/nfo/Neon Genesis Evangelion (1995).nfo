@@ -1,0 +1,132 @@
+<tvshow>
+  <title>Neon Genesis Evangelion</title>
+  <originaltitle>新世紀エヴァンゲリオン</originaltitle>
+  <year>1995</year>
+  <premiered>1995-10-04</premiered>
+  <rating>8.56</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Animation</genre>
+  <genre>Drama</genre>
+  <tag>angel</tag>
+  <tag>depression</tag>
+  <tag>symbolism</tag>
+  <tag>affectation</tag>
+  <tag>loss</tag>
+  <tag>love</tag>
+  <tag>mecha</tag>
+  <tag>giant robot</tag>
+  <tag>piloted robot</tag>
+  <tag>cyberpunk</tag>
+  <tag>self love</tag>
+  <tag>self-loathing</tag>
+  <tag>alien attack</tag>
+  <tag>disturbed</tag>
+  <tag>anime</tag>
+  <tag>reflective</tag>
+  <tag>psychological</tag>
+  <tag>science fiction</tag>
+  <tag>robots</tag>
+  <tag>suspense</tag>
+  <tag>suspenseful</tag>
+  <tag>exciting</tag>
+  <tag>depressing</tag>
+  <tag>admiring</tag>
+  <tag>post-apocalyptic</tag>
+  <studio>TV Tokyo</studio>
+  <studio>GAINAX</studio>
+  <studio>NAS</studio>
+  <studio>Tatsunoko Production</studio>
+  <uniqueid type="tmdb" default="true">890</uniqueid>
+  <uniqueid type="imdb">tt0112159</uniqueid>
+  <actor>
+    <name>Megumi Ogata</name>
+    <role>Shinji Ikari (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kotono Mitsuishi</name>
+    <role>Misato Katsuragi (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Megumi Hayashibara</name>
+    <role>Rei Ayanami (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Yuko Miyamura</name>
+    <role>Asuka Langley Soryu (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yuriko Yamaguchi</name>
+    <role>Dr. Ritsuko Akagi (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Fumihiko Tachiki</name>
+    <role>Gendo Ikari (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Motomu Kiyokawa</name>
+    <role>Kozo Fuyutsuki (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Miki Nagasawa</name>
+    <role>Maya Ibuki (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mugihito</name>
+    <role>Keel Lorenz (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Junko Iwao</name>
+    <role>Hikari Horaki (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Tetsuya Iwanaga</name>
+    <role>Kensuke Aida (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Tomokazu Seki</name>
+    <role>Touji Suzuhara (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tomokazu Seki</name>
+    <role>Makoto Hyuuga (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Takehito Koyasu</name>
+    <role>Shigeru Aoba (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Takehito Koyasu</name>
+    <role>Sherigu Aoba (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Koichi Yamadera</name>
+    <role>Ryouji Kaji (voice)</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>Hiro Yuuki</name>
+    <role>Makoto Hyuuga (voice)</role>
+    <sortorder>16</sortorder>
+  </actor>
+  <actor>
+    <name>Hiro Yuuki</name>
+    <role>Hyuuga Makoto (voice)</role>
+    <sortorder>17</sortorder>
+  </actor>
+</tvshow>

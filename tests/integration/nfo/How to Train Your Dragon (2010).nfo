@@ -1,0 +1,143 @@
+<movie>
+  <title>How to Train Your Dragon</title>
+  <originaltitle>How to Train Your Dragon</originaltitle>
+  <year>2010</year>
+  <premiered>2010-03-18</premiered>
+  <rating>7.867</rating>
+  <mpaa>PG</mpaa>
+  <genre>Fantasy</genre>
+  <genre>Adventure</genre>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <tag>friendship</tag>
+  <tag>ship</tag>
+  <tag>blacksmith</tag>
+  <tag>island</tag>
+  <tag>based on novel or book</tag>
+  <tag>flying</tag>
+  <tag>arena</tag>
+  <tag>village</tag>
+  <tag>villain</tag>
+  <tag>training</tag>
+  <tag>ignorance</tag>
+  <tag>vikings (norsemen)</tag>
+  <tag>forest</tag>
+  <tag>flight</tag>
+  <tag>nest</tag>
+  <tag>dragon</tag>
+  <tag>battle</tag>
+  <tag>combat</tag>
+  <tag>well</tag>
+  <tag>warrior</tag>
+  <tag>pets</tag>
+  <tag>reflective</tag>
+  <tag>wonder</tag>
+  <tag>playful</tag>
+  <tag>serene</tag>
+  <tag>3d animation</tag>
+  <tag>lighthearted</tag>
+  <tag>intimate</tag>
+  <tag>sentimental</tag>
+  <tag>witty</tag>
+  <tag>hilarious</tag>
+  <tag>romantic</tag>
+  <tag>whimsical</tag>
+  <tag>admiring</tag>
+  <tag>adoring</tag>
+  <tag>amused</tag>
+  <tag>celebratory</tag>
+  <tag>cheerful</tag>
+  <tag>comforting</tag>
+  <tag>compassionate</tag>
+  <tag>euphoric</tag>
+  <tag>excited</tag>
+  <tag>gentle</tag>
+  <tag>hopeful</tag>
+  <tag>optimistic</tag>
+  <tag>powerful</tag>
+  <tag>sincere</tag>
+  <tag>sympathetic</tag>
+  <tag>vibrant</tag>
+  <studio>DreamWorks Animation</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">10191</uniqueid>
+  <uniqueid type="imdb">tt0892769</uniqueid>
+  <set tmdbcolid="89137">
+    <name>89137</name>
+  </set>
+  <actor>
+    <name>Jay Baruchel</name>
+    <role>Hiccup (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Gerard Butler</name>
+    <role>Stoick (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Craig Ferguson</name>
+    <role>Gobber (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>America Ferrera</name>
+    <role>Astrid (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jonah Hill</name>
+    <role>Snotlout (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Mintz-Plasse</name>
+    <role>Fishlegs (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>T.J. Miller</name>
+    <role>Tuffnut (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kristen Wiig</name>
+    <role>Ruffnut (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Robin Atkin Downes</name>
+    <role>Ack (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Philip McGrade</name>
+    <role>Starkard (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kieron Elliott</name>
+    <role>Hoark the Haggard (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ashley Jensen</name>
+    <role>Phlegma the Fierce (Voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>David Tennant</name>
+    <role>Spitelout (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Randy Thom</name>
+    <role>Toothless (voice) (uncredited)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <director>Dean DeBlois</director>
+  <director>Chris Sanders</director>
+  <credits>Dean DeBlois</credits>
+  <credits>Chris Sanders</credits>
+  <credits>William Davies</credits>
+</movie>

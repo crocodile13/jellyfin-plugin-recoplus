@@ -1,0 +1,98 @@
+<tvshow>
+  <title>The Last Dance</title>
+  <originaltitle>The Last Dance</originaltitle>
+  <year>2020</year>
+  <premiered>2020-04-19</premiered>
+  <rating>8.278</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Documentary</genre>
+  <tag>interview</tag>
+  <tag>sports</tag>
+  <tag>jordan</tag>
+  <tag>basketball</tag>
+  <tag>behind the scenes</tag>
+  <tag>sports documentary</tag>
+  <tag>national basketball association (nba)</tag>
+  <tag>chicago bulls</tag>
+  <studio>ESPN</studio>
+  <studio>ESPN Films</studio>
+  <studio>Mandalay Sports Media</studio>
+  <studio>NBA Entertainment</studio>
+  <uniqueid type="tmdb" default="true">79525</uniqueid>
+  <uniqueid type="imdb">tt8420184</uniqueid>
+  <actor>
+    <name>Michael Jordan</name>
+    <role>Self - Bulls Guard 1984-98</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Scottie Pippen</name>
+    <role>Self - Bulls Forward 1987-98</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Dennis Rodman</name>
+    <role>Self - Bulls Forward 1995-98</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Phil Jackson</name>
+    <role>Self - Bulls Head Coach 1989-98</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Kerr</name>
+    <role>Self - Bulls Guard 1992-98</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kobe Bryant</name>
+    <role>Self</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Magic Johnson</name>
+    <role>Self</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Barkley</name>
+    <role>Self</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Ewing</name>
+    <role>Self - Georgetown Center 1981-85</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Deloris Jordan</name>
+    <role>Self</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Isiah Thomas</name>
+    <role>Self</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Carmen Electra</name>
+    <role>Self</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Pat Riley</name>
+    <role>Self</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>John Salley</name>
+    <role>Self</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Barack Obama</name>
+    <role>Self</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,96 @@
+<tvshow>
+  <title>Chernobyl</title>
+  <originaltitle>Chernobyl</originaltitle>
+  <year>2019</year>
+  <premiered>2019-05-06</premiered>
+  <rating>8.732</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <tag>based on true story</tag>
+  <tag>disaster</tag>
+  <tag>miniseries</tag>
+  <tag>nuclear catastrophe</tag>
+  <tag>1980s</tag>
+  <tag>chernobyl, ukraine</tag>
+  <studio>HBO</studio>
+  <studio>SISTER</studio>
+  <studio>The Mighty Mint</studio>
+  <studio>Word Games</studio>
+  <uniqueid type="tmdb" default="true">87108</uniqueid>
+  <uniqueid type="imdb">tt7366338</uniqueid>
+  <actor>
+    <name>Jared Harris</name>
+    <role>Valery Legasov</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Stellan Skarsgård</name>
+    <role>Boris Shcherbina</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Emily Watson</name>
+    <role>Ulana Khomyuk</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Ritter</name>
+    <role>Anatoly Dyatlov</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jessie Buckley</name>
+    <role>Lyudmilla Ignatenko</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Nagaitis</name>
+    <role>Vasily Ignatenko</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Troughton</name>
+    <role>Alexandr Akimov</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Emms</name>
+    <role>Leonid Toptunov</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Con O'Neill</name>
+    <role>Viktor Bryukhanov</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Adrian Rawlins</name>
+    <role>Nikolai Fomin</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Williams</name>
+    <role>KGB Chairman Charkov</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David Dencik</name>
+    <role>Mikhail Gorbachev</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Lewis Jones</name>
+    <role>General Pikalov</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ralph Ineson</name>
+    <role>General Tarakanov</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Keoghan</name>
+    <role>Pavel</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

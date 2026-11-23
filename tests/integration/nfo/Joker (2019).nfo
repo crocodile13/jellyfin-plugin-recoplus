@@ -1,0 +1,119 @@
+<movie>
+  <title>Joker</title>
+  <originaltitle>Joker</originaltitle>
+  <year>2019</year>
+  <premiered>2019-10-01</premiered>
+  <rating>8.112</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Thriller</genre>
+  <genre>Drama</genre>
+  <tag>society</tag>
+  <tag>based on comic</tag>
+  <tag>social commentary</tag>
+  <tag>psychological thriller</tag>
+  <tag>criminal mastermind</tag>
+  <tag>mental illness</tag>
+  <tag>anarchy</tag>
+  <tag>character study</tag>
+  <tag>clown makeup</tag>
+  <tag>outsider</tag>
+  <tag>prophetic</tag>
+  <tag>social realism</tag>
+  <tag>tv host</tag>
+  <tag>1980s</tag>
+  <tag>mother son relationship</tag>
+  <tag>origin story</tag>
+  <tag>falling into madness</tag>
+  <tag>anti-capitalist</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Joint Effort</studio>
+  <studio>Village Roadshow Pictures</studio>
+  <studio>Bron Studios</studio>
+  <studio>DC Films</studio>
+  <country>Canada</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">475557</uniqueid>
+  <uniqueid type="imdb">tt7286456</uniqueid>
+  <set tmdbcolid="987044">
+    <name>987044</name>
+  </set>
+  <actor>
+    <name>Joaquin Phoenix</name>
+    <role>Arthur Fleck</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Robert De Niro</name>
+    <role>Murray Franklin</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Zazie Beetz</name>
+    <role>Sophie Dumond</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Frances Conroy</name>
+    <role>Penny Fleck</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Brett Cullen</name>
+    <role>Thomas Wayne</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Shea Whigham</name>
+    <role>Detective Burke</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Camp</name>
+    <role>Detective Garrity</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Glenn Fleshler</name>
+    <role>Randall</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Leigh Gill</name>
+    <role>Gary</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Pais</name>
+    <role>Hoyt Vaughn</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Rocco Luna</name>
+    <role>GiGi Dumond</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Marc Maron</name>
+    <role>Gene Ufland</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Sondra James</name>
+    <role>Dr. Sally</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Murphy Guyer</name>
+    <role>Barry O'Donnell</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Douglas Hodge</name>
+    <role>Alfred Pennyworth</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Todd Phillips</director>
+  <credits>Scott Silver</credits>
+  <credits>Todd Phillips</credits>
+</movie>

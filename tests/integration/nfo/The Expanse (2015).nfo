@@ -1,0 +1,122 @@
+<tvshow>
+  <title>The Expanse</title>
+  <originaltitle>The Expanse</originaltitle>
+  <year>2015</year>
+  <premiered>2015-12-14</premiered>
+  <rating>8.071</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Drama</genre>
+  <genre>Mystery</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>based on novel or book</tag>
+  <tag>planet mars</tag>
+  <tag>spacecraft</tag>
+  <tag>space battle</tag>
+  <tag>future</tag>
+  <tag>space colony</tag>
+  <tag>space travel</tag>
+  <tag>space</tag>
+  <tag>conspiracy</tag>
+  <tag>space station</tag>
+  <tag>space opera</tag>
+  <tag>wonder</tag>
+  <tag>inspirational</tag>
+  <tag>hard sci-fi</tag>
+  <studio>Syfy</studio>
+  <studio>Prime Video</studio>
+  <studio>Legendary Television</studio>
+  <studio>Sean Daniel Company</studio>
+  <studio>Alcon Television Group</studio>
+  <studio>Penguin in a Parka</studio>
+  <studio>Just So</studio>
+  <studio>Hivemind</studio>
+  <uniqueid type="tmdb" default="true">63639</uniqueid>
+  <uniqueid type="imdb">tt3230854</uniqueid>
+  <actor>
+    <name>Steven Strait</name>
+    <role>Jim Holden</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Dominique Tipper</name>
+    <role>Naomi Nagata</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Cas Anvar</name>
+    <role>Alex Kamal</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Wes Chatham</name>
+    <role>Amos Burton</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Shohreh Aghdashloo</name>
+    <role>Chrisjen Avasarala</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Frankie Adams</name>
+    <role>Bobbie Draper</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Paulo Costanzo</name>
+    <role>Shed Garvey</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Sara Mitich</name>
+    <role>Gia</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Shawn Doyle</name>
+    <role>Sadavir Errinwright</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Florence Faivre</name>
+    <role>Julie Mao</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Cara Gee</name>
+    <role>Camina Drummer</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Keon Alexander</name>
+    <role>Marco Inaros</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas Jane</name>
+    <role>Joe Miller</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas Jane</name>
+    <role>Investigator</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Nadine Nicole</name>
+    <role>Clarissa Mao</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Nadine Nicole</name>
+    <role>Melba Koh</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>John Chou</name>
+    <role>NSA Analyst</role>
+    <sortorder>16</sortorder>
+  </actor>
+  <credits>Daniel Abraham</credits>
+  <credits>Ty Franck</credits>
+</tvshow>

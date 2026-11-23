@@ -1,0 +1,120 @@
+<movie>
+  <title>The Dark Knight Rises</title>
+  <originaltitle>The Dark Knight Rises</originaltitle>
+  <year>2012</year>
+  <premiered>2012-07-17</premiered>
+  <rating>7.801</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Crime</genre>
+  <genre>Thriller</genre>
+  <tag>airplane</tag>
+  <tag>fight</tag>
+  <tag>burglar</tag>
+  <tag>hostage</tag>
+  <tag>secret identity</tag>
+  <tag>crime fighter</tag>
+  <tag>superhero</tag>
+  <tag>villainess</tag>
+  <tag>time bomb</tag>
+  <tag>based on comic</tag>
+  <tag>cover-up</tag>
+  <tag>vigilante</tag>
+  <tag>tragic hero</tag>
+  <tag>mobile</tag>
+  <tag>terrorism</tag>
+  <tag>destruction</tag>
+  <tag>fighting</tag>
+  <tag>criminal underworld</tag>
+  <tag>cat burglar</tag>
+  <tag>flood</tag>
+  <studio>Syncopy</studio>
+  <studio>Legendary Pictures</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>DC</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">49026</uniqueid>
+  <uniqueid type="imdb">tt1345836</uniqueid>
+  <set tmdbcolid="263">
+    <name>263</name>
+  </set>
+  <actor>
+    <name>Christian Bale</name>
+    <role>Bruce Wayne</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Gary Oldman</name>
+    <role>Commissioner Gordon</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Hardy</name>
+    <role>Bane</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Joseph Gordon-Levitt</name>
+    <role>Blake</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Hathaway</name>
+    <role>Selina</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Marion Cotillard</name>
+    <role>Miranda</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Morgan Freeman</name>
+    <role>Fox</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Caine</name>
+    <role>Alfred</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Modine</name>
+    <role>Foley</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Alon Aboutboul</name>
+    <role>Dr. Pavel</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Mendelsohn</name>
+    <role>Daggett</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Burn Gorman</name>
+    <role>Stryver</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Sunjata</name>
+    <role>Captain Jones</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Aidan Gillen</name>
+    <role>CIA Op</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Kennard</name>
+    <role>Special Ops Sergeant</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Christopher Nolan</director>
+  <credits>Jonathan Nolan</credits>
+  <credits>Christopher Nolan</credits>
+</movie>

@@ -1,0 +1,115 @@
+<movie>
+  <title>La Haine</title>
+  <originaltitle>La Haine</originaltitle>
+  <year>1995</year>
+  <premiered>1995-05-31</premiered>
+  <rating>8.088</rating>
+  <mpaa>NR</mpaa>
+  <genre>Drama</genre>
+  <tag>police brutality</tag>
+  <tag>hip-hop</tag>
+  <tag>paris, france</tag>
+  <tag>socially deprived family</tag>
+  <tag>breakdance</tag>
+  <tag>ghetto</tag>
+  <tag>male friendship</tag>
+  <tag>street riots</tag>
+  <tag>racism</tag>
+  <tag>black and white</tag>
+  <tag>rebellious youth</tag>
+  <tag>xenophobia</tag>
+  <tag>housing project</tag>
+  <tag>ethnic diversity</tag>
+  <tag>riot police</tag>
+  <tag>day in a life</tag>
+  <tag>frantic</tag>
+  <tag>skinheads</tag>
+  <tag>paris suburb</tag>
+  <tag>gun death</tag>
+  <tag>police shooting</tag>
+  <tag>urban violence</tag>
+  <studio>Kasso Productions</studio>
+  <studio>La Sept Cinéma</studio>
+  <studio>Les Productions Lazennec</studio>
+  <studio>Le Studio Canal+</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">406</uniqueid>
+  <uniqueid type="imdb">tt0113247</uniqueid>
+  <actor>
+    <name>Vincent Cassel</name>
+    <role>Vinz</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hubert Koundé</name>
+    <role>Hubert</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Saïd Taghmaoui</name>
+    <role>Saïd</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Abdel Ahmed Ghili</name>
+    <role>Abdel</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Solo</name>
+    <role>Santo</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Joseph Momo</name>
+    <role>Ordinary Man</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Héloïse Rauth</name>
+    <role>Sarah</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rywka Wajsbrot</name>
+    <role>Vinz's Grandmother</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Olga Abrego</name>
+    <role>Vinz's Aunt</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Laurent Labasse</name>
+    <role>Cook</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Choukri Gabteni</name>
+    <role>Saïd's Brother</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Nabil Ben Mhamed</name>
+    <role>Joking Boy</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Benoît Magimel</name>
+    <role>Benoît</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Médard Niang</name>
+    <role>Médard</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Arash Mansour</name>
+    <role>Arash</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Mathieu Kassovitz</director>
+  <credits>Mathieu Kassovitz</credits>
+</movie>

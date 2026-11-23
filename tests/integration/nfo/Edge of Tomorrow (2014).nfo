@@ -1,0 +1,118 @@
+<movie>
+  <title>Edge of Tomorrow</title>
+  <originaltitle>Edge of Tomorrow</originaltitle>
+  <year>2014</year>
+  <premiered>2014-05-27</premiered>
+  <rating>7.644</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Science Fiction</genre>
+  <tag>deja vu</tag>
+  <tag>based on novel or book</tag>
+  <tag>restart</tag>
+  <tag>military officer</tag>
+  <tag>dystopia</tag>
+  <tag>time travel</tag>
+  <tag>training</tag>
+  <tag>alien</tag>
+  <tag>time loop</tag>
+  <tag>soldier</tag>
+  <tag>alien invasion</tag>
+  <tag>war hero</tag>
+  <tag>exoskeleton</tag>
+  <tag>soldiers</tag>
+  <tag>war</tag>
+  <tag>suspenseful</tag>
+  <tag>intense</tag>
+  <tag>defiant</tag>
+  <tag>earnest</tag>
+  <tag>2020s</tag>
+  <studio>Village Roadshow Pictures</studio>
+  <studio>VIZ Media</studio>
+  <studio>3 Arts Entertainment</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>RatPac-Dune Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">137113</uniqueid>
+  <uniqueid type="imdb">tt1631867</uniqueid>
+  <actor>
+    <name>Tom Cruise</name>
+    <role>Cage</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Emily Blunt</name>
+    <role>Rita</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Brendan Gleeson</name>
+    <role>General Brigham</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Paxton</name>
+    <role>Master Sergeant Farell</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jonas Armstrong</name>
+    <role>Skinner</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Way</name>
+    <role>Kimmel</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kick Gurry</name>
+    <role>Griff</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Franz Drameh</name>
+    <role>Ford</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Dragomir Mrsic</name>
+    <role>Kuntz</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Charlotte Riley</name>
+    <role>Nance</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Masayoshi Haneda</name>
+    <role>Takeda</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Terence Maynard</name>
+    <role>Cruel Sergeant</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Noah Taylor</name>
+    <role>Dr. Carter</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Lara Pulver</name>
+    <role>Karen Lord</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Madeleine Mantock</name>
+    <role>Julie</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Doug Liman</director>
+  <credits>Christopher McQuarrie</credits>
+  <credits>Hiroshi Sakurazaka</credits>
+  <credits>Jez Butterworth</credits>
+  <credits>John-Henry Butterworth</credits>
+</movie>

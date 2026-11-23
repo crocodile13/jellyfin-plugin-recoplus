@@ -1,0 +1,107 @@
+<movie>
+  <title>Groundhog Day</title>
+  <originaltitle>Groundhog Day</originaltitle>
+  <year>1993</year>
+  <premiered>1993-02-11</premiered>
+  <rating>7.638</rating>
+  <mpaa>PG</mpaa>
+  <genre>Romance</genre>
+  <genre>Fantasy</genre>
+  <genre>Comedy</genre>
+  <tag>deja vu</tag>
+  <tag>groundhog</tag>
+  <tag>weather forecast</tag>
+  <tag>telecaster</tag>
+  <tag>pennsylvania, usa</tag>
+  <tag>alarm clock</tag>
+  <tag>winter</tag>
+  <tag>time warp</tag>
+  <tag>holiday</tag>
+  <tag>time loop</tag>
+  <tag>magic realism</tag>
+  <tag>existentialism</tag>
+  <tag>groundhog day</tag>
+  <tag>february</tag>
+  <studio>Columbia Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">137</uniqueid>
+  <uniqueid type="imdb">tt0107048</uniqueid>
+  <actor>
+    <name>Bill Murray</name>
+    <role>Phil</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Andie MacDowell</name>
+    <role>Rita</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Elliott</name>
+    <role>Larry</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Tobolowsky</name>
+    <role>Ned</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Doyle-Murray</name>
+    <role>Buster</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Marita Geraghty</name>
+    <role>Nancy</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Angela Paton</name>
+    <role>Mrs. Lancaster</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rick Ducommun</name>
+    <role>Gus</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Rick Overton</name>
+    <role>Ralph</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Robin Duke</name>
+    <role>Doris the Waitress</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Carol Bivins</name>
+    <role>Anchorwoman</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Willie Garson</name>
+    <role>Phil's Assistant Kenny</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ken Hudson Campbell</name>
+    <role>Man in Hallway</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Les Podewell</name>
+    <role>Old Man</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rod Sell</name>
+    <role>Groundhog Official</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Harold Ramis</director>
+  <credits>Danny Rubin</credits>
+  <credits>Harold Ramis</credits>
+</movie>

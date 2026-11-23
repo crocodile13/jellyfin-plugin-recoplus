@@ -1,0 +1,106 @@
+<tvshow>
+  <title>Tom Clancy's Jack Ryan</title>
+  <originaltitle>Tom Clancy's Jack Ryan</originaltitle>
+  <year>2018</year>
+  <premiered>2018-08-30</premiered>
+  <rating>7.668</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Drama</genre>
+  <tag>central intelligence agency (cia)</tag>
+  <tag>based on novel or book</tag>
+  <tag>intelligence</tag>
+  <tag>espionage</tag>
+  <tag>jack ryan</tag>
+  <tag>national security</tag>
+  <tag>ex military</tag>
+  <tag>analyst</tag>
+  <tag>counterterrorism</tag>
+  <tag>government agency</tag>
+  <tag>intelligence service</tag>
+  <tag>cia analyst</tag>
+  <studio>Prime Video</studio>
+  <studio>Amazon Studios</studio>
+  <studio>Platinum Dunes</studio>
+  <studio>Skydance Television</studio>
+  <studio>Genre Arts</studio>
+  <studio>Push, Boot.</studio>
+  <studio>Paramount Television Studios</studio>
+  <uniqueid type="tmdb" default="true">73375</uniqueid>
+  <uniqueid type="imdb">tt5057054</uniqueid>
+  <actor>
+    <name>John Krasinski</name>
+    <role>Jack Ryan</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Wendell Pierce</name>
+    <role>James Greer</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Abbie Cornish</name>
+    <role>Cathy Mueller</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ali Suliman</name>
+    <role>Mousa bin Suleiman</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Noomi Rapace</name>
+    <role>Harriet 'Harry' Baumann</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Okieriete Onaodowan</name>
+    <role>Adebayo 'Ade' Osoji</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Dina Shihabi</name>
+    <role>Hanin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Nina Hoss</name>
+    <role>Alena Kovac</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Louis Ozawa</name>
+    <role>Chao Fah Sein</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Zuleikha Robinson</name>
+    <role>Zeyara Lemos</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jordi Mollà</name>
+    <role>President Nicolás Reyes</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ryn Greenwell</name>
+    <role>Bennu Fah</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Guinness</name>
+    <role>Petr Kovac</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Peña</name>
+    <role>Domingo Chavez</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Betty Gabriel</name>
+    <role>Elizabeth Wright</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

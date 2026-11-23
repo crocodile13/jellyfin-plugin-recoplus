@@ -1,0 +1,126 @@
+<movie>
+  <title>Forrest Gump</title>
+  <originaltitle>Forrest Gump</originaltitle>
+  <year>1994</year>
+  <premiered>1994-06-23</premiered>
+  <rating>8.462</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Comedy</genre>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>new year's eve</tag>
+  <tag>vietnam war</tag>
+  <tag>vietnam veteran</tag>
+  <tag>mentally disabled</tag>
+  <tag>friendship</tag>
+  <tag>usa president</tag>
+  <tag>washington dc, usa</tag>
+  <tag>post-traumatic stress disorder (ptsd)</tag>
+  <tag>waitress</tag>
+  <tag>based on novel or book</tag>
+  <tag>hippie</tag>
+  <tag>single parent</tag>
+  <tag>parent child relationship</tag>
+  <tag>optimism</tag>
+  <tag>1970s</tag>
+  <tag>drug addiction</tag>
+  <tag>autism</tag>
+  <tag>alabama</tag>
+  <tag>black panther party</tag>
+  <tag>bus stop</tag>
+  <tag>family relationships</tag>
+  <tag>chameleon</tag>
+  <tag>single mother</tag>
+  <tag>military</tag>
+  <tag>anti war protest</tag>
+  <tag>1960s</tag>
+  <tag>simpleton</tag>
+  <tag>college american football</tag>
+  <tag>mother son relationship</tag>
+  <tag>america</tag>
+  <tag>feelgood</tag>
+  <studio>Paramount Pictures</studio>
+  <studio>The Steve Tisch Company</studio>
+  <studio>Wendy Finerman Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">13</uniqueid>
+  <uniqueid type="imdb">tt0109830</uniqueid>
+  <actor>
+    <name>Tom Hanks</name>
+    <role>Forrest Gump</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Robin Wright</name>
+    <role>Jenny Curran</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Gary Sinise</name>
+    <role>Lieutenant Dan Taylor</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Mykelti Williamson</name>
+    <role>Bubba Blue</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sally Field</name>
+    <role>Mrs. Gump</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Anderson</name>
+    <role>Principal Hancock</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Geoffrey Blake</name>
+    <role>Wesley</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Dobson</name>
+    <role>Young Elvis Presley</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Haley Joel Osment</name>
+    <role>Forrest Junior</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Siobhan Fallon Hogan</name>
+    <role>School Bus Driver</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Sonny Shroyer</name>
+    <role>Bear Bryant</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Conner Humphreys</name>
+    <role>Young Forrest Gump</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Hanna Hall</name>
+    <role>Young Jenny Curran</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Rebecca Williams</name>
+    <role>Nurse at Park Bench</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Penny</name>
+    <role>Crony</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Robert Zemeckis</director>
+  <credits>Eric Roth</credits>
+  <credits>Winston Groom</credits>
+</movie>

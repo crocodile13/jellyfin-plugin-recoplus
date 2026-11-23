@@ -1,0 +1,100 @@
+<tvshow>
+  <title>The Witcher</title>
+  <originaltitle>The Witcher</originaltitle>
+  <year>2019</year>
+  <premiered>2019-12-20</premiered>
+  <rating>7.876</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Action &amp; Adventure</genre>
+  <tag>based on novel or book</tag>
+  <tag>monster</tag>
+  <tag>mutant</tag>
+  <tag>magic</tag>
+  <tag>mutation</tag>
+  <tag>fantasy world</tag>
+  <tag>dark fantasy</tag>
+  <studio>Netflix</studio>
+  <studio>Sean Daniel Company</studio>
+  <studio>Platige Image</studio>
+  <studio>Hivemind</studio>
+  <studio>Little Schmidt Productions</studio>
+  <studio>Platige Films</studio>
+  <uniqueid type="tmdb" default="true">71912</uniqueid>
+  <uniqueid type="imdb">tt5180504</uniqueid>
+  <actor>
+    <name>Henry Cavill</name>
+    <role>Geralt of Rivia</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Liam Hemsworth</name>
+    <role>Geralt of Rivia</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Anya Chalotra</name>
+    <role>Yennefer of Vengerberg</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Freya Allan</name>
+    <role>Princess Cirilla 'Ciri' of Cintra</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Joey Batey</name>
+    <role>Jaskier / The Sandpiper</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Eamon Farren</name>
+    <role>Cahir</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Mimî M. Khayisa</name>
+    <role>Fringilla Vigo</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Anna Shaffer</name>
+    <role>Triss Merigold</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mahesh Jadu</name>
+    <role>Vilgefortz of Roggeveen</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Zhang Meng'er</name>
+    <role>Milva</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Danny Woodburn</name>
+    <role>Zoltan Chivay</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Cassie Clare</name>
+    <role>Philippa Eilhart</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Levy</name>
+    <role>Mousesack</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>MyAnna Buring</name>
+    <role>Tissaia De Vries</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Christelle Elwin</name>
+    <role>Mistle</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

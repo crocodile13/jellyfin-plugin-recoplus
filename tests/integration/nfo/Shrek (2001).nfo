@@ -1,0 +1,126 @@
+<movie>
+  <title>Shrek</title>
+  <originaltitle>Shrek</originaltitle>
+  <year>2001</year>
+  <premiered>2001-05-18</premiered>
+  <rating>7.781</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Fantasy</genre>
+  <genre>Adventure</genre>
+  <genre>Family</genre>
+  <tag>princess</tag>
+  <tag>based on novel or book</tag>
+  <tag>magic</tag>
+  <tag>fairy tale</tag>
+  <tag>donkey</tag>
+  <tag>liberation</tag>
+  <tag>lordship</tag>
+  <tag>prince</tag>
+  <tag>castle</tag>
+  <tag>villain</tag>
+  <tag>robin hood</tag>
+  <tag>enchantment</tag>
+  <tag>swamp</tag>
+  <tag>parody</tag>
+  <tag>anthropomorphism</tag>
+  <tag>dragon</tag>
+  <tag>woman director</tag>
+  <tag>ogre</tag>
+  <tag>3d animation</tag>
+  <tag>grand</tag>
+  <tag>cartoon donkey</tag>
+  <tag>appreciative</tag>
+  <tag>bold</tag>
+  <studio>Pacific Data Images</studio>
+  <studio>DreamWorks Animation</studio>
+  <studio>DreamWorks Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">808</uniqueid>
+  <uniqueid type="imdb">tt0126029</uniqueid>
+  <set tmdbcolid="2150">
+    <name>2150</name>
+  </set>
+  <actor>
+    <name>Mike Myers</name>
+    <role>Shrek / Blind Mouse (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Eddie Murphy</name>
+    <role>Donkey (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Cameron Diaz</name>
+    <role>Princess Fiona (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>John Lithgow</name>
+    <role>Lord Farquaad (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Vincent Cassel</name>
+    <role>Monsieur Hood (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Dennis</name>
+    <role>Ogre Hunter (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Clive Pearse</name>
+    <role>Ogre Hunter (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Cummings</name>
+    <role>Captain of the Guards (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Bobby Block</name>
+    <role>Baby Bear (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Miller</name>
+    <role>Geppetto / Magic Mirror (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Cody Cameron</name>
+    <role>Pinnochio / Three Pigs (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kathleen Freeman</name>
+    <role>Old Woman  (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Galasso</name>
+    <role>Peter Pan (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Knights</name>
+    <role>Blind Mouse / Thelonious (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Simon J. Smith</name>
+    <role>Blind Mouse (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Andrew Adamson</director>
+  <director>Vicky Jenson</director>
+  <credits>Terry Rossio</credits>
+  <credits>Joe Stillman</credits>
+  <credits>Ted Elliott</credits>
+  <credits>Roger S.H. Schulman</credits>
+</movie>

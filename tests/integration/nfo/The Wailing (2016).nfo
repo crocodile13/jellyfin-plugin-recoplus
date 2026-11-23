@@ -1,0 +1,117 @@
+<movie>
+  <title>The Wailing</title>
+  <originaltitle>곡성</originaltitle>
+  <year>2016</year>
+  <premiered>2016-05-12</premiered>
+  <rating>7.405</rating>
+  <mpaa>NR</mpaa>
+  <genre>Horror</genre>
+  <genre>Mystery</genre>
+  <tag>daughter</tag>
+  <tag>small town</tag>
+  <tag>police</tag>
+  <tag>investigation</tag>
+  <tag>exorcism</tag>
+  <tag>possession</tag>
+  <tag>murder</tag>
+  <tag>priest</tag>
+  <tag>rural area</tag>
+  <tag>curse</tag>
+  <tag>shaman</tag>
+  <tag>zombie</tag>
+  <tag>demon</tag>
+  <tag>shrine</tag>
+  <tag>occult</tag>
+  <tag>ghost</tag>
+  <tag>gluttony</tag>
+  <tag>shamanism</tag>
+  <tag>folk horror</tag>
+  <tag>acupuncture</tag>
+  <tag>divination</tag>
+  <tag>ambiguous</tag>
+  <studio>Fox International Productions</studio>
+  <studio>Ivanhoe Pictures</studio>
+  <studio>Side Mirror</studio>
+  <studio>20th Century Fox Korea</studio>
+  <country>South Korea</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">293670</uniqueid>
+  <uniqueid type="imdb">tt5215952</uniqueid>
+  <actor>
+    <name>Kwak Do-won</name>
+    <role>Jong-goo</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hwang Jung-min</name>
+    <role>Il-gwang</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Chun Woo-hee</name>
+    <role>Moo-myeong</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jun Kunimura</name>
+    <role>The Stranger</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Hwan-hee</name>
+    <role>Hyo-jin</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Heo Jin</name>
+    <role>Mother-in-Law</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jang So-yeon</name>
+    <role>Jong-goo's Wife</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Do-yoon</name>
+    <role>Yang Yi-sam</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Cho Han-chul</name>
+    <role>Detective</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Son Kang-gook</name>
+    <role>Oh Sung-bok</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Park Seong-yeon</name>
+    <role>Kwon Myung-joo</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Bae Yong-geun</name>
+    <role>Police Officer</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Ki-cheon</name>
+    <role>Police Box Chief</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Yoo Soon-woong</name>
+    <role>Police Station Chief</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Yong-nyeo</name>
+    <role>Jak-boo's Mother</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Na Hong-jin</director>
+  <credits>Na Hong-jin</credits>
+</movie>

@@ -1,0 +1,103 @@
+<tvshow>
+  <title>Marvel's Daredevil</title>
+  <originaltitle>Marvel's Daredevil</originaltitle>
+  <year>2015</year>
+  <premiered>2015-04-10</premiered>
+  <rating>8.172</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>Action &amp; Adventure</genre>
+  <tag>new york city</tag>
+  <tag>corruption</tag>
+  <tag>secret identity</tag>
+  <tag>secret organization</tag>
+  <tag>vigilante</tag>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>lawyer</tag>
+  <tag>blind</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <studio>Netflix</studio>
+  <studio>ABC Studios</studio>
+  <studio>DeKnight Industries</studio>
+  <studio>Goddard Textiles</studio>
+  <studio>Marvel Television</studio>
+  <uniqueid type="tmdb" default="true">61889</uniqueid>
+  <uniqueid type="imdb">tt3322312</uniqueid>
+  <actor>
+    <name>Charlie Cox</name>
+    <role>Matt Murdock / Daredevil</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Deborah Ann Woll</name>
+    <role>Karen Page</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Elden Henson</name>
+    <role>Foggy Nelson</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Bernthal</name>
+    <role>Frank Castle / Punisher</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Nikolai Nikolaeff</name>
+    <role>Vladimir</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Gideon Emery</name>
+    <role>Anatoly</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Vincent D'Onofrio</name>
+    <role>Wilson Fisk / Kingpin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rob Morgan</name>
+    <role>Turk Barrett</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Nagle</name>
+    <role>Roscoe Sweeney</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Wendy Moniz</name>
+    <role>Jennifer Fisher</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Adriane Lenox</name>
+    <role>Doris Urich</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Alex Falberg</name>
+    <role>Semyon</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Moisés Acevedo</name>
+    <role>Santino</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Judith Delgado</name>
+    <role>Elena Cardenas</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Suzanne H. Smart</name>
+    <role>Shirley Benson</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

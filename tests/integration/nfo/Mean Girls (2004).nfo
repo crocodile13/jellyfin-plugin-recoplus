@@ -1,0 +1,124 @@
+<movie>
+  <title>Mean Girls</title>
+  <originaltitle>Mean Girls</originaltitle>
+  <year>2004</year>
+  <premiered>2004-04-30</premiered>
+  <rating>7.228</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Drama</genre>
+  <genre>Comedy</genre>
+  <tag>based on novel or book</tag>
+  <tag>illinois</tag>
+  <tag>female friendship</tag>
+  <tag>bullying</tag>
+  <tag>coming of age</tag>
+  <tag>prom</tag>
+  <tag>teenage girl</tag>
+  <tag>fish out of water</tag>
+  <tag>best friend</tag>
+  <tag>math teacher</tag>
+  <tag>gossip</tag>
+  <tag>clique</tag>
+  <tag>former best friend</tag>
+  <tag>teen comedy</tag>
+  <tag>exploitation of friendship</tag>
+  <tag>public humiliation</tag>
+  <tag>high school rivalry</tag>
+  <tag>new girl at school</tag>
+  <tag>teenage life</tag>
+  <tag>manipulative friend</tag>
+  <tag>math genius</tag>
+  <tag>mischievous</tag>
+  <tag>female bully</tag>
+  <tag>teenage friendship</tag>
+  <tag>teenager</tag>
+  <tag>audacious</tag>
+  <tag>mean girls</tag>
+  <tag>mean girl</tag>
+  <studio>Broadway Video</studio>
+  <studio>Paramount Pictures</studio>
+  <studio>M.G. Films</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">10625</uniqueid>
+  <uniqueid type="imdb">tt0377092</uniqueid>
+  <set tmdbcolid="99606">
+    <name>99606</name>
+  </set>
+  <actor>
+    <name>Lindsay Lohan</name>
+    <role>Cady Heron</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel McAdams</name>
+    <role>Regina George</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Lizzy Caplan</name>
+    <role>Janis Ian</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lacey Chabert</name>
+    <role>Gretchen Wieners</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Amanda Seyfried</name>
+    <role>Karen Smith</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Franzese</name>
+    <role>Damian</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Bennett</name>
+    <role>Aaron Samuels</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rajiv Surendra</name>
+    <role>Kevin Gnapoor</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Tina Fey</name>
+    <role>Ms. Norbury</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Meadows</name>
+    <role>Mr. Duvall</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ana Gasteyer</name>
+    <role>Cady's Mom</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Neil Flynn</name>
+    <role>Cady's Dad</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Poehler</name>
+    <role>Mrs. George</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Dwayne Hill</name>
+    <role>Coach Carr</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Diego Klattenhoff</name>
+    <role>Shane Oman</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Mark Waters</director>
+  <credits>Tina Fey</credits>
+</movie>

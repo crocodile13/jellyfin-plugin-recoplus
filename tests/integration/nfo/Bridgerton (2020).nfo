@@ -1,0 +1,106 @@
+<tvshow>
+  <title>Bridgerton</title>
+  <originaltitle>Bridgerton</originaltitle>
+  <year>2020</year>
+  <premiered>2020-12-25</premiered>
+  <rating>8</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <tag>based on novel or book</tag>
+  <tag>affectation</tag>
+  <tag>society</tag>
+  <tag>marriage</tag>
+  <tag>love</tag>
+  <tag>romance</tag>
+  <tag>alternate history</tag>
+  <tag>period drama</tag>
+  <tag>lgbt</tag>
+  <tag>courtship</tag>
+  <tag>georgian or regency era</tag>
+  <tag>period piece</tag>
+  <tag>secret</tag>
+  <tag>non-traditional casting</tag>
+  <tag>dramatic</tag>
+  <tag>romantic</tag>
+  <studio>Netflix</studio>
+  <studio>shondaland</studio>
+  <studio>CVD Productions</studio>
+  <uniqueid type="tmdb" default="true">91239</uniqueid>
+  <uniqueid type="imdb">tt8740790</uniqueid>
+  <actor>
+    <name>Ruth Gemmell</name>
+    <role>Lady Violet Bridgerton</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Bailey</name>
+    <role>Lord Anthony Bridgerton</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Luke Thompson</name>
+    <role>Benedict Bridgerton</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Regé-Jean Page</name>
+    <role>Simon Basset</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yerin Ha</name>
+    <role>Sophie Baek</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Luke Newton</name>
+    <role>Colin Bridgerton</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Victor Alli</name>
+    <role>Lord John Stirling</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Claudia Jessie</name>
+    <role>Eloise Bridgerton</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Florence Hunt</name>
+    <role>Hyacinth Bridgerton</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Will Tilston</name>
+    <role>Gregory Bridgerton</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Charithra Chandran</name>
+    <role>Edwina Sharma</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Adjoa Andoh</name>
+    <role>Lady Agatha Danbury</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Andrews</name>
+    <role>Lady Whistledown (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Polly Walker</name>
+    <role>Lady Portia Featherington</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Golda Rosheuvel</name>
+    <role>Queen Charlotte</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <credits>Julia Quinn</credits>
+</tvshow>

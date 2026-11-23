@@ -1,0 +1,121 @@
+<movie>
+  <title>District 9</title>
+  <originaltitle>District 9</originaltitle>
+  <year>2009</year>
+  <premiered>2009-08-05</premiered>
+  <rating>7.479</rating>
+  <mpaa>R</mpaa>
+  <genre>Science Fiction</genre>
+  <tag>street gang</tag>
+  <tag>government</tag>
+  <tag>genetics</tag>
+  <tag>slum</tag>
+  <tag>mutation</tag>
+  <tag>dystopia</tag>
+  <tag>transformation</tag>
+  <tag>south africa</tag>
+  <tag>johannesburg, south africa</tag>
+  <tag>satire</tag>
+  <tag>alien</tag>
+  <tag>prawn</tag>
+  <tag>alternate history</tag>
+  <tag>racism</tag>
+  <tag>metamorphosis</tag>
+  <tag>xenophobia</tag>
+  <tag>found footage</tag>
+  <tag>weapons dealer</tag>
+  <tag>internment camp</tag>
+  <tag>alien technology</tag>
+  <tag>segregation</tag>
+  <tag>medical experiment</tag>
+  <tag>private military company</tag>
+  <tag>based on short film</tag>
+  <tag>found footage adjacent</tag>
+  <studio>TriStar Pictures</studio>
+  <studio>Block / Hanson</studio>
+  <studio>WingNut Films</studio>
+  <studio>District 9</studio>
+  <country>New Zealand</country>
+  <country>South Africa</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">17654</uniqueid>
+  <uniqueid type="imdb">tt1136608</uniqueid>
+  <actor>
+    <name>Sharlto Copley</name>
+    <role>Wikus van de Merwe</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Cope</name>
+    <role>Christopher Johnson / Grey Bradnam / Trent</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Nathalie Boltt</name>
+    <role>Sarah Livingstone - Sociologist</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sylvaine Strike</name>
+    <role>Dr Katrina McKenzie</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Mkandawie</name>
+    <role>Interviewee</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>John Sumner</name>
+    <role>Les Feldman - MIL Engineer</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>William Allen Young</name>
+    <role>Dirk Michaels</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Nick Blake</name>
+    <role>Francois Moraneu - CIV Engineer Team</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Greg Melvill-Smith</name>
+    <role>Interviewer</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Hobbs</name>
+    <role>Ross Pienaar</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Vanessa Haywood</name>
+    <role>Tania van de Merwe</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Morena Busa Sesatsa</name>
+    <role>Interviewee</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Themba Nkosi</name>
+    <role>Interviewee</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Mzwandile Nqoba</name>
+    <role>Interviewee</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Strydom</name>
+    <role>Interviewee</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Neill Blomkamp</director>
+  <credits>Neill Blomkamp</credits>
+  <credits>Terri Tatchell</credits>
+</movie>

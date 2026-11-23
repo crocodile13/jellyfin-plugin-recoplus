@@ -1,0 +1,115 @@
+<tvshow>
+  <title>The Good Place</title>
+  <originaltitle>The Good Place</originaltitle>
+  <year>2016</year>
+  <premiered>2016-09-19</premiered>
+  <rating>8</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Comedy</genre>
+  <tag>paradise</tag>
+  <tag>philosophy</tag>
+  <tag>soulmates</tag>
+  <tag>heaven</tag>
+  <tag>friendship</tag>
+  <tag>hell</tag>
+  <tag>afterlife</tag>
+  <tag>mistaken identity</tag>
+  <tag>torture</tag>
+  <tag>neighborhood</tag>
+  <tag>karma</tag>
+  <tag>sitcom</tag>
+  <tag>ethics</tag>
+  <tag>save the world</tag>
+  <studio>NBC</studio>
+  <studio>Fremulon</studio>
+  <studio>3 Arts Entertainment</studio>
+  <studio>Universal Television</studio>
+  <uniqueid type="tmdb" default="true">66573</uniqueid>
+  <uniqueid type="imdb">tt4955642</uniqueid>
+  <actor>
+    <name>Kristen Bell</name>
+    <role>Eleanor Shellstrop</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ted Danson</name>
+    <role>Michael</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>William Jackson Harper</name>
+    <role>Chidi Anagonye</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jameela Jamil</name>
+    <role>Tahani Al-Jamil</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Manny Jacinto</name>
+    <role>Jason Mendoza</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>D'Arcy Carden</name>
+    <role>Janet</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Emily Arlook</name>
+    <role>Dana</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jill Remez</name>
+    <role>Gloria</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Paulina Lule</name>
+    <role>Angélique</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Okuda</name>
+    <role>Jessica</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Okuda</name>
+    <role>Gayle / Jessica</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Okuda</name>
+    <role>Gayle</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Hayden Szeto</name>
+    <role>Luang</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Joaquin Ticonderoga</name>
+    <role>Pedro</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>George Basil</name>
+    <role>Andy</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Sandra Cevallos</name>
+    <role>Cualli</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>Jamie Denbo</name>
+    <role>Chef Patricia</role>
+    <sortorder>16</sortorder>
+  </actor>
+</tvshow>

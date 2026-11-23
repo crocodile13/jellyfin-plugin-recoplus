@@ -1,0 +1,111 @@
+<movie>
+  <title>Delicatessen</title>
+  <originaltitle>Delicatessen</originaltitle>
+  <year>1991</year>
+  <premiered>1991-04-17</premiered>
+  <rating>7.315</rating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <genre>Science Fiction</genre>
+  <genre>Fantasy</genre>
+  <tag>underground</tag>
+  <tag>suicide attempt</tag>
+  <tag>dystopia</tag>
+  <tag>post-apocalyptic future</tag>
+  <tag>dark comedy</tag>
+  <tag>clown</tag>
+  <tag>butcher</tag>
+  <tag>butcher's shop</tag>
+  <tag>vegetarian</tag>
+  <tag>terror cell</tag>
+  <tag>surrealism</tag>
+  <tag>cannibal</tag>
+  <tag>cannibalism</tag>
+  <tag>post-apocalyptic</tag>
+  <studio>Constellation</studio>
+  <studio>Hachette Première</studio>
+  <studio>UGC</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">892</uniqueid>
+  <uniqueid type="imdb">tt0101700</uniqueid>
+  <actor>
+    <name>Dominique Pinon</name>
+    <role>Louison</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Marie-Laure Dougnac</name>
+    <role>Julie Clapet</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-Claude Dreyfus</name>
+    <role>Clapet</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Karin Viard</name>
+    <role>Mademoiselle Plusse</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ticky Holgado</name>
+    <role>Marcel Tapioca</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Pascal Benezech</name>
+    <role>Tried to Escape</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Edith Ker</name>
+    <role>Grandmother</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rufus</name>
+    <role>Robert Kube</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jacques Mathou</name>
+    <role>Roger Kube</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chick Ortega</name>
+    <role>Postman</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-François Perrier</name>
+    <role>Georges Interligator</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Silvie Laguna</name>
+    <role>Aurore Interligator</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Howard Vernon</name>
+    <role>Frog Man</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Dominique Zardi</name>
+    <role>Taxi Driver</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Anne-Marie Pisani</name>
+    <role>Madame Tapioca</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jean-Pierre Jeunet</director>
+  <director>Marc Caro</director>
+  <credits>Jean-Pierre Jeunet</credits>
+  <credits>Gilles Adrien</credits>
+  <credits>Marc Caro</credits>
+</movie>

@@ -1,0 +1,126 @@
+<movie>
+  <title>Burning</title>
+  <originaltitle>버닝</originaltitle>
+  <year>2018</year>
+  <premiered>2018-05-17</premiered>
+  <rating>7.4</rating>
+  <mpaa>R</mpaa>
+  <genre>Mystery</genre>
+  <genre>Drama</genre>
+  <genre>Thriller</genre>
+  <tag>fire</tag>
+  <tag>jealousy</tag>
+  <tag>dreams</tag>
+  <tag>countryside</tag>
+  <tag>love triangle</tag>
+  <tag>cat</tag>
+  <tag>sex shop</tag>
+  <tag>sadness</tag>
+  <tag>sunlight</tag>
+  <tag>suspicion</tag>
+  <tag>greenhouse</tag>
+  <tag>melancholy</tag>
+  <tag>love</tag>
+  <tag>arson</tag>
+  <tag>writer</tag>
+  <tag>class differences</tag>
+  <tag>based on short story</tag>
+  <tag>burning</tag>
+  <tag>questioning</tag>
+  <tag>metaphor</tag>
+  <tag>meditative</tag>
+  <tag>philosophical</tag>
+  <tag>dance ritual</tag>
+  <tag>rural setting</tag>
+  <tag>introspective</tag>
+  <tag>sunsets</tag>
+  <tag>return to hometown</tag>
+  <tag>seoul, south korea</tag>
+  <tag>disappearing</tag>
+  <tag>subjective</tag>
+  <studio>Pinehouse Film</studio>
+  <studio>NOWFILM</studio>
+  <studio>NHK</studio>
+  <country>South Korea</country>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">491584</uniqueid>
+  <uniqueid type="imdb">tt7282468</uniqueid>
+  <actor>
+    <name>Yoo Ah-in</name>
+    <role>Lee Jong-su</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Steven Yeun</name>
+    <role>Ben</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jeon Jong-seo</name>
+    <role>Shin Hae-mi</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Soo-kyung</name>
+    <role>Yeon-ju</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Choe Seung-ho</name>
+    <role>Lee Yong-seok</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Moon Sung-keun</name>
+    <role>Lawyer</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Min Bok-gi</name>
+    <role>Judge</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Soo-jung</name>
+    <role>Prosecutor</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Ban Hye-ra</name>
+    <role>Jong-su's mother</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Cha Mi-kyung</name>
+    <role>Hae-mi's mother</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Bong-ryeon</name>
+    <role>Hae-mi's Sister</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jeong Chang-ok</name>
+    <role>Village head</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Park Seoung-tae</name>
+    <role>Landlady</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Cho Young-joon</name>
+    <role>Young Jong-su</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Young-suk</name>
+    <role>Store owner</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Lee Chang-dong</director>
+  <credits>Lee Chang-dong</credits>
+  <credits>Oh Jung-mi</credits>
+</movie>

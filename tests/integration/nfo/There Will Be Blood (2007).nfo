@@ -1,0 +1,129 @@
+<movie>
+  <title>There Will Be Blood</title>
+  <originaltitle>There Will Be Blood</originaltitle>
+  <year>2007</year>
+  <premiered>2007-12-26</premiered>
+  <rating>8.061</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <tag>california</tag>
+  <tag>petrol</tag>
+  <tag>sibling relationship</tag>
+  <tag>based on novel or book</tag>
+  <tag>capitalism</tag>
+  <tag>pastor</tag>
+  <tag>deaf-mute</tag>
+  <tag>greed</tag>
+  <tag>american dream</tag>
+  <tag>narcissism</tag>
+  <tag>fanatic</tag>
+  <tag>father</tag>
+  <tag>baptism</tag>
+  <tag>misanthrophy</tag>
+  <tag>money</tag>
+  <tag>oil</tag>
+  <tag>religion</tag>
+  <tag>impostor</tag>
+  <tag>church</tag>
+  <tag>alcoholic</tag>
+  <tag>oil industry</tag>
+  <tag>child abandonment</tag>
+  <tag>character study</tag>
+  <tag>zealot</tag>
+  <tag>bowling alley</tag>
+  <tag>sign languages</tag>
+  <tag>oil field</tag>
+  <tag>turn of the century</tag>
+  <tag>19th century</tag>
+  <tag>adopted son</tag>
+  <tag>1900s</tag>
+  <tag>personality change</tag>
+  <tag>pipeline</tag>
+  <tag>20th century</tag>
+  <tag>1890s</tag>
+  <studio>Paramount Vantage</studio>
+  <studio>Miramax</studio>
+  <studio>JoAnne Sellar Productions</studio>
+  <studio>Ghoulardi Film Company</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">7345</uniqueid>
+  <uniqueid type="imdb">tt0469494</uniqueid>
+  <actor>
+    <name>Daniel Day-Lewis</name>
+    <role>Daniel Plainview</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Dano</name>
+    <role>Paul Sunday / Eli Sunday</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin J. O'Connor</name>
+    <role>Henry</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ciarán Hinds</name>
+    <role>Fletcher Hamilton</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sydney McCallister</name>
+    <role>Mary Sunday (young)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Dillon Freasier</name>
+    <role>H.W. Plainview</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Hope Elizabeth Reeves</name>
+    <role>Elizabeth</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Colleen Foy</name>
+    <role>Mary Sunday</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Del Sherman</name>
+    <role>H. B. Ailman</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>David Willis</name>
+    <role>Abel Sunday</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Hans Howes</name>
+    <role>Mr. Bandy</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Paul F. Tompkins</name>
+    <role>Prescott</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Breznahan</name>
+    <role>Signal Hill Man</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Meskimen</name>
+    <role>Signal Hill Married Man</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Erica Sullivan</name>
+    <role>Signal Hill Woman</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Paul Thomas Anderson</director>
+  <credits>Upton Sinclair</credits>
+  <credits>Paul Thomas Anderson</credits>
+</movie>

@@ -1,0 +1,113 @@
+<movie>
+  <title>Moonlight</title>
+  <originaltitle>Moonlight</originaltitle>
+  <year>2016</year>
+  <premiered>2016-10-21</premiered>
+  <rating>7.4</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <tag>drug dealer</tag>
+  <tag>high school</tag>
+  <tag>florida</tag>
+  <tag>drug abuse</tag>
+  <tag>miami, florida</tag>
+  <tag>parent child relationship</tag>
+  <tag>fight</tag>
+  <tag>homophobia</tag>
+  <tag>drug addiction</tag>
+  <tag>ghetto</tag>
+  <tag>restaurant</tag>
+  <tag>bullying</tag>
+  <tag>coming of age</tag>
+  <tag>male homosexuality</tag>
+  <tag>lgbt</tag>
+  <tag>addict</tag>
+  <tag>masculinity</tag>
+  <tag>black lgbt</tag>
+  <tag>atlanta, georgia</tag>
+  <tag>gay theme</tag>
+  <tag>boys' love (bl)</tag>
+  <studio>A24</studio>
+  <studio>Plan B Entertainment</studio>
+  <studio>PASTEL</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">376867</uniqueid>
+  <uniqueid type="imdb">tt4975722</uniqueid>
+  <actor>
+    <name>Trevante Rhodes</name>
+    <role>Black</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>André Holland</name>
+    <role>Kevin</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Janelle Monáe</name>
+    <role>Teresa</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ashton Sanders</name>
+    <role>Chiron</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jharrel Jerome</name>
+    <role>Kevin Age 16</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Alex R. Hibbert</name>
+    <role>Little</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jaden Piner</name>
+    <role>Kevin Age 9</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Naomie Harris</name>
+    <role>Paula</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mahershala Ali</name>
+    <role>Juan</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Shariff Earp</name>
+    <role>Terrence</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Duan Sanderson</name>
+    <role>Azu</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Herman 'Caheei McGloun</name>
+    <role>Longshoreman</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kamal Ani-Bellow</name>
+    <role>Portable Boy 1</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Keomi Givens</name>
+    <role>Portable Boy 2</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Eddie Blanchard</name>
+    <role>Portable Boy 3</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Barry Jenkins</director>
+  <credits>Barry Jenkins</credits>
+</movie>

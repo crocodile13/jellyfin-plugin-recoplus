@@ -1,0 +1,85 @@
+<movie>
+  <title>Amy</title>
+  <originaltitle>Amy</originaltitle>
+  <year>2015</year>
+  <premiered>2015-07-02</premiered>
+  <rating>7.564</rating>
+  <mpaa>R</mpaa>
+  <genre>Documentary</genre>
+  <genre>Music</genre>
+  <tag>jazz</tag>
+  <tag>drug addiction</tag>
+  <tag>rehabilitation</tag>
+  <tag>overdose</tag>
+  <tag>jazz singer or musician</tag>
+  <tag>biography</tag>
+  <tag>addiction</tag>
+  <tag>drug rehabilitation</tag>
+  <tag>drug overdose</tag>
+  <tag>addict</tag>
+  <tag>eating disorder</tag>
+  <tag>downward spiral</tag>
+  <studio>On the Corner Films</studio>
+  <studio>Globe Productions</studio>
+  <studio>Film4 Productions</studio>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">331781</uniqueid>
+  <uniqueid type="imdb">tt2870648</uniqueid>
+  <actor>
+    <name>Amy Winehouse</name>
+    <role>Self (archive footage)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Ronson</name>
+    <role>Self</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Bennett</name>
+    <role>Self</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Pete Doherty</name>
+    <role>Self</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Juliette Ashby</name>
+    <role>Self</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Yasiin Bey</name>
+    <role>Self</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Mitch Winehouse</name>
+    <role>Self</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Tyler James</name>
+    <role>Self</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Nick Shymansky</name>
+    <role>Self</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Salaam Remi</name>
+    <role>Self</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Blake Fielder-Civil</name>
+    <role>Self</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <director>Asif Kapadia</director>
+  <credits>Asif Kapadia</credits>
+</movie>

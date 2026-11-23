@@ -1,0 +1,105 @@
+<tvshow>
+  <title>Reply 1988</title>
+  <originaltitle>응답하라 1988</originaltitle>
+  <year>2015</year>
+  <premiered>2015-11-06</premiered>
+  <rating>8.7</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Comedy</genre>
+  <tag>love triangle</tag>
+  <tag>nostalgia</tag>
+  <tag>friendship</tag>
+  <tag>romcom</tag>
+  <tag>romance</tag>
+  <tag>coming of age</tag>
+  <tag>school</tag>
+  <tag>bromance</tag>
+  <tag>go</tag>
+  <tag>1980s</tag>
+  <tag>mother son relationship</tag>
+  <tag>heartfelt</tag>
+  <tag>seoul, south korea</tag>
+  <tag>charming</tag>
+  <tag>romantic drama</tag>
+  <tag>cheerful</tag>
+  <tag>weiqi</tag>
+  <studio>tvN</studio>
+  <studio>CJ ENM</studio>
+  <uniqueid type="tmdb" default="true">64010</uniqueid>
+  <uniqueid type="imdb">tt5182866</uniqueid>
+  <actor>
+    <name>Lee Hye-ri</name>
+    <role>Sung Deok-sun</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ryu Jun-yeol</name>
+    <role>Kim Jung-hwan</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Park Bo-gum</name>
+    <role>Choi Taek</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Go Kyung-pyo</name>
+    <role>Sung Sun-woo</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Dong-hwi</name>
+    <role>Ryu Dong-ryong</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ryu Hye-young</name>
+    <role>Sung Bo-ra</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Seong-won</name>
+    <role>Sung No-eul</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ahn Jae-hong</name>
+    <role>Kim Jung-bong</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Seol</name>
+    <role>Sung Jin-ju</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sung Dong-il</name>
+    <role>Sung Dong-il</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Il-hwa</name>
+    <role>Lee Il-hwa</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Sung-kyun</name>
+    <role>Kim Sung-kyun</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ra Mi-ran</name>
+    <role>Ra Mi-ran</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Mu-sung</name>
+    <role>Choi Moo-seong</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Sun-young</name>
+    <role>Kim Sun-young</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

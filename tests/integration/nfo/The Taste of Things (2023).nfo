@@ -1,0 +1,89 @@
+<movie>
+  <title>The Taste of Things</title>
+  <originaltitle>La Passion de Dodin Bouffant</originaltitle>
+  <year>2023</year>
+  <premiered>2023-11-08</premiered>
+  <rating>7.106</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Romance</genre>
+  <genre>Drama</genre>
+  <tag>affectation</tag>
+  <tag>french cuisine</tag>
+  <tag>intimate</tag>
+  <studio>Curiosa Films</studio>
+  <studio>France 2 Cinéma</studio>
+  <studio>uMedia</studio>
+  <studio>Gaumont</studio>
+  <country>Belgium</country>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">964960</uniqueid>
+  <uniqueid type="imdb">tt19760052</uniqueid>
+  <actor>
+    <name>Benoît Magimel</name>
+    <role>Dodin Bouffant</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Juliette Binoche</name>
+    <role>Eugénie</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick d'Assumçao</name>
+    <role>Grimaud</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Emmanuel Salinger</name>
+    <role>Rabaz</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jan Hammenecker</name>
+    <role>Magot</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Frédéric Fisbach</name>
+    <role>Beaubois</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Galatea Bellugi</name>
+    <role>Violette</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Pierre Gagnaire</name>
+    <role>Küchenchef des Prinzen</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Bonnie Chagneau-Ravoire</name>
+    <role>Pauline</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Yannik Landrein</name>
+    <role>Père de Pauline</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Adler</name>
+    <role>Mère de Pauline</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-Marc Roulot</name>
+    <role>Augustin</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Mhamed Arezki</name>
+    <role>Le Prince</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <director>Trần Anh Hùng</director>
+  <credits>Marcel Rouff</credits>
+  <credits>Trần Anh Hùng</credits>
+</movie>

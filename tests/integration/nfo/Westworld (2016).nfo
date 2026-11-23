@@ -1,0 +1,111 @@
+<tvshow>
+  <title>Westworld</title>
+  <originaltitle>Westworld</originaltitle>
+  <year>2016</year>
+  <premiered>2016-10-02</premiered>
+  <rating>8.009</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Western</genre>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>android</tag>
+  <tag>remake</tag>
+  <tag>role playing</tag>
+  <tag>second life</tag>
+  <tag>robot</tag>
+  <tag>wild west</tag>
+  <tag>theme park</tag>
+  <tag>based on movie</tag>
+  <tag>ethical dilemma</tag>
+  <tag>moral dilemma</tag>
+  <tag>psychological drama</tag>
+  <tag>amused</tag>
+  <tag>pretentious</tag>
+  <studio>HBO</studio>
+  <studio>Warner Bros. Television</studio>
+  <studio>Jerry Weintraub Productions</studio>
+  <studio>Bad Robot</studio>
+  <studio>Kilter Films</studio>
+  <uniqueid type="tmdb" default="true">63247</uniqueid>
+  <uniqueid type="imdb">tt0475784</uniqueid>
+  <actor>
+    <name>Evan Rachel Wood</name>
+    <role>Dolores Abernathy</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Evan Rachel Wood</name>
+    <role>Christina</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Thandiwe Newton</name>
+    <role>Maeve Millay</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey Wright</name>
+    <role>Bernard Lowe</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Tessa Thompson</name>
+    <role>Charlotte Hale</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Aaron Paul</name>
+    <role>Caleb Nichols</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>James Marsden</name>
+    <role>Theodore 'Teddy' Flood</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Angela Sarafyan</name>
+    <role>Clementine Pennyfeather</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Hopkins</name>
+    <role>Dr. Robert Ford</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Vincent Cassel</name>
+    <role>Serac</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ingrid Bolsø Berdal</name>
+    <role>Armistice</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ed Harris</name>
+    <role>Man in Black</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Fares Fares</name>
+    <role>Antoine Costa</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Louis Herthum</name>
+    <role>Peter Abernathy</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Talulah Riley</name>
+    <role>Angela</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Gustaf Skarsgård</name>
+    <role>Karl Strand</role>
+    <sortorder>15</sortorder>
+  </actor>
+</tvshow>

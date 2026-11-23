@@ -1,0 +1,126 @@
+<tvshow>
+  <title>The Bureau</title>
+  <originaltitle>Le Bureau des légendes</originaltitle>
+  <year>2015</year>
+  <premiered>2015-04-27</premiered>
+  <rating>8.211</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>spy</tag>
+  <tag>middle east</tag>
+  <tag>secret identity</tag>
+  <tag>mossad</tag>
+  <tag>identity crisis</tag>
+  <tag>undercover agent</tag>
+  <tag>espionage</tag>
+  <tag>intelligence agency</tag>
+  <tag>moral ambiguity</tag>
+  <tag>infiltration</tag>
+  <tag>mole</tag>
+  <tag>surveillance</tag>
+  <tag>geopolitics</tag>
+  <tag>dgse</tag>
+  <tag>complex</tag>
+  <tag>russian intelligence services</tag>
+  <tag>false identity</tag>
+  <tag>psychological tension</tag>
+  <tag>french intelligence</tag>
+  <tag>iranian intelligence service</tag>
+  <tag>algerian intelligence service</tag>
+  <tag>french intelligence agency</tag>
+  <tag>undercover operations</tag>
+  <tag>clandestine missions</tag>
+  <tag>loyalty vs betrayal</tag>
+  <tag>trust and deception</tag>
+  <tag>covert warfare</tag>
+  <tag>personal sacrifice</tag>
+  <tag>emotional isolation</tag>
+  <tag>shadow life</tag>
+  <tag>long-term infiltration</tag>
+  <tag>internal politics</tag>
+  <tag>human cost of espionage</tag>
+  <tag>ethical compromise</tag>
+  <tag>french intelligence service</tag>
+  <studio>Canal+</studio>
+  <studio>TOP - The Oligarchs Productions</studio>
+  <studio>H Films</studio>
+  <studio>Federation Entertainment</studio>
+  <uniqueid type="tmdb" default="true">62476</uniqueid>
+  <uniqueid type="imdb">tt4063800</uniqueid>
+  <actor>
+    <name>Mathieu Kassovitz</name>
+    <role>Guillaume Debailly</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-Pierre Darroussin</name>
+    <role>Henri Duflot</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sara Giraudeau</name>
+    <role>Marina Loiseau</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Léa Drucker</name>
+    <role>Docteur Balmes</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Stefan Crepon</name>
+    <role>César dit « Pacemaker »</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Zineb Triki</name>
+    <role>Nadia El Mansour</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Florence Loiret Caille</name>
+    <role>Marie-Jeanne Duthilleul</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Zaccaï</name>
+    <role>Raymond Sisteron</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Oleksiy Horbunov</name>
+    <role>Mikhaël Kharlov</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Mathieu Amalric</name>
+    <role>Jean-Jacques, dit « JJA »</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Louis Garrel</name>
+    <role>Andrea Tassone dit « Mille Sabords »</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jules Sagot</name>
+    <role>Sylvain Ellenstein</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Moe Bar-El</name>
+    <role>Shapur Zamani</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Azoulay</name>
+    <role>Liz Bernstein</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Irina Muluile</name>
+    <role>"La Mule"</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

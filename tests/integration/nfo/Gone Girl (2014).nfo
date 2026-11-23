@@ -1,0 +1,116 @@
+<movie>
+  <title>Gone Girl</title>
+  <originaltitle>Gone Girl</originaltitle>
+  <year>2014</year>
+  <premiered>2014-10-01</premiered>
+  <rating>7.89</rating>
+  <mpaa>R</mpaa>
+  <genre>Mystery</genre>
+  <genre>Thriller</genre>
+  <genre>Drama</genre>
+  <tag>infidelity</tag>
+  <tag>based on novel or book</tag>
+  <tag>wife</tag>
+  <tag>marriage crisis</tag>
+  <tag>investigation</tag>
+  <tag>disappearance</tag>
+  <tag>psychological thriller</tag>
+  <tag>whodunit</tag>
+  <tag>cynical</tag>
+  <tag>missing person</tag>
+  <tag>search party</tag>
+  <tag>criminal lawyer</tag>
+  <tag>murder suspect</tag>
+  <tag>missing wife</tag>
+  <tag>perspective</tag>
+  <tag>manipulative woman</tag>
+  <tag>toxic relationship</tag>
+  <tag>revenge thriller</tag>
+  <tag>killed during sex</tag>
+  <tag>hate</tag>
+  <tag>controlling wife</tag>
+  <studio>20th Century Fox</studio>
+  <studio>Regency Enterprises</studio>
+  <studio>TSG Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">210577</uniqueid>
+  <uniqueid type="imdb">tt2267998</uniqueid>
+  <actor>
+    <name>Ben Affleck</name>
+    <role>Nick Dunne</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rosamund Pike</name>
+    <role>Amy Dunne</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Neil Patrick Harris</name>
+    <role>Desi Collings</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Tyler Perry</name>
+    <role>Tanner Bolt</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Carrie Coon</name>
+    <role>Margo Dunne</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Dickens</name>
+    <role>Detective Rhonda Boney</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Fugit</name>
+    <role>Officer James Gilpin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>David Clennon</name>
+    <role>Rand Elliott</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Banes</name>
+    <role>Marybeth Elliott</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Missi Pyle</name>
+    <role>Ellen Abbott</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Emily Ratajkowski</name>
+    <role>Andie Fitzgerald</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Casey Wilson</name>
+    <role>Noelle Hawthorne</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lola Kirke</name>
+    <role>Greta</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Boyd Holbrook</name>
+    <role>Jeff</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Sela Ward</name>
+    <role>Sharon Schieber</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>David Fincher</director>
+  <credits>Gillian Flynn</credits>
+  <credits>Gillian Flynn</credits>
+</movie>

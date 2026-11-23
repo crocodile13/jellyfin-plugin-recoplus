@@ -1,0 +1,119 @@
+<movie>
+  <title>2001: A Space Odyssey</title>
+  <originaltitle>2001: A Space Odyssey</originaltitle>
+  <year>1968</year>
+  <premiered>1968-04-02</premiered>
+  <rating>8</rating>
+  <mpaa>G</mpaa>
+  <genre>Science Fiction</genre>
+  <genre>Mystery</genre>
+  <genre>Adventure</genre>
+  <tag>man vs machine</tag>
+  <tag>moon</tag>
+  <tag>jupiter</tag>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>based on novel or book</tag>
+  <tag>technology</tag>
+  <tag>super computer</tag>
+  <tag>space travel</tag>
+  <tag>space mission</tag>
+  <tag>moon base</tag>
+  <tag>astronaut</tag>
+  <tag>evolution</tag>
+  <tag>monolith</tag>
+  <tag>space station</tag>
+  <tag>space opera</tag>
+  <tag>philosophical</tag>
+  <tag>2000s</tag>
+  <tag>ai rebellion</tag>
+  <tag>suspenseful</tag>
+  <tag>complicated</tag>
+  <tag>metrocolor</tag>
+  <studio>Stanley Kubrick Productions</studio>
+  <studio>Metro-Goldwyn-Mayer</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">62</uniqueid>
+  <uniqueid type="imdb">tt0062622</uniqueid>
+  <set tmdbcolid="4438">
+    <name>4438</name>
+  </set>
+  <actor>
+    <name>Keir Dullea</name>
+    <role>Dr. David Bowman</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Gary Lockwood</name>
+    <role>Dr. Frank Poole</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>William Sylvester</name>
+    <role>Dr. Heywood Floyd</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Douglas Rain</name>
+    <role>HAL 9000 (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Richter</name>
+    <role>Moonwatcher</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Leonard Rossiter</name>
+    <role>Dr. Andrei Smyslov</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Margaret Tyzack</name>
+    <role>Elena</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Beatty</name>
+    <role>Dr. Ralph Halvorsen</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sean Sullivan</name>
+    <role>Dr. Roy Michaels</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Frank W. Miller</name>
+    <role>Mission Controller (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Weston</name>
+    <role>Astronaut</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ed Bishop</name>
+    <role>Aries-1B Lunar Shuttle Captain</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Glenn Beck</name>
+    <role>Astronaut</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Gifford</name>
+    <role>Poole's Father</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ann Gillis</name>
+    <role>Poole's Mother</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Stanley Kubrick</director>
+  <credits>Stanley Kubrick</credits>
+  <credits>Arthur C. Clarke</credits>
+</movie>

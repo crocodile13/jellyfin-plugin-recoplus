@@ -1,0 +1,109 @@
+<movie>
+  <title>X</title>
+  <originaltitle>X</originaltitle>
+  <year>2022</year>
+  <premiered>2022-03-17</premiered>
+  <rating>6.688</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <tag>pornography</tag>
+  <tag>sheriff</tag>
+  <tag>war veteran</tag>
+  <tag>gas station</tag>
+  <tag>1970s</tag>
+  <tag>texas</tag>
+  <tag>porn star</tag>
+  <tag>serial killer</tag>
+  <tag>slasher</tag>
+  <tag>violent death</tag>
+  <tag>porn actress</tag>
+  <tag>elderly couple</tag>
+  <tag>farm house</tag>
+  <tag>isolated farmhouse</tag>
+  <tag>existentialism</tag>
+  <tag>adult filmmaking</tag>
+  <tag>disturbed</tag>
+  <tag>televangelist</tag>
+  <tag>pastiche</tag>
+  <tag>porn films</tag>
+  <studio>A24</studio>
+  <studio>Little Lamb Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">760104</uniqueid>
+  <uniqueid type="imdb">tt13560574</uniqueid>
+  <set tmdbcolid="950289">
+    <name>950289</name>
+  </set>
+  <actor>
+    <name>Mia Goth</name>
+    <role>Maxine / Pearl</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jenna Ortega</name>
+    <role>Lorraine</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Brittany Snow</name>
+    <role>Bobby-Lynne</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kid Cudi</name>
+    <role>Jackson</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Martin Henderson</name>
+    <role>Wayne</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Owen Campbell</name>
+    <role>RJ</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Ure</name>
+    <role>Howard</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>James Gaylyn</name>
+    <role>Sheriff Dentler</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Simon Prast</name>
+    <role>Televangelist</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Geoff Dolan</name>
+    <role>Deputy</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew J. Saville</name>
+    <role>Officer Mitchell</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Bryony Skillington</name>
+    <role>Store Clerk</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Karen Gillan</name>
+    <role>Radio Steak Seller (voice) (uncredited)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Larry Fessenden</name>
+    <role>Howard (voice) (uncredited)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <director>Ti West</director>
+  <credits>Ti West</credits>
+</movie>

@@ -1,0 +1,105 @@
+<movie>
+  <title>Superbad</title>
+  <originaltitle>Superbad</originaltitle>
+  <year>2007</year>
+  <premiered>2007-08-17</premiered>
+  <rating>7.276</rating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <tag>high school</tag>
+  <tag>police</tag>
+  <tag>alcohol</tag>
+  <tag>chaos</tag>
+  <tag>nerd</tag>
+  <tag>coming of age</tag>
+  <tag>school</tag>
+  <tag>los angeles, california</tag>
+  <tag>drugs</tag>
+  <tag>buddy</tag>
+  <tag>one night</tag>
+  <tag>fake id</tag>
+  <tag>serene</tag>
+  <studio>Columbia Pictures</studio>
+  <studio>Apatow Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">8363</uniqueid>
+  <uniqueid type="imdb">tt0829482</uniqueid>
+  <actor>
+    <name>Jonah Hill</name>
+    <role>Seth</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Cera</name>
+    <role>Evan</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Mintz-Plasse</name>
+    <role>Fogell</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Hader</name>
+    <role>Officer Slater</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Seth Rogen</name>
+    <role>Officer Michaels</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Martha MacIsaac</name>
+    <role>Becca</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Emma Stone</name>
+    <role>Jules</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Aviva Baumann</name>
+    <role>Nicola</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Lo Truglio</name>
+    <role>Francis the Driver</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Corrigan</name>
+    <role>Mark</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Clement Blake</name>
+    <role>Homeless Guy</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Erica Vittina Phillips</name>
+    <role>Liquor Store Cashier</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Nuñez</name>
+    <role>Liquor Store Clerk</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Dave Franco</name>
+    <role>Greg the Soccer Player</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Marcella Lentz-Pope</name>
+    <role>Gaby</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Greg Mottola</director>
+  <credits>Seth Rogen</credits>
+  <credits>Evan Goldberg</credits>
+</movie>

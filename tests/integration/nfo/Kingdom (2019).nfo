@@ -1,0 +1,105 @@
+<tvshow>
+  <title>Kingdom</title>
+  <originaltitle>킹덤</originaltitle>
+  <year>2019</year>
+  <premiered>2019-01-25</premiered>
+  <rating>8.196</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Mystery</genre>
+  <tag>prince</tag>
+  <tag>kingdom</tag>
+  <tag>royal family</tag>
+  <tag>based on comic</tag>
+  <tag>outbreak</tag>
+  <tag>gore</tag>
+  <tag>survival</tag>
+  <tag>zombie</tag>
+  <tag>epidemic</tag>
+  <tag>survival horror</tag>
+  <tag>palace intrigue</tag>
+  <tag>historical drama</tag>
+  <tag>16th century</tag>
+  <tag>joseon dynasty (1392–1910)</tag>
+  <tag>busan, south korea</tag>
+  <tag>horror</tag>
+  <studio>Netflix</studio>
+  <studio>AStory</studio>
+  <uniqueid type="tmdb" default="true">70593</uniqueid>
+  <uniqueid type="imdb">tt6611916</uniqueid>
+  <actor>
+    <name>Ju Ji-hoon</name>
+    <role>Crown Prince Chang</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ryu Seung-ryong</name>
+    <role>Cho Hak-ju</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Bae Doona</name>
+    <role>Seo-bi</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Sang-ho</name>
+    <role>Moo-yeong</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Sung-kyu</name>
+    <role>Yeong-sin</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jun Seok-ho</name>
+    <role>Cho Beom-pal</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Hye-jun</name>
+    <role>Queen Cho</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Park Byung-eun</name>
+    <role>Min Chi-rok</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Tae-hun</name>
+    <role>Lee Kang-yoon</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Huh Joon-ho</name>
+    <role>Ahn Hyeon</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ahn Eun-jin</name>
+    <role>Moo Young’s wife</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Moon Dong-hyeok</name>
+    <role>Yu Saeng</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ji Hyun-jun</name>
+    <role>[Commander]</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ha Min</name>
+    <role>Queen Chief Court Lady</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jeong Gyu-su</name>
+    <role>Sangju mayor</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

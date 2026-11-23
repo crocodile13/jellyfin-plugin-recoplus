@@ -1,0 +1,103 @@
+<movie>
+  <title>Icarus</title>
+  <originaltitle>Icarus</originaltitle>
+  <year>2017</year>
+  <premiered>2017-01-20</premiered>
+  <rating>7.64</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Documentary</genre>
+  <tag>sports</tag>
+  <tag>olympic games</tag>
+  <tag>doping</tag>
+  <tag>sports documentary</tag>
+  <studio>Diamond Docs</studio>
+  <studio>Impact Partners</studio>
+  <studio>Alex Productions</studio>
+  <studio>Chicago Media Project</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">432976</uniqueid>
+  <uniqueid type="imdb">tt6333060</uniqueid>
+  <set tmdbcolid="1036702">
+    <name>1036702</name>
+  </set>
+  <actor>
+    <name>Bryan Fogel</name>
+    <role>Self</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>David Zabriskie</name>
+    <role>Self</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Don Catlin</name>
+    <role>Self</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Grigory Rodchenkov</name>
+    <role>Self</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Scott Brandt</name>
+    <role>Self</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Stone</name>
+    <role>Self</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Pound</name>
+    <role>Self</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Richard McLaren</name>
+    <role>Self</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Nikita Kamaev</name>
+    <role>Self (archive footage)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas Bach</name>
+    <role>Self (archive footage)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Sebastian Coe</name>
+    <role>Self (archive footage)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Vitaliy Mutko</name>
+    <role>Self (archive footage)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Dan Cogan</name>
+    <role>Self (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>David Howman</name>
+    <role>Self</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jacques Rogge</name>
+    <role>Self (archive footage)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Bryan Fogel</director>
+  <credits>Timothy Rode</credits>
+  <credits>Jon Bertain</credits>
+  <credits>Bryan Fogel</credits>
+  <credits>Mark Monroe</credits>
+</movie>

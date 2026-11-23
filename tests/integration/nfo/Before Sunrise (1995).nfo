@@ -1,0 +1,106 @@
+<movie>
+  <title>Before Sunrise</title>
+  <originaltitle>Before Sunrise</originaltitle>
+  <year>1995</year>
+  <premiered>1995-01-27</premiered>
+  <rating>8</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>talking</tag>
+  <tag>soulmates</tag>
+  <tag>walking</tag>
+  <tag>austria</tag>
+  <tag>vienna, austria</tag>
+  <tag>semi autobiographical</tag>
+  <tag>playful</tag>
+  <tag>cliché</tag>
+  <studio>Castle Rock Entertainment</studio>
+  <studio>Detour Filmproduction</studio>
+  <studio>Filmhaus Films</studio>
+  <country>Austria</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">76</uniqueid>
+  <uniqueid type="imdb">tt0112471</uniqueid>
+  <set tmdbcolid="123800">
+    <name>123800</name>
+  </set>
+  <actor>
+    <name>Ethan Hawke</name>
+    <role>Jesse</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Delpy</name>
+    <role>Céline</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Andrea Eckert</name>
+    <role>Wife on Train</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Hanno Pöschl</name>
+    <role>Husband on Train</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Karl Bruckschwaiger</name>
+    <role>Guy on Bridge</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tex Rubinowitz</name>
+    <role>Guy on Bridge</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Erni Mangold</name>
+    <role>Palm Reader</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Dominik Castell</name>
+    <role>Street Poet</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Haymon Maria Buttinger</name>
+    <role>Bartender</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Harold Waiglein</name>
+    <role>Guitarist in Club</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Bilge Jeschim</name>
+    <role>Belly Dancer</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kurti</name>
+    <role>Percussionist</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Hans Weingartner</name>
+    <role>Cafe Patron</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Liese Lyon</name>
+    <role>Cafe Patron</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Ily Huemer</name>
+    <role>Cafe Patron</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Richard Linklater</director>
+  <credits>Richard Linklater</credits>
+  <credits>Kim Krizan</credits>
+</movie>

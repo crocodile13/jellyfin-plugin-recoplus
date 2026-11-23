@@ -1,0 +1,110 @@
+<movie>
+  <title>Paprika</title>
+  <originaltitle>パプリカ</originaltitle>
+  <year>2006</year>
+  <premiered>2006-10-01</premiered>
+  <rating>7.8</rating>
+  <mpaa>R</mpaa>
+  <genre>Animation</genre>
+  <genre>Science Fiction</genre>
+  <genre>Thriller</genre>
+  <tag>research</tag>
+  <tag>japan</tag>
+  <tag>dreams</tag>
+  <tag>based on novel or book</tag>
+  <tag>procession</tag>
+  <tag>psychoanalysis</tag>
+  <tag>mad scientist</tag>
+  <tag>dream girl</tag>
+  <tag>parallel world</tag>
+  <tag>adult animation</tag>
+  <tag>dream world</tag>
+  <tag>anime</tag>
+  <tag>avant garde</tag>
+  <tag>witty</tag>
+  <tag>vibrant</tag>
+  <studio>Madhouse</studio>
+  <studio>Sony Pictures</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">4977</uniqueid>
+  <uniqueid type="imdb">tt0851578</uniqueid>
+  <actor>
+    <name>Megumi Hayashibara</name>
+    <role>Paprika / Atsuko Chiba (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tohru Emori</name>
+    <role>Seijiro Inui (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Katsunosuke Hori</name>
+    <role>Torataro Shima (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Toru Furuya</name>
+    <role>Kosaku Tokita (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Akio Otsuka</name>
+    <role>Toshimi Konakawa (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Koichi Yamadera</name>
+    <role>Morio Osanai (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Hideyuki Tanaka</name>
+    <role>Guy (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Satoshi Kon</name>
+    <role>Jinnai (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Yasutaka Tsutsui</name>
+    <role>Kuga (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Satomi Korogi</name>
+    <role>Japanese Doll (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Rikako Aikawa</name>
+    <role>Nobue Kakimoto (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Shinya Fukumatsu</name>
+    <role>(voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kumiko Izumi</name>
+    <role>(voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Eiji Miyashita</name>
+    <role>(voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Mitsuo Iwata</name>
+    <role>Yasushi Tsumura (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Satoshi Kon</director>
+  <credits>Satoshi Kon</credits>
+  <credits>Yasutaka Tsutsui</credits>
+  <credits>Seishi Minakami</credits>
+</movie>

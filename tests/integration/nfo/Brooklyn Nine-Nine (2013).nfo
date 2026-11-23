@@ -1,0 +1,103 @@
+<tvshow>
+  <title>Brooklyn Nine-Nine</title>
+  <originaltitle>Brooklyn Nine-Nine</originaltitle>
+  <year>2013</year>
+  <premiered>2013-09-17</premiered>
+  <rating>8.2</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Comedy</genre>
+  <genre>Crime</genre>
+  <tag>new york city</tag>
+  <tag>detective</tag>
+  <tag>police</tag>
+  <tag>workplace</tag>
+  <tag>big city</tag>
+  <tag>brooklyn, new york city</tag>
+  <tag>nypd</tag>
+  <tag>sitcom</tag>
+  <tag>workplace comedy</tag>
+  <tag>sharp</tag>
+  <studio>NBC</studio>
+  <studio>FOX</studio>
+  <studio>Dr. Goor Productions</studio>
+  <studio>Universal Television</studio>
+  <studio>3 Arts Entertainment</studio>
+  <studio>Fremulon</studio>
+  <uniqueid type="tmdb" default="true">48891</uniqueid>
+  <uniqueid type="imdb">tt2467372</uniqueid>
+  <actor>
+    <name>Andy Samberg</name>
+    <role>Jake Peralta</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Melissa Fumero</name>
+    <role>Amy Santiago</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Terry Crews</name>
+    <role>Terry Jeffords</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Lo Truglio</name>
+    <role>Charles Boyle</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Stephanie Beatriz</name>
+    <role>Rosa Diaz</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Andre Braugher</name>
+    <role>Raymond Holt</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Dirk Blocker</name>
+    <role>Michael Hitchcock</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Joel McKinnon Miller</name>
+    <role>Norman Scully</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Chelsea Peretti</name>
+    <role>Gina Linetti</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Sandler</name>
+    <role>Adam Sandler</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Theismann</name>
+    <role>Joe Theismann</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Azizi</name>
+    <role>Ahmed</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Scott Michael Morgan</name>
+    <role>Judd Sterrino</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Artemis Pebdani</name>
+    <role>Carlene</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Helen Slayton-Hughes</name>
+    <role>Ethel Musterberg</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

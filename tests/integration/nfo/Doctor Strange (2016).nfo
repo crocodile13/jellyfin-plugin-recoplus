@@ -1,0 +1,111 @@
+<movie>
+  <title>Doctor Strange</title>
+  <originaltitle>Doctor Strange</originaltitle>
+  <year>2016</year>
+  <premiered>2016-10-25</premiered>
+  <rating>7.424</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Fantasy</genre>
+  <genre>Adventure</genre>
+  <genre>Action</genre>
+  <tag>magic</tag>
+  <tag>superhero</tag>
+  <tag>training</tag>
+  <tag>based on comic</tag>
+  <tag>sorcerer</tag>
+  <tag>doctor</tag>
+  <tag>neurosurgeon</tag>
+  <tag>injury</tag>
+  <tag>wizard</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>origin story</tag>
+  <tag>interdimensional travel</tag>
+  <studio>Marvel Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">284052</uniqueid>
+  <uniqueid type="imdb">tt1211837</uniqueid>
+  <set tmdbcolid="618529">
+    <name>618529</name>
+  </set>
+  <actor>
+    <name>Benedict Cumberbatch</name>
+    <role>Dr. Stephen Strange</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Chiwetel Ejiofor</name>
+    <role>Mordo</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel McAdams</name>
+    <role>Dr. Christine Palmer</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Benedict Wong</name>
+    <role>Wong</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Mads Mikkelsen</name>
+    <role>Kaecilius</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tilda Swinton</name>
+    <role>The Ancient One</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Stuhlbarg</name>
+    <role>Dr. Nicodemus West</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Benjamin Bratt</name>
+    <role>Jonathan Pangborn</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Scott Adkins</name>
+    <role>Lucian / Strong Zealot</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Zara Phythian</name>
+    <role>Brunette Zealot</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Alaa Safi</name>
+    <role>Tall Zealot</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Katrina Durden</name>
+    <role>Blonde Zealot</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Topo Wresniwiro</name>
+    <role>Hamir</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Umit Ulgen</name>
+    <role>Sol Rama</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Linda Louise Duan</name>
+    <role>Tina Minoru</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Scott Derrickson</director>
+  <credits>Scott Derrickson</credits>
+  <credits>Jon Spaihts</credits>
+  <credits>C. Robert Cargill</credits>
+</movie>

@@ -1,0 +1,117 @@
+<tvshow>
+  <title>Mob Psycho 100</title>
+  <originaltitle>モブサイコ100</originaltitle>
+  <year>2016</year>
+  <premiered>2016-07-12</premiered>
+  <rating>8.484</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Animation</genre>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Comedy</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>supernatural</tag>
+  <tag>based on comic</tag>
+  <tag>psychic power</tag>
+  <tag>slice of life</tag>
+  <tag>coming of age</tag>
+  <tag>sibling rivalry</tag>
+  <tag>based on manga</tag>
+  <tag>super power</tag>
+  <tag>occult</tag>
+  <tag>extrasensory perception</tag>
+  <tag>high school rivalry</tag>
+  <tag>school life</tag>
+  <tag>shounen</tag>
+  <tag>anime</tag>
+  <tag>japanese high school</tag>
+  <tag>based on webcomic or webtoon</tag>
+  <tag>enthusiastic</tag>
+  <tag>gentle</tag>
+  <tag>straightforward</tag>
+  <tag>sympathetic</tag>
+  <studio>TOKYO MX</studio>
+  <studio>BONES</studio>
+  <studio>Warner Bros. Japan</studio>
+  <studio>THE KLOCKWORX</studio>
+  <studio>Hakuhodo DY Music &amp; Pictures</studio>
+  <studio>BS Fuji</studio>
+  <studio>Shogakukan</studio>
+  <studio>Shogakukan-Shueisha Productions</studio>
+  <uniqueid type="tmdb" default="true">67075</uniqueid>
+  <uniqueid type="imdb">tt5897304</uniqueid>
+  <actor>
+    <name>Setsuo Ito</name>
+    <role>Shigeo 'Mob' Kageyama (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Takahiro Sakurai</name>
+    <role>Arataka Reigen (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Miyu Irino</name>
+    <role>Ritsu Kageyama (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Akio Otsuka</name>
+    <role>Dimple (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Keiji Fujiwara</name>
+    <role>Boss (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ikuji Nose</name>
+    <role>Takenaka (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Yoji Ueda</name>
+    <role>Client (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ai Kayano</name>
+    <role>Chihiro (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kotori Koiwai</name>
+    <role>Mari (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chinatsu Akasaki</name>
+    <role>Masked Woman (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Tetsu Kimishima</name>
+    <role>Yamazaki (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Yuuki Gouda</name>
+    <role>Toriumi (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Yusuke Kuwahata</name>
+    <role>Go Asahi (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Mariko Higashiuchi</name>
+    <role>Kamuro's Mother (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rintaro Nishi</name>
+    <role>Fuji (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

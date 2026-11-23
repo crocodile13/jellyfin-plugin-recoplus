@@ -1,0 +1,111 @@
+<movie>
+  <title>Senna</title>
+  <originaltitle>Senna</originaltitle>
+  <year>2010</year>
+  <premiered>2010-10-07</premiered>
+  <rating>8.111</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Documentary</genre>
+  <tag>sports car</tag>
+  <tag>competition</tag>
+  <tag>champion</tag>
+  <tag>biography</tag>
+  <tag>rivalry</tag>
+  <tag>archive footage</tag>
+  <tag>teammate</tag>
+  <tag>driver</tag>
+  <tag>sports documentary</tag>
+  <tag>sport competition</tag>
+  <tag>talent competition</tag>
+  <tag>legacy</tag>
+  <tag>formula one (f1)</tag>
+  <tag>motorsport</tag>
+  <tag>sportsman</tag>
+  <tag>car racing</tag>
+  <studio>Universal Pictures</studio>
+  <studio>StudioCanal</studio>
+  <studio>Working Title</studio>
+  <studio>Midfield Films</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">58496</uniqueid>
+  <uniqueid type="imdb">tt1424432</uniqueid>
+  <actor>
+    <name>Ayrton Senna</name>
+    <role>Self (archive footage)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Alain Prost</name>
+    <role>Self</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Williams</name>
+    <role>Self</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ron Dennis</name>
+    <role>Self</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Viviane Senna</name>
+    <role>Self</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Milton da Silva</name>
+    <role>Self (archive footage)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Neyde Senna</name>
+    <role>Self (archive footage)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jackie Stewart</name>
+    <role>Self (archive footage)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sid Watkins</name>
+    <role>Self</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Galvão Bueno</name>
+    <role>Self</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Reginaldo Leme</name>
+    <role>Self</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Gerhard Berger</name>
+    <role>Self (archive footage)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Nelson Piquet</name>
+    <role>Self (archive footage)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Nigel Mansell</name>
+    <role>Self (archive footage)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-Marie Balestre</name>
+    <role>Self (archive footage)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Asif Kapadia</director>
+  <credits>Manish Pandey</credits>
+</movie>

@@ -1,0 +1,94 @@
+<tvshow>
+  <title>How I Met Your Mother</title>
+  <originaltitle>How I Met Your Mother</originaltitle>
+  <year>2005</year>
+  <premiered>2005-09-19</premiered>
+  <rating>8.109</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Comedy</genre>
+  <tag>roommates</tag>
+  <tag>self-discovery</tag>
+  <tag>group of friends</tag>
+  <tag>sitcom</tag>
+  <tag>searching for love</tag>
+  <studio>CBS</studio>
+  <studio>20th Century Fox Television</studio>
+  <studio>Bays-Thomas Productions</studio>
+  <uniqueid type="tmdb" default="true">1100</uniqueid>
+  <uniqueid type="imdb">tt0460649</uniqueid>
+  <actor>
+    <name>Josh Radnor</name>
+    <role>Ted Mosby</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Neil Patrick Harris</name>
+    <role>Barney Stinson</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Segel</name>
+    <role>Marshall Eriksen</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Alyson Hannigan</name>
+    <role>Lily Aldrin</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Cobie Smulders</name>
+    <role>Robin Scherbatsky</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Cristin Milioti</name>
+    <role>Tracy McConnell</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Abby Elliott</name>
+    <role>Jeanette Peterson</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Becki Newton</name>
+    <role>Quinn Garvey</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jennifer Morrison</name>
+    <role>Zoey Pierson</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Suzie Plakson</name>
+    <role>Judy Eriksen</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle MacLachlan</name>
+    <role>George Van Smoot</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Marshall Manesh</name>
+    <role>Ranjit Singh</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Frances Conroy</name>
+    <role>Loretta Stinson</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Mandy Moore</name>
+    <role>Amy</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ron Butler</name>
+    <role>Proctor</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

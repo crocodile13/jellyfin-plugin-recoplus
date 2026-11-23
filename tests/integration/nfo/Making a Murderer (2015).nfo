@@ -1,0 +1,38 @@
+<tvshow>
+  <title>Making a Murderer</title>
+  <originaltitle>Making a Murderer</originaltitle>
+  <year>2015</year>
+  <premiered>2015-12-18</premiered>
+  <rating>7.829</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Documentary</genre>
+  <genre>Crime</genre>
+  <tag>prison</tag>
+  <tag>corruption</tag>
+  <tag>wisconsin</tag>
+  <tag>revenge</tag>
+  <tag>trial</tag>
+  <tag>dirty cop</tag>
+  <tag>murderer</tag>
+  <tag>true crime</tag>
+  <tag>fight the system</tag>
+  <tag>wrecking yard</tag>
+  <tag>criminal justice</tag>
+  <tag>thought provoking</tag>
+  <tag>riveting</tag>
+  <tag>investigative</tag>
+  <studio>Netflix</studio>
+  <studio>Synthesis Films</studio>
+  <uniqueid type="tmdb" default="true">64439</uniqueid>
+  <uniqueid type="imdb">tt5189670</uniqueid>
+  <actor>
+    <name>Steven Avery</name>
+    <role>Self</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kathleen Zellner</name>
+    <role>Self</role>
+    <sortorder>1</sortorder>
+  </actor>
+</tvshow>

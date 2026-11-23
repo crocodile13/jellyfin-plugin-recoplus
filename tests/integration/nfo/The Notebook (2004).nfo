@@ -1,0 +1,110 @@
+<movie>
+  <title>The Notebook</title>
+  <originaltitle>The Notebook</originaltitle>
+  <year>2004</year>
+  <premiered>2004-06-25</premiered>
+  <rating>7.888</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Romance</genre>
+  <genre>Drama</genre>
+  <tag>secret love</tag>
+  <tag>soulmates</tag>
+  <tag>based on novel or book</tag>
+  <tag>love of one's life</tag>
+  <tag>fight</tag>
+  <tag>poem</tag>
+  <tag>river</tag>
+  <tag>sadness</tag>
+  <tag>class</tag>
+  <tag>dementia</tag>
+  <tag>tears</tag>
+  <tag>candle</tag>
+  <tag>mailbox</tag>
+  <tag>valentine's day</tag>
+  <tag>romantic</tag>
+  <studio>New Line Cinema</studio>
+  <studio>Avery Pix</studio>
+  <studio>Gran Via Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">11036</uniqueid>
+  <uniqueid type="imdb">tt0332280</uniqueid>
+  <actor>
+    <name>Ryan Gosling</name>
+    <role>Noah Calhoun</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel McAdams</name>
+    <role>Allie Hamilton</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Gena Rowlands</name>
+    <role>Older Allie</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>James Garner</name>
+    <role>Older Noah 'Duke'</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Joan Allen</name>
+    <role>Anne Hamilton</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>David Thornton</name>
+    <role>John Hamilton</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>James Marsden</name>
+    <role>Lon Hammond</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Connolly</name>
+    <role>Fin</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Shepard</name>
+    <role>Frank Calhoun</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Starletta DuPois</name>
+    <role>Nurse Esther</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ed Grady</name>
+    <role>Harry</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jennifer Echols</name>
+    <role>Nurse Selma</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Heather Wahlquist</name>
+    <role>Sara Tuffington</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Cullen Moss</name>
+    <role>Bodee</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Thunderbird Dinwiddie</name>
+    <role>Veronica</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Nick Cassavetes</director>
+  <credits>Nicholas Sparks</credits>
+  <credits>Jeremy Leven</credits>
+  <credits>Jan Sardi</credits>
+</movie>

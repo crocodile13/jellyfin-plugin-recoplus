@@ -1,0 +1,116 @@
+<movie>
+  <title>Schindler's List</title>
+  <originaltitle>Schindler's List</originaltitle>
+  <year>1993</year>
+  <premiered>1993-12-15</premiered>
+  <rating>8.57</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>History</genre>
+  <genre>War</genre>
+  <tag>factory</tag>
+  <tag>hero</tag>
+  <tag>based on novel or book</tag>
+  <tag>nazi</tag>
+  <tag>concentration camp</tag>
+  <tag>ss (nazi schutzstaffel)</tag>
+  <tag>holocaust (shoah)</tag>
+  <tag>world war ii</tag>
+  <tag>ghetto</tag>
+  <tag>jew persecution</tag>
+  <tag>kraków, poland</tag>
+  <tag>defense industry</tag>
+  <tag>auschwitz-birkenau concentration camp</tag>
+  <tag>biography</tag>
+  <tag>based on true story</tag>
+  <tag>industrialist</tag>
+  <tag>historical fiction</tag>
+  <tag>black and white</tag>
+  <tag>train</tag>
+  <tag>period drama</tag>
+  <tag>poland</tag>
+  <tag>evil</tag>
+  <tag>historical drama</tag>
+  <studio>Amblin Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">424</uniqueid>
+  <uniqueid type="imdb">tt0108052</uniqueid>
+  <actor>
+    <name>Liam Neeson</name>
+    <role>Oskar Schindler</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Kingsley</name>
+    <role>Itzhak Stern</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ralph Fiennes</name>
+    <role>Amon Goeth</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Caroline Goodall</name>
+    <role>Emilie Schindler</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Sagall</name>
+    <role>Poldek Pfefferberg</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Embeth Davidtz</name>
+    <role>Helen Hirsch</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Małgorzata Gebel</name>
+    <role>Viktoria Klonowska</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Shmuel Levy</name>
+    <role>Wilek Chilowicz</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Ivanir</name>
+    <role>Marcel Goldberg</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Béatrice Macola</name>
+    <role>Ingrid</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Andrzej Seweryn</name>
+    <role>Julian Scherner</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Friedrich von Thun</name>
+    <role>Rolf Czurda</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Krzysztof Luft</name>
+    <role>Herman Toffel</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Nehring</name>
+    <role>Leo John</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Norbert Weisser</name>
+    <role>Albert Hujar</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Steven Spielberg</director>
+  <credits>Steven Zaillian</credits>
+  <credits>Thomas Keneally</credits>
+</movie>

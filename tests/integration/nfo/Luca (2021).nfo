@@ -1,0 +1,113 @@
+<movie>
+  <title>Luca</title>
+  <originaltitle>Luca</originaltitle>
+  <year>2021</year>
+  <premiered>2021-06-17</premiered>
+  <rating>7.765</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Fantasy</genre>
+  <genre>Drama</genre>
+  <genre>Comedy</genre>
+  <tag>friendship</tag>
+  <tag>monster</tag>
+  <tag>italy</tag>
+  <tag>villain</tag>
+  <tag>coming of age</tag>
+  <tag>friends</tag>
+  <tag>bromance</tag>
+  <tag>sea monster</tag>
+  <tag>vespa</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>seaside town</tag>
+  <tag>1950s</tag>
+  <tag>pasta</tag>
+  <tag>water</tag>
+  <tag>3d animation</tag>
+  <tag>italian riviera</tag>
+  <tag>pesto</tag>
+  <tag>admiring</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">508943</uniqueid>
+  <uniqueid type="imdb">tt12801262</uniqueid>
+  <actor>
+    <name>Jacob Tremblay</name>
+    <role>Luca Paguro (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Dylan Grazer</name>
+    <role>Alberto Scorfano (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Emma Berman</name>
+    <role>Giulia Marcovaldo (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Saverio Raimondo</name>
+    <role>Ercole Visconti (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Maya Rudolph</name>
+    <role>Daniela Paguro (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Marco Barricelli</name>
+    <role>Massimo Marcovaldo (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Gaffigan</name>
+    <role>Lorenzo Paguro (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Sohn</name>
+    <role>Ciccio (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Lorenzo Crisci</name>
+    <role>Guido (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Marina Massironi</name>
+    <role>Signora Marsigliese (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Gino La Monica</name>
+    <role>Tomasso (Old Fisherman) (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Sandy Martin</name>
+    <role>Grandma Paguro (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Giacomo Gianniotti</name>
+    <role>Giacomo (Young Fisherman) (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Elisa Gabrielli</name>
+    <role>Concetta Aragosta (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Mimi Maynard</name>
+    <role>Pinuccia Aragosta (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Enrico Casarosa</director>
+  <credits>Mike Jones</credits>
+  <credits>Jesse Andrews</credits>
+</movie>

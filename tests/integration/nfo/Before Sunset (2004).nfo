@@ -1,0 +1,84 @@
+<movie>
+  <title>Before Sunset</title>
+  <originaltitle>Before Sunset</originaltitle>
+  <year>2004</year>
+  <premiered>2004-06-16</premiered>
+  <rating>7.812</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>journalist</tag>
+  <tag>talking</tag>
+  <tag>soulmates</tag>
+  <tag>walking</tag>
+  <tag>paris, france</tag>
+  <tag>bookshop</tag>
+  <tag>love of one's life</tag>
+  <tag>author</tag>
+  <tag>semi autobiographical</tag>
+  <tag>romantic</tag>
+  <tag>cliché</tag>
+  <studio>Warner Independent Pictures</studio>
+  <studio>Castle Rock Entertainment</studio>
+  <studio>Detour Filmproduction</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">80</uniqueid>
+  <uniqueid type="imdb">tt0381681</uniqueid>
+  <set tmdbcolid="123800">
+    <name>123800</name>
+  </set>
+  <actor>
+    <name>Ethan Hawke</name>
+    <role>Jesse</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Delpy</name>
+    <role>Céline</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Vernon Dobtcheff</name>
+    <role>Bookstore Manager</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Louise Lemoine Torrès</name>
+    <role>Journalist #1</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Rodolphe Pauly</name>
+    <role>Journalist #2</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Mariane Plasteig</name>
+    <role>Waitress</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Diabolo</name>
+    <role>Philippe</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Denis Evrard</name>
+    <role>Boat Attendant</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Albert Delpy</name>
+    <role>Man at Grill</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Marie Pillet</name>
+    <role>Woman in Courtyard</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <director>Richard Linklater</director>
+  <credits>Richard Linklater</credits>
+  <credits>Ethan Hawke</credits>
+  <credits>Julie Delpy</credits>
+</movie>

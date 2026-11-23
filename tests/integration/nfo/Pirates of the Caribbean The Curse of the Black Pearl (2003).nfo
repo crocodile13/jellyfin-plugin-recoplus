@@ -1,0 +1,116 @@
+<movie>
+  <title>Pirates of the Caribbean: The Curse of the Black Pearl</title>
+  <originaltitle>Pirates of the Caribbean: The Curse of the Black Pearl</originaltitle>
+  <year>2003</year>
+  <premiered>2003-07-09</premiered>
+  <rating>7.839</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <genre>Action</genre>
+  <tag>ship</tag>
+  <tag>blacksmith</tag>
+  <tag>gold</tag>
+  <tag>exotic island</tag>
+  <tag>governor</tag>
+  <tag>skeleton</tag>
+  <tag>jamaica</tag>
+  <tag>british empire</tag>
+  <tag>pirate</tag>
+  <tag>swashbuckler</tag>
+  <tag>18th century</tag>
+  <tag>caribbean sea</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>pirate ship</tag>
+  <tag>british navy</tag>
+  <tag>tortuga</tag>
+  <tag>based on theme park ride</tag>
+  <tag>hilarious</tag>
+  <tag>brisk</tag>
+  <studio>Walt Disney Pictures</studio>
+  <studio>Jerry Bruckheimer Films</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">22</uniqueid>
+  <uniqueid type="imdb">tt0325980</uniqueid>
+  <set tmdbcolid="295">
+    <name>295</name>
+  </set>
+  <actor>
+    <name>Johnny Depp</name>
+    <role>Jack Sparrow</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Geoffrey Rush</name>
+    <role>Barbossa</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Orlando Bloom</name>
+    <role>Will Turner</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Keira Knightley</name>
+    <role>Elizabeth Swann</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Davenport</name>
+    <role>Norrington</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Pryce</name>
+    <role>Governor Weatherby Swann</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Arenberg</name>
+    <role>Pintel</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mackenzie Crook</name>
+    <role>Ragetti</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Damian O'Hare</name>
+    <role>Lt. Gillette</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Giles New</name>
+    <role>Murtogg</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Angus Barnett</name>
+    <role>Mullroy</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David Bailie</name>
+    <role>Cotton</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Berry Jr.</name>
+    <role>Twigg</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Isaac C. Singleton, Jr.</name>
+    <role>Bo'sun</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin McNally</name>
+    <role>Joshamee Gibbs</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Gore Verbinski</director>
+  <credits>Terry Rossio</credits>
+  <credits>Ted Elliott</credits>
+</movie>

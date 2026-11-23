@@ -1,0 +1,101 @@
+<tvshow>
+  <title>Game of Thrones</title>
+  <originaltitle>Game of Thrones</originaltitle>
+  <year>2011</year>
+  <premiered>2011-04-17</premiered>
+  <rating>8.476</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Drama</genre>
+  <genre>Action &amp; Adventure</genre>
+  <tag>based on novel or book</tag>
+  <tag>kingdom</tag>
+  <tag>dragon</tag>
+  <tag>king</tag>
+  <tag>intrigue</tag>
+  <tag>fantasy world</tag>
+  <studio>HBO</studio>
+  <studio>Television 360</studio>
+  <studio>Generator Entertainment</studio>
+  <studio>Bighead Littlehead</studio>
+  <studio>Grok! Television</studio>
+  <studio>Startling Television</studio>
+  <uniqueid type="tmdb" default="true">1399</uniqueid>
+  <uniqueid type="imdb">tt0944947</uniqueid>
+  <actor>
+    <name>Peter Dinklage</name>
+    <role>Tyrion 'The Halfman' Lannister</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kit Harington</name>
+    <role>Jon Snow</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sean Bean</name>
+    <role>Lord Eddard 'Ned' Stark</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Addy</name>
+    <role>Robert Baratheon</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Madden</name>
+    <role>Robb Stark</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Nikolaj Coster-Waldau</name>
+    <role>Sir Jaime 'Kingslayer' Lannister</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lena Headey</name>
+    <role>Cersei Lannister</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Michelle Fairley</name>
+    <role>Catelyn Stark</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Emilia Clarke</name>
+    <role>Daenerys Targaryen</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Liam Cunningham</name>
+    <role>Davos Seaworth</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Maisie Williams</name>
+    <role>Arya Stark</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Iain Glen</name>
+    <role>Ser Jorah Mormont</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Isaac Hempstead Wright</name>
+    <role>Brandon 'Bran' Stark</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Aidan Gillen</name>
+    <role>Petyr 'Littlefinger' Baelish</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Dance</name>
+    <role>Tywin Lannister</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <credits>George R.R. Martin</credits>
+</tvshow>

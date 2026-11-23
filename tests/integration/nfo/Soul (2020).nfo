@@ -1,0 +1,120 @@
+<movie>
+  <title>Soul</title>
+  <originaltitle>Soul</originaltitle>
+  <year>2020</year>
+  <premiered>2020-12-25</premiered>
+  <rating>8.083</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Drama</genre>
+  <genre>Family</genre>
+  <genre>Music</genre>
+  <genre>Fantasy</genre>
+  <tag>new york city</tag>
+  <tag>jazz</tag>
+  <tag>musician</tag>
+  <tag>cat</tag>
+  <tag>self-discovery</tag>
+  <tag>jazz singer or musician</tag>
+  <tag>teacher</tag>
+  <tag>nostalgic</tag>
+  <tag>questioning</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>life after death</tag>
+  <tag>calm</tag>
+  <tag>philosophical</tag>
+  <tag>reflective</tag>
+  <tag>wonder</tag>
+  <tag>introspective</tag>
+  <tag>3d animation</tag>
+  <tag>inspirational</tag>
+  <tag>sentimental</tag>
+  <tag>gentle</tag>
+  <tag>hopeful</tag>
+  <tag>optimistic</tag>
+  <tag>sincere</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">508442</uniqueid>
+  <uniqueid type="imdb">tt2948372</uniqueid>
+  <actor>
+    <name>Jamie Foxx</name>
+    <role>Joe Gardner (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tina Fey</name>
+    <role>22 (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Graham Norton</name>
+    <role>Moonwind (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel House</name>
+    <role>Terry (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Alice Braga</name>
+    <role>Counselor Jerry (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Ayoade</name>
+    <role>Counselor Jerry (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Phylicia Rashād</name>
+    <role>Libba Gardner (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Donnell Rawlings</name>
+    <role>Dez (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Questlove</name>
+    <role>Curly (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Angela Bassett</name>
+    <role>Dorothea (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Cora Champommier</name>
+    <role>Connie (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Margo Hall</name>
+    <role>Melba (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Daveed Diggs</name>
+    <role>Paul (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Rhodessa Jones</name>
+    <role>Lulu (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Wes Studi</name>
+    <role>Counselor Jerry (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Pete Docter</director>
+  <credits>Pete Docter</credits>
+  <credits>Mike Jones</credits>
+  <credits>Kemp Powers</credits>
+</movie>

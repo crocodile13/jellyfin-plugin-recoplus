@@ -1,0 +1,119 @@
+<movie>
+  <title>The Big Lebowski</title>
+  <originaltitle>The Big Lebowski</originaltitle>
+  <year>1998</year>
+  <premiered>1998-03-06</premiered>
+  <rating>7.857</rating>
+  <criticrating>79</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <genre>Crime</genre>
+  <tag>vietnam veteran</tag>
+  <tag>white russian</tag>
+  <tag>bowling</tag>
+  <tag>carpet</tag>
+  <tag>nihilism</tag>
+  <tag>heart attack</tag>
+  <tag>kidnapping</tag>
+  <tag>lsd</tag>
+  <tag>marijuana</tag>
+  <tag>los angeles, california</tag>
+  <tag>millionaire</tag>
+  <tag>cowboy</tag>
+  <tag>ashes</tag>
+  <tag>impregnation</tag>
+  <tag>bowling team</tag>
+  <tag>unemployed</tag>
+  <tag>bowling ball</tag>
+  <tag>neo-noir</tag>
+  <tag>weeds</tag>
+  <tag>psychedelic drug</tag>
+  <tag>absurd</tag>
+  <tag>amused</tag>
+  <tag>shaggy dog story</tag>
+  <studio>PolyGram Filmed Entertainment</studio>
+  <studio>Working Title</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">115</uniqueid>
+  <uniqueid type="imdb">tt0118715</uniqueid>
+  <actor>
+    <name>Jeff Bridges</name>
+    <role>The Dude</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>John Goodman</name>
+    <role>Walter Sobchak</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Julianne Moore</name>
+    <role>Maude Lebowski</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Buscemi</name>
+    <role>Donny</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>David Huddleston</name>
+    <role>The Big Lebowski</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Philip Seymour Hoffman</name>
+    <role>Brandt</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tara Reid</name>
+    <role>Bunny Lebowski</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Philip Moon</name>
+    <role>Treehorn Thug</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Pellegrino</name>
+    <role>Treehorn Thug</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Stormare</name>
+    <role>Nihilist</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Flea</name>
+    <role>Nihilist</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Torsten Voges</name>
+    <role>Nihilist</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jimmie Dale Gilmore</name>
+    <role>Smokey</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Kehler</name>
+    <role>Dude's Landlord</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>John Turturro</name>
+    <role>Jesus Quintana</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Joel Coen</director>
+  <director>Ethan Coen</director>
+  <credits>Ethan Coen</credits>
+  <credits>Joel Coen</credits>
+</movie>

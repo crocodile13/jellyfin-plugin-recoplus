@@ -1,0 +1,109 @@
+<movie>
+  <title>Mother</title>
+  <originaltitle>마더</originaltitle>
+  <year>2009</year>
+  <premiered>2009-05-28</premiered>
+  <rating>7.71</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>Mystery</genre>
+  <tag>small town</tag>
+  <tag>mother</tag>
+  <tag>golf</tag>
+  <tag>murder</tag>
+  <tag>teenage girl</tag>
+  <tag>misunderstanding</tag>
+  <tag>cell phone</tag>
+  <tag>drunk</tag>
+  <tag>disability</tag>
+  <tag>needle</tag>
+  <tag>drunkenness</tag>
+  <tag>murder mystery</tag>
+  <tag>acupuncture</tag>
+  <tag>mental retardation</tag>
+  <tag>mother son relationship</tag>
+  <studio>Barunson E&amp;A</studio>
+  <studio>CJ Entertainment</studio>
+  <country>South Korea</country>
+  <uniqueid type="tmdb" default="true">30018</uniqueid>
+  <uniqueid type="imdb">tt1216496</uniqueid>
+  <actor>
+    <name>Kim Hye-ja</name>
+    <role>Mother</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Won Bin</name>
+    <role>Yoon Do-joon</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jin Goo</name>
+    <role>Jin-tae</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Yoon Je-moon</name>
+    <role>Je-moon</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jeon Mi-seon</name>
+    <role>Mi-seon</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Song Sae-byuk</name>
+    <role>Sepak Takraw Detective</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Young-suk</name>
+    <role>Elder at Junk Shop</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Moon Hee-ra</name>
+    <role>Moon Ah-jeong</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Chun Woo-hee</name>
+    <role>Mi-na</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Byeong-soon</name>
+    <role>Police Group Leader</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Yeo Moo-yeong</name>
+    <role>Lawyer Kong Seok-ho</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jung Young-ki</name>
+    <role>Skinny Student</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ko Kyu-pil</name>
+    <role>Fat Student</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Mi-do</name>
+    <role>Scar Girl</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Jin-goo</name>
+    <role>Ah-jeong's Grandma</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Bong Joon Ho</director>
+  <credits>Bong Joon Ho</credits>
+  <credits>Park Eun-kyo</credits>
+</movie>

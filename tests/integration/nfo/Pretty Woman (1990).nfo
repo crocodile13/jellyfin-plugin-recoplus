@@ -1,0 +1,119 @@
+<movie>
+  <title>Pretty Woman</title>
+  <originaltitle>Pretty Woman</originaltitle>
+  <year>1990</year>
+  <premiered>1990-03-23</premiered>
+  <rating>7.438</rating>
+  <mpaa>R</mpaa>
+  <genre>Romance</genre>
+  <genre>Comedy</genre>
+  <tag>prostitute</tag>
+  <tag>sports car</tag>
+  <tag>capitalism</tag>
+  <tag>expensive restaurant</tag>
+  <tag>workaholic</tag>
+  <tag>fire escape</tag>
+  <tag>romcom</tag>
+  <tag>los angeles, california</tag>
+  <tag>millionaire</tag>
+  <tag>valentine's day</tag>
+  <tag>beverly hills</tag>
+  <tag>pygmalion</tag>
+  <tag>entrepreneur</tag>
+  <tag>social differences</tag>
+  <tag>business deal</tag>
+  <tag>penthouse</tag>
+  <tag>italian opera</tag>
+  <tag>shopping spree</tag>
+  <tag>bubble bath</tag>
+  <tag>loving</tag>
+  <tag>hooker</tag>
+  <tag>street smarts</tag>
+  <tag>contract relationship</tag>
+  <tag>cinderella story</tag>
+  <tag>cheerful</tag>
+  <tag>polo match</tag>
+  <studio>Touchstone Pictures</studio>
+  <studio>Silver Screen Partners IV</studio>
+  <studio>Arnon Milchan Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">114</uniqueid>
+  <uniqueid type="imdb">tt0100405</uniqueid>
+  <actor>
+    <name>Julia Roberts</name>
+    <role>Vivian Ward</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Gere</name>
+    <role>Edward Lewis</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ralph Bellamy</name>
+    <role>James Morse</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Alexander</name>
+    <role>Philip Stuckey</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Laura San Giacomo</name>
+    <role>Kit De Luca</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Héctor Elizondo</name>
+    <role>The Hotel Manager</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Alex Hyde-White</name>
+    <role>David Morse</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Amy Yasbeck</name>
+    <role>Elizabeth Stuckey</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Elinor Donahue</name>
+    <role>Bridget</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Judith Baldwin</name>
+    <role>Susan</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Randal</name>
+    <role>Magician</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Applebaum</name>
+    <role>Howard</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tracy Bjork</name>
+    <role>Female Guest</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Gary Greene</name>
+    <role>Male Guest</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Billy Gallo</name>
+    <role>Carlos</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Garry Marshall</director>
+  <credits>J.F. Lawton</credits>
+</movie>

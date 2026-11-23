@@ -1,0 +1,105 @@
+<tvshow>
+  <title>House of the Dragon</title>
+  <originaltitle>House of the Dragon</originaltitle>
+  <year>2022</year>
+  <premiered>2022-08-21</premiered>
+  <rating>8.375</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Drama</genre>
+  <genre>Action &amp; Adventure</genre>
+  <tag>based on novel or book</tag>
+  <tag>kingdom</tag>
+  <tag>prequel</tag>
+  <tag>dysfunctional family</tag>
+  <tag>knight</tag>
+  <tag>dragon</tag>
+  <tag>king</tag>
+  <tag>fantasy world</tag>
+  <tag>dark fantasy</tag>
+  <tag>epic battle</tag>
+  <tag>power struggle</tag>
+  <tag>power madness</tag>
+  <tag>grimdark</tag>
+  <studio>HBO</studio>
+  <studio>Bastard Sword</studio>
+  <studio>1:26 Pictures</studio>
+  <studio>GRRM</studio>
+  <uniqueid type="tmdb" default="true">94997</uniqueid>
+  <uniqueid type="imdb">tt11198330</uniqueid>
+  <actor>
+    <name>Matt Smith</name>
+    <role>Prince Daemon Targaryen</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Olivia Cooke</name>
+    <role>Queen Alicent Hightower</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>James Norton</name>
+    <role>Lord Ormund Hightower</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Toussaint</name>
+    <role>Lord Corlys 'The Sea Snake' Velaryon</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Fabien Frankel</name>
+    <role>Ser Criston Cole</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Needham</name>
+    <role>Lord Larys 'Clubfoot' Strong</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Sonoya Mizuno</name>
+    <role>Mysaria 'The White Worm'</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ewan Mitchell</name>
+    <role>Prince Aemond Targaryen</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Collett</name>
+    <role>Prince Jacaerys 'Jace' Velaryon</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Bethany Antonia</name>
+    <role>Lady Baela Targaryen</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Phil Daniels</name>
+    <role>Maester Gerardys</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Abubakar Salim</name>
+    <role>Alyn of Hull</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Clinton Liberty</name>
+    <role>Addam of Hull</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Phoebe Campbell</name>
+    <role>Lady Rhaena Targaryen</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Freddie Fox</name>
+    <role>Ser Gwayne Hightower</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

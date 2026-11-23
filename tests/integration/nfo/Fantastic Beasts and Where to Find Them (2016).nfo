@@ -1,0 +1,112 @@
+<movie>
+  <title>Fantastic Beasts and Where to Find Them</title>
+  <originaltitle>Fantastic Beasts and Where to Find Them</originaltitle>
+  <year>2016</year>
+  <premiered>2016-11-16</premiered>
+  <rating>7.3</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Fantasy</genre>
+  <genre>Adventure</genre>
+  <tag>witch</tag>
+  <tag>new york city</tag>
+  <tag>robbery</tag>
+  <tag>escape</tag>
+  <tag>teleportation</tag>
+  <tag>magic</tag>
+  <tag>suitcase</tag>
+  <tag>mistake</tag>
+  <tag>spin off</tag>
+  <tag>subway station</tag>
+  <tag>wizard</tag>
+  <tag>goblin</tag>
+  <tag>magical creature</tag>
+  <tag>1920s</tag>
+  <tag>based on young adult novel</tag>
+  <tag>fantastic beasts and where to find them</tag>
+  <studio>Heyday Films</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">259316</uniqueid>
+  <uniqueid type="imdb">tt3183660</uniqueid>
+  <set tmdbcolid="435259">
+    <name>435259</name>
+  </set>
+  <actor>
+    <name>Eddie Redmayne</name>
+    <role>Newt</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Katherine Waterston</name>
+    <role>Porpentina 'Tina' Goldstein</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Dan Fogler</name>
+    <role>Jacob Kowalski</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Alison Sudol</name>
+    <role>Queenie</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Colin Farrell</name>
+    <role>Graves</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Voight</name>
+    <role>Shaw Senior</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ron Perlman</name>
+    <role>Gnarlak</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ezra Miller</name>
+    <role>Credence Barebone</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Samantha Morton</name>
+    <role>Mary Lou Barebone</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Carmen Ejogo</name>
+    <role>Seraphina Picquery</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Cowdery</name>
+    <role>Henry Shaw Jnr / Senator Shaw</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Johnny Depp</name>
+    <role>Grindelwald</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ronan Raftery</name>
+    <role>Langdon Shaw</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Faith Wood-Blagrove</name>
+    <role>Modesty Barebone</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jenn Murray</name>
+    <role>Chastity Barebone</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>David Yates</director>
+  <credits>J.K. Rowling</credits>
+</movie>

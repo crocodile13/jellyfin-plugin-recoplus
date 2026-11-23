@@ -1,0 +1,47 @@
+<tvshow>
+  <title>Blue Planet II</title>
+  <originaltitle>Blue Planet II</originaltitle>
+  <year>2017</year>
+  <premiered>2017-10-29</premiered>
+  <rating>8.631</rating>
+  <mpaa>TV-G</mpaa>
+  <genre>Documentary</genre>
+  <genre>Family</genre>
+  <tag>ocean</tag>
+  <tag>sea</tag>
+  <tag>fish</tag>
+  <tag>deep sea</tag>
+  <tag>miniseries</tag>
+  <tag>oceanic expedition</tag>
+  <tag>oceanography</tag>
+  <tag>scientific expedition</tag>
+  <tag>underwater photography</tag>
+  <tag>science and technology</tag>
+  <tag>water planet</tag>
+  <tag>nature documentary</tag>
+  <tag>expert opinion</tag>
+  <tag>underwater world</tag>
+  <tag>deep-sea dive</tag>
+  <tag>planet earth</tag>
+  <tag>marine life</tag>
+  <tag>oceans</tag>
+  <tag>underwater facility</tag>
+  <tag>deep blue</tag>
+  <tag>animals &amp; nature</tag>
+  <tag>sea animals</tag>
+  <studio>BBC One</studio>
+  <studio>BBC Studios Natural History Unit</studio>
+  <studio>BBC America</studio>
+  <studio>Tencent</studio>
+  <studio>WDR</studio>
+  <studio>France Télévisions</studio>
+  <studio>CCTV</studio>
+  <uniqueid type="tmdb" default="true">74313</uniqueid>
+  <uniqueid type="imdb">tt6769208</uniqueid>
+  <actor>
+    <name>David Attenborough</name>
+    <role>Self - Presenter</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <director>Alastair Fothergill</director>
+</tvshow>

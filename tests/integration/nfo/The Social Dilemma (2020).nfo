@@ -1,0 +1,120 @@
+<movie>
+  <title>The Social Dilemma</title>
+  <originaltitle>The Social Dilemma</originaltitle>
+  <year>2020</year>
+  <premiered>2020-01-26</premiered>
+  <rating>7.451</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Documentary</genre>
+  <genre>Drama</genre>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>technology</tag>
+  <tag>silicon valley</tag>
+  <tag>high tech surveillance</tag>
+  <tag>internet</tag>
+  <tag>surveillance</tag>
+  <tag>big corporation</tag>
+  <tag>media manipulation</tag>
+  <tag>social network</tag>
+  <tag>teen suicide</tag>
+  <tag>low self esteem</tag>
+  <tag>social media</tag>
+  <tag>internet culture</tag>
+  <tag>commercialism</tag>
+  <tag>internet addiction</tag>
+  <tag>social isolation</tag>
+  <tag>self-harm</tag>
+  <tag>advertising campaign</tag>
+  <tag>advertising model</tag>
+  <tag>late stage capitalism</tag>
+  <tag>machine learning</tag>
+  <tag>media addiction</tag>
+  <tag>algorithm</tag>
+  <tag>societal collapse</tag>
+  <tag>smartphone</tag>
+  <studio>Exposure Labs</studio>
+  <studio>Argent Pictures</studio>
+  <studio>The Space Program</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">656690</uniqueid>
+  <uniqueid type="imdb">tt11464826</uniqueid>
+  <actor>
+    <name>Tristan Harris</name>
+    <role>Self</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Seibert</name>
+    <role>Self</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Bailey Richardson</name>
+    <role>Self</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Toscano</name>
+    <role>Self</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sandy Parakilas</name>
+    <role>Self</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Guillaume Chaslot</name>
+    <role>Self</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lynn Fox</name>
+    <role>Self</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Aza Raskin</name>
+    <role>Self</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Alex Roetter</name>
+    <role>Self</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Kendall</name>
+    <role>Self</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Justin Rosenstein</name>
+    <role>Self</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Randy Fernando</name>
+    <role>Self</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jaron Lanier</name>
+    <role>Self</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Roger McNamee</name>
+    <role>Self</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Shoshana Zuboff</name>
+    <role>Self</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jeff Orlowski</director>
+  <credits>Vickie Curtis</credits>
+  <credits>Davis Coombe</credits>
+  <credits>Jeff Orlowski</credits>
+</movie>

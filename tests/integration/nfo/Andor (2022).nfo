@@ -1,0 +1,100 @@
+<tvshow>
+  <title>Andor</title>
+  <originaltitle>Andor</originaltitle>
+  <year>2022</year>
+  <premiered>2022-09-21</premiered>
+  <rating>8.319</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Action &amp; Adventure</genre>
+  <genre>War &amp; Politics</genre>
+  <tag>space war</tag>
+  <tag>prequel</tag>
+  <tag>space</tag>
+  <tag>rebellion</tag>
+  <tag>revolutionary</tag>
+  <tag>space opera</tag>
+  <tag>imperialism</tag>
+  <tag>political thriller</tag>
+  <tag>spy thriller</tag>
+  <tag>audacious</tag>
+  <studio>Disney+</studio>
+  <studio>Lucasfilm Ltd.</studio>
+  <uniqueid type="tmdb" default="true">83867</uniqueid>
+  <uniqueid type="imdb">tt9253284</uniqueid>
+  <actor>
+    <name>Diego Luna</name>
+    <role>Cassian Andor</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Miles</name>
+    <role>Tay Kolma</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Dillane</name>
+    <role>Davo Sculdun</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Anton Lesser</name>
+    <role>Major Partagaz</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Muhannad Bhaier</name>
+    <role>Wilmon</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Stellan Skarsgård</name>
+    <role>Luthen Rael</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Denise Gough</name>
+    <role>Dedra Meero</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle Soller</name>
+    <role>Syril Karn</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Adria Arjona</name>
+    <role>Bix Caleen</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Genevieve O'Reilly</name>
+    <role>Mon Mothma</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Faye Marsay</name>
+    <role>Vel Sartha</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Dulau</name>
+    <role>Kleya Marki</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Varada Sethu</name>
+    <role>Cinta Kaz</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Alastair Mackenzie</name>
+    <role>Perrin Fertha</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Joplin Sibtain</name>
+    <role>Brasso</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

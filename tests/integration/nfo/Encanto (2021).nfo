@@ -1,0 +1,118 @@
+<movie>
+  <title>Encanto</title>
+  <originaltitle>Encanto</originaltitle>
+  <year>2021</year>
+  <premiered>2021-11-24</premiered>
+  <rating>7.6</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <genre>Fantasy</genre>
+  <tag>strong woman</tag>
+  <tag>magic</tag>
+  <tag>sadness</tag>
+  <tag>immigration</tag>
+  <tag>supernatural</tag>
+  <tag>beauty</tag>
+  <tag>musical</tag>
+  <tag>big family</tag>
+  <tag>forest</tag>
+  <tag>family secrets</tag>
+  <tag>family relationships</tag>
+  <tag>flamenco</tag>
+  <tag>joy of life</tag>
+  <tag>teenage girl</tag>
+  <tag>female protagonist</tag>
+  <tag>family conflict</tag>
+  <tag>helping children</tag>
+  <tag>matriarch</tag>
+  <tag>3d animation</tag>
+  <tag>colombia</tag>
+  <studio>Walt Disney Animation Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">568124</uniqueid>
+  <uniqueid type="imdb">tt2953050</uniqueid>
+  <set tmdbcolid="1451277">
+    <name>1451277</name>
+  </set>
+  <actor>
+    <name>Stephanie Beatriz</name>
+    <role>Mirabel (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>María Cecilia Botero</name>
+    <role>Abuela Alma (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>John Leguizamo</name>
+    <role>Bruno (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Mauro Castillo</name>
+    <role>Félix (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jess Darrow</name>
+    <role>Luisa (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Angie Cepeda</name>
+    <role>Julieta  (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Carolina Gaitán</name>
+    <role>Pepa (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Diane Guerrero</name>
+    <role>Isabela (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Wilmer Valderrama</name>
+    <role>Agustín (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Rhenzy Feliz</name>
+    <role>Camilo (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ravi Cabot-Conyers</name>
+    <role>Antonio (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Adassa</name>
+    <role>Dolores (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Maluma</name>
+    <role>Mariano (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Rose Portillo</name>
+    <role>Señora Guzmán (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Noemi Josefina Flores</name>
+    <role>Young Mirabel / Town Kid (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Byron Howard</director>
+  <director>Jared Bush</director>
+  <credits>Charise Castro Smith</credits>
+  <credits>Jared Bush</credits>
+</movie>

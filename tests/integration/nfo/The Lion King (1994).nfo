@@ -1,0 +1,117 @@
+<movie>
+  <title>The Lion King</title>
+  <originaltitle>The Lion King</originaltitle>
+  <year>1994</year>
+  <premiered>1994-06-15</premiered>
+  <rating>8.25</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Drama</genre>
+  <tag>father murder</tag>
+  <tag>loss of loved one</tag>
+  <tag>africa</tag>
+  <tag>lion</tag>
+  <tag>cartoon</tag>
+  <tag>manipulation</tag>
+  <tag>villain</tag>
+  <tag>redemption</tag>
+  <tag>musical</tag>
+  <tag>uncle</tag>
+  <tag>coming of age</tag>
+  <tag>murder</tag>
+  <tag>shaman</tag>
+  <tag>king</tag>
+  <tag>animals</tag>
+  <tag>nature</tag>
+  <tag>father son relationship</tag>
+  <tag>awestruck</tag>
+  <studio>Walt Disney Pictures</studio>
+  <studio>Walt Disney Feature Animation</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">8587</uniqueid>
+  <uniqueid type="imdb">tt0110357</uniqueid>
+  <set tmdbcolid="94032">
+    <name>94032</name>
+  </set>
+  <actor>
+    <name>Matthew Broderick</name>
+    <role>Simba (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Moira Kelly</name>
+    <role>Nala (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Irons</name>
+    <role>Scar (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Nathan Lane</name>
+    <role>Timon (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ernie Sabella</name>
+    <role>Pumbaa (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>James Earl Jones</name>
+    <role>Mufasa (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Guillaume</name>
+    <role>Rafiki (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rowan Atkinson</name>
+    <role>Zazu (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Whoopi Goldberg</name>
+    <role>Shenzi (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Cheech Marin</name>
+    <role>Banzai (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Cummings</name>
+    <role>Ed (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jonathan Taylor Thomas</name>
+    <role>Young Simba (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Niketa Calame-Harris</name>
+    <role>Young Nala (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Madge Sinclair</name>
+    <role>Sarabi (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Zoe Leader</name>
+    <role>Sarafina (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Roger Allers</director>
+  <director>Rob Minkoff</director>
+  <credits>Linda Woolverton</credits>
+  <credits>Jonathan Roberts</credits>
+  <credits>Irene Mecchi</credits>
+</movie>

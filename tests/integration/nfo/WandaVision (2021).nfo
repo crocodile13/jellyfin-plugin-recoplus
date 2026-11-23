@@ -1,0 +1,111 @@
+<tvshow>
+  <title>WandaVision</title>
+  <originaltitle>WandaVision</originaltitle>
+  <year>2021</year>
+  <premiered>2021-01-15</premiered>
+  <rating>8.178</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Mystery</genre>
+  <genre>Drama</genre>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>witch</tag>
+  <tag>loss of loved one</tag>
+  <tag>magic</tag>
+  <tag>sorcery</tag>
+  <tag>supernatural</tag>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>grief</tag>
+  <tag>suburbia</tag>
+  <tag>miniseries</tag>
+  <tag>family</tag>
+  <tag>superhero team</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>sitcom</tag>
+  <tag>supervillain</tag>
+  <tag>tv show</tag>
+  <tag>hilarious</tag>
+  <tag>admiring</tag>
+  <tag>bold</tag>
+  <tag>exhilarated</tag>
+  <studio>Disney+</studio>
+  <studio>Marvel Studios</studio>
+  <uniqueid type="tmdb" default="true">85271</uniqueid>
+  <uniqueid type="imdb">tt9140560</uniqueid>
+  <actor>
+    <name>Elizabeth Olsen</name>
+    <role>Wanda Maximoff / Scarlet Witch</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Bettany</name>
+    <role>Vision / The Vision</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kathryn Hahn</name>
+    <role>Agnes / Agatha Harkness</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Teyonah Parris</name>
+    <role>Monica Rambeau / Geraldine</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Randall Park</name>
+    <role>Jimmy Woo</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kat Dennings</name>
+    <role>Darcy Lewis / The Escape Artist</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Yuuki Luna</name>
+    <role>Tap Dancer</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Eric Delgado</name>
+    <role>Tap Dancer</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Randy Oglesby</name>
+    <role>Doctor Stan Nielson</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Rose Bianco</name>
+    <role>Mrs. Nielson</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lana Young</name>
+    <role>Dr. Highland</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Younis</name>
+    <role>Doctor</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Viviana Chavez</name>
+    <role>Nurse</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Bobby Hernandez</name>
+    <role>Security Guard</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Shaun MacLean</name>
+    <role>Orderly</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

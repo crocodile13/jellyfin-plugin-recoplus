@@ -1,0 +1,114 @@
+<movie>
+  <title>10 Things I Hate About You</title>
+  <originaltitle>10 Things I Hate About You</originaltitle>
+  <year>1999</year>
+  <premiered>1999-03-30</premiered>
+  <rating>7.599</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Comedy</genre>
+  <genre>Romance</genre>
+  <genre>Drama</genre>
+  <tag>high school</tag>
+  <tag>seattle, washington</tag>
+  <tag>deception</tag>
+  <tag>based on play or musical</tag>
+  <tag>coming of age</tag>
+  <tag>teen movie</tag>
+  <tag>shrew</tag>
+  <tag>teen comedy</tag>
+  <tag>valentine's day</tag>
+  <tag>opposites attract</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>teenage romance</tag>
+  <tag>overprotective father</tag>
+  <tag>playful</tag>
+  <tag>lighthearted</tag>
+  <tag>casual</tag>
+  <tag>cliché</tag>
+  <studio>Mad Chance</studio>
+  <studio>Jaret Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">4951</uniqueid>
+  <uniqueid type="imdb">tt0147800</uniqueid>
+  <set tmdbcolid="1477103">
+    <name>1477103</name>
+  </set>
+  <actor>
+    <name>Heath Ledger</name>
+    <role>Patrick Verona</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Stiles</name>
+    <role>Katarina Stratford</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Joseph Gordon-Levitt</name>
+    <role>Cameron James</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Larisa Oleynik</name>
+    <role>Bianca Stratford</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>David Krumholtz</name>
+    <role>Michael Eckman</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Keegan</name>
+    <role>Joey Donner</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Susan May Pratt</name>
+    <role>Mandella</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Gabrielle Union</name>
+    <role>Chastity</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Larry Miller</name>
+    <role>Walter Stratford</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Daryl Mitchell</name>
+    <role>Mr. Morgan</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Allison Janney</name>
+    <role>Ms. Perky</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David Leisure</name>
+    <role>Mr. Chapin</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Greg Jackson</name>
+    <role>Scruvy</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle Cease</name>
+    <role>Bogey Lowenstien</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Terence Heuston</name>
+    <role>Derek</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Gil Junger</director>
+  <credits>Kirsten Smith</credits>
+  <credits>Karen McCullah</credits>
+</movie>

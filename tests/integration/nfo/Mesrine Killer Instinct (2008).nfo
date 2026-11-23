@@ -1,0 +1,114 @@
+<movie>
+  <title>Mesrine: Killer Instinct</title>
+  <originaltitle>L'Instinct de mort</originaltitle>
+  <year>2008</year>
+  <premiered>2008-10-22</premiered>
+  <rating>7.3</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Action</genre>
+  <genre>Thriller</genre>
+  <genre>Crime</genre>
+  <tag>casino</tag>
+  <tag>france</tag>
+  <tag>based on novel or book</tag>
+  <tag>kidnapping</tag>
+  <tag>gangster</tag>
+  <tag>based on true story</tag>
+  <tag>montreal, canada</tag>
+  <tag>prison escape</tag>
+  <tag>murder</tag>
+  <tag>shootout</tag>
+  <tag>bank robbery</tag>
+  <tag>ex soldier</tag>
+  <tag>1960s</tag>
+  <tag>algerian war (1954-62)</tag>
+  <studio>Remstar Productions</studio>
+  <studio>Novo RPI</studio>
+  <studio>La Petite Reine</studio>
+  <country>Canada</country>
+  <country>France</country>
+  <country>Italy</country>
+  <uniqueid type="tmdb" default="true">13635</uniqueid>
+  <uniqueid type="imdb">tt1259014</uniqueid>
+  <set tmdbcolid="85945">
+    <name>85945</name>
+  </set>
+  <actor>
+    <name>Vincent Cassel</name>
+    <role>Jacques Mesrine</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Cécile de France</name>
+    <role>Jeanne Schneider</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Gérard Depardieu</name>
+    <role>Guido</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Gilles Lellouche</name>
+    <role>Paul</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Roy Dupuis</name>
+    <role>Jean-Paul Mercier</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Florence Thomassin</name>
+    <role>Sarah</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Elena Anaya</name>
+    <role>Sofia</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ludivine Sagnier</name>
+    <role>Sylvie Jeanjacquot</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Duchaussoy</name>
+    <role>Pierre André Mesrine, father of Jacques</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Myriam Boyer</name>
+    <role>Mesrine's mother</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Abdelhafid Metalsi</name>
+    <role>Ahmed, pimp</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Gilbert Sicotte</name>
+    <role>Billionaire</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Mustapha Abourachid</name>
+    <role>Harki</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Deano Clavet</name>
+    <role>Roger André</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Sofiane Benrazzak</name>
+    <role>Fellagah #1</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jean-François Richet</director>
+  <credits>Abdel Raouf Dafri</credits>
+</movie>

@@ -1,0 +1,111 @@
+<tvshow>
+  <title>MINDHUNTER</title>
+  <originaltitle>MINDHUNTER</originaltitle>
+  <year>2017</year>
+  <premiered>2017-10-13</premiered>
+  <rating>8.146</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Crime</genre>
+  <tag>prison</tag>
+  <tag>based on novel or book</tag>
+  <tag>1970s</tag>
+  <tag>fbi</tag>
+  <tag>psychology</tag>
+  <tag>interview</tag>
+  <tag>psychopath</tag>
+  <tag>serial killer</tag>
+  <tag>murderer</tag>
+  <tag>true crime</tag>
+  <tag>rapist</tag>
+  <tag>police investigation</tag>
+  <tag>virginia</tag>
+  <tag>mysterious</tag>
+  <tag>quantico</tag>
+  <tag>complex</tag>
+  <tag>police profiling</tag>
+  <tag>dreary</tag>
+  <tag>police procedural</tag>
+  <tag>psychological</tag>
+  <tag>thriller</tag>
+  <tag>psychological profiling</tag>
+  <studio>Netflix</studio>
+  <studio>Denver &amp; Delilah Productions</studio>
+  <uniqueid type="tmdb" default="true">67744</uniqueid>
+  <uniqueid type="imdb">tt5290382</uniqueid>
+  <actor>
+    <name>Jonathan Groff</name>
+    <role>Holden Ford</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Holt McCallany</name>
+    <role>Bill Tench</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Hannah Gross</name>
+    <role>Debbie Mitford</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Anna Torv</name>
+    <role>Wendy Carr</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Stacey Roca</name>
+    <role>Nancy Tench</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Cotter Smith</name>
+    <role>Unit Chief Shepard</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Tuttle</name>
+    <role>Gregg Smith</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>David H. Holmes</name>
+    <role>Cody Miller</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Crockett</name>
+    <role>Sissy Miller</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jordan Gelber</name>
+    <role>Peter Rathman</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas Philip O'Neill</name>
+    <role>Leo Buchanan</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Sellars</name>
+    <role>Ninkovich</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Joanna Lowe</name>
+    <role>Hostage</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Carter Bratton</name>
+    <role>Quantico Instructor</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Mathews</name>
+    <role>Trainee Mike</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

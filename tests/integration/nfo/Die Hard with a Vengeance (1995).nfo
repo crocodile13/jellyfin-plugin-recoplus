@@ -1,0 +1,125 @@
+<movie>
+  <title>Die Hard: With a Vengeance</title>
+  <originaltitle>Die Hard: With a Vengeance</originaltitle>
+  <year>1995</year>
+  <premiered>1995-05-19</premiered>
+  <rating>7.3</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Thriller</genre>
+  <tag>new york city</tag>
+  <tag>taxi</tag>
+  <tag>gold</tag>
+  <tag>helicopter</tag>
+  <tag>robbery</tag>
+  <tag>police</tag>
+  <tag>bomb</tag>
+  <tag>riddle</tag>
+  <tag>detective</tag>
+  <tag>fbi</tag>
+  <tag>sequel</tag>
+  <tag>flashback</tag>
+  <tag>revenge</tag>
+  <tag>shootout</tag>
+  <tag>explosion</tag>
+  <tag>nypd</tag>
+  <tag>cargo ship</tag>
+  <tag>wild goose chase</tag>
+  <tag>simon says</tag>
+  <tag>dump truck</tag>
+  <tag>harlem, new york city</tag>
+  <tag>aqueduct</tag>
+  <tag>bomb threat</tag>
+  <tag>action hero</tag>
+  <tag>deadly game</tag>
+  <tag>federal reserve bank</tag>
+  <tag>nyc subway</tag>
+  <tag>assertive</tag>
+  <tag>excited</tag>
+  <studio>20th Century Fox</studio>
+  <studio>Cinergi Pictures</studio>
+  <studio>Andrew G. Vajna Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">1572</uniqueid>
+  <uniqueid type="imdb">tt0112864</uniqueid>
+  <set tmdbcolid="1570">
+    <name>1570</name>
+  </set>
+  <actor>
+    <name>Bruce Willis</name>
+    <role>John McClane</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Irons</name>
+    <role>Simon</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel L. Jackson</name>
+    <role>Zeus Carver</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Larry Bryggman</name>
+    <role>Chief Walter Cobb</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Graham Greene</name>
+    <role>Joe Lambert</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Peck</name>
+    <role>Ricky Walsh</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Nicholas Wyman</name>
+    <role>Mathias Targo</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Chamberlin</name>
+    <role>Charles Weiss</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Colleen Camp</name>
+    <role>Connie Kowalski</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Phillips</name>
+    <role>Katya</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Alexander Jackson</name>
+    <role>Dexter</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Aldis Hodge</name>
+    <role>Raymond</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Sharon Washington</name>
+    <role>Officer Jane</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Pearlman</name>
+    <role>Dr. Fred Schiller</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Mischa Hausserman</name>
+    <role>Mischa</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>John McTiernan</director>
+  <credits>Jonathan Hensleigh</credits>
+</movie>

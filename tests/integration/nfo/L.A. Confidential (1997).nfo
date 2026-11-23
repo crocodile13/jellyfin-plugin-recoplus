@@ -1,0 +1,110 @@
+<movie>
+  <title>L.A. Confidential</title>
+  <originaltitle>L.A. Confidential</originaltitle>
+  <year>1997</year>
+  <premiered>1997-09-19</premiered>
+  <rating>7.813</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Mystery</genre>
+  <genre>Thriller</genre>
+  <tag>corruption</tag>
+  <tag>based on novel or book</tag>
+  <tag>call girl</tag>
+  <tag>shotgun</tag>
+  <tag>detective</tag>
+  <tag>femme fatale</tag>
+  <tag>domestic violence</tag>
+  <tag>whodunit</tag>
+  <tag>corpse</tag>
+  <tag>district attorney</tag>
+  <tag>movie star</tag>
+  <tag>good cop bad cop</tag>
+  <tag>neo-noir</tag>
+  <tag>1950s</tag>
+  <tag>direct</tag>
+  <studio>Regency Enterprises</studio>
+  <studio>The Wolper Organization</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">2118</uniqueid>
+  <uniqueid type="imdb">tt0119488</uniqueid>
+  <actor>
+    <name>Kevin Spacey</name>
+    <role>Jack Vincennes</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Russell Crowe</name>
+    <role>Wendell 'Bud' White</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Guy Pearce</name>
+    <role>Edmund 'Ed' Exley</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>James Cromwell</name>
+    <role>Dudley Smith</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Basinger</name>
+    <role>Lynn Bracken</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Danny DeVito</name>
+    <role>Sid Hudgens</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>David Strathairn</name>
+    <role>Pierce Patchett</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Ron Rifkin</name>
+    <role>D.A. Ellis Loew</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Graham Beckel</name>
+    <role>Dick Stensland</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Amber Smith</name>
+    <role>Susan Lefferts</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>John Mahon</name>
+    <role>Police Chief</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Guilfoyle</name>
+    <role>Mickey Cohen</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Matt McCoy</name>
+    <role>'Badge of Honor' Star Brett Chase</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Paolo Seganti</name>
+    <role>Johnny Stompanato</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Simon Baker</name>
+    <role>Matt Reynolds</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Curtis Hanson</director>
+  <credits>Brian Helgeland</credits>
+  <credits>Curtis Hanson</credits>
+  <credits>James Ellroy</credits>
+</movie>

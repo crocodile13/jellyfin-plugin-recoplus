@@ -1,0 +1,105 @@
+<tvshow>
+  <title>Lupin</title>
+  <originaltitle>Lupin</originaltitle>
+  <year>2021</year>
+  <premiered>2021-01-08</premiered>
+  <rating>7.681</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>Mystery</genre>
+  <tag>paris, france</tag>
+  <tag>based on novel or book</tag>
+  <tag>investigation</tag>
+  <tag>police</tag>
+  <tag>thief</tag>
+  <tag>revenge</tag>
+  <tag>heist</tag>
+  <tag>criminal</tag>
+  <tag>disguise</tag>
+  <tag>dramedy</tag>
+  <tag>arsene lupin</tag>
+  <tag>thriller</tag>
+  <tag>exciting</tag>
+  <tag>action</tag>
+  <studio>Netflix</studio>
+  <studio>Gaumont</studio>
+  <studio>Carrousel Studios</studio>
+  <uniqueid type="tmdb" default="true">96677</uniqueid>
+  <uniqueid type="imdb">tt2531336</uniqueid>
+  <actor>
+    <name>Omar Sy</name>
+    <role>Assane Diop</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ludivine Sagnier</name>
+    <role>Claire Laurent</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Antoine Gouy</name>
+    <role>Benjamin Férel</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Soufiane Guerrab</name>
+    <role>Youssef Guédira</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Kamel Guenfoud</name>
+    <role>Kevin</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Grégoire Colin</name>
+    <role>Vincent Morville</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Arthur Choisnet</name>
+    <role>Rudy</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Saïd Benchnafa</name>
+    <role>Bogdan</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mohamed Nouar</name>
+    <role>Ibrahim</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Charlotte Saliou</name>
+    <role>Louvre Museum Guide</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ary Gabison</name>
+    <role>Louvre Barrier Security Guard</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Martin Trouvé-Dugény</name>
+    <role>Thomas in Control Room</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Xavier Gojo</name>
+    <role>Ferrari Police Officer</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Linda Massoz</name>
+    <role>Prison Nurse</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Karim Lasmi</name>
+    <role>Mirko</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,122 @@
+<movie>
+  <title>The Pianist</title>
+  <originaltitle>The Pianist</originaltitle>
+  <year>2002</year>
+  <premiered>2002-09-17</premiered>
+  <rating>8.369</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>War</genre>
+  <tag>concert</tag>
+  <tag>nazi</tag>
+  <tag>resistance</tag>
+  <tag>warsaw ghetto</tag>
+  <tag>polish resistance</tag>
+  <tag>homeland</tag>
+  <tag>holocaust (shoah)</tag>
+  <tag>hunger</tag>
+  <tag>world war ii</tag>
+  <tag>prisoner of war</tag>
+  <tag>ghetto</tag>
+  <tag>deportation</tag>
+  <tag>jew persecution</tag>
+  <tag>liberation</tag>
+  <tag>biography</tag>
+  <tag>based on true story</tag>
+  <tag>survival</tag>
+  <tag>tragedy</tag>
+  <tag>based on memoir or autobiography</tag>
+  <tag>pianist</tag>
+  <tag>poland</tag>
+  <tag>tearjerker</tag>
+  <tag>angry</tag>
+  <tag>complex</tag>
+  <studio>R.P. Productions</studio>
+  <studio>Heritage Films</studio>
+  <studio>Studio Babelsberg</studio>
+  <studio>Runteam</studio>
+  <studio>StudioCanal</studio>
+  <country>France</country>
+  <country>Germany</country>
+  <country>Poland</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">423</uniqueid>
+  <uniqueid type="imdb">tt0253474</uniqueid>
+  <actor>
+    <name>Adrien Brody</name>
+    <role>Władysław 'Władek' Szpilman</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas Kretschmann</name>
+    <role>Captain Wilm Hosenfeld</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Finlay</name>
+    <role>Father</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Maureen Lipman</name>
+    <role>Mother</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Emilia Fox</name>
+    <role>Dorota</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ed Stoppard</name>
+    <role>Henryk Szpilman</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Rayner</name>
+    <role>Regina Szpilman</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jessica Kate Meyer</name>
+    <role>Halina Szpilman</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Michał Żebrowski</name>
+    <role>Jurek</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Wanja Mues</name>
+    <role>SS Slapping Father</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Ridings</name>
+    <role>Mr. Lipa</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Nomi Sharron</name>
+    <role>Feather Woman</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Milner</name>
+    <role>Man Waiting to Cross</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Lucy Skeaping</name>
+    <role>Street Musician</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Roddy Skeaping</name>
+    <role>Street Musician</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Roman Polanski</director>
+  <credits>Ronald Harwood</credits>
+</movie>

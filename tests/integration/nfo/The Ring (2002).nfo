@@ -1,0 +1,118 @@
+<movie>
+  <title>The Ring</title>
+  <originaltitle>The Ring</originaltitle>
+  <year>2002</year>
+  <premiered>2002-10-18</premiered>
+  <rating>6.712</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Horror</genre>
+  <genre>Mystery</genre>
+  <tag>journalist</tag>
+  <tag>island</tag>
+  <tag>drowning</tag>
+  <tag>investigation</tag>
+  <tag>supernatural</tag>
+  <tag>horse</tag>
+  <tag>telephone</tag>
+  <tag>paranormal</tag>
+  <tag>remake</tag>
+  <tag>urban legend</tag>
+  <tag>curse</tag>
+  <tag>female protagonist</tag>
+  <tag>cabin in the woods</tag>
+  <tag>ghost</tag>
+  <tag>well</tag>
+  <tag>videotape</tag>
+  <tag>mysterious death</tag>
+  <tag>terrifying</tag>
+  <tag>absurd</tag>
+  <tag>intense</tag>
+  <studio>DreamWorks Pictures</studio>
+  <studio>BenderSpink</studio>
+  <studio>Parkes+MacDonald Production</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">565</uniqueid>
+  <uniqueid type="imdb">tt0298130</uniqueid>
+  <set tmdbcolid="14563">
+    <name>14563</name>
+  </set>
+  <actor>
+    <name>Naomi Watts</name>
+    <role>Rachel</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Martin Henderson</name>
+    <role>Noah</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>David Dorfman</name>
+    <role>Aidan</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Cox</name>
+    <role>Richard Morgan</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jane Alexander</name>
+    <role>Dr. Grasnik</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lindsay Frost</name>
+    <role>Ruth</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Amber Tamblyn</name>
+    <role>Katie</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rachael Bella</name>
+    <role>Rebecca</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Daveigh Chase</name>
+    <role>Samara</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Shannon Cochran</name>
+    <role>Anna Morgan</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Sandra Thigpen</name>
+    <role>Teacher</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Lineback</name>
+    <role>Innkeeper</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Sasha Barrese</name>
+    <role>Girl Teen #1</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tess Hall</name>
+    <role>Girl Teen #2</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Brody</name>
+    <role>Male Teen #1</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Gore Verbinski</director>
+  <credits>Ehren Kruger</credits>
+  <credits>Kōji Suzuki</credits>
+  <credits>Hiroshi Takahashi</credits>
+</movie>

@@ -1,0 +1,117 @@
+<movie>
+  <title>Paddington 2</title>
+  <originaltitle>Paddington 2</originaltitle>
+  <year>2017</year>
+  <premiered>2017-11-05</premiered>
+  <rating>7.49</rating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <tag>london, england</tag>
+  <tag>based on novel or book</tag>
+  <tag>sequel</tag>
+  <tag>bear</tag>
+  <tag>train</tag>
+  <tag>based on children's book</tag>
+  <tag>animals</tag>
+  <tag>aging actor</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>live action and animation</tag>
+  <tag>candid</tag>
+  <tag>talking animal</tag>
+  <tag>cgi-live action hybrid</tag>
+  <tag>witty</tag>
+  <tag>vibrant</tag>
+  <tag>prison drama</tag>
+  <studio>StudioCanal</studio>
+  <studio>Heyday Films</studio>
+  <studio>Anton Capital Entertainment</studio>
+  <country>France</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">346648</uniqueid>
+  <uniqueid type="imdb">tt4468740</uniqueid>
+  <set tmdbcolid="488924">
+    <name>488924</name>
+  </set>
+  <actor>
+    <name>Ben Whishaw</name>
+    <role>Paddington Brown (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Sally Hawkins</name>
+    <role>Mary Brown</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Hugh Bonneville</name>
+    <role>Henry Brown</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Madeleine Harris</name>
+    <role>Judy Brown</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel Joslin</name>
+    <role>Jonathan Brown</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Walters</name>
+    <role>Mrs. Bird</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Hugh Grant</name>
+    <role>Phoenix Buchanan</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Imelda Staunton</name>
+    <role>Aunt Lucy (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Brendan Gleeson</name>
+    <role>Knuckles McGinty</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jim Broadbent</name>
+    <role>Samuel Gruber</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Capaldi</name>
+    <role>Reginald Curry</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Miller</name>
+    <role>Colonel Lancaster</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jessica Hynes</name>
+    <role>Miss Kitts</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Gambon</name>
+    <role>Uncle Pastuzo (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Noah Taylor</name>
+    <role>Phibs</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Paul King</director>
+  <credits>Paul King</credits>
+  <credits>Simon Farnaby</credits>
+  <credits>Jon Croker</credits>
+  <credits>Mark Burton</credits>
+</movie>

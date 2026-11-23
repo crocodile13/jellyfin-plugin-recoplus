@@ -1,0 +1,117 @@
+<movie>
+  <title>Drive</title>
+  <originaltitle>Drive</originaltitle>
+  <year>2011</year>
+  <premiered>2011-09-15</premiered>
+  <rating>7.582</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Thriller</genre>
+  <genre>Crime</genre>
+  <tag>robbery</tag>
+  <tag>car mechanic</tag>
+  <tag>stuntman</tag>
+  <tag>beaten to death</tag>
+  <tag>revenge</tag>
+  <tag>organized crime</tag>
+  <tag>neighbor</tag>
+  <tag>police chase</tag>
+  <tag>los angeles, california</tag>
+  <tag>brutality</tag>
+  <tag>jacket</tag>
+  <tag>scorpion</tag>
+  <tag>toothpick</tag>
+  <tag>getaway driver</tag>
+  <tag>crime lord</tag>
+  <tag>stunt driver</tag>
+  <tag>existentialism</tag>
+  <tag>neo-noir</tag>
+  <tag>hammer</tag>
+  <studio>FilmDistrict</studio>
+  <studio>Bold Films</studio>
+  <studio>Marc Platt Productions</studio>
+  <studio>OddLot Entertainment</studio>
+  <studio>Motel Movies</studio>
+  <studio>Newbridge Film Capital</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">64690</uniqueid>
+  <uniqueid type="imdb">tt0780504</uniqueid>
+  <actor>
+    <name>Ryan Gosling</name>
+    <role>Driver</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Carey Mulligan</name>
+    <role>Irene</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Bryan Cranston</name>
+    <role>Shannon</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Albert Brooks</name>
+    <role>Bernie Rose</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Oscar Isaac</name>
+    <role>Standard</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Christina Hendricks</name>
+    <role>Blanche</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ron Perlman</name>
+    <role>Nino</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kaden Leos</name>
+    <role>Benicio</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Wolfe</name>
+    <role>Tan Suit</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>James Biberi</name>
+    <role>Cook</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Russ Tamblyn</name>
+    <role>Doc</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Bucaro III</name>
+    <role>Chauffeur</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tiara Parker</name>
+    <role>Young Woman</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Trella</name>
+    <role>Hitman #1</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jimmy Hart</name>
+    <role>Hitman #2</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Nicolas Winding Refn</director>
+  <credits>Hossein Amini</credits>
+  <credits>James Sallis</credits>
+</movie>

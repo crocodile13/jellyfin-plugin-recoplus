@@ -1,0 +1,116 @@
+<tvshow>
+  <title>Fleabag</title>
+  <originaltitle>Fleabag</originaltitle>
+  <year>2016</year>
+  <premiered>2016-07-21</premiered>
+  <rating>8.277</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Comedy</genre>
+  <genre>Drama</genre>
+  <tag>london, england</tag>
+  <tag>feminism</tag>
+  <tag>cynicism</tag>
+  <tag>stepmother</tag>
+  <tag>grief</tag>
+  <tag>loneliness</tag>
+  <tag>dysfunctional family</tag>
+  <tag>priest</tag>
+  <tag>dark comedy</tag>
+  <tag>based on play or musical</tag>
+  <tag>promiscuity</tag>
+  <tag>breaking the fourth wall</tag>
+  <tag>guilt</tag>
+  <tag>death of mother</tag>
+  <tag>passive aggression</tag>
+  <tag>casual sex</tag>
+  <tag>evil stepmother</tag>
+  <tag>guilty conscience</tag>
+  <tag>sitcom</tag>
+  <tag>death of best friend</tag>
+  <tag>lonely woman</tag>
+  <tag>fear of intimacy</tag>
+  <tag>sister sister relationship</tag>
+  <tag>loss of mother</tag>
+  <tag>loss of a friend</tag>
+  <tag>bisexual woman</tag>
+  <studio>BBC One</studio>
+  <studio>BBC Three (Online)</studio>
+  <studio>Two Brothers Pictures</studio>
+  <uniqueid type="tmdb" default="true">67070</uniqueid>
+  <uniqueid type="imdb">tt5687612</uniqueid>
+  <actor>
+    <name>Phoebe Waller-Bridge</name>
+    <role>Fleabag</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Sian Clifford</name>
+    <role>Claire</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jenny Rainsford</name>
+    <role>Boo</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Scott</name>
+    <role>The Priest</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sean Richards-Mulzac</name>
+    <role>Young Man</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tree Waller-Bridge</name>
+    <role>Lecturer</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Sarah Daykin</name>
+    <role>Drunk Girl</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jordan Long</name>
+    <role>Taxi Driver</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Daniella Isaacs</name>
+    <role>Yoga Girl 1</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Olivia Gray</name>
+    <role>Yoga Girl 2</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin McNally</name>
+    <role>Older Man</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Aldridge</name>
+    <role>Arsehole Guy</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Mirza</name>
+    <role>Shop Owner</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jo Martin</name>
+    <role>Pam</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Olivia Colman</name>
+    <role>Godmother</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,110 @@
+<movie>
+  <title>The 400 Blows</title>
+  <originaltitle>Les Quatre Cents Coups</originaltitle>
+  <year>1959</year>
+  <premiered>1959-06-03</premiered>
+  <rating>7.994</rating>
+  <mpaa>NR</mpaa>
+  <genre>Drama</genre>
+  <tag>adolescence</tag>
+  <tag>paris, france</tag>
+  <tag>balzac</tag>
+  <tag>delinquent</tag>
+  <tag>coming of age</tag>
+  <tag>black and white</tag>
+  <tag>fingerprint</tag>
+  <tag>semi autobiographical</tag>
+  <tag>skipping school</tag>
+  <tag>mugshot</tag>
+  <tag>strict teacher</tag>
+  <tag>montmartre, paris</tag>
+  <tag>calm</tag>
+  <tag>bitter</tag>
+  <tag>complicated</tag>
+  <tag>gentle</tag>
+  <studio>Les Films du Carrosse</studio>
+  <studio>Sédif Productions</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">147</uniqueid>
+  <uniqueid type="imdb">tt0053198</uniqueid>
+  <set tmdbcolid="185682">
+    <name>185682</name>
+  </set>
+  <actor>
+    <name>Jean-Pierre Léaud</name>
+    <role>Antoine Doinel</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Claire Maurier</name>
+    <role>Gilberte Doinel</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Albert Rémy</name>
+    <role>Julien Doinel</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Georges Flamant</name>
+    <role>Mr. Bigey</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Auffay</name>
+    <role>René</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Beauvais</name>
+    <role>Directeur de l'école</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Yvonne Claudie</name>
+    <role>Mme Bigey</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Pierre Repp</name>
+    <role>Professeur d'anglais</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Guy Decomble</name>
+    <role>Professeur de français</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Couturier</name>
+    <role>Betrand Mauricet</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>François Nocher</name>
+    <role>Enfant</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Kanayan</name>
+    <role>Enfant</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Renaud Fontanarosa</name>
+    <role>Enfant</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Girard</name>
+    <role>Enfant</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Serge Moati</name>
+    <role>Enfant</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>François Truffaut</director>
+  <credits>François Truffaut</credits>
+</movie>

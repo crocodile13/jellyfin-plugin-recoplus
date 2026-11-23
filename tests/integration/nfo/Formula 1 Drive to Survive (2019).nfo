@@ -1,0 +1,96 @@
+<tvshow>
+  <title>Formula 1: Drive to Survive</title>
+  <originaltitle>Formula 1: Drive to Survive</originaltitle>
+  <year>2019</year>
+  <premiered>2019-03-08</premiered>
+  <rating>8.153</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Documentary</genre>
+  <tag>car race</tag>
+  <tag>speed</tag>
+  <tag>sports</tag>
+  <tag>based on true story</tag>
+  <tag>racing</tag>
+  <tag>sports documentary</tag>
+  <tag>championship</tag>
+  <tag>formula one (f1)</tag>
+  <studio>Netflix</studio>
+  <studio>Box to Box Films</studio>
+  <uniqueid type="tmdb" default="true">87083</uniqueid>
+  <uniqueid type="imdb">tt8289930</uniqueid>
+  <actor>
+    <name>Max Verstappen</name>
+    <role>Self</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Lewis Hamilton</name>
+    <role>Self</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Leclerc</name>
+    <role>Self</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sergio Pérez</name>
+    <role>Self</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>George Russell</name>
+    <role>Self</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Carlos Sainz Jr.</name>
+    <role>Self</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Nico Hülkenberg</name>
+    <role>Self</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Lando Norris</name>
+    <role>Self</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Esteban Ocon</name>
+    <role>Self</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Fernando Alonso</name>
+    <role>Self</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Valtteri Bottas</name>
+    <role>Self</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Ricciardo</name>
+    <role>Self</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Magnussen</name>
+    <role>Self</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Nicholas Latifi</name>
+    <role>Self</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Sebastian Vettel</name>
+    <role>Self</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

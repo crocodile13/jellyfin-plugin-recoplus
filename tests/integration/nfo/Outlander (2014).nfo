@@ -1,0 +1,124 @@
+<tvshow>
+  <title>Outlander</title>
+  <originaltitle>Outlander</originaltitle>
+  <year>2014</year>
+  <premiered>2014-08-09</premiered>
+  <rating>8.19</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>scotland</tag>
+  <tag>based on novel or book</tag>
+  <tag>magic</tag>
+  <tag>time travel</tag>
+  <tag>romance</tag>
+  <tag>18th century</tag>
+  <tag>love story</tag>
+  <studio>STARZ</studio>
+  <studio>Tall Ship Productions</studio>
+  <studio>Left Bank Pictures</studio>
+  <studio>Sony Pictures Television</studio>
+  <studio>Story Mining &amp; Supply Company</studio>
+  <uniqueid type="tmdb" default="true">56570</uniqueid>
+  <uniqueid type="imdb">tt3006802</uniqueid>
+  <actor>
+    <name>Caitríona Balfe</name>
+    <role>Claire Randall Fraser</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Heughan</name>
+    <role>Jamie Fraser</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sophie Skelton</name>
+    <role>Brianna MacKenzie</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sophie Skelton</name>
+    <role>Brianna Randall</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sophie Skelton</name>
+    <role>Brianna Randall Fraser</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>David Berry</name>
+    <role>Lord John Grey</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>César Domboy</name>
+    <role>Fergus Claudel Fraser</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Rankin</name>
+    <role>Roger MacKenzie</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Rankin</name>
+    <role>Roger Wakefield</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Rankin</name>
+    <role>Roger Wakefield MacKenzie</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>John Bell</name>
+    <role>Ian Fraser Murray</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>John Bell</name>
+    <role>Young Ian Murray</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Vandervaart</name>
+    <role>William Ransom</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Caitlin O'Ryan</name>
+    <role>Lizzie Wemyss</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Gary Lewis</name>
+    <role>Colum MacKenzie</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Lewis Jones</name>
+    <role>Thomas 'Tom' Christie</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>Grant O'Rourke</name>
+    <role>Rupert MacKenzie</role>
+    <sortorder>16</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Walters</name>
+    <role>Angus Mhor</role>
+    <sortorder>17</sortorder>
+  </actor>
+  <actor>
+    <name>Simon Callow</name>
+    <role>Duke of Sandringham</role>
+    <sortorder>18</sortorder>
+  </actor>
+  <actor>
+    <name>James Fleet</name>
+    <role>Reverend Wakefield</role>
+    <sortorder>19</sortorder>
+  </actor>
+</tvshow>

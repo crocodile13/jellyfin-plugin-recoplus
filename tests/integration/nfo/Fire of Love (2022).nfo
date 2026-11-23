@@ -1,0 +1,87 @@
+<movie>
+  <title>Fire of Love</title>
+  <originaltitle>Fire of Love</originaltitle>
+  <year>2022</year>
+  <premiered>2022-07-06</premiered>
+  <rating>7.547</rating>
+  <mpaa>PG</mpaa>
+  <genre>Documentary</genre>
+  <tag>married couple</tag>
+  <tag>volcano</tag>
+  <tag>interview</tag>
+  <tag>volcanology</tag>
+  <tag>archive footage</tag>
+  <tag>volcanic eruption</tag>
+  <tag>scientist hero</tag>
+  <tag>forces of nature</tag>
+  <tag>nature documentary</tag>
+  <tag>tectonic plates</tag>
+  <tag>female scientist</tag>
+  <tag>planet earth</tag>
+  <tag>scientist heroine</tag>
+  <tag>life and career</tag>
+  <tag>inspirational</tag>
+  <tag>scientists</tag>
+  <tag>romantic</tag>
+  <tag>science documentary</tag>
+  <tag>biographical</tag>
+  <tag>biographical documentary</tag>
+  <studio>Sandbox Films</studio>
+  <studio>Cottage M</studio>
+  <studio>Intuitive Pictures</studio>
+  <studio>National Geographic Documentary Films</studio>
+  <country>United States of America</country>
+  <country>Canada</country>
+  <uniqueid type="tmdb" default="true">913823</uniqueid>
+  <uniqueid type="imdb">tt16227014</uniqueid>
+  <actor>
+    <name>Alka Balbir</name>
+    <role>Katia Conrad Krafft (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Guillaume Tremblay</name>
+    <role>Maurice Krafft (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Miranda July</name>
+    <role>Self - Narrator (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Katia Krafft</name>
+    <role>Self (archive footage)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Maurice Krafft</name>
+    <role>Self (archive footage)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Glicken</name>
+    <role>Self (archive footage)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Roland Haas</name>
+    <role>Self (archive footage)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jacques Durieux</name>
+    <role>Self (archive footage)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Wolff</name>
+    <role>Self (archive footage)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <director>Sara Dosa</director>
+  <credits>Erin Casper</credits>
+  <credits>Sara Dosa</credits>
+  <credits>Shane Boris</credits>
+  <credits>Jocelyne Chaput</credits>
+</movie>

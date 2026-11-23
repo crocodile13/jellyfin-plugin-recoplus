@@ -1,0 +1,116 @@
+<movie>
+  <title>Smile</title>
+  <originaltitle>Smile</originaltitle>
+  <year>2022</year>
+  <premiered>2022-09-23</premiered>
+  <rating>6.664</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Mystery</genre>
+  <tag>suicide</tag>
+  <tag>new jersey</tag>
+  <tag>post-traumatic stress disorder (ptsd)</tag>
+  <tag>therapist</tag>
+  <tag>detective</tag>
+  <tag>paranoia</tag>
+  <tag>trauma</tag>
+  <tag>curse</tag>
+  <tag>hospital</tag>
+  <tag>doctor</tag>
+  <tag>mental illness</tag>
+  <tag>evil</tag>
+  <tag>self-harm</tag>
+  <tag>demonic</tag>
+  <tag>smile</tag>
+  <tag>supernatural horror</tag>
+  <tag>based on short film</tag>
+  <tag>body horror</tag>
+  <tag>psychological horror</tag>
+  <tag>horror</tag>
+  <studio>Paramount Players</studio>
+  <studio>Paramount Pictures</studio>
+  <studio>Temple Hill Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">882598</uniqueid>
+  <uniqueid type="imdb">tt15474916</uniqueid>
+  <set tmdbcolid="1100788">
+    <name>1100788</name>
+  </set>
+  <actor>
+    <name>Sosie Bacon</name>
+    <role>Rose Cotter</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Kyle Gallner</name>
+    <role>Joel</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jessie T. Usher</name>
+    <role>Trevor</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robin Weigert</name>
+    <role>Dr. Madeline Northcott</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Caitlin Stasey</name>
+    <role>Laura Weaver</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kal Penn</name>
+    <role>Dr. Morgan Desai</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Rob Morgan</name>
+    <role>Robert Talley</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Gillian Zinser</name>
+    <role>Holly</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Judy Reyes</name>
+    <role>Victoria Munoz</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Sochet</name>
+    <role>Carl Renken</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Nick Arapoglou</name>
+    <role>Greg</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Perry Strong</name>
+    <role>Detective Buckley</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Lamb</name>
+    <role>Jackson</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Dora Kiss</name>
+    <role>Mom</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Meghan Brown Pratt</name>
+    <role>10 Year Old Rose</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Parker Finn</director>
+  <credits>Parker Finn</credits>
+</movie>

@@ -1,0 +1,99 @@
+<movie>
+  <title>Call Me by Your Name</title>
+  <originaltitle>Call Me by Your Name</originaltitle>
+  <year>2017</year>
+  <premiered>2017-10-01</premiered>
+  <rating>8.073</rating>
+  <mpaa>R</mpaa>
+  <genre>Romance</genre>
+  <genre>Drama</genre>
+  <tag>based on novel or book</tag>
+  <tag>upper class</tag>
+  <tag>italy</tag>
+  <tag>swimming pool</tag>
+  <tag>coming of age</tag>
+  <tag>love</tag>
+  <tag>breaking the fourth wall</tag>
+  <tag>summer</tag>
+  <tag>teenage boy</tag>
+  <tag>masturbation</tag>
+  <tag>first love</tag>
+  <tag>lgbt</tag>
+  <tag>jewish family</tag>
+  <tag>1980s</tag>
+  <tag>gay theme</tag>
+  <studio>La Cinéfacture</studio>
+  <studio>Frenesy Film</studio>
+  <studio>M.Y.R.A. Entertainment</studio>
+  <studio>RT Features</studio>
+  <studio>Water's End Productions</studio>
+  <country>Brazil</country>
+  <country>France</country>
+  <country>Italy</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">398818</uniqueid>
+  <uniqueid type="imdb">tt5726616</uniqueid>
+  <actor>
+    <name>Timothée Chalamet</name>
+    <role>Elio</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Armie Hammer</name>
+    <role>Oliver</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Stuhlbarg</name>
+    <role>Mr. Perlman</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Amira Casar</name>
+    <role>Annella</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Esther Garrel</name>
+    <role>Marzia</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Victoire du Bois</name>
+    <role>Chiara</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Vanda Capriolo</name>
+    <role>Mafalda</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Antonio Rimoldi</name>
+    <role>Anchise</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Elena Bucci</name>
+    <role>Bambi</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Marco Sgrosso</name>
+    <role>Nico</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>André Aciman</name>
+    <role>Mounir</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Spears</name>
+    <role>Isaac</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <director>Luca Guadagnino</director>
+  <credits>James Ivory</credits>
+  <credits>André Aciman</credits>
+</movie>

@@ -1,0 +1,134 @@
+<tvshow>
+  <title>SPY x FAMILY</title>
+  <originaltitle>SPY×FAMILY</originaltitle>
+  <year>2022</year>
+  <premiered>2022-04-09</premiered>
+  <rating>8.493</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Animation</genre>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Comedy</genre>
+  <tag>spy</tag>
+  <tag>assassin</tag>
+  <tag>adoption</tag>
+  <tag>strong woman</tag>
+  <tag>secret mission</tag>
+  <tag>secret organization</tag>
+  <tag>secret agent</tag>
+  <tag>espionage</tag>
+  <tag>slice of life</tag>
+  <tag>mind reading</tag>
+  <tag>based on manga</tag>
+  <tag>family</tag>
+  <tag>shounen</tag>
+  <tag>anime</tag>
+  <tag>found family</tag>
+  <studio>TV Tokyo</studio>
+  <studio>TV Aichi</studio>
+  <studio>TVQ</studio>
+  <studio>TV Osaka</studio>
+  <studio>TVh</studio>
+  <studio>TSC</studio>
+  <studio>WIT STUDIO</studio>
+  <studio>CloverWorks</studio>
+  <studio>Shogakukan-Shueisha Productions</studio>
+  <studio>Shueisha</studio>
+  <studio>TOHO</studio>
+  <uniqueid type="tmdb" default="true">120089</uniqueid>
+  <uniqueid type="imdb">tt13706018</uniqueid>
+  <actor>
+    <name>Takuya Eguchi</name>
+    <role>Loid Forger (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Atsumi Tanezaki</name>
+    <role>Anya Forger (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Saori Hayami</name>
+    <role>Yor Forger (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kenichirou Matsuda</name>
+    <role>Bond Forger (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Kenichirou Matsuda</name>
+    <role>Narration (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Atsushi Ono</name>
+    <role>Edgar (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Kurita Itsuki</name>
+    <role>Eden College Examiner (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Yoko Fujita</name>
+    <role>Eden College Examinee (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Junichi Suwabe</name>
+    <role>Shopkeeper from Garden (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Yuko Sasaki</name>
+    <role>Old Woman (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroshi Yanaka</name>
+    <role>Walter Evans (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuya Saji</name>
+    <role>WISE Agent (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuya Saji</name>
+    <role>Audience Member (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuya Saji</name>
+    <role>Passerby (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kazuya Saji</name>
+    <role>Driver (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Mari Uchiyama</name>
+    <role>Eden College Examinee (voice)</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>Akio Otsuka</name>
+    <role>WISE Director (voice)</role>
+    <sortorder>16</sortorder>
+  </actor>
+  <actor>
+    <name>Miho Hino</name>
+    <role>WISE Agent (voice)</role>
+    <sortorder>17</sortorder>
+  </actor>
+  <actor>
+    <name>Miyu Komaki</name>
+    <role>Princess Honey (voice)</role>
+    <sortorder>18</sortorder>
+  </actor>
+</tvshow>

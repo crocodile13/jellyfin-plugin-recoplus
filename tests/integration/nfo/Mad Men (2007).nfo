@@ -1,0 +1,108 @@
+<tvshow>
+  <title>Mad Men</title>
+  <originaltitle>Mad Men</originaltitle>
+  <year>2007</year>
+  <premiered>2007-07-19</premiered>
+  <rating>8.1</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Drama</genre>
+  <tag>work</tag>
+  <tag>marketing</tag>
+  <tag>marriage</tag>
+  <tag>workplace</tag>
+  <tag>period drama</tag>
+  <tag>advertising</tag>
+  <tag>historical</tag>
+  <tag>family conflict</tag>
+  <tag>advertising agency</tag>
+  <tag>executive</tag>
+  <tag>madison avenue</tag>
+  <tag>1960s</tag>
+  <tag>sexual attitudes</tag>
+  <tag>dark</tag>
+  <tag>workplace harassment</tag>
+  <tag>understated</tag>
+  <tag>intense</tag>
+  <tag>workplace politics</tag>
+  <studio>AMC</studio>
+  <studio>RadicalMedia</studio>
+  <studio>Weiner Bros.</studio>
+  <studio>Lionsgate Television</studio>
+  <uniqueid type="tmdb" default="true">1104</uniqueid>
+  <uniqueid type="imdb">tt0804503</uniqueid>
+  <actor>
+    <name>Jon Hamm</name>
+    <role>Don Draper</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Elisabeth Moss</name>
+    <role>Peggy Olson</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Vincent Kartheiser</name>
+    <role>Pete Campbell</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>January Jones</name>
+    <role>Betty Draper</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Christina Hendricks</name>
+    <role>Joan Holloway</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Gladis</name>
+    <role>Paul Kinsey</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Aaron Staton</name>
+    <role>Ken Cosgrove</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rich Sommer</name>
+    <role>Harry Crane</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kiernan Shipka</name>
+    <role>Sally Draper</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Rahm</name>
+    <role>Ted Chaough</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Stanley</name>
+    <role>Henry Francis</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Feldman</name>
+    <role>Michael Ginsberg</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Mason Cotton</name>
+    <role>Bobby Draper</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Cara Buono</name>
+    <role>Faye Miller</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>John Slattery</name>
+    <role>Roger Sterling</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

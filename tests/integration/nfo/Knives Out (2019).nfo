@@ -1,0 +1,107 @@
+<movie>
+  <title>Knives Out</title>
+  <originaltitle>Knives Out</originaltitle>
+  <year>2019</year>
+  <premiered>2019-11-27</premiered>
+  <rating>7.842</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Comedy</genre>
+  <genre>Crime</genre>
+  <genre>Mystery</genre>
+  <tag>immigrant</tag>
+  <tag>detective</tag>
+  <tag>massachusetts</tag>
+  <tag>investigation</tag>
+  <tag>big family</tag>
+  <tag>mansion</tag>
+  <tag>whodunit</tag>
+  <tag>family home</tag>
+  <tag>murder mystery</tag>
+  <tag>neo-noir</tag>
+  <tag>privilege</tag>
+  <studio>MRC</studio>
+  <studio>T-Street</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">546554</uniqueid>
+  <uniqueid type="imdb">tt8946378</uniqueid>
+  <set tmdbcolid="722971">
+    <name>722971</name>
+  </set>
+  <actor>
+    <name>Daniel Craig</name>
+    <role>Benoit Blanc</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Evans</name>
+    <role>Ransom Drysdale</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ana de Armas</name>
+    <role>Marta Cabrera</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jamie Lee Curtis</name>
+    <role>Linda Drysdale</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Shannon</name>
+    <role>Walt Thrombey</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Don Johnson</name>
+    <role>Richard Drysdale</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Toni Collette</name>
+    <role>Joni Thrombey</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>LaKeith Stanfield</name>
+    <role>Lieutenant Elliott</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Plummer</name>
+    <role>Harlan Thrombey</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Katherine Langford</name>
+    <role>Meg Thrombey</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jaeden Martell</name>
+    <role>Jacob Thrombey</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Riki Lindhome</name>
+    <role>Donna Thrombrey</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Edi Patterson</name>
+    <role>Fran</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Oz</name>
+    <role>Alan Stevens</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>K Callan</name>
+    <role>Greatnana Wanetta</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Rian Johnson</director>
+  <credits>Rian Johnson</credits>
+</movie>

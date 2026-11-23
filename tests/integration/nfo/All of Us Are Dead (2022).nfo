@@ -1,0 +1,107 @@
+<tvshow>
+  <title>All of Us Are Dead</title>
+  <originaltitle>지금 우리 학교는</originaltitle>
+  <year>2022</year>
+  <premiered>2022-01-28</premiered>
+  <rating>8.3</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Drama</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>high school</tag>
+  <tag>bullying</tag>
+  <tag>based on comic</tag>
+  <tag>survival</tag>
+  <tag>coming of age</tag>
+  <tag>apocalypse</tag>
+  <tag>zombie</tag>
+  <tag>virus</tag>
+  <tag>anxious</tag>
+  <tag>based on webcomic or webtoon</tag>
+  <tag>horror</tag>
+  <tag>depressing</tag>
+  <tag>harsh</tag>
+  <studio>Netflix</studio>
+  <studio>Film Monster</studio>
+  <studio>KIMJONGHAK PRODUCTION</studio>
+  <studio>npio Entertainment</studio>
+  <studio>JTBC Studios</studio>
+  <studio>SLL</studio>
+  <uniqueid type="tmdb" default="true">99966</uniqueid>
+  <uniqueid type="imdb">tt14169960</uniqueid>
+  <actor>
+    <name>Park Ji-hu</name>
+    <role>Nam On-jo</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Yoon Chan-young</name>
+    <role>Lee Cheong-san</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Cho Yi-hyun</name>
+    <role>Choi Nam-ra</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Lomon</name>
+    <role>Lee Su-hyeok</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yoo In-soo</name>
+    <role>Yoon Gwi-nam</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Min-jae</name>
+    <role />
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lee You-mi</name>
+    <role>Lee Na-yeon</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Byong-chul</name>
+    <role>Lee Byeong-chan</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Roh Jae-won</name>
+    <role />
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Kyoo-hyung</name>
+    <role>Song Jae-ik</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jeon Bae-soo</name>
+    <role>Nam So-ju</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Yoon Ga-i</name>
+    <role>Lee Jong-ah</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Si-eun</name>
+    <role>So Ju-ran</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>An Si-ha</name>
+    <role>Kim Kyung-mi</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Jeong-yeon</name>
+    <role>Kim Min-ji</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

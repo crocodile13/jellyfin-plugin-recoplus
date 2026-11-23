@@ -1,0 +1,122 @@
+<movie>
+  <title>Aftersun</title>
+  <originaltitle>Aftersun</originaltitle>
+  <year>2022</year>
+  <premiered>2022-10-21</premiered>
+  <rating>7.653</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <tag>hotel</tag>
+  <tag>depression</tag>
+  <tag>karaoke</tag>
+  <tag>tourist</tag>
+  <tag>vacation</tag>
+  <tag>turkey</tag>
+  <tag>swimming pool</tag>
+  <tag>coming of age</tag>
+  <tag>memory</tag>
+  <tag>tai chi</tag>
+  <tag>family vacation</tag>
+  <tag>first kiss</tag>
+  <tag>teenage daughter</tag>
+  <tag>lgbt</tag>
+  <tag>semi autobiographical</tag>
+  <tag>video recorder</tag>
+  <tag>woman director</tag>
+  <tag>moody</tag>
+  <tag>rug</tag>
+  <tag>father daughter relationship</tag>
+  <tag>loving</tag>
+  <tag>reminiscing</tag>
+  <tag>gay theme</tag>
+  <tag>bittersweet</tag>
+  <tag>intimate</tag>
+  <tag>queer loneliness</tag>
+  <studio>PASTEL</studio>
+  <studio>BBC Film</studio>
+  <studio>Tango Entertainment</studio>
+  <studio>Unified Theory</studio>
+  <studio>Screen Scotland</studio>
+  <studio>BFI</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">965150</uniqueid>
+  <uniqueid type="imdb">tt19770238</uniqueid>
+  <actor>
+    <name>Paul Mescal</name>
+    <role>Calum</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Frankie Corio</name>
+    <role>Sophie</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Brooklyn Toulson</name>
+    <role>Michael</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Celia Rowlson-Hall</name>
+    <role>Adult Sophie</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sally Messham</name>
+    <role>Belinda</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ayşe Parlak</name>
+    <role>Teen Girl 1</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Sophia Lamanova</name>
+    <role>Teen Girl 2</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Spike Fearn</name>
+    <role>Olly</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Perdios</name>
+    <role>Toby</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Corio</name>
+    <role>Ocean Park Father</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ruby Thompson</name>
+    <role>Laura</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ethan James Smith</name>
+    <role>Scott</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Onur Ekşioğlu</name>
+    <role>Onur</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Cafer Karahan</name>
+    <role>Carpet Salesman</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kayleigh Coleman</name>
+    <role>Jane</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Charlotte Wells</director>
+  <credits>Charlotte Wells</credits>
+</movie>

@@ -1,0 +1,111 @@
+<movie>
+  <title>I Saw the Devil</title>
+  <originaltitle>악마를 보았다</originaltitle>
+  <year>2010</year>
+  <premiered>2010-08-12</premiered>
+  <rating>7.812</rating>
+  <mpaa>Not Rated</mpaa>
+  <genre>Thriller</genre>
+  <genre>Horror</genre>
+  <tag>psychopath</tag>
+  <tag>revenge</tag>
+  <tag>serial killer</tag>
+  <tag>mercilessness</tag>
+  <tag>brutality</tag>
+  <tag>blunt</tag>
+  <tag>hard</tag>
+  <tag>grim</tag>
+  <tag>south korea</tag>
+  <tag>sadistic killer</tag>
+  <tag>ambivalent</tag>
+  <tag>awestruck</tag>
+  <tag>tragic</tag>
+  <studio>Softbank Ventures</studio>
+  <studio>Peppermint &amp; Company</studio>
+  <studio>Siz Entertainment</studio>
+  <studio>Finecut</studio>
+  <studio>Michigan Venture Capital</studio>
+  <studio>Showbox</studio>
+  <studio>CJ Investment</studio>
+  <country>South Korea</country>
+  <uniqueid type="tmdb" default="true">49797</uniqueid>
+  <uniqueid type="imdb">tt1588170</uniqueid>
+  <actor>
+    <name>Lee Byung-hun</name>
+    <role>Kim Soo-hyeon</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Min-sik</name>
+    <role>Kyung-chul</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jeon Kuk-hwan</name>
+    <role>Squad Chief Jang</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Cheon Ho-jin</name>
+    <role>Section Chief Oh</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Oh San-ha</name>
+    <role>Joo-yeon</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Yoon-seo</name>
+    <role>Se-yeon</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Choi Mu-sung</name>
+    <role>Tae-joo</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kim In-seo</name>
+    <role>Se-jung</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Kap-soo</name>
+    <role>Planning Team Deputy Head</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Jun-hyeok</name>
+    <role>NIS Agent</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jo Deok-jae</name>
+    <role>Detective Kang</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Han Chul-woo</name>
+    <role>Detective Park</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Cho Myeong-yeon</name>
+    <role>Detective 3</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Um Tae-goo</name>
+    <role>Detective 4</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Han Se-joo</name>
+    <role>Woman on Bus</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Kim Jee-woon</director>
+  <credits>Park Hoon-jung</credits>
+  <credits>Kim Jee-woon</credits>
+</movie>

@@ -1,0 +1,125 @@
+<movie>
+  <title>The Silence of the Lambs</title>
+  <originaltitle>The Silence of the Lambs</originaltitle>
+  <year>1991</year>
+  <premiered>1991-02-14</premiered>
+  <rating>8.346</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Thriller</genre>
+  <genre>Drama</genre>
+  <tag>prison</tag>
+  <tag>based on novel or book</tag>
+  <tag>kidnapping</tag>
+  <tag>psychopath</tag>
+  <tag>fbi</tag>
+  <tag>scientific study</tag>
+  <tag>murder</tag>
+  <tag>serial killer</tag>
+  <tag>psychological thriller</tag>
+  <tag>brutality</tag>
+  <tag>cannibal</tag>
+  <tag>psychiatrist</tag>
+  <tag>biting</tag>
+  <tag>moth</tag>
+  <tag>virginia</tag>
+  <tag>macabre</tag>
+  <tag>disturbed</tag>
+  <tag>neo-noir</tag>
+  <tag>twisted</tag>
+  <tag>skinning</tag>
+  <tag>cannibalism</tag>
+  <tag>psychological horror</tag>
+  <tag>hannibal lecter</tag>
+  <tag>intense</tag>
+  <tag>psychological profiling</tag>
+  <tag>crime thriller</tag>
+  <tag>crime horror</tag>
+  <studio>Orion Pictures</studio>
+  <studio>Strong Heart</studio>
+  <studio>A Luta Continua</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">274</uniqueid>
+  <uniqueid type="imdb">tt0102926</uniqueid>
+  <set tmdbcolid="9743">
+    <name>9743</name>
+  </set>
+  <actor>
+    <name>Jodie Foster</name>
+    <role>Clarice Starling</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Hopkins</name>
+    <role>Dr. Hannibal Lecter</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Scott Glenn</name>
+    <role>Jack Crawford</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Ted Levine</name>
+    <role>Jame Gumb</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Heald</name>
+    <role>Dr. Frederick Chilton</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Brooke Smith</name>
+    <role>Catherine Martin</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Diane Baker</name>
+    <role>Senator Ruth Martin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kasi Lemmons</name>
+    <role>Ardelia Mapp</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Frankie Faison</name>
+    <role>Barney</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tracey Walter</name>
+    <role>Lamar</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Napier</name>
+    <role>Lt. Boyle</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Danny Darst</name>
+    <role>Sgt. Tate</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Alex Coleman</name>
+    <role>Sgt. Pembry</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Dan Butler</name>
+    <role>Roden</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Lazar</name>
+    <role>Pilcher</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jonathan Demme</director>
+  <credits>Ted Tally</credits>
+  <credits>Thomas Harris</credits>
+</movie>
