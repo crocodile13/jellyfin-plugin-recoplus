@@ -133,3 +133,17 @@ PERSONAS = {
         "attendu": "aucun goût connu : ce que le foyer regarde, puis les mieux notés ; liste non arbitraire",
     },
 }
+
+
+# Banc réaliste (SIM_BENCH=1) : bibliothèque de tous les univers et une trentaine de comptes générés (bench.py)
+import os as _os
+
+if _os.environ.get("SIM_BENCH"):
+    import bench as _bench
+    import universes as _universes
+
+    _m, _s = _universes.titles()
+    _have = {(t, y) for t, y in MOVIES} | {(t, y) for t, y, _, _ in SERIES}
+    MOVIES += [(t, y) for t, y in _m if (t, y) not in _have]
+    SERIES += [(t, y, 2, 5) for t, y in _s if (t, y) not in _have]
+    PERSONAS.update(_bench.personas())
