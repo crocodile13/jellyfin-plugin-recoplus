@@ -1,0 +1,119 @@
+<movie>
+  <title>Arrival</title>
+  <originaltitle>Arrival</originaltitle>
+  <year>2016</year>
+  <premiered>2016-11-10</premiered>
+  <rating>7.638</rating>
+  <criticrating>94</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Drama</genre>
+  <genre>Science Fiction</genre>
+  <genre>Mystery</genre>
+  <tag>spacecraft</tag>
+  <tag>extraterrestrial technology</tag>
+  <tag>loss</tag>
+  <tag>time</tag>
+  <tag>alien</tag>
+  <tag>language</tag>
+  <tag>female protagonist</tag>
+  <tag>scientist</tag>
+  <tag>heartbreak</tag>
+  <tag>based on short story</tag>
+  <tag>alien contact</tag>
+  <tag>military</tag>
+  <tag>alien language</tag>
+  <tag>linguist</tag>
+  <tag>first contact</tag>
+  <tag>communication</tag>
+  <tag>linguistics</tag>
+  <tag>time-manipulation</tag>
+  <tag>complex</tag>
+  <tag>determinism</tag>
+  <tag>science fiction</tag>
+  <tag>wistful</tag>
+  <tag>incredulous</tag>
+  <tag>hopeful</tag>
+  <studio>FilmNation Entertainment</studio>
+  <studio>Lava Bear Films</studio>
+  <studio>21 Laps Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">329865</uniqueid>
+  <uniqueid type="imdb">tt2543164</uniqueid>
+  <actor>
+    <name>Amy Adams</name>
+    <role>Louise Banks</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Renner</name>
+    <role>Ian Donnelly</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Forest Whitaker</name>
+    <role>Colonel Weber</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Stuhlbarg</name>
+    <role>Agent Halpern</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Mark O'Brien</name>
+    <role>Captain Marks</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tzi Ma</name>
+    <role>General Shang</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Abigail Pniowsky</name>
+    <role>8-Year-Old Hannah</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Julia Scarlett Dan</name>
+    <role>12-Year-Old Hannah</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jadyn Malone</name>
+    <role>6-Year-Old Hannah</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Schorpion</name>
+    <role>Dr. Kettler</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lucas Chartier-Dessert</name>
+    <role>Private Lasky</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Christian Jadah</name>
+    <role>Private Combs</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lucy Van Oldenbarneveld</name>
+    <role>CNAC Anchor</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Shaver</name>
+    <role>Environmental Tech</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Pat Kiely</name>
+    <role>Environmental Tech</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Denis Villeneuve</director>
+  <credits>Eric Heisserer</credits>
+</movie>

@@ -1,0 +1,112 @@
+<movie>
+  <title>The Conjuring 2</title>
+  <originaltitle>The Conjuring 2</originaltitle>
+  <year>2016</year>
+  <premiered>2016-06-08</premiered>
+  <rating>7.298</rating>
+  <criticrating>80</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <tag>london, england</tag>
+  <tag>england</tag>
+  <tag>1970s</tag>
+  <tag>halloween</tag>
+  <tag>sequel</tag>
+  <tag>spirit</tag>
+  <tag>single mother</tag>
+  <tag>demon</tag>
+  <tag>paranormal investigation</tag>
+  <tag>demonic possession</tag>
+  <tag>ghost</tag>
+  <tag>valak</tag>
+  <studio>New Line Cinema</studio>
+  <studio>The Safran Company</studio>
+  <studio>Atomic Monster</studio>
+  <studio>RatPac-Dune Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">259693</uniqueid>
+  <uniqueid type="imdb">tt3065204</uniqueid>
+  <set tmdbcolid="313086">
+    <name>313086</name>
+  </set>
+  <actor>
+    <name>Vera Farmiga</name>
+    <role>Lorraine Warren</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick Wilson</name>
+    <role>Ed Warren</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Madison Wolfe</name>
+    <role>Janet Hodgson</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Frances O'Connor</name>
+    <role>Peggy Hodgson</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Lauren Esposito</name>
+    <role>Margaret Hodgson</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Benjamin Haigh</name>
+    <role>Billy Hodgson</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Patrick McAuley</name>
+    <role>Johnny Hodgson</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Sterling Jerins</name>
+    <role>Judy Warren</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Bonnie Aarons</name>
+    <role>Demon Nun</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Simon McBurney</name>
+    <role>Maurice Grosse</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Maria Doyle Kennedy</name>
+    <role>Peggy Nottingham</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Simon Delaney</name>
+    <role>Vic Nottingham</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Franka Potente</name>
+    <role>Anita Gregory</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Adrian</name>
+    <role>Bill Wilkins</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Coulter</name>
+    <role>Father Gordon</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>James Wan</director>
+  <credits>Chad Hayes</credits>
+  <credits>Carey Hayes</credits>
+  <credits>James Wan</credits>
+  <credits>David Leslie Johnson-McGoldrick</credits>
+</movie>

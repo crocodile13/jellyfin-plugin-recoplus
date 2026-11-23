@@ -1,0 +1,118 @@
+<tvshow>
+  <title>Attack on Titan</title>
+  <originaltitle>進撃の巨人</originaltitle>
+  <year>2013</year>
+  <premiered>2013-04-07</premiered>
+  <rating>8.692</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Animation</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Action &amp; Adventure</genre>
+  <tag>fascism</tag>
+  <tag>dystopia</tag>
+  <tag>politics</tag>
+  <tag>revenge</tag>
+  <tag>gore</tag>
+  <tag>survival</tag>
+  <tag>tragedy</tag>
+  <tag>giant monster</tag>
+  <tag>based on manga</tag>
+  <tag>super power</tag>
+  <tag>political intrigue</tag>
+  <tag>family tragedy</tag>
+  <tag>military</tag>
+  <tag>dark fantasy</tag>
+  <tag>shounen</tag>
+  <tag>anime</tag>
+  <tag>war</tag>
+  <tag>suspense</tag>
+  <tag>mystery</tag>
+  <tag>defiant</tag>
+  <studio>MBS</studio>
+  <studio>NHK G</studio>
+  <studio>TOKYO MX</studio>
+  <studio>Production I.G</studio>
+  <studio>MAPPA</studio>
+  <studio>WIT STUDIO</studio>
+  <studio>Pony Canyon</studio>
+  <studio>Kodansha</studio>
+  <studio>dentsu</studio>
+  <studio>Pony Canyon Enterprise</studio>
+  <uniqueid type="tmdb" default="true">1429</uniqueid>
+  <uniqueid type="imdb">tt2560140</uniqueid>
+  <actor>
+    <name>Marina Inoue</name>
+    <role>Armin Arlert (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hiro Shimono</name>
+    <role>Connie Springer (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Tomohisa Hashizume</name>
+    <role>Bertholdt Hoover (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Yuki Kaji</name>
+    <role>Eren Yeager (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Natsuki Hanae</name>
+    <role>Falco Grice (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Romi Park</name>
+    <role>Hange Zoë (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ayane Sakura</name>
+    <role>Gabi Braun (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kisho Taniyama</name>
+    <role>Jean Kirstein (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroshi Kamiya</name>
+    <role>Levi (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Yui Ishikawa</name>
+    <role>Mikasa Ackerman (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Yu Kobayashi</name>
+    <role>Sasha Blouse (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Yoshimasa Hosoya</name>
+    <role>Reiner Braun (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tomokazu Sugita</name>
+    <role>Marlo Freudenberg (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Ikkyu Juku</name>
+    <role>Gross (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Yusaku Yara</name>
+    <role>Rod Reiss (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

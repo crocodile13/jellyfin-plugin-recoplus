@@ -1,0 +1,108 @@
+<movie>
+  <title>OSS 117: Cairo, Nest of Spies</title>
+  <originaltitle>OSS 117 : Le Caire, nid d'espions</originaltitle>
+  <year>2006</year>
+  <premiered>2006-04-19</premiered>
+  <rating>7.2</rating>
+  <criticrating>76</criticrating>
+  <mpaa>NR</mpaa>
+  <genre>Crime</genre>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Comedy</genre>
+  <tag>france</tag>
+  <tag>cairo</tag>
+  <tag>nazi</tag>
+  <tag>espionage</tag>
+  <tag>secret agent</tag>
+  <tag>satirical</tag>
+  <tag>comedy</tag>
+  <tag>french intelligence</tag>
+  <studio>Artémis Productions</studio>
+  <studio>Gaumont</studio>
+  <studio>M6 Films</studio>
+  <country>France</country>
+  <country>Belgium</country>
+  <uniqueid type="tmdb" default="true">15152</uniqueid>
+  <uniqueid type="imdb">tt0464913</uniqueid>
+  <set tmdbcolid="1413999">
+    <name>1413999</name>
+  </set>
+  <actor>
+    <name>Jean Dujardin</name>
+    <role>Hubert Bonisseur de La Bath, alias OSS 117</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Bérénice Bejo</name>
+    <role>Larmina El Akmar Betouche</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Aure Atika</name>
+    <role>La princesse Al Tarouk</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Philippe Lefebvre</name>
+    <role>Jack Jefferson</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Konstantin Aleksandrov</name>
+    <role>Setine</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Saïd Amadis</name>
+    <role>Le ministre égyptien</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Laurent Bateau</name>
+    <role>Gardenborough</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Claude Brosset</name>
+    <role>Le patron</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>François Damiens</name>
+    <role>Raymond Pelletier</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Youssef Hamid</name>
+    <role>L'imam</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Khalid Maadour</name>
+    <role>Le suiveur</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Arsène Mosca</name>
+    <role>Loktar</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Abdellah Moundy</name>
+    <role>Slimane</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Eric Prat</name>
+    <role>Plantieux</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Sammel</name>
+    <role>Moeller</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Michel Hazanavicius</director>
+  <credits>Jean Bruce</credits>
+</movie>

@@ -1,0 +1,110 @@
+<movie>
+  <title>Avengers: Infinity War</title>
+  <originaltitle>Avengers: Infinity War</originaltitle>
+  <year>2018</year>
+  <premiered>2018-04-25</premiered>
+  <rating>8.2</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Action</genre>
+  <genre>Science Fiction</genre>
+  <tag>sacrifice</tag>
+  <tag>magic</tag>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>space</tag>
+  <tag>battlefield</tag>
+  <tag>genocide</tag>
+  <tag>magical object</tag>
+  <tag>super power</tag>
+  <tag>superhero team</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>cosmic</tag>
+  <studio>Marvel Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">299536</uniqueid>
+  <uniqueid type="imdb">tt4154756</uniqueid>
+  <set tmdbcolid="86311">
+    <name>86311</name>
+  </set>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Tony Stark / Iron Man</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Evans</name>
+    <role>Steve Rogers / Captain America</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Hemsworth</name>
+    <role>Thor</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Brolin</name>
+    <role>Thanos</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Ruffalo</name>
+    <role>Bruce Banner / Hulk</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Scarlett Johansson</name>
+    <role>Natasha Romanoff / Black Widow</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Don Cheadle</name>
+    <role>James Rhodes / War Machine</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Benedict Cumberbatch</name>
+    <role>Doctor Strange</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Holland</name>
+    <role>Peter Parker / Spider-Man</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Chadwick Boseman</name>
+    <role>T'Challa / Black Panther</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Zoe Saldaña</name>
+    <role>Gamora</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Karen Gillan</name>
+    <role>Nebula</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Hiddleston</name>
+    <role>Loki</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Bettany</name>
+    <role>Vision</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Olsen</name>
+    <role>Wanda Maximoff / Scarlet Witch</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Joe Russo</director>
+  <director>Anthony Russo</director>
+  <credits>Stephen McFeely</credits>
+  <credits>Christopher Markus</credits>
+</movie>

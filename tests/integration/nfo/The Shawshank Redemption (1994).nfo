@@ -1,0 +1,111 @@
+<movie>
+  <title>The Shawshank Redemption</title>
+  <originaltitle>The Shawshank Redemption</originaltitle>
+  <year>1994</year>
+  <premiered>1994-09-23</premiered>
+  <rating>8.7</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Crime</genre>
+  <tag>prison</tag>
+  <tag>friendship</tag>
+  <tag>police brutality</tag>
+  <tag>corruption</tag>
+  <tag>based on novel or book</tag>
+  <tag>freedom</tag>
+  <tag>hope</tag>
+  <tag>prison cell</tag>
+  <tag>delinquent</tag>
+  <tag>redemption</tag>
+  <tag>parole board</tag>
+  <tag>prison escape</tag>
+  <tag>wrongful imprisonment</tag>
+  <tag>interracial friendship</tag>
+  <tag>framed for murder</tag>
+  <tag>1940s</tag>
+  <tag>voiceover</tag>
+  <tag>amused</tag>
+  <tag>epic</tag>
+  <studio>Castle Rock Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">278</uniqueid>
+  <uniqueid type="imdb">tt0111161</uniqueid>
+  <actor>
+    <name>Tim Robbins</name>
+    <role>Andy Dufresne</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Morgan Freeman</name>
+    <role>Ellis Boyd 'Red' Redding</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Gunton</name>
+    <role>Warden Norton</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>William Sadler</name>
+    <role>Heywood</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Clancy Brown</name>
+    <role>Captain Byron T. Hadley</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Gil Bellows</name>
+    <role>Tommy</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>James Whitmore</name>
+    <role>Brooks Hatlen</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Rolston</name>
+    <role>Bogs Diamond</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jeffrey DeMunn</name>
+    <role>1946 D.A.</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Larry Brandenburg</name>
+    <role>Skeet</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Neil Giuntoli</name>
+    <role>Jigger</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Libby</name>
+    <role>Floyd</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>David Proval</name>
+    <role>Snooze</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Joseph Ragno</name>
+    <role>Ernie</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jude Ciccolella</name>
+    <role>Guard Mert</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Frank Darabont</director>
+  <credits>Frank Darabont</credits>
+  <credits>Stephen King</credits>
+</movie>

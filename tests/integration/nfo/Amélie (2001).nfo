@@ -1,0 +1,127 @@
+<movie>
+  <title>Amélie</title>
+  <originaltitle>Le Fabuleux Destin d'Amélie Poulain</originaltitle>
+  <year>2001</year>
+  <premiered>2001-04-25</premiered>
+  <rating>7.9</rating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <genre>Romance</genre>
+  <tag>daughter</tag>
+  <tag>paris, france</tag>
+  <tag>love triangle</tag>
+  <tag>photography</tag>
+  <tag>ghost train</tag>
+  <tag>sex shop</tag>
+  <tag>shyness</tag>
+  <tag>journey around the world</tag>
+  <tag>postcard</tag>
+  <tag>romcom</tag>
+  <tag>hypochondriac</tag>
+  <tag>romance</tag>
+  <tag>cafe</tag>
+  <tag>kindness</tag>
+  <tag>magic realism</tag>
+  <tag>child's point of view</tag>
+  <tag>nostalgic</tag>
+  <tag>montmartre, paris</tag>
+  <tag>neighbor neighbor relationship</tag>
+  <tag>father daughter relationship</tag>
+  <tag>wonder</tag>
+  <tag>loving</tag>
+  <tag>playful</tag>
+  <tag>happy ending</tag>
+  <tag>childhood memory</tag>
+  <tag>lighthearted</tag>
+  <tag>adoring</tag>
+  <tag>comforting</tag>
+  <tag>hopeful</tag>
+  <tag>vibrant</tag>
+  <studio>Victoires Productions</studio>
+  <studio>Tapioca Films</studio>
+  <studio>France 3 Cinéma</studio>
+  <studio>MMC Independent</studio>
+  <studio>UGC</studio>
+  <country>France</country>
+  <country>Germany</country>
+  <uniqueid type="tmdb" default="true">194</uniqueid>
+  <uniqueid type="imdb">tt0211915</uniqueid>
+  <actor>
+    <name>Audrey Tautou</name>
+    <role>Amélie Poulain</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Mathieu Kassovitz</name>
+    <role>Nino Quincampoix</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Rufus</name>
+    <role>Raphaël Poulain</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Serge Merlin</name>
+    <role>Raymond Dufayel</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jamel Debbouze</name>
+    <role>Lucien</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Clotilde Mollet</name>
+    <role>Gina</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Claire Maurier</name>
+    <role>Suzanne</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Isabelle Nanty</name>
+    <role>Georgette</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Dominique Pinon</name>
+    <role>Joseph</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Artus de Penguern</name>
+    <role>Hipolito</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Yolande Moreau</name>
+    <role>Madeleine Wallace</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Urbain Cancelier</name>
+    <role>Collignon</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lorella Cravotta</name>
+    <role>Amandine Poulain</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Maurice Bénichou</name>
+    <role>Dominique Bretodeau</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Michel Robin</name>
+    <role>Mr. Collignon</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jean-Pierre Jeunet</director>
+  <credits>Guillaume Laurant</credits>
+  <credits>Jean-Pierre Jeunet</credits>
+</movie>

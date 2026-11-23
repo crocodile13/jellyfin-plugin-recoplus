@@ -1,0 +1,118 @@
+<movie>
+  <title>Blade Runner 2049</title>
+  <originaltitle>Blade Runner 2049</originaltitle>
+  <year>2017</year>
+  <premiered>2017-10-04</premiered>
+  <rating>7.616</rating>
+  <mpaa>R</mpaa>
+  <genre>Science Fiction</genre>
+  <genre>Drama</genre>
+  <tag>future</tag>
+  <tag>android</tag>
+  <tag>bounty hunter</tag>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>dystopia</tag>
+  <tag>sequel</tag>
+  <tag>cyberpunk</tag>
+  <tag>transhumanism</tag>
+  <tag>los angeles, california</tag>
+  <tag>las vegas</tag>
+  <tag>tech noir</tag>
+  <tag>cyber thriller</tag>
+  <tag>humanoid robot</tag>
+  <tag>blade runner</tag>
+  <tag>2040s</tag>
+  <tag>slow burn</tag>
+  <studio>Alcon Entertainment</studio>
+  <studio>Columbia Pictures</studio>
+  <studio>Scott Free Productions</studio>
+  <studio>Bud Yorkin Productions</studio>
+  <studio>Torridon Films</studio>
+  <studio>16:14 Entertainment</studio>
+  <country>Canada</country>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">335984</uniqueid>
+  <uniqueid type="imdb">tt1856101</uniqueid>
+  <set tmdbcolid="422837">
+    <name>422837</name>
+  </set>
+  <actor>
+    <name>Ryan Gosling</name>
+    <role>'K'</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Harrison Ford</name>
+    <role>Rick Deckard</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ana de Armas</name>
+    <role>Joi</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Dave Bautista</name>
+    <role>Sapper Morton</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Robin Wright</name>
+    <role>Lieutenant Joshi</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Sylvia Hoeks</name>
+    <role>Luv</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Mackenzie Davis</name>
+    <role>Mariette</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jared Leto</name>
+    <role>Niander Wallace</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Carla Juri</name>
+    <role>Dr. Ana Stelline</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Hiam Abbass</name>
+    <role>Freysa</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Lennie James</name>
+    <role>Mister Cotton</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David Dastmalchian</name>
+    <role>Coco</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Sean Young</name>
+    <role>Rachael</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Edward James Olmos</name>
+    <role>Gaff</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Barkhad Abdi</name>
+    <role>Doc Badger</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Denis Villeneuve</director>
+  <credits>Hampton Fancher</credits>
+  <credits>Michael Green</credits>
+</movie>

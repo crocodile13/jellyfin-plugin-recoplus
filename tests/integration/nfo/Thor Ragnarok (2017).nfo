@@ -1,0 +1,113 @@
+<movie>
+  <title>Thor: Ragnarok</title>
+  <originaltitle>Thor: Ragnarok</originaltitle>
+  <year>2017</year>
+  <premiered>2017-10-24</premiered>
+  <rating>7.577</rating>
+  <criticrating>93</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Comedy</genre>
+  <genre>Science Fiction</genre>
+  <tag>superhero</tag>
+  <tag>death of father</tag>
+  <tag>based on comic</tag>
+  <tag>sequel</tag>
+  <tag>alien planet</tag>
+  <tag>female villain</tag>
+  <tag>norse mythology</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>mysterious</tag>
+  <tag>norse god</tag>
+  <tag>familiar</tag>
+  <tag>ominous</tag>
+  <studio>Marvel Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">284053</uniqueid>
+  <uniqueid type="imdb">tt3501632</uniqueid>
+  <set tmdbcolid="131296">
+    <name>131296</name>
+  </set>
+  <actor>
+    <name>Chris Hemsworth</name>
+    <role>Thor</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Ruffalo</name>
+    <role>Bruce Banner / Hulk</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Hiddleston</name>
+    <role>Loki</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Cate Blanchett</name>
+    <role>Hela</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Idris Elba</name>
+    <role>Heimdall</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Goldblum</name>
+    <role>Grandmaster</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tessa Thompson</name>
+    <role>Valkyrie</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Karl Urban</name>
+    <role>Skurge</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Hopkins</name>
+    <role>Odin</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Benedict Cumberbatch</name>
+    <role>Doctor Strange</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Taika Waititi</name>
+    <role>Korg (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel House</name>
+    <role>Topaz</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Clancy Brown</name>
+    <role>Surtur (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tadanobu Asano</name>
+    <role>Hogun</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ray Stevenson</name>
+    <role>Volstagg</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Taika Waititi</director>
+  <credits>Craig Kyle</credits>
+  <credits>Christopher L. Yost</credits>
+  <credits>Eric Pearson</credits>
+</movie>

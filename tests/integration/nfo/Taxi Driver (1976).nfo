@@ -1,0 +1,125 @@
+<movie>
+  <title>Taxi Driver</title>
+  <originaltitle>Taxi Driver</originaltitle>
+  <year>1976</year>
+  <premiered>1976-02-09</premiered>
+  <rating>8.116</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <tag>drug dealer</tag>
+  <tag>vietnam veteran</tag>
+  <tag>new york city</tag>
+  <tag>taxi</tag>
+  <tag>pornography</tag>
+  <tag>obsession</tag>
+  <tag>taxi driver</tag>
+  <tag>1970s</tag>
+  <tag>pimp</tag>
+  <tag>observer</tag>
+  <tag>firearm</tag>
+  <tag>politician</tag>
+  <tag>alienation</tag>
+  <tag>junk food</tag>
+  <tag>misanthrophy</tag>
+  <tag>vigilante</tag>
+  <tag>political campaign</tag>
+  <tag>cynical</tag>
+  <tag>illegal prostitution</tag>
+  <tag>urban decay</tag>
+  <tag>character study</tag>
+  <tag>loner</tag>
+  <tag>manhattan, new york city</tag>
+  <tag>meditative</tag>
+  <tag>neo-noir</tag>
+  <tag>child prostitution</tag>
+  <tag>complex</tag>
+  <tag>dreary</tag>
+  <tag>cautionary</tag>
+  <tag>provocative</tag>
+  <tag>antagonistic</tag>
+  <tag>audacious</tag>
+  <tag>callous</tag>
+  <studio>Bill/Phillips Productions</studio>
+  <studio>Columbia Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">103</uniqueid>
+  <uniqueid type="imdb">tt0075314</uniqueid>
+  <actor>
+    <name>Robert De Niro</name>
+    <role>Travis Bickle</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jodie Foster</name>
+    <role>Iris</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Cybill Shepherd</name>
+    <role>Betsy</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Harvey Keitel</name>
+    <role>Sport</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Boyle</name>
+    <role>Wizard</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Leonard Harris</name>
+    <role>Charles Palantine</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Albert Brooks</name>
+    <role>Tom</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Diahnne Abbott</name>
+    <role>Concession Girl</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Frank Adu</name>
+    <role>Angry Black Man</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Victor Argo</name>
+    <role>Melio</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Gino Ardito</name>
+    <role>Policeman at Rally</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Garth Avery</name>
+    <role>Iris' Friend</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Harry Cohn</name>
+    <role>Cabbie in Bellmore</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Cooper Cunningham</name>
+    <role>Hooker in Cab</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Brenda Dickson</name>
+    <role>Soap Opera Woman</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Martin Scorsese</director>
+  <credits>Paul Schrader</credits>
+</movie>

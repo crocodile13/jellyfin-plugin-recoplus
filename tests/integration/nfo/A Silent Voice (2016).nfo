@@ -1,0 +1,116 @@
+<movie>
+  <title>A Silent Voice: The Movie</title>
+  <originaltitle>映画 聲の形</originaltitle>
+  <year>2016</year>
+  <premiered>2016-09-17</premiered>
+  <rating>8.398</rating>
+  <mpaa>NR</mpaa>
+  <genre>Animation</genre>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>high school</tag>
+  <tag>friendship</tag>
+  <tag>suicide</tag>
+  <tag>suicide attempt</tag>
+  <tag>deaf</tag>
+  <tag>bullying</tag>
+  <tag>coming of age</tag>
+  <tag>school</tag>
+  <tag>based on manga</tag>
+  <tag>adult animation</tag>
+  <tag>teen suicide</tag>
+  <tag>woman director</tag>
+  <tag>sign languages</tag>
+  <tag>shounen</tag>
+  <tag>anime</tag>
+  <tag>social anxiety</tag>
+  <tag>japanese high school</tag>
+  <tag>japanese school</tag>
+  <tag>appreciative</tag>
+  <studio>Kyoto Animation</studio>
+  <studio>ABC Animation</studio>
+  <studio>Kodansha</studio>
+  <studio>Pony Canyon</studio>
+  <studio>Quaras</studio>
+  <studio>Shochiku</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">378064</uniqueid>
+  <uniqueid type="imdb">tt5323662</uniqueid>
+  <actor>
+    <name>Miyu Irino</name>
+    <role>Shouya Ishida (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Saori Hayami</name>
+    <role>Shouko Nishimiya (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Aoi Yuki</name>
+    <role>Yuzuru Nishimiya (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kensho Ono</name>
+    <role>Tomohiro Nagatsuka (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yuki Kaneko</name>
+    <role>Naoka Ueno (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Yui Ishikawa</name>
+    <role>Miyoko Sahara (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Megumi Han</name>
+    <role>Miki Kawai (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Toshiyuki Toyonaga</name>
+    <role>Satoshi Mashiba (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mayu Matsuoka</name>
+    <role>Shouya Ishida as an Elementary School Boy (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Sachiko Kojima</name>
+    <role>Kazuki Shimada as an Elementary School Boy (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Hana Takeda</name>
+    <role>Keisuke Hirose as an Elementary School Boy (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Fuminori Komatsu</name>
+    <role>Takeuchi-sensei (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ikuko Tani</name>
+    <role>Ito Nishimiya (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Erena Kamata</name>
+    <role>Maria Ishida (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ayano Hamaguchi</name>
+    <role>Shouya's Sister (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Naoko Yamada</director>
+  <credits>Reiko Yoshida</credits>
+</movie>

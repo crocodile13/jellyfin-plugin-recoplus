@@ -1,0 +1,108 @@
+<movie>
+  <title>Ratatouille</title>
+  <originaltitle>Ratatouille</originaltitle>
+  <year>2007</year>
+  <premiered>2007-06-28</premiered>
+  <rating>7.851</rating>
+  <criticrating>96</criticrating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Comedy</genre>
+  <genre>Family</genre>
+  <genre>Fantasy</genre>
+  <tag>sibling relationship</tag>
+  <tag>paris, france</tag>
+  <tag>confidence</tag>
+  <tag>cooking</tag>
+  <tag>leaving one's family</tag>
+  <tag>restaurant</tag>
+  <tag>chef</tag>
+  <tag>unlikely friendship</tag>
+  <tag>french restaurant</tag>
+  <tag>rat</tag>
+  <tag>fine dining</tag>
+  <tag>3d animation</tag>
+  <tag>chasing dreams</tag>
+  <tag>lifelong dream</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">2062</uniqueid>
+  <uniqueid type="imdb">tt0382932</uniqueid>
+  <actor>
+    <name>Patton Oswalt</name>
+    <role>Remy (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Lou Romano</name>
+    <role>Linguini (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ian Holm</name>
+    <role>Skinner (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Dennehy</name>
+    <role>Django (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Sohn</name>
+    <role>Emile (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Peter O'Toole</name>
+    <role>Anton Ego (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Brad Garrett</name>
+    <role>Gusteau (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Janeane Garofalo</name>
+    <role>Colette (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Will Arnett</name>
+    <role>Horst (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Julius Callahan</name>
+    <role>Lalo / Francois (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>James Remar</name>
+    <role>Larousse (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>John Ratzenberger</name>
+    <role>Mustafa (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Teddy Newton</name>
+    <role>Lawyer (Talon Labarthe) (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Fucile</name>
+    <role>Pompidou / Health Inspector (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jake Steinfeld</name>
+    <role>Git (Lab Rat) (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Brad Bird</director>
+  <credits>Brad Bird</credits>
+</movie>

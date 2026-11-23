@@ -1,0 +1,111 @@
+<movie>
+  <title>Spirited Away</title>
+  <originaltitle>千と千尋の神隠し</originaltitle>
+  <year>2001</year>
+  <premiered>2001-07-20</premiered>
+  <rating>8.537</rating>
+  <criticrating>96</criticrating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Fantasy</genre>
+  <genre>Adventure</genre>
+  <tag>witch</tag>
+  <tag>parent child relationship</tag>
+  <tag>darkness</tag>
+  <tag>bath house</tag>
+  <tag>magic</tag>
+  <tag>spirit</tag>
+  <tag>parallel world</tag>
+  <tag>amusement park</tag>
+  <tag>youkai</tag>
+  <tag>japanese mythology</tag>
+  <tag>anime</tag>
+  <studio>Studio Ghibli</studio>
+  <studio>Tokuma Shoten</studio>
+  <studio>Nippon Television Network Corporation</studio>
+  <studio>Mitsubishi</studio>
+  <studio>dentsu</studio>
+  <studio>TFC</studio>
+  <studio>The Walt Disney Company (Japan)</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">129</uniqueid>
+  <uniqueid type="imdb">tt0245429</uniqueid>
+  <actor>
+    <name>Rumi Hiiragi</name>
+    <role>Chihiro (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Miyu Irino</name>
+    <role>Haku (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Mari Natsuki</name>
+    <role>Yubaba / Zeniba (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Takashi Naito</name>
+    <role>Father (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yasuko Sawaguchi</name>
+    <role>Mother (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Tatsuya Gashuin</name>
+    <role>Aogaeru (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ryunosuke Kamiki</name>
+    <role>Boh (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Yumi Tamai</name>
+    <role>Rin (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Yo Oizumi</name>
+    <role>Bandai Frog (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Koba Hayashi</name>
+    <role>River Spirit (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Tsunehiko Kamijou</name>
+    <role>Chichiyaku (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Takehiko Ono</name>
+    <role>Aniyaku (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Bunta Sugawara</name>
+    <role>Kamaji (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Shigeru Wakita</name>
+    <role>(voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Shirou Saitou</name>
+    <role>(voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Hayao Miyazaki</credits>
+</movie>

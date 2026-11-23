@@ -1,0 +1,109 @@
+<movie>
+  <title>Finding Dory</title>
+  <originaltitle>Finding Dory</originaltitle>
+  <year>2016</year>
+  <premiered>2016-06-16</premiered>
+  <rating>7.043</rating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <tag>fish</tag>
+  <tag>amnesia</tag>
+  <tag>octopus</tag>
+  <tag>sequel</tag>
+  <tag>anthropomorphism</tag>
+  <tag>computer animation</tag>
+  <tag>underwater</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>clownfish</tag>
+  <tag>3d animation</tag>
+  <tag>amused</tag>
+  <tag>enthusiastic</tag>
+  <tag>hopeful</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">127380</uniqueid>
+  <uniqueid type="imdb">tt2277860</uniqueid>
+  <set tmdbcolid="137697">
+    <name>137697</name>
+  </set>
+  <actor>
+    <name>Ellen DeGeneres</name>
+    <role>Dory (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Albert Brooks</name>
+    <role>Marlin (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ed O'Neill</name>
+    <role>Hank (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Hayden Rolence</name>
+    <role>Nemo (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Diane Keaton</name>
+    <role>Jenny (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Eugene Levy</name>
+    <role>Charlie (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Ty Burrell</name>
+    <role>Bailey (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Kaitlin Olson</name>
+    <role>Destiny (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Idris Elba</name>
+    <role>Fluke (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Dominic West</name>
+    <role>Rudder (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kate McKinnon</name>
+    <role>Wife Fish (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Hader</name>
+    <role>Husband Fish (Stan) (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Stanton</name>
+    <role>Crush (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Torbin Xan Bullock</name>
+    <role>Gerald (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Bennett Dammann</name>
+    <role>Squirt (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Andrew Stanton</director>
+  <credits>Andrew Stanton</credits>
+  <credits>Victoria Strouse</credits>
+</movie>

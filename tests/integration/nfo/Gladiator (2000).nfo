@@ -1,0 +1,131 @@
+<movie>
+  <title>Gladiator</title>
+  <originaltitle>Gladiator</originaltitle>
+  <year>2000</year>
+  <premiered>2000-05-04</premiered>
+  <rating>8.234</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Drama</genre>
+  <genre>Adventure</genre>
+  <tag>gladiator</tag>
+  <tag>rome, italy</tag>
+  <tag>arena</tag>
+  <tag>senate</tag>
+  <tag>roman empire</tag>
+  <tag>parent child relationship</tag>
+  <tag>emperor</tag>
+  <tag>slavery</tag>
+  <tag>ancient rome</tag>
+  <tag>revenge</tag>
+  <tag>battlefield</tag>
+  <tag>slave auction</tag>
+  <tag>historical fiction</tag>
+  <tag>ancient world</tag>
+  <tag>period drama</tag>
+  <tag>combat</tag>
+  <tag>chariot</tag>
+  <tag>philosopher</tag>
+  <tag>aggressive</tag>
+  <tag>grim</tag>
+  <tag>barbarian horde</tag>
+  <tag>2nd century</tag>
+  <tag>successor</tag>
+  <tag>commodus</tag>
+  <tag>maximus</tag>
+  <tag>antiquity</tag>
+  <tag>intense</tag>
+  <tag>vibrant</tag>
+  <tag>gladiador</tag>
+  <studio>Universal Pictures</studio>
+  <studio>Scott Free Productions</studio>
+  <studio>Red Wagon Entertainment</studio>
+  <studio>Mill Film</studio>
+  <studio>DreamWorks Pictures</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">98</uniqueid>
+  <uniqueid type="imdb">tt0172495</uniqueid>
+  <set tmdbcolid="1069584">
+    <name>1069584</name>
+  </set>
+  <actor>
+    <name>Russell Crowe</name>
+    <role>Maximus</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Joaquin Phoenix</name>
+    <role>Commodus</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Connie Nielsen</name>
+    <role>Lucilla</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Oliver Reed</name>
+    <role>Proximo</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Harris</name>
+    <role>Marcus Aurelius</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Derek Jacobi</name>
+    <role>Gracchus</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Djimon Hounsou</name>
+    <role>Juba</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>David Schofield</name>
+    <role>Falco</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>John Shrapnel</name>
+    <role>Gaius</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tomas Arana</name>
+    <role>Quintus</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ralf Moeller</name>
+    <role>Hagen</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Spencer Treat Clark</name>
+    <role>Lucius</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>David Hemmings</name>
+    <role>Cassius</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tommy Flanagan</name>
+    <role>Cicero</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Sven-Ole Thorsen</name>
+    <role>Tiger</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Ridley Scott</director>
+  <credits>David Franzoni</credits>
+  <credits>John Logan</credits>
+  <credits>William Nicholson</credits>
+</movie>

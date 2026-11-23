@@ -1,0 +1,110 @@
+<movie>
+  <title>Pride &amp; Prejudice</title>
+  <originaltitle>Pride &amp; Prejudice</originaltitle>
+  <year>2005</year>
+  <premiered>2005-09-16</premiered>
+  <rating>8.051</rating>
+  <mpaa>PG</mpaa>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>based on novel or book</tag>
+  <tag>england</tag>
+  <tag>bachelor</tag>
+  <tag>family relationships</tag>
+  <tag>suitor</tag>
+  <tag>prejudice</tag>
+  <tag>period drama</tag>
+  <tag>pride</tag>
+  <tag>18th century</tag>
+  <tag>opposites attract</tag>
+  <tag>gentleman</tag>
+  <tag>georgian or regency era</tag>
+  <tag>sisters</tag>
+  <studio>StudioCanal</studio>
+  <studio>Working Title</studio>
+  <studio>Scion Films</studio>
+  <studio>Focus Features</studio>
+  <country>France</country>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">4348</uniqueid>
+  <uniqueid type="imdb">tt0414387</uniqueid>
+  <actor>
+    <name>Keira Knightley</name>
+    <role>Elizabeth Bennet</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Macfadyen</name>
+    <role>Mr. Darcy</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Brenda Blethyn</name>
+    <role>Mrs. Bennet</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Rosamund Pike</name>
+    <role>Jane Bennet</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Carey Mulligan</name>
+    <role>Kitty Bennet</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jena Malone</name>
+    <role>Lydia Bennet</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Talulah Riley</name>
+    <role>Mary Bennet</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Donald Sutherland</name>
+    <role>Mr. Bennet</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Simon Woods</name>
+    <role>Mr. Bingley</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Judi Dench</name>
+    <role>Lady Catherine de Bourgh</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Hollander</name>
+    <role>Mr. Collins</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Rupert Friend</name>
+    <role>Mr. Wickham</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kelly Reilly</name>
+    <role>Caroline Bingley</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Claudie Blakley</name>
+    <role>Charlotte Lucas</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Penelope Wilton</name>
+    <role>Mrs. Gardiner</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Joe Wright</director>
+  <credits>Deborah Moggach</credits>
+  <credits>Jane Austen</credits>
+</movie>

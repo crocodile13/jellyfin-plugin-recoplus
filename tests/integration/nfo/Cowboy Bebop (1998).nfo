@@ -1,0 +1,116 @@
+<tvshow>
+  <title>Cowboy Bebop</title>
+  <originaltitle>カウボーイビバップ</originaltitle>
+  <year>1998</year>
+  <premiered>1998-04-03</premiered>
+  <rating>8.485</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Animation</genre>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Western</genre>
+  <tag>philosophy</tag>
+  <tag>bounty hunter</tag>
+  <tag>jazz</tag>
+  <tag>anti hero</tag>
+  <tag>blues</tag>
+  <tag>future</tag>
+  <tag>space</tag>
+  <tag>space western</tag>
+  <tag>dark past</tag>
+  <tag>crime syndicate</tag>
+  <tag>hard boiled</tag>
+  <tag>curious</tag>
+  <tag>neo-noir</tag>
+  <tag>anime</tag>
+  <tag>philosophical</tag>
+  <tag>spaceship</tag>
+  <tag>irreverent</tag>
+  <tag>ambiguity</tag>
+  <tag>western</tag>
+  <tag>psychological drama</tag>
+  <tag>sentimental</tag>
+  <tag>intense</tag>
+  <tag>amused</tag>
+  <studio>TV Tokyo</studio>
+  <studio>WOWOW Prime</studio>
+  <studio>SUNRISE</studio>
+  <studio>Bandai Visual</studio>
+  <uniqueid type="tmdb" default="true">30991</uniqueid>
+  <uniqueid type="imdb">tt0213338</uniqueid>
+  <actor>
+    <name>Koichi Yamadera</name>
+    <role>Spike Spiegel / Ein (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Unsho Ishizuka</name>
+    <role>Jet Black (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Megumi Hayashibara</name>
+    <role>Faye Valentine (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Aoi Tada</name>
+    <role>Edward Wong Hau Pepelu Tivruski IV (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Takeshi Aono</name>
+    <role>Doohan (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Norio Wakamoto</name>
+    <role>Vicious (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Gara Takashima</name>
+    <role>Julia (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rintaro Nishi</name>
+    <role>Asimov Solensan (voice) (as Tarô Nishi)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Yurika Hino</name>
+    <role>Katrina Solensan (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Takehiro Koyama</name>
+    <role>Laughing Bull (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Katsumi Cho</name>
+    <role>Bartender (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Mari Maruta</name>
+    <role>Announcer A (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ryuuzaburou Ootomo</name>
+    <role>Abdul Hakim (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Yuzuru Fujimoto</name>
+    <role>Doctor (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Ako Mayama</name>
+    <role>Pet Shop Owner (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

@@ -1,0 +1,121 @@
+<movie>
+  <title>Die Hard</title>
+  <originaltitle>Die Hard</originaltitle>
+  <year>1988</year>
+  <premiered>1988-07-15</premiered>
+  <rating>7.818</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Thriller</genre>
+  <tag>husband wife relationship</tag>
+  <tag>based on novel or book</tag>
+  <tag>s.w.a.t.</tag>
+  <tag>fbi</tag>
+  <tag>christmas party</tag>
+  <tag>vault</tag>
+  <tag>heist</tag>
+  <tag>murder</tag>
+  <tag>shootout</tag>
+  <tag>los angeles, california</tag>
+  <tag>terrorism</tag>
+  <tag>one man army</tag>
+  <tag>explosion</tag>
+  <tag>police officer</tag>
+  <tag>hostage negotiator</tag>
+  <tag>one night</tag>
+  <tag>lapd</tag>
+  <tag>1980s</tag>
+  <tag>action hero</tag>
+  <tag>hostages</tag>
+  <tag>absurd</tag>
+  <tag>high octane</tag>
+  <tag>amused</tag>
+  <studio>Gordon Company</studio>
+  <studio>Silver Pictures</studio>
+  <studio>20th Century Fox</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">562</uniqueid>
+  <uniqueid type="imdb">tt0095016</uniqueid>
+  <set tmdbcolid="1570">
+    <name>1570</name>
+  </set>
+  <actor>
+    <name>Bruce Willis</name>
+    <role>John McClane</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Rickman</name>
+    <role>Hans Gruber</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Alexander Godunov</name>
+    <role>Karl</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Bonnie Bedelia</name>
+    <role>Holly Gennaro McClane</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Reginald VelJohnson</name>
+    <role>Al Powell</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Gleason</name>
+    <role>Dwayne Robinson</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>De'voreaux White</name>
+    <role>Argyle</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>William Atherton</name>
+    <role>Richard Thornburg</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Hart Bochner</name>
+    <role>Harry Ellis</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>James Shigeta</name>
+    <role>Joseph Yoshinobu Takagi</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Bruno Doyon</name>
+    <role>Franco</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Andreas Wisniewski</name>
+    <role>Tony</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Clarence Gilyard Jr.</name>
+    <role>Theo</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Joey Plewa</name>
+    <role>Alexander</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Lorenzo Caccialanza</name>
+    <role>Marco</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>John McTiernan</director>
+  <credits>Roderick Thorp</credits>
+  <credits>Jeb Stuart</credits>
+  <credits>Steven E. de Souza</credits>
+</movie>

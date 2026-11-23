@@ -1,0 +1,109 @@
+<movie>
+  <title>Us</title>
+  <originaltitle>Us</originaltitle>
+  <year>2019</year>
+  <premiered>2019-03-14</premiered>
+  <rating>6.932</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Thriller</genre>
+  <tag>mask</tag>
+  <tag>boardwalk</tag>
+  <tag>murder</tag>
+  <tag>psychological thriller</tag>
+  <tag>fear</tag>
+  <tag>family vacation</tag>
+  <tag>home invasion</tag>
+  <tag>amusement park</tag>
+  <tag>doppelgänger</tag>
+  <tag>santa cruz, california</tag>
+  <tag>aggressive</tag>
+  <tag>1980s</tag>
+  <tag>duality</tag>
+  <tag>distressing</tag>
+  <studio>Monkeypaw Productions</studio>
+  <studio>Universal Pictures</studio>
+  <studio>Perfect World Pictures</studio>
+  <studio>Blumhouse Productions</studio>
+  <studio>QC Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">458723</uniqueid>
+  <uniqueid type="imdb">tt6857112</uniqueid>
+  <actor>
+    <name>Lupita Nyong'o</name>
+    <role>Adelaide Wilson / Red</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Winston Duke</name>
+    <role>Gabe Wilson / Abraham</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Elisabeth Moss</name>
+    <role>Kitty Tyler / Dahlia</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Heidecker</name>
+    <role>Josh Tyler / Tex</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Shahadi Wright Joseph</name>
+    <role>Zora Wilson / Umbrae</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Evan Alex</name>
+    <role>Jason Wilson / Pluto</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Yahya Abdul-Mateen II</name>
+    <role>Russell Thomas / Weyland</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Anna Diop</name>
+    <role>Rayne Thomas / Eartha</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Cali Sheldon</name>
+    <role>Becca Tyler / Io</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Noelle Sheldon</name>
+    <role>Lindsey Tyler / Nix</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Madison Curry</name>
+    <role>Young Adelaide Wilson / Young Red</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ashley McKoy</name>
+    <role>Teenage Adelaide Wilson / Teenage Red</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Napiera Groves</name>
+    <role>Dr. Foster</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Lon Gowan</name>
+    <role>Don</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Frazier</name>
+    <role>Ferdie / Jeremiah</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jordan Peele</director>
+  <credits>Jordan Peele</credits>
+</movie>

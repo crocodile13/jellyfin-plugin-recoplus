@@ -1,0 +1,106 @@
+<movie>
+  <title>Warriors of the Wind</title>
+  <originaltitle>風の谷のナウシカ</originaltitle>
+  <year>1984</year>
+  <premiered>1984-03-11</premiered>
+  <rating>7.94</rating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Animation</genre>
+  <genre>Fantasy</genre>
+  <tag>future</tag>
+  <tag>airplane</tag>
+  <tag>saving the world</tag>
+  <tag>human vs nature</tag>
+  <tag>fungus spores</tag>
+  <tag>post-apocalyptic future</tag>
+  <tag>giant insect</tag>
+  <tag>toxic</tag>
+  <tag>based on manga</tag>
+  <tag>ecology</tag>
+  <tag>anime</tag>
+  <tag>adventure</tag>
+  <studio>Topcraft</studio>
+  <studio>Tokuma Shoten</studio>
+  <studio>Hakuhodo</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">81</uniqueid>
+  <uniqueid type="imdb">tt0087544</uniqueid>
+  <actor>
+    <name>Sumi Shimamoto</name>
+    <role>Nausicaä (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ichiro Nagai</name>
+    <role>Mito (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Gorō Naya</name>
+    <role>Yupa (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Yoji Matsuda</name>
+    <role>Asbel (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yoshiko Sakakibara</name>
+    <role>Kushana (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Iemasa Kayumi</name>
+    <role>Kurotowa (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Hisako Kyoda</name>
+    <role>Obaba (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mahito Tsujimura</name>
+    <role>Jihl (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Mina Tominaga</name>
+    <role>Lastel (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kohei Miyauchi</name>
+    <role>Gol (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Joji Yanami</name>
+    <role>Gikkuri (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Minoru Yada</name>
+    <role>Niga (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Rihoko Yoshida</name>
+    <role>Teto / Girl C (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tetsuo Mizutori</name>
+    <role>Commando (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Masako Sugaya</name>
+    <role>Girl A (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Hayao Miyazaki</credits>
+</movie>

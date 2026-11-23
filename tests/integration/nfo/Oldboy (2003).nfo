@@ -1,0 +1,131 @@
+<movie>
+  <title>Oldboy</title>
+  <originaltitle>올드보이</originaltitle>
+  <year>2003</year>
+  <premiered>2003-11-21</premiered>
+  <rating>8.232</rating>
+  <mpaa>R</mpaa>
+  <genre>Thriller</genre>
+  <genre>Mystery</genre>
+  <tag>daughter</tag>
+  <tag>martial arts</tag>
+  <tag>rage and hate</tag>
+  <tag>hostility</tag>
+  <tag>transformation</tag>
+  <tag>imprisonment</tag>
+  <tag>dark comedy</tag>
+  <tag>hypnosis</tag>
+  <tag>sushi restaurant</tag>
+  <tag>notebook</tag>
+  <tag>time</tag>
+  <tag>sin</tag>
+  <tag>alcoholism</tag>
+  <tag>flashback</tag>
+  <tag>revenge</tag>
+  <tag>loneliness</tag>
+  <tag>torture</tag>
+  <tag>based on manga</tag>
+  <tag>urination</tag>
+  <tag>rage</tag>
+  <tag>anger</tag>
+  <tag>catholic</tag>
+  <tag>incest</tag>
+  <tag>captivity</tag>
+  <tag>neo-noir</tag>
+  <tag>philosophical</tag>
+  <tag>father daughter relationship</tag>
+  <tag>brother sister relationship</tag>
+  <tag>asian origins</tag>
+  <tag>remade</tag>
+  <tag>south korea</tag>
+  <tag>hammer</tag>
+  <tag>grimdark</tag>
+  <tag>inspirational</tag>
+  <tag>driven to suicide</tag>
+  <tag>depressing</tag>
+  <studio>Show East</studio>
+  <studio>Egg Film</studio>
+  <studio>Cineclick Asia</studio>
+  <country>South Korea</country>
+  <uniqueid type="tmdb" default="true">670</uniqueid>
+  <uniqueid type="imdb">tt0364569</uniqueid>
+  <actor>
+    <name>Choi Min-sik</name>
+    <role>Oh Dae-su</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Yoo Ji-tae</name>
+    <role>Lee Woo-jin</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kang Hye-jung</name>
+    <role>Mi-do</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Byeong-ok</name>
+    <role>Mr. Han</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ji Dae-han</name>
+    <role>No Joo-hwan</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Oh Dal-su</name>
+    <role>Park Cheol-woong</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Seung-shin</name>
+    <role>Yoo Hyung-ja</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Yoon Jin-seo</name>
+    <role>Lee Soo-ah</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Oh Tae-kyung</name>
+    <role>Young Dae-su</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Yoo Yeon-seok</name>
+    <role>Young Woo-jin</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>You Il-han</name>
+    <role>Young Joo-hwan</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Young-hee</name>
+    <role>Clock Store Lady</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kim Young-ae</name>
+    <role>Elevator Lady</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Lee Mi-mi</name>
+    <role>Dental Nurse</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Han Jae-duk</name>
+    <role>Night Teacher</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Park Chan-wook</director>
+  <credits>Im Joon-hyung</credits>
+  <credits>Hwang Jo-yoon</credits>
+  <credits>Park Chan-wook</credits>
+</movie>

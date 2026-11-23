@@ -1,0 +1,119 @@
+<movie>
+  <title>Se7en</title>
+  <originaltitle>Se7en</originaltitle>
+  <year>1995</year>
+  <premiered>1995-09-22</premiered>
+  <rating>8.383</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Mystery</genre>
+  <genre>Thriller</genre>
+  <tag>rage and hate</tag>
+  <tag>police</tag>
+  <tag>s.w.a.t.</tag>
+  <tag>sadism</tag>
+  <tag>self-fulfilling prophecy</tag>
+  <tag>psychopath</tag>
+  <tag>detective</tag>
+  <tag>investigation</tag>
+  <tag>insomnia</tag>
+  <tag>murder</tag>
+  <tag>serial killer</tag>
+  <tag>religion</tag>
+  <tag>shootout</tag>
+  <tag>corpse</tag>
+  <tag>seven deadly sins</tag>
+  <tag>disturbed</tag>
+  <tag>depravity</tag>
+  <tag>neo-noir</tag>
+  <tag>urban gothic</tag>
+  <tag>grimdark</tag>
+  <tag>suspenseful</tag>
+  <tag>bold</tag>
+  <tag>cruel</tag>
+  <tag>frightened</tag>
+  <tag>seven: los siete pecados capitales</tag>
+  <studio>New Line Cinema</studio>
+  <studio>Juno Pix</studio>
+  <studio>Arnold Kopelson Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">807</uniqueid>
+  <uniqueid type="imdb">tt0114369</uniqueid>
+  <actor>
+    <name>Morgan Freeman</name>
+    <role>Somerset</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Brad Pitt</name>
+    <role>Mills</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Gwyneth Paltrow</name>
+    <role>Tracy</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>John Cassini</name>
+    <role>Officer Davis</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Crombie</name>
+    <role>Dr. O'Neill</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Reg E. Cathey</name>
+    <role>Dr. Santiago</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>R. Lee Ermey</name>
+    <role>Police Captain</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Zacapa</name>
+    <role>Detective Taylor at First Murder</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Kevin Walker</name>
+    <role>Dead Man at 1st Crime Scene</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>George Christy</name>
+    <role>Workman at Door of Somerset's Office</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Endre Hules</name>
+    <role>Cab Driver</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Hawthorne James</name>
+    <role>George the Night Guard at the Library</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Mack</name>
+    <role>Gluttony Victim</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>William Davidson</name>
+    <role>First Guard at the Library</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Collins</name>
+    <role>Second Guard at the Library</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>David Fincher</director>
+  <credits>Andrew Kevin Walker</credits>
+</movie>

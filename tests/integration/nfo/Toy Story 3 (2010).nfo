@@ -1,0 +1,108 @@
+<movie>
+  <title>Toy Story 3</title>
+  <originaltitle>Toy Story 3</originaltitle>
+  <year>2010</year>
+  <premiered>2010-06-16</premiered>
+  <rating>7.818</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Comedy</genre>
+  <tag>escape</tag>
+  <tag>hostage</tag>
+  <tag>college</tag>
+  <tag>villain</tag>
+  <tag>sequel</tag>
+  <tag>buddy</tag>
+  <tag>daycare</tag>
+  <tag>teddy bear</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>toy comes to life</tag>
+  <tag>personification</tag>
+  <tag>inanimate objects come to life</tag>
+  <tag>3d animation</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">10193</uniqueid>
+  <uniqueid type="imdb">tt0435761</uniqueid>
+  <set tmdbcolid="10194">
+    <name>10194</name>
+  </set>
+  <actor>
+    <name>Tom Hanks</name>
+    <role>Woody (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Allen</name>
+    <role>Buzz Lightyear (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Joan Cusack</name>
+    <role>Jessie (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Don Rickles</name>
+    <role>Mr. Potato Head (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Wallace Shawn</name>
+    <role>Rex (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>John Ratzenberger</name>
+    <role>Hamm (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Estelle Harris</name>
+    <role>Mrs. Potato Head (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Blake Clark</name>
+    <role>Slinky Dog (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Pidgeon</name>
+    <role>Aliens (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ned Beatty</name>
+    <role>Lotso (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Keaton</name>
+    <role>Ken (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jodi Benson</name>
+    <role>Barbie (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>John Morris</name>
+    <role>Andy (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Emily Ricks</name>
+    <role>Bonnie (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Timothy Dalton</name>
+    <role>Mr. Pricklepants (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Lee Unkrich</director>
+  <credits>Michael Arndt</credits>
+</movie>

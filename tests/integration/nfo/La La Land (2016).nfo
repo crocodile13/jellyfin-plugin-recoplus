@@ -1,0 +1,124 @@
+<movie>
+  <title>La La Land</title>
+  <originaltitle>La La Land</originaltitle>
+  <year>2016</year>
+  <premiered>2016-12-01</premiered>
+  <rating>7.9</rating>
+  <criticrating>91</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Comedy</genre>
+  <genre>Drama</genre>
+  <genre>Romance</genre>
+  <tag>dancing</tag>
+  <tag>dance</tag>
+  <tag>jazz</tag>
+  <tag>musical</tag>
+  <tag>ambition</tag>
+  <tag>casting</tag>
+  <tag>romcom</tag>
+  <tag>coffee shop</tag>
+  <tag>jazz club</tag>
+  <tag>traffic jam</tag>
+  <tag>hollywood</tag>
+  <tag>los angeles, california</tag>
+  <tag>pianist</tag>
+  <tag>pier</tag>
+  <tag>audition</tag>
+  <tag>valentine's day</tag>
+  <tag>planetarium</tag>
+  <tag>aspiring actor</tag>
+  <tag>movie set</tag>
+  <tag>sunset</tag>
+  <tag>one-woman show</tag>
+  <tag>pool party</tag>
+  <tag>complex</tag>
+  <tag>griffith observatory</tag>
+  <tag>bold</tag>
+  <tag>embarrassed</tag>
+  <tag>empathetic</tag>
+  <tag>exuberant</tag>
+  <studio>Summit Entertainment</studio>
+  <studio>Gilbert Films</studio>
+  <studio>Impostor Pictures</studio>
+  <studio>Marc Platt Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">313369</uniqueid>
+  <uniqueid type="imdb">tt3783958</uniqueid>
+  <actor>
+    <name>Ryan Gosling</name>
+    <role>Sebastian</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Emma Stone</name>
+    <role>Mia</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>John Legend</name>
+    <role>Keith</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Rosemarie DeWitt</name>
+    <role>Laura</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Finn Wittrock</name>
+    <role>Greg</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Callie Hernandez</name>
+    <role>Tracy</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Sonoya Mizuno</name>
+    <role>Caitlin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jessica Rothe</name>
+    <role>Alexis</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Everett Scott</name>
+    <role>David</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Pence</name>
+    <role>Josh</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>J.K. Simmons</name>
+    <role>Bill</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Amiée Conn</name>
+    <role>Famous Actress</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Terry Walters</name>
+    <role>Linda (Coffee Shop Manager)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Thom Shelton</name>
+    <role>Coffee Spiller</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Cinda Adams</name>
+    <role>Casting Director (First Audition)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Damien Chazelle</director>
+  <credits>Damien Chazelle</credits>
+</movie>

@@ -1,0 +1,111 @@
+<movie>
+  <title>Avengers: Age of Ultron</title>
+  <originaltitle>Avengers: Age of Ultron</originaltitle>
+  <year>2015</year>
+  <premiered>2015-04-22</premiered>
+  <rating>7.3</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Science Fiction</genre>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>saving the world</tag>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>sequel</tag>
+  <tag>vision</tag>
+  <tag>robot</tag>
+  <tag>superhero team</tag>
+  <tag>creator</tag>
+  <tag>super villain</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>fictitious country</tag>
+  <tag>good versus evil</tag>
+  <tag>hilarious</tag>
+  <tag>comforting</tag>
+  <studio>Marvel Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">99861</uniqueid>
+  <uniqueid type="imdb">tt2395427</uniqueid>
+  <set tmdbcolid="86311">
+    <name>86311</name>
+  </set>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Tony Stark / Iron Man</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Hemsworth</name>
+    <role>Thor</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Ruffalo</name>
+    <role>Bruce Banner / Hulk</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Chris Evans</name>
+    <role>Steve Rogers / Captain America</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Scarlett Johansson</name>
+    <role>Natasha Romanoff / Black Widow</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jeremy Renner</name>
+    <role>Clint Barton / Hawkeye</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>James Spader</name>
+    <role>Ultron (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel L. Jackson</name>
+    <role>Nick Fury</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Don Cheadle</name>
+    <role>James Rhodes / War Machine</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Aaron Taylor-Johnson</name>
+    <role>Pietro Maximoff / Quicksilver</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Elizabeth Olsen</name>
+    <role>Wanda Maximoff / Scarlet Witch</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Bettany</name>
+    <role>Jarvis / Vision</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Cobie Smulders</name>
+    <role>Maria Hill</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Mackie</name>
+    <role>Sam Wilson / The Falcon</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Hayley Atwell</name>
+    <role>Peggy Carter</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Joss Whedon</director>
+  <credits>Joss Whedon</credits>
+</movie>

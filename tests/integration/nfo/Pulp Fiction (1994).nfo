@@ -1,0 +1,109 @@
+<movie>
+  <title>Pulp Fiction</title>
+  <originaltitle>Pulp Fiction</originaltitle>
+  <year>1994</year>
+  <premiered>1994-09-10</premiered>
+  <rating>8.48</rating>
+  <mpaa>R</mpaa>
+  <genre>Thriller</genre>
+  <genre>Crime</genre>
+  <genre>Comedy</genre>
+  <tag>drug dealer</tag>
+  <tag>drug crime</tag>
+  <tag>gangster</tag>
+  <tag>dark comedy</tag>
+  <tag>stolen money</tag>
+  <tag>crime boss</tag>
+  <tag>redemption</tag>
+  <tag>los angeles, california</tag>
+  <tag>theft</tag>
+  <tag>couple</tag>
+  <tag>nonlinear timeline</tag>
+  <tag>multiple storylines</tag>
+  <tag>disturbed</tag>
+  <tag>aggressive</tag>
+  <tag>neo-noir</tag>
+  <studio>Miramax</studio>
+  <studio>A Band Apart</studio>
+  <studio>Jersey Films</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">680</uniqueid>
+  <uniqueid type="imdb">tt0110912</uniqueid>
+  <actor>
+    <name>John Travolta</name>
+    <role>Vincent Vega</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel L. Jackson</name>
+    <role>Jules Winnfield</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Uma Thurman</name>
+    <role>Mia Wallace</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Bruce Willis</name>
+    <role>Butch Coolidge</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ving Rhames</name>
+    <role>Marsellus Wallace</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Harvey Keitel</name>
+    <role>The Wolf</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Eric Stoltz</name>
+    <role>Lance</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Roth</name>
+    <role>Pumpkin</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Amanda Plummer</name>
+    <role>Honey Bunny</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Maria de Medeiros</name>
+    <role>Fabienne</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Quentin Tarantino</name>
+    <role>Jimmie Dimmick</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Walken</name>
+    <role>Captain Koons</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Rosanna Arquette</name>
+    <role>Jody</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Peter Greene</name>
+    <role>Zed</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Duane Whitaker</name>
+    <role>Maynard</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Quentin Tarantino</director>
+  <credits>Quentin Tarantino</credits>
+</movie>

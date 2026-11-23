@@ -1,0 +1,117 @@
+<movie>
+  <title>Spider-Man: Homecoming</title>
+  <originaltitle>Spider-Man: Homecoming</originaltitle>
+  <year>2017</year>
+  <premiered>2017-07-05</premiered>
+  <rating>7.3</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Science Fiction</genre>
+  <tag>high school</tag>
+  <tag>new york city</tag>
+  <tag>washington dc, usa</tag>
+  <tag>secret identity</tag>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>coming of age</tag>
+  <tag>reboot</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>masked superhero</tag>
+  <tag>teen superhero</tag>
+  <tag>lighthearted</tag>
+  <studio>Marvel Studios</studio>
+  <studio>Pascal Pictures</studio>
+  <studio>LStar Capital</studio>
+  <studio>Columbia Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">315635</uniqueid>
+  <uniqueid type="imdb">tt2250912</uniqueid>
+  <set tmdbcolid="531241">
+    <name>531241</name>
+  </set>
+  <actor>
+    <name>Tom Holland</name>
+    <role>Peter Parker / Spider-Man</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Keaton</name>
+    <role>Adrian Toomes / Vulture</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Tony Stark / Iron Man</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Marisa Tomei</name>
+    <role>May Parker</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Favreau</name>
+    <role>Happy Hogan</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Gwyneth Paltrow</name>
+    <role>Pepper Potts</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Zendaya</name>
+    <role>Michelle</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Donald Glover</name>
+    <role>Aaron Davis</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Jacob Batalon</name>
+    <role>Ned</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Laura Harrier</name>
+    <role>Liz</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Revolori</name>
+    <role>Flash</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Bokeem Woodbine</name>
+    <role>Herman Schultz / Shocker #2</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Tyne Daly</name>
+    <role>Anne Marie Hoag</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Abraham Attah</name>
+    <role>Abraham</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Hannibal Buress</name>
+    <role>Coach Wilson</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jon Watts</director>
+  <credits>Jonathan Goldstein</credits>
+  <credits>John Francis Daley</credits>
+  <credits>Jon Watts</credits>
+  <credits>Christopher Ford</credits>
+  <credits>Chris McKenna</credits>
+  <credits>Erik Sommers</credits>
+</movie>

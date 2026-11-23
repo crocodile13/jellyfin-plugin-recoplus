@@ -1,0 +1,109 @@
+<tvshow>
+  <title>Kaamelott</title>
+  <originaltitle>Kaamelott</originaltitle>
+  <year>2005</year>
+  <premiered>2005-01-03</premiered>
+  <rating>8.479</rating>
+  <mpaa>10</mpaa>
+  <genre>Comedy</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>holy grail</tag>
+  <tag>satire</tag>
+  <tag>dark comedy</tag>
+  <tag>king arthur</tag>
+  <tag>knights of the round table</tag>
+  <tag>based on myths, legends or folklore</tag>
+  <tag>sitcom</tag>
+  <tag>deadpan comedy</tag>
+  <tag>running gags</tag>
+  <tag>adventure comedy</tag>
+  <tag>historical comedy</tag>
+  <tag>absurdist humor</tag>
+  <tag>medieval legends</tag>
+  <tag>nonsense humor</tag>
+  <tag>verbal humor</tag>
+  <tag>anachronistic humor</tag>
+  <tag>historical satire</tag>
+  <studio>M6</studio>
+  <studio>Calt Production</studio>
+  <studio>Dies Irae</studio>
+  <studio>Shortcom</studio>
+  <uniqueid type="tmdb" default="true">11466</uniqueid>
+  <uniqueid type="imdb">tt0441059</uniqueid>
+  <actor>
+    <name>Alexandre Astier</name>
+    <role>Roi Arthur</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Anne Girouard</name>
+    <role>Guenièvre</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Lionnel Astier</name>
+    <role>Léodagan</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Joëlle Sevilla</name>
+    <role>Séli</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Thomas Cousseau</name>
+    <role>Lancelot</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Franck Pitiot</name>
+    <role>Perceval</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Jean-Christophe Hembert</name>
+    <role>Karadoc</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Nicolas Gabion</name>
+    <role>Bohort</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Alexis Hénon</name>
+    <role>Galessin</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Stéphane Margot</name>
+    <role>Calogrenant</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jacques Chambon</name>
+    <role>Merlin</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Loïc Varraut</name>
+    <role>Venec</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Alain Chapuis</name>
+    <role>Le tavernier</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Audrey Fleurot</name>
+    <role>La Dame du Lac</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Serge Papagalli</name>
+    <role>Guethenoc</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <credits>Christophe Fort</credits>
+</tvshow>

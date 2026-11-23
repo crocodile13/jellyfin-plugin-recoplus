@@ -1,0 +1,113 @@
+<movie>
+  <title>Toy Story 4</title>
+  <originaltitle>Toy Story 4</originaltitle>
+  <year>2019</year>
+  <premiered>2019-06-19</premiered>
+  <rating>7.459</rating>
+  <criticrating>96</criticrating>
+  <mpaa>G</mpaa>
+  <genre>Family</genre>
+  <genre>Comedy</genre>
+  <genre>Animation</genre>
+  <genre>Adventure</genre>
+  <tag>friendship</tag>
+  <tag>cartoon</tag>
+  <tag>carnival</tag>
+  <tag>rescue mission</tag>
+  <tag>sequel</tag>
+  <tag>anti villain</tag>
+  <tag>buddy</tag>
+  <tag>doll</tag>
+  <tag>cowboy</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>toy comes to life</tag>
+  <tag>ventriloquist's dummy</tag>
+  <tag>dedication</tag>
+  <tag>antique shop</tag>
+  <tag>3d animation</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">301528</uniqueid>
+  <uniqueid type="imdb">tt1979376</uniqueid>
+  <set tmdbcolid="10194">
+    <name>10194</name>
+  </set>
+  <actor>
+    <name>Tom Hanks</name>
+    <role>Woody (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Allen</name>
+    <role>Buzz Lightyear (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Annie Potts</name>
+    <role>Bo Peep (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Tony Hale</name>
+    <role>Forky (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Keegan-Michael Key</name>
+    <role>Ducky (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Madeleine McGraw</name>
+    <role>Bonnie (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Christina Hendricks</name>
+    <role>Gabby Gabby (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Jordan Peele</name>
+    <role>Bunny (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Keanu Reeves</name>
+    <role>Duke Caboom (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Ally Maki</name>
+    <role>Giggle McDimples (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jay Hernandez</name>
+    <role>Bonnie’s Dad (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Lori Alan</name>
+    <role>Bonnie's Mom (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Joan Cusack</name>
+    <role>Jessie (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Bonnie Hunt</name>
+    <role>Dolly (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kristen Schaal</name>
+    <role>Trixie (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Josh Cooley</director>
+  <credits>Stephany Folsom</credits>
+  <credits>Andrew Stanton</credits>
+</movie>

@@ -1,0 +1,131 @@
+<movie>
+  <title>Zootopia</title>
+  <originaltitle>Zootopia</originaltitle>
+  <year>2016</year>
+  <premiered>2016-02-11</premiered>
+  <rating>7.765</rating>
+  <mpaa>PG</mpaa>
+  <genre>Animation</genre>
+  <genre>Adventure</genre>
+  <genre>Family</genre>
+  <genre>Comedy</genre>
+  <tag>sheep</tag>
+  <tag>allegory</tag>
+  <tag>lion</tag>
+  <tag>hippopotamus</tag>
+  <tag>cartoon</tag>
+  <tag>villain</tag>
+  <tag>bullying</tag>
+  <tag>polar bear</tag>
+  <tag>con artist</tag>
+  <tag>anthropomorphism</tag>
+  <tag>revenge</tag>
+  <tag>conspiracy</tag>
+  <tag>urban</tag>
+  <tag>female protagonist</tag>
+  <tag>animals</tag>
+  <tag>rookie cop</tag>
+  <tag>missing person</tag>
+  <tag>fable</tag>
+  <tag>racial prejudice</tag>
+  <tag>injustice</tag>
+  <tag>reconciliation</tag>
+  <tag>female villain</tag>
+  <tag>buddy cop</tag>
+  <tag>stereotype</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>cartoon rabbit</tag>
+  <tag>villain arrested</tag>
+  <tag>discrimination</tag>
+  <tag>cartoon bear</tag>
+  <tag>cartoon animal</tag>
+  <tag>3d animation</tag>
+  <tag>cartoon fox</tag>
+  <tag>cartoon elephant</tag>
+  <studio>Walt Disney Animation Studios</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">269149</uniqueid>
+  <uniqueid type="imdb">tt2948356</uniqueid>
+  <set tmdbcolid="1084247">
+    <name>1084247</name>
+  </set>
+  <actor>
+    <name>Ginnifer Goodwin</name>
+    <role>Judy Hopps (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jason Bateman</name>
+    <role>Nick Wilde (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Idris Elba</name>
+    <role>Chief Bogo (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Jenny Slate</name>
+    <role>Bellwether (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Nate Torrence</name>
+    <role>Clawhauser (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Bonnie Hunt</name>
+    <role>Bonnie Hopps (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Don Lake</name>
+    <role>Stu Hopps (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Tommy Chong</name>
+    <role>Yax (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>J.K. Simmons</name>
+    <role>Mayor Lionheart (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Octavia Spencer</name>
+    <role>Mrs. Otterton (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Tudyk</name>
+    <role>Duke Weaselton (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Shakira</name>
+    <role>Gazelle (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Raymond S. Persi</name>
+    <role>Flash (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Della Saba</name>
+    <role>Young Hopps (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Maurice LaMarche</name>
+    <role>Mr. Big (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Byron Howard</director>
+  <director>Rich Moore</director>
+  <credits>Jared Bush</credits>
+  <credits>Phil Johnston</credits>
+</movie>

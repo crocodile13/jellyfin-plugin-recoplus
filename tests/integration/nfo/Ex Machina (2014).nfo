@@ -1,0 +1,112 @@
+<movie>
+  <title>Ex Machina</title>
+  <originaltitle>Ex Machina</originaltitle>
+  <year>2015</year>
+  <premiered>2015-01-21</premiered>
+  <rating>7.569</rating>
+  <criticrating>92</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Science Fiction</genre>
+  <tag>android</tag>
+  <tag>dancing</tag>
+  <tag>friendship</tag>
+  <tag>man vs machine</tag>
+  <tag>distrust</tag>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>isolation</tag>
+  <tag>technology</tag>
+  <tag>manipulation</tag>
+  <tag>high technology</tag>
+  <tag>treason</tag>
+  <tag>deception</tag>
+  <tag>norway</tag>
+  <tag>laboratory</tag>
+  <tag>robot</tag>
+  <tag>power outage</tag>
+  <tag>surveillance</tag>
+  <tag>rich</tag>
+  <tag>surveillance camera</tag>
+  <tag>consciousness</tag>
+  <tag>employer employee relationship</tag>
+  <tag>isolated house</tag>
+  <tag>wealthy man</tag>
+  <tag>existentialism</tag>
+  <tag>lockdown</tag>
+  <tag>emotional intelligence</tag>
+  <tag>female cyborg</tag>
+  <tag>human android relationship</tag>
+  <tag>tech company</tag>
+  <tag>critical</tag>
+  <tag>intense</tag>
+  <studio>DNA Films</studio>
+  <studio>Film4 Productions</studio>
+  <studio>IAC Films</studio>
+  <studio>Scott Rudin Productions</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">264660</uniqueid>
+  <uniqueid type="imdb">tt0470752</uniqueid>
+  <actor>
+    <name>Domhnall Gleeson</name>
+    <role>Caleb</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Alicia Vikander</name>
+    <role>Ava</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Oscar Isaac</name>
+    <role>Nathan</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sonoya Mizuno</name>
+    <role>Kyoko</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Corey Johnson</name>
+    <role>Jay</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Claire Selby</name>
+    <role>Lily</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Symara A. Templeman</name>
+    <role>Jasmine</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Gana Bayarsaikhan</name>
+    <role>Jade</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Tiffany Pisani</name>
+    <role>Katya</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Elina Alminas</name>
+    <role>Amber</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Chelsea Li</name>
+    <role>Office Girl (uncredited)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Dan Pappaspanos</name>
+    <role>Office Worker (uncredited)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <director>Alex Garland</director>
+  <credits>Alex Garland</credits>
+</movie>

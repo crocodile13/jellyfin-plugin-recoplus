@@ -1,0 +1,119 @@
+<movie>
+  <title>The Godfather</title>
+  <originaltitle>The Godfather</originaltitle>
+  <year>1972</year>
+  <premiered>1972-03-14</premiered>
+  <rating>8.7</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Crime</genre>
+  <tag>based on novel or book</tag>
+  <tag>loss of loved one</tag>
+  <tag>love at first sight</tag>
+  <tag>italy</tag>
+  <tag>gangster</tag>
+  <tag>symbolism</tag>
+  <tag>patriarch</tag>
+  <tag>europe</tag>
+  <tag>organized crime</tag>
+  <tag>mafia</tag>
+  <tag>religion</tag>
+  <tag>revenge motive</tag>
+  <tag>crime family</tag>
+  <tag>sicilian mafia</tag>
+  <tag>religious hypocrisy</tag>
+  <tag>gun violence</tag>
+  <tag>rise to power</tag>
+  <tag>gang violence</tag>
+  <tag>1940s</tag>
+  <tag>1950s</tag>
+  <tag>mafia war</tag>
+  <studio>Paramount Pictures</studio>
+  <studio>Alfran Productions</studio>
+  <studio>Albert S. Ruddy Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">238</uniqueid>
+  <uniqueid type="imdb">tt0068646</uniqueid>
+  <set tmdbcolid="230">
+    <name>230</name>
+  </set>
+  <actor>
+    <name>Marlon Brando</name>
+    <role>Don Vito Corleone</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Al Pacino</name>
+    <role>Michael Corleone</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>James Caan</name>
+    <role>Sonny Corleone</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Duvall</name>
+    <role>Tom Hagen</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Richard S. Castellano</name>
+    <role>Clemenza</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Diane Keaton</name>
+    <role>Kay Adams</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Talia Shire</name>
+    <role>Connie Corleone Rizzi</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Gianni Russo</name>
+    <role>Carlo Rizzi</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sterling Hayden</name>
+    <role>Captain McCluskey</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>John Marley</name>
+    <role>Jack Woltz</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Conte</name>
+    <role>Barzini</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Al Lettieri</name>
+    <role>Sollozzo</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Abe Vigoda</name>
+    <role>Sal Tessio</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>John Cazale</name>
+    <role>Fredo Corleone</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rudy Bond</name>
+    <role>Cuneo</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Francis Ford Coppola</director>
+  <credits>Mario Puzo</credits>
+  <credits>Francis Ford Coppola</credits>
+  <credits>Mario Puzo</credits>
+</movie>

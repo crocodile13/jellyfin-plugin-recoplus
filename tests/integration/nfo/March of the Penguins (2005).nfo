@@ -1,0 +1,67 @@
+<movie>
+  <title>March of the Penguins</title>
+  <originaltitle>La Marche de l'empereur</originaltitle>
+  <year>2005</year>
+  <premiered>2005-01-26</premiered>
+  <rating>7.082</rating>
+  <criticrating>94</criticrating>
+  <mpaa>G</mpaa>
+  <genre>Documentary</genre>
+  <genre>Family</genre>
+  <tag>cold</tag>
+  <tag>parent child relationship</tag>
+  <tag>penguin</tag>
+  <tag>brood</tag>
+  <tag>autonomy</tag>
+  <tag>survival</tag>
+  <tag>wildlife</tag>
+  <tag>snow</tag>
+  <tag>antarctica</tag>
+  <tag>struggle for survival</tag>
+  <tag>animals</tag>
+  <tag>nature</tag>
+  <tag>nature documentary</tag>
+  <tag>wonder</tag>
+  <tag>anxious</tag>
+  <tag>animal behaviour</tag>
+  <tag>animal documentary</tag>
+  <tag>wildlife documentary</tag>
+  <tag>celebratory</tag>
+  <tag>hopeful</tag>
+  <tag>vibrant</tag>
+  <studio>National Geographic Films</studio>
+  <studio>Bonne Pioche</studio>
+  <studio>Wild Bunch</studio>
+  <studio>APC</studio>
+  <studio>French Polar Institute</studio>
+  <country>France</country>
+  <uniqueid type="tmdb" default="true">1667</uniqueid>
+  <uniqueid type="imdb">tt0428803</uniqueid>
+  <set tmdbcolid="513585">
+    <name>513585</name>
+  </set>
+  <actor>
+    <name>Charles Berling</name>
+    <role>Father Penguin (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Romane Bohringer</name>
+    <role>Mother Penguin (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jules Sitruk</name>
+    <role>Baby Penguin (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Morgan Freeman</name>
+    <role>Narrator</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <director>Luc Jacquet</director>
+  <credits>Jordan Roberts</credits>
+  <credits>Michel Fessler</credits>
+  <credits>Luc Jacquet</credits>
+</movie>

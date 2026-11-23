@@ -1,0 +1,105 @@
+<tvshow>
+  <title>Friends</title>
+  <originaltitle>Friends</originaltitle>
+  <year>1994</year>
+  <premiered>1994-09-22</premiered>
+  <rating>8.405</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Comedy</genre>
+  <tag>new york city</tag>
+  <tag>roommates</tag>
+  <tag>friendship</tag>
+  <tag>cafe</tag>
+  <tag>apartment building</tag>
+  <tag>group of friends</tag>
+  <tag>manhattan, new york city</tag>
+  <tag>sitcom</tag>
+  <tag>young adult</tag>
+  <tag>calm</tag>
+  <tag>searching for love</tag>
+  <tag>apartment</tag>
+  <tag>casual</tag>
+  <tag>best friends</tag>
+  <tag>joyful</tag>
+  <tag>sarcastic</tag>
+  <studio>NBC</studio>
+  <studio>Warner Bros. Television</studio>
+  <studio>Bright/Kauffman/Crane Productions</studio>
+  <uniqueid type="tmdb" default="true">1668</uniqueid>
+  <uniqueid type="imdb">tt0108778</uniqueid>
+  <actor>
+    <name>Jennifer Aniston</name>
+    <role>Rachel Green</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Courteney Cox</name>
+    <role>Monica Geller</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Kudrow</name>
+    <role>Phoebe Buffay</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Matt LeBlanc</name>
+    <role>Joey Tribbiani</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Matthew Perry</name>
+    <role>Chandler Bing</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>David Schwimmer</name>
+    <role>Ross Geller</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Thornhill</name>
+    <role>Kristen</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Steve Zahn</name>
+    <role>Duncan</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Michael McKean</name>
+    <role>Mr. Rastatter</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Jana Marie Hupp</name>
+    <role>Mindy</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Carlo Imperato</name>
+    <role>Roy</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Brittney Powell</name>
+    <role>Jade</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Lea Thompson</name>
+    <role>Caroline Duffy (uncredited)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Isabella Rossellini</name>
+    <role>Isabella Rossellini</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Alec Baldwin</name>
+    <role>Parker</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

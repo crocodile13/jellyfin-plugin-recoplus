@@ -1,0 +1,116 @@
+<movie>
+  <title>Howl's Moving Castle</title>
+  <originaltitle>ハウルの動く城</originaltitle>
+  <year>2004</year>
+  <premiered>2004-09-09</premiered>
+  <rating>8.391</rating>
+  <mpaa>PG</mpaa>
+  <genre>Fantasy</genre>
+  <genre>Animation</genre>
+  <genre>Adventure</genre>
+  <tag>witch</tag>
+  <tag>flying</tag>
+  <tag>rain</tag>
+  <tag>castle</tag>
+  <tag>scarecrow</tag>
+  <tag>body exchange</tag>
+  <tag>hatter</tag>
+  <tag>bakery</tag>
+  <tag>curse</tag>
+  <tag>steampunk</tag>
+  <tag>demon</tag>
+  <tag>anime</tag>
+  <tag>philosophical</tag>
+  <tag>based on young adult novel</tag>
+  <tag>fantasy</tag>
+  <tag>magical</tag>
+  <tag>adventure</tag>
+  <studio>Studio Ghibli</studio>
+  <studio>Tokuma Shoten</studio>
+  <studio>Nippon Television Network Corporation</studio>
+  <studio>dentsu</studio>
+  <studio>Walt Disney Japan</studio>
+  <studio>d-rights</studio>
+  <studio>TOHO</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">4935</uniqueid>
+  <uniqueid type="imdb">tt0347149</uniqueid>
+  <actor>
+    <name>Chieko Baisho</name>
+    <role>Sophie (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Takuya Kimura</name>
+    <role>Howl (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Akihiro Miwa</name>
+    <role>Witch of the Waste (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Tatsuya Gashuin</name>
+    <role>Calcifer (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ryunosuke Kamiki</name>
+    <role>Markl (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Mitsunori Isaki</name>
+    <role>Kosho (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Yo Oizumi</name>
+    <role>Prince Justin / Turnip Head (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Akio Otsuka</name>
+    <role>King of Ingary (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Daijirou Harada</name>
+    <role>Heen (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Haruko Katou</name>
+    <role>Madame Suliman (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Makoto Yasumura</name>
+    <role>(voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Manabu Muraji</name>
+    <role>(voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Keiko Tsukamoto</name>
+    <role>(voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tsuzuki Kayako</name>
+    <role>(voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Seiji Sasaki</name>
+    <role>(voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Diana Wynne Jones</credits>
+  <credits>Hayao Miyazaki</credits>
+</movie>

@@ -1,0 +1,113 @@
+<movie>
+  <title>Castle in the Sky</title>
+  <originaltitle>天空の城ラピュタ</originaltitle>
+  <year>1986</year>
+  <premiered>1986-08-02</premiered>
+  <rating>7.972</rating>
+  <criticrating>97</criticrating>
+  <mpaa>PG</mpaa>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <genre>Animation</genre>
+  <genre>Action</genre>
+  <genre>Family</genre>
+  <tag>army</tag>
+  <tag>flying</tag>
+  <tag>magic</tag>
+  <tag>mine</tag>
+  <tag>castle</tag>
+  <tag>lost civilisation</tag>
+  <tag>pirate</tag>
+  <tag>orphan</tag>
+  <tag>government agent</tag>
+  <tag>floating</tag>
+  <tag>pendant</tag>
+  <tag>blue sky</tag>
+  <tag>air pirate</tag>
+  <tag>crystal</tag>
+  <tag>anime</tag>
+  <tag>incredulous</tag>
+  <tag>adventure</tag>
+  <studio>Studio Ghibli</studio>
+  <studio>Tokuma Shoten</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">10515</uniqueid>
+  <uniqueid type="imdb">tt0092067</uniqueid>
+  <actor>
+    <name>Keiko Yokozawa</name>
+    <role>Sheeta (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Mayumi Tanaka</name>
+    <role>Pazu (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Minori Terada</name>
+    <role>Muska (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Kotoe Hatsui</name>
+    <role>Dola (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Fujio Tokita</name>
+    <role>Uncle Pomme (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ichiro Nagai</name>
+    <role>Shogun Mouro (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Hiroshi Ito</name>
+    <role>Oyakata (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Machiko Washio</name>
+    <role>Okami (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Takuzō Kamiyama</name>
+    <role>Charles / Shalulu (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Yoshito Yasuhara</name>
+    <role>Louis (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Sukekiyo Kameyama</name>
+    <role>Henri (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Eken Mine</name>
+    <role>Underling (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>TARAKO</name>
+    <role>Madge (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Masashi Sugawara</name>
+    <role>Underling (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Reiko Suzuki</name>
+    <role>Sheeta's Grandmother (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Hayao Miyazaki</director>
+  <credits>Hayao Miyazaki</credits>
+</movie>

@@ -1,0 +1,120 @@
+<movie>
+  <title>Mad Max: Fury Road</title>
+  <originaltitle>Mad Max: Fury Road</originaltitle>
+  <year>2015</year>
+  <premiered>2015-05-13</premiered>
+  <rating>7.642</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Science Fiction</genre>
+  <tag>rescue</tag>
+  <tag>australia</tag>
+  <tag>dystopia</tag>
+  <tag>sandstorm</tag>
+  <tag>post-apocalyptic future</tag>
+  <tag>sequel</tag>
+  <tag>survival</tag>
+  <tag>on the run</tag>
+  <tag>peak oil</tag>
+  <tag>dark future</tag>
+  <tag>intense</tag>
+  <tag>desert wasteland</tag>
+  <tag>convoy attack</tag>
+  <tag>high-speed chase</tag>
+  <tag>freedom quest</tag>
+  <tag>road warfare</tag>
+  <tag>modified vehicles</tag>
+  <tag>war boys</tag>
+  <tag>tyrannical ruler</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Village Roadshow Pictures</studio>
+  <studio>Kennedy Miller Mitchell</studio>
+  <studio>RatPac-Dune Entertainment</studio>
+  <country>Australia</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">76341</uniqueid>
+  <uniqueid type="imdb">tt1392190</uniqueid>
+  <set tmdbcolid="8945">
+    <name>8945</name>
+  </set>
+  <actor>
+    <name>Tom Hardy</name>
+    <role>Max Rockatansky</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Charlize Theron</name>
+    <role>Imperator Furiosa</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Nicholas Hoult</name>
+    <role>Nux</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Hugh Keays-Byrne</name>
+    <role>Immortan Joe</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Helman</name>
+    <role>Slit</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Nathan Jones</name>
+    <role>Rictus Erectus</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Zoë Kravitz</name>
+    <role>Toast the Knowing</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rosie Huntington-Whiteley</name>
+    <role>The Splendid Angharad</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Riley Keough</name>
+    <role>Capable</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Abbey Lee</name>
+    <role>The Dag</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Courtney Eaton</name>
+    <role>Cheedo the Fragile</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>John Howard</name>
+    <role>The People Eater</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Carter</name>
+    <role>The Bullet Farmer</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Iota</name>
+    <role>The Doof Warrior</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Angus Sampson</name>
+    <role>The Organic Mechanic</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>George Miller</director>
+  <credits>Nico Lathouris</credits>
+  <credits>George Miller</credits>
+  <credits>Brendan McCarthy</credits>
+</movie>

@@ -1,0 +1,118 @@
+<movie>
+  <title>The Matrix</title>
+  <originaltitle>The Matrix</originaltitle>
+  <year>1999</year>
+  <premiered>1999-03-31</premiered>
+  <rating>8.264</rating>
+  <mpaa>R</mpaa>
+  <genre>Action</genre>
+  <genre>Science Fiction</genre>
+  <tag>man vs machine</tag>
+  <tag>martial arts</tag>
+  <tag>fortune teller</tag>
+  <tag>artificial intelligence (a.i.)</tag>
+  <tag>saving the world</tag>
+  <tag>prophecy</tag>
+  <tag>philosophy</tag>
+  <tag>dystopia</tag>
+  <tag>allegory</tag>
+  <tag>insurgence</tag>
+  <tag>chosen one</tag>
+  <tag>simulated reality</tag>
+  <tag>cyberpunk</tag>
+  <tag>christ allegory</tag>
+  <tag>messiah</tag>
+  <tag>gnosticism</tag>
+  <tag>christ figure</tag>
+  <tag>christian allegory</tag>
+  <tag>bold</tag>
+  <studio>Village Roadshow Pictures</studio>
+  <studio>Groucho II Film Partnership</studio>
+  <studio>Silver Pictures</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">603</uniqueid>
+  <uniqueid type="imdb">tt0133093</uniqueid>
+  <set tmdbcolid="2344">
+    <name>2344</name>
+  </set>
+  <actor>
+    <name>Keanu Reeves</name>
+    <role>Neo</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Laurence Fishburne</name>
+    <role>Morpheus</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Carrie-Anne Moss</name>
+    <role>Trinity</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Hugo Weaving</name>
+    <role>Agent Smith</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Gloria Foster</name>
+    <role>Oracle</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Pantoliano</name>
+    <role>Cypher</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Marcus Chong</name>
+    <role>Tank</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Julian Arahanga</name>
+    <role>Apoc</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Doran</name>
+    <role>Mouse</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Belinda McClory</name>
+    <role>Switch</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Ray Parker</name>
+    <role>Dozer</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Goddard</name>
+    <role>Agent Brown</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Taylor</name>
+    <role>Agent Jones</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>David Aston</name>
+    <role>Rhineheart</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Marc Aden Gray</name>
+    <role>Choi</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Lana Wachowski</director>
+  <director>Lilly Wachowski</director>
+  <credits>Lana Wachowski</credits>
+  <credits>Lilly Wachowski</credits>
+</movie>

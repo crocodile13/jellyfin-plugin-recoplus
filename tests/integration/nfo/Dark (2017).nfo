@@ -1,0 +1,115 @@
+<tvshow>
+  <title>Dark</title>
+  <originaltitle>Dark</originaltitle>
+  <year>2017</year>
+  <premiered>2017-12-01</premiered>
+  <rating>8.428</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Crime</genre>
+  <genre>Drama</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <genre>Mystery</genre>
+  <tag>hotel</tag>
+  <tag>detective</tag>
+  <tag>small town</tag>
+  <tag>cave</tag>
+  <tag>nuclear power plant</tag>
+  <tag>time travel</tag>
+  <tag>investigation</tag>
+  <tag>time machine</tag>
+  <tag>cop</tag>
+  <tag>woods</tag>
+  <tag>surrealism</tag>
+  <tag>priest</tag>
+  <tag>time loop</tag>
+  <tag>disappearance</tag>
+  <tag>incest</tag>
+  <tag>missing child</tag>
+  <tag>alternate timeline</tag>
+  <tag>watchmaker</tag>
+  <tag>mysterious past</tag>
+  <tag>family crisis</tag>
+  <tag>science fiction</tag>
+  <tag>suspense</tag>
+  <tag>thriller</tag>
+  <tag>dignified</tag>
+  <studio>Netflix</studio>
+  <studio>Wiedemann &amp; Berg Television</studio>
+  <uniqueid type="tmdb" default="true">70523</uniqueid>
+  <uniqueid type="imdb">tt5753856</uniqueid>
+  <actor>
+    <name>Louis Hofmann</name>
+    <role>Jonas Kahnwald</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Lisa Vicari</name>
+    <role>Martha Nielsen</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Andreas Pietschmann</name>
+    <role>The Stranger</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Daan Lennard Liebrenz</name>
+    <role>Mikkel Nielsen</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Dietrich Hollinderbäumer</name>
+    <role>Adam</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Maja Schöne</name>
+    <role>Hannah Kahnwald</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Stephan Kampwirth</name>
+    <role>Peter Doppler</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Waschke</name>
+    <role>Noah</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Lux</name>
+    <role>Bartosz Tiedemann</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Oliver Masucci</name>
+    <role>Ulrich Nielsen</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Jördis Triebel</name>
+    <role>Katharina Nielsen</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Karoline Eichhorn</name>
+    <role>Charlotte Doppler</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Angela Winkler</name>
+    <role>Ines Kahnwald</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jennipher Antoni</name>
+    <role>Ulla Obendorf</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Radom</name>
+    <role>Erik Obendorf</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

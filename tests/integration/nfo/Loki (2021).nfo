@@ -1,0 +1,106 @@
+<tvshow>
+  <title>Loki</title>
+  <originaltitle>Loki</originaltitle>
+  <year>2021</year>
+  <premiered>2021-06-09</premiered>
+  <rating>8.182</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Drama</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>anti hero</tag>
+  <tag>secret organization</tag>
+  <tag>time</tag>
+  <tag>time travel</tag>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>spin off</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>alternate timeline</tag>
+  <tag>woman director</tag>
+  <tag>multiverse</tag>
+  <studio>Disney+</studio>
+  <studio>Marvel Studios</studio>
+  <studio>Kevin Feige Productions</studio>
+  <uniqueid type="tmdb" default="true">84958</uniqueid>
+  <uniqueid type="imdb">tt9140554</uniqueid>
+  <actor>
+    <name>Tom Hiddleston</name>
+    <role>Loki</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Sophia Di Martino</name>
+    <role>The Variant</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Gugu Mbatha-Raw</name>
+    <role>Judge Renslayer</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Wunmi Mosaku</name>
+    <role>Hunter B-15</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Tara Strong</name>
+    <role>Miss Minutes (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ke Huy Quan</name>
+    <role>OB</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Owen Wilson</name>
+    <role>Mobius</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Eugene Cordero</name>
+    <role>Casey</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Eugene Cordero</name>
+    <role>Hunter K-5E</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Derek Russo</name>
+    <role>Hunter U-92</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Erika Coleman</name>
+    <role>Flight Attendant</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Munkhshur Bolbaatar</name>
+    <role>Gobi Villager</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Fadem</name>
+    <role>Martin</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Raphael Luce</name>
+    <role>French Boy</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Eric Jepson</name>
+    <role>Minuteman #4</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Hannah Aslesen</name>
+    <role>Minuteman #5</role>
+    <sortorder>15</sortorder>
+  </actor>
+</tvshow>

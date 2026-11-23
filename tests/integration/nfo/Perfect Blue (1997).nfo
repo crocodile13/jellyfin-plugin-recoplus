@@ -1,0 +1,124 @@
+<movie>
+  <title>Perfect Blue</title>
+  <originaltitle>PERFECT BLUE</originaltitle>
+  <year>1998</year>
+  <premiered>1998-02-28</premiered>
+  <rating>8.293</rating>
+  <mpaa>R</mpaa>
+  <genre>Animation</genre>
+  <genre>Thriller</genre>
+  <tag>career</tag>
+  <tag>rape</tag>
+  <tag>based on novel or book</tag>
+  <tag>paranoia</tag>
+  <tag>stalker</tag>
+  <tag>celebrity</tag>
+  <tag>singer</tag>
+  <tag>stalking</tag>
+  <tag>fame</tag>
+  <tag>female protagonist</tag>
+  <tag>psychological thriller</tag>
+  <tag>mental illness</tag>
+  <tag>madness</tag>
+  <tag>split personality</tag>
+  <tag>adult animation</tag>
+  <tag>literary adaptation</tag>
+  <tag>disturbed</tag>
+  <tag>paranoid</tag>
+  <tag>j-pop</tag>
+  <tag>celebrity worship</tag>
+  <tag>anime</tag>
+  <tag>aspiring actress</tag>
+  <tag>idolatry</tag>
+  <tag>suspense</tag>
+  <tag>psychological horror</tag>
+  <tag>avant garde</tag>
+  <tag>psychological drama</tag>
+  <studio>Madhouse</studio>
+  <studio>Rex Entertainment</studio>
+  <studio>Kotobuki Seihan Printing</studio>
+  <studio>Asahi Broadcasting Corporation</studio>
+  <studio>Fangs</studio>
+  <studio>ONIRO</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">10494</uniqueid>
+  <uniqueid type="imdb">tt0156887</uniqueid>
+  <actor>
+    <name>Junko Iwao</name>
+    <role>Mima Kirigoe (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Rica Matsumoto</name>
+    <role>Rumi (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Shinpachi Tsuji</name>
+    <role>Tadokoro (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Masaaki Okura</name>
+    <role>Uchida (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Yosuke Akimoto</name>
+    <role>Tejima (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Yoku Shioya</name>
+    <role>Shibuya (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Hideyuki Hori</name>
+    <role>Sakuragi (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Emi Shinohara</name>
+    <role>Eri Ochiai (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Masashi Ebara</name>
+    <role>Murano (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kiyoyuki Yanada</name>
+    <role>Kantoku (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Toru Furusawa</name>
+    <role>Yada (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Shiho Niiyama</name>
+    <role>Rei (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Emiko Furukawa</name>
+    <role>Yukiko (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Teiya Ichiryusai</name>
+    <role>Mima's Mother (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Shin-ichiro Miki</name>
+    <role>Taku (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Satoshi Kon</director>
+  <credits>Sadayuki Murai</credits>
+  <credits>Yoshikazu Takeuchi</credits>
+</movie>

@@ -1,0 +1,115 @@
+<movie>
+  <title>Love Actually</title>
+  <originaltitle>Love Actually</originaltitle>
+  <year>2003</year>
+  <premiered>2003-09-07</premiered>
+  <rating>7.098</rating>
+  <criticrating>65</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Comedy</genre>
+  <genre>Romance</genre>
+  <genre>Drama</genre>
+  <tag>london, england</tag>
+  <tag>usa president</tag>
+  <tag>rock star</tag>
+  <tag>school performance</tag>
+  <tag>love at first sight</tag>
+  <tag>holiday</tag>
+  <tag>war on terror</tag>
+  <tag>marseille, france</tag>
+  <tag>office</tag>
+  <tag>christmas party</tag>
+  <tag>language barrier</tag>
+  <tag>prime minister</tag>
+  <tag>press conference</tag>
+  <tag>bars and restaurants</tag>
+  <tag>valentine's day</tag>
+  <tag>heathrow airport</tag>
+  <tag>multiple storylines</tag>
+  <tag>christmas</tag>
+  <tag>lighthearted</tag>
+  <studio>Working Title</studio>
+  <studio>DNA Films</studio>
+  <studio>StudioCanal</studio>
+  <country>France</country>
+  <country>United Kingdom</country>
+  <uniqueid type="tmdb" default="true">508</uniqueid>
+  <uniqueid type="imdb">tt0314331</uniqueid>
+  <actor>
+    <name>Hugh Grant</name>
+    <role>The Prime Minister</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Alan Rickman</name>
+    <role>Harry</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Emma Thompson</name>
+    <role>Karen</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Liam Neeson</name>
+    <role>Daniel</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Martine McCutcheon</name>
+    <role>Natalie</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Colin Firth</name>
+    <role>Jamie Bennett</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Bill Nighy</name>
+    <role>Billy Mack</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Laura Linney</name>
+    <role>Sarah</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Lúcia Moniz</name>
+    <role>Aurelia</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Andrew Lincoln</name>
+    <role>Mark</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Keira Knightley</name>
+    <role>Juliet</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Chiwetel Ejiofor</name>
+    <role>Peter</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Gregor Fisher</name>
+    <role>Joe</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Martin Freeman</name>
+    <role>John</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Joanna Page</name>
+    <role>Just Judy</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Richard Curtis</director>
+  <credits>Richard Curtis</credits>
+</movie>

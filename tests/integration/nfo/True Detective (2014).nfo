@@ -1,0 +1,111 @@
+<tvshow>
+  <title>True Detective</title>
+  <originaltitle>True Detective</originaltitle>
+  <year>2014</year>
+  <premiered>2014-01-12</premiered>
+  <rating>8.295</rating>
+  <mpaa>TV-MA</mpaa>
+  <genre>Drama</genre>
+  <genre>Mystery</genre>
+  <tag>philosophy</tag>
+  <tag>detective</tag>
+  <tag>investigation</tag>
+  <tag>anthology</tag>
+  <tag>murder</tag>
+  <tag>serial killer</tag>
+  <tag>police corruption</tag>
+  <tag>police detective</tag>
+  <tag>nonlinear timeline</tag>
+  <tag>police investigation</tag>
+  <tag>murder investigation</tag>
+  <tag>murder mystery</tag>
+  <tag>neo-noir</tag>
+  <tag>grim</tag>
+  <tag>philosophical</tag>
+  <tag>introspective</tag>
+  <tag>depressing</tag>
+  <studio>HBO</studio>
+  <studio>Passenger</studio>
+  <studio>Anonymous Content</studio>
+  <studio>Lee Caplin / Picture Entertainment</studio>
+  <studio>Neon Black</studio>
+  <studio>Parliament of Owls</studio>
+  <studio>Peligrosa</studio>
+  <uniqueid type="tmdb" default="true">46648</uniqueid>
+  <uniqueid type="imdb">tt2356777</uniqueid>
+  <actor>
+    <name>Matthew McConaughey</name>
+    <role>Rust Cohle</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jodie Foster</name>
+    <role>Liz Danvers</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Kali Reis</name>
+    <role>Evangeline Navarro</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Fiona Shaw</name>
+    <role>Rose Aguineau</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Colin Farrell</name>
+    <role>Ray Velcoro</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Finn Bennett</name>
+    <role>Peter Prior</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Isabella Star LaBlanc</name>
+    <role>Leah Danvers</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Mahershala Ali</name>
+    <role>Wayne Hays</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>John Hawkes</name>
+    <role>Hank Prior</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Woody Harrelson</name>
+    <role>Martin Hart</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Vince Vaughn</name>
+    <role>Frank Semyon</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Dorff</name>
+    <role>Roland West</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Michelle Monaghan</name>
+    <role>Maggie Hart</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel McAdams</name>
+    <role>Antigone 'Ani' Bezzerides</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Carmen Ejogo</name>
+    <role>Amelia Reardon</role>
+    <sortorder>14</sortorder>
+  </actor>
+</tvshow>

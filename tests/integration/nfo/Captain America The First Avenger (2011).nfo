@@ -1,0 +1,114 @@
+<movie>
+  <title>Captain America: The First Avenger</title>
+  <originaltitle>Captain America: The First Avenger</originaltitle>
+  <year>2011</year>
+  <premiered>2011-07-22</premiered>
+  <rating>7.012</rating>
+  <criticrating>80</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Adventure</genre>
+  <genre>Science Fiction</genre>
+  <tag>new york city</tag>
+  <tag>nazi</tag>
+  <tag>superhero</tag>
+  <tag>heroism</tag>
+  <tag>based on comic</tag>
+  <tag>super soldier</tag>
+  <tag>brooklyn, new york city</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>origin story</tag>
+  <tag>soldiers</tag>
+  <tag>war</tag>
+  <tag>admiring</tag>
+  <tag>celebratory</tag>
+  <tag>earnest</tag>
+  <tag>aspirational</tag>
+  <studio>Marvel Studios</studio>
+  <studio>Marvel Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">1771</uniqueid>
+  <uniqueid type="imdb">tt0458339</uniqueid>
+  <set tmdbcolid="131295">
+    <name>131295</name>
+  </set>
+  <actor>
+    <name>Chris Evans</name>
+    <role>Captain America / Steve Rogers</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Hayley Atwell</name>
+    <role>Peggy Carter</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Sebastian Stan</name>
+    <role>James Buchanan 'Bucky' Barnes</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Tommy Lee Jones</name>
+    <role>Colonel Chester Phillips</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Hugo Weaving</name>
+    <role>Johann Schmidt / Red Skull</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Dominic Cooper</name>
+    <role>Howard Stark</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Richard Armitage</name>
+    <role>Heinz Kruger</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Stanley Tucci</name>
+    <role>Dr. Abraham Erskine</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel L. Jackson</name>
+    <role>Nick Fury</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Toby Jones</name>
+    <role>Dr. Arnim Zola</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Neal McDonough</name>
+    <role>Timothy 'Dum Dum' Dugan</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Derek Luke</name>
+    <role>Gabe Jones</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kenneth Choi</name>
+    <role>Jim Morita</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>JJ Feild</name>
+    <role>James Montgomery Falsworth</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Bruno Ricci</name>
+    <role>Jacques Dernier</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Joe Johnston</director>
+  <credits>Christopher Markus</credits>
+  <credits>Stephen McFeely</credits>
+</movie>

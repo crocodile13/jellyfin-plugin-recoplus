@@ -1,0 +1,125 @@
+<movie>
+  <title>Sinister</title>
+  <originaltitle>Sinister</originaltitle>
+  <year>2012</year>
+  <premiered>2012-10-04</premiered>
+  <rating>6.873</rating>
+  <mpaa>R</mpaa>
+  <genre>Horror</genre>
+  <genre>Thriller</genre>
+  <genre>Mystery</genre>
+  <tag>drowning</tag>
+  <tag>pennsylvania, usa</tag>
+  <tag>writing</tag>
+  <tag>child murder</tag>
+  <tag>snuff</tag>
+  <tag>tape</tag>
+  <tag>home movie footage</tag>
+  <tag>murder</tag>
+  <tag>massacre</tag>
+  <tag>power outage</tag>
+  <tag>held captive</tag>
+  <tag>hanging</tag>
+  <tag>death</tag>
+  <tag>car fire</tag>
+  <tag>novelist</tag>
+  <tag>attic</tag>
+  <tag>occult</tag>
+  <tag>super 8mm footage</tag>
+  <tag>found footage</tag>
+  <tag>moving in</tag>
+  <tag>book writing</tag>
+  <tag>supernatural horror</tag>
+  <tag>sinister</tag>
+  <tag>ominous</tag>
+  <studio>Automatik Entertainment</studio>
+  <studio>Blumhouse Productions</studio>
+  <studio>Alliance Films</studio>
+  <studio>IM Global</studio>
+  <studio>Summit Entertainment</studio>
+  <country>Canada</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">82507</uniqueid>
+  <uniqueid type="imdb">tt1922777</uniqueid>
+  <set tmdbcolid="357173">
+    <name>357173</name>
+  </set>
+  <actor>
+    <name>Ethan Hawke</name>
+    <role>Ellison Oswalt</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Juliet Rylance</name>
+    <role>Tracy Oswalt</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Vincent D'Onofrio</name>
+    <role>Professor Jonas</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>James Ransone</name>
+    <role>Deputy</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Fred Thompson</name>
+    <role>Sheriff</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Clare Foley</name>
+    <role>Ashley Oswalt</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Hall D'Addario</name>
+    <role>Trevor Oswalt</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Victoria Leigh</name>
+    <role>Stephanie Stevenson</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Blake Mizrahi</name>
+    <role>Christopher Miller</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Cameron Ocasio</name>
+    <role>BBQ Son / Killer</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Danielle Kotch</name>
+    <role>Lawn Girl</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ethan Haberfield</name>
+    <role>Pool Party Boy</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Nicholas King</name>
+    <role>Bughuul / Mr. Boogie</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tavis Smiley</name>
+    <role>Anchor</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel Konstantin</name>
+    <role>Mrs. Stevenson (uncredited)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Scott Derrickson</director>
+  <credits>C. Robert Cargill</credits>
+  <credits>Scott Derrickson</credits>
+</movie>

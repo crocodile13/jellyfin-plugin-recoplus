@@ -1,0 +1,119 @@
+<movie>
+  <title>Weathering with You</title>
+  <originaltitle>天気の子</originaltitle>
+  <year>2019</year>
+  <premiered>2019-07-19</premiered>
+  <rating>7.968</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Animation</genre>
+  <genre>Drama</genre>
+  <genre>Fantasy</genre>
+  <genre>Romance</genre>
+  <tag>japan</tag>
+  <tag>magic</tag>
+  <tag>climate change</tag>
+  <tag>rain</tag>
+  <tag>surrealism</tag>
+  <tag>weather</tag>
+  <tag>weather manipulation</tag>
+  <tag>romance</tag>
+  <tag>slice of life</tag>
+  <tag>tokyo, japan</tag>
+  <tag>orphan</tag>
+  <tag>summer</tag>
+  <tag>shrine</tag>
+  <tag>flood</tag>
+  <tag>japanese mythology</tag>
+  <tag>anime</tag>
+  <tag>time skip</tag>
+  <tag>supernatural power</tag>
+  <tag>urban fantasy</tag>
+  <tag>comforting</tag>
+  <studio>CoMix Wave Films</studio>
+  <studio>Story</studio>
+  <studio>TOHO</studio>
+  <studio>KADOKAWA</studio>
+  <studio>jeki</studio>
+  <studio>Lawson Entertainment</studio>
+  <studio>"Weathering With You" Film Partners</studio>
+  <country>Japan</country>
+  <uniqueid type="tmdb" default="true">568160</uniqueid>
+  <uniqueid type="imdb">tt9426210</uniqueid>
+  <actor>
+    <name>Kotaro Daigo</name>
+    <role>Hodaka Morishima (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Nana Mori</name>
+    <role>Hina Amano (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Tsubasa Honda</name>
+    <role>Natsumi Suga (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sakura Kiryu</name>
+    <role>Nagisa Amano (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sei Hiraizumi</name>
+    <role>Yasui (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Chieko Baisho</name>
+    <role>Fumi Tachibana (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Shun Oguri</name>
+    <role>Keisuke Suga (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Yuki Kaji</name>
+    <role>Takai (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sumi Shimamoto</name>
+    <role>Mamiya (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Moe Katsuki</name>
+    <role>Moka Suga (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ryohei Kimura</name>
+    <role>Kimura (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kana Hanazawa</name>
+    <role>Kana (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Ayane Sakura</name>
+    <role>Ayane (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Kana Ichinose</name>
+    <role>Sasaki (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Masako Nozawa</name>
+    <role>Fortuneteller (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Makoto Shinkai</director>
+  <credits>Makoto Shinkai</credits>
+</movie>

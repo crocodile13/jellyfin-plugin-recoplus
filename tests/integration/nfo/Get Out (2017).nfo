@@ -1,0 +1,113 @@
+<movie>
+  <title>Get Out</title>
+  <originaltitle>Get Out</originaltitle>
+  <year>2017</year>
+  <premiered>2017-02-24</premiered>
+  <rating>7.624</rating>
+  <criticrating>98</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Mystery</genre>
+  <genre>Thriller</genre>
+  <genre>Horror</genre>
+  <tag>kidnapping</tag>
+  <tag>externally controlled action</tag>
+  <tag>manipulation</tag>
+  <tag>dark comedy</tag>
+  <tag>hypnosis</tag>
+  <tag>parents-in-law</tag>
+  <tag>satire</tag>
+  <tag>racist</tag>
+  <tag>revenge</tag>
+  <tag>interracial relationship</tag>
+  <tag>disappearance</tag>
+  <tag>racism</tag>
+  <tag>psychological thriller</tag>
+  <tag>neurosurgeon</tag>
+  <tag>missing person</tag>
+  <tag>stereotype</tag>
+  <tag>brain surgery</tag>
+  <tag>race-conscious</tag>
+  <studio>Monkeypaw Productions</studio>
+  <studio>Blumhouse Productions</studio>
+  <studio>QC Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">419430</uniqueid>
+  <uniqueid type="imdb">tt5052448</uniqueid>
+  <actor>
+    <name>Daniel Kaluuya</name>
+    <role>Chris Washington</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Allison Williams</name>
+    <role>Rose Armitage</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Catherine Keener</name>
+    <role>Missy Armitage</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Bradley Whitford</name>
+    <role>Dean Armitage</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Caleb Landry Jones</name>
+    <role>Jeremy Armitage</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Marcus Henderson</name>
+    <role>Walter</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Betty Gabriel</name>
+    <role>Georgina</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>LaKeith Stanfield</name>
+    <role>Andre Logan King</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Root</name>
+    <role>Jim Hudson</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Lil Rel Howery</name>
+    <role>Rod Williams</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ashley LeConte Campbell</name>
+    <role>Lisa Deets</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>John Wilmot</name>
+    <role>Gordon Greene</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Caren L. Larkey</name>
+    <role>Emily Greene</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Julie Ann Doan</name>
+    <role>April Dray</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rutherford Cravens</name>
+    <role>Parker Dray</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jordan Peele</director>
+  <credits>Jordan Peele</credits>
+</movie>

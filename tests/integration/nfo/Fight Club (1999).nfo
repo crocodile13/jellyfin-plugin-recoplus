@@ -1,0 +1,111 @@
+<movie>
+  <title>Fight Club</title>
+  <originaltitle>Fight Club</originaltitle>
+  <year>1999</year>
+  <premiered>1999-10-15</premiered>
+  <rating>8.437</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Thriller</genre>
+  <tag>dual identity</tag>
+  <tag>rage and hate</tag>
+  <tag>based on novel or book</tag>
+  <tag>nihilism</tag>
+  <tag>fight</tag>
+  <tag>support group</tag>
+  <tag>dystopia</tag>
+  <tag>insomnia</tag>
+  <tag>alter ego</tag>
+  <tag>breaking the fourth wall</tag>
+  <tag>split personality</tag>
+  <tag>quitting a job</tag>
+  <tag>dissociative identity disorder</tag>
+  <tag>self destructiveness</tag>
+  <studio>Fox 2000 Pictures</studio>
+  <studio>Regency Enterprises</studio>
+  <studio>Linson Entertainment</studio>
+  <studio>20th Century Fox</studio>
+  <studio>Taurus Film</studio>
+  <country>Germany</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">550</uniqueid>
+  <uniqueid type="imdb">tt0137523</uniqueid>
+  <actor>
+    <name>Edward Norton</name>
+    <role>Narrator</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Brad Pitt</name>
+    <role>Tyler Durden</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Helena Bonham Carter</name>
+    <role>Marla Singer</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Meat Loaf</name>
+    <role>Robert Paulson</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Jared Leto</name>
+    <role>Angel Face</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Zach Grenier</name>
+    <role>Richard Chesler (Regional Manager)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Holt McCallany</name>
+    <role>The Mechanic</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Eion Bailey</name>
+    <role>Ricky</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Richmond Arquette</name>
+    <role>Intern at Hospital</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>David Andrews</name>
+    <role>Thomas at Remaining Men Together</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>George Maguire</name>
+    <role>Group Leader at Remaining Men Together</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Eugenie Bondurant</name>
+    <role>Weeping Woman - Onward and Upward</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Christina Cabot</name>
+    <role>Group Leader - Partners in Positivity</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Sydney 'Big Dawg' Colston</name>
+    <role>Speaker - Free and Clear</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Rachel Singer</name>
+    <role>Chloe</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>David Fincher</director>
+  <credits>Chuck Palahniuk</credits>
+  <credits>Jim Uhls</credits>
+</movie>

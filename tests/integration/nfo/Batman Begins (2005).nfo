@@ -1,0 +1,119 @@
+<movie>
+  <title>Batman Begins</title>
+  <originaltitle>Batman Begins</originaltitle>
+  <year>2005</year>
+  <premiered>2005-06-10</premiered>
+  <rating>7.733</rating>
+  <criticrating>85</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Drama</genre>
+  <genre>Crime</genre>
+  <genre>Action</genre>
+  <tag>martial arts</tag>
+  <tag>undercover</tag>
+  <tag>loss of loved one</tag>
+  <tag>secret identity</tag>
+  <tag>crime fighter</tag>
+  <tag>superhero</tag>
+  <tag>based on comic</tag>
+  <tag>rivalry</tag>
+  <tag>ninja</tag>
+  <tag>vigilante</tag>
+  <tag>tragic hero</tag>
+  <tag>super power</tag>
+  <tag>haunted by the past</tag>
+  <tag>evil doctor</tag>
+  <tag>master villain</tag>
+  <tag>unfulfilled love</tag>
+  <tag>inspirational</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>DC</studio>
+  <studio>Syncopy</studio>
+  <studio>Legendary Pictures</studio>
+  <studio>Patalex III Productions</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">272</uniqueid>
+  <uniqueid type="imdb">tt0372784</uniqueid>
+  <set tmdbcolid="263">
+    <name>263</name>
+  </set>
+  <actor>
+    <name>Christian Bale</name>
+    <role>Bruce Wayne / Batman</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Caine</name>
+    <role>Alfred</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Liam Neeson</name>
+    <role>Ducard</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Katie Holmes</name>
+    <role>Rachel Dawes</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Gary Oldman</name>
+    <role>Jim Gordon</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Cillian Murphy</name>
+    <role>Dr. Jonathan Crane</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Wilkinson</name>
+    <role>Carmine Falcone</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Rutger Hauer</name>
+    <role>Earle</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Ken Watanabe</name>
+    <role>Ra's al Ghul</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Boone Junior</name>
+    <role>Flass</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Linus Roache</name>
+    <role>Thomas Wayne</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Morgan Freeman</name>
+    <role>Lucius Fox</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Larry Holden</name>
+    <role>Finch</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Gerard Murphy</name>
+    <role>Judge Faden</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Colin McFarlane</name>
+    <role>Loeb</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Christopher Nolan</director>
+  <credits>Christopher Nolan</credits>
+  <credits>David S. Goyer</credits>
+</movie>

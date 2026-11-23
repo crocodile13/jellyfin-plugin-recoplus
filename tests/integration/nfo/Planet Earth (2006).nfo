@@ -1,0 +1,37 @@
+<tvshow>
+  <title>Planet Earth</title>
+  <originaltitle>Planet Earth</originaltitle>
+  <year>2006</year>
+  <premiered>2006-03-05</premiered>
+  <rating>8.646</rating>
+  <mpaa>TV-PG</mpaa>
+  <genre>Documentary</genre>
+  <tag>climate change</tag>
+  <tag>wildlife</tag>
+  <tag>miniseries</tag>
+  <tag>animals</tag>
+  <tag>nature</tag>
+  <tag>four seasons</tag>
+  <tag>inspiring</tag>
+  <tag>nature documentary</tag>
+  <tag>wildlife photographer</tag>
+  <tag>planet earth</tag>
+  <tag>landscape photography</tag>
+  <tag>animals &amp; nature</tag>
+  <tag>captivating</tag>
+  <tag>relaxing</tag>
+  <tag>wildlife documentary</tag>
+  <tag>animal photography</tag>
+  <studio>BBC Earth</studio>
+  <studio>BBC</studio>
+  <studio>NHK</studio>
+  <studio>Discovery</studio>
+  <uniqueid type="tmdb" default="true">1044</uniqueid>
+  <uniqueid type="imdb">tt0795176</uniqueid>
+  <actor>
+    <name>David Attenborough</name>
+    <role>Self - Narrator</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <credits>Gary Parker</credits>
+</tvshow>

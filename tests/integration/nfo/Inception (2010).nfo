@@ -1,0 +1,110 @@
+<movie>
+  <title>Inception</title>
+  <originaltitle>Inception</originaltitle>
+  <year>2010</year>
+  <premiered>2010-07-15</premiered>
+  <rating>8.373</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Action</genre>
+  <genre>Science Fiction</genre>
+  <genre>Crime</genre>
+  <tag>mission</tag>
+  <tag>dreams</tag>
+  <tag>kidnapping</tag>
+  <tag>spy</tag>
+  <tag>allegory</tag>
+  <tag>intellectual</tag>
+  <tag>manipulation</tag>
+  <tag>heist</tag>
+  <tag>memory</tag>
+  <tag>dream world</tag>
+  <tag>subconscious</tag>
+  <tag>incredulous</tag>
+  <tag>bold</tag>
+  <tag>high concept</tag>
+  <tag>dream</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Legendary Pictures</studio>
+  <studio>Syncopy</studio>
+  <country>United Kingdom</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">27205</uniqueid>
+  <uniqueid type="imdb">tt1375666</uniqueid>
+  <actor>
+    <name>Leonardo DiCaprio</name>
+    <role>Dom Cobb</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Joseph Gordon-Levitt</name>
+    <role>Arthur</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Ken Watanabe</name>
+    <role>Saito</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Hardy</name>
+    <role>Eames</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Elliot Page</name>
+    <role>Ariadne</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Dileep Rao</name>
+    <role>Yusuf</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Cillian Murphy</name>
+    <role>Robert Fischer, Jr.</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Tom Berenger</name>
+    <role>Peter Browning</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Marion Cotillard</name>
+    <role>Mal Cobb</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Pete Postlethwaite</name>
+    <role>Maurice Fischer</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Michael Caine</name>
+    <role>Stephen Miles</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Lukas Haas</name>
+    <role>Nash</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Talulah Riley</name>
+    <role>Blonde</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Tohoru Masamune</name>
+    <role>Japanese Security Guard</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Taylor Geare</name>
+    <role>Phillipa (5 years)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Christopher Nolan</director>
+  <credits>Christopher Nolan</credits>
+</movie>

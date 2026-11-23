@@ -1,0 +1,128 @@
+<movie>
+  <title>No Country for Old Men</title>
+  <originaltitle>No Country for Old Men</originaltitle>
+  <year>2007</year>
+  <premiered>2007-11-09</premiered>
+  <rating>7.949</rating>
+  <criticrating>93</criticrating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Thriller</genre>
+  <genre>Western</genre>
+  <tag>vietnam veteran</tag>
+  <tag>sheriff</tag>
+  <tag>trailer park</tag>
+  <tag>based on novel or book</tag>
+  <tag>hitman</tag>
+  <tag>psychopath</tag>
+  <tag>drug trafficking</tag>
+  <tag>texas</tag>
+  <tag>motel</tag>
+  <tag>usa–mexico border</tag>
+  <tag>drug cartel</tag>
+  <tag>fate</tag>
+  <tag>desert</tag>
+  <tag>modern-day western</tag>
+  <tag>neo-western</tag>
+  <tag>tracking device</tag>
+  <tag>cold blooded killer</tag>
+  <tag>motel room</tag>
+  <tag>cartel</tag>
+  <tag>neo-noir</tag>
+  <tag>1980s</tag>
+  <tag>mexican cartel</tag>
+  <tag>drug deal</tag>
+  <tag>coin toss</tag>
+  <tag>human nature</tag>
+  <tag>captive bolt gun</tag>
+  <tag>western noir</tag>
+  <tag>horror western</tag>
+  <tag>faithful adaptation</tag>
+  <studio>Miramax</studio>
+  <studio>Paramount Vantage</studio>
+  <studio>Scott Rudin Productions</studio>
+  <studio>Mike Zoss Productions</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">6977</uniqueid>
+  <uniqueid type="imdb">tt0477348</uniqueid>
+  <actor>
+    <name>Javier Bardem</name>
+    <role>Anton Chigurh</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Tommy Lee Jones</name>
+    <role>Ed Tom Bell</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Josh Brolin</name>
+    <role>Llewelyn Moss</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Woody Harrelson</name>
+    <role>Carson Wells</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Kelly Macdonald</name>
+    <role>Carla Jean Moss</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Garret Dillahunt</name>
+    <role>Wendell</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Tess Harper</name>
+    <role>Loretta Bell</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Barry Corbin</name>
+    <role>Ellis</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Stephen Root</name>
+    <role>Man Who Hires Wells</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Rodger Boyce</name>
+    <role>El Paso Sheriff</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Beth Grant</name>
+    <role>Carla Jean's Mother</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Ana Reeder</name>
+    <role>Poolside Woman</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Kit Gwin</name>
+    <role>Sheriff Bell's Secretary</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Zach Hopkins</name>
+    <role>Strangled Deputy</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Chip Love</name>
+    <role>Man in Ford</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Joel Coen</director>
+  <director>Ethan Coen</director>
+  <credits>Cormac McCarthy</credits>
+  <credits>Ethan Coen</credits>
+  <credits>Joel Coen</credits>
+</movie>

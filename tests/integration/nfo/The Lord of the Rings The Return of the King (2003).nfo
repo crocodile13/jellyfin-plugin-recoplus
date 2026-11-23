@@ -1,0 +1,152 @@
+<movie>
+  <title>The Lord of the Rings: The Return of the King</title>
+  <originaltitle>The Lord of the Rings: The Return of the King</originaltitle>
+  <year>2003</year>
+  <premiered>2003-12-17</premiered>
+  <rating>8.5</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <genre>Action</genre>
+  <tag>army</tag>
+  <tag>based on novel or book</tag>
+  <tag>elves</tag>
+  <tag>dwarf</tag>
+  <tag>magic</tag>
+  <tag>kingdom</tag>
+  <tag>christianity</tag>
+  <tag>obsession</tag>
+  <tag>bravery</tag>
+  <tag>castle</tag>
+  <tag>volcano</tag>
+  <tag>giant spider</tag>
+  <tag>sequel</tag>
+  <tag>honor</tag>
+  <tag>king</tag>
+  <tag>madness</tag>
+  <tag>split personality</tag>
+  <tag>christ allegory</tag>
+  <tag>fantasy world</tag>
+  <tag>wizard</tag>
+  <tag>epic battle</tag>
+  <tag>journey</tag>
+  <tag>ring</tag>
+  <tag>companionship</tag>
+  <tag>magical creature</tag>
+  <tag>quest</tag>
+  <tag>live action and animation</tag>
+  <tag>hero's journey</tag>
+  <tag>high fantasy</tag>
+  <tag>wraith</tag>
+  <tag>sword and sorcery</tag>
+  <tag>power madness</tag>
+  <tag>complex</tag>
+  <tag>wonder</tag>
+  <tag>trekking</tag>
+  <tag>good versus evil</tag>
+  <tag>sword making</tag>
+  <tag>inspirational</tag>
+  <tag>wistful</tag>
+  <tag>grand</tag>
+  <tag>intense</tag>
+  <tag>cheerful</tag>
+  <tag>dignified</tag>
+  <tag>earnest</tag>
+  <tag>enchant</tag>
+  <tag>melodramatic</tag>
+  <tag>powerful</tag>
+  <tag>sincere</tag>
+  <tag>winged creatures</tag>
+  <tag>epic fantasy</tag>
+  <tag>hobbit</tag>
+  <studio>New Line Cinema</studio>
+  <studio>WingNut Films</studio>
+  <studio>The Saul Zaentz Company</studio>
+  <country>New Zealand</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">122</uniqueid>
+  <uniqueid type="imdb">tt0167260</uniqueid>
+  <set tmdbcolid="119">
+    <name>119</name>
+  </set>
+  <actor>
+    <name>Elijah Wood</name>
+    <role>Frodo</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ian McKellen</name>
+    <role>Gandalf</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Viggo Mortensen</name>
+    <role>Aragorn</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sean Astin</name>
+    <role>Sam</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Andy Serkis</name>
+    <role>Gollum / Smeagol</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Dominic Monaghan</name>
+    <role>Merry</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Billy Boyd</name>
+    <role>Pippin</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>John Noble</name>
+    <role>Denethor</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>David Wenham</name>
+    <role>Faramir</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Miranda Otto</name>
+    <role>Éowyn</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Bernard Hill</name>
+    <role>Théoden</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>John Rhys-Davies</name>
+    <role>Gimli</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Orlando Bloom</name>
+    <role>Legolas</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Hugo Weaving</name>
+    <role>Elrond</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Liv Tyler</name>
+    <role>Arwen</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Peter Jackson</director>
+  <credits>J. R. R. Tolkien</credits>
+  <credits>Fran Walsh</credits>
+  <credits>Peter Jackson</credits>
+  <credits>Philippa Boyens</credits>
+</movie>

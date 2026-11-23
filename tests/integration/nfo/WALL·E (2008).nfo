@@ -1,0 +1,114 @@
+<movie>
+  <title>WALL·E</title>
+  <originaltitle>WALL·E</originaltitle>
+  <year>2008</year>
+  <premiered>2008-06-26</premiered>
+  <rating>8.129</rating>
+  <mpaa>G</mpaa>
+  <genre>Animation</genre>
+  <genre>Family</genre>
+  <genre>Science Fiction</genre>
+  <tag>garbage</tag>
+  <tag>dystopia</tag>
+  <tag>space travel</tag>
+  <tag>space</tag>
+  <tag>distant future</tag>
+  <tag>loneliness</tag>
+  <tag>robot</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>duringcreditsstinger</tag>
+  <tag>reflective</tag>
+  <tag>3d animation</tag>
+  <tag>inspirational</tag>
+  <tag>psychological drama</tag>
+  <tag>understated</tag>
+  <tag>suspenseful</tag>
+  <tag>sentimental</tag>
+  <tag>cheerful</tag>
+  <tag>compassionate</tag>
+  <tag>hopeful</tag>
+  <tag>joyful</tag>
+  <tag>sincere</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">10681</uniqueid>
+  <uniqueid type="imdb">tt0910970</uniqueid>
+  <actor>
+    <name>Ben Burtt</name>
+    <role>WALL·E / M-O (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Elissa Knight</name>
+    <role>EVE (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jeff Garlin</name>
+    <role>Captain (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Fred Willard</name>
+    <role>Shelby Forthright, BnL CEO</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>John Ratzenberger</name>
+    <role>John (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Kathy Najimy</name>
+    <role>Mary (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Sigourney Weaver</name>
+    <role>Ship's Computer (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Lori Alan</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Bob Bergen</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>John Cygan</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Pete Docter</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Eiding</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Donald Fullilove</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Teresa Ganzel</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Jess Harnell</name>
+    <role>Additional Voices (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Andrew Stanton</director>
+  <credits>Jim Reardon</credits>
+  <credits>Andrew Stanton</credits>
+</movie>

@@ -1,0 +1,161 @@
+<tvshow>
+  <title>Avatar: The Last Airbender</title>
+  <originaltitle>Avatar: The Last Airbender</originaltitle>
+  <year>2005</year>
+  <premiered>2005-02-21</premiered>
+  <rating>8.8</rating>
+  <mpaa>TV-Y7</mpaa>
+  <genre>Animation</genre>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>saving the world</tag>
+  <tag>monk</tag>
+  <tag>martial arts</tag>
+  <tag>asia</tag>
+  <tag>magic</tag>
+  <tag>villain</tag>
+  <tag>child hero</tag>
+  <tag>reincarnation</tag>
+  <tag>friendship</tag>
+  <tag>honor</tag>
+  <tag>destiny</tag>
+  <tag>candid</tag>
+  <tag>philosophical</tag>
+  <tag>playful</tag>
+  <tag>awestruck</tag>
+  <tag>comforting</tag>
+  <tag>anime inspired</tag>
+  <studio>Nickelodeon</studio>
+  <studio>Nickelodeon Animation Studios</studio>
+  <studio>JM Animation</studio>
+  <studio>DR Movie</studio>
+  <studio>Moi Animation</studio>
+  <studio>Nickelodeon Productions</studio>
+  <uniqueid type="tmdb" default="true">246</uniqueid>
+  <uniqueid type="imdb">tt0417299</uniqueid>
+  <actor>
+    <name>Zach Tyler Eisen</name>
+    <role>Aang (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Mae Whitman</name>
+    <role>Katara (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jack De Sena</name>
+    <role>Sokka (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Dante Basco</name>
+    <role>Zuko (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Mako</name>
+    <role>Iroh (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Dee Bradley Baker</name>
+    <role>Appa / Momo (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Cricket Leigh</name>
+    <role>Mai (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Olivia Hack</name>
+    <role>Ty Lee (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Michaela Jill Murphy</name>
+    <role>Toph Beifong (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Michaela Jill Murphy</name>
+    <role>Meng (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>André Sogliuzzo</name>
+    <role>Hakoda (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>André Sogliuzzo</name>
+    <role>King Bumi (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>André Sogliuzzo</name>
+    <role>King Bumi / Dai Li Captain (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>André Sogliuzzo</name>
+    <role>Captain (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Grey DeLisle</name>
+    <role>Azula (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Grey DeLisle</name>
+    <role>Azula / Additional Voices (voice)</role>
+    <sortorder>15</sortorder>
+  </actor>
+  <actor>
+    <name>Grey DeLisle</name>
+    <role>Azula / Ta Min (voice)</role>
+    <sortorder>16</sortorder>
+  </actor>
+  <actor>
+    <name>Grey DeLisle</name>
+    <role>Azula / Banished Servant (voice)</role>
+    <sortorder>17</sortorder>
+  </actor>
+  <actor>
+    <name>Grey DeLisle</name>
+    <role>Azula / Kya (voice)</role>
+    <sortorder>18</sortorder>
+  </actor>
+  <actor>
+    <name>Grey DeLisle</name>
+    <role>Azula / Michi / Additional Voices (voice)</role>
+    <sortorder>19</sortorder>
+  </actor>
+  <actor>
+    <name>Grey DeLisle</name>
+    <role>Azula / Blue Dragon (voice)</role>
+    <sortorder>20</sortorder>
+  </actor>
+  <actor>
+    <name>Jodi Carlisle</name>
+    <role>Herbalist (voice)</role>
+    <sortorder>21</sortorder>
+  </actor>
+  <actor>
+    <name>Lucille Bliss</name>
+    <role>Yagoda (voice)</role>
+    <sortorder>22</sortorder>
+  </actor>
+  <actor>
+    <name>John Kassir</name>
+    <role>Chey (voice)</role>
+    <sortorder>23</sortorder>
+  </actor>
+  <actor>
+    <name>Ross Thomas</name>
+    <role>Ruon-Jian (voice)</role>
+    <sortorder>24</sortorder>
+  </actor>
+</tvshow>

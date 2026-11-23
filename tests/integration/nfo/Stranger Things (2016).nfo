@@ -1,0 +1,114 @@
+<tvshow>
+  <title>Stranger Things</title>
+  <originaltitle>Stranger Things</originaltitle>
+  <year>2016</year>
+  <premiered>2016-07-15</premiered>
+  <rating>8.54</rating>
+  <mpaa>TV-14</mpaa>
+  <genre>Action &amp; Adventure</genre>
+  <genre>Mystery</genre>
+  <genre>Sci-Fi &amp; Fantasy</genre>
+  <tag>monster</tag>
+  <tag>small town</tag>
+  <tag>indiana, usa</tag>
+  <tag>experiment</tag>
+  <tag>halloween</tag>
+  <tag>friendship</tag>
+  <tag>supernatural</tag>
+  <tag>coming of age</tag>
+  <tag>parallel world</tag>
+  <tag>super power</tag>
+  <tag>government conspiracy</tag>
+  <tag>teen drama</tag>
+  <tag>1980s</tag>
+  <tag>supernatural horror</tag>
+  <tag>teen horror</tag>
+  <tag>horror</tag>
+  <tag>depressing</tag>
+  <studio>Netflix</studio>
+  <studio>21 Laps Entertainment</studio>
+  <studio>Monkey Massacre Productions</studio>
+  <studio>Upside Down Pictures</studio>
+  <uniqueid type="tmdb" default="true">66732</uniqueid>
+  <uniqueid type="imdb">tt4574334</uniqueid>
+  <actor>
+    <name>Winona Ryder</name>
+    <role>Joyce Byers</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>David Harbour</name>
+    <role>Jim Hopper</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Millie Bobby Brown</name>
+    <role>Eleven / Jane Hopper</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Millie Bobby Brown</name>
+    <role>Eleven</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Finn Wolfhard</name>
+    <role>Mike Wheeler</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Gaten Matarazzo</name>
+    <role>Dustin Henderson</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Caleb McLaughlin</name>
+    <role>Lucas Sinclair</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Noah Schnapp</name>
+    <role>Will Byers</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Sadie Sink</name>
+    <role>Max Mayfield</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Natalia Dyer</name>
+    <role>Nancy Wheeler</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Charlie Heaton</name>
+    <role>Jonathan Byers</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Joe Keery</name>
+    <role>Steve Harrington</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Maya Hawke</name>
+    <role>Robin Buckley</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Brett Gelman</name>
+    <role>Murray</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Priah Ferguson</name>
+    <role>Erica Sinclair</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <actor>
+    <name>Cara Buono</name>
+    <role>Karen Wheeler</role>
+    <sortorder>15</sortorder>
+  </actor>
+</tvshow>

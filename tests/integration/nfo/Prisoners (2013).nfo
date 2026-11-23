@@ -1,0 +1,108 @@
+<movie>
+  <title>Prisoners</title>
+  <originaltitle>Prisoners</originaltitle>
+  <year>2013</year>
+  <premiered>2013-09-19</premiered>
+  <rating>8.105</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Thriller</genre>
+  <genre>Crime</genre>
+  <tag>pennsylvania, usa</tag>
+  <tag>kidnapping</tag>
+  <tag>detective</tag>
+  <tag>symbolism</tag>
+  <tag>investigation</tag>
+  <tag>father</tag>
+  <tag>vigilante</tag>
+  <tag>psychological thriller</tag>
+  <tag>brutality</tag>
+  <tag>neo-noir</tag>
+  <tag>search for child</tag>
+  <tag>child abduction</tag>
+  <tag>rural town</tag>
+  <tag>suspense mystery</tag>
+  <studio>Alcon Entertainment</studio>
+  <studio>8:38 Productions</studio>
+  <studio>Madhouse Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">146233</uniqueid>
+  <uniqueid type="imdb">tt1392214</uniqueid>
+  <actor>
+    <name>Hugh Jackman</name>
+    <role>Keller Dover</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Jake Gyllenhaal</name>
+    <role>Detective Loki</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Viola Davis</name>
+    <role>Nancy Birch</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Maria Bello</name>
+    <role>Grace Dover</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Terrence Howard</name>
+    <role>Franklin Birch</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Melissa Leo</name>
+    <role>Holly Jones</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Dano</name>
+    <role>Alex Jones</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Dylan Minnette</name>
+    <role>Ralph Dover</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Zoë Soul</name>
+    <role>Eliza Birch</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Erin Gerasimovich</name>
+    <role>Anna Dover</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Kyla-Drew</name>
+    <role>Joy Birch</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Wayne Duvall</name>
+    <role>Captain Richard O'Malley</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Len Cariou</name>
+    <role>Father Patrick Dunn</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>David Dastmalchian</name>
+    <role>Bob Taylor</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Brad James</name>
+    <role>Officer Carter</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Denis Villeneuve</director>
+  <credits>Aaron Guzikowski</credits>
+</movie>

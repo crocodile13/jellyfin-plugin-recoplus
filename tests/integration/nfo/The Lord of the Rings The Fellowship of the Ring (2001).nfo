@@ -1,0 +1,134 @@
+<movie>
+  <title>The Lord of the Rings: The Fellowship of the Ring</title>
+  <originaltitle>The Lord of the Rings: The Fellowship of the Ring</originaltitle>
+  <year>2001</year>
+  <premiered>2001-12-18</premiered>
+  <rating>8.452</rating>
+  <criticrating>91</criticrating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Fantasy</genre>
+  <genre>Action</genre>
+  <tag>based on novel or book</tag>
+  <tag>elves</tag>
+  <tag>dwarf</tag>
+  <tag>magic</tag>
+  <tag>christianity</tag>
+  <tag>obsession</tag>
+  <tag>allegory</tag>
+  <tag>bravery</tag>
+  <tag>castle</tag>
+  <tag>troll</tag>
+  <tag>battle</tag>
+  <tag>demon</tag>
+  <tag>christ allegory</tag>
+  <tag>uncle nephew relationship</tag>
+  <tag>fantasy world</tag>
+  <tag>dark fantasy</tag>
+  <tag>journey</tag>
+  <tag>companionship</tag>
+  <tag>magical creature</tag>
+  <tag>live action and animation</tag>
+  <tag>hero's journey</tag>
+  <tag>wraith</tag>
+  <tag>sword and sorcery</tag>
+  <tag>christ figure</tag>
+  <tag>trekking</tag>
+  <tag>good versus evil</tag>
+  <tag>christian allegory</tag>
+  <tag>magical ring</tag>
+  <tag>tolkien</tag>
+  <tag>epic fantasy</tag>
+  <tag>epic</tag>
+  <tag>hobbit</tag>
+  <studio>New Line Cinema</studio>
+  <studio>WingNut Films</studio>
+  <studio>The Saul Zaentz Company</studio>
+  <country>New Zealand</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">120</uniqueid>
+  <uniqueid type="imdb">tt0120737</uniqueid>
+  <set tmdbcolid="119">
+    <name>119</name>
+  </set>
+  <actor>
+    <name>Elijah Wood</name>
+    <role>Frodo</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Ian McKellen</name>
+    <role>Gandalf</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Viggo Mortensen</name>
+    <role>Aragorn</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Sean Astin</name>
+    <role>Sam</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Ian Holm</name>
+    <role>Bilbo</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Liv Tyler</name>
+    <role>Arwen</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Christopher Lee</name>
+    <role>Saruman</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Sean Bean</name>
+    <role>Boromir</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Billy Boyd</name>
+    <role>Pippin</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Dominic Monaghan</name>
+    <role>Merry</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>John Rhys-Davies</name>
+    <role>Gimli</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Orlando Bloom</name>
+    <role>Legolas</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Cate Blanchett</name>
+    <role>Galadriel</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Hugo Weaving</name>
+    <role>Elrond</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Andy Serkis</name>
+    <role>Gollum</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Peter Jackson</director>
+  <credits>Peter Jackson</credits>
+  <credits>Fran Walsh</credits>
+  <credits>Philippa Boyens</credits>
+  <credits>J. R. R. Tolkien</credits>
+</movie>

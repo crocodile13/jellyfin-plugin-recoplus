@@ -1,0 +1,126 @@
+<movie>
+  <title>Zodiac</title>
+  <originaltitle>Zodiac</originaltitle>
+  <year>2007</year>
+  <premiered>2007-03-02</premiered>
+  <rating>7.536</rating>
+  <mpaa>R</mpaa>
+  <genre>Crime</genre>
+  <genre>Mystery</genre>
+  <genre>Thriller</genre>
+  <tag>newspaper</tag>
+  <tag>journalist</tag>
+  <tag>california</tag>
+  <tag>based on novel or book</tag>
+  <tag>police</tag>
+  <tag>san francisco, california</tag>
+  <tag>killing</tag>
+  <tag>detective</tag>
+  <tag>1970s</tag>
+  <tag>investigation</tag>
+  <tag>victim</tag>
+  <tag>code</tag>
+  <tag>murder</tag>
+  <tag>serial killer</tag>
+  <tag>crime scene</tag>
+  <tag>reporter</tag>
+  <tag>whodunit</tag>
+  <tag>alcoholic</tag>
+  <tag>true crime</tag>
+  <tag>young man</tag>
+  <tag>fourth of july</tag>
+  <tag>newspaper article</tag>
+  <tag>cartoonist</tag>
+  <tag>1960s</tag>
+  <tag>zodiac killer</tag>
+  <tag>malicious</tag>
+  <tag>clinical</tag>
+  <tag>bar</tag>
+  <tag>ambiguous</tag>
+  <tag>awestruck</tag>
+  <tag>foreboding</tag>
+  <tag>frightened</tag>
+  <studio>Paramount Pictures</studio>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Phoenix Pictures</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">1949</uniqueid>
+  <uniqueid type="imdb">tt0443706</uniqueid>
+  <actor>
+    <name>Jake Gyllenhaal</name>
+    <role>Robert Graysmith</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Ruffalo</name>
+    <role>David Toschi</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Edwards</name>
+    <role>William Armstrong</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Paul Avery</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Chloë Sevigny</name>
+    <role>Melanie</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Elias Koteas</name>
+    <role>Jack Mulanax</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>John Carroll Lynch</name>
+    <role>Arthur Leigh Allen</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Brian Cox</name>
+    <role>Melvin Belli</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Dermot Mulroney</name>
+    <role>Martin Lee</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Charles Fleischer</name>
+    <role>Bob Vaughn</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Zach Grenier</name>
+    <role>Mel Nicolai</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Philip Baker Hall</name>
+    <role>Sherwood Morrill</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>James Le Gros</name>
+    <role>George Bawart</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Donal Logue</name>
+    <role>Ken Narlow</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Richmond Arquette</name>
+    <role>Zodiac 1 / Zodiac 2</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>David Fincher</director>
+  <credits>James Vanderbilt</credits>
+</movie>

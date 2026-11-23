@@ -1,0 +1,112 @@
+<movie>
+  <title>The Babadook</title>
+  <originaltitle>The Babadook</originaltitle>
+  <year>2014</year>
+  <premiered>2014-05-22</premiered>
+  <rating>6.537</rating>
+  <mpaa>NR</mpaa>
+  <genre>Drama</genre>
+  <genre>Horror</genre>
+  <tag>monster</tag>
+  <tag>nightmare</tag>
+  <tag>parent child relationship</tag>
+  <tag>dysfunctional family</tag>
+  <tag>sleeplessness</tag>
+  <tag>single mother</tag>
+  <tag>grieving</tag>
+  <tag>woman director</tag>
+  <tag>death of spouse</tag>
+  <tag>behavioral disorders</tag>
+  <tag>psychological disorders</tag>
+  <tag>traumatized woman</tag>
+  <tag>adelaide australia</tag>
+  <tag>adelaide</tag>
+  <tag>depressing</tag>
+  <tag>horrified</tag>
+  <studio>Screen Australia</studio>
+  <studio>Smoking Gun Productions</studio>
+  <studio>Causeway Films</studio>
+  <studio>South Australian Film Corporation</studio>
+  <studio>Entertainment One</studio>
+  <country>Australia</country>
+  <country>Canada</country>
+  <uniqueid type="tmdb" default="true">242224</uniqueid>
+  <uniqueid type="imdb">tt2321549</uniqueid>
+  <actor>
+    <name>Essie Davis</name>
+    <role>Amelia Vanek</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Noah Wiseman</name>
+    <role>Samuel Vanek</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Hayley McElhinney</name>
+    <role>Claire</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Daniel Henshall</name>
+    <role>Robbie</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Barbara West</name>
+    <role>Gracie Roach</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ben Winspear</name>
+    <role>Oskar Vanek</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Cathy Adamek</name>
+    <role>Prue</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Craig Behenna</name>
+    <role>Warren</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Hachi</name>
+    <role>Bugsy</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Tim Purcell</name>
+    <role>The Babadook</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Chloe Hurn</name>
+    <role>Ruby</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Jacquy Phillips</name>
+    <role>Beverly</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Bridget Walters</name>
+    <role>Norma</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Adam Morgan</name>
+    <role>Sergeant</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Pippa Wanganeen</name>
+    <role>Eastern Suburbs Mum 1</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jennifer Kent</director>
+  <credits>Jennifer Kent</credits>
+</movie>

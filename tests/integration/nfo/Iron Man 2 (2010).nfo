@@ -1,0 +1,106 @@
+<movie>
+  <title>Iron Man 2</title>
+  <originaltitle>Iron Man 2</originaltitle>
+  <year>2010</year>
+  <premiered>2010-04-28</premiered>
+  <rating>6.856</rating>
+  <mpaa>PG-13</mpaa>
+  <genre>Adventure</genre>
+  <genre>Action</genre>
+  <genre>Science Fiction</genre>
+  <tag>technology</tag>
+  <tag>superhero</tag>
+  <tag>malibu</tag>
+  <tag>based on comic</tag>
+  <tag>sequel</tag>
+  <tag>revenge</tag>
+  <tag>aftercreditsstinger</tag>
+  <tag>marvel cinematic universe (mcu)</tag>
+  <tag>break out</tag>
+  <studio>Marvel Studios</studio>
+  <studio>Fairview Entertainment</studio>
+  <studio>Marvel Entertainment</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">10138</uniqueid>
+  <uniqueid type="imdb">tt1228705</uniqueid>
+  <set tmdbcolid="131292">
+    <name>131292</name>
+  </set>
+  <actor>
+    <name>Robert Downey Jr.</name>
+    <role>Tony Stark</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Gwyneth Paltrow</name>
+    <role>Pepper Potts</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Don Cheadle</name>
+    <role>Lt. Col. James 'Rhodey' Rhodes</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Scarlett Johansson</name>
+    <role>Natalie Rushman / Natasha Romanoff</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Sam Rockwell</name>
+    <role>Justin Hammer</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Mickey Rourke</name>
+    <role>Ivan Vanko</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Samuel L. Jackson</name>
+    <role>Nick Fury</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Clark Gregg</name>
+    <role>Agent Coulson</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>John Slattery</name>
+    <role>Howard Stark</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Garry Shandling</name>
+    <role>Senator Stern</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Paul Bettany</name>
+    <role>Jarvis (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Kate Mara</name>
+    <role>U.S. Marshal</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Leslie Bibb</name>
+    <role>Christine Everhart</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Jon Favreau</name>
+    <role>Happy Hogan</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Christiane Amanpour</name>
+    <role>Christiane Amanpour</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Jon Favreau</director>
+  <credits>Justin Theroux</credits>
+</movie>

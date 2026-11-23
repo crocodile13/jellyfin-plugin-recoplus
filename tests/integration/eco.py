@@ -73,7 +73,7 @@ def setup_seerr(admin_password: str, jellyfin_users: dict[str, str]) -> str:
     _req(SEERR + "/api/v1/auth/jellyfin", "POST", {"username": "admin", "password": admin_password, "hostname": "jf", "port": 8096,
                                                    "useSsl": False, "urlBase": "", "email": "admin@example.invalid", "serverType": 2},
          opener=_opener)
-    _req(SEERR + "/api/v1/settings/jellyfin/library?sync=true", opener=_opener)
+    _req(SEERR + "/api/v1/settings/jellyfin/library/sync", "POST", {}, opener=_opener)
     libs = _req(SEERR + "/api/v1/settings/jellyfin/library", opener=_opener)
     for lib in libs:
         _req(SEERR + f"/api/v1/settings/jellyfin/library/{lib['id']}", "PUT", {"enabled": True}, opener=_opener)

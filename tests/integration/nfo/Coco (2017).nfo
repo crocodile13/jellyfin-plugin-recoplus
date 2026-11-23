@@ -1,0 +1,114 @@
+<movie>
+  <title>Coco</title>
+  <originaltitle>Coco</originaltitle>
+  <year>2017</year>
+  <premiered>2017-10-27</premiered>
+  <rating>8.207</rating>
+  <mpaa>PG</mpaa>
+  <genre>Family</genre>
+  <genre>Animation</genre>
+  <genre>Music</genre>
+  <genre>Adventure</genre>
+  <tag>skeleton</tag>
+  <tag>mexico</tag>
+  <tag>guitar</tag>
+  <tag>afterlife</tag>
+  <tag>musician</tag>
+  <tag>holiday</tag>
+  <tag>villain</tag>
+  <tag>singer</tag>
+  <tag>murderer</tag>
+  <tag>life after death</tag>
+  <tag>kids</tag>
+  <tag>day of the dead</tag>
+  <tag>3d animation</tag>
+  <tag>music</tag>
+  <tag>boy</tag>
+  <tag>hilarious</tag>
+  <tag>modest</tag>
+  <studio>Pixar</studio>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">354912</uniqueid>
+  <uniqueid type="imdb">tt2380307</uniqueid>
+  <set tmdbcolid="1451578">
+    <name>1451578</name>
+  </set>
+  <actor>
+    <name>Anthony Gonzalez</name>
+    <role>Miguel Rivera (voice)</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Gael García Bernal</name>
+    <role>Héctor (voice)</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Benjamin Bratt</name>
+    <role>Ernesto de la Cruz (voice)</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Alanna Ubach</name>
+    <role>Mamá Imelda (voice)</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Renée Victor</name>
+    <role>Abuelita (voice)</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Jaime Camil</name>
+    <role>Papá (voice)</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Alfonso Arau</name>
+    <role>Papá Julio (voice)</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Herbert Siguenza</name>
+    <role>Tío Oscar / Tío Felipe (voice)</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Gabriel Iglesias</name>
+    <role>Clerk (voice)</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Lombardo Boyar</name>
+    <role>Plaza Mariachi / Gustavo (voice)</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>Ana Ofelia Murguía</name>
+    <role>Mamá Coco (voice)</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>Natalia Cordova-Buckley</name>
+    <role>Frida Kahlo (voice)</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Sofía Espinosa</name>
+    <role>Mamá (voice)</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Selene Luna</name>
+    <role>Tía Rosita (voice)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Edward James Olmos</name>
+    <role>Chicharrón (voice)</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Lee Unkrich</director>
+  <credits>Adrian Molina</credits>
+  <credits>Matthew Aldrich</credits>
+</movie>

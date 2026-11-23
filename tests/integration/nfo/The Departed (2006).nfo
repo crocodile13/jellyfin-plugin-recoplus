@@ -1,0 +1,120 @@
+<movie>
+  <title>The Departed</title>
+  <originaltitle>The Departed</originaltitle>
+  <year>2006</year>
+  <premiered>2006-10-04</premiered>
+  <rating>8.16</rating>
+  <mpaa>R</mpaa>
+  <genre>Drama</genre>
+  <genre>Thriller</genre>
+  <genre>Crime</genre>
+  <tag>police</tag>
+  <tag>undercover</tag>
+  <tag>boston, massachusetts</tag>
+  <tag>gangster</tag>
+  <tag>irish-american</tag>
+  <tag>crime boss</tag>
+  <tag>friends</tag>
+  <tag>remake</tag>
+  <tag>mobster</tag>
+  <tag>organized crime</tag>
+  <tag>mafia</tag>
+  <tag>undercover cop</tag>
+  <tag>mole</tag>
+  <tag>state police</tag>
+  <tag>police training</tag>
+  <tag>realtor</tag>
+  <tag>angry</tag>
+  <tag>complex</tag>
+  <tag>dreary</tag>
+  <tag>inspirational</tag>
+  <tag>intense</tag>
+  <tag>authoritarian</tag>
+  <tag>frightened</tag>
+  <studio>Warner Bros. Pictures</studio>
+  <studio>Plan B Entertainment</studio>
+  <studio>Initial Entertainment Group</studio>
+  <studio>Vertigo Entertainment</studio>
+  <studio>Media Asia Films</studio>
+  <country>Hong Kong</country>
+  <country>United States of America</country>
+  <uniqueid type="tmdb" default="true">1422</uniqueid>
+  <uniqueid type="imdb">tt0407887</uniqueid>
+  <actor>
+    <name>Leonardo DiCaprio</name>
+    <role>Billy</role>
+    <sortorder>0</sortorder>
+  </actor>
+  <actor>
+    <name>Matt Damon</name>
+    <role>Colin</role>
+    <sortorder>1</sortorder>
+  </actor>
+  <actor>
+    <name>Jack Nicholson</name>
+    <role>Costello</role>
+    <sortorder>2</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Wahlberg</name>
+    <role>Dignam</role>
+    <sortorder>3</sortorder>
+  </actor>
+  <actor>
+    <name>Martin Sheen</name>
+    <role>Queenan</role>
+    <sortorder>4</sortorder>
+  </actor>
+  <actor>
+    <name>Ray Winstone</name>
+    <role>Mr. French</role>
+    <sortorder>5</sortorder>
+  </actor>
+  <actor>
+    <name>Vera Farmiga</name>
+    <role>Madolyn</role>
+    <sortorder>6</sortorder>
+  </actor>
+  <actor>
+    <name>Anthony Anderson</name>
+    <role>Brown</role>
+    <sortorder>7</sortorder>
+  </actor>
+  <actor>
+    <name>Alec Baldwin</name>
+    <role>Ellerby</role>
+    <sortorder>8</sortorder>
+  </actor>
+  <actor>
+    <name>Kevin Corrigan</name>
+    <role>Cousin Sean</role>
+    <sortorder>9</sortorder>
+  </actor>
+  <actor>
+    <name>James Badge Dale</name>
+    <role>Barrigan</role>
+    <sortorder>10</sortorder>
+  </actor>
+  <actor>
+    <name>David O'Hara</name>
+    <role>Fitzy</role>
+    <sortorder>11</sortorder>
+  </actor>
+  <actor>
+    <name>Mark Rolston</name>
+    <role>Delahunt</role>
+    <sortorder>12</sortorder>
+  </actor>
+  <actor>
+    <name>Robert Wahlberg</name>
+    <role>Lazio (FBI)</role>
+    <sortorder>13</sortorder>
+  </actor>
+  <actor>
+    <name>Kristen Dalton</name>
+    <role>Gwen</role>
+    <sortorder>14</sortorder>
+  </actor>
+  <director>Martin Scorsese</director>
+  <credits>William Monahan</credits>
+</movie>
