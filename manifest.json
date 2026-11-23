@@ -12,9 +12,9 @@
         "version": "1.0.44.0",
         "changelog": "1.0.44: titles in a Seerr watchlist were proposed again as outside-library recommendations when their details were not cached yet (each account's requests and watchlist are now always excluded); a later part of a saga outside the library is only proposed once every earlier part, in the library or not, is seen (no more part 5 to someone at part 2); a suggestion found from a title the account only requested now says \"Because you're waiting for X\" instead of \"Because you liked X\"; accounts without any known taste no longer get random \"little-known gems\" from all of TMDb.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.44.0/RecoPlus_1.0.44.0.zip",
+        "checksum": "ad053876992b5779bccc3545ebc8b46b",
+        "timestamp": "2026-11-23T12:03:41Z"
       },
       {
         "version": "1.0.43.0",
