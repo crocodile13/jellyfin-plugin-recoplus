@@ -11,5 +11,7 @@
   <ItemGroup>
     <!-- dictionnaire français → anglais (pas de « .en. » dans le nom : MSBuild en ferait un assembly satellite) -->
     <EmbeddedResource Include="english.json" LogicalName="RecoPlus.Engine.english.json" />
+    <EmbeddedResource Include="german.json" LogicalName="RecoPlus.Engine.german.json" />
+    <EmbeddedResource Include="spanish.json" LogicalName="RecoPlus.Engine.spanish.json" />
   </ItemGroup>
 </Project>

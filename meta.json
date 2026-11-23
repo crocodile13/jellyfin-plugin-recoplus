@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.53: the Preview tab now shows what an account actually sees — its home rows in order, as posters, with titles outside the library in their place and, under each title, why it is proposed — instead of plain lists of names.",
+  "changelog": "1.0.54: the interface is now also in German and Spanish (settings page, home rows, cards, reasons and notifications), chosen automatically from each person's Jellyfin language or set in the plugin; a text missing in either falls back to English. The settings page also drops the remaining technical terms from its essential and advanced levels.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.53.0",
+  "version": "1.0.54.0",
   "status": "Active",
   "autoUpdate": true,
   "assemblies": [

@@ -25,7 +25,7 @@ Reco+ is a Jellyfin plugin that replaces the built-in recommendations — Sugges
 - **Measured effect**: the State tab shows what accounts do with what is recommended — started within 7 days, finished within 30, by row and by position — from the watch history alone.
 - **Calibration** on your own history, with cross-validation by account: settings are only proposed when they really generalize, and nothing is applied without your click.
 - **Self-protecting**: every Jellyfin hook is checked at start-up; a part that no longer fits switches itself off and Jellyfin's normal behaviour comes back, with an alert (activity log, banner, optional webhook).
-- **English and French** interface, following each person's Jellyfin language.
+- **English, French, German and Spanish** interface, following each person's Jellyfin language.
 
 ## Screenshots
 
@@ -50,7 +50,7 @@ Reco+ is a Jellyfin plugin that replaces the built-in recommendations — Sugges
   </tr>
 </table>
 
-<sub>Interface available in English and French (screenshots in French). Screenshots from version 1.0.20 on a real server: account names replaced, artwork blurred, titles made up.</sub>
+<sub>Interface available in English, French, German and Spanish (screenshots in French). Screenshots from version 1.0.20 on a real server: account names replaced, artwork blurred, titles made up.</sub>
 
 <sub>PS: the rain is not a Reco+ feature. It is a personal whim of the author's "production" instance, where these screenshots were taken. The plugin recommends films; it does not do the weather.</sub>
 

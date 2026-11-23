@@ -720,7 +720,7 @@ await test('langue : page en anglais (réglage ou langue de Jellyfin), textes du
     const k = d.getElementById('rp_c_KindParceQue'); k.value = 'Split'; k.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
     assert.equal(d.getElementById('rp_c_TitleParceQueFilms').placeholder, 'Because you liked {title}: movies');
     assert.equal(d.getElementById('rp_e_Mmr').closest('.rp-factor').querySelector('.rp-mult').textContent, '×1.00 · normal');
-    assert.deepEqual([...d.getElementById('rp_c_Language').options].map((o) => o.textContent), ["Jellyfin's", 'French', 'English']);
+    assert.deepEqual([...d.getElementById('rp_c_Language').options].map((o) => o.textContent), ["Jellyfin's", 'French', 'English', 'Deutsch', 'Español']);
     // plus aucun texte de la page resté en français
     const fr = [];
     const walker = d.createTreeWalker(ui, d.defaultView.NodeFilter.SHOW_TEXT, { acceptNode: (x) => (x.parentNode.nodeName === 'SCRIPT' || x.parentNode.nodeName === 'STYLE' ? 2 : 1) });
@@ -731,6 +731,29 @@ await test('langue : page en anglais (réglage ou langue de Jellyfin), textes du
     assert.deepEqual(left, [], 'texte composé resté en français');
     // chaque appel à l'API porte la langue de la page
     assert.ok(calls.filter((u) => !u.startsWith('/RecoPlus/I18n')).every((u) => /[?&]lang=en(&|$)/.test(u)), calls.join(' '));
+});
+
+await test('langue : page en allemand (dictionnaire complété par l\'anglais côté serveur), virgule décimale, rien en français', async () => {
+    const DE = JSON.parse(readFileSync(join(root, 'src/RecoPlus.Engine/german.json'), 'utf8'));
+    const dict = { ...EN, ...DE };
+    const st = { ...status, secrets: { seerrApiKey: 'nicht gesetzt', webhookUrl: 'nicht gesetzt', webhookToken: 'nicht gesetzt' } };
+    const { d, calls } = await open({ ...cfg, Language: 'German' }, { '/RecoPlus/I18n': { lang: 'de', dict }, '/RecoPlus/Status': st });
+    await wait(50);
+    const ui = d.querySelector('.content-primary');
+    assert.equal(d.querySelector('.rp-tab[data-tab="general"]').textContent, 'Allgemein');
+    assert.equal(d.querySelector('#rpRecompute span').textContent, 'Jetzt neu berechnen');
+    assert.match(d.getElementById('rp_c_Enabled').closest('label').textContent, /Plugin aktiv/);
+    assert.equal(d.getElementById('rp_c_HssSectionTitle').getAttribute('placeholder'), 'Für dich');
+    assert.equal(d.getElementById('rp_e_Mmr').closest('.rp-factor').querySelector('.rp-mult').textContent, '×1,00 · normal', 'virgule décimale');
+    const k = d.getElementById('rp_c_KindParceQue'); k.value = 'Split'; k.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.equal(d.getElementById('rp_c_TitleParceQueFilms').placeholder, 'Weil du {title} mochtest: Filme');
+    assert.equal(d.getElementById('rp_c_ExtendedBoldness_lbl').textContent.length > 0, true);
+    const fr = [];
+    const walker = d.createTreeWalker(ui, d.defaultView.NodeFilter.SHOW_TEXT, { acceptNode: (x) => (x.parentNode.nodeName === 'SCRIPT' || x.parentNode.nodeName === 'STYLE' ? 2 : 1) });
+    let n; while ((n = walker.nextNode())) { const t = n.nodeValue.trim(); if (t && DE[t] && DE[t] !== t) fr.push(t); }
+    ui.querySelectorAll('[title],[placeholder],[aria-label]').forEach((e) => ['title', 'placeholder', 'aria-label'].forEach((a) => { const v = e.getAttribute(a); if (v && DE[v] && DE[v] !== v) fr.push(v); }));
+    assert.deepEqual(fr, []);
+    assert.ok(calls.filter((u) => !u.startsWith('/RecoPlus/I18n')).every((u) => /[?&]lang=de(&|$)/.test(u)), calls.join(' '));
 });
 
 await test('état : effet des recommandations (taux par rangée et par place, part des lectures, sans recul)', async () => {

@@ -14,7 +14,13 @@ public enum UiLanguage
     French,
 
     /// <summary>Anglais.</summary>
-    English
+    English,
+
+    /// <summary>Allemand (ajouté à la fin : les valeurs enregistrées des autres ne changent pas).</summary>
+    German,
+
+    /// <summary>Espagnol.</summary>
+    Spanish
 }
 
 /// <summary>Choix de la langue des textes (voir <see cref="Texts"/>) : réglage du plugin, sinon langue de Jellyfin.</summary>
@@ -36,14 +42,16 @@ public static class I18n
     }
 
     /// <summary>
-    /// « fr » ou « en » : la langue imposée par le réglage du plugin, sinon celle du client qui demande (langue de
-    /// l'interface Jellyfin, du navigateur), sinon celle de l'interface du serveur.
+    /// « fr », « en », « de » ou « es » : la langue imposée par le réglage du plugin, sinon celle du client qui demande
+    /// (langue de l'interface Jellyfin, du navigateur), sinon celle de l'interface du serveur ; l'anglais pour une autre.
     /// </summary>
     public static string Lang(string? client = null)
         => (Plugin.Instance?.Configuration.Language ?? UiLanguage.System) switch
         {
             UiLanguage.French => "fr",
             UiLanguage.English => "en",
+            UiLanguage.German => "de",
+            UiLanguage.Spanish => "es",
             _ => Texts.Normalize(!string.IsNullOrWhiteSpace(client) ? client : Server()?.UICulture),
         };
 

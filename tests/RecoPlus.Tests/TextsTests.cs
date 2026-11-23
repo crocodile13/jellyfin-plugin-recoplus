@@ -12,13 +12,41 @@ namespace RecoPlus.Tests;
 public class TextsTests
 {
     [Fact]
-    public void NormalizeKeepsFrenchOnlyForFrench()
+    public void NormalizeKnowsTheFourLanguagesAndFallsBackToEnglish()
     {
         Assert.Equal("fr", Texts.Normalize("fr-FR"));
         Assert.Equal("fr", Texts.Normalize(" FR "));
         Assert.Equal("en", Texts.Normalize("en-US"));
-        Assert.Equal("en", Texts.Normalize("de"));
+        Assert.Equal("de", Texts.Normalize("de"));
+        Assert.Equal("de", Texts.Normalize("de-AT"));
+        Assert.Equal("es", Texts.Normalize("es_419"));
+        Assert.Equal("en", Texts.Normalize("pt-BR"));
+        Assert.Equal("en", Texts.Normalize("desu"));                     // pas un code « de »
         Assert.Equal("en", Texts.Normalize(null));
+    }
+
+    [Fact]
+    public void GermanAndSpanishCoverEveryTextWithTheSamePlaceholders()
+    {
+        var ph = new Regex(@"\{[\w:]+\}");
+        static List<string> Of(Regex r, string t) => r.Matches(t).Select(m => m.Value == "{title}" ? "{titre}" : m.Value).Distinct().OrderBy(x => x, StringComparer.Ordinal).ToList();
+        foreach (var lang in new[] { "de", "es" })
+        {
+            var d = Texts.Dictionary(lang);
+            var missing = Texts.English.Keys.Where(k => !d.ContainsKey(k)).ToList();
+            Assert.True(missing.Count == 0, lang + " : sans traduction :\n" + string.Join("\n", missing.Take(20)));
+            var extra = d.Keys.Where(k => !Texts.English.ContainsKey(k)).ToList();
+            Assert.True(extra.Count == 0, lang + " : clés inconnues :\n" + string.Join("\n", extra.Take(20)));
+            foreach (var (fr, t) in d)
+            {
+                Assert.False(string.IsNullOrWhiteSpace(t), lang + " : traduction vide : " + fr);
+                Assert.True(Of(ph, fr).SequenceEqual(Of(ph, t)), lang + " : paramètres différents : « " + fr + " » → « " + t + " »");
+            }
+        }
+
+        Assert.Equal("Discovery boldness", Texts.T("Audace des découvertes", "en"));
+        Assert.NotEqual("Audace des découvertes", Texts.T("Audace des découvertes", "de"));
+        Assert.Equal("Audace des découvertes", Texts.T("Audace des découvertes", "fr"));
     }
 
     [Fact]

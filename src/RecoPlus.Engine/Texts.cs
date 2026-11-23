@@ -9,9 +9,10 @@ using System.Text.Json.Nodes;
 namespace RecoPlus.Engine;
 
 /// <summary>
-/// Textes affichés, en français (langue source) ou en anglais. Le texte français sert de clé : le dictionnaire
-/// <c>english.json</c> (ressource incorporée) donne sa traduction anglaise ; un texte absent du dictionnaire reste tel
-/// quel. Un message qui dépend de valeurs est un modèle à paramètres {0}, {1}… Pour être traduit au moment de
+/// Textes affichés, en français (langue source), anglais, allemand ou espagnol. Le texte français sert de clé : les
+/// dictionnaires <c>english.json</c>, <c>german.json</c>, <c>spanish.json</c> (ressources incorporées ; jamais « .de. »
+/// dans le nom, MSBuild en ferait un assembly satellite) donnent ses traductions ; un texte absent d'un dictionnaire
+/// allemand ou espagnol se rabat sur l'anglais, et un texte absent de l'anglais reste tel quel. Un message qui dépend de valeurs est un modèle à paramètres {0}, {1}… Pour être traduit au moment de
 /// l'affichage (dans la langue de celui qui le lit, pas celle du serveur au moment où il a été produit), il est gardé
 /// « emballé » (<see cref="Pack"/>) : modèle et paramètres, rendus par <see cref="Render"/>. Un paramètre peut être
 /// lui-même un message emballé (imbrication sans limite) ou un libellé à traduire (<see cref="Translatable"/>).
@@ -23,18 +24,46 @@ public static class Texts
 
     private static readonly JsonSerializerOptions Json = new() { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
-    private static readonly Lazy<IReadOnlyDictionary<string, string>> EnDict = new(Load);
+    /// <summary>Langues de l'interface : le français (source), puis celles qui ont un dictionnaire.</summary>
+    public static IReadOnlyList<string> Languages { get; } = new[] { "fr", "en", "de", "es" };
+
+    private static readonly Dictionary<string, Lazy<IReadOnlyDictionary<string, string>>> Dicts = new(StringComparer.Ordinal)
+    {
+        ["en"] = new(() => Load("RecoPlus.Engine.english.json")),
+        ["de"] = new(() => Load("RecoPlus.Engine.german.json")),
+        ["es"] = new(() => Load("RecoPlus.Engine.spanish.json")),
+    };
 
     /// <summary>Dictionnaire français → anglais.</summary>
-    public static IReadOnlyDictionary<string, string> English => EnDict.Value;
+    public static IReadOnlyDictionary<string, string> English => Dicts["en"].Value;
 
-    /// <summary>« fr » ou « en » d'après un code de langue quelconque (fr-FR, en-US, de…) : français seulement pour fr.</summary>
+    /// <summary>Dictionnaire français → <paramref name="lang"/> (vide en français, langue source, ou langue inconnue).</summary>
+    public static IReadOnlyDictionary<string, string> Dictionary(string lang)
+        => Dicts.TryGetValue(lang, out var d) ? d.Value : new Dictionary<string, string>(StringComparer.Ordinal);
+
+    /// <summary>Langue de l'interface d'après un code quelconque (fr-FR, de-AT, es-419, pt…) : l'anglais pour une langue sans dictionnaire.</summary>
     public static string Normalize(string? lang)
-        => !string.IsNullOrWhiteSpace(lang) && lang.Trim().StartsWith("fr", StringComparison.OrdinalIgnoreCase) ? "fr" : "en";
+    {
+        var l = string.IsNullOrWhiteSpace(lang) ? string.Empty : lang.Trim();
+        var two = l.Length >= 2 ? l[..2].ToLowerInvariant() : string.Empty;
+        return two is "fr" or "de" or "es" && (l.Length == 2 || l[2] is '-' or '_') ? two : "en";
+    }
 
-    /// <summary>Texte dans la langue voulue (le français est la langue source).</summary>
+    /// <summary>Texte dans la langue voulue (le français est la langue source ; allemand ou espagnol absent : l'anglais).</summary>
     public static string T(string fr, string lang)
-        => lang == "en" && English.TryGetValue(fr, out var en) && en.Length > 0 ? en : fr;
+    {
+        if (lang == "fr")
+        {
+            return fr;
+        }
+
+        if (Dictionary(lang).TryGetValue(fr, out var t) && t.Length > 0)
+        {
+            return t;
+        }
+
+        return lang != "en" && English.TryGetValue(fr, out var en) && en.Length > 0 ? en : fr;
+    }
 
     /// <summary>Modèle traduit puis rempli ({0}, {1}… remplacés par les paramètres ; un paramètre emballé est rendu lui aussi).</summary>
     public static string T(string fr, string lang, params object?[] args)
@@ -170,9 +199,9 @@ public static class Texts
         return sb.ToString();
     }
 
-    private static IReadOnlyDictionary<string, string> Load()
+    private static IReadOnlyDictionary<string, string> Load(string resource)
     {
-        using var s = typeof(Texts).Assembly.GetManifestResourceStream("RecoPlus.Engine.english.json");
+        using var s = typeof(Texts).Assembly.GetManifestResourceStream(resource);
         if (s is null)
         {
             return new Dictionary<string, string>(StringComparer.Ordinal);

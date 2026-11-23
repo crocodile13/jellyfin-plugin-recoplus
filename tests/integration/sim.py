@@ -671,7 +671,15 @@ def index_check():
         problems.append("index.html : balise du script Reco+ absente")
     if "no-cache" not in cc:
         problems.append(f"index.html : Cache-Control « {cc} » (no-cache attendu : sinon un navigateur garde l'ancien script)")
-    return {"script": "RecoPlus/client.js" in page, "cache": cc, "je": "JellyfinEnhanced/script" in page}
+    # langues : chaque dictionnaire incorporé dans la DLL et servi (allemand, espagnol : complets, pas un repli anglais)
+    langs = {}
+    for lang, probe, want in (("de", "Jetzt neu berechnen", "Recompute now"), ("es", "Recalcular ahora", "Recompute now")):
+        r = call("GET", "/RecoPlus/I18n", query={"lang": lang})
+        d = r.get("dict") or {}
+        langs[lang] = len(d)
+        if r.get("lang") != lang or d.get("Recalculer maintenant") != probe:
+            problems.append(f"langue {lang} : réponse {r.get('lang')}, « Recalculer maintenant » → {d.get('Recalculer maintenant')!r} (attendu {probe!r})")
+    return {"script": "RecoPlus/client.js" in page, "cache": cc, "je": "JellyfinEnhanced/script" in page, "langues": langs}
 
 
 def browser_check():
@@ -728,7 +736,7 @@ def markdown(r) -> str:
             L.append(f"  - {n} : " + " · ".join(v["titles"][:6]) + "  ")
     if r.get("index"):
         i = r["index"]
-        L.append(f"index.html : script Reco+ {'présent' if i['script'] else 'absent'}, Jellyfin Enhanced {'présent' if i['je'] else 'absent'}, Cache-Control « {i['cache']} »  ")
+        L.append(f"index.html : script Reco+ {'présent' if i['script'] else 'absent'}, Jellyfin Enhanced {'présent' if i['je'] else 'absent'}, Cache-Control « {i['cache']} » ; textes servis : {i.get('langues')}  ")
     for k, v in (r.get("navigateur") or {}).items():
         if isinstance(v, dict):
             L.append(f"Navigateur, {k} : {v.get('sections')} sections ({v.get('reco')} Reco+), {v.get('ext')} cartes hors bibliothèque ({v.get('own')} de Reco+, Jellyfin Enhanced {'prêt' if v.get('je') else 'chargé sans Seerr' if v.get('je_obj') else 'balise sans script' if v.get('je_tag') else 'absent'}), "
