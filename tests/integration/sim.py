@@ -39,18 +39,19 @@ NOW = dt.datetime.now(dt.timezone.utc)
 problems: list[str] = []
 
 
-def log(*a):
-    print(*a, flush=True)
-
-
 def safe(name: str) -> str:
     return re.sub(r'[<>:"/\\|?*]', "", name)
+
+
+def log(*a):
+    print(*a, flush=True)
 
 
 # ------------------------------------------------------------------ bibliothèque
 
 NFO = Path(__file__).with_name("nfo")   # métadonnées figées (voir export_nfo) : bibliothèque analysée sans Internet
-OFFLINE = NFO.is_dir()
+# hors ligne seulement si chaque titre a sa fiche ; sinon en ligne, et les fiches sont exportées (artifact) pour la suite
+OFFLINE = NFO.is_dir() and all((NFO / f"{safe(t)} ({y}).nfo").is_file() for t, y in [(m[0], m[1]) for m in MOVIES] + [(x[0], x[1]) for x in SERIES])
 
 
 def layout(media: Path, sample: Path):
@@ -282,12 +283,15 @@ def post_either(paths, query=None, body=None):
 def simulate(lib, users):
     for name, p in PERSONAS.items():
         uid = users[name]
-        for title, days in p.get("watched", []):
+        bulk = set(p.get("bulk", []))
+        for k, (title, days) in enumerate(p.get("watched", [])):
             it = find(lib, title)
+            # un import en masse : tous à quelques secondes d'écart ; sinon chaque titre à sa propre heure
+            when = iso(days) if title in bulk else iso(days + (k % 7) / 24)
             if it["Type"] == "Series":
                 episodes(it, uid, 10_000, days)
             else:
-                post_either([f"/UserPlayedItems/{it['Id']}", f"/Users/{uid}/PlayedItems/{it['Id']}"], {"userId": uid, "datePlayed": iso(days)})
+                post_either([f"/UserPlayedItems/{it['Id']}", f"/Users/{uid}/PlayedItems/{it['Id']}"], {"userId": uid, "datePlayed": when})
         for title, n, days in p.get("episodes", []):
             episodes(find(lib, title), uid, n, days)
         for title, part, days in p.get("abandoned", []):
@@ -430,6 +434,30 @@ def recompute():
         problems.append(f"calcul complet : {res.get('Status')} {res.get('ErrorMessage') or ''}")
 
 
+def measure(lib, name, uid, p, items):
+    """Banc : rang des titres gardés de côté (vraiment regardés ensuite) chez Reco+ et chez la popularité dans le foyer ;
+    part du début de « Pour toi » dans les goûts du compte."""
+    import bench
+    ranked = names(call("GET", "/Items/Suggestions", query={"userId": uid, "limit": 500, "type": "Movie,Series"}).get("Items", []))
+    held = [find(lib, t)["Name"] for t, _, _ in p["holdout"]]
+    known = {find(lib, t)["Name"] for t, *_ in p.get("watched", []) + p.get("episodes", []) + p.get("abandoned", [])}
+    known |= {find(lib, t)["Name"] for t in p.get("favorites", []) + p.get("dislikes", [])}
+    # popularité dans le foyer : nombre de comptes qui ont regardé chaque titre (hors titres gardés de côté)
+    count: dict[str, int] = {}
+    for q in PERSONAS.values():
+        for t, *_ in q.get("watched", []) + q.get("episodes", []):
+            n_ = find(lib, t)["Name"]
+            count[n_] = count.get(n_, 0) + 1
+    pool = sorted((i["Name"] for i in lib.values() if i["Name"] not in known), key=lambda x: (-count.get(x, 0), x))
+    rank = lambda lst, x: lst.index(x) + 1 if x in lst else None
+    uni = bench.universe_of()
+    name_uni = {find(lib, t)["Name"]: us for t, us in uni.items()}
+    mine = {u for u, w in (p.get("univers") or {}).items() if w >= .15}
+    top = items[:20]
+    share = sum(1 for t in top if name_uni.get(t, set()) & mine) / len(top) if top and mine else None
+    return {"gardes": held, "reco": [rank(ranked, h) for h in held], "popularite": [rank(pool, h) for h in held], "dans_ses_gouts": share}
+
+
 def hss_row(name, uid, section):
     """Ce que Home Screen Sections renvoie au compte pour une rangée Reco+ (sa propre route, en tant que ce compte)."""
     try:
@@ -522,6 +550,8 @@ def report(lib, users):
         acc["raisons"] = {t: named[t] for t in items[:12] if t in named}
         if name != "nouveau" and not why:
             problems.append(f"{name} : aucune raison donnée (fiche du titre)")
+        if p.get("holdout") is not None:
+            acc["mesure"] = measure(lib, name, uid, p, items)
         if not items:
             problems.append(f"{name} : aucune liste")
         bad = seen & (set(items) | set(acc["suggestions"]))
@@ -574,6 +604,25 @@ def markdown(r) -> str:
     L.append("")
     for k, v in (r.get("seerr") or {}).items():
         L.append(f"Seerr, {k} : {v}  ")
+    bench_rows = [(n, a["mesure"]) for n, a in r["accounts"].items() if a.get("mesure") and a["mesure"]["gardes"]]
+    if bench_rows:
+        def hit(m, key, k):
+            ranks = [x for mm in m for x in mm[key]]
+            return sum(1 for x in ranks if x is not None and x <= k) / max(1, len(ranks))
+        def mrr(m, key):
+            ranks = [x for mm in m for x in mm[key]]
+            return sum(1 / x for x in ranks if x) / max(1, len(ranks))
+        ms = [m for _, m in bench_rows]
+        shares = [m["dans_ses_gouts"] for m in ms if m["dans_ses_gouts"] is not None]
+        L += ["", "### Banc : mesure objective",
+              f"Titres gardés de côté (les {len(ms[0]['gardes'])} derniers vraiment regardés de chaque compte), retrouvés parmi les 20 premiers : "
+              f"**Reco+ {hit(ms, 'reco', 20):.0%}** contre popularité dans le foyer {hit(ms, 'popularite', 20):.0%} ; parmi les 10 premiers : "
+              f"Reco+ {hit(ms, 'reco', 10):.0%} contre {hit(ms, 'popularite', 10):.0%} ; rang réciproque moyen {mrr(ms, 'reco'):.3f} contre {mrr(ms, 'popularite'):.3f}. "
+              f"Début de « Pour toi » dans les goûts du compte : {sum(shares) / max(1, len(shares)):.0%} en moyenne.", "",
+              "| Compte | Gardés | Rang Reco+ | Rang popularité | Pour toi dans ses goûts |", "|---|---|---|---|---|"]
+        for n, m in bench_rows:
+            L.append(f"| {n} | {', '.join(m['gardes'])} | {', '.join(str(x or '—') for x in m['reco'])} | {', '.join(str(x or '—') for x in m['popularite'])} | "
+                     f"{'—' if m['dans_ses_gouts'] is None else format(m['dans_ses_gouts'], '.0%')} |")
     L.append("")
     L.append("### Problèmes" if problems else "### Aucun problème détecté")
     L += [f"- {p}" for p in problems]
