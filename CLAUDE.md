@@ -169,7 +169,9 @@ de la CI.
   (logit conditionnel régularisé vers l'actuel), réseau (correction non linéaire, expérimental) ; automatique = toutes.
 - Validation croisée par comptes à k groupes (`FoldCount` : √comptes ; méthodes longues `SlowFoldCount` : √(2k)) ;
   chaque méthode donne un chemin, l'étape retenue suit la règle 1-SE (réglable : `CalibrationOptions`) ; recommandé
-  seulement si l'IC95 bootstrap par compte est au-dessus de zéro et le gain au-dessus du minimum.
+  seulement si l'IC95 bootstrap par compte est au-dessus de zéro et le gain au-dessus du minimum. Gain annoncé et
+  recommandation : `HonestSelection` (choix du pas et de la méthode refait sans chaque groupe, jugé sur lui, à partir
+  des mesures hors échantillon `MethodResult.Oof`, sans réapprendre) : sinon « malédiction du gagnant ».
 - Mémoire et durée : `SimCache` (index par jeu de vecteurs, borné), `ContextCache` (une version),
   `ChoiceModel.FeatureCache` (réglage de départ seulement), avancement pondéré par le coût mesuré de chaque étape.
 - Le bouton « Exporter le jeu de calibrage » produit le format lu par `ParityTests.LoadDataset` (comptes u01, u02…).

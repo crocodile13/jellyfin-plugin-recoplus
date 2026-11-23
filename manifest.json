@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.51.0",
+        "changelog": "1.0.51: calibration is more honest about its gains — the step along each method's path and the method itself were chosen on the same cross-validation measurements that then reported the gain, which flatters the winner (the best of several noisy draws). The announced gain and the recommendation now come from the whole choice made again without each group of accounts and judged on it (no extra training).",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.50.0",
         "changelog": "1.0.50: new \"Discovery boldness\" slider in the Extended mode tab, from cautious to bold: it sets in one move the minimum TMDb votes and rating of the exploration, the genres explored for hidden gems and the daily randomness (the middle keeps today's values). Measured with a real Seerr, bold divides the median votes of the proposed titles by 2 to 7 while their average rating and the fit with each account's tastes stay the same.",
         "targetAbi": "12.2.0.0",
