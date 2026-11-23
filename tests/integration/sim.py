@@ -23,8 +23,10 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
+import eco
 from catalog import MOVIES, PERSONAS, SERIES
 
 BASE = os.environ.get("JF_URL", "http://127.0.0.1:8096").rstrip("/")
@@ -47,18 +49,80 @@ def safe(name: str) -> str:
 
 # ------------------------------------------------------------------ bibliothèque
 
+NFO = Path(__file__).with_name("nfo")   # métadonnées figées (voir export_nfo) : bibliothèque analysée sans Internet
+OFFLINE = NFO.is_dir()
+
+
 def layout(media: Path, sample: Path):
     for title, year in MOVIES:
         d = media / "movies" / f"{safe(title)} ({year})"
         d.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(sample, d / f"{safe(title)} ({year}).mkv")
+        if (NFO / f"{safe(title)} ({year}).nfo").is_file():
+            shutil.copyfile(NFO / f"{safe(title)} ({year}).nfo", d / "movie.nfo")
     for title, year, seasons, eps in SERIES:
+        if (NFO / f"{safe(title)} ({year}).nfo").is_file():
+            (media / "shows" / f"{safe(title)} ({year})").mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(NFO / f"{safe(title)} ({year}).nfo", media / "shows" / f"{safe(title)} ({year})" / "tvshow.nfo")
         for s in range(1, seasons + 1):
             d = media / "shows" / f"{safe(title)} ({year})" / f"Season {s:02d}"
             d.mkdir(parents=True, exist_ok=True)
             for e in range(1, eps + 1):
                 shutil.copyfile(sample, d / f"{safe(title)} S{s:02d}E{e:02d}.mkv")
-    log(f"bibliothèque : {len(MOVIES)} films, {len(SERIES)} séries")
+    log(f"bibliothèque : {len(MOVIES)} films, {len(SERIES)} séries ({'métadonnées figées (.nfo)' if OFFLINE else 'métadonnées TMDb en ligne'})")
+
+
+def export_nfo(out: Path):
+    """Métadonnées de la bibliothèque analysée (TMDb via Jellyfin) écrites en .nfo : les runs suivants s'en servent hors ligne."""
+    out.mkdir(parents=True, exist_ok=True)
+    r = call("GET", "/Items", query={"IncludeItemTypes": "Movie,Series", "Recursive": "true", "Limit": 2000,
+                                       "Fields": "Path,Genres,Tags,Studios,People,ProviderIds,ProductionLocations,OriginalTitle,PremiereDate,OfficialRating"})
+    n = 0
+    for it in r["Items"]:
+        full = call("GET", f"/Items/{it['Id']}")          # notes, langue d'origine : fiche complète
+        root = ET.Element("tvshow" if it["Type"] == "Series" else "movie")
+        def add(tag, val, **attrs):
+            if val not in (None, ""):
+                ET.SubElement(root, tag, {k: str(v) for k, v in attrs.items()}).text = str(val)
+        add("title", it.get("Name"))
+        add("originaltitle", it.get("OriginalTitle"))
+        add("year", it.get("ProductionYear"))
+        add("premiered", (it.get("PremiereDate") or "")[:10])
+        add("rating", full.get("CommunityRating"))
+        add("criticrating", full.get("CriticRating"))
+        add("mpaa", it.get("OfficialRating"))
+        for g in it.get("Genres") or []:
+            add("genre", g)
+        for t in it.get("Tags") or []:
+            add("tag", t)
+        for st in it.get("Studios") or []:
+            add("studio", st.get("Name"))
+        for c in it.get("ProductionLocations") or []:
+            add("country", c)
+        ids = it.get("ProviderIds") or {}
+        if ids.get("Tmdb"):
+            add("uniqueid", ids["Tmdb"], type="tmdb", default="true")
+        if ids.get("Imdb"):
+            add("uniqueid", ids["Imdb"], type="imdb")
+        if ids.get("TmdbCollection"):
+            s_ = ET.SubElement(root, "set", {"tmdbcolid": ids["TmdbCollection"]})
+            ET.SubElement(s_, "name").text = ids["TmdbCollection"]
+        for k, person in enumerate(it.get("People") or []):
+            kind = person.get("Type")
+            if kind in ("Actor", "GuestStar") and k < 30:
+                a = ET.SubElement(root, "actor")
+                ET.SubElement(a, "name").text = person.get("Name")
+                ET.SubElement(a, "role").text = person.get("Role") or ""
+                ET.SubElement(a, "sortorder").text = str(k)
+            elif kind == "Director":
+                add("director", person.get("Name"))
+            elif kind == "Writer":
+                add("credits", person.get("Name"))
+        folder = Path(it.get("Path") or "").name if it["Type"] == "Series" else Path(it.get("Path") or "").parent.name
+        ET.indent(root)
+        (out / f"{folder}.nfo").write_text(ET.tostring(root, encoding="unicode", xml_declaration=False), encoding="utf-8")
+        n += 1
+    log(f"{n} fiches .nfo exportées dans {out}")
 
 
 # ------------------------------------------------------------------ API
@@ -125,7 +189,8 @@ def setup():
     info = wait("démarrage de Jellyfin", lambda: (lambda i: i if isinstance(i, dict) and i.get("Version") else None)(call("GET", "/System/Info/Public", tries=1)),
                 timeout=300, every=3)
     log(f"Jellyfin {info.get('Version')}")
-    password = secrets.token_urlsafe(24)   # jamais écrit nulle part
+    global ADMIN_PASSWORD
+    password = ADMIN_PASSWORD = secrets.token_urlsafe(24)   # jamais écrit nulle part
     if not info.get("StartupWizardCompleted"):
         call("POST", "/Startup/Configuration", {"UICulture": "en-US", "MetadataCountryCode": "US", "PreferredMetadataLanguage": "en"})
         call("GET", "/Startup/User")
@@ -137,8 +202,15 @@ def setup():
     print(f"::add-mask::{TOKEN}", flush=True)
 
     for name, kind, path in (("Films", "movies", "/media/movies"), ("Séries", "tvshows", "/media/shows")):
-        call("POST", "/Library/VirtualFolders", {"LibraryOptions": {"PathInfos": [{"Path": path}]}},
-             {"name": name, "collectionType": kind, "refreshLibrary": "false"})
+        opts = {"PathInfos": [{"Path": path}]}
+        if OFFLINE:
+            # métadonnées lues dans les .nfo : aucun téléchargement (fiches, images), aucune extraction d'images
+            types = ("Movie",) if kind == "movies" else ("Series", "Season", "Episode")
+            opts.update({"TypeOptions": [{"Type": t, "MetadataFetchers": [], "ImageFetchers": [], "MetadataFetcherOrder": [], "ImageFetcherOrder": []} for t in types],
+                         "MetadataSavers": [], "EnableChapterImageExtraction": False, "ExtractChapterImagesDuringLibraryScan": False,
+                         "EnableTrickplayImageExtraction": False, "ExtractTrickplayImagesDuringLibraryScan": False,
+                         "EnableEmbeddedTitles": False, "EnableEmbeddedExtrasTitles": False, "EnableEmbeddedEpisodeInfos": False})
+        call("POST", "/Library/VirtualFolders", {"LibraryOptions": opts}, {"name": name, "collectionType": kind, "refreshLibrary": "false"})
     call("POST", "/Library/Refresh")
 
     def scanned():
@@ -147,7 +219,7 @@ def setup():
         with_meta = sum(1 for i in items if i.get("Genres"))
         log(f"  analyse : {len(items)} titres, {with_meta} avec genres")
         return len(items) >= 0.95 * (len(MOVIES) + len(SERIES)) and with_meta >= 0.8 * len(items) and not refreshing()
-    wait("analyse de la bibliothèque", scanned, timeout=1500, every=20)
+    wait("analyse de la bibliothèque", scanned, timeout=1500, every=5 if OFFLINE else 20)
 
     for name in PERSONAS:
         PASSWORDS[name] = secrets.token_urlsafe(18)   # en mémoire seulement
@@ -155,6 +227,8 @@ def setup():
 
 
 PASSWORDS: dict[str, str] = {}
+ADMIN_PASSWORD = ""
+WISHED: dict[str, list] = {}   # compte → [(mediaType, tmdbId)] demandés ou en liste de suivi
 _tokens: dict[str, str] = {}
 
 
@@ -293,6 +367,42 @@ def setup_je(lib, users):
             log(f"  compte {name} : {len(items)} masqué(s), {len(p.get('reviews', []))} avis (Jellyfin Enhanced)")
 
 
+def setup_seerr(users):
+    """Seerr relié à Jellyfin, demandes et listes de suivi des comptes, puis Reco+ relié à Seerr (mode étendu)."""
+    key = eco.setup_seerr(ADMIN_PASSWORD, users)
+    wished = eco.wishes(PERSONAS, eco.seerr_users(), problems)
+    pid = plugin_id("Reco+")
+    cfg = call("GET", f"/Plugins/{pid}/Configuration")
+    cfg.update({"SeerrEnabled": True, "SeerrUrl": "http://seerr:5055", "ExtendedEnabled": True})
+    call("POST", f"/Plugins/{pid}/Configuration", cfg)
+    call("POST", "/RecoPlus/Secret", {"Name": "SeerrApiKey", "Value": key})   # jamais dans la configuration
+    t = call("POST", "/RecoPlus/TestSeerr", {}, query={"lang": "fr"})
+    log(f"Reco+ → Seerr : {t.get('message')}")
+    if not t.get("ok"):
+        problems.append(f"test Seerr de Reco+ : {t.get('message')}")
+    return wished
+
+
+def arrive(lib_before):
+    """Une demande arrive : son fichier est posé dans la bibliothèque (comme après Radarr), puis la bibliothèque est relue."""
+    media = Path(os.environ.get("SIM_MEDIA", "../../media"))
+    arrived = {}
+    for name, p in PERSONAS.items():
+        if p.get("arrive"):
+            title, year = p["arrive"]
+            d = media / "movies" / f"{safe(title)} ({year})"
+            d.mkdir(parents=True, exist_ok=True)
+            sample = next((media / "movies").rglob("*.mkv"))
+            shutil.copyfile(sample, d / f"{safe(title)} ({year}).mkv")
+            arrived[name] = f"{safe(title)} ({year})"
+    if not arrived:
+        return {}
+    call("POST", "/Library/Refresh")
+    lib = wait("arrivée dans la bibliothèque", lambda: (lambda l: l if all(k in l and l[k].get("Genres") for k in arrived.values()) else None)(library()),
+               timeout=900, every=15)
+    return {name: lib[folder]["Name"] for name, folder in arrived.items()}
+
+
 # ------------------------------------------------------------------ Reco+
 
 def task(key):
@@ -307,7 +417,7 @@ def recompute():
         t = task("RecoPlusNightly") or {}
         last = t.get("LastExecutionResult") or {}
         return t.get("State") == "Idle" and last and last.get("EndTimeUtc") != before.get("EndTimeUtc") and last
-    res = wait("calcul de Reco+", done, timeout=900, every=10)
+    res = wait("calcul de Reco+", done, timeout=900, every=3)
     log(f"calcul complet : {res.get('Status')}")
     if res.get("Status") != "Completed":
         problems.append(f"calcul complet : {res.get('Status')} {res.get('ErrorMessage') or ''}")
@@ -344,6 +454,8 @@ def report(lib, users):
     je_state = status["engine"].get("JellyfinEnhanced") or ""
     if "je" in EXPECT and not re.search(r"[1-9]\d* titres masqués, [1-9]\d* avis", je_state):
         problems.append(f"Jellyfin Enhanced : masquages ou avis non lus ({je_state})")
+    if "seerr" in EXPECT and not (status["engine"].get("Seerr") or "").startswith("connecté"):
+        problems.append(f"Seerr vu par Reco+ : {status['engine'].get('Seerr')}")
     if "hss" in EXPECT and "déclarées" not in (status.get("hss") or ""):
         problems.append(f"Home Screen Sections : {status.get('hss')}")
 
@@ -367,6 +479,19 @@ def report(lib, users):
         everywhere = set(items) | set(acc["suggestions"]) | {x for v in acc["rangees"].values() for x in v}
         if hidden & everywhere:
             problems.append(f"{name} : titre masqué (Jellyfin Enhanced) proposé {sorted(hidden & everywhere)}")
+        if "seerr" in EXPECT:
+            ext = call("GET", "/RecoPlus/Extended", query={"lang": "fr"}, token=as_user(name))
+            acc["hors_bibliotheque"] = [f"{e['Name']} ({e.get('Year') or '?'}){' — ' + e['Reason'] if e.get('Reason') else ''}{' · ' + e['Row'] if e.get('Row') else ''}"
+                                        for e in ext.get("items", [])]
+            acc["apercu_hors_bibliotheque"] = prev.get("extended") or []
+            keys = {(e["MediaType"], e["TmdbId"]) for e in ext.get("items", [])}
+            lib_tmdb = {(("tv" if i["Type"] == "Series" else "movie"), int((i.get("ProviderIds") or {}).get("Tmdb") or 0)) for i in lib.values()}
+            if keys & lib_tmdb:
+                problems.append(f"{name} : titres de la bibliothèque proposés comme hors bibliothèque {sorted(keys & lib_tmdb)}")
+            if keys & set(WISHED.get(name, [])):
+                problems.append(f"{name} : titre demandé ou en liste de suivi reproposé hors bibliothèque")
+            if name != "nouveau" and not ext.get("items"):
+                problems.append(f"{name} : aucun titre hors bibliothèque (mode étendu)")
         if "hss" in EXPECT:
             acc["hss_pour_toi"] = hss_row(name, users[name], "RecoPlusPourToi")
             if not acc["hss_pour_toi"]:
@@ -383,6 +508,37 @@ def report(lib, users):
     return out
 
 
+def after_report(lib, users):
+    """Bouton « Demander » (au nom du compte), puis arrivée d'un titre demandé : jamais reproposé à celui qui l'a demandé."""
+    out = {}
+    name = "action"
+    items = call("GET", "/RecoPlus/Extended", token=as_user(name)).get("items", [])
+    if items:
+        it = items[0]
+        r = call("POST", "/RecoPlus/Request", {"MediaType": it["MediaType"], "TmdbId": it["TmdbId"]}, token=as_user(name))
+        out["demande"] = f"{name} demande « {it['Name']} » : {r}"
+        again = call("GET", "/RecoPlus/Extended", token=as_user(name)).get("items", [])
+        if any(e["TmdbId"] == it["TmdbId"] and e["MediaType"] == it["MediaType"] for e in again):
+            problems.append(f"{name} : titre demandé par le bouton encore proposé")
+    arrived = arrive(lib)
+    if arrived:
+        recompute()
+        for who, title in arrived.items():
+            seen_in = {}
+            for n, uid in users.items():
+                if n not in PERSONAS:
+                    continue
+                prev = call("GET", "/RecoPlus/Preview", query={"userId": uid, "lang": "fr"})
+                rows = {"Pour toi": [re.sub(r"^📌 ", "", x) for x in prev.get("items") or []], **(prev.get("rows") or {})}
+                where = [k for k, v in rows.items() if title in [x.removesuffix(" (série)") for x in v]]
+                if where:
+                    seen_in[n] = where
+            out["arrivee"] = f"« {title} » demandé par {who} et arrivé : proposé à {seen_in or 'personne'}"
+            if who in seen_in:
+                problems.append(f"{who} : « {title} », qu'il a demandé, lui est proposé dès son arrivée ({seen_in[who]})")
+    return out
+
+
 def markdown(r) -> str:
     L = [f"## Reco+ {r['status']['version']} sur Jellyfin {r['jellyfin']} ({', '.join(sorted(EXPECT)) or 'Reco+ seul'})", ""]
     L.append("| Vérification | | Détail |\n|---|---|---|")
@@ -391,6 +547,9 @@ def markdown(r) -> str:
     L.append("")
     L.append(f"Home Screen Sections : {r['status']['hss']}  ")
     L.append(f"Comptes prêts : {r['status']['engine']['UsersWithRecs']} — erreur : {r['status']['engine']['LastError'] or 'aucune'}")
+    L.append("")
+    for k, v in (r.get("seerr") or {}).items():
+        L.append(f"Seerr, {k} : {v}  ")
     L.append("")
     L.append("### Problèmes" if problems else "### Aucun problème détecté")
     L += [f"- {p}" for p in problems]
@@ -402,6 +561,8 @@ def markdown(r) -> str:
         L.append(f"- **/Items/Suggestions** : {', '.join(a['suggestions'][:10])}")
         for c in a["recommandations_films"]:
             L.append(f"- **/Movies/Recommendations — parce que {c['parce_que']}** : {', '.join(c['titres'])}")
+        if a.get("hors_bibliotheque") is not None:
+            L.append(f"- **Hors bibliothèque (Seerr)** : {'; '.join(a['hors_bibliotheque'][:12]) or '(aucun)'}")
         if a.get("hss_pour_toi") is not None:
             L.append(f"- **Home Screen Sections, « Pour toi » vu par le compte** : {', '.join(a['hss_pour_toi'][:10]) or '(vide)'}")
         if a["plus_comme_ceci"]:
@@ -414,16 +575,22 @@ def run():
     setup()
     lib = library()
     log(f"bibliothèque indexée : {len(lib)} titres")
+    if os.environ.get("SIM_EXPORT_NFO") or not OFFLINE:   # pas encore de métadonnées figées : on les exporte (artifact)
+        export_nfo(OUT / "nfo")
     users = {u["Name"]: u["Id"] for u in call("GET", "/Users")}
     simulate(lib, users)
     if "je" in EXPECT:
         setup_je(lib, users)
     if "hss" in EXPECT:
         setup_hss()
+    if "seerr" in EXPECT:
+        WISHED.update(setup_seerr(users))
     # Reco+ : vérifications de compatibilité 20 s après le démarrage, planificateur 60 s après
     wait("vérifications de Reco+", lambda: call("GET", "/RecoPlus/Status").get("checks"), timeout=300)
     recompute()
     r = report(lib, users)
+    if "seerr" in EXPECT:
+        r["seerr"] = after_report(lib, users)
     r["problems"] = problems
     (OUT / "report.json").write_text(json.dumps(r, ensure_ascii=False, indent=2), encoding="utf-8")
     md = markdown(r)

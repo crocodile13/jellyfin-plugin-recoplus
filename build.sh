@@ -11,8 +11,10 @@ if [ "$VERSION" != "$CSPROJ_VERSION" ]; then
   exit 1
 fi
 echo "== Reco+ $VERSION — SDK $(dotnet --version)"
-echo "== tests"
-dotnet test tests/RecoPlus.Tests -c Release --nologo -v q 2>&1 | tail -25
+if [ "${SKIP_TESTS:-}" != 1 ]; then   # SKIP_TESTS=1 : paquet seul (test d'intégration ; les tests tournent dans la CI)
+  echo "== tests"
+  dotnet test tests/RecoPlus.Tests -c Release --nologo -v q 2>&1 | tail -25
+fi
 echo "== compilation du plugin"
 dotnet build src/Jellyfin.Plugin.RecoPlus -c Release --nologo -v q 2>&1 | tail -5
 OUT="out/RecoPlus_$VERSION"

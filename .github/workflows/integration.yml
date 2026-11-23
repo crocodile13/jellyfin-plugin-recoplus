@@ -3,11 +3,25 @@ name: Integration
 # Reco+ in a real Jellyfin (Docker), with and without the plugins it works with, on the oldest and newest supported
 # versions: synthetic library (real titles, dummy files, TMDb metadata through Jellyfin), simulated accounts, full
 # computation, then every hook and what each account is offered (report in the job summary and as an artifact).
-# Nothing secret: random admin password per run, token masked, fictitious accounts only.
+# eco: everything plus a real Seerr linked to Jellyfin (requests, watchlists, extended mode, current lists).
+# Nothing secret: random passwords per run, tokens and API keys masked, fictitious accounts only.
+# Runs on pull requests that touch the plugin or this test, every Monday (new Jellyfin, plugin and Seerr versions are
+# picked up automatically: latest releases and images), and by hand.
 on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/integration/**'
+      - '.github/workflows/integration.yml'
   push:
     branches: ['sim-*']
+  schedule:
+    - cron: '17 5 * * 1'
   workflow_dispatch:
+
+concurrency:
+  group: integration-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -21,9 +35,10 @@ jobs:
       fail-fast: false
       matrix:
         jellyfin: ['12.2', '12.4']
-        plugins: ['reco', 'hss', 'full']
+        plugins: ['reco', 'hss', 'full', 'eco']
     env:
       SIM_OUT: ${{ github.workspace }}/sim-out
+      SIM_MEDIA: ${{ github.workspace }}/media
     steps:
       - uses: actions/checkout@v7
 
@@ -36,7 +51,7 @@ jobs:
           python-version: '3.12'
 
       - name: Build Reco+
-        run: ./build.sh
+        run: SKIP_TESTS=1 ./build.sh   # unit tests run in CI
 
       - name: Plugins
         env:
@@ -57,7 +72,7 @@ jobs:
             get IAmParadox27/jellyfin-plugin-pages "Release-$JV.zip" PluginPages
             get IAmParadox27/jellyfin-plugin-home-sections "Release-$JV.zip" HomeScreenSections
           fi
-          if [ "${{ matrix.plugins }}" = full ]; then
+          if [ "${{ matrix.plugins }}" = full ] || [ "${{ matrix.plugins }}" = eco ]; then
             get n00bcodr/Jellyfin-Enhanced "Jellyfin.Plugin.JellyfinEnhanced_12.0.0.zip" JellyfinEnhanced
             V=$(gh release view -R jellyfin/jellyfin-plugin-playbackreporting --json assets -q '.assets[].name' | grep -E '^playback-reporting_.*\.zip$' | head -1)
             get jellyfin/jellyfin-plugin-playbackreporting "$V" PlaybackReporting
@@ -74,14 +89,19 @@ jobs:
           python tests/integration/sim.py layout media media/sample.mkv
           rm media/sample.mkv
 
-      - name: Start Jellyfin
+      - name: Start Jellyfin (and Seerr)
         run: |
-          docker run -d --name jf -p 8096:8096 -v "$PWD/jf/config:/config" -v "$PWD/jf/cache:/cache" -v "$PWD/media:/media:ro" \
+          docker network create eco
+          docker run -d --name jf --network eco -p 8096:8096 -v "$PWD/jf/config:/config" -v "$PWD/jf/cache:/cache" -v "$PWD/media:/media:ro" \
             jellyfin/jellyfin:${{ matrix.jellyfin }}
+          if [ "${{ matrix.plugins }}" = eco ]; then
+            mkdir -p seerr && chmod 777 seerr
+            docker run -d --name seerr --network eco -p 5055:5055 -e TZ=UTC -v "$PWD/seerr:/app/config" seerr/seerr:latest
+          fi
 
       - name: Simulate and check
         env:
-          SIM_EXPECT: ${{ matrix.plugins == 'hss' && 'hss' || matrix.plugins == 'full' && 'hss,je,pr' || '' }}
+          SIM_EXPECT: ${{ matrix.plugins == 'hss' && 'hss' || matrix.plugins == 'full' && 'hss,je,pr' || matrix.plugins == 'eco' && 'hss,je,pr,seerr' || '' }}
         run: cd tests/integration && python sim.py run
 
       - name: Server log (Reco+ and errors only)
@@ -91,6 +111,10 @@ jobs:
           docker logs jf 2>&1 | grep -E 'Reco\+|RecoPlus|\[ERR\]|\[FTL\]|Exception' \
             | sed -E 's/((api_?key|token|password|pw)[=:" ]+)[^ ,"&]+/\1***/Ig' > "$SIM_OUT/jellyfin.log" || true
           tail -60 "$SIM_OUT/jellyfin.log"
+          if docker inspect seerr >/dev/null 2>&1; then
+            docker logs seerr 2>&1 | grep -iE 'error|warn|jellyfin|request' \
+              | sed -E 's/((api_?key|token|password|pw)[=:" ]+)[^ ,"&]+/\1***/Ig' | tail -200 > "$SIM_OUT/seerr.log" || true
+          fi
 
       - uses: actions/upload-artifact@v7
         if: always()
