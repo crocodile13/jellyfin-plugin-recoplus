@@ -317,6 +317,9 @@ public sealed class RecoService : IDisposable
         Persist();
     }
 
+    /// <summary>Œuvre d'un titre aimé pour les pistes d'exploration : sa saga TMDb, sinon le titre lui-même.</summary>
+    private static string WorkOf(SeerrDetails d, string id) => d.CollectionId is int c ? "c:" + c : "t:" + id;
+
     /// <summary>Dates de Playback Reporting : premier et dernier lancement réels de chaque élément par compte.</summary>
     private sealed record PrDates(IReadOnlyDictionary<(Guid, Guid), double> First, IReadOnlyDictionary<(Guid, Guid), double> Last);
 
@@ -1906,8 +1909,8 @@ public sealed class RecoService : IDisposable
         var genreNames = liked.SelectMany(x => x.D.GenreRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name.ToLowerInvariant());
         var keywordNames = liked.SelectMany(x => x.D.KeywordRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
         int genreCount = Math.Max(cfg.ExtendedByGenre ? Math.Clamp(cfg.ExtendedGenres, 0, 20) : 0, Math.Max(cfg.ExtendedGems ? Math.Clamp(cfg.ExtendedGemGenres, 0, 20) : 0, cfg.ExtendedCrossings ? 5 : 0));
-        var topGenres = Exploration.Top(liked.Select(x => (x.D.GenreRefs.Select(g => g.Id), x.A.Weight)), 1, genreCount);
-        var topKeywords = Exploration.Top(liked.Select(x => (x.D.KeywordRefs.Select(g => g.Id), x.A.Weight)), 2, Math.Max(cfg.ExtendedByKeyword ? Math.Clamp(cfg.ExtendedKeywords, 0, 50) : 0, cfg.ExtendedCrossings ? 5 : 0));
+        var topGenres = Exploration.Top(liked.Select(x => (x.D.GenreRefs.Select(g => g.Id), x.A.Weight, WorkOf(x.D, x.A.Id))), 1, genreCount);
+        var topKeywords = Exploration.Top(liked.Select(x => (x.D.KeywordRefs.Select(g => g.Id), x.A.Weight, WorkOf(x.D, x.A.Id))), 2, Math.Max(cfg.ExtendedByKeyword ? Math.Clamp(cfg.ExtendedKeywords, 0, 50) : 0, cfg.ExtendedCrossings ? 5 : 0));
         double likedTotal = Math.Max(1e-9, liked.Sum(x => x.A.Weight));
         var topLanguages = liked.Where(x => !string.IsNullOrEmpty(x.D.OriginalLanguage)).GroupBy(x => x.D.OriginalLanguage!.ToLowerInvariant())
             .Select(g => (Item: g.Key, Weight: g.Sum(x => x.A.Weight) / likedTotal))
@@ -2010,7 +2013,7 @@ public sealed class RecoService : IDisposable
             {
                 var mine = liked.Where(x => x.D.MediaType == t).ToList();
                 var names = mine.SelectMany(x => x.D.StudioRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
-                foreach (var (sid, w) in Exploration.Top(mine.Select(x => (x.D.StudioRefs.Select(g => g.Id), x.A.Weight)), min, max))
+                foreach (var (sid, w) in Exploration.Top(mine.Select(x => (x.D.StudioRefs.Select(g => g.Id), x.A.Weight, WorkOf(x.D, x.A.Id))), min, max))
                 {
                     var id = sid.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     Discover("studio", t, new Dictionary<string, string> { [t == "tv" ? "network" : "studio"] = id }, w, Texts.Pack(t == "tv" ? "De la chaîne {0}" : "Du studio {0}", names[sid]));
@@ -2062,11 +2065,13 @@ public sealed class RecoService : IDisposable
         if (cfg.ExtendedByPeople && liked.Count > 0)
         {
             var names = liked.SelectMany(x => x.D.PeopleRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
-            var people = Exploration.Top(liked.Select(x => (x.D.PeopleRefs.Select(g => g.Id), x.A.Weight)), Math.Clamp(cfg.ExtendedPeopleMinTitles, 1, 50), Math.Clamp(cfg.ExtendedPeople, 0, 50));
+            var people = Exploration.Top(liked.Select(x => (x.D.PeopleRefs.Select(g => g.Id), x.A.Weight, WorkOf(x.D, x.A.Id))), Math.Clamp(cfg.ExtendedPeopleMinTitles, 1, 50), Math.Clamp(cfg.ExtendedPeople, 0, 50));
             var works = await Task.WhenAll(people.Select(pp => _seerr.PersonWorksAsync(cl, pp.Item, ct))).ConfigureAwait(false);
             for (int pi = 0; pi < people.Count; pi++)
             {
-                foreach (var r in works[pi])
+                // seulement ce qui partage un genre avec les titres aimés qui ont désigné la personne
+                var pg = liked.Where(x => x.D.PeopleRefs.Any(g => g.Id == people[pi].Item)).SelectMany(x => x.D.GenreRefs.Select(g => g.Id)).Distinct().ToList();
+                foreach (var r in works[pi].Where(r => Exploration.SharesGenre(pg, r.Genres, r.MediaType)))
                 {
                     Add("people", r, people[pi].Weight * (0.5 + (r.Vote / 20.0)), Texts.Pack("De {0}", names[people[pi].Item]));
                 }

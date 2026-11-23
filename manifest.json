@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.48.0",
+        "changelog": "1.0.48: discovery from authors (extended mode) is more to the point — two parts of the same saga no longer count as two reasons to like its director, studio or themes (Harry Potter 1 and 2 no longer bring Chris Columbus's whole filmography), and an author's works must share a genre with the liked titles that led to them (Andrew Stanton, found through Toy Story and Finding Nemo, no longer leads to 3 Body Problem).",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.47.0",
         "changelog": "1.0.47: new setting Home › Rows › \"Repeat across rows\" (off by default): a title already shown in one row may come back in another when it is among that row's best titles for what the row is about, never in the row right above, never as its first card, in a limited number of rows; the rest of the ranking never repeats \"For you\". Measured on a realistic bench of 30 accounts, it barely changes relevance, so it stays a matter of taste. The integration test now also opens the home screen in a real browser, with and without extended mode.",
         "targetAbi": "12.2.0.0",

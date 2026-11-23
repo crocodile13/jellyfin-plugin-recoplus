@@ -575,9 +575,12 @@ public sealed class SeerrService
     public Task<List<SeerrResult>> CollectionAsync(SeerrClient cl, int collectionId, CancellationToken ct)
         => CachedListAsync("c:" + collectionId, StableListTtl, c => cl.CollectionAsync(collectionId, c), ct);
 
-    /// <summary>Titres réalisés, créés ou écrits par une personne (cache 7 jours).</summary>
+    /// <summary>
+    /// Titres réalisés, créés ou écrits par une personne (cache 7 jours ; clé « pw: » depuis 1.0.48, les listes d'avant
+    /// n'avaient pas les genres de chaque œuvre).
+    /// </summary>
     public Task<List<SeerrResult>> PersonWorksAsync(SeerrClient cl, int personId, CancellationToken ct)
-        => CachedListAsync("p:" + personId, StableListTtl, c => cl.PersonWorksAsync(personId, c), ct);
+        => CachedListAsync("pw:" + personId, StableListTtl, c => cl.PersonWorksAsync(personId, c), ct);
 
     // liste en cache, sinon un appel (limité à 4 simultanés) ; un échec est mémorisé (404 : 7 jours, sinon 1 h) et donne une liste vide
     private async Task<List<SeerrResult>> CachedListAsync(string key, TimeSpan ttl, Func<CancellationToken, Task<List<SeerrResult>>> fetch, CancellationToken ct)

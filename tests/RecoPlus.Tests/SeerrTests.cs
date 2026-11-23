@@ -115,7 +115,7 @@ public class SeerrTests
     public void MapsListResultsWithTheirOwnKind()
     {
         var items = JsonDocument.Parse("""
-        [{"id":1,"mediaType":"movie","title":"M","voteAverage":8.1,"voteCount":900,"releaseDate":"2001-01-01"},
+        [{"id":1,"mediaType":"movie","title":"M","voteAverage":8.1,"voteCount":900,"releaseDate":"2001-01-01","genreIds":[16,10751]},
          {"id":2,"mediaType":"tv","name":"T","voteAverage":7.9,"voteCount":50},
          {"id":3,"mediaType":"person","name":"P"},{"id":0,"title":"?"},{"id":4,"title":"Sans sorte"}]
         """).RootElement.EnumerateArray();
@@ -123,6 +123,8 @@ public class SeerrTests
         Assert.Equal(new[] { "movie:1", "tv:2", "movie:4" }, r.Select(x => x.MediaType + ":" + x.TmdbId));
         Assert.Equal("T", r[1].Name);
         Assert.Equal(900, r[0].VoteCount);
+        Assert.Equal(new[] { 16, 10751 }, r[0].Genres);                       // genres de l'œuvre
+        Assert.Null(r[1].Genres);                                              // absents : inconnus, pas vides
     }
 
     [Fact]
