@@ -12,9 +12,9 @@
         "version": "1.0.53.0",
         "changelog": "1.0.53: the Preview tab now shows what an account actually sees — its home rows in order, as posters, with titles outside the library in their place and, under each title, why it is proposed — instead of plain lists of names.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.53.0/RecoPlus_1.0.53.0.zip",
+        "checksum": "e893395749c3bc5a00f99a4d97bec0ad",
+        "timestamp": "2026-11-23T19:29:35Z"
       },
       {
         "version": "1.0.52.0",
