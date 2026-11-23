@@ -517,6 +517,17 @@ def report(lib, users):
             "recommandations_films": [{"parce_que": r.get("BaselineItemName"), "titres": names(r.get("Items", []))} for r in recs or []],
             "plus_comme_ceci": {"de": anchor["Name"], "titres": names(similar.get("Items", []))} if anchor else None,
         }
+        # aperçu visuel (onglet Aperçu) : mêmes rangées, « Pour toi » en tête, titres hors bibliothèque à leur place
+        cards = prev.get("cards") or []
+        acc["apercu_cartes"] = {c["Title"]: len(c["Cards"]) for c in cards}
+        if items and (not cards or cards[0]["Id"] not in ("PourToi", "PourToiFilms", "PourToiSeries")):
+            problems.append(f"{name} : aperçu visuel sans « Pour toi » en tête ({[c['Id'] for c in cards][:3]})")
+        if items and cards and cards[0]["Id"] == "PourToi":
+            first = [c["Name"] for c in cards[0]["Cards"] if not c["External"]][:3]
+            if first != items[:3]:
+                problems.append(f"{name} : aperçu visuel, « Pour toi » commence par {first}, la liste servie par {items[:3]}")
+        if "seerr" in EXPECT and name in WISHED and not any(c["External"] for r in cards for c in r["Cards"]):
+            problems.append(f"{name} : aperçu visuel sans aucun titre hors bibliothèque (mode étendu)")
         out["accounts"][name] = acc
         hidden = {find(lib, t)["Name"] for t in p.get("hidden", [])} if "je" in EXPECT else set()
         everywhere = set(items) | set(acc["suggestions"]) | {x for v in acc["rangees"].values() for x in v}
