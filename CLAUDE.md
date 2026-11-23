@@ -214,6 +214,11 @@ de la CI.
   (premier calcul, rangées dans HSS par `RecoPlus/HomeSections/Setup`, Seerr). Après Enregistrer : bandeau « recalculer
   et voir l'aperçu ».
 - Les réglages du calibrage s'enregistrent dès qu'ils changent (eux seuls), comme la méthode.
+- Audace des découvertes (`ExtendedBoldness`, type `slider`) : un préréglage de la page, pas un réglage lu par le calcul.
+  Le curseur écrit `ExtendedMinVotes`, `ExtendedMinRating`, `ExtendedGemGenres`, `ExtendedNoise` (courbe `BOLD`, deux
+  moitiés, 50 = leurs défauts) ; un de ces champs changé à la main affiche « réglée à la main ». Même courbe dans
+  `tests/integration/sim.py` (`bold_values`, arrondi comme `Math.round`) ; expérience sur les branches `sim-*`
+  (`SIM_BOLDNESS`).
 - Construction après le chargement de la langue (`__rpReady`) ; une variable locale ne s'appelle jamais `t`.
 - Une option de liste `enum:` ne contient pas de virgule dans son libellé (séparateur des options).
 
