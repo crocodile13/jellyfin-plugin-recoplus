@@ -70,6 +70,8 @@ SERIES = [
 #   dislikes : [titre]                    pouce vers le bas
 #   hidden : [titre]                      masqué partout (Jellyfin Enhanced, configuration complète seulement)
 #   reviews : [(titre, étoiles)]          avis noté 1-5 (Jellyfin Enhanced, configuration complète seulement)
+#   requests / watchlist : [(titre, année, "movie"|"tv")]   hors bibliothèque, faits dans Seerr (configuration écosystème)
+#   arrive : (titre, année)               une demande de ce compte qui arrive ensuite dans la bibliothèque
 PERSONAS = {
     "anime": {
         "attendu": "Ghibli et animation japonaise (films et séries d'anime) en tête ; pas de super-héros ni d'horreur",
@@ -79,6 +81,8 @@ PERSONAS = {
         "favorites": ["Spirited Away", "Death Note"],
         "abandoned": [("Love Actually", 0.2, 80)],
         "hidden": ["Weathering with You"],
+        "requests": [("The Boy and the Heron", 2023, "movie")],
+        "watchlist": [("Suzume", 2022, "movie")],
         "reviews": [("Your Name.", 5)],
     },
     "action": {
@@ -88,6 +92,7 @@ PERSONAS = {
         "episodes": [("The Mandalorian", 6, 20)],
         "favorites": ["John Wick"],
         "abandoned": [("Pride & Prejudice", 0.15, 100)],
+        "requests": [("John Wick: Chapter 4", 2023, "movie")],
     },
     "famille": {
         "attendu": "Pixar / Disney, Toy Story 3 (volet suivant), Bluey ; rien d'interdit aux enfants",
@@ -96,6 +101,8 @@ PERSONAS = {
         "episodes": [("Bluey", 8, 5)],
         "favorites": ["Moana"],
         "hidden": ["Toy Story 3"],
+        "requests": [("Inside Out 2", 2024, "movie")],
+        "arrive": ("Inside Out 2", 2024),
         "reviews": [("Frozen", 1)],
     },
     "horreur": {
@@ -105,6 +112,8 @@ PERSONAS = {
         "episodes": [("The Haunting of Hill House", 3, 7)],
         "dislikes": ["Frozen"],
         "reviews": [("The Shining", 5), ("Insidious", 2)],
+        "requests": [("Talk to Me", 2023, "movie")],
+        "watchlist": [("The Conjuring: The Devil Made Me Do It", 2021, "movie")],
     },
     "cinephile": {
         "attendu": "policier / drame d'auteur (Godfather II, Heat, Taxi Driver, Oldboy…), The Wire, True Detective",
@@ -113,6 +122,7 @@ PERSONAS = {
         "episodes": [("Breaking Bad", 12, 40), ("The Sopranos", 6, 10)],
         "favorites": ["The Godfather", "Breaking Bad"],
         "abandoned": [("Frozen II", 0.1, 70)],
+        "requests": [("The Irishman", 2019, "movie"), ("Better Call Saul", 2015, "tv")],
     },
     "potter": {
         "attendu": "Harry Potter 3 en tête (le premier volet pas encore vu), jamais le 4 avant le 3 ; Le Seigneur des anneaux",
