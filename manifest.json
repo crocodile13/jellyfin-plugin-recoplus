@@ -12,9 +12,9 @@
         "version": "1.0.46.0",
         "changelog": "1.0.46: the page of a title opened from a Reco+ row now says, in a discreet grey line under its name, why it was proposed (\"Because you liked X\", \"Sequel to X\", \"New episodes\", \"Trending this week\", \"Recently added\") — only when the reason is clear, never on the home cards; outside-library cards keep their own reason.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.46.0/RecoPlus_1.0.46.0.zip",
+        "checksum": "1bbf1e77a3459ffd18053166aee3f432",
+        "timestamp": "2026-11-23T12:28:03Z"
       },
       {
         "version": "1.0.45.0",
