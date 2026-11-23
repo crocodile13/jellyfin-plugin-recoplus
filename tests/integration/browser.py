@@ -49,7 +49,8 @@ def home(url: str, server_id: str, user_id: str, token: str, name: str, password
         ctx.add_init_script("localStorage.setItem('jellyfin_credentials', %s);" % json.dumps(json.dumps(creds)))
         page = ctx.new_page()
         page.on("pageerror", lambda e: errors.append(f"erreur JavaScript : {e}"))
-        page.on("console", lambda m: errors.append(f"console : {m.text}"[:400]) if m.type == "error" else None)
+        page.on("console", lambda m: errors.append(f"console : {m.text}"[:400]) if m.type == "error" and "Failed to load resource" not in m.text else None)
+        page.on("response", lambda r: errors.append(f"HTTP {r.status} : {r.url.split('?')[0]}") if r.status >= 400 else None)
         page.goto(f"{url}/web/#/home", wait_until="domcontentloaded")
         try:
             page.wait_for_selector(".sections .verticalSection, .homeSectionsContainer .verticalSection, #txtManualName", timeout=60000)

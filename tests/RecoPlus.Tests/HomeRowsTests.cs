@@ -111,6 +111,9 @@ public class HomeRowsTests
             before.UnionWith(l);
         }
 
+        // la suite du classement ne reprend jamais « Pour toi » (elle en est la continuation)
+        Assert.All(new[] { HomeRows.Films, HomeRows.Series }, row => Assert.All(r.Rows[row], x => Assert.DoesNotContain(x, r.Rows[HomeRows.PourToi])));
+
         // sans reprise : aucun titre dans deux rangées
         var strict = HomeRows.Allocate(ctx, vec, "u", ordered.Take(14).ToList(), ordered, sc, new RowOptions { Size = 8, Movies = true, Series = true, New = true, NewDays = 30, Because = 3, RepeatShare = 0.25, RepeatMax = 1 });
         var all = strict.Rows.Values.SelectMany(x => x).ToList();
