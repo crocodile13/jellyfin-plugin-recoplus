@@ -80,6 +80,9 @@ jobs:
             V=$(gh release view -R jellyfin/jellyfin-plugin-playbackreporting --json assets -q '.assets[].name' | grep -E '^playback-reporting_.*\.zip$' | head -1)
             get jellyfin/jellyfin-plugin-playbackreporting "$V" PlaybackReporting
           fi
+          if [ "${{ matrix.plugins }}" = full ] || [ "${{ matrix.plugins }}" = eco ]; then
+            get IAmParadox27/jellyfin-plugin-media-bar "Release-$JV.zip" MediaBar   # ticket #50 : la configuration du rapporteur
+          fi
           ls "$P"
 
       - name: Library
@@ -104,8 +107,13 @@ jobs:
             docker run -d --name seerr --network eco -p 5055:5055 -e TZ=UTC -v "$PWD/seerr:/app/config" seerr/seerr:latest
           fi
 
+      - name: Browser (Playwright)
+        if: matrix.plugins == 'hss' || matrix.plugins == 'full' || matrix.plugins == 'eco'
+        run: pip install -q playwright==1.49.1 && python -m playwright install --with-deps chromium >/dev/null
+
       - name: Simulate and check
         env:
+          SIM_BROWSER: ${{ (matrix.plugins == 'hss' || matrix.plugins == 'full' || matrix.plugins == 'eco') && '1' || '' }}
           SIM_EXPECT: ${{ matrix.plugins == 'hss' && 'hss' || matrix.plugins == 'full' && 'hss,je,pr' || (matrix.plugins == 'eco' || matrix.plugins == 'bench') && 'hss,je,pr,seerr' || '' }}
           SIM_BENCH: ${{ matrix.plugins == 'bench' && '1' || '' }}
         run: cd tests/integration && python sim.py run
