@@ -277,6 +277,7 @@ public static class HomeRows
         int maxRows = Math.Clamp(o.RepeatMax, 1, 10);
         int strong = maxRows > 1 ? (int)Math.Round(size * Math.Clamp(o.RepeatShare, 0.0, 1.0), MidpointRounding.AwayFromZero) : 0;
         IReadOnlyCollection<string> above = Array.Empty<string>();
+        IReadOnlyCollection<string> forbid = Array.Empty<string>();   // jamais repris dans la rangée en cours
 
         List<string> Take(IEnumerable<string> src, int n, HashSet<string> repeats)
         {
@@ -293,7 +294,7 @@ public static class HomeRows
                 {
                     l.Add(id);
                 }
-                else if (pos < strong && l.Count < size && seen.GetValueOrDefault(id) < maxRows && !above.Contains(id) && !l.Contains(id))
+                else if (pos < strong && l.Count < size && seen.GetValueOrDefault(id) < maxRows && !above.Contains(id) && !forbid.Contains(id) && !l.Contains(id))
                 {
                     l.Add(id);
                     repeats.Add(id);
@@ -514,7 +515,9 @@ public static class HomeRows
             }
         }
 
-        // suite du classement : « Films » et « Séries » (séparée), une seule sorte, ou les deux réunies
+        // suite du classement : « Films » et « Séries » (séparée), une seule sorte, ou les deux réunies. C'est la suite de
+        // « Pour toi » : ses meilleurs titres sont ceux de « Pour toi », qu'elle ne reprend donc jamais
+        forbid = Expand(PourToi, o.KindSetting(PourToi)).SelectMany(r => rows.GetValueOrDefault(r) ?? new List<string>()).ToHashSet(StringComparer.Ordinal);
         foreach (var id in Expand(Suite, o.KindSetting(Suite)).Where(Visible))
         {
             if (id == Films ? o.Movies : id == Series ? o.Series : o.Movies || o.Series)
