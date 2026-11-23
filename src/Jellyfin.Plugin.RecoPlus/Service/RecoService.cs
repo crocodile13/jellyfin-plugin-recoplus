@@ -1380,7 +1380,7 @@ public sealed class RecoService : IDisposable
                 var d = int.TryParse(p[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var tid) ? _seerr.CachedDetails(p[0], tid) : null;
                 if (d is null || !titles.TryGetValue(id, out var t) || Known(h, id, cfg.ProposeMarked) || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || wished.Contains(k)
                     || hidden?.Contains(k) == true || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ListPolicy.Allows(t, lo) || !ParentalAllowed(policy, d, country)
-                    || (minRuntime > 0 && d.Runtime is int rt && rt < minRuntime) || !nextPart(id))
+                    || (minRuntime > 0 && d.Runtime is int rt && rt < minRuntime) || Exploration.IsReEdit(d.KeywordRefs.Select(x => x.Name)) || !nextPart(id))
                 {
                     continue;
                 }
@@ -1910,7 +1910,7 @@ public sealed class RecoService : IDisposable
         var keywordNames = liked.SelectMany(x => x.D.KeywordRefs).GroupBy(g => g.Id).ToDictionary(g => g.Key, g => g.First().Name);
         int genreCount = Math.Max(cfg.ExtendedByGenre ? Math.Clamp(cfg.ExtendedGenres, 0, 20) : 0, Math.Max(cfg.ExtendedGems ? Math.Clamp(cfg.ExtendedGemGenres, 0, 20) : 0, cfg.ExtendedCrossings ? 5 : 0));
         var topGenres = Exploration.Top(liked.Select(x => (x.D.GenreRefs.Select(g => g.Id), x.A.Weight, WorkOf(x.D, x.A.Id))), 1, genreCount);
-        var topKeywords = Exploration.Top(liked.Select(x => (x.D.KeywordRefs.Select(g => g.Id), x.A.Weight, WorkOf(x.D, x.A.Id))), 2, Math.Max(cfg.ExtendedByKeyword ? Math.Clamp(cfg.ExtendedKeywords, 0, 50) : 0, cfg.ExtendedCrossings ? 5 : 0));
+        var topKeywords = Exploration.Top(liked.Select(x => (x.D.KeywordRefs.Where(g => Exploration.IsThemeKeyword(g.Name)).Select(g => g.Id), x.A.Weight, WorkOf(x.D, x.A.Id))), 2, Math.Max(cfg.ExtendedByKeyword ? Math.Clamp(cfg.ExtendedKeywords, 0, 50) : 0, cfg.ExtendedCrossings ? 5 : 0));
         double likedTotal = Math.Max(1e-9, liked.Sum(x => x.A.Weight));
         var topLanguages = liked.Where(x => !string.IsNullOrEmpty(x.D.OriginalLanguage)).GroupBy(x => x.D.OriginalLanguage!.ToLowerInvariant())
             .Select(g => (Item: g.Key, Weight: g.Sum(x => x.A.Weight) / likedTotal))
@@ -2115,6 +2115,7 @@ public sealed class RecoService : IDisposable
             if (d is null || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ParentalAllowed(policy, d, country)
                 || (d.VoteCount ?? 0) < minVotesAll
                 || (minRuntime > 0 && d.Runtime is int rt && rt < minRuntime)   // court métrage (durée inconnue : gardé)
+                || Exploration.IsReEdit(d.KeywordRefs.Select(x => x.Name))     // remontage de films existants
                 || d.ReleaseDate is null || string.CompareOrdinal(d.ReleaseDate, today) > 0)   // pas encore sorti
             {
                 continue;

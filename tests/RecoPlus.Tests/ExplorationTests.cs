@@ -128,6 +128,19 @@ public class ExplorationTests
     }
 
     [Fact]
+    public void ProductionKeywordsAreNotThemesAndReEditsAreNotDiscoveries()
+    {
+        Assert.False(Exploration.IsThemeKeyword("based on novel or book"));
+        Assert.False(Exploration.IsThemeKeyword("aftercreditsstinger"));
+        Assert.False(Exploration.IsThemeKeyword(" Sequel "));
+        Assert.True(Exploration.IsThemeKeyword("anime"));
+        Assert.True(Exploration.IsThemeKeyword("supernatural horror"));
+        Assert.True(Exploration.IsThemeKeyword("3d animation"));
+        Assert.True(Exploration.IsReEdit(new[] { "mobster", "edited from film" }));   // The Godfather Trilogy: 1901-1980
+        Assert.False(Exploration.IsReEdit(new[] { "mobster", "organized crime" }));
+    }
+
+    [Fact]
     public void PairsKeepTheStrongestCrossings()
     {
         var g = new (int, double)[] { (18, 3.0), (16, 2.0), (35, 0.5) };
