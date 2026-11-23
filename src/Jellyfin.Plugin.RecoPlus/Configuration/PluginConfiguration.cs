@@ -85,6 +85,15 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public int RowSize { get; set; } = 20;
 
     /// <summary>
+    /// Reprises entre rangées : un titre déjà montré revient dans une autre rangée s'il fait partie de ce pourcentage de
+    /// ses meilleurs titres (0 = aucun titre dans deux rangées).
+    /// </summary>
+    public int RowRepeatPercent { get; set; } = 25;
+
+    /// <summary>Reprises entre rangées : nombre maximal de rangées où un même titre apparaît (1 = aucune reprise).</summary>
+    public int RowRepeatMax { get; set; } = 3;
+
+    /// <summary>
     /// Titre de la rangée des films, moitié de la suite du classement (vide = titre par défaut, dans la langue du lecteur ;
     /// de même pour les autres titres).
     /// </summary>

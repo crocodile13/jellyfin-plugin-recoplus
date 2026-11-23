@@ -79,6 +79,54 @@ public class HomeRowsTests
     }
 
     [Fact]
+    public void ATitleComesBackOnlyAmongTheBestOfAnotherRowNeverInTheRowAboveAndWithinTheLimit()
+    {
+        var (ctx, vec, cands, sc) = Setup();
+        var ordered = cands.OrderByDescending(c => sc[c]).ThenBy(c => c, StringComparer.Ordinal).ToList();
+        var o = new RowOptions { Size = 8, Movies = true, Series = true, New = true, NewDays = 30, Because = 3, RepeatShare = 0.25, RepeatMax = 2 };
+        var r = HomeRows.Allocate(ctx, vec, "u", ordered.Take(14).ToList(), ordered, sc, o);
+
+        var order = r.Rows.Where(e => e.Value.Count > 0).ToList();
+        var count = order.SelectMany(e => e.Value).GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
+        Assert.Contains(count.Values, c => c > 1);                            // des reprises
+        Assert.All(count.Values, c => Assert.True(c <= o.RepeatMax));          // au plus RepeatMax rangées par titre
+        int strong = (int)Math.Round(o.Size * o.RepeatShare, MidpointRounding.AwayFromZero);
+        var before = new HashSet<string>();
+        for (int i = 0; i < order.Count; i++)
+        {
+            var l = order[i].Value;
+            Assert.Equal(l.Count, l.Distinct().Count());
+            var rep = l.Where(before.Contains).ToList();
+            Assert.True(rep.Count <= strong);                                  // seulement parmi les meilleurs de la rangée
+            Assert.All(rep, x => Assert.True(l.IndexOf(x) < o.Size));          // jamais dans les réserves
+            if (l.Count > rep.Count)
+            {
+                Assert.DoesNotContain(l[0], rep);                              // jamais en première carte
+            }
+            if (i > 0)
+            {
+                Assert.All(rep, x => Assert.DoesNotContain(x, order[i - 1].Value)); // jamais la rangée juste au-dessus
+            }
+
+            before.UnionWith(l);
+        }
+
+        // sans reprise : aucun titre dans deux rangées
+        var strict = HomeRows.Allocate(ctx, vec, "u", ordered.Take(14).ToList(), ordered, sc, new RowOptions { Size = 8, Movies = true, Series = true, New = true, NewDays = 30, Because = 3, RepeatShare = 0.25, RepeatMax = 1 });
+        var all = strict.Rows.Values.SelectMany(x => x).ToList();
+        Assert.Equal(all.Count, all.Distinct().Count());
+    }
+
+    [Fact]
+    public void RepeatsNeverOpenARowNorFollowEachOther()
+    {
+        var rep = new HashSet<string> { "a", "b", "c", "e" };
+        Assert.Equal(new[] { "x", "a", "y", "b", "z", "c", "e" }, HomeRows.Interleave(new[] { "a", "b", "c", "x", "y", "e", "z" }, rep));
+        Assert.Equal(new[] { "x", "a", "y" }, HomeRows.Interleave(new[] { "x", "a", "y" }, rep));       // déjà bien placées
+        Assert.Equal(new[] { "x", "y" }, HomeRows.Interleave(new[] { "x", "y" }, rep));
+    }
+
+    [Fact]
     public void ABecauseRowNeverContainsItsOwnAnchor()
     {
         var (ctx, vec, cands, sc) = Setup();

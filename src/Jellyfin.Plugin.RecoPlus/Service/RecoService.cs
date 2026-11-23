@@ -897,6 +897,8 @@ public sealed class RecoService : IDisposable
             New = On(HomeRows.Nouveautes),
             NewDays = Math.Clamp(cfg.RowNewDays, 1, 365),
             Because = because,
+            RepeatShare = Math.Clamp(cfg.RowRepeatPercent, 0, 100) / 100.0,
+            RepeatMax = Math.Clamp(cfg.RowRepeatMax, 1, 10),
             Kinds = HomeRows.KindRows.ToDictionary(k => k, cfg.KindOf, StringComparer.Ordinal),
             Shown = shown,
         };
