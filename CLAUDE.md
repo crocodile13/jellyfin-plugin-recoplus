@@ -51,6 +51,11 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
   mesures, réglages, calibrage) est dans `docs/how-it-works.md` / `.fr.md`. Les deux langues restent alignées.
 - `tests/RecoPlus.Tests/` (xUnit), `tests/client/*.test.mjs` (jsdom), `prototype/` (moteur Python de référence,
   `golden.py` régénère le jeu synthétique de `golden.json`), `tools/reco-export/` (export lecture seule, pseudonymisé).
+- `tests/integration/` + `integration.yml` : vrai Jellyfin (Docker, 12.2 et 12.4) avec Reco+ seul, avec HSS (+ File
+  Transformation, Plugin Pages), avec Jellyfin Enhanced et Playback Reporting, et « eco » avec un vrai Seerr. Bibliothèque
+  de vrais titres (fichiers factices, métadonnées figées `nfo/`), comptes simulés (`catalog.py`), tous les points
+  d'accroche vérifiés, rapport de pertinence par compte (résumé du job, artifact) à lire en entier à chaque run. Sur les
+  PR qui touchent `src/`, chaque lundi, à la main ; aucun secret (mots de passe aléatoires, jetons et clés masqués).
 - CI (`.github/workflows/ci.yml`) : cohérence des versions, `golden.py`, `build.sh`, compilation contre les derniers paquets
   Jellyfin 12, tests jsdom (Node 24), tests de reco-export (un `ResourceWarning` est une erreur). Publication
   (`release.yml`) : seulement après une CI réussie sur un push vers `main` (`workflow_run`), pour le commit où `main` est
@@ -226,7 +231,8 @@ de la CI.
   sources, et protégée (`try`/`catch` ciblé, rien si la forme n'est pas celle attendue).
 - Vérifications, toutes, avant de livrer : tests du moteur (projet local, `RECOPLUS_ROOT` pointant le dépôt), tests
   jsdom (`client`, `configpage`), diagnostics Roslyn du plugin comparés à la base, `golden.py` régénéré puis tests de
-  parité, cohérence des versions (csproj, `meta.json`, `manifest.json`), traductions, docs fr/en, ce fichier.
+  parité, cohérence des versions (csproj, `meta.json`, `manifest.json`), traductions, docs fr/en, ce fichier ; test
+  d'intégration vert sur la PR, et son rapport relu (pertinence de chaque rangée, hors bibliothèque compris).
 - Tout nouveau comportement a son test (moteur : xUnit ; page : jsdom), y compris le cas sans Seerr, sans HSS et la
   langue anglaise. Tests sans `[Theory]` (le substitut local de xUnit ne connaît que `[Fact]`).
 - Ce fichier se met à jour dans le même commit qu'un changement d'organisation, de convention ou un nouveau piège.

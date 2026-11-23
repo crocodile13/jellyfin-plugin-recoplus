@@ -38,6 +38,19 @@ public static class Exploration
         return lastPlay >= since || (lastActivity is { } la && la >= since);
     }
 
+    /// <summary>
+    /// Phrase qui explique une proposition venue d'un titre de départ (modèle à traduire, {0} = ce titre) : « Parce que tu
+    /// as aimé » s'il a été regardé ou aimé, « Parce que tu attends » s'il est seulement demandé ou en liste de suivi —
+    /// dire « tu as aimé » d'un titre jamais vu serait faux.
+    /// </summary>
+    public static string BecauseTemplate(Interaction? x)
+    {
+        bool viewed = x is not null && (x.Played || x.Episodes > 0 || x.Completion > 0);
+        bool liked = x is not null && (x.Favorite || x.FavSeasons > 0 || x.FavEpisodes > 0 || x.Rating is > 0);
+        bool wanted = x is not null && (x.Requested > 0 || x.Watchlisted > 0);
+        return !viewed && !liked && wanted ? "Parce que tu attends {0}" : "Parce que tu as aimé {0}";
+    }
+
     /// <summary>Noms (français : clés de traduction, voir <see cref="Texts"/>) des langues d'origine explorées, par code ISO 639-1.</summary>
     public static IReadOnlyDictionary<string, string> LanguageNames { get; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
     {

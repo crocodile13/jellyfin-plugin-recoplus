@@ -556,7 +556,7 @@ public sealed class RecoService : IDisposable
                 var uk = extTargets[i].Id.ToString("N");
                 if (only is not null && _extMemo.TryGetValue(uk, out var memo) && DateTime.UtcNow - memo.At < ExtMemoTtl)
                 {
-                    extCands[uk] = Reuse(memo.C, hist.GetValueOrDefault(uk), lib, seerr, titles, colls, cfg);
+                    extCands[uk] = Reuse(memo.C, hist.GetValueOrDefault(uk), lib, seerr, seerr.Wished(uk), titles, colls, cfg);
                     continue;
                 }
 
@@ -724,8 +724,13 @@ public sealed class RecoService : IDisposable
             }
 
             var hid = hiddenTmdb.GetValueOrDefault(key);
+            var wished = seerr.Wished(key);   // demandes et liste de suivi du compte : jamais reproposées hors bibliothèque
+            // saga : un volet hors bibliothèque seulement si les précédents sont vus (ou aimés), où qu'ils soient
+            var usig = uc.Sig.GetValueOrDefault(key) ?? new Dictionary<string, double>();
+            bool SeenPart(string p) => (h.TryGetValue(p, out var px) && titles.TryGetValue(p, out var pt) && HomeRows.Watched(px, pt)) || usig.GetValueOrDefault(p) > 0;
+            bool NextPart(string id) => !s.Saga || Sagas.IsNextToWatch(ds, id, SeenPart, s.SagaMax);
             var extIds = extCands.TryGetValue(key, out var ex)
-                ? ex.Ids.Where(id => ListPolicy.Allows(titles[id], lo) && (hid is null || !hid.Contains(id.StartsWith("tmdb:", StringComparison.Ordinal) ? id[5..] : id))).ToList()
+                ? ex.Ids.Where(id => ListPolicy.Allows(titles[id], lo) && (hid is null || !hid.Contains(id.StartsWith("tmdb:", StringComparison.Ordinal) ? id[5..] : id)) && NextPart(id)).ToList()
                 : new List<string>();
             if (ex is not null && extIds.Count > 0)
             {
@@ -742,7 +747,7 @@ public sealed class RecoService : IDisposable
 
                 r.Extended = recs.Select(p => p.Rec!).ToList();
                 r.ExtendedAt = DateTime.UtcNow;
-                var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo);
+                var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo, NextPart);
                 var placedFrom = PlaceAll(recs.Select(p => (p.Id, p.Rec!)).ToList(), pools, noise, noiseSeed);
 
                 // bilan par source (aperçu) : trouvés, détaillés et autorisés, proposés, placés dans la rangée
@@ -767,7 +772,7 @@ public sealed class RecoService : IDisposable
                 {
                     var k = e.MediaType + ":" + e.TmdbId;
                     var d = _seerr.CachedDetails(e.MediaType, e.TmdbId);
-                    return !Known(h, "tmdb:" + k, cfg.ProposeMarked) && !lib.ByTmdb.ContainsKey(k) && !seerr.Requested.Contains(k) && hid?.Contains(k) != true
+                    return !Known(h, "tmdb:" + k, cfg.ProposeMarked) && !lib.ByTmdb.ContainsKey(k) && !seerr.Requested.Contains(k) && !wished.Contains(k) && hid?.Contains(k) != true
                            && (d is null || (d.MediaStatus is not (2 or 3 or 4 or 5 or 6) && ParentalAllowed(policy, d, country)));
                 }).Select(e => e.Copy()).ToList();   // copies : la liste précédente est encore servie pendant le calcul
                 r.Sources = prevRecs.Sources;
@@ -781,7 +786,7 @@ public sealed class RecoService : IDisposable
             // et les titres hors bibliothèque gardés se replacent avec elles (rangées recomposées)
             if (cfg.ExtendedEnabled && !(ex is not null && extIds.Count > 0))
             {
-                var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo);
+                var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo, NextPart);
                 if (pools.Count > 0)
                 {
                     var kept = r.Extended.Select(e => (Id: "tmdb:" + e.MediaType + ":" + e.TmdbId, Rec: e)).Where(p => titles.ContainsKey(p.Id)).ToList();
@@ -1325,7 +1330,8 @@ public sealed class RecoService : IDisposable
     /// listes. Mode étendu seulement (cartes et bouton Demander).
     /// </summary>
     private Dictionary<string, ListPool> ListPools(User u, Dictionary<string, Interaction> h, HashSet<string>? hidden, Dictionary<string, TmdbList> lists,
-        RowOptions rowOpts, Dictionary<string, Title> titles, LibrarySnapshot lib, SeerrSnapshot seerr, Configuration.PluginConfiguration cfg, ListOptions lo)
+        RowOptions rowOpts, Dictionary<string, Title> titles, LibrarySnapshot lib, SeerrSnapshot seerr, Configuration.PluginConfiguration cfg, ListOptions lo,
+        Func<string, bool> nextPart)
     {
         var res = new Dictionary<string, ListPool>(StringComparer.Ordinal);
         if (!cfg.ExtendedEnabled)
@@ -1335,6 +1341,7 @@ public sealed class RecoService : IDisposable
 
         var policy = PolicyOf(u);
         var country = cfg.ClassificationCountry();
+        var wished = seerr.Wished(u.Id.ToString("N"));
         int size = Math.Clamp(cfg.RowSize, 5, 60);
         int minRuntime = Math.Clamp(cfg.ExtendedMinRuntime, 0, 600);   // courts métrages écartés, comme pour l'exploration
         foreach (var (row, tl) in lists)
@@ -1357,9 +1364,9 @@ public sealed class RecoService : IDisposable
                 var k = id[5..];
                 var p = k.Split(':');
                 var d = int.TryParse(p[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var tid) ? _seerr.CachedDetails(p[0], tid) : null;
-                if (d is null || !titles.TryGetValue(id, out var t) || Known(h, id, cfg.ProposeMarked) || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k)
+                if (d is null || !titles.TryGetValue(id, out var t) || Known(h, id, cfg.ProposeMarked) || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || wished.Contains(k)
                     || hidden?.Contains(k) == true || d.MediaStatus is 2 or 3 or 4 or 5 or 6 || !ListPolicy.Allows(t, lo) || !ParentalAllowed(policy, d, country)
-                    || (minRuntime > 0 && d.Runtime is int rt && rt < minRuntime))
+                    || (minRuntime > 0 && d.Runtime is int rt && rt < minRuntime) || !nextPart(id))
                 {
                     continue;
                 }
@@ -1733,14 +1740,14 @@ public sealed class RecoService : IDisposable
     /// sont plus à proposer (arrivés dans la bibliothèque, demandés, vus ou marqués depuis).
     /// </summary>
     private static ExtCandidates Reuse(ExtCandidates c, IReadOnlyDictionary<string, Interaction>? h, LibrarySnapshot lib, SeerrSnapshot seerr,
-        Dictionary<string, Title> titles, Dictionary<string, List<string>> colls, Configuration.PluginConfiguration cfg)
+        HashSet<string> wished, Dictionary<string, Title> titles, Dictionary<string, List<string>> colls, Configuration.PluginConfiguration cfg)
     {
         h ??= new Dictionary<string, Interaction>();
         var ids = new List<string>();
         foreach (var id in c.Ids)
         {
             var k = id[5..];
-            if (!c.Details.TryGetValue(id, out var d) || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Known(h, id, cfg.ProposeMarked))
+            if (!c.Details.TryGetValue(id, out var d) || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || wished.Contains(k) || Known(h, id, cfg.ProposeMarked))
             {
                 continue;
             }
@@ -1782,8 +1789,10 @@ public sealed class RecoService : IDisposable
         int minVotesAll = Math.Clamp(cfg.ExtendedMinVotesAll, 0, 1_000_000);
         int minRuntime = Math.Clamp(cfg.ExtendedMinRuntime, 0, 600);
         string today = DateTime.UtcNow.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+        var wished = seerr.Wished(key);   // demandes et liste de suivi : le compte les veut déjà (fiche en cache ou non)
         bool Skip(SeerrResult r, string k)
-            => r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || Known(seen, "tmdb:" + k, cfg.ProposeMarked)
+            => r.Adult || r.MediaStatus is 2 or 3 or 4 or 5 or 6 || lib.ByTmdb.ContainsKey(k) || seerr.Requested.Contains(k) || wished.Contains(k)
+               || Known(seen, "tmdb:" + k, cfg.ProposeMarked)
                || (r.VoteCount > 0 && r.VoteCount < minVotesAll);   // peu de votes connus dès la liste : pas la peine d'en demander la fiche
 
         // pistes par source : titre → (score dans la source, raison) ; on garde la meilleure piste d'un titre dans une source
@@ -1818,6 +1827,7 @@ public sealed class RecoService : IDisposable
         })).ConfigureAwait(false);
         var count = new Dictionary<string, int>(StringComparer.Ordinal);
         var because = new Dictionary<string, string>(StringComparer.Ordinal);
+        var becauseTpl = new Dictionary<string, string>(StringComparer.Ordinal);   // « tu as aimé » ou « tu attends »
         for (int ai = 0; ai < anchors.Count; ai++)
         {
             var a = anchors[ai];
@@ -1830,7 +1840,10 @@ public sealed class RecoService : IDisposable
                 }
 
                 count[k] = count.GetValueOrDefault(k) + 1;
-                because.TryAdd("tmdb:" + k, AnchorName(a.Id));
+                if (because.TryAdd("tmdb:" + k, AnchorName(a.Id)))
+                {
+                    becauseTpl["tmdb:" + k] = Exploration.BecauseTemplate(seen.GetValueOrDefault(a.Id));
+                }
                 // proposé par les titres les plus aimés, par plusieurs titres aimés, puis le mieux noté (départage)
                 var cur = bySource.TryGetValue("related", out var rm) && rm.TryGetValue(k, out var c) ? c.Score : 0;
                 Add("related", r, cur + a.Weight + (r.Vote * 1e-4), string.Empty);
@@ -1961,7 +1974,13 @@ public sealed class RecoService : IDisposable
             };
             foreach (var t in types)
             {
-                Discover("gems", t, gem, 1, Texts.Pack("Pépite peu connue"));
+                // pépites tous genres : seulement pour un compte dont on connaît déjà des goûts (sans aucun titre aimé,
+                // une pépite tirée au hasard dans tout TMDb n'a aucune raison d'être là ; les mieux notés restent)
+                if (liked.Count > 0)
+                {
+                    Discover("gems", t, gem, 1, Texts.Pack("Pépite peu connue"));
+                }
+
                 foreach (var (gid, w) in topGenres.Take(Math.Clamp(cfg.ExtendedGemGenres, 0, 20)))
                 {
                     var genreIds = Exploration.GenreFor(gid, t).ToList();
@@ -2096,7 +2115,7 @@ public sealed class RecoService : IDisposable
             sourceOf[id] = source;
             agree[id] = count.GetValueOrDefault(k) / (double)Math.Max(1, anchors.Count);
             reasons[id] = source == "related"
-                ? (because.TryGetValue(id, out var b) && b.Length > 0 ? Texts.Pack("Parce que tu as aimé {0}", b) : string.Empty)
+                ? (because.TryGetValue(id, out var b) && b.Length > 0 ? Texts.Pack(becauseTpl.GetValueOrDefault(id, "Parce que tu as aimé {0}"), b) : string.Empty)
                 : bySource[source][k].Reason;
         }
 

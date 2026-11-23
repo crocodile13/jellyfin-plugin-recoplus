@@ -176,6 +176,23 @@ public static class Sagas
         return null;
     }
 
+    /// <summary>
+    /// Volet proposable selon sa saga : hors saga (ou regroupement thématique), ou aucun volet sorti avant lui n'est encore
+    /// à voir. Vaut pour les titres hors bibliothèque : on ne propose pas « Harry Potter 5 » à qui en est au 2, même si
+    /// les volets 3 et 4 sont dans la bibliothèque (c'est eux qu'il faut voir d'abord).
+    /// </summary>
+    /// <param name="seen">Le compte a vu (ou aimé) ce titre.</param>
+    public static bool IsNextToWatch(Dataset ds, string id, Func<string, bool> seen, int sagaMax)
+    {
+        if (!ds.Titles.TryGetValue(id, out var t) || Recommender.Franchise(ds, id) is not { } f || !IsSaga(ds, f, sagaMax)
+            || !ds.Collections.TryGetValue(f.Id, out var parts))
+        {
+            return true;
+        }
+
+        return !parts.Any(p => p != id && ds.Titles.TryGetValue(p, out var pt) && Order(pt, t) < 0 && !seen(p));
+    }
+
     /// <summary>Saga (et non regroupement thématique) : taille au plus <paramref name="sagaMax"/>, collection non mélangée.</summary>
     public static bool IsSaga(Dataset ds, (int Size, string Id) f, int sagaMax) => f.Size <= sagaMax && !ds.Thematic.Contains(f.Id);
 

@@ -9,6 +9,17 @@ namespace RecoPlus.Tests;
 public class ExplorationTests
 {
     [Fact]
+    public void BecauseSaysWaitingForATitleOnlyRequested()
+    {
+        Assert.Equal("Parce que tu as aimé {0}", Exploration.BecauseTemplate(new Interaction { Title = "a", Played = true, Completion = 1 }));
+        Assert.Equal("Parce que tu as aimé {0}", Exploration.BecauseTemplate(new Interaction { Title = "a", Favorite = true }));        // aimé, vu ailleurs
+        Assert.Equal("Parce que tu attends {0}", Exploration.BecauseTemplate(new Interaction { Title = "a", Requested = 1 }));
+        Assert.Equal("Parce que tu attends {0}", Exploration.BecauseTemplate(new Interaction { Title = "a", Watchlisted = 1 }));
+        Assert.Equal("Parce que tu as aimé {0}", Exploration.BecauseTemplate(new Interaction { Title = "a", Requested = 1, Episodes = 3 }));
+        Assert.Equal("Because you're waiting for {0}", Texts.T("Parce que tu attends {0}", "en"));
+    }
+
+    [Fact]
     public void DailyPagesKeepPageOneAndDrawTheRestPerSeed()
     {
         var a = Exploration.DailyPages("u1|2026-10-20|genre:18", 3, 10);
