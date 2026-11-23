@@ -44,7 +44,9 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
   - `Web/icon.svg` : icône de l'entrée « Reco+ » du menu du tableau de bord (`EnableInMainMenu`, icône Material
     « style » de secours ; `client.js` la remplace par le logo par CSS, sans toucher au DOM de l'interface).
   - `Web/configPage.html` (page de configuration) et `Web/client.js` (script de l'accueil : titres des rangées
-    « Parce que … », titres montrés, titres hors bibliothèque).
+    « Parce que … », titres montrés, titres hors bibliothèque ; sur la fiche d'un titre ouvert depuis une rangée Reco+,
+    la raison de la proposition, `Reasons.For` côté moteur). Choix de Marien : la raison est discrète, sur la fiche
+    seulement, jamais sur les cartes de l'accueil ; aucune raison plutôt qu'une raison vague ou fausse.
 - Fichiers dans le dossier de données du plugin : `recommandations.json`, `premiers-lancements.json`, `secrets.json`
   (mode 600), titres montrés ; cache Seerr : `fiches.json`, `listes.json`. Tous écrits par fichier temporaire + renommage.
 - `README.md` / `README.fr.md` : README classique (présentation, installation, prise en main) ; le détail (moteur,

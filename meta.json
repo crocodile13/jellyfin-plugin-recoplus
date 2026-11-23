@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.45: the settings page gets three levels — essential (default), advanced, expert — so it shows what matters first while keeping every fine setting; the State tab opens with a health summary and a start-up checklist with one-click actions (run the first computation, add the Reco+ rows to Home Screen Sections and enable it, connect Seerr); after Save, a banner offers to recompute and shows the Preview as soon as it is done.",
+  "changelog": "1.0.46: the page of a title opened from a Reco+ row now says, in a discreet grey line under its name, why it was proposed (\"Because you liked X\", \"Sequel to X\", \"New episodes\", \"Trending this week\", \"Recently added\") — only when the reason is clear, never on the home cards; outside-library cards keep their own reason.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.45.0",
+  "version": "1.0.46.0",
   "status": "Active",
   "autoUpdate": true,
   "assemblies": [

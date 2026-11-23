@@ -429,5 +429,37 @@ await test('menu du tableau de bord : l\'icône de l\'entrée Reco+ devient le l
     assert.match(css, /\[data-recoplus-icon\]\{color:transparent!important;background:url\("\/RecoPlus\/icon\.svg"\)/);
 });
 
+await test('fiche d\'un titre ouvert depuis une rangée Reco+ : une ligne discrète dit pourquoi ; rien venant d\'ailleurs, rien sur les cartes', async () => {
+    const id = 'a'.repeat(31) + '0', other = 'c'.repeat(32);
+    const dom = new JSDOM('<!doctype html><html><body><div id="indexPage"><div id="homeTab" class="tabContent" data-index="0"><div class="sections">'
+        + '<div class="verticalSection RecoPlusPourToi section1"><div class="itemsContainer"><div class="card" data-id="' + id + '"><span>Kiki</span></div></div></div>'
+        + '</div></div></div></body></html>', { url: 'http://localhost/web/#/home', runScripts: 'outside-only', pretendToBeVisual: true });
+    const w = dom.window;
+    w.ApiClient = {
+        getCurrentUserId: () => 'u1',
+        getUrl: (p) => '/' + p,
+        getJSON: () => Promise.resolve({ enabled: false, items: [], reasons: { [id]: 'Parce que tu as aimé Spirited Away <b>!</b>' } }),
+        ajax: () => Promise.resolve({}),
+    };
+    w.eval(SCRIPT);
+    await wait(100);
+    assert.equal(w.document.querySelectorAll('.recoplus-reason').length, 0, 'rien sur les cartes de l\'accueil');
+    w.document.querySelector('.card span').click();
+    const details = (itemId) => {
+        w.location.hash = '#/details?id=' + itemId + '&serverId=s';
+        w.document.body.insertAdjacentHTML('beforeend', '<div class="itemDetailPage"><div class="detailPagePrimaryContainer"><h1 class="itemName">Titre</h1></div></div>');
+    };
+    details(id);
+    await wait(700);
+    const line = w.document.querySelector('.recoplus-reason');
+    assert.ok(line, 'raison sous le nom');
+    assert.equal(line.textContent, 'Parce que tu as aimé Spirited Away <b>!</b>', 'texte brut, jamais du HTML');
+    assert.equal(line.previousElementSibling.className, 'itemName');
+    w.document.querySelector('.itemDetailPage').remove();
+    details(other);   // ouvert depuis ailleurs (recherche, bibliothèque) : rien
+    await wait(700);
+    assert.equal(w.document.querySelectorAll('.recoplus-reason').length, 0);
+});
+
 console.log(failures ? `\n${failures} test(s) en échec` : '\ntous les tests passent');
 process.exit(failures ? 1 : 0);

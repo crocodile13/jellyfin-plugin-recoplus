@@ -669,6 +669,7 @@ public sealed class RecoService : IDisposable
                         Taste = shaped.ToDictionary(id => id, id => Math.Round(sc[id], 5), StringComparer.Ordinal),
                         Rows = home.Rows,
                         RowAnchors = home.Anchors,
+                        RowAnchorIds = home.AnchorIds,
                     };
                     views.Add(new HomeView(slot, view, shaped, ordered, sc) { Opts = ro });
                     if (slot is int sl)
@@ -679,7 +680,7 @@ public sealed class RecoService : IDisposable
                     if (slot is null || slot == uc.Ds.HourOf(now) / 6)
                     {
                         // vue par défaut (et seule vue sans heure de la journée)
-                        (r.Ranked, r.Taste, r.Rows, r.RowAnchors) = (view.Ranked, view.Taste, view.Rows, view.RowAnchors);
+                        (r.Ranked, r.Taste, r.Rows, r.RowAnchors, r.RowAnchorIds) = (view.Ranked, view.Taste, view.Rows, view.RowAnchors, view.RowAnchorIds);
                         r.MovieCategories = Categories(uc, vec, key, ranked, titles);
                         views[^1].Default = true;
                     }
@@ -704,7 +705,7 @@ public sealed class RecoService : IDisposable
                     var placed = PlaceExternals(uc, vec, key, r.Pinned, general, pools, hv, cfg, s, expo, noise, noiseSeed, titles, now);
                     if (hv.Default)
                     {
-                        (r.Rows, r.RowAnchors, r.Layouts) = (hv.View.Rows, hv.View.RowAnchors, hv.View.Layouts);
+                        (r.Rows, r.RowAnchors, r.RowAnchorIds, r.Layouts) = (hv.View.Rows, hv.View.RowAnchors, hv.View.RowAnchorIds, hv.View.Layouts);
                         var known = r.Extended.Select(e => e.MediaType + ":" + e.TmdbId).ToHashSet(StringComparer.Ordinal);
                         foreach (var (rec, row, after) in placed)
                         {
@@ -800,6 +801,14 @@ public sealed class RecoService : IDisposable
                 }
             }
 
+            // pourquoi chaque titre est là (fiche du titre, quand on y arrive depuis une rangée Reco+)
+            r.Reasons = Reasons.For(uc, vec, key, r.Rows, r.RowAnchorIds, r.Pinned, row => row switch
+            {
+                HomeRows.Tendances => Texts.Pack(cfg.TrendingWindow == Configuration.TrendWindow.Day ? "En tendance aujourd'hui" : "En tendance cette semaine"),
+                HomeRows.Populaires => Texts.Pack("Populaire en ce moment"),
+                HomeRows.AVenir => Texts.Pack("Bientôt à l'affiche"),
+                _ => null,
+            });
             _recs[key] = r;
             // mesure : ce qui a été proposé à ce compte (titres de la bibliothèque), pour le bilan de l'état du moteur
             _ledger.Record(key, r.Rows, id => titles.TryGetValue(id, out var lt) && !lt.External, now);
@@ -1083,7 +1092,7 @@ public sealed class RecoService : IDisposable
         }
 
         var home = HomeRows.Allocate(ctx, vec, key, pinned.Concat(hv.Shaped).ToList(), hv.Ordered, hv.Sc, rowOpts, Fit);
-        (hv.View.Rows, hv.View.RowAnchors, hv.View.Layouts) = (home.Rows, home.Anchors, layouts);
+        (hv.View.Rows, hv.View.RowAnchors, hv.View.RowAnchorIds, hv.View.Layouts) = (home.Rows, home.Anchors, home.AnchorIds, layouts);
         return placed;
     }
 

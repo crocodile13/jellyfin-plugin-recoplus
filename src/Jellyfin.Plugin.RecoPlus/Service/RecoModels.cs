@@ -82,6 +82,9 @@ public sealed class SlotRecs
 
     public Dictionary<string, string> RowAnchors { get; set; } = new(StringComparer.Ordinal);
 
+    /// <summary>Rangées « Parce que … » : identifiant du titre aimé de chacune.</summary>
+    public Dictionary<string, string> RowAnchorIds { get; set; } = new(StringComparer.Ordinal);
+
     /// <summary>Composition des rangées avec titres hors bibliothèque (voir <see cref="UserRecs.Layouts"/>).</summary>
     public Dictionary<string, List<string>> Layouts { get; set; } = new(StringComparer.Ordinal);
 }
@@ -118,6 +121,15 @@ public sealed class UserRecs
     /// <summary>Rangées « Parce que … » : titre aimé de chacune.</summary>
     public Dictionary<string, string> RowAnchors { get; set; } = new(StringComparer.Ordinal);
 
+    /// <summary>Rangées « Parce que … » : identifiant du titre aimé de chacune.</summary>
+    public Dictionary<string, string> RowAnchorIds { get; set; } = new(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Pourquoi chaque titre de la bibliothèque des rangées est proposé (emballé : <see cref="Texts.Pack"/>), montré
+    /// discrètement sur la fiche du titre quand on y arrive depuis une rangée Reco+ (<see cref="Reasons"/>).
+    /// </summary>
+    public Dictionary<string, string> Reasons { get; set; } = new(StringComparer.Ordinal);
+
     /// <summary>Goût du compte pour chaque titre de la liste (personnalisation de « Plus comme ceci »).</summary>
     public Dictionary<string, double> Taste { get; set; } = new(StringComparer.Ordinal);
 
@@ -139,6 +151,7 @@ public sealed class UserRecs
         c.Taste = v.Taste;
         c.Rows = v.Rows;
         c.RowAnchors = v.RowAnchors;
+        c.RowAnchorIds = v.RowAnchorIds;
         c.Layouts = v.Layouts.Count > 0 ? v.Layouts : Layouts;
         return c;
     }
