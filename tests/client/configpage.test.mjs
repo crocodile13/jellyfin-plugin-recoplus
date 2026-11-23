@@ -517,6 +517,34 @@ await test('aperçu : tableau des sources, dans l\'ordre, « — » sans mélang
     assert.ok(!d.getElementById('rpPreviewSourcesBox').classList.contains('rp-hidden'));
 });
 
+await test('aperçu visuel : rangées dans l\'ordre, affiches, hors bibliothèque et tête marqués, raisons, rien d\'injecté', async () => {
+    const cards = [
+        { Id: 'PourToi', Title: 'Pour toi', Cards: [
+            { ItemId: 'aaa', Name: 'Spirited Away', Year: 2001, Series: false, External: false, Poster: null, Reason: 'Parce que tu as aimé Ponyo', Pinned: true },
+            { ItemId: null, Name: 'Porco Rosso', Year: 1992, Series: false, External: true, Poster: '/abc123.jpg', Reason: 'De Hayao Miyazaki', Pinned: false },
+            { ItemId: null, Name: '<img src=x onerror=alert(1)>', Year: null, Series: false, External: true, Poster: 'javascript:alert(1)', Reason: '', Pinned: false },
+        ] },
+        { Id: 'ParceQue1', Title: 'Parce que tu as aimé Akira', Cards: [] },
+    ];
+    const { d } = await open(cfg, { '/RecoPlus/Preview': { items: [], rows: {}, extended: [], cards } });
+    await wait(50);
+    d.getElementById('rpPreviewBtn').click();
+    await wait(50);
+    const host = d.getElementById('rpPreviewCards');
+    assert.deepEqual([...host.querySelectorAll('h4')].map((h) => h.textContent), ['Pour toi', 'Parce que tu as aimé Akira']);
+    const c = [...host.querySelectorAll('.rp-pv-card')];
+    assert.equal(c.length, 3);
+    assert.equal(c[0].querySelector('img').getAttribute('src'), '/Items/aaa/Images/Primary');
+    assert.equal(c[0].querySelector('.rp-pv-tag').textContent, 'en tête');
+    assert.equal(c[0].querySelector('.rp-pv-why').textContent, 'Parce que tu as aimé Ponyo');
+    assert.equal(c[1].querySelector('img').getAttribute('src'), 'https://image.tmdb.org/t/p/w185/abc123.jpg');
+    assert.equal(c[1].querySelector('.rp-pv-tag').textContent, 'hors bibliothèque');
+    assert.equal(c[2].querySelector('img'), null, 'chemin d\'affiche invalide : pas d\'image');
+    assert.equal(c[2].querySelector('.rp-pv-name').textContent, '<img src=x onerror=alert(1)>', 'texte brut');
+    assert.equal(host.querySelectorAll('.rp-pv-card img[onerror]').length, 0);
+    assert.ok(host.textContent.includes('vide (pas assez de titres)'), 'rangée vide annoncée');
+});
+
 await test('mode développeur : Journal et détail par source cachés par défaut ; Moteur et Calibrage au niveau avancé', async () => {
     const { d, w } = await open(cfg);
     await wait(50);
@@ -556,6 +584,9 @@ await test('journal : entrées ajoutées en texte brut, curseur suivi, filtre de
     ];
     const { d, w } = await open(cfg, { '/RecoPlus/Logs': (o) => { calls.push(o.url); return o.url.includes('cursor=') ? chunks[1] : chunks[0]; } });
     await wait(50);
+    // ici, ce sont les clics qui interrogent le journal : la minuterie de la page (toutes les 2 s) tomberait entre deux
+    // clics si la machine est lente et ajouterait un morceau de journal (test instable)
+    for (let i = 1; i < 1000; i++) { w.clearInterval(i); }
     const dev = d.getElementById('rpDev'); dev.checked = true; dev.dispatchEvent(new w.Event('change', { bubbles: true }));
     d.querySelector('.rp-tab[data-tab="journal"]').click();
     await wait(50);

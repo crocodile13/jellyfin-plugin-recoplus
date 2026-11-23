@@ -65,6 +65,14 @@
                 #RecoPlusConfigPage.rp-lvl-1 [data-level="2"], #RecoPlusConfigPage.rp-lvl-1 [data-level="3"], #RecoPlusConfigPage.rp-lvl-2 [data-level="3"] { display: none !important; }
                 #RecoPlusConfigPage .rp-level { align-self: center; font-size: .9em; }
                 #RecoPlusConfigPage .rp-slider input[type=range] { width: 100%; accent-color: #00a4dc; }
+                #RecoPlusConfigPage .rp-pv h4 { margin: 1em 0 .4em; }
+                #RecoPlusConfigPage .rp-pv-strip { display: flex; gap: .6em; overflow-x: auto; padding-bottom: .4em; }
+                #RecoPlusConfigPage .rp-pv-card { flex: 0 0 7.5em; font-size: .8em; line-height: 1.25; }
+                #RecoPlusConfigPage .rp-pv-img { position: relative; width: 7.5em; height: 11.25em; border-radius: 4px; background: var(--rp-soft) center/cover no-repeat; overflow: hidden; }
+                #RecoPlusConfigPage .rp-pv-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+                #RecoPlusConfigPage .rp-pv-tag { position: absolute; top: .3em; left: .3em; background: rgba(0,0,0,.7); color: #fff; border-radius: 3px; padding: 0 .35em; font-size: .85em; }
+                #RecoPlusConfigPage .rp-pv-name { margin-top: .3em; font-weight: 600; }
+                #RecoPlusConfigPage .rp-pv-why { opacity: .65; margin-top: .15em; }
                 #RecoPlusConfigPage .rp-slider-ends { display: flex; justify-content: space-between; font-size: .85em; opacity: .75; }
                 #RecoPlusConfigPage .rp-slider-ends output { font-weight: 600; opacity: 1; }
                 #RecoPlusConfigPage .rp-level select { background: transparent; color: inherit; border: 1px solid var(--rp-line); border-radius: 4px; padding: .2em .4em; font: inherit; }
@@ -348,17 +356,13 @@
             <div class="rp-pane" data-pane="apercu">
                 <div class="rp-box">
                     <h3>Ce que voit un compte</h3>
-                    <p>Liste actuellement servie (après filtres, hasard du jour et minimums). Après un Enregistrer, cliquez sur « Recalculer maintenant » (sinon chaque compte est recalculé à sa prochaine activité).</p>
+                    <p>Les rangées d'accueil du compte, dans leur ordre, telles qu'elles sont servies : titres hors bibliothèque à leur place, et sous chaque titre la raison de sa proposition. Après un Enregistrer, cliquez sur « Recalculer maintenant » (sinon chaque compte est recalculé à sa prochaine activité).</p>
                     <p class="rp-result mute rp-hidden" id="rpPreviewWait">Calcul en cours… l'aperçu s'affichera dès qu'il sera terminé.</p>
                     <div class="rp-row">
                         <select is="emby-select" id="rpPreviewUser"></select>
                         <button is="emby-button" type="button" class="raised" id="rpPreviewBtn"><span>Afficher</span></button>
                     </div>
-                    <div class="rp-grid" style="margin-top:1em">
-                        <div><h3 data-tpl="Rangée {ROW}"></h3><ol id="rpPreviewList"></ol></div>
-                        <div><h3>Mode étendu</h3><ol id="rpPreviewExt"></ol></div>
-                    </div>
-                    <div class="rp-grid" id="rpPreviewRows" style="margin-top:1em"></div>
+                    <div id="rpPreviewCards" style="margin-top:1em"></div>
                     <div id="rpPreviewSourcesBox" class="rp-hidden rp-dev" style="margin-top:1em">
                         <h3>Mode étendu : apport de chaque source</h3>
                         <p class="mute">Trouvés : titres absents, non demandés et non vus. Détaillés : retenus dans le budget de fiches et autorisés (contrôle parental, listes). Proposés : classés parmi les titres hors bibliothèque du compte. Sur l'accueil : placés dans une rangée d'accueil.</p>
@@ -1516,18 +1520,7 @@
             $('#rpCalRollback').addEventListener('click', function () { api('POST', 'Calibration/Rollback').then(load, load); });
             $('#rpPreviewBtn').addEventListener('click', function () {
                 api('GET', 'Preview?userId=' + encodeURIComponent($('#rpPreviewUser').value)).then(function (r) {
-                    var ol = $('#rpPreviewList'), ox = $('#rpPreviewExt'); ol.innerHTML = ''; ox.innerHTML = '';
-                    (r.items || []).forEach(function (n) { ol.appendChild(el('li', {}, n)); });
-                    if (!r.items || !r.items.length) { ol.appendChild(el('li', { 'class': 'mute' }, t('pas de liste (compte ignoré ou pas encore calculé)'))); }
-                    (r.extended || []).forEach(function (n) { ox.appendChild(el('li', {}, n)); });
-                    var rr = $('#rpPreviewRows'); rr.innerHTML = '';
-                    Object.keys(r.rows || {}).forEach(function (k) {
-                        var d = el('div'); d.appendChild(el('h3', {}, k));
-                        var o = el('ol'); (r.rows[k] || []).forEach(function (n) { o.appendChild(el('li', {}, n)); });
-                        if (!(r.rows[k] || []).length) { o.appendChild(el('li', { 'class': 'mute' }, t('vide (pas assez de titres)'))); }
-                        d.appendChild(o); rr.appendChild(d);
-                    });
-                    if (!r.extended || !r.extended.length) { ox.appendChild(el('li', { 'class': 'mute' }, t('désactivé ou vide'))); }
+                    renderCards(r.cards || []);
                     var st = r.sources || {}, tb = $('#rpPreviewSources'), keys = Object.keys(st);
                     tb.innerHTML = '';
                     $('#rpPreviewSourcesBox').classList.toggle('rp-hidden', !keys.length);
@@ -1541,6 +1534,36 @@
                         });
                     }
                 });
+            });
+        }
+
+        // Aperçu visuel : une rangée = un intitulé et une bande d'affiches ; texte inséré en textContent, affiche TMDb
+        // seulement d'un chemin d'image valide, affiche de la bibliothèque servie par Jellyfin
+        function renderCards(rows) {
+            var host = $('#rpPreviewCards');
+            host.innerHTML = '';
+            host.classList.add('rp-pv');
+            if (!rows.length) { host.appendChild(el('p', { 'class': 'mute' }, t('pas de liste (compte ignoré ou pas encore calculé)'))); return; }
+            rows.forEach(function (row) {
+                host.appendChild(el('h4', {}, row.Title));
+                var strip = el('div', { 'class': 'rp-pv-strip' });
+                row.Cards.forEach(function (c) {
+                    var card = el('div', { 'class': 'rp-pv-card' }), box = el('div', { 'class': 'rp-pv-img' });
+                    var src = c.ItemId ? ApiClient.getUrl('Items/' + encodeURIComponent(c.ItemId) + '/Images/Primary', { maxHeight: 240, quality: 80 })
+                        : (c.Poster && /^\/[A-Za-z0-9_-]+\.(jpg|jpeg|png|webp)$/.test(c.Poster) ? 'https://image.tmdb.org/t/p/w185' + c.Poster : '');
+                    if (src) {
+                        var img = el('img', { src: src, alt: '', loading: 'lazy' });
+                        img.addEventListener('error', function () { img.remove(); });
+                        box.appendChild(img);
+                    }
+                    if (c.External || c.Pinned) { box.appendChild(el('span', { 'class': 'rp-pv-tag' }, c.External ? t('hors bibliothèque') : t('en tête'))); }
+                    card.appendChild(box);
+                    card.appendChild(el('div', { 'class': 'rp-pv-name' }, c.Name + (c.Year ? ' (' + c.Year + ')' : '')));
+                    if (c.Reason) { card.appendChild(el('div', { 'class': 'rp-pv-why' }, c.Reason)); }
+                    strip.appendChild(card);
+                });
+                if (!row.Cards.length) { strip.appendChild(el('p', { 'class': 'mute' }, t('vide (pas assez de titres)'))); }
+                host.appendChild(strip);
             });
         }
 

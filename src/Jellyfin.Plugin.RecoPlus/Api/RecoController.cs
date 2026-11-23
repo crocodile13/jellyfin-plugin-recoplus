@@ -401,6 +401,7 @@ public sealed class RecoController : ControllerBase
             items = _reco.Preview(userId, Lang),
             extended = r?.Extended.Take(30).Select(e => $"{e.Name} ({e.Year}) — {Why(e)}{(cfg.AnyExternalRow() ? RowOf(e) : string.Empty)}"),
             rows = _reco.PreviewRows(userId, Lang),
+            cards = _reco.PreviewCards(userId, Lang),
             sources = r?.Sources,
             computedAt = r?.ComputedAt,
         });

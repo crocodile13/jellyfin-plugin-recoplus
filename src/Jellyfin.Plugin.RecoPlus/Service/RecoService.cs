@@ -1642,6 +1642,75 @@ public sealed class RecoService : IDisposable
         return res;
     }
 
+    /// <summary>Une carte de l'aperçu visuel : titre de la bibliothèque (identifiant Jellyfin) ou hors bibliothèque (affiche TMDb).</summary>
+    public sealed record PreviewCard(string? ItemId, string Name, int? Year, bool Series, bool External, string? Poster, string Reason, bool Pinned);
+
+    /// <summary>Une rangée de l'aperçu visuel, telle que l'accueil la compose.</summary>
+    public sealed record PreviewRow(string Id, string Title, List<PreviewCard> Cards);
+
+    /// <summary>
+    /// Aperçu visuel : chaque rangée dans l'ordre de l'accueil, avec ses titres hors bibliothèque à leur place (même
+    /// composition que le script de l'accueil : « » = la carte suivante de la bibliothèque) et la raison de chaque titre.
+    /// </summary>
+    public List<PreviewRow> PreviewCards(Guid user, string lang)
+    {
+        var r = For(user);
+        var cfg = Plugin.Instance?.Configuration;
+        var lib = Library ?? _index.Current;
+        var res = new List<PreviewRow>();
+        if (r is null || cfg is null || lib is null)
+        {
+            return res;
+        }
+
+        int size = Math.Clamp(cfg.RowSize, 5, 60);
+        var pins = new HashSet<string>(r.Pinned, StringComparer.Ordinal);
+        var ext = r.Extended.GroupBy(e => e.MediaType + ":" + e.TmdbId).ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
+        PreviewCard? Local(string id) => lib.Titles.TryGetValue(id, out var t)
+            ? new PreviewCard(id, t.Name, t.Year, t.Kind == TitleKind.Series, false, null, r.Reasons.TryGetValue(id, out var why) ? Texts.Render(why, lang) : string.Empty, pins.Contains(id))
+            : null;
+        PreviewCard External(ExternalRec e) => new(null, e.Name, e.Year, e.MediaType == "tv", true, e.PosterPath,
+            string.IsNullOrEmpty(e.Reason) ? (e.Because.Length > 0 ? Texts.T("Parce que tu as aimé {0}", lang, e.Because) : string.Empty) : Texts.Render(e.Reason, lang), false);
+        foreach (var (row, ids) in r.Rows.Where(kv => kv.Value.Count > 0))
+        {
+            var local = ids.Select(Local).Where(c => c is not null).Select(c => c!).ToList();
+            var cards = new List<PreviewCard>();
+            if (r.Layouts.TryGetValue(row, out var layout))
+            {
+                int li = 0;
+                bool hasLib = false;
+                foreach (var slot in layout)
+                {
+                    if (slot.Length == 0)
+                    {
+                        hasLib = true;
+                        if (li < local.Count)
+                        {
+                            cards.Add(local[li++]);
+                        }
+                    }
+                    else if (ext.TryGetValue(slot, out var e))
+                    {
+                        cards.Add(External(e));
+                    }
+                }
+
+                while (hasLib && cards.Count < size && li < local.Count)
+                {
+                    cards.Add(local[li++]);
+                }
+            }
+            else
+            {
+                cards.AddRange(local);
+            }
+
+            res.Add(new PreviewRow(row, HomeScreenSectionsIntegration.DisplayTitle(cfg, row, r.RowAnchors.GetValueOrDefault(row), lang), cards.Take(size).ToList()));
+        }
+
+        return res;
+    }
+
     private ExternalRec? ToExternalRec(string id, Dictionary<string, Title> titles, Dictionary<string, string> because, Dictionary<string, string> reasons)
     {
         // id = "tmdb:movie:123"
