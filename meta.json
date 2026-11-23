@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.44: titles in a Seerr watchlist were proposed again as outside-library recommendations when their details were not cached yet (each account's requests and watchlist are now always excluded); a later part of a saga outside the library is only proposed once every earlier part, in the library or not, is seen (no more part 5 to someone at part 2); a suggestion found from a title the account only requested now says \"Because you're waiting for X\" instead of \"Because you liked X\"; accounts without any known taste no longer get random \"little-known gems\" from all of TMDb.",
+  "changelog": "1.0.45: the settings page gets three levels — essential (default), advanced, expert — so it shows what matters first while keeping every fine setting; the State tab opens with a health summary and a start-up checklist with one-click actions (run the first computation, add the Reco+ rows to Home Screen Sections and enable it, connect Seerr); after Save, a banner offers to recompute and shows the Preview as soon as it is done.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.44.0",
+  "version": "1.0.45.0",
   "status": "Active",
   "autoUpdate": true,
   "assemblies": [

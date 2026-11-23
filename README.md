@@ -82,11 +82,11 @@ New versions are then installed by Jellyfin's **Update Plugins** scheduled task 
 
 1. Open **Reco+** in the Plugins section of the dashboard menu (or **Dashboard → Plugins → Reco+**). The defaults are the evaluated ones: Reco+ works as soon as it is installed.
 2. Click **Recompute now** on the Status tab (otherwise each account is computed at its next activity).
-3. With Home Screen Sections: add the Reco+ rows you want in its settings ("Add Section"); their titles are set on the General tab.
+3. With Home Screen Sections: click **Add them for me** on the State tab (or add the Reco+ rows yourself in its settings); their titles are set on the Home tab.
 4. With Seerr: enter its URL and API key on the Seerr tab, click **Test**, then enable extended mode if you want titles outside the library.
 5. Check what an account gets on the **Preview** tab.
 
-Basic settings are visible at once; advanced ones are folded away or in the **Engine** and **Calibration** tabs; diagnostic tools (log, calibration data export) are in **developer mode**. Hover over **?** next to any setting for its help.
+Settings come in three levels — **essential** (default), **advanced**, **expert** — chosen at the right of the tabs; diagnostic tools (log, calibration data export) are in **developer mode**. Hover over **?** next to any setting for its help.
 
 ## FAQ
 

@@ -317,30 +317,20 @@ def episodes(series, uid, n, days):
 
 # ------------------------------------------------------------------ plugins compagnons
 
-RECO_SECTIONS = ["PourToi", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Films", "Series"]
-
-
 def plugin_id(name_part: str):
     return next((p["Id"] for p in call("GET", "/Plugins") if name_part.lower() in p["Name"].lower()), None)
 
 
 def setup_hss():
-    """Comme un administrateur : Home Screen Sections activé, les rangées Reco+ ajoutées à son tableau."""
-    pid = plugin_id("Home Screen Sections")
-    if not pid:
-        problems.append("Home Screen Sections : plugin introuvable")
-        return
-    cfg = call("GET", f"/Plugins/{pid}/Configuration")
-    cfg["Enabled"] = True
-    have = {s.get("SectionId") for s in cfg.get("SectionSettings") or []}
-    base = len(cfg.get("SectionSettings") or [])
-    for i, r in enumerate(RECO_SECTIONS):
-        sid = "RecoPlus" + r
-        if sid not in have:
-            cfg.setdefault("SectionSettings", []).append({"SectionId": sid, "Enabled": True, "AllowUserOverride": True, "LowerLimit": 1,
-                                                          "UpperLimit": 1, "OrderIndex": base + i, "ViewMode": "Landscape"})
-    call("POST", f"/Plugins/{pid}/Configuration", cfg)
-    log(f"Home Screen Sections : {len(RECO_SECTIONS)} rangées Reco+ ajoutées au tableau")
+    """Comme le bouton « Les ajouter pour moi » de la page : Reco+ active Home Screen Sections et y ajoute ses rangées."""
+    r = call("POST", "/RecoPlus/HomeSections/Setup", {}, query={"lang": "fr"})
+    log(f"Home Screen Sections : {r.get('message')}")
+    st = call("GET", "/RecoPlus/Status").get("hssSetup") or {}
+    if r.get("added", -1) <= 0 or not st.get("Enabled") or st.get("InTable") != st.get("Declared"):
+        problems.append(f"mise en route de Home Screen Sections : {r.get('message')} — état {st}")
+    again = call("POST", "/RecoPlus/HomeSections/Setup", {})
+    if again.get("added") != 0:
+        problems.append(f"Home Screen Sections : un second passage ajoute encore {again.get('added')} rangée(s)")
 
 
 def setup_je(lib, users):

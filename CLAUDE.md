@@ -194,9 +194,15 @@ de la CI.
   par le calibrage hors du pas, bloquait l'enregistrement sans message (ticket #44). Le serveur borne chaque valeur ;
   `configpage.test.mjs` vérifie que chaque défaut respecte min / max / pas, et soumet le formulaire pour de vrai
   (`requestSubmit`, pas un événement `submit` qui contourne la validation).
-- Trois niveaux : de base (visible) ; avancé (onglets Moteur et Calibrage, marqués « avancé », et sections repliées
-  « Réglages avancés ») ; mode développeur (Journal, export et réglages statistiques du calibrage, chemin détaillé des
-  méthodes, apport de chaque source dans l'aperçu). Un outil de diagnostic va en mode développeur, pas en avancé.
+- Trois niveaux d'affichage (`data-level` sur onglets, panneaux, boîtes et sections ; sélecteur `#rpLevel`, retenu par
+  navigateur) : 1 essentiels (par défaut : ce qu'il faut pour que tout marche), 2 avancés (Moteur, Calibrage, listes du
+  moment, mélange, tête de liste, sources de découverte), 3 experts (réglages fins du moteur, de l'exploration, statistiques
+  du calibrage). Un réglage caché garde sa valeur et reste enregistré. Mode développeur à part (outils, pas réglages :
+  Journal, export, chemin du calibrage, apport des sources). Un nouveau réglage : choisir son niveau en se demandant
+  « faut-il le toucher pour que ça marche ? » (1), « pour ajuster ? » (2), sinon 3.
+- Onglet État : résumé de santé et mise en route (`renderHealth`) — chaque point dit ce qui manque et propose l'action
+  (premier calcul, rangées dans HSS par `RecoPlus/HomeSections/Setup`, Seerr). Après Enregistrer : bandeau « recalculer
+  et voir l'aperçu ».
 - Les réglages du calibrage s'enregistrent dès qu'ils changent (eux seuls), comme la méthode.
 - Construction après le chargement de la langue (`__rpReady`) ; une variable locale ne s'appelle jamais `t`.
 - Une option de liste `enum:` ne contient pas de virgule dans son libellé (séparateur des options).

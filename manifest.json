@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.45.0",
+        "changelog": "1.0.45: the settings page gets three levels — essential (default), advanced, expert — so it shows what matters first while keeping every fine setting; the State tab opens with a health summary and a start-up checklist with one-click actions (run the first computation, add the Reco+ rows to Home Screen Sections and enable it, connect Seerr); after Save, a banner offers to recompute and shows the Preview as soon as it is done.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.44.0",
         "changelog": "1.0.44: titles in a Seerr watchlist were proposed again as outside-library recommendations when their details were not cached yet (each account's requests and watchlist are now always excluded); a later part of a saga outside the library is only proposed once every earlier part, in the library or not, is seen (no more part 5 to someone at part 2); a suggestion found from a title the account only requested now says \"Because you're waiting for X\" instead of \"Because you liked X\"; accounts without any known taste no longer get random \"little-known gems\" from all of TMDb.",
         "targetAbi": "12.2.0.0",
