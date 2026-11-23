@@ -72,7 +72,18 @@ class HttpError(RuntimeError):
 TOKEN: str | None = None
 
 
-def call(method: str, path: str, body=None, query: dict | None = None, timeout=60):
+def call(method: str, path: str, body=None, query: dict | None = None, timeout=60, tries=20):
+    """Appel de l'API ; 503 (serveur qui démarre ou occupé) : nouvel essai, jusqu'à `tries` fois."""
+    for k in range(tries):
+        try:
+            return _call(method, path, body, query, timeout)
+        except HttpError as e:
+            if e.status != 503 or k == tries - 1:
+                raise
+            time.sleep(3)
+
+
+def _call(method: str, path: str, body=None, query: dict | None = None, timeout=60):
     url = BASE + path + ("?" + urllib.parse.urlencode({k: v for k, v in query.items() if v is not None}) if query else "")
     data = None if body is None else json.dumps(body).encode()
     auth = CLIENT + (f', Token="{TOKEN}"' if TOKEN else "")
@@ -110,7 +121,8 @@ def iso(days_ago: float) -> str:
 
 def setup():
     global TOKEN
-    info = wait("démarrage de Jellyfin", lambda: call("GET", "/System/Info/Public"), timeout=300, every=3)
+    info = wait("démarrage de Jellyfin", lambda: (lambda i: i if isinstance(i, dict) and i.get("Version") else None)(call("GET", "/System/Info/Public", tries=1)),
+                timeout=300, every=3)
     log(f"Jellyfin {info.get('Version')}")
     password = secrets.token_urlsafe(24)   # jamais écrit nulle part
     if not info.get("StartupWizardCompleted"):
