@@ -51,9 +51,11 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
   mesures, réglages, calibrage) est dans `docs/how-it-works.md` / `.fr.md`. Les deux langues restent alignées.
 - `tests/RecoPlus.Tests/` (xUnit), `tests/client/*.test.mjs` (jsdom), `prototype/` (moteur Python de référence,
   `golden.py` régénère le jeu synthétique de `golden.json`), `tools/reco-export/` (export lecture seule, pseudonymisé).
-- CI (`.github/workflows/ci.yml`) : cohérence des versions, `golden.py`, `build.sh`, tests jsdom, tests de
-  reco-export. Publication (`release.yml`) : à chaque changement de `manifest.json` sur `main` dont la version n'a pas
-  encore de release ; un commit du bot remplit ensuite `sourceUrl`, `checksum`, `timestamp`.
+- CI (`.github/workflows/ci.yml`) : cohérence des versions, `golden.py`, `build.sh`, compilation contre les derniers paquets
+  Jellyfin 12, tests jsdom (Node 24), tests de reco-export (un `ResourceWarning` est une erreur). Publication
+  (`release.yml`) : seulement après une CI réussie sur un push vers `main` (`workflow_run`), pour le commit où `main` est
+  encore, si la version de `manifest.json` n'a pas encore de release ; un commit du bot remplit ensuite `sourceUrl`,
+  `checksum`, `timestamp` (il ne relance pas la CI). Un commit sans nouvelle version ne publie rien.
 
 ## Commandes
 

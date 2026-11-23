@@ -62,6 +62,7 @@ class Api:
                     self.calls += 1
                     return json.load(r)
             except urllib.error.HTTPError as e:          # le message ne contient pas la clé (passée en en-tête)
+                e.close()                                 # la réponse d'erreur garde une connexion ouverte
                 if e.code in (400, 401, 403, 404):
                     raise ApiError(f"HTTP {e.code} sur {path}") from None
                 last = f"HTTP {e.code}"
