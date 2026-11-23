@@ -2,6 +2,8 @@
    - Rangées « Parce que tu as aimé … » : le titre générique déclaré à Home Screen Sections est remplacé par celui du compte.
    - Affichages : une carte d'une rangée Reco+ visible au moins une seconde, onglet au premier plan, compte connecté,
      est notée « vue » (une fois par jour) ; une carte ouverte est notée « ouverte ». Rien d'autre n'est envoyé.
+   - Pourquoi ce titre : sur la fiche d'un titre ouvert depuis une rangée Reco+, une ligne discrète sous son nom (rien
+     sur les cartes de l'accueil). La raison vient du serveur, dans la langue du compte.
    Titres hors bibliothèque (mode étendu) :
    - Home Screen Sections présent : chaque rangée Reco+ qui en reçoit (réglage par rangée : Seerr seul ou mélange) est
      recomposée selon le serveur, qui a décidé de la place de chaque titre ; la rangée garde sa taille.
@@ -403,24 +405,54 @@
     }
 
     document.addEventListener('click', function (ev) {
-        if (!track.on) { return; }
         var card = ev.target && ev.target.closest ? ev.target.closest('.card') : null;
         if (!card || !recoSection(card)) { return; }
         var id = cardId(card);
-        if (id) { track.opened.push(id); flush(); }
+        if (!id) { return; }
+        remember(id);
+        if (track.on) { track.opened.push(id); flush(); }
     }, true);
+
+    // ---- pourquoi ce titre (fiche du titre ouvert depuis une rangée Reco+)
+
+    var FROM_KEY = 'recoplus.from', FROM_MS = 30 * 60 * 1000;
+    function remember(id) {
+        try { window.sessionStorage.setItem(FROM_KEY, JSON.stringify({ id: id, at: Date.now() })); } catch (e) { /* stockage indisponible */ }
+    }
+    function cameFrom() {
+        try { var f = JSON.parse(window.sessionStorage.getItem(FROM_KEY) || 'null'); return f && Date.now() - f.at < FROM_MS ? f.id : null; } catch (e) { return null; }
+    }
+    function detailsId() {
+        var m = /[?&]id=([0-9a-fA-F-]{32,36})(?:&|$)/.exec(window.location.hash || '') || /[?&]id=([0-9a-fA-F-]{32,36})(?:&|$)/.exec(window.location.search || '');
+        return /details/i.test((window.location.hash || '') + (window.location.pathname || '')) && m ? m[1].replace(/-/g, '').toLowerCase() : null;
+    }
+    function detailsReason(d) {
+        var id = detailsId();
+        var old = document.querySelector('.recoplus-reason');
+        var why = id && id === cameFrom() && d && d.reasons ? d.reasons[id] : null;
+        if (!why) { if (old && old.getAttribute('data-rp-for') !== id) { old.remove(); } return; }
+        var name = document.querySelector('.itemDetailPage:not(.hide) .itemName, #itemDetailPage:not(.hide) .itemName, .detailPagePrimaryContainer .itemName');
+        if (!name || (old && old.getAttribute('data-rp-for') === id && old.isConnected)) { return; }
+        if (old) { old.remove(); }
+        var line = el('div', 'recoplus-reason', why);   // texte du serveur, inséré en texte brut
+        line.setAttribute('data-rp-for', id);
+        line.style.cssText = 'font-size:.9em;opacity:.6;margin:.25em 0 .4em;';
+        name.insertAdjacentElement('afterend', line);
+    }
     document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') { flush(); } });
     setInterval(flush, FLUSH_MS);
 
     var busy = false;
     function check() {
         if (busy) { return; }
+        if (detailsId()) { load().then(detailsReason); return; }   // fiche d'un titre : la raison seulement
         var sections = homeSections();
         if (!sections || !sections.children.length) { return; }
         busy = true;
         load().then(function (d) {
             busy = false;
             if (!d) { return; }
+            detailsReason(d);
             renameRows(d);
             track.on = !!d.track;
             watchCards();

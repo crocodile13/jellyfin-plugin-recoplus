@@ -215,6 +215,8 @@ public sealed class RecoController : ControllerBase
             // adresse publique seulement : l'adresse interne de Seerr n'a rien à faire chez les utilisateurs
             seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? string.Empty : cfg.SeerrPublicUrl.TrimEnd('/'),
             items = on ? (r?.Extended ?? new List<ExternalRec>()).Select(e => e.In(Lang)).ToList() : new List<ExternalRec>(),
+            // pourquoi chaque titre de la bibliothèque des rangées est proposé (fiche du titre), dans la langue du compte
+            reasons = cfg.Enabled && r is not null ? r.Reasons.ToDictionary(kv => kv.Key, kv => L(kv.Value), StringComparer.Ordinal) : new Dictionary<string, string>(),
         });
     }
 

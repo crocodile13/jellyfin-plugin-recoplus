@@ -515,6 +515,13 @@ def report(lib, users):
                 problems.append(f"{name} : rangée « Pour toi » vide dans Home Screen Sections")
             elif seen & set(acc["hss_pour_toi"]):
                 problems.append(f"{name} : titres déjà vus dans la rangée HSS {sorted(seen & set(acc['hss_pour_toi']))}")
+        # pourquoi chaque titre (fiche du titre) : les raisons servies au script, pour les premiers de « Pour toi »
+        why = call("GET", "/RecoPlus/Extended", query={"lang": "fr"}, token=as_user(name)).get("reasons") or {}
+        by_id = {i["Id"].replace("-", "").lower(): i["Name"] for i in lib.values()}
+        named = {by_id.get(k, k): v for k, v in why.items()}
+        acc["raisons"] = {t: named[t] for t in items[:12] if t in named}
+        if name != "nouveau" and not why:
+            problems.append(f"{name} : aucune raison donnée (fiche du titre)")
         if not items:
             problems.append(f"{name} : aucune liste")
         bad = seen & (set(items) | set(acc["suggestions"]))
@@ -575,6 +582,8 @@ def markdown(r) -> str:
               f"**Pour toi** : {', '.join(a['pour_toi'][:15])}", ""]
         for row, titles in a["rangees"].items():
             L.append(f"- **{row}** : {', '.join(titles[:10]) or '(vide)'}")
+        if a.get("raisons"):
+            L.append("- **Pourquoi (fiche du titre)** : " + "; ".join(f"{t} — {w}" for t, w in a["raisons"].items()))
         L.append(f"- **/Items/Suggestions** : {', '.join(a['suggestions'][:10])}")
         for c in a["recommandations_films"]:
             L.append(f"- **/Movies/Recommendations — parce que {c['parce_que']}** : {', '.join(c['titres'])}")

@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.0.46.0",
+        "changelog": "1.0.46: the page of a title opened from a Reco+ row now says, in a discreet grey line under its name, why it was proposed (\"Because you liked X\", \"Sequel to X\", \"New episodes\", \"Trending this week\", \"Recently added\") — only when the reason is clear, never on the home cards; outside-library cards keep their own reason.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.45.0",
         "changelog": "1.0.45: the settings page gets three levels — essential (default), advanced, expert — so it shows what matters first while keeping every fine setting; the State tab opens with a health summary and a start-up checklist with one-click actions (run the first computation, add the Reco+ rows to Home Screen Sections and enable it, connect Seerr); after Save, a banner offers to recompute and shows the Preview as soon as it is done.",
         "targetAbi": "12.2.0.0",
