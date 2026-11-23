@@ -733,6 +733,34 @@ await test('langue : sans dictionnaire (serveur injoignable ou français), la pa
     assert.equal(d.getElementById('rp_c_HssSectionTitle').getAttribute('placeholder'), 'Pour toi');
 });
 
+await test('audace des découvertes : le curseur règle les filtres de l\'exploration, « réglée à la main » sinon', async () => {
+    const base = { ...cfg, ExtendedBoldness: 50, ExtendedMinVotes: 500, ExtendedMinRating: 7.5, ExtendedGemGenres: 3, ExtendedNoise: 0.3 };
+    const { d, saved } = await open(base);
+    await wait(50);
+    const lbl = () => d.getElementById('rp_c_ExtendedBoldness_lbl').textContent;
+    const v = (k) => d.getElementById('rp_c_' + k).value;
+    const slide = (x) => { const r = d.getElementById('rp_c_ExtendedBoldness'); r.value = String(x); r.dispatchEvent(new d.defaultView.Event('input', { bubbles: true })); };
+    assert.equal(lbl(), 'équilibrée', 'milieu = valeurs par défaut');
+    slide(0);
+    assert.deepEqual([v('ExtendedMinVotes'), v('ExtendedMinRating'), v('ExtendedGemGenres'), v('ExtendedNoise')], ['2000', '7.8', '1', '0.1']);
+    assert.equal(lbl(), 'prudente');
+    slide(100);
+    assert.deepEqual([v('ExtendedMinVotes'), v('ExtendedMinRating'), v('ExtendedGemGenres'), v('ExtendedNoise')], ['100', '7', '6', '0.6']);
+    assert.equal(lbl(), 'aventureuse');
+    slide(75);
+    assert.equal(v('ExtendedMinVotes'), '200', 'votes : échelle logarithmique, arrondis au pas');
+    const mv = d.getElementById('rp_c_ExtendedMinVotes');
+    mv.value = '1000';
+    mv.dispatchEvent(new d.defaultView.Event('input', { bubbles: true }));
+    assert.equal(lbl(), 'réglée à la main');
+    d.getElementById('rpForm').requestSubmit();
+    await wait(50);
+    assert.equal(saved.length, 1);
+    assert.equal(saved[0].ExtendedBoldness, 75);
+    assert.equal(saved[0].ExtendedMinVotes, 1000);
+    assert.equal(saved[0].ExtendedNoise, 0.45);
+});
+
 await test('enregistrer : un champ réactivé ou écrit par le calibrage ne bloque jamais (ticket #44)', async () => {
     // configuration telle que le serveur l'envoie : nouveautés hors bibliothèque à 365 j, mode étendu coupé ; puis des
     // valeurs du moteur écrites par la recherche par curseurs (hors du pas des champs)

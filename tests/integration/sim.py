@@ -601,6 +601,57 @@ def after_report(lib, users):
     return out
 
 
+# Audace des découvertes : même courbe que la page (configPage.html, BOLD) : 0 prudente, 50 équilibrée, 100 aventureuse
+BOLD = [("ExtendedMinVotes", 2000, 500, 100, 50, True), ("ExtendedMinRating", 7.8, 7.5, 7.0, 0.1, False),
+        ("ExtendedGemGenres", 1, 3, 6, 1, False), ("ExtendedNoise", 0.1, 0.3, 0.6, 0.05, False)]
+
+
+def bold_values(a: float) -> dict:
+    import math
+    out = {}
+    for k, v0, v1, v2, step, log_ in BOLD:
+        lo, hi, x = (v0, v1, a / 50) if a <= 50 else (v1, v2, (a - 50) / 50)
+        v = math.exp(math.log(lo) + (math.log(hi) - math.log(lo)) * x) if log_ else lo + (hi - lo) * x
+        v = round(math.floor(v / step + 0.5) * step, 3)   # arrondi comme Math.round
+        out[k] = int(v) if isinstance(step, int) else v
+    return out
+
+
+def boldness_experiment():
+    """Titres hors bibliothèque de chaque compte en prudente puis en aventureuse : votes TMDb, notes, sources, extraits."""
+    pid = plugin_id("Reco+")
+    out = {}
+    for label, a in (("prudente", 0), ("aventureuse", 100), ("équilibrée", 50)):
+        cfg = call("GET", f"/Plugins/{pid}/Configuration")
+        cfg.update(bold_values(a), ExtendedBoldness=a)
+        call("POST", f"/Plugins/{pid}/Configuration", cfg)
+        if label == "équilibrée":
+            break   # réglage par défaut remis pour la suite
+        recompute()
+        res = {}
+        for name in PERSONAS:
+            if name not in PASSWORDS:
+                continue
+            items = call("GET", "/RecoPlus/Extended", token=as_user(name)).get("items", [])
+            votes = []
+            for it in items[:40]:
+                try:
+                    d = eco.seerr("GET", f"/api/v1/{'tv' if it['MediaType'] == 'tv' else 'movie'}/{it['TmdbId']}")
+                    votes.append(int(d.get("voteCount") or 0))
+                except Exception:
+                    pass
+            votes.sort()
+            res[name] = {
+                "n": len(items),
+                "votes_median": votes[len(votes) // 2] if votes else None,
+                "rating_mean": round(sum(it.get("Vote") or 0 for it in items) / max(1, len(items)), 2),
+                "titles": [f"{it['Name']} ({it.get('Year') or '?'}) — {it.get('Reason') or it.get('Because') or ''}" for it in items[:10]],
+            }
+        out[label] = res
+        log(f"audace {label} : médiane des votes " + ", ".join(f"{n} {v['votes_median']}" for n, v in res.items()))
+    return out
+
+
 def index_check():
     """index.html servie par Jellyfin : balise du script Reco+, et revérifiée à chaque chargement (ticket #50)."""
     with urllib.request.urlopen(BASE + "/web/index.html", timeout=30) as r:
@@ -660,6 +711,10 @@ def markdown(r) -> str:
     L.append("")
     for k, v in (r.get("seerr") or {}).items():
         L.append(f"Seerr, {k} : {v}  ")
+    for label, res in (r.get("audace") or {}).items():
+        L.append(f"**Audace {label}** : " + " ; ".join(f"{n} {v['n']} titres, votes médians {v['votes_median']}, note moyenne {v['rating_mean']}" for n, v in res.items()) + "  ")
+        for n, v in res.items():
+            L.append(f"  - {n} : " + " · ".join(v["titles"][:6]) + "  ")
     if r.get("index"):
         i = r["index"]
         L.append(f"index.html : script Reco+ {'présent' if i['script'] else 'absent'}, Jellyfin Enhanced {'présent' if i['je'] else 'absent'}, Cache-Control « {i['cache']} »  ")
@@ -739,6 +794,11 @@ def run():
             r["seerr"] = after_report(lib, users)
         except Exception as e:   # le rapport s'écrit quand même ; l'erreur est un problème du test
             problems.append(f"Seerr, après le rapport : {e}")
+    if "seerr" in EXPECT and os.environ.get("SIM_BOLDNESS"):
+        try:
+            r["audace"] = boldness_experiment()
+        except Exception as e:
+            problems.append(f"expérience d'audace : {e}")
     if "hss" in EXPECT and os.environ.get("SIM_BROWSER"):
         r["navigateur"] = browser_check()
     r["problems"] = problems

@@ -418,6 +418,13 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Nombre de titres hors bibliothèque proposés.</summary>
     public int ExtendedCount { get; set; } = 40;
 
+    /// <summary>
+    /// Audace des découvertes (0 prudente, 50 équilibrée, 100 aventureuse) : position du curseur de la page, qui règle d'un
+    /// geste les votes et la note TMDb minimum de l'exploration, les genres explorés pour les pépites et le hasard du jour
+    /// (ces réglages restent seuls lus par le calcul ; 50 = leurs valeurs par défaut).
+    /// </summary>
+    public int ExtendedBoldness { get; set; } = 50;
+
     /// <summary>Titres aimés utilisés comme points de départ dans le catalogue.</summary>
     public int ExtendedAnchors { get; set; } = 30;
 

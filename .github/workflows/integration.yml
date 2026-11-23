@@ -116,6 +116,7 @@ jobs:
           SIM_BROWSER: ${{ (matrix.plugins == 'hss' || matrix.plugins == 'full' || matrix.plugins == 'eco') && '1' || '' }}
           SIM_EXPECT: ${{ matrix.plugins == 'hss' && 'hss' || matrix.plugins == 'full' && 'hss,je,pr' || (matrix.plugins == 'eco' || matrix.plugins == 'bench') && 'hss,je,pr,seerr' || '' }}
           SIM_BENCH: ${{ matrix.plugins == 'bench' && '1' || '' }}
+          SIM_BOLDNESS: ${{ github.event_name == 'push' && matrix.plugins == 'eco' && '1' || '' }}   # branches sim-* : audace prudente / aventureuse
         run: cd tests/integration && python sim.py run
 
       - name: Server log (Reco+ and errors only)
