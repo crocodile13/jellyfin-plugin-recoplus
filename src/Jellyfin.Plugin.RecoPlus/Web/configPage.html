@@ -118,7 +118,7 @@
 
             <!-- ÉTAT -->
             <div class="rp-pane on" data-pane="etat">
-                <div class="rp-health" id="rpHealth"><h3 id="rpHealthTitle">…</h3><ul class="rp-steps" id="rpSteps"></ul></div>
+                <div class="rp-health" id="rpHealth"><h3 id="rpHealthHead">…</h3><ul class="rp-steps" id="rpSteps"></ul></div>
                 <div class="rp-kpis" id="rpKpis"></div>
                 <div class="rp-box">
                     <h3>Compatibilité et dépendances</h3>
@@ -1257,7 +1257,8 @@
             li.appendChild(el('b', { 'class': state === 'ok' ? 'ok' : state === 'warn' ? 'ko' : 'mute' }, state === 'ok' ? '✔' : state === 'warn' ? '⚠' : 'ℹ'));
             li.appendChild(el('span', {}, text));
             if (label) {
-                var b = el('button', { type: 'button', 'class': 'raised emby-button' }, label);
+                var b = el('button', { type: 'button', 'class': 'raised' }, label);
+                b.classList.add('emby-button');
                 var out = el('span', { 'class': 'rp-result mute' });
                 b.addEventListener('click', function () { action(b, out); });
                 li.appendChild(b);
@@ -1294,7 +1295,7 @@
             else if (!s.seerrOk) { warn += step(list, 'warn', t('Seerr ne répond pas : titres hors bibliothèque et demandes en pause.'), t('Vérifier'), function () { goTab('seerr'); }); }
             else { warn += step(list, 'ok', t('Seerr relié.')); }
             $('#rpHealth').classList.toggle('warn', warn > 0);
-            $('#rpHealthTitle').textContent = warn ? tf('{0} point(s) à regarder', warn) : t('Tout fonctionne');
+            $('#rpHealthHead').textContent = warn ? tf('{0} point(s) à regarder', warn) : t('Tout fonctionne');
         }
         // « Recalculer maintenant et voir l'aperçu » : l'aperçu se rafraîchit à la fin du calcul
         function recomputeAndPreview() {
