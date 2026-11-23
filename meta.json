@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.48: discovery from authors (extended mode) is more to the point — two parts of the same saga no longer count as two reasons to like its director, studio or themes (Harry Potter 1 and 2 no longer bring Chris Columbus's whole filmography), and an author's works must share a genre with the liked titles that led to them (Andrew Stanton, found through Toy Story and Finding Nemo, no longer leads to 3 Body Problem).",
+  "changelog": "1.0.48: discovery from authors (extended mode) is more to the point — two parts of the same saga no longer count as two reasons to like its director, studio or themes (Harry Potter 1 and 2 no longer bring Chris Columbus's whole filmography), and an author's works must share two genres with the liked titles that led to them (Andrew Stanton, found through Toy Story and Finding Nemo, leads to A Bug's Life, no longer to John Carter or Obi-Wan Kenobi).",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",

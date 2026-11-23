@@ -115,12 +115,16 @@ public class ExplorationTests
     [Fact]
     public void AFilmographyKeepsOnlyWhatSharesAGenreWithTheLikedTitles()
     {
-        int[] liked = { 16, 10751 };                                            // animation, familial (films)
-        Assert.True(Exploration.SharesGenre(liked, new[] { 16, 12 }, "movie"));     // Wall-E
-        Assert.False(Exploration.SharesGenre(liked, new[] { 10765, 18 }, "tv"));    // 3 Body Problem
-        Assert.True(Exploration.SharesGenre(liked, new[] { 16 }, "tv"));            // une série d'animation
-        Assert.True(Exploration.SharesGenre(liked, null, "movie"));                // genres inconnus : gardée
-        Assert.True(Exploration.SharesGenre(new[] { 28 }, new[] { 10759 }, "tv"));  // action (film) → Action & Adventure (série)
+        int[] toyStory = { 16, 12, 35, 10751 };                                 // animation, aventure, comédie, familial
+        Assert.True(Exploration.SharesGenre(toyStory, new[] { 16, 12, 35, 10751 }, "movie")); // 1001 pattes
+        Assert.False(Exploration.SharesGenre(toyStory, new[] { 28, 12, 878 }, "movie"));        // John Carter : aventure seule
+        Assert.False(Exploration.SharesGenre(toyStory, new[] { 10759, 10765, 18 }, "tv"));      // Obi-Wan Kenobi
+        Assert.False(Exploration.SharesGenre(toyStory, new[] { 10765, 18 }, "tv"));             // 3 Body Problem
+        Assert.True(Exploration.SharesGenre(toyStory, new[] { 16 }, "tv"));                     // un seul genre, commun
+        Assert.True(Exploration.SharesGenre(toyStory, null, "movie"));                          // genres inconnus : gardée
+        Assert.True(Exploration.SharesGenre(new[] { 28 }, new[] { 10759, 18 }, "tv"));          // un seul genre aimé : action → Action & Adventure
+        Assert.True(Exploration.SharesGenre(new[] { 80, 18 }, new[] { 80, 18, 36 }, "movie")); // Scorsese : crime et drame
+        Assert.False(Exploration.SharesGenre(new[] { 27 }, new[] { 18 }, "movie"));             // rien en commun
     }
 
     [Fact]
