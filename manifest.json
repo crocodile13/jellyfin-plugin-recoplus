@@ -12,9 +12,9 @@
         "version": "1.0.43.0",
         "changelog": "1.0.43: settings could not be saved after enabling extended mode (issue #44) or after applying a coordinate-search calibration — a re-enabled field failed the browser's validation silently; the page no longer blocks and the server keeps every value in range; titles pinned at the top (new episodes, next part of a saga) now respect the list filters; a new episode triggers a recomputation like other additions; \"More like this\" puts the next part first from the same sagas as the rest of the plugin (TMDb collections, name rule); free mix no longer favours library titles for brand-new accounts; deleted Jellyfin accounts are forgotten; a failed computation and an unreadable watch history now raise an alert; the first-play register is bounded.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.43.0/RecoPlus_1.0.43.0.zip",
+        "checksum": "b9c4e670588b463dd570b47dc5c37682",
+        "timestamp": "2026-11-23T10:15:46Z"
       },
       {
         "version": "1.0.42.0",
