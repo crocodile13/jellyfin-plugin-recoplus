@@ -28,6 +28,29 @@ public sealed class SeerrSnapshot
     /// <summary>Clés « movie:123 » demandées (tous comptes), pour exclure du mode étendu ce qui est déjà en cours.</summary>
     public HashSet<string> Requested { get; init; } = new(StringComparer.Ordinal);
 
+    /// <summary>
+    /// Titres que ce compte veut déjà (« movie:123 ») : ses demandes non refusées et sa liste de suivi. Jamais à lui
+    /// proposer hors bibliothèque, que leur fiche soit en cache ou non.
+    /// </summary>
+    public HashSet<string> Wished(string jellyfinUser)
+    {
+        var res = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var r in RequestsByUser.GetValueOrDefault(jellyfinUser) ?? new List<SeerrRequest>())
+        {
+            if (r.RequestStatus != 3)
+            {
+                res.Add(r.MediaType + ":" + r.TmdbId);
+            }
+        }
+
+        foreach (var w in WatchlistByUser.GetValueOrDefault(jellyfinUser) ?? new List<SeerrWatch>())
+        {
+            res.Add(w.MediaType + ":" + w.TmdbId);
+        }
+
+        return res;
+    }
+
     /// <summary>Version de Seerr.</summary>
     public string Version { get; init; } = string.Empty;
 

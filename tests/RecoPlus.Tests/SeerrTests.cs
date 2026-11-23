@@ -14,6 +14,24 @@ namespace RecoPlus.Tests;
 
 public class SeerrTests
 {
+    [Fact]
+    public void WishedTitlesAreRequestsAndWatchlistOfThatAccountOnly()
+    {
+        // une liste de suivi compte même sans fiche en cache (Suzume reproposé hors bibliothèque, test d'intégration)
+        var snap = new SeerrSnapshot
+        {
+            RequestsByUser = new Dictionary<string, List<SeerrRequest>>
+            {
+                ["a"] = new() { new SeerrRequest(1, "movie", 10, 1, 0, DateTime.UtcNow), new SeerrRequest(1, "tv", 11, 3, 0, DateTime.UtcNow) },
+                ["b"] = new() { new SeerrRequest(2, "movie", 20, 2, 0, DateTime.UtcNow) },
+            },
+            WatchlistByUser = new Dictionary<string, List<SeerrWatch>> { ["a"] = new() { new SeerrWatch("movie", 12, DateTime.UtcNow) } },
+        };
+        Assert.Equal(new[] { "movie:10", "movie:12" }, snap.Wished("a").OrderBy(x => x).ToArray());   // demande refusée exclue
+        Assert.Equal(new[] { "movie:20" }, snap.Wished("b").ToArray());
+        Assert.Empty(snap.Wished("inconnu"));
+    }
+
     private sealed class Fake : HttpMessageHandler
     {
         public readonly List<HttpRequestMessage> Seen = new();

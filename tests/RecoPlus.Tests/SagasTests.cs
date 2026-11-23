@@ -30,6 +30,23 @@ public class SagasTests
     private static Dictionary<string, Title> Ts(params Title[] ts) => ts.ToDictionary(t => t.Id, t => t, StringComparer.Ordinal);
 
     [Fact]
+    public void AnOutsidePartIsProposedOnlyOnceEveryEarlierPartIsSeen()
+    {
+        // tomes 1-4 dans la bibliothèque, tome 5 hors bibliothèque (même collection TMDb) ; le compte en est au tome 2
+        var t = Ts(M("h1", "Harry 1", 2001), M("h2", "Harry 2", 2002), M("h3", "Harry 3", 2004), M("h4", "Harry 4", 2005), M("x", "Other", 2010));
+        t["tmdb:movie:5"] = new Title { Id = "tmdb:movie:5", Kind = TitleKind.Movie, Name = "Harry 5", Year = 2007, External = true };
+        var tc = new Dictionary<string, int> { ["h1"] = 1241, ["h2"] = 1241, ["h3"] = 1241, ["h4"] = 1241, ["tmdb:movie:5"] = 1241 };
+        var ds = Dataset(t, Sagas.Refine(t, new Dictionary<string, List<string>>(), tc));
+        var seen = new HashSet<string> { "h1", "h2" };
+        Assert.False(Sagas.IsNextToWatch(ds, "tmdb:movie:5", seen.Contains, 12));   // les tomes 3 et 4 d'abord
+        Assert.True(Sagas.IsNextToWatch(ds, "h3", seen.Contains, 12));
+        seen.UnionWith(new[] { "h3", "h4" });
+        Assert.True(Sagas.IsNextToWatch(ds, "tmdb:movie:5", seen.Contains, 12));    // à jour : le tome 5 est le suivant
+        Assert.True(Sagas.IsNextToWatch(ds, "x", seen.Contains, 12));               // hors saga
+        Assert.True(Sagas.IsNextToWatch(ds, "tmdb:movie:5", _ => false, 3));         // collection trop grande : pas une saga
+    }
+
+    [Fact]
     public void NextPartComesFromTheSmallestSagaNeverAThematicGroup()
     {
         // « Plus comme ceci » : le volet suivant vient des sagas reconstruites (ordre de sortie), pas d'un regroupement

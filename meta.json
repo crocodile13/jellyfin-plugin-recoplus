@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.0.43: settings could not be saved after enabling extended mode (issue #44) or after applying a coordinate-search calibration — a re-enabled field failed the browser's validation silently; the page no longer blocks and the server keeps every value in range; titles pinned at the top (new episodes, next part of a saga) now respect the list filters; a new episode triggers a recomputation like other additions; \"More like this\" puts the next part first from the same sagas as the rest of the plugin (TMDb collections, name rule); free mix no longer favours library titles for brand-new accounts; deleted Jellyfin accounts are forgotten; a failed computation and an unreadable watch history now raise an alert; the first-play register is bounded.",
+  "changelog": "1.0.44: titles in a Seerr watchlist were proposed again as outside-library recommendations when their details were not cached yet (each account's requests and watchlist are now always excluded); a later part of a saga outside the library is only proposed once every earlier part, in the library or not, is seen (no more part 5 to someone at part 2); a suggestion found from a title the account only requested now says \"Because you're waiting for X\" instead of \"Because you liked X\"; accounts without any known taste no longer get random \"little-known gems\" from all of TMDb.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.0.43.0",
+  "version": "1.0.44.0",
   "status": "Active",
   "autoUpdate": true,
   "assemblies": [
