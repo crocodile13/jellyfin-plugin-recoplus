@@ -15,7 +15,7 @@
 
 Les recommandations intégrées à Jellyfin reposent en grande partie sur le hasard. **Reco+ les remplace par des recommandations personnalisées**, calculées pour chaque utilisateur à partir de l'ensemble de son historique : ce qu'il a regardé, apprécié, abandonné ou demandé. Il enrichit également l'accueil de rangées à la manière des plateformes de streaming — « Pour toi », « Parce que tu as aimé … », tendances, nouveautés — et, avec Seerr, peut suggérer des titres absents de votre bibliothèque, à demander en un clic.
 
-- **S'intègre à votre installation** : Home Screen Sections, Seerr (Jellyseerr / Overseerr), Jellyfin Enhanced, Playback Reporting et Media Bar Enhanced. Toutes ces extensions sont facultatives et détectées automatiquement.
+- **S'intègre à votre installation** : Reco+ fonctionne seul, mais **Home Screen Sections** (rangées d'accueil) et **Seerr** (Jellyseerr / Overseerr : titres hors bibliothèque, listes du moment) sont recommandés pour l'expérience complète, ainsi que **Jellyfin Enhanced** (avis, titres masqués, cartes de demande). Playback Reporting et Media Bar Enhanced viennent en complément. Toutes ces extensions sont détectées automatiquement.
 - **Opérationnel dès l'installation** : les réglages par défaut sont issus de mesures sur un historique réel.
 - **Entièrement paramétrable** : chaque facteur de classement, chaque rangée, chaque source et chaque filtre peut être ajusté ou désactivé, ou calibré automatiquement sur votre propre historique.
 - **Transparent** : chaque recommandation indique sa raison, et un aperçu montre exactement ce que voit chaque utilisateur.
@@ -103,15 +103,15 @@ Les réglages se présentent sur trois niveaux — **essentiels** (par défaut),
 ## Prérequis
 
 - **Jellyfin 12.2 à 12.4** (les autres versions sont détectées et chaque point d'accroche est vérifié, mais elles ne sont pas testées).
-- Extensions facultatives : chacune enrichit Reco+, aucune n'est indispensable.
+- Extensions : aucune n'est indispensable, mais les trois premières sont recommandées pour l'expérience complète.
 
-| Extension / service | Apport |
-|---|---|
-| [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) | les rangées d'accueil ; il détermine quelles rangées chaque utilisateur voit, et dans quel ordre |
-| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | demandes et listes de suivi prises en compte, rangées tendances / populaires / à venir, suggestions hors bibliothèque (mode étendu) |
-| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | avis et titres masqués ; ses cartes et son bouton *Demander* pour les titres hors bibliothèque |
-| [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) | dates de premier visionnage précises, utiles au calibrage |
-| [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) | affiche les recommandations de Reco+ lorsque son option « Personalized Recommendations » est activée |
+| Extension / service | | Apport |
+|---|---|---|
+| [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) | recommandé | les rangées d'accueil ; il détermine quelles rangées chaque utilisateur voit, et dans quel ordre |
+| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | recommandé | demandes et listes de suivi prises en compte, rangées tendances / populaires / à venir, suggestions hors bibliothèque (mode étendu) |
+| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | recommandé | avis et titres masqués ; ses cartes et son bouton *Demander* pour les titres hors bibliothèque |
+| [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) | complément | dates de premier visionnage précises, utiles au calibrage |
+| [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) | complément | affiche les recommandations de Reco+ lorsque son option « Personalized Recommendations » est activée |
 
 LocalRecs, s'il est installé, produit des recommandations en double : il est conseillé de le désinstaller.
 
