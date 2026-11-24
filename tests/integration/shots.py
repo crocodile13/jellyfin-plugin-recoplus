@@ -67,13 +67,14 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         time.sleep(4)                                            # affiches chargées
         # cadrée à partir de la première rangée remplie (au-dessus : l'en-tête et l'emplacement vide d'un bandeau), sur
         # la largeur de l'écran (les rangées débordent) ; JPEG : des affiches floutées, pas du texte fin
+        # après l'agrandissement : la zone vide au-dessus des rangées prend une hauteur proportionnelle à la fenêtre
+        page.set_viewport_size({"width": 1440, "height": 2000})
+        time.sleep(3)
         top = page.evaluate("""() => {
           const s = [...document.querySelectorAll('.sections .verticalSection, .homeSectionsContainer .verticalSection')]
             .find(x => x.offsetParent !== null && x.querySelector('.card'));
           return s ? s.getBoundingClientRect().top + window.scrollY : 0;
         }""")
-        page.set_viewport_size({"width": 1440, "height": 2000})
-        time.sleep(3)
         name = f"home-{lang}.jpg"
         page.screenshot(path=str(out / name), type="jpeg", quality=82, full_page=True,
                         clip={"x": 0, "y": max(0, top - 24), "width": 1440, "height": 1150})
@@ -101,9 +102,14 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
                 page.wait_for_selector("#rpPreviewCards .rp-pv-card", timeout=60000)
                 time.sleep(4)
             name = f"config-{label}-{lang}.png"
+            # page entière découpée à la position de la page Reco+ : la barre fixe de Jellyfin reste au-dessus, hors cadre
             page.evaluate("window.scrollTo(0, 0)")
-            el = page.query_selector("#RecoPlusConfigPage .content-primary") or page.query_selector("#RecoPlusConfigPage")
-            el.screenshot(path=str(out / name))
+            box = page.evaluate("""() => {
+              const e = document.querySelector('#RecoPlusConfigPage .content-primary') || document.querySelector('#RecoPlusConfigPage');
+              const r = e.getBoundingClientRect();
+              return {x: r.left + window.scrollX, y: r.top + window.scrollY, width: r.width, height: r.height};
+            }""")
+            page.screenshot(path=str(out / name), full_page=True, clip=box)
             made.append(name)
         b.close()
     log(f"captures ({lang}) : {', '.join(made)}")
