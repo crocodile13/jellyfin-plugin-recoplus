@@ -188,9 +188,9 @@ jobs:
         env:
           V: ${{ needs.gate.outputs.version }}
         run: |
-          test -n "$(ls sim-out/shots/*.png 2>/dev/null)" || { echo "no screenshots in the artifact"; exit 1; }
+          test -n "$(ls sim-out/shots/*.png sim-out/shots/*.jpg 2>/dev/null)" || { echo "no screenshots in the artifact"; exit 1; }
           mkdir -p assets/screenshots
-          cp sim-out/shots/*.png assets/screenshots/
+          cp sim-out/shots/*.png sim-out/shots/*.jpg assets/screenshots/ 2>/dev/null || true; rm -f assets/screenshots/echec-*
           echo "$V" > assets/screenshots/VERSION
           git add assets/screenshots
           if git diff --cached --quiet; then echo "unchanged"; exit 0; fi

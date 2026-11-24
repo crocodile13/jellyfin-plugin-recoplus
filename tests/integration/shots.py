@@ -25,7 +25,7 @@ def _context(p, url, server_id, user_id, token, locale):
     creds = {"Servers": [{"Id": server_id, "ManualAddress": url, "LocalAddress": url, "UserId": user_id,
                           "AccessToken": token, "LastConnectionMode": 2, "DateLastAccessed": int(time.time() * 1000)}]}
     b = p.chromium.launch()
-    ctx = b.new_context(viewport={"width": 1440, "height": 900}, device_scale_factor=2, locale=locale)
+    ctx = b.new_context(viewport={"width": 1440, "height": 900}, device_scale_factor=1, locale=locale)
     ctx.add_init_script("localStorage.setItem('jellyfin_credentials', %s);" % json.dumps(json.dumps(creds)))
     ctx.add_init_script("document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); "
                         "s.textContent = %s; document.head.appendChild(s); });" % json.dumps(BLUR))
@@ -36,7 +36,8 @@ def _open(page, url, path, name, password, ready, out, tag):
     """Ouvre une page ; si Jellyfin montre le formulaire de connexion (session injectée non reprise), se connecte."""
     page.goto(f"{url}/web/#/{path}", wait_until="domcontentloaded")
     try:
-        page.wait_for_selector(ready + ", #txtManualName", timeout=90000)
+        # « attached » : la première section trouvée peut être une zone vide cachée ; _stable compte ensuite les visibles
+        page.wait_for_selector(ready + ", #txtManualName", state="attached", timeout=90000)
         if page.query_selector("#txtManualName") is not None:
             if not page.is_visible("#txtManualName") and page.query_selector(".btnManual") is not None:
                 page.click(".btnManual")
@@ -45,9 +46,9 @@ def _open(page, url, path, name, password, ready, out, tag):
             page.keyboard.press("Enter")
             time.sleep(4)
             page.goto(f"{url}/web/#/{path}", wait_until="domcontentloaded")
-            page.wait_for_selector(ready, timeout=90000)
+            page.wait_for_selector(ready, state="attached", timeout=90000)
     except Exception:
-        page.screenshot(path=str(out / f"echec-{tag}.png"), full_page=True)   # pour voir ce qui bloque
+        page.screenshot(path=str(out / f"echec-{tag}.jpg"), quality=70)   # pour voir ce qui bloque
         raise
 
 
@@ -64,11 +65,9 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         _open(page, url, "home", account[2], account[3], ".sections .verticalSection, .homeSectionsContainer .verticalSection", out, f"home-{lang}")
         browser._stable(page)
         time.sleep(4)                                            # affiches chargées
-        name = f"home-{lang}.png"
-        page.screenshot(path=str(out / name), full_page=False)
-        made.append(name)
-        name = f"home-full-{lang}.png"
-        page.screenshot(path=str(out / name), full_page=True)
+        # l'écran visible seulement (les rangées débordent en largeur) ; JPEG : des affiches floutées, pas du texte fin
+        name = f"home-{lang}.jpg"
+        page.screenshot(path=str(out / name), type="jpeg", quality=82)
         made.append(name)
         b.close()
 
