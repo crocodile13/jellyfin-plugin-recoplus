@@ -3,6 +3,10 @@
 Reco+ versions, newest first. Each line is the changelog shown by Jellyfin's plugin catalogue.
 Compatibility: see the Jellyfin range of each version below (`targetAbi` in `manifest.json`).
 
+## 1.1.1 — Fix
+
+- **1.1.1** (Jellyfin 12.2–12.4) — "Recompute now" clicked while a full computation was already running was silently ignored, so new settings (or a Seerr connection just saved) only applied at the next computation. The request now waits and runs right after the current computation.
+
 ## 1.1.0 — 1.1 series
 
 - **1.1.0** (Jellyfin 12.2–12.4) — start of the 1.1 series. From now on a version groups a coherent set of changes (1.minor.patch: features in a minor version, fixes in a patch) instead of one version per change, so updates are fewer and each says more. Same features as 1.0.55 — German and Spanish interface, visual preview, discovery boldness slider, reasons on title pages, three settings levels, honest calibration gains; the full history is in CHANGELOG.md. The catalogue no longer lists 1.0.36, which was never released.

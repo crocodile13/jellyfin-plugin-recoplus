@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.1.0 (Jellyfin 12.2 to 12.4): start of the 1.1 series. From now on a version groups a coherent set of changes (1.minor.patch: features in a minor version, fixes in a patch) instead of one version per change, so updates are fewer and each says more. Same features as 1.0.55 — German and Spanish interface, visual preview, discovery boldness slider, reasons on title pages, three settings levels, honest calibration gains; the full history is in CHANGELOG.md. The catalogue no longer lists 1.0.36, which was never released.",
+  "changelog": "1.1.1 (Jellyfin 12.2 to 12.4): \"Recompute now\" clicked while a full computation was already running was silently ignored, so new settings (or a Seerr connection just saved) only applied at the next computation. The request now waits and runs right after the current computation.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.1.0.0",
+  "version": "1.1.1.0",
   "status": "Active",
   "autoUpdate": true,
   "assemblies": [

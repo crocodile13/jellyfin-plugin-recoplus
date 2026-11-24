@@ -330,5 +330,8 @@ de la CI.
 - `git stash` avec le lien `tests/client/node_modules` (anciennement suivi) supprimé : le lien revient à la place du
   dossier installé. Le lien n'est plus suivi ; `npm install --no-save` dans `tests/client` suffit.
 - `i18n.en.json` comme ressource incorporée : MSBuild y voit la culture « en » et la sort de l'assembly (satellite).
+- `QueueIfNotRunning` ignore une demande quand la tâche tourne déjà : un « Recalculer maintenant » pendant un calcul
+  complet était perdu (réglages ou Seerr pris au calcul suivant). `RecoWorker` garde la demande (`_dueAll`) tant que
+  `FullRunActive`. Côté test, attendre un calcul **démarré après** la demande (`sim.recompute`).
 - `index.html` réécrite (Reco+, Jellyfin Enhanced) sans `ETag` ni date : un navigateur gardait l'ancienne page, donc
   l'ancien script, après une mise à jour (#50, réglé en vidant le cache). La page réécrite porte `Cache-Control: no-cache`.
