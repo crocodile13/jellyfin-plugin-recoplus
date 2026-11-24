@@ -65,9 +65,18 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         _open(page, url, "home", account[2], account[3], ".sections .verticalSection, .homeSectionsContainer .verticalSection", out, f"home-{lang}")
         browser._stable(page)
         time.sleep(4)                                            # affiches chargées
-        # l'écran visible seulement (les rangées débordent en largeur) ; JPEG : des affiches floutées, pas du texte fin
+        # cadrée à partir de la première rangée remplie (au-dessus : l'en-tête et l'emplacement vide d'un bandeau), sur
+        # la largeur de l'écran (les rangées débordent) ; JPEG : des affiches floutées, pas du texte fin
+        top = page.evaluate("""() => {
+          const s = [...document.querySelectorAll('.sections .verticalSection, .homeSectionsContainer .verticalSection')]
+            .find(x => x.offsetParent !== null && x.querySelector('.card'));
+          return s ? s.getBoundingClientRect().top + window.scrollY : 0;
+        }""")
+        page.set_viewport_size({"width": 1440, "height": 2000})
+        time.sleep(3)
         name = f"home-{lang}.jpg"
-        page.screenshot(path=str(out / name), type="jpeg", quality=82)
+        page.screenshot(path=str(out / name), type="jpeg", quality=82, full_page=True,
+                        clip={"x": 0, "y": max(0, top - 24), "width": 1440, "height": 1150})
         made.append(name)
         b.close()
 
@@ -76,6 +85,8 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         page = ctx.new_page()
         _open(page, url, "configurationpage?name=RecoPlus", admin[2], admin[3], "#RecoPlusConfigPage .rp-tab", out, f"config-{lang}")
         time.sleep(3)
+        # la barre de Jellyfin recouvrirait le haut de la page dans une capture d'élément
+        page.add_style_tag(content=".skinHeader { display: none !important; } .mainAnimatedPage { padding-top: 0 !important; }")
         page.select_option("#rpLevel", "2")
         page.dispatch_event("#rpLevel", "change")
         for tab, label in TABS:
@@ -90,6 +101,7 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
                 page.wait_for_selector("#rpPreviewCards .rp-pv-card", timeout=60000)
                 time.sleep(4)
             name = f"config-{label}-{lang}.png"
+            page.evaluate("window.scrollTo(0, 0)")
             el = page.query_selector("#RecoPlusConfigPage .content-primary") or page.query_selector("#RecoPlusConfigPage")
             el.screenshot(path=str(out / name))
             made.append(name)
