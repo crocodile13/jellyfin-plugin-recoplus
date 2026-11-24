@@ -32,8 +32,27 @@ def _context(p, url, server_id, user_id, token, locale):
     return b, ctx
 
 
+def _open(page, url, path, name, password, ready, out, tag):
+    """Ouvre une page ; si Jellyfin montre le formulaire de connexion (session injectée non reprise), se connecte."""
+    page.goto(f"{url}/web/#/{path}", wait_until="domcontentloaded")
+    try:
+        page.wait_for_selector(ready + ", #txtManualName", timeout=90000)
+        if page.query_selector("#txtManualName") is not None:
+            if not page.is_visible("#txtManualName") and page.query_selector(".btnManual") is not None:
+                page.click(".btnManual")
+            page.fill("#txtManualName", name)
+            page.fill("#txtManualPassword", password)
+            page.keyboard.press("Enter")
+            time.sleep(4)
+            page.goto(f"{url}/web/#/{path}", wait_until="domcontentloaded")
+            page.wait_for_selector(ready, timeout=90000)
+    except Exception:
+        page.screenshot(path=str(out / f"echec-{tag}.png"), full_page=True)   # pour voir ce qui bloque
+        raise
+
+
 def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out, log=print) -> list:
-    """admin / account = (identifiant, jeton). Écrit les captures dans `out` ; renvoie leurs noms."""
+    """admin / account = (identifiant, jeton, nom, mot de passe). Écrit les captures dans `out` ; renvoie leurs noms."""
     from playwright.sync_api import sync_playwright
 
     locale = "fr-FR" if lang == "fr" else "en-US"
@@ -42,8 +61,7 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         # accueil du compte : sections composées, cartes hors bibliothèque comprises
         b, ctx = _context(p, url, server_id, account[0], account[1], locale)
         page = ctx.new_page()
-        page.goto(f"{url}/web/#/home", wait_until="domcontentloaded")
-        page.wait_for_selector(".sections .verticalSection, .homeSectionsContainer .verticalSection", timeout=90000)
+        _open(page, url, "home", account[2], account[3], ".sections .verticalSection, .homeSectionsContainer .verticalSection", out, f"home-{lang}")
         browser._stable(page)
         time.sleep(4)                                            # affiches chargées
         name = f"home-{lang}.png"
@@ -57,8 +75,7 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         # page de configuration, niveau avancé, chaque onglet
         b, ctx = _context(p, url, server_id, admin[0], admin[1], locale)
         page = ctx.new_page()
-        page.goto(f"{url}/web/#/configurationpage?name=RecoPlus", wait_until="domcontentloaded")
-        page.wait_for_selector("#RecoPlusConfigPage .rp-tab", timeout=90000)
+        _open(page, url, "configurationpage?name=RecoPlus", admin[2], admin[3], "#RecoPlusConfigPage .rp-tab", out, f"config-{lang}")
         time.sleep(3)
         page.select_option("#rpLevel", "2")
         page.dispatch_event("#rpLevel", "change")

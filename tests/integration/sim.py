@@ -704,7 +704,8 @@ def shots_take():
         cfg["Language"] = value
         call("POST", f"/Plugins/{pid}/Configuration", cfg)
         time.sleep(2)
-        made += shots.take(BASE, info.get("Id", ""), (ids["admin"], TOKEN), (ids["anime"], as_user("anime"), "anime"), lang, out, log)
+        made += shots.take(BASE, info.get("Id", ""), (ids["admin"], TOKEN, "admin", ADMIN_PASSWORD),
+                           (ids["anime"], as_user("anime"), "anime", PASSWORDS["anime"]), lang, out, log)
     return made
 
 
