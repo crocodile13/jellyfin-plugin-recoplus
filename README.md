@@ -15,7 +15,7 @@
 
 Jellyfin's built-in recommendations rely largely on chance. **Reco+ replaces them with personalized recommendations**, computed for each user from their entire history: what they watched, enjoyed, abandoned or requested. It also brings streaming-style rows to the home screen — "For you", "Because you liked …", trending, new arrivals — and, with Seerr, can suggest titles missing from your library, ready to request in one click.
 
-- **Fits your setup**: Home Screen Sections, Seerr (Jellyseerr / Overseerr), Jellyfin Enhanced, Playback Reporting and Media Bar Enhanced. All of them are optional and detected automatically.
+- **Fits your setup**: Reco+ works on its own, but **Home Screen Sections** (home rows) and **Seerr** (Jellyseerr / Overseerr: titles beyond the library, current lists) are recommended for the full experience, as is **Jellyfin Enhanced** (reviews, hidden titles, request cards). Playback Reporting and Media Bar Enhanced add to it. All of them are detected automatically.
 - **Ready out of the box**: the default settings come from measurements on a real watch history.
 - **Fully configurable**: every ranking factor, row, source and filter can be adjusted or switched off, or calibrated automatically on your own history.
 - **Transparent**: every recommendation states its reason, and a preview shows exactly what each user sees.
@@ -103,15 +103,15 @@ Settings come in three levels — **essential** (default), **advanced** and **ex
 ## Requirements
 
 - **Jellyfin 12.2 to 12.4** (other versions are detected and each hook is checked, but they are not tested).
-- Optional extensions: each one adds to Reco+, none is required.
+- Extensions: none is required, but the first three are recommended for the full experience.
 
-| Extension / service | Adds |
-|---|---|
-| [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) | the home rows; it decides which rows each user sees, and in which order |
-| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | requests and watchlists taken into account, trending / popular / upcoming rows, suggestions beyond the library (extended mode) |
-| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | reviews and hidden titles; its cards and *Request* button for titles outside the library |
-| [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) | precise first-play dates, useful for calibration |
-| [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) | shows Reco+ recommendations when its "Personalized Recommendations" option is on |
+| Extension / service | | Adds |
+|---|---|---|
+| [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) | recommended | the home rows; it decides which rows each user sees, and in which order |
+| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | recommended | requests and watchlists taken into account, trending / popular / upcoming rows, suggestions beyond the library (extended mode) |
+| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | recommended | reviews and hidden titles; its cards and *Request* button for titles outside the library |
+| [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) | add-on | precise first-play dates, useful for calibration |
+| [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) | add-on | shows Reco+ recommendations when its "Personalized Recommendations" option is on |
 
 LocalRecs, if installed, produces duplicate recommendations: uninstalling it is advised.
 
