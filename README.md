@@ -15,6 +15,10 @@
 
 **Jellyfin's own recommendations are mostly random.** Reco+ replaces them with lists ranked for each person from everything they watched, liked, abandoned or asked for — and adds a Netflix-like home screen with "For you", "Because you liked …", trending and new-for-you rows. With Seerr, it can even suggest titles you don't have yet, with a one-click *Request* button.
 
+**Works on its own, and better with** [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) (home rows), [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr: requests, trending lists, titles you don't have), [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) (reviews, hidden titles, request cards), [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) and [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) — each optional, detected automatically.
+
+**Works out of the box, tunable to the last detail**: sensible, measured defaults, and every part of the engine — each ranking factor, row, source and filter — can be adjusted, switched off or calibrated automatically on your own history.
+
 <p align="center">
   <img src="assets/screenshots/accueil.jpg" alt="Home screen with four Reco+ rows: For you (with titles outside the library), New for you, Movies for you, Series for you" width="100%">
   <br><sub>A home screen with Reco+ rows: a title never appears twice, and the first row mixes in titles you don't have yet (Seerr cards from Jellyfin Enhanced).</sub>
