@@ -12,9 +12,9 @@
         "version": "1.1.1.0",
         "changelog": "1.1.1 (Jellyfin 12.2 to 12.4): \"Recompute now\" clicked while a full computation was already running was silently ignored, so new settings (or a Seerr connection just saved) only applied at the next computation. The request now waits and runs right after the current computation.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.1.1.0/RecoPlus_1.1.1.0.zip",
+        "checksum": "fcd1a746a23c8f991f44eb9d170f0af3",
+        "timestamp": "2026-11-24T19:10:38Z"
       },
       {
         "version": "1.1.0.0",
