@@ -68,20 +68,30 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
             .find(x => x.offsetParent !== null && x.querySelector('.card'));
           return s ? s.getBoundingClientRect().top + window.scrollY : 0;
         }""")
-        # Jellyfin montre un aperçu flou (blurhash) tant que l'affiche n'est pas chargée ; son chargeur ne demande une image
-        # qu'en voyant la carte entrer à l'écran (un agrandissement de fenêtre ne le réveille pas : petit défilement), et
-        # retire « data-src » une fois l'image posée. Attendre que plus aucune carte visible n'en ait (au plus 60 s)
-        pending_js = """() => [...document.querySelectorAll('[data-src]')]
-          .filter(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0; }).length"""
-        end, pending = time.time() + 60, -1
-        while time.time() < end:
-            page.evaluate("window.scrollBy(0, 1); window.scrollBy(0, -1); window.dispatchEvent(new Event('scroll'))")
-            pending = page.evaluate(pending_js)
-            if pending == 0:
-                break
-            time.sleep(2)
-        time.sleep(1.5)                                          # fondu d'apparition des affiches
-        log(f"accueil ({lang}) : {pending} affiche(s) encore en attente au moment de la capture")
+        # Jellyfin montre un aperçu flou (blurhash) tant qu'une affiche n'est pas chargée, et son chargeur paresseux ne
+        # se déclenche pas dans ce navigateur sans écran (constaté : 23 affiches jamais demandées en 60 s). La capture les
+        # charge donc elle-même, comme le chargeur : image téléchargée, posée en fond, aperçu flou masqué (au plus 30 s)
+        loaded = page.evaluate("""() => new Promise(done => {
+          const cards = [...document.querySelectorAll('[data-src]')]
+            .filter(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0; });
+          let ok = 0, bad = 0;
+          const one = e => new Promise(res => {
+            const url = e.getAttribute('data-src'), img = new Image();
+            img.onload = () => {
+              e.style.backgroundImage = "url('" + url + "')";
+              e.removeAttribute('data-src');
+              e.classList.remove('lazy-hidden');
+              const c = e.querySelector('.blurhash-canvas'); if (c) { c.style.display = 'none'; }
+              ok++; res();
+            };
+            img.onerror = () => { bad++; res(); };
+            img.src = url;
+          });
+          const t = setTimeout(() => done({ ok, bad, total: cards.length }), 30000);
+          Promise.all(cards.map(one)).then(() => { clearTimeout(t); done({ ok, bad, total: cards.length }); });
+        })""")
+        time.sleep(1)
+        log(f"accueil ({lang}) : affiches chargées {loaded['ok']}/{loaded['total']}, en échec {loaded['bad']}")
         name = f"home-{lang}.jpg"
         page.screenshot(path=str(out / name), type="jpeg", quality=82, full_page=True,
                         clip={"x": 0, "y": max(0, top - 24), "width": 1440, "height": 1150})
