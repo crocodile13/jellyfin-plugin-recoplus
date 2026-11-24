@@ -68,6 +68,17 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
             .find(x => x.offsetParent !== null && x.querySelector('.card'));
           return s ? s.getBoundingClientRect().top + window.scrollY : 0;
         }""")
+        # Jellyfin montre un aperçu flou (blurhash) tant que l'affiche n'est pas chargée : attendre les vraies affiches
+        # des rangées visibles (au plus 45 s)
+        end = time.time() + 45
+        while time.time() < end:
+            pending = page.evaluate("""() => [...document.querySelectorAll('.cardImageContainer')]
+              .filter(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0; })
+              .filter(e => getComputedStyle(e).backgroundImage === 'none' && !e.querySelector('img')).length""")
+            if pending == 0:
+                break
+            time.sleep(1.5)
+        time.sleep(1)
         name = f"home-{lang}.jpg"
         page.screenshot(path=str(out / name), type="jpeg", quality=82, full_page=True,
                         clip={"x": 0, "y": max(0, top - 24), "width": 1440, "height": 1150})
