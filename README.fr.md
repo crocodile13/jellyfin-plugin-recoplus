@@ -15,6 +15,10 @@
 
 **Les recommandations intégrées de Jellyfin sont surtout du hasard.** Reco+ les remplace par des listes classées pour chaque personne d'après tout ce qu'elle a regardé, aimé, abandonné ou demandé — et ajoute un accueil façon Netflix, avec des rangées « Pour toi », « Parce que tu as aimé … », tendances et nouveautés. Avec Seerr, il propose même des titres que vous n'avez pas encore, avec un bouton *Demander*.
 
+**Fonctionne seul, et mieux avec** [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) (rangées d'accueil), [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr : demandes, listes du moment, titres que vous n'avez pas), [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) (avis, titres masqués, cartes de demande), [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) et [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) — tous facultatifs, détectés tout seuls.
+
+**Prêt à l'emploi, réglable dans le moindre détail** : des valeurs par défaut mesurées, et chaque partie du moteur — chaque facteur de classement, rangée, source et filtre — se règle, se coupe ou se calibre automatiquement sur votre propre historique.
+
 <p align="center">
   <img src="assets/screenshots/accueil.jpg" alt="Accueil avec quatre rangées Reco+ : Pour toi (avec des titres hors bibliothèque), Nouveautés pour toi, Films pour toi, Séries pour toi" width="100%">
   <br><sub>Un accueil avec les rangées Reco+ : jamais deux fois le même titre, et la première rangée mêle des titres que vous n'avez pas encore (cartes Seerr de Jellyfin Enhanced).</sub>
