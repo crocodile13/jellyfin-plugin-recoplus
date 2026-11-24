@@ -174,7 +174,7 @@ Reco+ est développé avec l'aide d'un assistant d'IA (Claude, d'Anthropic), qui
 
 ## Contribuer
 
-Les contributions sont les bienvenues : signalements de bugs, idées, traductions, code. Le guide [CONTRIBUTING.md](CONTRIBUTING.md) décrit la marche à suivre.
+Les contributions sont les bienvenues : signalements de bugs, idées, code. Le guide [CONTRIBUTING.md](CONTRIBUTING.md) décrit la marche à suivre.
 
 **Les historiques de lecture sont particulièrement précieux.** Le moteur n'a pu être évalué que sur un petit foyer réel ; des données plus nombreuses et plus variées permettraient d'affiner ses réglages par défaut pour tout le monde. Si votre serveur a beaucoup d'utilisateurs ou un long historique, un jeu de données anonymisé serait d'une grande aide. L'export intégré (onglet Calibrage, mode développeur) ou [`tools/reco-export`](tools/reco-export) le produisent en lecture seule, comptes renommés (u01, u02…), sans nom ni identifiant. Ouvrez une issue pour convenir d'un moyen d'envoi : ne publiez jamais ces données directement.
 
