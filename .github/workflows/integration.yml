@@ -117,6 +117,7 @@ jobs:
           SIM_EXPECT: ${{ matrix.plugins == 'hss' && 'hss' || matrix.plugins == 'full' && 'hss,je,pr' || (matrix.plugins == 'eco' || matrix.plugins == 'bench') && 'hss,je,pr,seerr' || '' }}
           SIM_BENCH: ${{ matrix.plugins == 'bench' && '1' || '' }}
           SIM_BOLDNESS: ${{ github.event_name == 'push' && matrix.plugins == 'eco' && '1' || '' }}   # branches sim-* : audace prudente / aventureuse
+          SIM_SHOTS: ${{ github.event_name == 'push' && matrix.plugins == 'eco' && matrix.jellyfin == '12.4' && '1' || '' }}   # branches sim-* : captures README / wiki
         run: cd tests/integration && python sim.py run
 
       - name: Server log (Reco+ and errors only)

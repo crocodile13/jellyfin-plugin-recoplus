@@ -207,7 +207,10 @@ def setup():
         if OFFLINE:
             # métadonnées lues dans les .nfo : aucun téléchargement (fiches, images), aucune extraction d'images
             types = ("Movie",) if kind == "movies" else ("Series", "Season", "Episode")
-            opts.update({"TypeOptions": [{"Type": t, "MetadataFetchers": [], "ImageFetchers": [], "MetadataFetcherOrder": [], "ImageFetcherOrder": []} for t in types],
+            # captures (SIM_SHOTS) : les affiches viennent de TMDb, les fiches restent celles des .nfo
+            img = ["TheMovieDb"] if os.environ.get("SIM_SHOTS") and t_poster(kind) else []
+            opts.update({"TypeOptions": [{"Type": t, "MetadataFetchers": [], "ImageFetchers": img if t in ("Movie", "Series") else [], "MetadataFetcherOrder": [],
+                                          "ImageFetcherOrder": img if t in ("Movie", "Series") else []} for t in types],
                          "MetadataSavers": [], "EnableChapterImageExtraction": False, "ExtractChapterImagesDuringLibraryScan": False,
                          "EnableTrickplayImageExtraction": False, "ExtractTrickplayImagesDuringLibraryScan": False,
                          "EnableEmbeddedTitles": False, "EnableEmbeddedExtrasTitles": False, "EnableEmbeddedEpisodeInfos": False})
@@ -682,6 +685,29 @@ def index_check():
     return {"script": "RecoPlus/client.js" in page, "cache": cc, "je": "JellyfinEnhanced/script" in page, "langues": langs}
 
 
+def t_poster(kind: str) -> bool:
+    """Affiches téléchargées pour cette sorte de bibliothèque (captures seulement)."""
+    return kind in ("movies", "tvshows")
+
+
+def shots_take():
+    """Captures du README et du wiki (anglais puis français) ; dans l'artifact, dossier shots/."""
+    import shots
+    out = OUT / "shots"
+    out.mkdir(exist_ok=True)
+    info = call("GET", "/System/Info/Public")
+    ids = {u["Name"]: u["Id"] for u in call("GET", "/Users")}
+    pid = plugin_id("Reco+")
+    made = []
+    for lang, value in (("en", "English"), ("fr", "French")):
+        cfg = call("GET", f"/Plugins/{pid}/Configuration")
+        cfg["Language"] = value
+        call("POST", f"/Plugins/{pid}/Configuration", cfg)
+        time.sleep(2)
+        made += shots.take(BASE, info.get("Id", ""), (ids["admin"], TOKEN), (ids["anime"], as_user("anime"), "anime"), lang, out, log)
+    return made
+
+
 def browser_check():
     """Accueil d'un compte dans un vrai navigateur, mode étendu actif puis coupé (ticket #50) ; captures dans l'artifact."""
     try:
@@ -820,6 +846,11 @@ def run():
             problems.append(f"expérience d'audace : {e}")
     if "hss" in EXPECT and os.environ.get("SIM_BROWSER"):
         r["navigateur"] = browser_check()
+    if os.environ.get("SIM_SHOTS"):
+        try:
+            r["captures"] = shots_take()
+        except Exception as e:
+            problems.append(f"captures : {e}")
     r["problems"] = problems
     (OUT / "report.json").write_text(json.dumps(r, ensure_ascii=False, indent=2), encoding="utf-8")
     md = markdown(r)
