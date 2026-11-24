@@ -1,0 +1,25 @@
+name: Feature request
+description: An idea to make the recommendations or the plugin better
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ideas are welcome! Reco+ only changes how it ranks titles when the change is measured on real histories,
+        so a concrete example of a bad recommendation helps a lot. Français accepté.
+  - type: textarea
+    attributes:
+      label: What would you like?
+      description: The problem first, then your idea. An example ("account X watched A and B, got C, expected D") is gold.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Alternatives
+      description: Settings you already tried (the wiki's Settings page lists them all), workarounds, other plugins.
+  - type: checkboxes
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the existing issues and the [wiki](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki).
+          required: true
