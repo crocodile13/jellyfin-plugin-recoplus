@@ -705,6 +705,20 @@ await test('langue : chaque texte de la page a sa traduction anglaise (mêmes pa
     }
 });
 
+await test('liens du projet en tête de page : documentation dans la langue de la page, nouvel onglet', async () => {
+    const R = 'https://github.com/crocodile13/jellyfin-plugin-recoplus';
+    const fr = await open(cfg);
+    await wait(50);
+    const links = [...fr.d.querySelectorAll('.rp-links a')];
+    assert.deepEqual(links.map((a) => a.textContent), ['Documentation', 'Signaler un problème', 'GitHub']);
+    assert.deepEqual(links.map((a) => a.getAttribute('href')), [R + '/wiki/Accueil-fr', R + '/issues/new?template=bug_report.yml', R]);
+    assert.ok(links.every((a) => a.target === '_blank' && /noopener/.test(a.rel)));
+    const en = await open({ ...cfg, Language: 'English' }, { '/RecoPlus/I18n': { lang: 'en', dict: EN } });
+    await wait(50);
+    assert.deepEqual([...en.d.querySelectorAll('.rp-links a')].map((a) => [a.textContent, a.getAttribute('href')]),
+        [['Documentation', R + '/wiki'], ['Report a problem', R + '/issues/new?template=bug_report.yml'], ['GitHub', R]]);
+});
+
 await test('langue : page en anglais (réglage ou langue de Jellyfin), textes du serveur demandés en anglais', async () => {
     // textes d'état : rendus par le serveur dans la langue demandée
     const st = { ...status, secrets: { seerrApiKey: 'not set', webhookUrl: 'not set', webhookToken: 'not set' } };
