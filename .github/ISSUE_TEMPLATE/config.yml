@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: How Reco+ works (wiki)
+    url: https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki
+    about: The engine, every setting, the measurements — many questions are answered there.
+  - name: Security issue
+    url: https://github.com/crocodile13/jellyfin-plugin-recoplus/security/advisories/new
+    about: Please report vulnerabilities privately, not in a public issue.

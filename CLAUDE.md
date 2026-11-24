@@ -100,6 +100,13 @@ de la CI.
   réellement publiée (l'entrée 1.0.36, jamais publiée, est restée un mois dans le catalogue).
 - Publication automatique (`release.yml`) : release « Reco+ 1.x.y — Jellyfin A to B » (fenêtre lue dans `compat.json`).
 - Une version publiée ne se modifie pas : une correction est une nouvelle version.
+- PR des contributeurs extérieurs : la CI et le test d'intégration les vérifient, **seul Marien** les valide et les
+  merge (jamais moi, sauf demande explicite). Mes PR et celles de Marien : je merge moi-même une fois tout vert.
+  Modèles : `.github/ISSUE_TEMPLATE/` (formulaires bug et idée), `.github/pull_request_template.md` (checklist),
+  `CONTRIBUTING.md` ; à tenir à jour avec ces règles.
+- Captures du README et du wiki (`assets/screenshots/`) : refaites par `integration.yml` après chaque publication (job
+  `gate` : seulement si `assets/screenshots/VERSION` n'est pas la dernière release), commit direct du bot sur `main`.
+  À la main : pousser une branche `sim-*` (`SIM_SHOTS`, artifact `integration-12.4-eco`, dossier `shots/`).
 - Commits, titres et descriptions de PR : anglais. Auteur : `crocodile13 <134718087+crocodile13@users.noreply.github.com>`.
 
 ## Conventions
