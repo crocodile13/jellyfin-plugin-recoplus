@@ -7,6 +7,8 @@ name: Integration
 # Nothing secret: random passwords per run, tokens and API keys masked, fictitious accounts only.
 # Runs on pull requests that touch the plugin or this test, every Monday (new Jellyfin, plugin and Seerr versions are
 # picked up automatically: latest releases and images), and by hand.
+# After a release: only eco on the newest version, to retake the README / wiki screenshots (assets/screenshots), which
+# the last job commits to main when they changed. A push to main that published nothing does not run it.
 on:
   pull_request:
     paths:
@@ -18,6 +20,9 @@ on:
   schedule:
     - cron: '17 5 * * 1'
   workflow_dispatch:
+  workflow_run:
+    workflows: ['Release']
+    types: [completed]
 
 concurrency:
   group: integration-${{ github.ref }}
@@ -27,8 +32,31 @@ permissions:
   contents: read
 
 jobs:
+  # après une publication : les captures ne sont refaites que si la dernière version publiée n'est pas celle des captures
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      shots: ${{ steps.v.outputs.shots }}
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: v
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          V=$(gh release view --json tagName -q .tagName 2>/dev/null || true)
+          HAVE=$(cat assets/screenshots/VERSION 2>/dev/null || true)
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" = "workflow_run" ] && [ "${{ github.event.workflow_run.conclusion }}" = "success" ] && [ -n "$V" ] && [ "$V" != "$HAVE" ]; then
+            echo "shots=true" >> "$GITHUB_OUTPUT"; echo "screenshots: $HAVE -> $V"
+          else
+            echo "shots=false" >> "$GITHUB_OUTPUT"
+          fi
+
   jellyfin:
     name: Jellyfin ${{ matrix.jellyfin }} — ${{ matrix.plugins }}
+    needs: gate
+    if: github.event_name != 'workflow_run' || needs.gate.outputs.shots == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 75   # bench : la première analyse en ligne d'une bibliothèque de ~400 titres
     strategy:
@@ -38,7 +66,8 @@ jobs:
         plugins: ['reco', 'hss', 'full', 'eco', 'bench']
         # bench (banc réaliste : ~400 titres, 30 comptes, mesure objective) : dernière version, lundi, à la main, branches sim-* ;
         # pull requests : pas de banc, et l'écosystème (Seerr) sur la dernière version seulement
-        exclude: ${{ fromJSON(github.event_name == 'pull_request' && '[{"jellyfin":"12.2","plugins":"eco"},{"jellyfin":"12.2","plugins":"bench"},{"jellyfin":"12.4","plugins":"bench"}]' || '[{"jellyfin":"12.2","plugins":"bench"}]') }}
+        # après une publication : eco sur la dernière version seulement (captures)
+        exclude: ${{ fromJSON(github.event_name == 'pull_request' && '[{"jellyfin":"12.2","plugins":"eco"},{"jellyfin":"12.2","plugins":"bench"},{"jellyfin":"12.4","plugins":"bench"}]' || github.event_name == 'workflow_run' && '[{"jellyfin":"12.2","plugins":"reco"},{"jellyfin":"12.2","plugins":"hss"},{"jellyfin":"12.2","plugins":"full"},{"jellyfin":"12.2","plugins":"eco"},{"jellyfin":"12.2","plugins":"bench"},{"jellyfin":"12.4","plugins":"reco"},{"jellyfin":"12.4","plugins":"hss"},{"jellyfin":"12.4","plugins":"full"},{"jellyfin":"12.4","plugins":"bench"}]' || '[{"jellyfin":"12.2","plugins":"bench"}]') }}
     env:
       SIM_OUT: ${{ github.workspace }}/sim-out
       SIM_MEDIA: ${{ github.workspace }}/media
@@ -117,7 +146,7 @@ jobs:
           SIM_EXPECT: ${{ matrix.plugins == 'hss' && 'hss' || matrix.plugins == 'full' && 'hss,je,pr' || (matrix.plugins == 'eco' || matrix.plugins == 'bench') && 'hss,je,pr,seerr' || '' }}
           SIM_BENCH: ${{ matrix.plugins == 'bench' && '1' || '' }}
           SIM_BOLDNESS: ${{ github.event_name == 'push' && matrix.plugins == 'eco' && '1' || '' }}   # branches sim-* : audace prudente / aventureuse
-          SIM_SHOTS: ${{ github.event_name == 'push' && matrix.plugins == 'eco' && matrix.jellyfin == '12.4' && '1' || '' }}   # branches sim-* : captures README / wiki
+          SIM_SHOTS: ${{ (github.event_name == 'push' || github.event_name == 'workflow_run') && matrix.plugins == 'eco' && matrix.jellyfin == '12.4' && '1' || '' }}   # branches sim-* et après une publication : captures README / wiki
         run: cd tests/integration && python sim.py run
 
       - name: Server log (Reco+ and errors only)
@@ -138,3 +167,35 @@ jobs:
           name: integration-${{ matrix.jellyfin }}-${{ matrix.plugins }}
           path: sim-out/
           retention-days: 14
+
+  # captures refaites après une publication : copiées dans assets/screenshots et committées sur main par le bot si elles
+  # ont changé (comme le catalogue après une publication ; ce commit ne relance rien)
+  screenshots:
+    needs: [gate, jellyfin]
+    if: needs.gate.outputs.shots == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - uses: actions/download-artifact@v7
+        with:
+          name: integration-12.4-eco
+          path: sim-out
+      - name: Commit the new screenshots
+        env:
+          V: ${{ needs.gate.outputs.version }}
+        run: |
+          test -n "$(ls sim-out/shots/*.png 2>/dev/null)" || { echo "no screenshots in the artifact"; exit 1; }
+          mkdir -p assets/screenshots
+          cp sim-out/shots/*.png assets/screenshots/
+          echo "$V" > assets/screenshots/VERSION
+          git add assets/screenshots
+          if git diff --cached --quiet; then echo "unchanged"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "screenshots: $V (home screen and settings, English and French)"
+          git pull --rebase -q origin main
+          git push -q origin HEAD:main
