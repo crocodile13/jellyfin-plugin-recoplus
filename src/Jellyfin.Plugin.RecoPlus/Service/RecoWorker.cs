@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.RecoPlus.Data;
@@ -75,7 +76,11 @@ public sealed class RecoWorker : BackgroundService
         return lastRun is { } l && l + minGap > due ? l + minGap : due;
     }
 
-    /// <summary>Demande un recalcul complet (regroupé).</summary>
+    /// <summary>La tâche « Recalcul des recommandations » tourne (ou s'arrête) en ce moment.</summary>
+    private bool FullRunActive
+        => _tasks.ScheduledTasks.FirstOrDefault(t => t.ScheduledTask is Tasks.NightlyTask)?.State is TaskState.Running or TaskState.Cancelling;
+
+    /// <summary>Demande un recalcul complet (regroupé ; si un calcul complet tourne déjà, celui-ci suivra).</summary>
     public void ScheduleAll(TimeSpan delay)
     {
         if (!Enabled)
@@ -153,9 +158,12 @@ public sealed class RecoWorker : BackgroundService
 
                 var now = DateTime.UtcNow;
                 bool runAll = false;
+                // un calcul complet déjà en cours ne prend pas les changements faits depuis son départ (réglages, Seerr) :
+                // la demande attend sa fin, au lieu d'être perdue (Jellyfin ignore une tâche déjà lancée)
+                bool fullRunning = FullRunActive;
                 lock (_allLock)
                 {
-                    if (_dueAll is { } all && all <= now)
+                    if (_dueAll is { } all && all <= now && !fullRunning)
                     {
                         _dueAll = null;
                         runAll = true;
