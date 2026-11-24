@@ -72,7 +72,8 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         # se déclenche pas dans ce navigateur sans écran (constaté : 23 affiches jamais demandées en 60 s). La capture les
         # charge donc elle-même, comme le chargeur : image téléchargée, posée en fond, aperçu flou masqué. Les rangées
         # peuvent être redessinées après coup (constaté en français : 23/23 chargées puis capture floue) : on recommence
-        # jusqu'à ce qu'aucune affiche visible ne reste en attente, et on vérifie juste avant la capture.
+        # jusqu'à ce qu'aucune carte visible des rangées n'attende encore son image (`data-src` ; `lazy-hidden` seul ne dit
+        # rien : 15 éléments hors affiches la gardent), et on vérifie juste avant la capture.
         load = """() => new Promise(done => {
           const cards = [...document.querySelectorAll('[data-src]')]
             .filter(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0; });
@@ -95,7 +96,7 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         pending = """() => {
           const vis = e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0
             && getComputedStyle(e).display !== 'none'; };
-          return [...document.querySelectorAll('[data-src], .lazy-hidden')].filter(vis).length;
+          return [...document.querySelectorAll('.verticalSection [data-src]')].filter(vis).length;
         }"""
         left = -1
         for attempt in range(6):
