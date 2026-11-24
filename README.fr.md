@@ -34,7 +34,6 @@ Les recommandations intégrées à Jellyfin reposent en grande partie sur le has
 | **« Plus comme ceci »** | genres communs pour les films, séries au hasard | similarité réelle du contenu, et le volet suivant d'une saga en premier |
 | **Accueil** | ajouts récents, reprise de lecture | jusqu'à 10 rangées personnelles, sans aucun doublon |
 | **Titres absents de la bibliothèque** | — | suggérés selon vos goûts, demandés en un clic (facultatif, avec Seerr) |
-| **Précision mesurée** : le titre lancé ensuite figurait dans le top 10 calculé juste avant | 11 % | **18–19 %** |
 
 ## Fonctionnement en bref
 
