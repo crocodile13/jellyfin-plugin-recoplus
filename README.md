@@ -98,7 +98,7 @@ Settings come in three levels — **essential** (default), **advanced** and **ex
   </tr>
 </table>
 
-<sub>Taken automatically on the integration server after each release: simulated accounts, posters blurred. Every settings tab, in English and French, is in [assets/screenshots](assets/screenshots).</sub>
+<sub>Taken automatically on the integration server after each release: simulated accounts and watch histories. Every settings tab, in English and French, is in [assets/screenshots](assets/screenshots).</sub>
 
 ## Requirements
 
