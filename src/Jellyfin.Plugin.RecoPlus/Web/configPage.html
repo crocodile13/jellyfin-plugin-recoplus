@@ -13,6 +13,9 @@
                 #RecoPlusConfigPage { --rp-line: rgba(255,255,255,.09); --rp-soft: rgba(255,255,255,.04); --rp-mute: #9aa0a6; --rp-accent: #00a4dc; }
                 #RecoPlusConfigPage .rp-head { display: flex; align-items: baseline; gap: .8em; flex-wrap: wrap; margin: 1em 0 .2em; }
                 #RecoPlusConfigPage .rp-head h2 { margin: 0; }
+                #RecoPlusConfigPage .rp-links { margin-left: auto; display: flex; gap: 1.2em; font-size: .9em; }
+                #RecoPlusConfigPage .rp-links a { color: inherit; opacity: .75; text-decoration: none; }
+                #RecoPlusConfigPage .rp-links a:hover, #RecoPlusConfigPage .rp-links a:focus { opacity: 1; text-decoration: underline; }
                 #RecoPlusConfigPage .rp-sub { color: var(--rp-mute); font-size: .9em; margin: 0 0 1em; max-width: 60em; }
                 #RecoPlusConfigPage .rp-alert { background: #5c1414; border-left: 4px solid #e04848; padding: .7em 1em; border-radius: 4px; margin: .5em 0; }
                 #RecoPlusConfigPage .rp-alert b { display: block; }
@@ -107,7 +110,8 @@
                 #RecoPlusConfigPage .rp-save { position: sticky; bottom: 0; padding: .8em 0; background: inherit; z-index: 2; }
             </style>
 
-            <div class="rp-head"><h2>Reco+</h2><span class="mute" id="rpVersion"></span></div>
+            <div class="rp-head"><h2>Reco+</h2><span class="mute" id="rpVersion"></span>
+                <span class="rp-links"><a id="rpLinkDocs" href="https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki" target="_blank" rel="noopener noreferrer">Documentation</a><a href="https://github.com/crocodile13/jellyfin-plugin-recoplus/issues/new?template=bug_report.yml" target="_blank" rel="noopener noreferrer">Signaler un problème</a><a href="https://github.com/crocodile13/jellyfin-plugin-recoplus" target="_blank" rel="noopener noreferrer">GitHub</a></span></div>
             <p class="rp-sub">Recommandations personnelles à la place de celles de Jellyfin, calculées en arrière-plan et mises en cache : aucune page n'attend. Une partie qui ne colle plus à la version de Jellyfin se coupe seule et Jellyfin reprend son comportement normal pour elle. Passez la souris sur « ? » pour l'aide d'un réglage.</p>
             <div id="rpAlerts"></div>
 
@@ -417,6 +421,8 @@
                 // région du navigateur quand elle va avec la langue (de-AT, es-MX, en-GB…), sinon celle par défaut
                 LOCALE = new RegExp('^' + LANG + '(-|$)', 'i').test(CLIENT_LANG) ? CLIENT_LANG : { fr: 'fr-FR', en: 'en-US', de: 'de-DE', es: 'es-ES' }[LANG];
                 page.setAttribute('lang', LANG);
+                // documentation du wiki : pages françaises « …-fr », anglaises sinon
+                if (LANG === 'fr') { $('#rpLinkDocs').setAttribute('href', $('#rpLinkDocs').getAttribute('href') + '/Accueil-fr'); }
             });
         }
 
