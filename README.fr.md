@@ -168,6 +168,10 @@ La CI compile et teste à chaque push. Quand une nouvelle version apparaît dans
 - Les valeurs par défaut ont été choisies sur l'historique réel d'un petit foyer, puis vérifiées sur des données synthétiques (bibliothèque de vrais titres, 30 comptes simulés). Chaque serveur est différent : le Calibrage les ajuste à votre propre historique.
 - Les titres hors bibliothèque sont ajoutés par un script du client web ; les applications TV et mobiles ne reçoivent que les recommandations de la bibliothèque.
 
+## Développement assisté par IA
+
+Reco+ est développé avec l'aide d'un assistant d'IA (Claude, d'Anthropic), qui écrit l'essentiel du code sous la direction du mainteneur. Le mainteneur décide de ce qui est construit, relit chaque modification et la valide avant sa publication : tests unitaires et de parité dans la CI, test d'intégration sur de vrais serveurs Jellyfin à chaque pull request, et mesures sur des historiques de lecture pour tout ce qui touche aux recommandations.
+
 ## Contribuer
 
 Les contributions sont les bienvenues : signalements de bugs, idées, traductions, code. Le guide [CONTRIBUTING.md](CONTRIBUTING.md) décrit la marche à suivre.
