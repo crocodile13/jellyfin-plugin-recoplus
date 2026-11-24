@@ -13,31 +13,75 @@
 
 <p align="center"><i><a href="README.fr.md">Version française</a></i></p>
 
-Reco+ is a Jellyfin plugin that replaces the built-in recommendations — Suggestions, "Because you watched", "More like this" (similar items) — with lists ranked for each user. It adds personalized home screen rows ("For you", "Because you liked …") through Home Screen Sections, and can recommend movies and TV shows you don't have yet through Seerr (Jellyseerr / Overseerr), with a one-click *Request* button. Everything is computed in the background and cached: no page ever waits.
-
-## Features
-
-- **Better recommendations everywhere Jellyfin shows them**: `/Items/Suggestions` (random in Jellyfin), `/Movies/Recommendations` ("Because you liked X" from the whole history, not just the last 7 movies), "More like this" for movies and series (random series in Jellyfin).
-- **Home rows** with [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections): "For you", "Trending", "Popular", "Upcoming" (TMDb lists through Seerr, sorted by each account's taste), "New for you", up to three "Because you liked …", "Movies for you", "Series for you" — a title never appears twice. Each row can show movies, series, both, or split into two rows; accounts' home screens follow automatically.
-- **Uses everything the account told you**: whole history with decay, abandoned titles, favourites (series, seasons, episodes), ratings and Jellyfin Enhanced reviews and hidden titles, Seerr requests and watchlist, titles shown but never opened.
-- **Extended mode** (optional, needs Seerr): titles outside the library in the home rows of your choice — library only, Seerr only or mixed, per row — with Jellyfin Enhanced's cards and *Request* button.
-- **Safe by design**: a guard rail keeps new or popular titles from being pushed to accounts they don't fit; Jellyfin's access rules and parental control apply to every list; nothing is ever requested automatically.
-- **Measured effect**: the State tab shows what accounts do with what is recommended — started within 7 days, finished within 30, by row and by position — from the watch history alone.
-- **Calibration** on your own history, with cross-validation by account: settings are only proposed when they really generalize, and nothing is applied without your click.
-- **Self-protecting**: every Jellyfin hook is checked at start-up; a part that no longer fits switches itself off and Jellyfin's normal behaviour comes back, with an alert (activity log, banner, optional webhook).
-- **English, French, German and Spanish** interface, following each person's Jellyfin language.
-
-## Screenshots
+**Jellyfin's own recommendations are mostly random.** Reco+ replaces them with lists ranked for each person from everything they watched, liked, abandoned or asked for — and adds a Netflix-like home screen with "For you", "Because you liked …", trending and new-for-you rows. With Seerr, it can even suggest titles you don't have yet, with a one-click *Request* button.
 
 <p align="center">
   <img src="assets/screenshots/accueil.jpg" alt="Home screen with four Reco+ rows: For you (with titles outside the library), New for you, Movies for you, Series for you" width="100%">
-  <br><sub>Home screen with Home Screen Sections: four Reco+ rows, a title never repeated across them. The first row mixes in titles outside the library (Seerr cards from Jellyfin Enhanced).</sub>
+  <br><sub>A home screen with Reco+ rows: a title never appears twice, and the first row mixes in titles you don't have yet (Seerr cards from Jellyfin Enhanced).</sub>
 </p>
 
-<p align="center">
-  <img src="assets/screenshots/etat.png" alt="Status tab: last computation, accounts ready, Playback Reporting, Seerr and Jellyfin Enhanced status, compatibility checks" width="100%">
-  <br><sub>Status tab: what was read, and the compatibility checks run at start-up.</sub>
-</p>
+## Why Reco+
+
+| | Jellyfin alone | With Reco+ |
+|---|---|---|
+| **Suggestions** | random titles | your titles, ranked by your taste |
+| **"Because you watched X"** | the last 7 movies only | your whole history, movies and series |
+| **"More like this"** | genre overlap for movies, random series | real content similarity, the next part of a saga first |
+| **Home screen** | recently added, continue watching | up to 10 personal rows, never the same title twice |
+| **Titles you don't have** | — | suggested from your tastes, one-click request (optional, with Seerr) |
+| **Measured on a real server** — the title someone started next was in the top 10 just before | 11 % | **18–19 %** |
+
+## How it works, in 30 seconds
+
+1. **Your history becomes a taste.** Every title you watched, abandoned, rated, liked, hid or requested gets a weight; old ones count less, abandons count against similar titles.
+2. **Every title you haven't seen gets a score** by how much it resembles your tastes — its genres, keywords, director, actors… — and what people with the same tastes in your household watched.
+3. **A guard rail**: freshness, popularity and ratings only help titles that *already* fit you. A new or popular title that isn't for you is never pushed.
+4. **Your rows are built**: diversity, one entry per saga (the first part you haven't seen), new episodes of what you follow first, no duplicates between rows.
+
+Everything is computed in the background: no page ever waits. The full explanation, with every formula, is in the **[wiki](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki)**.
+
+## Install
+
+### From the plugin repository (recommended)
+
+1. In **Dashboard → Plugins → Repositories**, add:
+   ```
+   https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/manifest.json
+   ```
+2. Install **Reco+** from the catalogue.
+3. Restart Jellyfin.
+
+New versions are then installed by Jellyfin's **Update Plugins** scheduled task (Dashboard → Scheduled tasks) and applied at the next restart.
+
+### Manually
+
+1. Download `RecoPlus_<version>.zip` from the [releases](https://github.com/crocodile13/jellyfin-plugin-recoplus/releases) and check it against the published `.sha256`.
+2. Extract it into `<config>/plugins/RecoPlus_<version>/`, owned by the Jellyfin user.
+3. Restart Jellyfin.
+
+## First steps
+
+1. Open **Reco+** in the dashboard menu (Plugins section). The defaults are the evaluated ones: it works as soon as it is installed.
+2. On the **Status** tab, click **Recompute now**.
+3. With Home Screen Sections, click **Add them for me** on the Status tab; titles and contents of the rows are set on the **Home** tab.
+4. With Seerr, enter its URL and API key on the **Seerr** tab, click **Test**, then turn on **Extended mode** for titles you don't have yet.
+5. See exactly what an account gets on the **Preview** tab: its rows as posters, with the reason for each title.
+
+Settings come in three levels — **essential** (default), **advanced**, **expert** — chosen at the right of the tabs. Hover over **?** next to any setting for its help.
+
+## Features
+
+- **Everywhere Jellyfin recommends**: Suggestions, "Because you watched", "More like this", the Media Bar.
+- **Home rows** with [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections): "For you", "Trending", "Popular", "Upcoming", "New for you", up to three "Because you liked …", "Movies for you", "Series for you". Each row: movies, series, both, or split in two.
+- **Listens to everything you say**: favourites (series, season or episode), ratings, Jellyfin Enhanced reviews and hidden titles, Seerr requests and watchlist, titles shown but never opened.
+- **Titles you don't have** (extended mode, optional): found from your tastes in the TMDb catalogue, ranked by the same engine, with a **discovery boldness** slider from cautious to bold.
+- **Says why**: on the page of a title opened from a Reco+ row, a discreet line explains it ("Because you liked X", "Sequel to X", "New episodes"…).
+- **Safe**: Jellyfin's access rules and parental control apply to every list; nothing is ever requested automatically.
+- **Measured, not guessed**: the Status tab shows what accounts do with what is recommended (started within 7 days, finished within 30), and **Calibration** tunes the engine on your own history — only proposing what really generalizes.
+- **Self-protecting**: every Jellyfin hook is checked at start-up; a part that no longer fits switches itself off, with an alert.
+- **English, French, German and Spanish**, following each person's Jellyfin language.
+
+## Screenshots
 
 <table>
   <tr>
@@ -57,67 +101,40 @@ Reco+ is a Jellyfin plugin that replaces the built-in recommendations — Sugges
 ## Requirements
 
 - **Jellyfin 12.2 to 12.4** (other versions are detected and each hook is checked, but they are not tested).
-- Optional: [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) for home rows, [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) for reviews, hidden titles and Seerr cards, [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) for precise first-play dates, and a [Seerr](https://github.com/seerr-team/seerr) instance for requests and extended mode.
+- Optional, each adds something and nothing breaks without it:
 
-## Installation
+| Plugin / service | What it adds |
+|---|---|
+| [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) | the home rows (it decides which rows each account sees and in which order) |
+| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | requests and watchlists as tastes, trending/popular/upcoming rows, titles you don't have (extended mode) |
+| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | star reviews and hidden titles; its cards and *Request* button for titles you don't have |
+| [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) | precise first-play dates, for calibration |
+| [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) | shows Reco+ recommendations with its "Personalized Recommendations" option |
 
-### From the plugin repository (recommended)
-
-1. In **Dashboard → Plugins → Repositories**, add:
-   ```
-   https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/manifest.json
-   ```
-2. Install **Reco+** from the catalogue.
-3. Restart Jellyfin.
-
-New versions are then installed by Jellyfin's **Update Plugins** scheduled task (Dashboard → Scheduled tasks) and applied at the next restart.
-
-### Manually
-
-1. Download `RecoPlus_<version>.zip` from the [releases](https://github.com/crocodile13/jellyfin-plugin-recoplus/releases) and check it against the published `.sha256`.
-2. Extract it into `<config>/plugins/RecoPlus_<version>/`, owned by the Jellyfin user.
-3. Restart Jellyfin.
-
-## Getting started
-
-1. Open **Reco+** in the Plugins section of the dashboard menu (or **Dashboard → Plugins → Reco+**). The defaults are the evaluated ones: Reco+ works as soon as it is installed.
-2. Click **Recompute now** on the Status tab (otherwise each account is computed at its next activity).
-3. With Home Screen Sections: click **Add them for me** on the State tab (or add the Reco+ rows yourself in its settings); their titles are set on the Home tab.
-4. With Seerr: enter its URL and API key on the Seerr tab, click **Test**, then enable extended mode if you want titles outside the library.
-5. Check what an account gets on the **Preview** tab.
-
-Settings come in three levels — **essential** (default), **advanced**, **expert** — chosen at the right of the tabs; diagnostic tools (log, calibration data export) are in **developer mode**. Hover over **?** next to any setting for its help.
+LocalRecs, if installed, duplicates recommendations: uninstalling it is advised.
 
 ## FAQ
 
-**Why are Jellyfin's recommendations so random?** In Jellyfin, `/Items/Suggestions` returns random items, "Because you watched" only looks at the last few movies, and "More like this" picks random series sharing a genre. Reco+ replaces all three with a ranking built from each user's whole history.
+**Why are Jellyfin's recommendations so random?** `/Items/Suggestions` returns random items, "Because you watched" only looks at the last few movies, and "More like this" picks random series sharing a genre. Reco+ replaces all three.
 
-**Can I get a Netflix-like home screen in Jellyfin?** Yes, with [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections): Reco+ provides "For you", "New for you", "Because you liked …", "Movies for you" and "Series for you" rows, personalized per user.
+**Can I get a Netflix-like home screen?** Yes, with Home Screen Sections: Reco+ provides the rows, personalized per user.
 
-**Can Jellyfin recommend movies I don't have yet?** Yes, with extended mode and a Seerr (Jellyseerr or Overseerr) instance: titles from the TMDb catalogue are suggested in the home rows, ranked by the same engine, and can be requested in one click. Nothing is requested automatically.
+**Can Jellyfin recommend movies I don't have yet?** Yes, with extended mode and Seerr. Nothing is requested automatically.
 
-**Does it work for several users or a family server?** Yes: each user gets their own lists, Jellyfin's library access and parental controls are respected, and guest or child accounts can be ignored.
+**Does it work for a family server?** Yes: each user gets their own lists, library access and parental controls are respected, and guest or child accounts can be ignored.
 
-**How is it different from other recommendation plugins?** It uses explicit feedback (ratings, favourites, hidden titles, requests, abandoned titles), content similarity and collaborative filtering ("watched together"), keeps popular or new titles from being pushed to users they don't fit, and can calibrate itself on your own history.
+**Why is this title recommended to me?** Open it from a Reco+ row: a line under its name says why. Administrators can see every account's rows, with reasons, on the Preview tab.
 
-## Optional integrations
-
-| Plugin / service | If present | If absent |
-|---|---|---|
-| Home Screen Sections | every Reco+ row is listed among its sections: HSS decides which ones are shown, in which order and to whom (Reco+ only sets their titles, without a restart, and fills only the rows HSS shows to each account); "Because you liked X" titles are per account in the web client ("Because you liked…" elsewhere); HSS shows plugin rows in landscape, and titles outside the library take the same shape | no home row; everything else works |
-| Jellyfin Enhanced | extended mode uses its cards, detail modal and *Request* button, with the live Seerr status (if it is linked to Seerr); Reco+ asks it to load its Seerr module on the home screen (JE 12.17 and later only load it on their own pages), waits a few seconds for it and swaps its own cards for JE's as soon as it is ready | Reco+ cards, opening the Seerr page, with Reco+'s own *Request* button |
-| Media Bar Enhanced | with its "Personalized Recommendations" option on, shows Reco+ recommendations (it calls the replaced endpoints; library titles only) | — |
-| Playback Reporting | precise first-play dates for calibration | calibration is less precise; Reco+ also records first plays itself from install time |
-| Seerr (formerly Jellyseerr) | requests and watchlist as a signal, extended mode | all of this is off; the rest works |
-| LocalRecs | flagged as a duplicate | — |
+**How do I stop seeing a title?** Hide it with Jellyfin Enhanced ("not interested"), or rate it badly: it disappears and similar titles go down.
 
 ## Privacy
 
-Nothing leaves the server, except calls to **your** Seerr instance when you configure it and, in extended mode, posters loaded by the web client from `image.tmdb.org`. Titles shown but never opened stay on the server (one year at most) and only affect that account's ranking; the list of titles offered to each account (for the State tab's measurement) stays on the server too and is forgotten 120 days after a title was last offered.
+Nothing leaves the server, except calls to **your** Seerr instance when you configure it and, in extended mode, posters loaded by the web client from `image.tmdb.org`. Titles shown but never opened stay on the server (one year at most) and only affect that account's ranking; the list of titles offered to each account (for the Status tab's measurement) stays on the server too and is forgotten 120 days after a title was last offered.
 
 ## Documentation
 
-- [How Reco+ works](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki) (wiki): what the engine reads, the exact score, home rows, extended mode, calibration, measurements, every setting.
+- **[Wiki: how Reco+ works](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki)** — what the engine reads, the exact score, home rows, extended mode, calibration, measurements, every setting.
+- [Changelog](CHANGELOG.md).
 
 ## Development
 
@@ -147,7 +164,7 @@ CI builds and tests on every push. When `manifest.json` gets a new version, a re
 
 - Built and tested for Jellyfin 12.2 to 12.4 only.
 - The defaults were chosen on a single, small household: use Calibration on yours.
-- Titles outside the library are added by a script in the web client; TV and mobile apps get library recommendations only.
+- Titles you don't have are added by a script in the web client; TV and mobile apps get library recommendations only.
 
 ## License
 
