@@ -50,6 +50,11 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     seulement, jamais sur les cartes de l'accueil ; aucune raison plutôt qu'une raison vague ou fausse.
 - Fichiers dans le dossier de données du plugin : `recommandations.json`, `premiers-lancements.json`, `secrets.json`
   (mode 600), titres montrés ; cache Seerr : `fiches.json`, `listes.json`. Tous écrits par fichier temporaire + renommage.
+- `assets/` : `logo.svg` (en tête des README) et `logo.png` (même logo en 512 × 512, pour les sites qui refusent le
+  SVG : aperçu social, forums, listes de plugins) ; `thumb.svg` est la source de `thumb.png` (image du plugin dans le
+  catalogue et la liste des plugins installés) ; `screenshots/` est refait par le bot (voir Livraison).
+- `tests/integration/offline.py` : banc hors ligne (moteur de référence sur la bibliothèque figée du banc et ses
+  comptes), à lancer à la main pour mesurer vite une idée ; `run(extra=…)` ajoute des caractéristiques de contenu.
 - `README.md` / `README.fr.md` : README classique (présentation, installation, prise en main) ; le détail (moteur,
   mesures, réglages, calibrage) est dans le **wiki** GitHub (dépôt `jellyfin-plugin-recoplus.wiki.git`, pages anglaises et
   pages « …-fr ») ; `docs/how-it-works*.md` n'y renvoient plus que. Un changement de comportement, de valeur par défaut
