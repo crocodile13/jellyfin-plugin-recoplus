@@ -34,6 +34,18 @@ jobs:
           MANIFEST=$(jq -r '.[0].versions[0].version' manifest.json)
           echo "meta=$META csproj=$CSPROJ manifest=$MANIFEST"
           test "$META" = "$CSPROJ" && test "$META" = "$MANIFEST"
+          # 1.MINOR.PATCH.0, changelog starting with "1.MINOR.PATCH", versions strictly decreasing, and every entry
+          # below the top one really published (a catalogue entry without URL breaks installs: 1.0.36 was one)
+          echo "$META" | grep -qE '^1\.[0-9]+\.[0-9]+\.0$'
+          jq -e --arg p "${META%.0}" '.[0].versions[0].changelog | startswith($p)' manifest.json > /dev/null
+          python3 - <<'PY'
+          import json
+          v = json.load(open("manifest.json"))[0]["versions"]
+          key = lambda e: tuple(int(x) for x in e["version"].split("."))
+          assert all(key(a) > key(b) for a, b in zip(v, v[1:])), "versions not strictly decreasing"
+          bad = [e["version"] for e in v[1:] if not (e["sourceUrl"] and e["checksum"] and e["timestamp"])]
+          assert not bad, f"unpublished entries below the top one: {bad}"
+          PY
 
       - name: Jellyfin compatibility window (compat.json, every place that repeats it)
         run: python tools/compat.py check

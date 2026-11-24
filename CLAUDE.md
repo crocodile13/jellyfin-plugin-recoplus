@@ -84,19 +84,20 @@ de la CI.
 
 ## Livraison
 
-- Un commit par version, sur une branche `reco-1.0.N` partant de `origin/main` à jour ; livré en patch
-  (`git format-patch`) avec son sha256, appliqué par Marien (`git am -3`), PR, CI, merge `--rebase`, publication
-  automatique.
-- Le bloc d'application ne suppose rien : il vérifie le sha256, vérifie que la base existe (`git rev-parse -q --verify`)
-  et quelle version est sur `origin/main` (`meta.json`), applique seulement les patches plus récents, et travaille dans
-  un `git worktree` temporaire (jamais dans la copie de travail de Marien, souvent modifiée). Plusieurs versions en
-  attente : une série `format-patch` (une par version), pas des patches à appliquer sur des branches supposées.
-- Merge seulement CI verte (boucle `gh pr checks` sans `watch`) ; en cas d'échec, le bloc affiche `gh run view
-  --log-failed`. Une correction après push = un commit de plus sur la même branche avant merge.
+- Tout passe par `main` (pas de branche de développement) : une branche de travail partant de `origin/main` à jour, PR,
+  CI et test d'intégration verts (boucle `gh pr checks` sans `watch` ; échec : `gh run view --log-failed`), rapport
+  relu, merge `--rebase`. Une correction après push = un commit de plus sur la même branche avant merge.
+- **Une version publiée = un ensemble cohérent**, pas un changement : numéros `1.MINEUR.CORRECTIF.0` (série 1.x, on
+  ne passe pas en 2) ; nouvelles fonctions et changements visibles → version mineure (1.2.0), correctifs → version
+  corrective (1.1.1). Les changements intermédiaires se mergent **sans** toucher `manifest.json` (rien n'est publié) ;
+  la version se monte une fois l'ensemble fini et mesuré. Un correctif qui gêne des utilisateurs sort tout de suite.
+- Monter une version : `Version`, `AssemblyVersion`, `FileVersion` du csproj, `meta.json` (version, changelog) et une
+  entrée en tête de `manifest.json` (changelog en anglais commençant par « 1.MINEUR.CORRECTIF » puis la fenêtre
+  Jellyfin, `targetAbi` = `compat.json` from, `sourceUrl`/`checksum`/`timestamp` vides), et une rubrique en tête de
+  `CHANGELOG.md`. La CI vérifie le format, l'ordre décroissant du catalogue et que toute entrée sous la première est
+  réellement publiée (l'entrée 1.0.36, jamais publiée, est restée un mois dans le catalogue).
+- Publication automatique (`release.yml`) : release « Reco+ 1.x.y — Jellyfin A to B » (fenêtre lue dans `compat.json`).
 - Une version publiée ne se modifie pas : une correction est une nouvelle version.
-- Version : `Version`, `AssemblyVersion`, `FileVersion` du csproj, `meta.json` (version, changelog) et une entrée en tête
-  de `manifest.json` (changelog en anglais commençant par « 1.0.N: », `sourceUrl`/`checksum`/`timestamp` vides).
-  Un commit sans changement de `manifest.json` (documentation) ne publie rien.
 - Commits, titres et descriptions de PR : anglais. Auteur : `crocodile13 <134718087+crocodile13@users.noreply.github.com>`.
 
 ## Conventions
@@ -310,7 +311,6 @@ de la CI.
 - `pkill -f motif` tue aussi le shell dont la ligne de commande contient le motif.
 - `UpdateUserSettings` de HSS appelé pour tous les comptes : ceux qui suivaient le tableau ont été figés. Seulement
   les comptes présents dans `ModularHomeSettings.json`.
-- Patch livré sur une branche supposée (`reco-1.0.N-1` jamais créée) : toujours vérifier la base (voir Livraison).
 - `<input type=number min=30 step=30>` avec un défaut de 365 : invalide pour le navigateur, invisible tant que le champ
   est désactivé (voir Page de configuration).
 - `git stash` avec le lien `tests/client/node_modules` (anciennement suivi) supprimé : le lien revient à la place du
