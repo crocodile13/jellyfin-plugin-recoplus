@@ -1,8 +1,8 @@
 """Captures pour le README et le wiki : accueil d'un compte et chaque onglet de la page de configuration, en anglais et
 en français, sur le serveur du test d'intégration (bibliothèque de vrais titres, comptes simulés, vrai Seerr).
 
-Les affiches sont floutées (choix des captures du README : pas d'illustration de tiers en clair). Les comptes sont
-ceux du banc (noms génériques), le serveur est jetable : rien de réel n'apparaît. Les sessions s'ouvrent par jeton
+Les comptes et leurs historiques sont simulés (noms génériques), le serveur est jetable : rien de réel ni de privé
+n'apparaît, les affiches restent nettes. Les sessions s'ouvrent par jeton
 injecté (jamais écrit sur disque).
 """
 from __future__ import annotations
@@ -11,11 +11,6 @@ import json
 import time
 
 import browser
-
-BLUR = """
-.cardImageContainer, .cardImage, .cardImageIcon, .itemDetailImage, .backdropImage, .rp-pv-img img,
-.cardScalable img, .jellyseerr-card img { filter: blur(9px) saturate(1.1) !important; }
-"""
 
 TABS = [("etat", "status"), ("general", "general"), ("accueil", "home"), ("listes", "lists"), ("moteur", "engine"),
         ("etendu", "extended"), ("calibrage", "calibration"), ("apercu", "preview")]
@@ -27,8 +22,6 @@ def _context(p, url, server_id, user_id, token, locale):
     b = p.chromium.launch()
     ctx = b.new_context(viewport={"width": 1440, "height": 900}, device_scale_factor=1, locale=locale)
     ctx.add_init_script("localStorage.setItem('jellyfin_credentials', %s);" % json.dumps(json.dumps(creds)))
-    ctx.add_init_script("document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); "
-                        "s.textContent = %s; document.head.appendChild(s); });" % json.dumps(BLUR))
     return b, ctx
 
 
@@ -66,7 +59,7 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         browser._stable(page)
         time.sleep(4)                                            # affiches chargées
         # cadrée à partir de la première rangée remplie (au-dessus : l'en-tête et l'emplacement vide d'un bandeau), sur
-        # la largeur de l'écran (les rangées débordent) ; JPEG : des affiches floutées, pas du texte fin
+        # la largeur de l'écran (les rangées débordent) ; JPEG : surtout des affiches, peu de texte fin
         # après l'agrandissement : la zone vide au-dessus des rangées prend une hauteur proportionnelle à la fenêtre
         page.set_viewport_size({"width": 1440, "height": 2000})
         time.sleep(3)
