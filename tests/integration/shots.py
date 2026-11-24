@@ -68,17 +68,20 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
             .find(x => x.offsetParent !== null && x.querySelector('.card'));
           return s ? s.getBoundingClientRect().top + window.scrollY : 0;
         }""")
-        # Jellyfin montre un aperçu flou (blurhash) tant que l'affiche n'est pas chargée : attendre les vraies affiches
-        # des rangées visibles (au plus 45 s)
-        end = time.time() + 45
+        # Jellyfin montre un aperçu flou (blurhash) tant que l'affiche n'est pas chargée ; son chargeur ne demande une image
+        # qu'en voyant la carte entrer à l'écran (un agrandissement de fenêtre ne le réveille pas : petit défilement), et
+        # retire « data-src » une fois l'image posée. Attendre que plus aucune carte visible n'en ait (au plus 60 s)
+        pending_js = """() => [...document.querySelectorAll('[data-src]')]
+          .filter(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0; }).length"""
+        end, pending = time.time() + 60, -1
         while time.time() < end:
-            pending = page.evaluate("""() => [...document.querySelectorAll('.cardImageContainer')]
-              .filter(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0; })
-              .filter(e => getComputedStyle(e).backgroundImage === 'none' && !e.querySelector('img')).length""")
+            page.evaluate("window.scrollBy(0, 1); window.scrollBy(0, -1); window.dispatchEvent(new Event('scroll'))")
+            pending = page.evaluate(pending_js)
             if pending == 0:
                 break
-            time.sleep(1.5)
-        time.sleep(1)
+            time.sleep(2)
+        time.sleep(1.5)                                          # fondu d'apparition des affiches
+        log(f"accueil ({lang}) : {pending} affiche(s) encore en attente au moment de la capture")
         name = f"home-{lang}.jpg"
         page.screenshot(path=str(out / name), type="jpeg", quality=82, full_page=True,
                         clip={"x": 0, "y": max(0, top - 24), "width": 1440, "height": 1150})
