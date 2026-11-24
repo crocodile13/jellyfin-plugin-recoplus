@@ -70,8 +70,10 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         }""")
         # Jellyfin montre un aperçu flou (blurhash) tant qu'une affiche n'est pas chargée, et son chargeur paresseux ne
         # se déclenche pas dans ce navigateur sans écran (constaté : 23 affiches jamais demandées en 60 s). La capture les
-        # charge donc elle-même, comme le chargeur : image téléchargée, posée en fond, aperçu flou masqué (au plus 30 s)
-        loaded = page.evaluate("""() => new Promise(done => {
+        # charge donc elle-même, comme le chargeur : image téléchargée, posée en fond, aperçu flou masqué. Les rangées
+        # peuvent être redessinées après coup (constaté en français : 23/23 chargées puis capture floue) : on recommence
+        # jusqu'à ce qu'aucune affiche visible ne reste en attente, et on vérifie juste avant la capture.
+        load = """() => new Promise(done => {
           const cards = [...document.querySelectorAll('[data-src]')]
             .filter(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0; });
           let ok = 0, bad = 0;
@@ -81,7 +83,7 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
               e.style.backgroundImage = "url('" + url + "')";
               e.removeAttribute('data-src');
               e.classList.remove('lazy-hidden');
-              const c = e.querySelector('.blurhash-canvas'); if (c) { c.style.display = 'none'; }
+              (e.parentElement || e).querySelectorAll('.blurhash-canvas').forEach(c => { c.style.display = 'none'; });
               ok++; res();
             };
             img.onerror = () => { bad++; res(); };
@@ -89,9 +91,27 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
           });
           const t = setTimeout(() => done({ ok, bad, total: cards.length }), 30000);
           Promise.all(cards.map(one)).then(() => { clearTimeout(t); done({ ok, bad, total: cards.length }); });
-        })""")
-        time.sleep(1)
-        log(f"accueil ({lang}) : affiches chargées {loaded['ok']}/{loaded['total']}, en échec {loaded['bad']}")
+        })"""
+        pending = """() => {
+          const vis = e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0
+            && getComputedStyle(e).display !== 'none'; };
+          return [...document.querySelectorAll('[data-src], .lazy-hidden')].filter(vis).length;
+        }"""
+        left = -1
+        for attempt in range(6):
+            loaded = page.evaluate(load)
+            time.sleep(2)
+            left = page.evaluate(pending)
+            log(f"accueil ({lang}) : passe {attempt + 1}, affiches chargées {loaded['ok']}/{loaded['total']}, "
+                f"en échec {loaded['bad']}, encore floues {left}")
+            if left == 0:
+                break
+        if left != 0:
+            # pas d'image floue : l'ancienne capture reste en place
+            log(f"accueil ({lang}) : {left} affiche(s) encore floue(s), capture abandonnée")
+            page.screenshot(path=str(out / f"echec-home-{lang}.jpg"), type="jpeg", quality=70)
+            b.close()
+            raise RuntimeError(f"home-{lang}: posters still blurred")
         name = f"home-{lang}.jpg"
         page.screenshot(path=str(out / name), type="jpeg", quality=82, full_page=True,
                         clip={"x": 0, "y": max(0, top - 24), "width": 1440, "height": 1150})
