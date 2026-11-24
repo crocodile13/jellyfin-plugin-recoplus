@@ -98,7 +98,7 @@ Les réglages se présentent sur trois niveaux — **essentiels** (par défaut),
   </tr>
 </table>
 
-<sub>Prises automatiquement sur le serveur de test après chaque publication : comptes simulés, affiches floutées. Chaque onglet de la configuration, en français et en anglais, se trouve dans [assets/screenshots](assets/screenshots).</sub>
+<sub>Prises automatiquement sur le serveur de test après chaque publication : comptes et historiques simulés. Chaque onglet de la configuration, en français et en anglais, se trouve dans [assets/screenshots](assets/screenshots).</sub>
 
 ## Prérequis
 
