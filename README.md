@@ -168,6 +168,10 @@ CI builds and tests on every push. When `manifest.json` gets a new version, a re
 - The defaults were chosen on the real history of a small household, then checked on synthetic data (a library of real titles, 30 simulated accounts). Every server is different: Calibration adjusts them to your own history.
 - Titles you don't have are added by a script in the web client; TV and mobile apps get library recommendations only.
 
+## AI-assisted development
+
+Reco+ is developed with the help of an AI assistant (Claude, by Anthropic), which writes most of the code under the maintainer's direction. The maintainer decides what is built, reviews every change, and validates it before it ships: unit and parity tests in CI, an integration test on real Jellyfin servers for every pull request, and measurements on watch histories for anything that affects the recommendations.
+
 ## Contributing
 
 Contributions are welcome: bug reports, ideas, translations, code. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to get started.
