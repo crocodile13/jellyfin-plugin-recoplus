@@ -34,7 +34,6 @@ Jellyfin's built-in recommendations rely largely on chance. **Reco+ replaces the
 | **"More like this"** | shared genres for movies, random series | real content similarity, with the next part of a saga first |
 | **Home screen** | recently added, continue watching | up to 10 personal rows, with no duplicates |
 | **Titles missing from the library** | — | suggested from your tastes, requested in one click (optional, with Seerr) |
-| **Measured accuracy**: the title started next was in the top 10 computed just before | 11 % | **18–19 %** |
 
 ## How it works
 
