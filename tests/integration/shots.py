@@ -96,8 +96,12 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         pending = """() => {
           const vis = e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0
             && getComputedStyle(e).display !== 'none'; };
-          return [...document.querySelectorAll('.verticalSection [data-src]')].filter(vis).length;
+          return [...document.querySelectorAll('.verticalSection [data-src], .verticalSection .blurhash-canvas')].filter(vis).length;
         }"""
+        # le fondu de Jellyfin laisse l'aperçu flou par-dessus l'affiche déjà posée pendant un moment (constaté : capture
+        # floue avec toutes les images en place) : sans animation, aperçus flous masqués, affiches visibles d'emblée
+        page.add_style_tag(content="*, *::before, *::after { transition: none !important; animation: none !important; } "
+                                   ".blurhash-canvas { display: none !important; } .lazy-hidden { opacity: 1 !important; }")
         left = -1
         for attempt in range(6):
             loaded = page.evaluate(load)
