@@ -174,7 +174,7 @@ Reco+ is developed with the help of an AI assistant (Claude, by Anthropic), whic
 
 ## Contributing
 
-Contributions are welcome: bug reports, ideas, translations, code. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to get started.
+Contributions are welcome: bug reports, ideas, code. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to get started.
 
 **Watch histories are especially valuable.** The engine could only be evaluated on one small real household; more and more varied data would refine its defaults for everyone. If your server has many users or a long history, an anonymized dataset would help a great deal. The built-in export (Calibration tab, developer mode) or [`tools/reco-export`](tools/reco-export) produce one read-only, with accounts renamed (u01, u02…) and no names or identifiers. Please open an issue to arrange how to share it — never post the data publicly.
 
