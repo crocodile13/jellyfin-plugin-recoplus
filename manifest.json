@@ -12,9 +12,9 @@
         "version": "1.1.0.0",
         "changelog": "1.1.0 (Jellyfin 12.2 to 12.4): start of the 1.1 series. From now on a version groups a coherent set of changes (1.minor.patch: features in a minor version, fixes in a patch) instead of one version per change, so updates are fewer and each says more. Same features as 1.0.55 — German and Spanish interface, visual preview, discovery boldness slider, reasons on title pages, three settings levels, honest calibration gains; the full history is in CHANGELOG.md. The catalogue no longer lists 1.0.36, which was never released.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.1.0.0/RecoPlus_1.1.0.0.zip",
+        "checksum": "f52ea3946011ed8a3d71198fcd5c6896",
+        "timestamp": "2026-11-24T05:11:33Z"
       },
       {
         "version": "1.0.55.0",
