@@ -9,6 +9,14 @@
     "imageUrl": "https://raw.githubusercontent.com/crocodile13/jellyfin-plugin-recoplus/main/assets/thumb.png",
     "versions": [
       {
+        "version": "1.1.0.0",
+        "changelog": "1.1.0 (Jellyfin 12.2 to 12.4): start of the 1.1 series. From now on a version groups a coherent set of changes (1.minor.patch: features in a minor version, fixes in a patch) instead of one version per change, so updates are fewer and each says more. Same features as 1.0.55 — German and Spanish interface, visual preview, discovery boldness slider, reasons on title pages, three settings levels, honest calibration gains; the full history is in CHANGELOG.md. The catalogue no longer lists 1.0.36, which was never released.",
+        "targetAbi": "12.2.0.0",
+        "sourceUrl": "",
+        "checksum": "",
+        "timestamp": ""
+      },
+      {
         "version": "1.0.55.0",
         "changelog": "1.0.55: internal cleanup — TMDb identifiers are read in one place, strictly (a malformed one is now ignored instead of failing that part of the computation), the calibration's two bootstrap computations share one implementation, and duplicated settings reads are gone. Recommendations are unchanged.",
         "targetAbi": "12.2.0.0",
@@ -159,14 +167,6 @@
         "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.0.37.0/RecoPlus_1.0.37.0.zip",
         "checksum": "86618652facf5fb8d0ee3d0feaf0f96d",
         "timestamp": "2026-10-28T12:51:08Z"
-      },
-      {
-        "version": "1.0.36.0",
-        "changelog": "1.0.36: accounts that had not watched anything for a month kept old titles outside the library, placed in no home row, so they saw no Seerr suggestions at all — they are now explored again when their titles are unplaced or more than a week old, and signing in counts as activity, not only playing something.",
-        "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
       },
       {
         "version": "1.0.35.0",

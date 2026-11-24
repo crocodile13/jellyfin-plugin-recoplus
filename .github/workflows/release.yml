@@ -74,9 +74,10 @@ jobs:
         if: steps.v.outputs.exists == 'false'
         run: |
           VERSION=${{ steps.v.outputs.version }}
-          jq -r '.[0].versions[0].changelog' manifest.json > notes.md
+          JF="Jellyfin $(jq -r .from compat.json) to $(jq -r .to compat.json)"
+          { jq -r '.[0].versions[0].changelog' manifest.json; echo; echo "Requires $JF. Full history: CHANGELOG.md."; } > notes.md
           gh release create "v$VERSION" "${{ steps.zip.outputs.zip }}" "${{ steps.zip.outputs.zip }}.sha256" \
-            --title "Reco+ $VERSION" --notes-file notes.md
+            --title "Reco+ ${VERSION%.0} — $JF" --notes-file notes.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
