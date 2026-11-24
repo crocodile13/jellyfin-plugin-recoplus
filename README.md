@@ -21,7 +21,7 @@ Jellyfin's built-in recommendations rely largely on chance. **Reco+ replaces the
 - **Transparent**: every recommendation states its reason, and a preview shows exactly what each user sees.
 
 <p align="center">
-  <img src="assets/screenshots/accueil.jpg" alt="Home screen with four Reco+ rows: For you (with titles outside the library), New for you, Movies for you, Series for you" width="100%">
+  <img src="assets/screenshots/home-en.jpg" alt="Home screen with four Reco+ rows: For you (with titles outside the library), New for you, Movies for you, Series for you" width="100%">
   <br><sub>A home screen built by Reco+: each title appears only once, and the first row includes titles missing from the library (Seerr cards from Jellyfin Enhanced).</sub>
 </p>
 
@@ -89,18 +89,16 @@ Settings come in three levels — **essential** (default), **advanced** and **ex
 
 <table>
   <tr>
-    <td width="50%" valign="top"><img src="assets/screenshots/general.png" alt="General tab: what Reco+ replaces, home row titles, explicit feedback sources, ignored accounts"><br><sub><b>General</b> — what Reco+ replaces, row titles, explicit feedback, ignored accounts.</sub></td>
-    <td width="50%" valign="top"><img src="assets/screenshots/listes.png" alt="Lists tab: top of list composition, filters, excluded genres, diversity and sagas, pinned titles"><br><sub><b>Lists</b> — what is shown: randomness, minimums, filters, diversity, sagas, pinned titles.</sub></td>
+    <td width="50%" valign="top"><a href="assets/screenshots/config-status-en.png"><img src="assets/screenshots/config-status-en.png" alt="Status"></a><br><sub><b>Status</b> — health summary, start-up checklist, compatibility checks.</sub></td>
+    <td width="50%" valign="top"><a href="assets/screenshots/config-preview-en.png"><img src="assets/screenshots/config-preview-en.png" alt="Preview"></a><br><sub><b>Preview</b> — what each user sees, with the reason for every title.</sub></td>
   </tr>
   <tr>
-    <td width="50%" valign="top"><img src="assets/screenshots/seerr.png" alt="Seerr tab: connection, internal and public URLs, API key stored apart"><br><sub><b>Seerr</b> — connection test; the key is stored apart and never sent back.</sub></td>
-    <td width="50%" valign="top"><img src="assets/screenshots/notifications.png" alt="Notifications tab: webhook type, URL and token stored as secrets"><br><sub><b>Notifications</b> — webhook when a part switches itself off.</sub></td>
+    <td width="50%" valign="top"><a href="assets/screenshots/config-home-en.png"><img src="assets/screenshots/config-home-en.png" alt="Home"></a><br><sub><b>Home</b> — title, movies/series and content of every row.</sub></td>
+    <td width="50%" valign="top"><a href="assets/screenshots/config-extended-en.png"><img src="assets/screenshots/config-extended-en.png" alt="Extended mode"></a><br><sub><b>Extended mode</b> — titles outside the library and discovery boldness.</sub></td>
   </tr>
 </table>
 
-<sub>Interface available in English, French, German and Spanish (screenshots in French). Screenshots from version 1.0.20 on a real server: account names replaced, artwork blurred, titles made up.</sub>
-
-<sub>PS: the rain is not a Reco+ feature. It is a personal whim of the author's "production" instance, where these screenshots were taken. The plugin recommends films; it does not do the weather.</sub>
+<sub>Taken automatically on the integration server after each release: simulated accounts, posters blurred. Every settings tab, in English and French, is in [assets/screenshots](assets/screenshots).</sub>
 
 ## Requirements
 

@@ -21,7 +21,7 @@ Les recommandations intégrées à Jellyfin reposent en grande partie sur le has
 - **Transparent** : chaque recommandation indique sa raison, et un aperçu montre exactement ce que voit chaque utilisateur.
 
 <p align="center">
-  <img src="assets/screenshots/accueil.jpg" alt="Accueil avec quatre rangées Reco+ : Pour toi (avec des titres hors bibliothèque), Nouveautés pour toi, Films pour toi, Séries pour toi" width="100%">
+  <img src="assets/screenshots/home-fr.jpg" alt="Accueil avec quatre rangées Reco+ : Pour toi (avec des titres hors bibliothèque), Nouveautés pour toi, Films pour toi, Séries pour toi" width="100%">
   <br><sub>Un accueil composé par Reco+ : chaque titre n'apparaît qu'une fois, et la première rangée intègre des titres absents de la bibliothèque (cartes Seerr de Jellyfin Enhanced).</sub>
 </p>
 
@@ -89,18 +89,16 @@ Les réglages se présentent sur trois niveaux — **essentiels** (par défaut),
 
 <table>
   <tr>
-    <td width="50%" valign="top"><img src="assets/screenshots/general.png" alt="Onglet Général : ce que Reco+ remplace, titres des rangées, retours explicites, comptes ignorés"><br><sub><b>Général</b> — ce que Reco+ remplace, titres des rangées, retours explicites, comptes ignorés.</sub></td>
-    <td width="50%" valign="top"><img src="assets/screenshots/listes.png" alt="Onglet Listes : composition du haut de liste, filtres, genres exclus, diversité et sagas, titres en tête"><br><sub><b>Listes</b> — ce qui est montré : hasard, minimums, filtres, diversité, sagas, titres en tête.</sub></td>
+    <td width="50%" valign="top"><a href="assets/screenshots/config-status-fr.png"><img src="assets/screenshots/config-status-fr.png" alt="État"></a><br><sub><b>État</b> — résumé de santé, mise en route, vérifications de compatibilité.</sub></td>
+    <td width="50%" valign="top"><a href="assets/screenshots/config-preview-fr.png"><img src="assets/screenshots/config-preview-fr.png" alt="Aperçu"></a><br><sub><b>Aperçu</b> — ce que voit chaque utilisateur, avec la raison de chaque titre.</sub></td>
   </tr>
   <tr>
-    <td width="50%" valign="top"><img src="assets/screenshots/seerr.png" alt="Onglet Seerr : connexion, URL interne et publique, clé stockée à part"><br><sub><b>Seerr</b> — test de connexion ; la clé est stockée à part et jamais renvoyée.</sub></td>
-    <td width="50%" valign="top"><img src="assets/screenshots/notifications.png" alt="Onglet Notifications : type de webhook, URL et jeton stockés comme secrets"><br><sub><b>Notifications</b> — webhook quand une partie se coupe d'elle-même.</sub></td>
+    <td width="50%" valign="top"><a href="assets/screenshots/config-home-fr.png"><img src="assets/screenshots/config-home-fr.png" alt="Accueil"></a><br><sub><b>Accueil</b> — titre, films/séries et contenu de chaque rangée.</sub></td>
+    <td width="50%" valign="top"><a href="assets/screenshots/config-extended-fr.png"><img src="assets/screenshots/config-extended-fr.png" alt="Mode étendu"></a><br><sub><b>Mode étendu</b> — titres hors bibliothèque et audace des découvertes.</sub></td>
   </tr>
 </table>
 
-<sub>Interface en français, anglais, allemand et espagnol (captures en français). Captures de la version 1.0.20 sur un vrai serveur : noms des comptes remplacés, affiches floutées, titres inventés.</sub>
-
-<sub>PS : la pluie n'est pas une fonctionnalité de Reco+. C'est un délire perso de l'instance de « prod » de l'auteur, sur laquelle ces captures ont été prises. Le plugin recommande des films, il ne fait pas la météo.</sub>
+<sub>Prises automatiquement sur le serveur de test après chaque publication : comptes simulés, affiches floutées. Chaque onglet de la configuration, en français et en anglais, se trouve dans [assets/screenshots](assets/screenshots).</sub>
 
 ## Prérequis
 
