@@ -117,7 +117,7 @@ Rien ne quitte le serveur, sauf les appels à **votre** instance Seerr quand vou
 
 ## Documentation
 
-- [Comment fonctionne Reco+](docs/how-it-works.fr.md) : ce que le moteur prend en compte, mesures, sécurité, chaque réglage, calibrage.
+- [Comment fonctionne Reco+](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki/Accueil-fr) (wiki) : ce que lit le moteur, le score exact, les rangées, le mode étendu, le calibrage, les mesures, chaque réglage.
 
 ## Développement
 
