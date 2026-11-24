@@ -13,51 +13,32 @@
 
 <p align="center"><i><a href="README.md">English version</a></i></p>
 
-Reco+ est un plugin Jellyfin qui remplace les recommandations intégrées — Suggestions, « Parce que vous avez regardé », « Plus comme ceci » (titres similaires) — par des listes classées pour chaque utilisateur. Il ajoute des rangées d'accueil personnalisées (« Pour toi », « Parce que tu as aimé … ») via Home Screen Sections, et peut recommander des films et séries que vous n'avez pas encore via Seerr (Jellyseerr / Overseerr), avec un bouton *Demander*. Tout est calculé en arrière-plan et gardé en cache : aucune page n'attend.
-
-## Fonctionnalités
-
-- **De meilleures recommandations partout où Jellyfin en montre** : `/Items/Suggestions` (du hasard chez Jellyfin), `/Movies/Recommendations` (« Parce que tu as aimé X » tiré de tout l'historique, pas seulement des 7 derniers films), « Plus comme ceci » pour les films et les séries (des séries au hasard chez Jellyfin).
-- **Rangées d'accueil** avec [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) : « Pour toi », « Tendances », « Populaires », « À venir » (listes TMDb via Seerr, rangées selon les goûts de chacun), « Nouveautés pour toi », jusqu'à trois « Parce que tu as aimé … », « Films pour toi », « Séries pour toi » — jamais deux fois le même titre. Chaque rangée peut montrer films, séries, les deux, ou se séparer en deux rangées ; l'accueil des comptes suit tout seul.
-- **Tout ce que le compte a exprimé compte** : historique complet avec oubli progressif, abandons, favoris (séries, saisons, épisodes), notes et avis de Jellyfin Enhanced et titres masqués, demandes et liste de suivi Seerr, titres montrés sans être ouverts.
-- **Mode étendu** (facultatif, nécessite Seerr) : des titres hors bibliothèque dans les rangées d'accueil de votre choix — bibliothèque seule, Seerr seul ou mélange, rangée par rangée — avec les cartes et le bouton *Demander* de Jellyfin Enhanced.
-- **Sûr par conception** : un garde-fou empêche de pousser des titres récents ou populaires à des comptes qu'ils ne concernent pas ; les droits d'accès et le contrôle parental de Jellyfin s'appliquent à chaque liste ; rien n'est jamais demandé automatiquement.
-- **Effet mesuré** : l'onglet État montre ce que les comptes font de ce qui leur est recommandé — commencé sous 7 jours, fini sous 30, par rangée et par place — à partir du seul historique de lecture.
-- **Calibrage** sur votre propre historique, avec validation croisée par compte : un réglage n'est proposé que s'il se généralise vraiment, et rien n'est appliqué sans votre clic.
-- **Se protège seul** : chaque point d'accroche est vérifié au démarrage ; une partie qui ne colle plus se coupe et Jellyfin reprend son comportement normal, avec une alerte (journal d'activité, bannière, webhook facultatif).
-- **Interface en français, anglais, allemand et espagnol**, selon la langue Jellyfin de chacun.
-
-## Captures d'écran
+**Les recommandations intégrées de Jellyfin sont surtout du hasard.** Reco+ les remplace par des listes classées pour chaque personne d'après tout ce qu'elle a regardé, aimé, abandonné ou demandé — et ajoute un accueil façon Netflix, avec des rangées « Pour toi », « Parce que tu as aimé … », tendances et nouveautés. Avec Seerr, il propose même des titres que vous n'avez pas encore, avec un bouton *Demander*.
 
 <p align="center">
-  <img src="assets/screenshots/accueil.jpg" alt="Accueil avec quatre rangées Reco+ : Pour toi (avec des titres hors bibliothèque), Nouveautés, Films, Séries" width="100%">
-  <br><sub>Accueil avec Home Screen Sections : quatre rangées Reco+, jamais un titre deux fois. La première mélange des titres hors bibliothèque (cartes Seerr de Jellyfin Enhanced).</sub>
+  <img src="assets/screenshots/accueil.jpg" alt="Accueil avec quatre rangées Reco+ : Pour toi (avec des titres hors bibliothèque), Nouveautés pour toi, Films pour toi, Séries pour toi" width="100%">
+  <br><sub>Un accueil avec les rangées Reco+ : jamais deux fois le même titre, et la première rangée mêle des titres que vous n'avez pas encore (cartes Seerr de Jellyfin Enhanced).</sub>
 </p>
 
-<p align="center">
-  <img src="assets/screenshots/etat.png" alt="Onglet État : dernier calcul, comptes prêts, Playback Reporting, Seerr, Jellyfin Enhanced, vérifications de compatibilité" width="100%">
-  <br><sub>Onglet État : ce qui a été lu, et les vérifications de compatibilité faites au démarrage.</sub>
-</p>
+## Pourquoi Reco+
 
-<table>
-  <tr>
-    <td width="50%" valign="top"><img src="assets/screenshots/general.png" alt="Onglet Général : ce que Reco+ remplace, titres des rangées, retours explicites, comptes ignorés"><br><sub><b>Général</b> — ce que Reco+ remplace, titres des rangées, retours explicites, comptes ignorés.</sub></td>
-    <td width="50%" valign="top"><img src="assets/screenshots/listes.png" alt="Onglet Listes : composition du haut de liste, filtres, genres exclus, diversité et sagas, titres en tête"><br><sub><b>Listes</b> — ce qui est montré : hasard, minimums, filtres, diversité, sagas, titres en tête.</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top"><img src="assets/screenshots/seerr.png" alt="Onglet Seerr : connexion, URL interne et publique, clé stockée à part"><br><sub><b>Seerr</b> — test de connexion ; la clé est stockée à part et jamais renvoyée.</sub></td>
-    <td width="50%" valign="top"><img src="assets/screenshots/notifications.png" alt="Onglet Notifications : type de webhook, URL et jeton stockés comme secrets"><br><sub><b>Notifications</b> — webhook quand une partie se coupe d'elle-même.</sub></td>
-  </tr>
-</table>
+| | Jellyfin seul | Avec Reco+ |
+|---|---|---|
+| **Suggestions** | des titres au hasard | vos titres, classés selon vos goûts |
+| **« Parce que vous avez regardé X »** | les 7 derniers films seulement | tout votre historique, films et séries |
+| **« Plus comme ceci »** | genres en commun pour les films, séries au hasard | vraie ressemblance de contenu, le volet suivant d'une saga en premier |
+| **Accueil** | ajouts récents, reprendre | jusqu'à 10 rangées personnelles, jamais deux fois le même titre |
+| **Titres que vous n'avez pas** | — | proposés d'après vos goûts, demandés en un clic (facultatif, avec Seerr) |
+| **Mesuré sur un vrai serveur** — le titre commencé ensuite était dans le top 10 juste avant | 11 % | **18–19 %** |
 
-<sub>Interface en français, anglais, allemand et espagnol (captures en français). Captures de la version 1.0.20 sur un vrai serveur : noms des comptes remplacés, affiches floutées, titres inventés.</sub>
+## Comment ça marche, en 30 secondes
 
-<sub>PS : la pluie n'est pas une fonctionnalité de Reco+. C'est un délire perso de l'instance de « prod » de l'auteur, sur laquelle ces captures ont été prises. Le plugin recommande des films, il ne fait pas la météo.</sub>
+1. **Votre historique devient un goût.** Chaque titre vu, abandonné, noté, aimé, masqué ou demandé reçoit un poids ; les anciens comptent moins, les abandons pèsent contre les titres semblables.
+2. **Chaque titre que vous n'avez pas vu reçoit un score** selon sa ressemblance à vos goûts — genres, mots-clés, réalisateur, acteurs… — et ce que regardent les gens aux goûts proches dans votre foyer.
+3. **Un garde-fou** : nouveauté, popularité et notes n'aident que les titres qui vous correspondent *déjà*. Un titre neuf ou populaire qui n'est pas pour vous n'est jamais poussé.
+4. **Vos rangées sont composées** : diversité, une seule entrée par saga (le premier volet pas encore vu), les nouveaux épisodes de ce que vous suivez d'abord, aucun doublon entre rangées.
 
-## Prérequis
-
-- **Jellyfin 12.2 à 12.4** (les autres versions sont détectées et chaque point d'accroche est vérifié, mais elles ne sont pas testées).
-- Facultatif : [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) pour les rangées d'accueil, [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) pour les avis, titres masqués et cartes Seerr, [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) pour dater précisément les premières lectures, et une instance [Seerr](https://github.com/seerr-team/seerr) pour les demandes et le mode étendu.
+Tout est calculé en arrière-plan : aucune page n'attend. L'explication complète, avec chaque formule, est dans le **[wiki](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki/Accueil-fr)**.
 
 ## Installation
 
@@ -78,38 +59,73 @@ Les nouvelles versions sont ensuite installées par la tâche planifiée **Mettr
 2. Décompressez-le dans `<config>/plugins/RecoPlus_<version>/`, propriété de l'utilisateur de Jellyfin.
 3. Redémarrez Jellyfin.
 
-## Prise en main
+## Premiers pas
 
-1. Ouvrez **Reco+** dans la section Extensions du menu du tableau de bord (ou **Tableau de bord → Extensions → Reco+**). Les valeurs par défaut sont celles qui ont été évaluées : Reco+ fonctionne dès l'installation.
-2. Cliquez sur **Recalculer maintenant** dans l'onglet État (sinon chaque compte est calculé à sa prochaine activité).
-3. Avec Home Screen Sections : cliquez **Les ajouter pour moi** dans l'onglet État (ou ajoutez vous-même les rangées Reco+ dans ses réglages) ; leurs titres se règlent dans l'onglet Accueil.
-4. Avec Seerr : saisissez son URL et sa clé d'API dans l'onglet Seerr, cliquez sur **Tester**, puis activez le mode étendu si vous voulez des titres hors bibliothèque.
-5. Vérifiez ce que reçoit un compte dans l'onglet **Aperçu**.
+1. Ouvrez **Reco+** dans le menu du tableau de bord (section Extensions). Les valeurs par défaut sont celles qui ont été évaluées : il marche dès l'installation.
+2. Dans l'onglet **État**, cliquez sur **Recalculer maintenant**.
+3. Avec Home Screen Sections, cliquez sur **Les ajouter pour moi** dans l'onglet État ; titres et contenus des rangées se règlent dans l'onglet **Accueil**.
+4. Avec Seerr, saisissez son URL et sa clé d'API dans l'onglet **Seerr**, cliquez sur **Tester**, puis activez le **Mode étendu** pour les titres que vous n'avez pas.
+5. Voyez exactement ce que reçoit un compte dans l'onglet **Aperçu** : ses rangées en affiches, avec la raison de chaque titre.
 
-Les réglages ont trois niveaux — **essentiels** (par défaut), **avancés**, **experts** — à choisir à droite des onglets ; les outils de diagnostic (journal, export du jeu de calibrage) sont en **mode développeur**. Survolez le **?** d'un réglage pour son aide.
+Les réglages ont trois niveaux — **essentiels** (par défaut), **avancés**, **experts** — à choisir à droite des onglets. Survolez le **?** à côté d'un réglage pour son aide.
+
+## Fonctionnalités
+
+- **Partout où Jellyfin recommande** : Suggestions, « Parce que vous avez regardé », « Plus comme ceci », la Media Bar.
+- **Rangées d'accueil** avec [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) : « Pour toi », « Tendances », « Populaires », « À venir », « Nouveautés pour toi », jusqu'à trois « Parce que tu as aimé … », « Films pour toi », « Séries pour toi ». Chaque rangée : films, séries, les deux, ou séparée en deux.
+- **Écoute tout ce que vous exprimez** : favoris (série, saison ou épisode), notes, avis et titres masqués de Jellyfin Enhanced, demandes et liste de suivi Seerr, titres montrés sans être ouverts.
+- **Titres que vous n'avez pas** (mode étendu, facultatif) : trouvés d'après vos goûts dans le catalogue TMDb, classés par le même moteur, avec un curseur d'**audace des découvertes**, de prudente à aventureuse.
+- **Dit pourquoi** : sur la fiche d'un titre ouvert depuis une rangée Reco+, une ligne discrète l'explique (« Parce que tu as aimé X », « Suite de X », « Nouveaux épisodes »…).
+- **Sûr** : les droits d'accès et le contrôle parental de Jellyfin s'appliquent à chaque liste ; rien n'est jamais demandé automatiquement.
+- **Mesuré, pas deviné** : l'onglet État montre ce que les comptes font de ce qui leur est recommandé (commencé sous 7 jours, fini sous 30), et le **Calibrage** règle le moteur sur votre propre historique — en ne proposant que ce qui se généralise vraiment.
+- **Se protège seul** : chaque point d'accroche de Jellyfin est vérifié au démarrage ; une partie qui ne colle plus se coupe, avec une alerte.
+- **Français, anglais, allemand et espagnol**, selon la langue Jellyfin de chacun.
+
+## Captures d'écran
+
+<table>
+  <tr>
+    <td width="50%" valign="top"><img src="assets/screenshots/general.png" alt="Onglet Général : ce que Reco+ remplace, titres des rangées, retours explicites, comptes ignorés"><br><sub><b>Général</b> — ce que Reco+ remplace, titres des rangées, retours explicites, comptes ignorés.</sub></td>
+    <td width="50%" valign="top"><img src="assets/screenshots/listes.png" alt="Onglet Listes : composition du haut de liste, filtres, genres exclus, diversité et sagas, titres en tête"><br><sub><b>Listes</b> — ce qui est montré : hasard, minimums, filtres, diversité, sagas, titres en tête.</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top"><img src="assets/screenshots/seerr.png" alt="Onglet Seerr : connexion, URL interne et publique, clé stockée à part"><br><sub><b>Seerr</b> — test de connexion ; la clé est stockée à part et jamais renvoyée.</sub></td>
+    <td width="50%" valign="top"><img src="assets/screenshots/notifications.png" alt="Onglet Notifications : type de webhook, URL et jeton stockés comme secrets"><br><sub><b>Notifications</b> — webhook quand une partie se coupe d'elle-même.</sub></td>
+  </tr>
+</table>
+
+<sub>Interface en français, anglais, allemand et espagnol (captures en français). Captures de la version 1.0.20 sur un vrai serveur : noms des comptes remplacés, affiches floutées, titres inventés.</sub>
+
+<sub>PS : la pluie n'est pas une fonctionnalité de Reco+. C'est un délire perso de l'instance de « prod » de l'auteur, sur laquelle ces captures ont été prises. Le plugin recommande des films, il ne fait pas la météo.</sub>
+
+## Prérequis
+
+- **Jellyfin 12.2 à 12.4** (les autres versions sont détectées et chaque point d'accroche est vérifié, mais elles ne sont pas testées).
+- Facultatif, chacun ajoute quelque chose et rien ne casse sans lui :
+
+| Plugin / service | Ce qu'il apporte |
+|---|---|
+| [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) | les rangées d'accueil (c'est lui qui décide quelles rangées chaque compte voit, et dans quel ordre) |
+| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | demandes et listes de suivi comme goûts, rangées tendances / populaires / à venir, titres que vous n'avez pas (mode étendu) |
+| [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | avis en étoiles et titres masqués ; ses cartes et son bouton *Demander* pour les titres que vous n'avez pas |
+| [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) | dates de premier lancement précises, pour le calibrage |
+| [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) | montre les recommandations Reco+ avec son option « Personalized Recommendations » |
+
+LocalRecs, s'il est installé, fait doublon : mieux vaut le désinstaller.
 
 ## Questions fréquentes
 
-**Pourquoi les recommandations de Jellyfin semblent-elles au hasard ?** Dans Jellyfin, `/Items/Suggestions` renvoie des titres au hasard, « Parce que vous avez regardé » ne regarde que les derniers films, et « Plus comme ceci » prend des séries au hasard partageant un genre. Reco+ remplace les trois par un classement tiré de tout l'historique de chaque utilisateur.
+**Pourquoi les recommandations de Jellyfin semblent-elles au hasard ?** `/Items/Suggestions` renvoie des titres au hasard, « Parce que vous avez regardé » ne regarde que les derniers films, et « Plus comme ceci » prend des séries au hasard qui partagent un genre. Reco+ remplace les trois.
 
-**Peut-on avoir un accueil façon Netflix dans Jellyfin ?** Oui, avec [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) : Reco+ fournit les rangées « Pour toi », « Nouveautés pour toi », « Parce que tu as aimé … », « Films pour toi » et « Séries pour toi », personnalisées pour chacun.
+**Peut-on avoir un accueil façon Netflix ?** Oui, avec Home Screen Sections : Reco+ fournit les rangées, personnalisées pour chacun.
 
-**Jellyfin peut-il recommander des films que je n'ai pas ?** Oui, avec le mode étendu et une instance Seerr (Jellyseerr ou Overseerr) : des titres du catalogue TMDb sont proposés dans les rangées d'accueil, classés par le même moteur, et se demandent en un clic. Rien n'est demandé automatiquement.
+**Jellyfin peut-il recommander des films que je n'ai pas ?** Oui, avec le mode étendu et Seerr. Rien n'est jamais demandé automatiquement.
 
-**Ça marche pour plusieurs utilisateurs, un serveur familial ?** Oui : chacun a ses propres listes, les accès aux bibliothèques et le contrôle parental de Jellyfin sont respectés, et les comptes invités ou enfants peuvent être ignorés.
+**Ça marche pour un serveur familial ?** Oui : chacun a ses propres listes, les accès aux bibliothèques et le contrôle parental sont respectés, et les comptes invité ou enfant peuvent être ignorés.
 
-**Quelle différence avec d'autres plugins de recommandations ?** Il utilise les retours explicites (notes, favoris, titres masqués, demandes, abandons), la ressemblance de contenu et le filtrage collaboratif (« vus ensemble »), évite de pousser des titres populaires ou récents à ceux qu'ils ne concernent pas, et peut se calibrer sur votre propre historique.
+**Pourquoi ce titre m'est-il proposé ?** Ouvrez-le depuis une rangée Reco+ : une ligne sous son nom le dit. Les administrateurs voient les rangées de chaque compte, avec les raisons, dans l'onglet Aperçu.
 
-## Intégrations facultatives
-
-| Plugin / service | Présent | Absent |
-|---|---|---|
-| Home Screen Sections | toutes les rangées Reco+ figurent dans sa liste de sections : c'est lui qui décide lesquelles afficher, dans quel ordre et pour quels comptes (Reco+ ne règle que leurs titres, sans redémarrage, et ne remplit que les rangées que HSS montre à chaque compte) ; les titres « Parce que tu as aimé X » sont propres à chaque compte dans l'interface web (« Parce que tu as aimé… » ailleurs) ; HSS affiche les rangées de plugins en paysage, et les titres hors bibliothèque prennent le même format | pas de rangée d'accueil, le reste marche |
-| Jellyfin Enhanced | le mode étendu utilise ses cartes, sa fiche et son bouton *Demander*, avec l'état Seerr du moment (s'il est relié à Seerr) ; Reco+ lui demande de charger son module Seerr sur l'accueil (JE 12.17 et après ne le chargent que sur leurs propres pages), l'attend quelques secondes et remplace ses propres cartes dès qu'il est prêt | cartes Reco+, qui ouvrent la page Seerr, et bouton *Demander* de Reco+ |
-| Media Bar Enhanced | avec son option « Personalized Recommendations » activée, montre les recommandations Reco+ (il appelle les points d'entrée remplacés ; bibliothèque seulement) | — |
-| Playback Reporting | dates de premier lancement précises pour le calibrage | calibrage moins précis ; Reco+ relève lui-même les premiers lancements à partir de son installation |
-| Seerr (ex-Jellyseerr) | demandes et liste de suivi comme signal, mode étendu | tout cela est coupé, le reste marche |
-| LocalRecs | signalé comme doublon | — |
+**Comment ne plus voir un titre ?** Masquez-le avec Jellyfin Enhanced (« pas intéressé »), ou notez-le mal : il disparaît et les titres semblables descendent.
 
 ## Vie privée
 
@@ -117,7 +133,8 @@ Rien ne quitte le serveur, sauf les appels à **votre** instance Seerr quand vou
 
 ## Documentation
 
-- [Comment fonctionne Reco+](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki/Accueil-fr) (wiki) : ce que lit le moteur, le score exact, les rangées, le mode étendu, le calibrage, les mesures, chaque réglage.
+- **[Wiki : comment fonctionne Reco+](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki/Accueil-fr)** — ce que lit le moteur, le score exact, les rangées, le mode étendu, le calibrage, les mesures, chaque réglage.
+- [Historique des versions](CHANGELOG.md) (en anglais).
 
 ## Développement
 
