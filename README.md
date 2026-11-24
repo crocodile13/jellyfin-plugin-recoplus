@@ -117,7 +117,7 @@ Nothing leaves the server, except calls to **your** Seerr instance when you conf
 
 ## Documentation
 
-- [How Reco+ works](docs/how-it-works.md): what the engine takes into account, measurements, safety, every setting, calibration.
+- [How Reco+ works](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki) (wiki): what the engine reads, the exact score, home rows, extended mode, calibration, measurements, every setting.
 
 ## Development
 

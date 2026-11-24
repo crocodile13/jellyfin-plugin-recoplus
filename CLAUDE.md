@@ -51,7 +51,9 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
 - Fichiers dans le dossier de données du plugin : `recommandations.json`, `premiers-lancements.json`, `secrets.json`
   (mode 600), titres montrés ; cache Seerr : `fiches.json`, `listes.json`. Tous écrits par fichier temporaire + renommage.
 - `README.md` / `README.fr.md` : README classique (présentation, installation, prise en main) ; le détail (moteur,
-  mesures, réglages, calibrage) est dans `docs/how-it-works.md` / `.fr.md`. Les deux langues restent alignées.
+  mesures, réglages, calibrage) est dans le **wiki** GitHub (dépôt `jellyfin-plugin-recoplus.wiki.git`, pages anglaises et
+  pages « …-fr ») ; `docs/how-it-works*.md` n'y renvoient plus que. Un changement de comportement, de valeur par défaut
+  ou de réglage met à jour les pages du wiki concernées (les deux langues) dans la même session.
 - `tests/RecoPlus.Tests/` (xUnit), `tests/client/*.test.mjs` (jsdom), `prototype/` (moteur Python de référence,
   `golden.py` régénère le jeu synthétique de `golden.json`), `tools/reco-export/` (export lecture seule, pseudonymisé).
 - `tests/integration/` + `integration.yml` : vrai Jellyfin (Docker, 12.2 et 12.4) avec Reco+ seul, avec HSS (+ File
