@@ -1,0 +1,65 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this! A few details make it much faster to fix.
+        Never paste API keys, tokens, passwords or session cookies. Français accepté.
+  - type: checkboxes
+    attributes:
+      label: Before you start
+      options:
+        - label: I am on the latest Reco+ version (Dashboard → Plugins → Reco+).
+          required: true
+        - label: I reloaded the page with an empty cache (Ctrl+F5 / Cmd+Shift+R) and the problem is still there.
+          required: true
+        - label: I searched the existing issues and the [wiki](https://github.com/crocodile13/jellyfin-plugin-recoplus/wiki).
+          required: true
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, what you got. Screenshots welcome.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Reco+ version
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Jellyfin version
+      placeholder: "12.4.0"
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Installed alongside
+      options:
+        - label: Home Screen Sections
+        - label: Jellyfin Enhanced
+        - label: Seerr (Jellyseerr / Overseerr)
+        - label: Playback Reporting
+        - label: Media Bar Enhanced
+  - type: input
+    attributes:
+      label: Where
+      description: Web browser, TV app, mobile app…
+      placeholder: "Firefox 140 on Windows"
+  - type: textarea
+    attributes:
+      label: Browser console
+      description: For anything on the home screen or the settings page — press F12, open the Console tab, reload the page and paste the red lines.
+      render: text
+  - type: textarea
+    attributes:
+      label: Server log
+      description: Lines mentioning Reco+ (Dashboard → Logs, or the Status tab's red banner). Secrets are masked by Reco+, but check before posting.
+      render: text
+  - type: textarea
+    attributes:
+      label: Reco+ Status tab
+      description: What the summary at the top of the Status tab says (or a screenshot of it).
