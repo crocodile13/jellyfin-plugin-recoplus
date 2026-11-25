@@ -23,9 +23,14 @@ permissions:
   contents: read
 
 jobs:
+  # banc découpé en morceaux parallèles (un foyer coûte plusieurs minutes de calcul), puis rapport d'ensemble
   bench:
     runs-on: ubuntu-latest
     timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     env:
       DATA: ${{ inputs.data || 'ml-32m' }}
       HOUSEHOLDS: ${{ inputs.households || '300' }}
@@ -43,14 +48,32 @@ jobs:
         uses: actions/cache@v4
         with:
           path: tests/movielens/data/wikidata.json
-          key: movielens-wikidata-${{ github.run_id }}
+          key: movielens-wikidata-${{ matrix.shard }}-${{ github.run_id }}
           restore-keys: movielens-wikidata-
       - name: Bench
-        run: python tests/movielens/bench.py --data "$DATA" --households "$HOUSEHOLDS" --out out
+        run: python tests/movielens/bench.py --data "$DATA" --households "$HOUSEHOLDS" --shards 10 --shard ${{ matrix.shard }} --out out
       - uses: actions/upload-artifact@v7
-        if: always()
         with:
-          name: movielens-${{ env.DATA }}
+          name: movielens-shard-${{ matrix.shard }}
+          path: out/
+
+  report:
+    needs: bench
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: movielens-shard-*
+          path: shards
+      - name: Report
+        run: python tests/movielens/bench.py --report shards --out out
+      - uses: actions/upload-artifact@v7
+        with:
+          name: movielens-report
           path: out/
 
   # le vrai calibrage du plugin (C#) sur des « serveurs » MovieLens : une centaine de comptes d'une même époque

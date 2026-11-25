@@ -490,12 +490,20 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--out", default=str(HERE / "out"))
     ap.add_argument("--jobs", type=int, default=os.cpu_count() or 2)
+    ap.add_argument("--shard", type=int, default=0)
+    ap.add_argument("--shards", type=int, default=1, help="banc découpé : ce morceau écrit shard-<n>.json")
+    ap.add_argument("--report", default="", help="dossier des shard-*.json : rapport d'ensemble, sans calcul")
     ap.add_argument("--server", type=int, nargs="*", default=[], help="années : exporter un serveur par année (calibrage C#)")
     ap.add_argument("--server-users", type=int, default=100)
     ap.add_argument("--server-library", type=int, default=2000)
     a = ap.parse_args()
     root, out = Path(a.root), Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
+    if a.report:
+        parts = [json.loads(f.read_text(encoding="utf-8")) for f in sorted(Path(a.report).glob("**/shard-*.json"))]
+        meta = dict(parts[0]["meta"], seconds=max(x["meta"]["seconds"] for x in parts))
+        report([r for x in parts for r in x["res"]], meta, out)
+        return
     t0 = time.time()
     d = fetch(a.data, root)
     movies, tmdb = load_movies(d)
@@ -526,16 +534,32 @@ def main():
     covered = sum(1 for t in ids if wd.get(t, {}).get("Director"))
     print(f"{len(houses)} foyers ; réalisateur connu pour {covered}/{len(ids)} films", flush=True)
 
+    if a.shards > 1:
+        houses = houses[a.shard::a.shards]
+    res = []
     with Pool(a.jobs) as pool:
-        res = pool.map(evaluate, [(h, a.seed) for h in houses], chunksize=1)
+        for i, r in enumerate(pool.imap(evaluate, [(h, a.seed) for h in houses], chunksize=1), 1):
+            res.append(r)
+            if i % 5 == 0 or i == len(houses):
+                print(f"  {i}/{len(houses)} foyers ({time.time() - t0:.0f} s)", flush=True)
+    meta = {"data": a.data, "wikidata": [covered, len(ids)], "seconds": time.time() - t0}
+    if a.shards > 1:
+        (out / f"shard-{a.shard}.json").write_text(json.dumps({"meta": meta, "res": res}, ensure_ascii=False), encoding="utf-8")
+        return
+    report(res, meta, out)
+
+
+def report(res: list, meta: dict, out: Path):
+    """Rapport (Markdown et JSON) ; aussi l'assemblage des morceaux d'un banc découpé (--report)."""
     names = [v[0] for v in variants()]
     (out / "users.json").write_text(json.dumps([r["_users"] for r in res], ensure_ascii=False), encoding="utf-8")
     base = [r["défaut"][0] for r in res]
-    lines = [f"# Banc MovieLens ({a.data})", "",
-             f"{len(houses)} foyers de 2 à 4 comptes, bibliothèques d'environ {LIBRARY} films, "
+    covered, n_ids = meta["wikidata"]
+    lines = [f"# Banc MovieLens ({meta['data']})", "",
+             f"{len(res)} foyers de 2 à 4 comptes, bibliothèques d'environ {LIBRARY} films, "
              f"{sum(r['défaut'][2] for r in res)} films aimés à retrouver (les {HOLDOUT} premiers après la coupure, "
-             f"dans les {HOLDOUT_DAYS} jours). Réalisateur connu pour {covered}/{len(ids)} films (Wikidata). "
-             f"Durée : {time.time() - t0:.0f} s.", "",
+             f"dans les {HOLDOUT_DAYS} jours). Réalisateur connu pour {covered}/{n_ids} films (Wikidata). "
+             f"Durée : {meta['seconds']:.0f} s.", "",
              "Gain : moyenne de 1/log2(1 + rang) sur tous les candidats (comme le calibrage), par compte puis par foyer. "
              "Écart à « défaut » en %, IC95 bootstrap par foyer ; ✔ = au-dessus de zéro, ✖ = en dessous.", "",
              "| Variante | Gain | Écart | IC95 | hit@10 | |", "|---|---|---|---|---|---|"]
