@@ -12,6 +12,10 @@ on:
       households:
         description: "Number of households"
         default: "300"
+      calibrate:
+        description: "Also run the plugin's calibration on MovieLens servers (2005, 2012, 2019)"
+        type: boolean
+        default: false
   push:
     branches: ["ml-*"]
 
@@ -48,3 +52,46 @@ jobs:
         with:
           name: movielens-${{ env.DATA }}
           path: out/
+
+  # le vrai calibrage du plugin (C#) sur des « serveurs » MovieLens : une centaine de comptes d'une même époque
+  calibrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.calibrate }}
+    strategy:
+      fail-fast: false
+      matrix:
+        year: [2005, 2012, 2019]
+    env:
+      DATA: ${{ inputs.data || 'ml-32m' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+      - name: Dataset cache
+        uses: actions/cache@v4
+        with:
+          path: tests/movielens/data/${{ env.DATA }}.zip
+          key: movielens-${{ env.DATA }}-v1
+      - name: Wikidata cache
+        uses: actions/cache@v4
+        with:
+          path: tests/movielens/data/wikidata.json
+          key: movielens-wikidata-cal-${{ matrix.year }}-${{ github.run_id }}
+          restore-keys: movielens-wikidata-
+      - name: Export
+        run: python tests/movielens/bench.py --data "$DATA" --server ${{ matrix.year }} --out out
+      - name: Calibrate
+        run: |
+          dotnet build tests/movielens/Calibrate -c Release
+          dotnet tests/movielens/Calibrate/bin/Release/net10.0/Calibrate.dll out/server-${{ matrix.year }}.json auto out/calibration-${{ matrix.year }}.json
+          { echo "### MovieLens server ${{ matrix.year }}"; echo '```json'; cat out/calibration-${{ matrix.year }}.json; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: movielens-calibration-${{ matrix.year }}
+          path: out/calibration-*.json
