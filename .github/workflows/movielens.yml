@@ -1,0 +1,50 @@
+# Banc MovieLens : le moteur de référence sur des foyers fictifs tirés de MovieLens (tests/movielens/bench.py).
+# À la main, ou en poussant une branche ml-* ; rapport dans le résumé du job et en artifact. Les données MovieLens
+# (licence : recherche, pas de redistribution) et le cache Wikidata restent dans le cache d'Actions, jamais dans le dépôt.
+name: MovieLens bench
+
+on:
+  workflow_dispatch:
+    inputs:
+      data:
+        description: "MovieLens dataset (ml-latest-small, ml-32m)"
+        default: ml-32m
+      households:
+        description: "Number of households"
+        default: "300"
+  push:
+    branches: ["ml-*"]
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    env:
+      DATA: ${{ inputs.data || 'ml-32m' }}
+      HOUSEHOLDS: ${{ inputs.households || '300' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Dataset cache
+        uses: actions/cache@v4
+        with:
+          path: tests/movielens/data/${{ env.DATA }}.zip
+          key: movielens-${{ env.DATA }}-v1
+      - name: Wikidata cache
+        uses: actions/cache@v4
+        with:
+          path: tests/movielens/data/wikidata.json
+          key: movielens-wikidata-${{ github.run_id }}
+          restore-keys: movielens-wikidata-
+      - name: Bench
+        run: python tests/movielens/bench.py --data "$DATA" --households "$HOUSEHOLDS" --out out
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: movielens-${{ env.DATA }}
+          path: out/
