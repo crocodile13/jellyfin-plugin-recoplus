@@ -12,9 +12,9 @@
         "version": "1.1.2.0",
         "changelog": "1.1.2 (Jellyfin 12.2 to 12.4): calibration no longer runs out of memory on larger servers — each case keeps only what that account's ranking reads, and the calibration caches have a size limit (measured on a MovieLens server: peak memory 4.3 GB → 1.2 GB, 54 → 13 minutes, same result). The options of the settings level selector are readable again when the list is open. Security: the Seerr API key and the Gotify token are no longer sent along when Seerr or the webhook answer with a redirect (the error now names the address to save instead), and Seerr answers are size-limited.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.1.2.0/RecoPlus_1.1.2.0.zip",
+        "checksum": "cbbb94022bc45b6ceef09165cd3abc96",
+        "timestamp": "2026-11-26T18:00:32Z"
       },
       {
         "version": "1.1.1.0",
