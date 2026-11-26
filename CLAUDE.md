@@ -193,8 +193,11 @@ de la CI.
   seulement si l'IC95 bootstrap par compte est au-dessus de zéro et le gain au-dessus du minimum. Gain annoncé et
   recommandation : `HonestSelection` (choix du pas et de la méthode refait sans chaque groupe, jugé sur lui, à partir
   des mesures hors échantillon `MethodResult.Oof`, sans réapprendre) : sinon « malédiction du gagnant ».
-- Mémoire et durée : `SimCache` (index par jeu de vecteurs, borné), `ContextCache` (une version),
-  `ChoiceModel.FeatureCache` (réglage de départ seulement), avancement pondéré par le coût mesuré de chaque étape.
+- Mémoire et durée : `SimCache` (index par jeu de vecteurs, borné), `ContextCache` (une version, budget en entrées :
+  `Budget`, 6 millions ; au-delà, recalculé au lieu d'être gardé), `ChoiceModel.FeatureCache` (réglage de départ
+  seulement, budget de 32 millions de valeurs), avancement pondéré par le coût mesuré de chaque étape. Le `Context` d'un
+  cas ne garde que ce que lit le classement de son compte (`Context(…, onlyFor)` : lignes « vus ensemble » de ses titres
+  aimés vers ce qu'il n'a pas vu) : 4,3 Go → 1,2 Go sur un serveur MovieLens, mêmes résultats (tests `CalibrationTests`).
 - Le bouton « Exporter le jeu de calibrage » produit le format lu par `ParityTests.LoadDataset` (comptes u01, u02…).
 
 ## Page de configuration (`configPage.html`)

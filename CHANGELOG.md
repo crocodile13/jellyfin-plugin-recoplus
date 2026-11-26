@@ -3,6 +3,10 @@
 Reco+ versions, newest first. Each line is the changelog shown by Jellyfin's plugin catalogue.
 Compatibility: see the Jellyfin range of each version below (`targetAbi` in `manifest.json`).
 
+## 1.1.2 — Fixes
+
+- **1.1.2** (Jellyfin 12.2–12.4) — calibration no longer runs out of memory on larger servers — each case keeps only what that account's ranking reads, and the calibration caches have a size limit (measured on a MovieLens server: peak memory 4.3 GB → 1.2 GB, 54 → 13 minutes, same result). The options of the settings level selector are readable again when the list is open. Security: the Seerr API key and the Gotify token are no longer sent along when Seerr or the webhook answer with a redirect (the error now names the address to save instead), and Seerr answers are size-limited.
+
 ## 1.1.1 — Fix
 
 - **1.1.1** (Jellyfin 12.2–12.4) — "Recompute now" clicked while a full computation was already running was silently ignored, so new settings (or a Seerr connection just saved) only applied at the next computation. The request now waits and runs right after the current computation.
