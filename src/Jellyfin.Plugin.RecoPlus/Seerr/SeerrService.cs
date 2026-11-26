@@ -143,8 +143,9 @@ public sealed class SeerrService
     public SeerrClient Client()
     {
         var c = Plugin.Instance!.Configuration;
-        var http = _http.CreateClient("RecoPlusSeerr");
+        var http = _http.CreateClient(SeerrClient.HttpName);
         http.Timeout = TimeSpan.FromSeconds(20);
+        http.MaxResponseContentBufferSize = SeerrClient.MaxResponseBytes;
         return new SeerrClient(http, c.SeerrUrl, _secrets.Get(SecretStore.SeerrApiKey) ?? string.Empty);
     }
 

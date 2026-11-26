@@ -25,6 +25,9 @@ public sealed record Alert(string Key, string Title, string Message, DateTime At
 /// </summary>
 public sealed class Notifier
 {
+    /// <summary>Client HTTP nommé du webhook (sans redirection suivie, voir l'enregistrement des services).</summary>
+    public const string HttpName = "RecoPlusWebhook";
+
     private readonly IActivityManager _activity;
     private readonly IHttpClientFactory _http;
     private readonly SecretStore _secrets;
@@ -148,9 +151,15 @@ public sealed class Notifier
                     break;
             }
 
-            var http = _http.CreateClient("RecoPlusWebhook");
+            var http = _http.CreateClient(HttpName);
             http.Timeout = TimeSpan.FromSeconds(15);
             using var res = await http.SendAsync(req).ConfigureAwait(false);
+            // redirections non suivies (le jeton partirait avec) : l'adresse finale est à enregistrer
+            if ((int)res.StatusCode is >= 300 and < 400)
+            {
+                return Texts.Pack("le webhook redirige vers une autre adresse : enregistrez l'adresse finale");
+            }
+
             return res.IsSuccessStatusCode ? Sent : Texts.Pack("refusé ({0})", (int)res.StatusCode);
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or InvalidOperationException or FormatException)

@@ -23,6 +23,10 @@ public sealed class PluginServiceRegistrator : IPluginServiceRegistrator
     public void RegisterServices(IServiceCollection services, IServerApplicationHost applicationHost)
     {
         services.AddHttpClient();
+        // Seerr et webhook : jamais de redirection suivie. .NET ne retire que l'en-tête Authorization en suivant une
+        // redirection ; X-Api-Key (Seerr) et X-Gotify-Key partiraient vers l'adresse de destination, quelle qu'elle soit.
+        services.AddHttpClient(SeerrClient.HttpName).ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.SocketsHttpHandler { AllowAutoRedirect = false });
+        services.AddHttpClient(Notifier.HttpName).ConfigurePrimaryHttpMessageHandler(() => new System.Net.Http.SocketsHttpHandler { AllowAutoRedirect = false });
         services.AddSingleton<SecretStore>();
         services.AddSingleton<HistoryStore>();
         services.AddSingleton<PlaybackReportingReader>();

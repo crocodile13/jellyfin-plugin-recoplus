@@ -513,8 +513,9 @@ public sealed class RecoController : ControllerBase
 
         try
         {
-            var http = _httpFactory.CreateClient("RecoPlusSeerr");
+            var http = _httpFactory.CreateClient(SeerrClient.HttpName);
             http.Timeout = TimeSpan.FromSeconds(15);
+            http.MaxResponseContentBufferSize = SeerrClient.MaxResponseBytes;
             var cl = new SeerrClient(http, url, key);
             var version = await cl.CheckAsync(ct).ConfigureAwait(false);
             var users = await cl.UsersAsync(ct).ConfigureAwait(false);
