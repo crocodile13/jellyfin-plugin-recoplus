@@ -79,6 +79,8 @@
                 #RecoPlusConfigPage .rp-slider-ends { display: flex; justify-content: space-between; font-size: .85em; opacity: .75; }
                 #RecoPlusConfigPage .rp-slider-ends output { font-weight: 600; opacity: 1; }
                 #RecoPlusConfigPage .rp-level select { background: transparent; color: inherit; border: 1px solid var(--rp-line); border-radius: 4px; padding: .2em .4em; font: inherit; }
+                /* la liste ouverte est dessinée par le navigateur (fond clair) : sans couleur propre, les options héritaient du texte clair du thème et devenaient invisibles */
+                #RecoPlusConfigPage .rp-level select option { color: CanvasText; background-color: Canvas; }
                 #RecoPlusConfigPage .rp-health { border-radius: 8px; padding: .9em 1.2em; margin: 0 0 1em; background: var(--rp-soft); border-left: 4px solid #5cc46a; }
                 #RecoPlusConfigPage .rp-health.warn { border-left-color: #e6a23c; }
                 #RecoPlusConfigPage .rp-health h3 { margin: 0 0 .4em; }
