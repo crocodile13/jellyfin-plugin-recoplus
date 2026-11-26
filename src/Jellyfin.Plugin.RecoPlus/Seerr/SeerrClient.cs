@@ -141,6 +141,12 @@ public sealed class SeerrDetails
 /// </summary>
 public sealed class SeerrClient
 {
+    /// <summary>Client HTTP nommé de Seerr (sans redirection suivie, voir l'enregistrement des services).</summary>
+    public const string HttpName = "RecoPlusSeerr";
+
+    /// <summary>Taille maximale d'une réponse de Seerr (une fiche ou une page de liste pèse quelques centaines de Ko).</summary>
+    public const long MaxResponseBytes = 16 * 1024 * 1024;
+
     private readonly HttpClient _http;
     private readonly Uri _base;
     private readonly string _key;
@@ -162,6 +168,19 @@ public sealed class SeerrClient
         _key = apiKey;
     }
 
+    /// <summary>
+    /// Redirection (non suivie : la clé d'API partirait avec) : erreur claire, avec l'adresse à enregistrer à la place
+    /// (sans sa requête, qui pourrait porter autre chose).
+    /// </summary>
+    private static void Redirected(HttpResponseMessage res)
+    {
+        if ((int)res.StatusCode is >= 300 and < 400)
+        {
+            var to = res.Headers.Location is { } l ? (l.IsAbsoluteUri ? l.GetLeftPart(UriPartial.Path) : l.OriginalString.Split('?')[0]) : "?";
+            throw new SeerrException(Texts.Pack("Seerr redirige vers {0} : enregistrez cette adresse comme URL de Seerr", to), res.StatusCode);
+        }
+    }
+
     private async Task<JsonElement> Get(string path, CancellationToken ct, int? asUser = null)
     {
         using var req = new HttpRequestMessage(HttpMethod.Get, new Uri(_base, path.TrimStart('/')));
@@ -172,6 +191,7 @@ public sealed class SeerrClient
         }
 
         using var res = await _http.SendAsync(req, ct).ConfigureAwait(false);
+        Redirected(res);
         var body = await res.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
         if (!res.IsSuccessStatusCode)
         {
@@ -461,6 +481,7 @@ public sealed class SeerrClient
         req.Headers.Add("X-Api-Key", _key);
         req.Headers.Add("X-Api-User", asUser.ToString(CultureInfo.InvariantCulture));
         using var res = await _http.SendAsync(req, ct).ConfigureAwait(false);
+        Redirected(res);
         var text = await res.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
         if (res.StatusCode == HttpStatusCode.Created)
         {

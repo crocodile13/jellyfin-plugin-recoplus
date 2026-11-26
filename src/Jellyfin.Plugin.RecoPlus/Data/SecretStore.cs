@@ -63,7 +63,14 @@ public sealed class SecretStore
 
             Directory.CreateDirectory(Path.GetDirectoryName(PathOnDisk)!);
             var tmp = PathOnDisk + ".tmp";
-            using (var fs = new FileStream(tmp, FileMode.Create, FileAccess.Write, FileShare.None))
+            // créé directement en 600 (jamais lisible par d'autres, même un instant), puis remis en 600 s'il existait déjà
+            var options = new FileStreamOptions { Mode = FileMode.Create, Access = FileAccess.Write, Share = FileShare.None };
+            if (!OperatingSystem.IsWindows())
+            {
+                options.UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite;
+            }
+
+            using (var fs = new FileStream(tmp, options))
             {
                 if (!OperatingSystem.IsWindows())
                 {
