@@ -255,8 +255,8 @@ public static class HomeRows
     /// <param name="sc">Score de chaque candidat.</param>
     /// <param name="o">Rangées demandées.</param>
     /// <param name="fit">
-    /// Titres hors bibliothèque : appelé pour chaque rangée remplie (identifiant, titre aimé des rangées « Parce que … »,
-    /// ses titres de la bibliothèque dans la limite de sa taille), renvoie combien de ces titres restent (les premiers) ;
+    /// Titres hors bibliothèque : appelé pour chaque rangée, même sans titre de la bibliothèque (identifiant, titre aimé
+    /// des rangées « Parce que … », ses titres de la bibliothèque dans la limite de sa taille), renvoie combien de ces titres restent (les premiers) ;
     /// une valeur négative ou ≥ au nombre reçu ne change rien. Les titres qui sortent redeviennent libres pour les rangées
     /// suivantes ; quelques-uns restent en réserve à la fin de la rangée, sans y être réservés (secours de l'affichage).
     /// </param>
@@ -310,7 +310,9 @@ public static class HomeRows
         {
             var repeats = new HashSet<string>(StringComparer.Ordinal);
             var l = Take(src, keep, repeats);
-            if (fit is not null && l.Count > 0)
+            // aussi une rangée sans titre de la bibliothèque : « À venir », nouvelles sorties ne vivent souvent que hors
+            // bibliothèque (sans cet appel, elles restaient vides)
+            if (fit is not null)
             {
                 var shown = l.Take(size).ToList();
                 int k = fit(id, anchor, shown);

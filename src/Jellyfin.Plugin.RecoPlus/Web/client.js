@@ -116,7 +116,10 @@
     function isTmdbPath(p) { return !!p && /^\/[A-Za-z0-9._-]+$/.test(p); }
 
     function shapeOf(container) {
-        var ref = container && Array.prototype.find.call(container.children, function (c) { return c.classList && c.classList.contains('card') && !c.classList.contains(EXT); });
+        var isLib = function (c) { return c.classList && c.classList.contains('card') && !c.classList.contains(EXT); };
+        var ref = container && Array.prototype.find.call(container.children, isLib);
+        // rangée sans carte de la bibliothèque (« À venir », nouvelles sorties) : la forme des autres rangées Reco+
+        if (!ref) { ref = Array.prototype.find.call(document.querySelectorAll('.verticalSection[class*="RecoPlus"] .itemsContainer > .card'), isLib); }
         var m = ref && /(?:^|\s)overflow(\w+)Card(?:\s|$)/.exec(ref.className);
         return m ? m[1] : 'Portrait';
     }
@@ -279,6 +282,8 @@
         return seq.slice(0, Math.max(0, size | 0));
     }
 
+    var EMPTY_ROW = {};   // repère d'une rangée traitée qui n'avait aucune carte de la bibliothèque
+
     function mix(container, d, layout) {
         var isCard = function (c) { return c.classList.contains('card') && !c.classList.contains(EXT); };
         // cartes Reco+ de secours alors que Jellyfin Enhanced est maintenant prêt : on refait la rangée avec les siennes
@@ -289,8 +294,11 @@
             container.__recoPlusDoneFor = null;
         }
         var first = Array.prototype.find.call(container.children, isCard);
+        // rangée sans titre de la bibliothèque : Home Screen Sections la crée masquée ; elle vit de ses titres hors bibliothèque
+        var marker = first || EMPTY_ROW;
+        if (!first && !layout.some(function (t) { return !!t; })) { return; }
         // déjà traitée pour ce rendu de HSS (même si aucun titre n'a trouvé sa place) : rien à refaire
-        if (!first || container.__recoPlusBusy || container.__recoPlusDoneFor === first || container.querySelector('.' + EXT)) { return; }
+        if (container.__recoPlusBusy || container.__recoPlusDoneFor === marker || container.querySelector('.' + EXT)) { return; }
         var wanted = {};
         layout.forEach(function (t) { if (t) { wanted[t] = true; } });
         var items = (d.items || []).filter(function (it) { return wanted[keyOf(it)]; });
@@ -299,7 +307,7 @@
             container.__recoPlusBusy = false;
             if (!container.isConnected || container.querySelector('.' + EXT)) { return; }
             var lib = Array.prototype.filter.call(container.children, isCard);
-            container.__recoPlusDoneFor = lib[0];
+            container.__recoPlusDoneFor = lib[0] || EMPTY_ROW;
             container.__recoPlusLib = lib;
             if (!ext.length) { return; }
             // cartes de secours : on repasse plus tard, au cas où Jellyfin Enhanced finirait de charger
@@ -309,6 +317,8 @@
             var seq = compose(lib, layout, byKey, d.rowSize || lib.length);
             lib.forEach(function (l) { if (seq.indexOf(l) < 0) { l.remove(); } });   // sortis de la rangée
             seq.forEach(function (n) { container.appendChild(n); });
+            var section = container.closest('.verticalSection');
+            if (section && seq.length) { section.classList.remove('hide'); }
         }, function () { container.__recoPlusBusy = false; });
     }
 
