@@ -933,6 +933,10 @@ def run():
             problems.append(f"choix propre d'un compte dans Home Screen Sections : {e}")
     if "seerr" in EXPECT:
         WISHED.update(setup_seerr(users))
+        if "hss" in EXPECT:
+            # Seerr relié : les rangées des listes TMDb existent maintenant ; l'assistant les ajoute au tableau de HSS
+            r = call("POST", "/RecoPlus/HomeSections/Setup", {}, query={"lang": "fr"})
+            log(f"Home Screen Sections, avec Seerr : {r.get('message')}")
     # Reco+ : vérifications de compatibilité 20 s après le démarrage, planificateur 60 s après
     wait("vérifications de Reco+", lambda: call("GET", "/RecoPlus/Status").get("checks"), timeout=300)
     recompute()
