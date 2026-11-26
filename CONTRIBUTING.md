@@ -28,4 +28,4 @@ Every pull request runs CI and the integration test (a real Jellyfin in Docker, 
 - Every text shown to users is written in French (the source) and translated in `english.json`, `german.json` and `spanish.json` (`src/RecoPlus.Engine/`); the tests check it.
 - No secret, real data or personal information anywhere in the repository.
 
-The maintainer reviews and merges pull requests; versions are grouped (1.minor.patch) and published automatically.
+I review and merge pull requests; versions are grouped (1.minor.patch) and published automatically.

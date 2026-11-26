@@ -17,4 +17,4 @@
 - [ ] Docs updated if behaviour changes: README (English and French) and the wiki page concerned.
 - [ ] No secret, real watch history, server address or personal data in code, logs, screenshots or this pull request.
 
-<!-- CI and the integration test run on every pull request; the maintainer reviews and merges. Thank you! -->
+<!-- CI and the integration test run on every pull request; I review and merge. Thank you! -->

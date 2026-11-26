@@ -170,7 +170,7 @@ CI builds and tests on every push. When `manifest.json` gets a new version, a re
 
 ## AI-assisted development
 
-Reco+ is developed with the help of an AI assistant (Claude, by Anthropic), which writes most of the code under the maintainer's direction. The maintainer decides what is built, reviews every change, and validates it before it ships: unit and parity tests in CI, an integration test on real Jellyfin servers for every pull request, and measurements on watch histories for anything that affects the recommendations.
+I develop Reco+ with an AI assistant (Claude, by Anthropic), which writes most of the code. I decide what gets built and review every change before it ships. Each change goes through automated tests and a test on real Jellyfin servers; anything that affects the recommendations is also measured on watch histories.
 
 ## Contributing
 
