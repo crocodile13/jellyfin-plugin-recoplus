@@ -49,6 +49,12 @@ public sealed class EngineStatus
     /// <summary>Listes TMDb (tendances, populaires, à venir) : titres lus et part présente dans la bibliothèque.</summary>
     public string TmdbLists { get; set; } = "désactivé";
 
+    /// <summary>
+    /// Bilan de chaque liste TMDb (diagnostic : test d'intégration, état) : titres renvoyés par Seerr, gardés après les
+    /// minimums, dans la bibliothèque, hors bibliothèque avec leur fiche.
+    /// </summary>
+    public Dictionary<string, int[]> TmdbListCounts { get; set; } = new(StringComparer.Ordinal);
+
     /// <summary>Mesure de l'effet des propositions (null avant le premier calcul).</summary>
     public Measurement.Report? Measure { get; set; }
 
@@ -1514,12 +1520,14 @@ public sealed class RecoService : IDisposable
         var res = new Dictionary<string, TmdbList>(StringComparer.Ordinal);
         string window = cfg.TrendingWindow == Configuration.TrendWindow.Day ? "day" : "week";
         int read = 0, inLib = 0;
+        var counts = new Dictionary<string, int[]>(StringComparer.Ordinal);
         foreach (var row in HomeRows.ListRows)
         {
             var set = cfg.ListSettings(row);
             int count = set.Count;
             var perKind = new List<IReadOnlyList<string>>();
             var dates = new Dictionary<string, string?>(StringComparer.Ordinal);   // nouvelles sorties : date principale par clé TMDb
+            int raw = 0;
             foreach (var type in new[] { "movie", "tv" })
             {
                 var (list, query) = row switch
@@ -1548,6 +1556,7 @@ public sealed class RecoService : IDisposable
                         break;
                     }
 
+                    raw += items.Count;
                     found.AddRange(items.Where(r => r.MediaType == type && !r.Adult && Counts(r)));
                 }
 
@@ -1594,11 +1603,13 @@ public sealed class RecoService : IDisposable
                 }
             }
 
+            counts[row] = new[] { raw, ids.Count, ids.Count(id => !id.StartsWith("tmdb:", StringComparison.Ordinal)), external.Count };
             res[row] = new TmdbList(ids, score, external) { Released = row == HomeRows.Sorties ? await ReleaseDates(cl, ids, lib, dates, ct).ConfigureAwait(false) : null };
         }
 
         _seerr.SaveCache();
         Status.TmdbLists = Texts.Pack("{0} titres lus (tendances, populaires, nouvelles sorties, à venir), {1} dans la bibliothèque", read, inLib);
+        Status.TmdbListCounts = counts;
         return res;
     }
 

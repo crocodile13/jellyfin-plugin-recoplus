@@ -537,7 +537,7 @@ def report(lib, users):
     status = call("GET", "/RecoPlus/Status", query={"lang": "fr"})
     out = {"jellyfin": call("GET", "/System/Info/Public").get("Version"), "status": {
         "version": status.get("version"), "checks": status.get("checks"), "disabled": status.get("disabled"), "hss": status.get("hss"),
-        "engine": {k: status["engine"].get(k) for k in ("UsersWithRecs", "LastError", "PlaybackReporting", "JellyfinEnhanced", "Seerr")},
+        "engine": {k: status["engine"].get(k) for k in ("UsersWithRecs", "LastError", "PlaybackReporting", "JellyfinEnhanced", "Seerr", "TmdbLists", "TmdbListCounts")},
         "alerts": status.get("alerts")}, "accounts": {}}
     for c in status.get("checks") or []:
         name = c["check"]
@@ -636,6 +636,12 @@ def report(lib, users):
         got = {n: a["apercu_cartes"].get("Nouvelles sorties", 0) + a["apercu_cartes"].get("Nouvelles sorties : films", 0)
                + a["apercu_cartes"].get("Nouvelles sorties : séries", 0) for n, a in out["accounts"].items()}
         out["nouvelles_sorties"] = got
+        # où les titres de chaque liste se perdent : renvoyés par Seerr, gardés, bibliothèque, hors bibliothèque avec fiche ;
+        # puis, par compte, proposables (pool) et placés dans une rangée
+        out["listes"] = status["engine"].get("TmdbListCounts")
+        for n in out["accounts"]:
+            src = (call("GET", "/RecoPlus/Preview", query={"userId": users[n], "lang": "fr"}).get("sources") or {}).get("list")
+            out["accounts"][n]["source_listes"] = src
         if not any(got.values()):
             problems.append(f"rangée « Nouvelles sorties » vide pour tous les comptes ({got})")
     return out
@@ -856,6 +862,8 @@ def markdown(r) -> str:
         L.append(f"Seerr, {k} : {v}  ")
     if r.get("nouvelles_sorties") is not None:
         L.append(f"Nouvelles sorties (cartes par compte) : {r.get('nouvelles_sorties')}  ")
+        L.append(f"Listes TMDb (renvoyés, gardés, bibliothèque, hors bibliothèque) : {r['status']['engine'].get('TmdbListCounts')} — {r['status']['engine'].get('TmdbLists')}  ")
+        L.append("Listes, par compte (trouvés, détaillés, proposés, placés) : " + "; ".join(f"{n} {a.get('source_listes')}" for n, a in r["accounts"].items()) + "  ")
     for k, v in (r.get("page utilisateur") or {}).items():
         L.append(f"Page de l'utilisateur, {k} : {v}  ")
     for label, res in (r.get("audace") or {}).items():

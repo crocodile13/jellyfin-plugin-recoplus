@@ -469,6 +469,7 @@ public sealed class RecoController : ControllerBase
                 JellyfinEnhanced = L(e.JellyfinEnhanced),
                 TmdbLibrary = L(e.TmdbLibrary),
                 TmdbLists = L(e.TmdbLists),
+                e.TmdbListCounts,
                 e.Measure,
                 e.ExternalTitles,
                 e.Running,
