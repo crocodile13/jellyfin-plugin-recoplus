@@ -660,10 +660,22 @@ await test('calibrage : écarts en %, méthode sans changement signalée, applic
     assert.ok(!/\+0\.0008/.test(t), 'pas de valeur brute');
 });
 
-await test('les options du choix de niveau restent lisibles dans la liste ouverte par le navigateur (couleurs système)', async () => {
-    // le sélecteur hérite du texte clair du thème ; la liste ouverte, elle, a le fond du navigateur (clair) :
-    // sans couleur propre aux options, « avancés » et « experts » étaient blanc sur blanc
-    assert.match(HTML, /\.rp-level select option \{[^}]*color: CanvasText;[^}]*background-color: Canvas;/);
+await test('le choix de niveau est un menu de Jellyfin comme les autres (couleurs du thème, liste ouverte comprise)', async () => {
+    // menu nu : options blanc sur blanc (1.1.1), puis couleurs du système qui détonnaient dans le thème sombre (1.1.2)
+    const { d } = await open(cfg);
+    const sel = d.getElementById('rpLevel');
+    assert.equal(sel.getAttribute('is'), 'emby-select');
+    assert.ok(sel.closest('.selectContainer'));
+    assert.doesNotMatch(HTML, /CanvasText/);
+});
+
+await test('état : la tuile des rangées d\'accueil dit leur nombre, la liste entière au survol', async () => {
+    const hss = '12 rangées déclarées (Pour toi · Tendances · Populaires) — à choisir et ordonner dans la configuration de Home Screen Sections';
+    const { d } = await open(cfg, { '/RecoPlus/Status': { ...status, hss } });
+    await wait(50);
+    const tile = [...d.querySelectorAll('.rp-kpi')].find((x) => x.querySelector('span').textContent === 'Rangées d\'accueil');
+    assert.equal(tile.querySelector('b').textContent, '12 rangées déclarées');
+    assert.equal(tile.querySelector('b').getAttribute('title'), hss);
 });
 
 const EN = JSON.parse(readFileSync(join(root, 'src/RecoPlus.Engine/english.json'), 'utf8'));

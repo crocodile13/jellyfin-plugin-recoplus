@@ -132,6 +132,18 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         page.add_style_tag(content=".skinHeader { display: none !important; } .mainAnimatedPage { padding-top: 0 !important; }")
         page.select_option("#rpLevel", "2")
         page.dispatch_event("#rpLevel", "change")
+        # le menu du niveau a les couleurs des autres menus de la page (thème de Jellyfin), liste ouverte comprise
+        colors = page.evaluate("""() => {
+          const c = (s) => { const e = document.querySelector(s); if (!e) return null; const st = getComputedStyle(e); return [st.color, st.backgroundColor]; };
+          return { level: c('#rpLevel'), levelOption: c('#rpLevel option'), other: c('#rpCalMethod'), otherOption: c('#rpCalMethod option') };
+        }""")
+        log(f"couleurs des menus ({lang}) : {colors}")
+        # variables du thème de Jellyfin lues par la page (accent, fond des bulles) : vides = repli de Reco+
+        theme = page.evaluate("""() => { const r = getComputedStyle(document.documentElement);
+          return ['--jf-palette-primary-main', '--jf-palette-background-paper', '--jf-palette-text-primary'].map((v) => v + '=' + (r.getPropertyValue(v).trim() || '∅')); }""")
+        log(f"variables du thème ({lang}) : {theme}")
+        if colors["levelOption"] != colors["otherOption"] or colors["level"] != colors["other"]:
+            raise RuntimeError(f"menu du niveau pas aux couleurs des autres menus : {colors}")
         for tab, label in TABS:
             page.click(f'.rp-tab[data-tab="{tab}"]')
             time.sleep(1.5)

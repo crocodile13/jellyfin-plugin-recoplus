@@ -10,14 +10,18 @@
     <div data-role="content">
         <div class="content-primary">
             <style>
-                #RecoPlusConfigPage { --rp-line: rgba(255,255,255,.09); --rp-soft: rgba(255,255,255,.04); --rp-mute: #9aa0a6; --rp-accent: #00a4dc; }
+                /* couleurs du thème de Jellyfin, quel qu'il soit (sombre, clair, personnalisé) : lignes, fonds discrets et texte
+                   secondaire tirés de la couleur du texte ; accent et fond des bulles pris aux variables du thème s'il en a */
+                #RecoPlusConfigPage { --rp-line: color-mix(in srgb, currentColor 14%, transparent); --rp-soft: color-mix(in srgb, currentColor 5%, transparent);
+                    --rp-mute: color-mix(in srgb, currentColor 62%, transparent); --rp-accent: var(--jf-palette-primary-main, #00a4dc);
+                    --rp-paper: var(--jf-palette-background-paper, #202124); --rp-paper-text: var(--jf-palette-text-primary, #e8eaed); }
                 #RecoPlusConfigPage .rp-head { display: flex; align-items: baseline; gap: .8em; flex-wrap: wrap; margin: 1em 0 .2em; }
                 #RecoPlusConfigPage .rp-head h2 { margin: 0; }
                 #RecoPlusConfigPage .rp-links { margin-left: auto; display: flex; gap: 1.2em; font-size: .9em; }
                 #RecoPlusConfigPage .rp-links a { color: inherit; opacity: .75; text-decoration: none; }
                 #RecoPlusConfigPage .rp-links a:hover, #RecoPlusConfigPage .rp-links a:focus { opacity: 1; text-decoration: underline; }
                 #RecoPlusConfigPage .rp-sub { color: var(--rp-mute); font-size: .9em; margin: 0 0 1em; max-width: 60em; }
-                #RecoPlusConfigPage .rp-alert { background: #5c1414; border-left: 4px solid #e04848; padding: .7em 1em; border-radius: 4px; margin: .5em 0; }
+                #RecoPlusConfigPage .rp-alert { background: color-mix(in srgb, #e04848 18%, transparent); border-left: 4px solid #e04848; padding: .7em 1em; border-radius: 4px; margin: .5em 0; }
                 #RecoPlusConfigPage .rp-alert b { display: block; }
                 #RecoPlusConfigPage .rp-tabs { display: flex; gap: .3em; flex-wrap: wrap; border-bottom: 1px solid var(--rp-line); margin: 1em 0; position: sticky; top: 0; z-index: 3; background: inherit; }
                 #RecoPlusConfigPage .rp-tab { background: none; border: none; color: inherit; padding: .7em 1em; cursor: pointer; border-bottom: 2px solid transparent; font: inherit; opacity: .75; }
@@ -38,7 +42,7 @@
                 /* aide au survol (et au toucher / clavier : focus) */
                 #RecoPlusConfigPage .rp-tip { position: absolute; top: 0; right: 0; width: 1.35em; height: 1.35em; border-radius: 50%; border: 1px solid var(--rp-mute); color: var(--rp-mute); font-size: .78em; line-height: 1.3em; text-align: center; cursor: help; user-select: none; z-index: 1; }
                 #RecoPlusConfigPage .rp-tip:hover, #RecoPlusConfigPage .rp-tip:focus { z-index: 50; color: #fff; border-color: var(--rp-accent); background: var(--rp-accent); outline: none; }
-                #RecoPlusConfigPage .rp-tip .rp-bubble { display: none; position: absolute; right: 0; top: 1.7em; width: min(24em, 80vw); background: #202124; color: #e8eaed; border: 1px solid var(--rp-line); border-radius: 6px; padding: .7em .85em; font-size: 1.15em; line-height: 1.4; text-align: left; box-shadow: 0 6px 18px rgba(0,0,0,.5); white-space: normal; cursor: auto; }
+                #RecoPlusConfigPage .rp-tip .rp-bubble { display: none; position: absolute; right: 0; top: 1.7em; width: min(24em, 80vw); background: var(--rp-paper); color: var(--rp-paper-text); border: 1px solid var(--rp-line); border-radius: 6px; padding: .7em .85em; font-size: 1.15em; line-height: 1.4; text-align: left; box-shadow: 0 6px 18px rgba(0,0,0,.5); white-space: normal; cursor: auto; }
                 #RecoPlusConfigPage .rp-tip:hover .rp-bubble, #RecoPlusConfigPage .rp-tip:focus .rp-bubble { display: block; }
                 #RecoPlusConfigPage .rp-h4 { margin: 1em 0 .3em; font-size: .9em; color: var(--rp-mute); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
                 #RecoPlusConfigPage .rp-factors { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 0 2em; }
@@ -67,7 +71,7 @@
                 /* niveaux d'affichage : 1 essentiel, 2 avancé, 3 expert (réglages cachés gardés et enregistrés) */
                 #RecoPlusConfigPage.rp-lvl-1 [data-level="2"], #RecoPlusConfigPage.rp-lvl-1 [data-level="3"], #RecoPlusConfigPage.rp-lvl-2 [data-level="3"] { display: none !important; }
                 #RecoPlusConfigPage .rp-level { align-self: center; font-size: .9em; }
-                #RecoPlusConfigPage .rp-slider input[type=range] { width: 100%; accent-color: #00a4dc; }
+                #RecoPlusConfigPage .rp-slider input[type=range] { width: 100%; accent-color: var(--rp-accent); }
                 #RecoPlusConfigPage .rp-pv h4 { margin: 1em 0 .4em; }
                 #RecoPlusConfigPage .rp-pv-strip { display: flex; gap: .6em; overflow-x: auto; padding-bottom: .4em; }
                 #RecoPlusConfigPage .rp-pv-card { flex: 0 0 7.5em; font-size: .8em; line-height: 1.25; }
@@ -78,9 +82,10 @@
                 #RecoPlusConfigPage .rp-pv-why { opacity: .65; margin-top: .15em; }
                 #RecoPlusConfigPage .rp-slider-ends { display: flex; justify-content: space-between; font-size: .85em; opacity: .75; }
                 #RecoPlusConfigPage .rp-slider-ends output { font-weight: 600; opacity: 1; }
-                #RecoPlusConfigPage .rp-level select { background: transparent; color: inherit; border: 1px solid var(--rp-line); border-radius: 4px; padding: .2em .4em; font: inherit; }
-                /* la liste ouverte est dessinée par le navigateur (fond clair) : sans couleur propre, les options héritaient du texte clair du thème et devenaient invisibles */
-                #RecoPlusConfigPage .rp-level select option { color: CanvasText; background-color: Canvas; }
+                /* sélecteur de niveau : le menu de Jellyfin (emby-select, couleurs du thème pour lui et sa liste ouverte, comme les
+                   autres menus de la page), en petit dans la barre des onglets */
+                #RecoPlusConfigPage .rp-level-select { display: inline-block; margin: 0 0 0 .3em; vertical-align: middle; }
+                #RecoPlusConfigPage .rp-level-select select { width: auto; font-size: inherit; padding: .25em 2em .25em .6em; }
                 #RecoPlusConfigPage .rp-health { border-radius: 8px; padding: .9em 1.2em; margin: 0 0 1em; background: var(--rp-soft); border-left: 4px solid #5cc46a; }
                 #RecoPlusConfigPage .rp-health.warn { border-left-color: #e6a23c; }
                 #RecoPlusConfigPage .rp-health h3 { margin: 0 0 .4em; }
@@ -92,9 +97,9 @@
                 #RecoPlusConfigPage .rp-tabtag { font-size: .72em; color: var(--rp-mute); border: 1px solid var(--rp-line); border-radius: 4px; padding: 0 .35em; margin-left: .3em; vertical-align: middle; }
                 #RecoPlusConfigPage .rp-devtoggle { margin-left: auto; align-self: center; font-size: .9em; opacity: .8; cursor: pointer; white-space: nowrap; }
                 #RecoPlusConfigPage .rp-log { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8em; line-height: 1.45; white-space: pre-wrap; word-break: break-word; max-height: 65vh; overflow: auto; padding: .6em; border: 1px solid var(--rp-line); border-radius: 6px; margin-top: .8em; }
-                #RecoPlusConfigPage .rp-logline { padding: .1em 0; border-bottom: 1px solid rgba(127,127,127,.12); }
+                #RecoPlusConfigPage .rp-logline { padding: .1em 0; border-bottom: 1px solid var(--rp-line); }
                 #RecoPlusConfigPage .rp-logline.lv-WRN b { color: #e6a23c; } #RecoPlusConfigPage .rp-logline.lv-ERR b, #RecoPlusConfigPage .rp-logline.lv-FTL b { color: #ec6262; }
-                #RecoPlusConfigPage .rp-logline.lv-ERR, #RecoPlusConfigPage .rp-logline.lv-FTL { background: rgba(236,98,98,.08); }
+                #RecoPlusConfigPage .rp-logline.lv-ERR, #RecoPlusConfigPage .rp-logline.lv-FTL { background: color-mix(in srgb, #ec6262 10%, transparent); }
                 #RecoPlusConfigPage .rp-log input, #RecoPlusConfigPage #rpLogFilter { font: inherit; }
                 @media (max-width: 600px) { #RecoPlusConfigPage .rp-rows { grid-template-columns: 1fr; } #RecoPlusConfigPage .rp-rows .rp-note { padding-top: .6em; border-top: 1px solid var(--rp-line); } }
                 #RecoPlusConfigPage .rp-default { color: var(--rp-mute); font-size: .85em; margin-top: .4em; display: block; }
@@ -129,7 +134,7 @@
                 <button type="button" class="rp-tab" data-tab="moteur" data-level="2">Moteur</button>
                 <button type="button" class="rp-tab" data-tab="calibrage" data-level="2">Calibrage</button>
                 <button type="button" class="rp-tab rp-dev" data-tab="journal">Journal</button>
-                <label class="rp-level rp-devtoggle" title="Essentiel : ce qu'il faut pour que tout marche. Avancé : pour ajuster (facteurs du moteur, listes du moment, sources de découverte, calibrage). Expert : tous les réglages fins. Les réglages cachés gardent leur valeur. Réglage de ce navigateur.">Réglages : <select id="rpLevel"><option value="1">essentiels</option><option value="2">avancés</option><option value="3">experts</option></select></label>
+                <label class="rp-level rp-devtoggle" title="Essentiel : ce qu'il faut pour que tout marche. Avancé : pour ajuster (facteurs du moteur, listes du moment, sources de découverte, calibrage). Expert : tous les réglages fins. Les réglages cachés gardent leur valeur. Réglage de ce navigateur.">Réglages : <span class="selectContainer rp-level-select"><select is="emby-select" id="rpLevel"><option value="1">essentiels</option><option value="2">avancés</option><option value="3">experts</option></select></span></label>
                 <label class="rp-devtoggle" style="margin-left:1em" title="Outils de développement : journal en temps réel, export du jeu de calibrage, réglages statistiques et chemin détaillé du calibrage, apport de chaque source dans l'aperçu. Réglage de ce navigateur."><input type="checkbox" id="rpDev"> Mode développeur</label>
             </div>
 
@@ -497,10 +502,10 @@
             ['_Blank1AVenirSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
             ['_Blank2AVenirSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
             ['_RowMine', 'Selon les goûts du compte', 'sep', '', 0, 0, 0, 'rows', 'c'],
-            ['_RowNew', 'Nouveautés', 'note', 'Les titres arrivés récemment (voir « Nouveautés : arrivées depuis » dans les réglages avancés), dans l\'ordre des goûts du compte, sans ceux des rangées au-dessus. Moins de 4 titres : vide.', 0, 0, 0, 'rows', 'c'],
+            ['_RowNew', 'Nouveautés', 'note', 'Les titres arrivés récemment (voir « Nouveautés : arrivées depuis », boîte « Taille et reprises des rangées »), dans l\'ordre des goûts du compte, sans ceux des rangées au-dessus. Moins de 4 titres : vide.', 0, 0, 0, 'rows', 'c'],
             ['RowNewTitle', 'Titre', 'text', 'Titre de la rangée des nouveautés.', 0, 0, 0, 'rows', 'c', 'Nouveautés pour toi'],
             ['KindNouveautes', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=en 2 rangées', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
-            ['SourceNouveautes', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Hors bibliothèque : les titres sortis récemment (voir « sorties depuis » dans les réglages avancés).', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['SourceNouveautes', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Hors bibliothèque : les titres sortis récemment (voir « Nouveautés hors bibliothèque : sorties depuis », boîte « Taille et reprises des rangées »).', 0, 0, 0, 'rows', 'c', 'mélange'],
             ['_SubNouveautesFilms', '↳ Rangée films', 'note', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['TitleNouveautesFilms', 'Titre', 'text', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
             ['_Blank1NouveautesFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
@@ -594,7 +599,7 @@
             ['ProposeMarked', 'Proposer aussi ce que le compte a déjà marqué', 'bool', 'Titres notés (avis, pouce), en favori, en liste de suivi ou demandés, mais pas lus sur ce serveur. Coupé par défaut : une note ou un favori, c\'est un titre déjà vu ; une liste de suivi, c\'est déjà une liste. Ces marques comptent toujours pour les goûts.', 0, 0, 0, 'filters', 'c', 'coupé'],
             ['NewEpisodesPinned', 'Nouveautés de ce que vous suivez', 'int', 'Nombre maximal de titres placés en tête : nouveaux épisodes d\'une série vue sur ce serveur et rattrapée, ou aimée et diffusés récemment ; volet suivant d\'une saga dont les volets précédents sont vus. 0 = jamais.', 1, 0, 20, 'pinned', 'c', '3'],
             ['NewEpisodesMaxDays', 'Pendant (jours après l\'arrivée)', 'int', 'Au-delà, la nouveauté n\'est plus mise en avant (« À suivre » de Jellyfin prend le relais pour les séries).', 1, 1, 365, 'pinned', 'c', '45'],
-            ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. 0 = automatique : les « Titres par rangée » (onglet Accueil, réglages avancés), pour qu\'ils portent exactement sur ce que montre {ROW}.', 1, 0, 100, 'mixadv', 'l', '0 (automatique)'],
+            ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. 0 = automatique : les « Titres par rangée » (onglet Accueil, boîte « Taille et reprises des rangées »), pour qu\'ils portent exactement sur ce que montre {ROW}.', 1, 0, 100, 'mixadv', 'l', '0 (automatique)'],
             ['SagaMax', 'Au-delà : regroupement thématique', 'int', 'Une collection plus grande que ce nombre n\'est pas une saga mais un regroupement (« Films Marvel », « Ghibli ») : 2 entrées au plus, sans règle de premier volet.', 1, 2, 100, 'diversadv', 'e', '12'],
 
             // ---- Facteurs de classement : interrupteur + force (×0,25 à ×3 de la valeur évaluée ; coupé = 0)
@@ -612,10 +617,10 @@
             ['WMaxSim', 'Proche d\'un titre aimé', 'factor', 'Ressemblance avec LE titre aimé le plus proche : fait remonter ce qui prolonge un goût précis, même minoritaire (un seul film de Miyazaki vu et aimé suffit).', 0, 0, 3, 'fsim', 'e', '2', 2],
             ['WCentroid', 'Proche des goûts d\'ensemble', 'factor', 'Ressemblance avec l\'ensemble de ce que le compte aime : fait remonter ce qui correspond à ses goûts dominants.', 0, 0, 3, 'fsim', 'e', '1', 1],
             ['WShortTerm', 'Goût du moment', 'factor', 'Ressemblance avec les derniers titres aimés (5 par défaut) en plus des goûts de toujours : une période « séries coréennes » se voit tout de suite, sans effacer le reste. Coupé par défaut : sur l\'historique de référence il n\'apporte rien (la demi-vie suit déjà les envies récentes) — le Calibrage peut le proposer sur le vôtre.', 0, 0, 4, 'fsim', 'e', 'coupé (×1 = 0,5)', 0.5],
-            ['WTimeOfDay', 'Heure de la journée', 'factor', 'Fait remonter ce qui ressemble aux titres aimés regardés dans la même tranche horaire que maintenant (nuit 0-6 h, matin, après-midi, soirée 18-24 h) : on ne regarde pas la même chose à 8 h et à 23 h. Une liste est alors calculée par tranche et servie selon l\'heure. Coupé par défaut : sur l\'historique de référence il fait moins bien (trop peu de visionnages par tranche et par compte) — le Calibrage peut le proposer sur le vôtre. Fuseau : réglage avancé de l\'onglet Général.', 0, 0, 4, 'fsim', 'e', 'coupé (×1 = 0,5)', 0.5],
+            ['WTimeOfDay', 'Heure de la journée', 'factor', 'Fait remonter ce qui ressemble aux titres aimés regardés dans la même tranche horaire que maintenant (nuit 0-6 h, matin, après-midi, soirée 18-24 h) : on ne regarde pas la même chose à 8 h et à 23 h. Une liste est alors calculée par tranche et servie selon l\'heure. Coupé par défaut : sur l\'historique de référence il fait moins bien (trop peu de visionnages par tranche et par compte) — le Calibrage peut le proposer sur le vôtre. Fuseau : onglet Général, boîte « Fonctionnement ».', 0, 0, 4, 'fsim', 'e', 'coupé (×1 = 0,5)', 0.5],
             ['WCollab', 'Vus ensemble dans le foyer', 'factor', 'Fait remonter les titres souvent regardés par les mêmes personnes que les titres aimés du compte (filtrage collaboratif, prudent sur un petit foyer).', 0, 0, 3, 'fsim', 'e', '0,3', 0.3],
             ['WFresh', 'Nouveauté', 'factor', 'Bonus des titres récemment ajoutés, uniquement s\'ils collent déjà aux goûts du compte (garde-fou). Plafonné : ×2 au plus.', 0, 0, 2, 'fbonus', 'e', '2', 2],
-            ['WPopularity', 'Popularité', 'factor', 'Bonus des titres regardés par beaucoup de comptes du serveur, et de ceux en tendance sur TMDb (voir « Tendance TMDb dans la popularité », réglages avancés), uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
+            ['WPopularity', 'Popularité', 'factor', 'Bonus des titres regardés par beaucoup de comptes du serveur, et de ceux en tendance sur TMDb (voir « Tendance TMDb dans la popularité », boîte « Bonus réservés et garde-fou »), uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
             ['WQuality', 'Note de la communauté', 'factor', 'Bonus des titres bien notés (TMDb/IMDb), uniquement s\'ils collent déjà aux goûts (garde-fou). Pour écarter les titres mal notés, utilisez plutôt le filtre « Note minimale » de l\'onglet Listes.', 0, 0, 3, 'fbonus', 'e', '0,1', 0.1],
             ['WTmdbAgreement', 'Accord TMDb', 'factor', 'Bonus des titres que TMDb recommande à partir de plusieurs titres aimés — hors bibliothèque (mode étendu) comme dans la bibliothèque (onglet Général, Sources) —, uniquement s\'ils collent déjà aux goûts (garde-fou).', 0, 0, 3, 'fbonus', 'e', '0,5', 0.5],
             ['WRelease', 'Sortie récente', 'factor', 'Bonus des titres sortis récemment (date de sortie, pas d\'ajout à la bibliothèque), uniquement s\'ils collent déjà aux goûts. Coupé par défaut : non évalué sur un historique réel — le Calibrage peut le proposer.', 0, 0, 3, 'fbonus', 'e', 'coupé (×1 = 1)', 1],
@@ -712,7 +717,7 @@
             ['ExtendedCrossingsMax', 'Croisements explorés', 'int', 'Par sorte (films, séries) : les N couples genre × thème ou genre × langue d\'origine les plus forts dans les titres aimés. Listes plus étroites : la moitié des votes minimum suffit.', 1, 0, 30, 'xs_crossadv', 'c', '6'],
             ['ExtendedGemMinRating', 'Pépites : note TMDb minimale', 'num', 'Plus haute que pour les autres sources : avec peu de votes, une note est moins sûre.', 0.1, 0, 10, 'xs_gemsadv', 'c', '7,8'],
             ['ExtendedMinRuntime', 'Tout titre trouvé : durée minimale d\'un film (minutes)', 'int', 'Les films plus courts (courts métrages) ne sont pas proposés hors bibliothèque, listes du moment comprises. Durée inconnue : gardé. 0 = aucune limite.', 5, 0, 600, 'xfilt', 'c', '40'],
-            ['ExtendedMinVotesAll', 'Tout titre trouvé : votes TMDb minimum', 'int', 'Un titre hors bibliothèque trouvé par l\'exploration doit avoir au moins ce nombre de votes TMDb, quelle que soit la source (courts métrages, avant-premières, titres confidentiels écartés). Les titres pas encore sortis sont toujours écartés. Les listes du moment ont leurs propres minimums (onglet Accueil, réglages avancés).', 10, 0, 100000, 'xfilt', 'c', '50'],
+            ['ExtendedMinVotesAll', 'Tout titre trouvé : votes TMDb minimum', 'int', 'Un titre hors bibliothèque trouvé par l\'exploration doit avoir au moins ce nombre de votes TMDb, quelle que soit la source (courts métrages, avant-premières, titres confidentiels écartés). Les titres pas encore sortis sont toujours écartés. Les listes du moment ont leurs propres minimums (onglet Accueil, sous chaque liste).', 10, 0, 100000, 'xfilt', 'c', '50'],
             ['ExtendedGemMinVotes', 'Pépites : votes TMDb minimum', 'int', 'En dessous, la note ne veut rien dire (amis du réalisateur, fans). Sert aussi aux places découverte du mélange libre, même pépites coupées.', 10, 0, 100000, 'xs_gemsadv', 'c', '50'],
             ['ExtendedGemMaxVotes', 'Pépites : votes TMDb maximum', 'int', 'Au-dessus, le titre est déjà connu : il relève des autres sources.', 50, 0, 100000, 'xs_gemsadv', 'c', '500'],
             ['ExtendedGemGenres', 'Pépites : genres préférés explorés', 'int', 'En plus d\'une recherche tous genres, par sorte.', 1, 0, 20, 'xs_gemsadv', 'c', '3'],
@@ -1176,7 +1181,7 @@
         }
         function pct(x) { return percent(fixed(x * 100, 1)); }
         function when(s) { return s ? new Date(s).toLocaleString(LOCALE) : t('jamais'); }
-        function kpi(label, value) { var d = el('div', { 'class': 'rp-kpi' }); d.appendChild(el('span', {}, label)); d.appendChild(el('b', {}, value)); return d; }
+        function kpi(label, value, full) { var d = el('div', { 'class': 'rp-kpi' }); d.appendChild(el('span', {}, label)); d.appendChild(el('b', full ? { title: full } : {}, value)); return d; }
 
         // effet des recommandations : taux par rangée et par place, part des lectures venues d'une proposition
         var ROW_NAMES = { PourToi: 'Pour toi', Tendances: 'Tendances', Populaires: 'Populaires', Sorties: 'Nouvelles sorties', AVenir: 'À venir', Suite: 'Encore pour toi', Films: 'Films', Series: 'Séries', Nouveautes: 'Nouveautés', ParceQue: 'Parce que tu as aimé {0}' };
@@ -1218,7 +1223,8 @@
             k.appendChild(kpi('Jellyfin Enhanced', e.JellyfinEnhanced || '—'));
             k.appendChild(kpi(t('Accord TMDb (bibliothèque)'), e.TmdbLibrary || '—'));
             k.appendChild(kpi(t('Listes du moment (TMDb)'), e.TmdbLists || '—'));
-            k.appendChild(kpi(t('Rangée d\'accueil'), s.hss));
+            // rangées HSS : le nombre seulement (la liste des titres ferait une colonne interminable), la liste entière au survol
+            k.appendChild(kpi(t('Rangées d\'accueil'), String(s.hss || '').replace(/\s*\(.*$/, ''), s.hss));
             k.appendChild(kpi(t('Page des utilisateurs'), s.userPage || '—'));
             if (e.LastError) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, t('Dernière erreur de calcul'))); d.appendChild(el('span', {}, e.LastError)); al.appendChild(d); }
             renderMeasure(e.Measure);
@@ -1309,7 +1315,7 @@
         });
         $('#rpSaveBar').style.display = 'none';
 
-        // trois niveaux : de base (visible), avancé (onglets Moteur et Calibrage, sections repliées « Réglages avancés »),
+        // trois niveaux : de base (visible), avancé (onglets Moteur et Calibrage, boîtes « avancées »), expert (réglages fins dans leur boîte),
         // développeur (journal, export et réglages statistiques du calibrage, détails de diagnostic) ; réglage de ce navigateur
         function devStored() { try { return window.localStorage.getItem('recoplus.dev') === '1'; } catch (e) { return false; } }
         function setDev(on) {

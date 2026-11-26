@@ -170,7 +170,7 @@ La CI compile et teste à chaque push. Quand une nouvelle version apparaît dans
 
 ## Développement assisté par IA
 
-Reco+ est développé avec l'aide d'un assistant d'IA (Claude, d'Anthropic), qui écrit l'essentiel du code sous la direction du mainteneur. Le mainteneur décide de ce qui est construit, relit chaque modification et la valide avant sa publication : tests unitaires et de parité dans la CI, test d'intégration sur de vrais serveurs Jellyfin à chaque pull request, et mesures sur des historiques de lecture pour tout ce qui touche aux recommandations.
+Je développe Reco+ avec un assistant d'IA (Claude, d'Anthropic), qui écrit l'essentiel du code. Je décide de ce qui est construit et je relis chaque modification avant de la publier. Chaque changement passe des tests automatiques et un test sur de vrais serveurs Jellyfin ; tout ce qui touche aux recommandations est aussi mesuré sur des historiques de visionnage.
 
 ## Contribuer
 
