@@ -28,9 +28,9 @@
                 #RecoPlusConfigPage .rp-box h3 { margin: 0 0 .3em; font-size: 1.05em; }
                 #RecoPlusConfigPage .rp-box > p { color: var(--rp-mute); font-size: .88em; margin: 0 0 .9em; max-width: 60em; }
                 #RecoPlusConfigPage .rp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 2em; align-items: end; }
-                #RecoPlusConfigPage details.rp-adv { margin: 1.5em 0 1em; border-top: 1px dashed var(--rp-line); padding-top: .6em; }
-                #RecoPlusConfigPage details.rp-adv > summary { cursor: pointer; color: var(--rp-mute); margin: .3em 0 .9em; font-weight: 600; }
-                #RecoPlusConfigPage details.rp-adv > summary span { font-weight: normal; }
+                /* source d'exploration : son interrupteur, puis ses réglages fins (niveau expert) juste dessous, en retrait */
+                #RecoPlusConfigPage .rp-src { margin: 0 0 .4em; }
+                #RecoPlusConfigPage .rp-src-adv { margin: -.2em 0 .8em 2.2em; padding-left: .8em; border-left: 2px solid var(--rp-line); }
                 #RecoPlusConfigPage .rp-field { position: relative; }
                 #RecoPlusConfigPage .rp-field .inputContainer, #RecoPlusConfigPage .rp-field .selectContainer, #RecoPlusConfigPage .rp-field .checkboxContainer { margin-bottom: 1.2em; }
                 #RecoPlusConfigPage .rp-field .checkboxContainer { padding-right: 2em; }
@@ -163,9 +163,7 @@
                     <div class="rp-box"><h3>Comptes ignorés</h3><p>Ces comptes n'ont pas de recommandations Reco+ (Jellyfin leur répond normalement) et leur historique ne compte pas pour le foyer : compte invité, de test, d'un enfant…</p><div data-fields="users"></div></div>
                     <div class="rp-box"><h3>Langue</h3><div class="rp-grid" data-fields="lang"></div></div>
                     <div class="rp-box"><h3>Page des utilisateurs et pays</h3><p>Avec Plugin Pages, chaque utilisateur a une page « Reco+ » dans son menu pour régler ce que vous lui ouvrez ici ; sans Plugin Pages, ces réglages restent ceux du serveur. Le pays d'un compte sert aux dates de sortie de la rangée Nouvelles sorties (sorti en salle, en vidéo ou à la télévision dans ce pays) : il ne choisit pas des titres de ce pays.</p><div class="rp-grid" data-fields="userpage"></div></div>
-                    <details class="rp-adv" data-level="3"><summary>Réglages experts <span>— « Plus comme ceci », recalculs, fuseau, performances</span></summary>
-                        <div class="rp-box"><h3>Fonctionnement</h3><div class="rp-grid" data-fields="genadv"></div></div>
-                    </details>
+                    <div class="rp-box" data-level="3"><h3>Fonctionnement</h3><p>« Plus comme ceci », recalculs, fuseau horaire, performances.</p><div class="rp-grid" data-fields="genadv"></div></div>
                 </div>
 
                 <!-- ACCUEIL -->
@@ -177,38 +175,27 @@
                     </div>
                     <div class="rp-box" data-level="2"><h3>Listes du moment (TMDb)</h3>
                         <p>Rangées Tendances, Populaires, Nouvelles sorties et À venir : les listes de TMDb lues via Seerr à chaque calcul complet (en cache 6 heures), pour les films et pour les séries. Chaque compte n'y voit que ce qu'il n'a pas vu, rangé selon ses goûts autant que réglé ici. Sans Seerr, ces rangées n'existent pas dans Home Screen Sections.</p>
-                        <h4 class="rp-h4">Tendances</h4><div class="rp-grid" data-fields="lt"></div>
-                        <h4 class="rp-h4">Populaires</h4><div class="rp-grid" data-fields="lp"></div>
-                        <h4 class="rp-h4">Nouvelles sorties</h4><div class="rp-grid" data-fields="ls"></div>
-                        <h4 class="rp-h4">À venir</h4><div class="rp-grid" data-fields="lu"></div>
+                        <p data-level="3">Sous chaque liste, au niveau expert : ce qu'un titre hors bibliothèque doit avoir pour y entrer (popularité et votes TMDb minimum, goût minimal). Les titres de la bibliothèque ne sont pas filtrés, sauf dans les nouvelles sorties, dont les minimums font la rangée.</p>
+                        <h4 class="rp-h4">Tendances</h4><div class="rp-grid" data-fields="lt"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="lta"></div>
+                        <h4 class="rp-h4">Populaires</h4><div class="rp-grid" data-fields="lp"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="lpa"></div>
+                        <h4 class="rp-h4">Nouvelles sorties</h4><div class="rp-grid" data-fields="ls"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="lsa"></div>
+                        <h4 class="rp-h4">À venir</h4><div class="rp-grid" data-fields="lu"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="lua"></div>
                     </div>
                     <div class="rp-box" id="rpMixBox" data-level="2">
                         <h3>Mélange</h3>
                         <p>Pour les rangées dont le contenu est « mélange » : comment les titres hors bibliothèque s'y glissent.</p>
                         <div class="rp-grid" data-fields="extmix"></div>
                     </div>
-                    <details class="rp-adv" data-level="2"><summary>Réglages avancés <span>— taille des rangées, nouveautés, listes du moment hors bibliothèque</span></summary>
-                        <div class="rp-box" data-level="3"><h3>Listes du moment : titres hors bibliothèque</h3>
-                            <p>Seuls les titres qui comptent et qui conviennent au compte : popularité et votes TMDb minimum, goût minimal. Les titres de la bibliothèque ne sont pas filtrés.</p>
-                            <h4 class="rp-h4">Tendances</h4><div class="rp-grid" data-fields="lta"></div>
-                            <h4 class="rp-h4">Populaires</h4><div class="rp-grid" data-fields="lpa"></div>
-                            <h4 class="rp-h4">Nouvelles sorties</h4><div class="rp-grid" data-fields="lsa"></div>
-                            <h4 class="rp-h4">À venir</h4><div class="rp-grid" data-fields="lua"></div>
-                        </div>
-                        <div class="rp-box"><h3>Rangées</h3><div class="rp-grid" data-fields="rowsadv"></div></div>
-                    </details>
+                    <div class="rp-box" data-level="2"><h3>Taille et reprises des rangées</h3><div class="rp-grid" data-fields="rowsadv"></div></div>
                 </div>
 
                 <!-- LISTES -->
                 <div class="rp-pane" data-pane="listes">
                     <p class="rp-sub" data-tpl="Ce qui est montré, sans changer le calcul des goûts : ces réglages s'appliquent après le classement (ils n'entrent ni dans l'évaluation ni dans le calibrage). Ils valent pour {ROW}, les Suggestions et le mode étendu ; « Plus comme ceci » n'est filtré que par les comptes ignorés."></p>
-                    <div class="rp-box" data-level="2"><h3>Composition du haut de liste</h3><p data-tpl="Les premiers titres de la liste (« Haut de liste » : par défaut, autant que la rangée {ROW} en montre)."></p><div class="rp-grid" data-fields="mix"></div></div>
+                    <div class="rp-box" data-level="2"><h3>Composition du haut de liste</h3><p data-tpl="Les premiers titres de la liste (« Haut de liste » : par défaut, autant que la rangée {ROW} en montre)."></p><div class="rp-grid" data-fields="mix"></div><div class="rp-grid" data-level="3" data-fields="mixadv"></div></div>
                     <div class="rp-box"><h3>Filtres</h3><p>Un titre filtré n'est jamais proposé. Un titre sans note ou sans année passe.</p><div class="rp-grid" data-fields="filters"></div><h4 class="rp-h4">Genres jamais proposés</h4><div data-fields="genres"></div></div>
-                    <div class="rp-box" data-level="2"><h3>Diversité et sagas</h3><p>Personnalisée (par défaut, la mieux évaluée) : la liste est aussi variée que ce que le compte regarde. Calibrée : la part de chaque genre suit celle de son historique. Fixe : la même pénalité de redondance pour tous.</p><div class="rp-grid" data-fields="diversmode"></div><div class="rp-factors" data-fields="divers"></div><div class="rp-grid" data-fields="sagas"></div></div>
+                    <div class="rp-box" data-level="2"><h3>Diversité et sagas</h3><p>Personnalisée (par défaut, la mieux évaluée) : la liste est aussi variée que ce que le compte regarde. Calibrée : la part de chaque genre suit celle de son historique. Fixe : la même pénalité de redondance pour tous.</p><div class="rp-grid" data-fields="diversmode"></div><div class="rp-factors" data-fields="divers"></div><div class="rp-grid" data-fields="sagas"></div><div class="rp-grid" data-level="3" data-fields="diversadv"></div></div>
                     <div class="rp-box" data-level="2"><h3>En tête de liste</h3><p>Les nouveautés de ce que le compte suit passent devant tout le reste, pendant un temps : nouveaux épisodes ou nouvelle saison d'une série qu'il a rattrapée, volet suivant d'une saga. Un titre qu'il a demandé n'y est jamais : il sait déjà qu'il le veut ; il est classé comme les autres, d'abord écarté, puis peut revenir s'il n'est toujours pas vu.</p><div class="rp-grid" data-fields="pinned"></div></div>
-                    <details class="rp-adv" data-level="3"><summary>Réglages experts <span>— taille des listes, sagas, diversité calibrée</span></summary>
-                        <div class="rp-box"><div class="rp-grid" data-fields="listadv"></div></div>
-                    </details>
                 </div>
 
                 <!-- MOTEUR -->
@@ -220,14 +207,12 @@
                         <h4 class="rp-h4">Bonus réservés aux titres qui collent déjà aux goûts (garde-fou)</h4><div class="rp-factors" data-fields="fbonus"></div>
                     </div>
                     <div class="rp-box"><h3>Durées</h3><p>Combien de temps un signal compte.</p><div class="rp-grid" data-fields="durees"></div></div>
-                    <details class="rp-adv" data-level="3"><summary>Réglages experts <span>— signaux fins, bonus, contenu, « vus ensemble »</span></summary>
-                        <div class="rp-box"><h3>Signaux</h3><div class="rp-grid" data-fields="sigadv"></div></div>
-                        <div class="rp-box"><h3>Goût du moment et titres montrés sans être ouverts</h3><div class="rp-grid" data-fields="momentadv"></div></div>
-                        <div class="rp-box"><h3>Séries</h3><div class="rp-grid" data-fields="seriesadv"></div></div>
-                        <div class="rp-box"><h3>Bonus réservés et garde-fou</h3><div class="rp-grid" data-fields="bonusadv"></div></div>
-                        <div class="rp-box"><h3>Ce qui fait que deux titres se ressemblent</h3><div class="rp-factors" data-fields="contentadv"></div><div class="rp-grid" data-fields="contentnum"></div></div>
-                        <div class="rp-box"><h3>« Vus ensemble »</h3><div class="rp-grid" data-fields="collabadv"></div></div>
-                    </details>
+                        <div class="rp-box" data-level="3"><h3>Signaux</h3><div class="rp-grid" data-fields="sigadv"></div></div>
+                        <div class="rp-box" data-level="3"><h3>Goût du moment et titres montrés sans être ouverts</h3><div class="rp-grid" data-fields="momentadv"></div></div>
+                        <div class="rp-box" data-level="3"><h3>Séries</h3><div class="rp-grid" data-fields="seriesadv"></div></div>
+                        <div class="rp-box" data-level="3"><h3>Bonus réservés et garde-fou</h3><div class="rp-grid" data-fields="bonusadv"></div></div>
+                        <div class="rp-box" data-level="3"><h3>Ce qui fait que deux titres se ressemblent</h3><div class="rp-factors" data-fields="contentadv"></div><div class="rp-grid" data-fields="contentnum"></div></div>
+                        <div class="rp-box" data-level="3"><h3>« Vus ensemble »</h3><div class="rp-grid" data-fields="collabadv"></div></div>
                     <div class="rp-row"><button is="emby-button" type="button" class="raised" id="rpEngineReset"><span>Remettre les réglages du moteur par défaut</span></button></div>
                 </div>
 
@@ -249,9 +234,7 @@
                         </div>
                         <div class="rp-result" id="rpSeerrTestResult"></div>
                     </div>
-                    <details class="rp-adv" data-level="2"><summary>Réglages avancés <span>— langue, classifications</span></summary>
-                        <div class="rp-box"><div class="rp-grid" data-fields="seerradv"></div></div>
-                    </details>
+                    <div class="rp-box" data-level="2"><h3>Langue, rythme et classifications</h3><div class="rp-grid" data-fields="seerradv"></div></div>
                 </div>
 
                 <!-- ÉTENDU -->
@@ -265,11 +248,20 @@
                     <div class="rp-box" data-level="2">
                         <h3>Où chercher</h3>
                         <p>Sources des titres proposés, en plus des recommandations des titres aimés. Chacune apporte sa part, puis le moteur les classe toutes de la même façon, selon les goûts du compte.</p>
+                        <div class="rp-src"><div class="rp-grid" data-fields="xs_top"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="xs_topadv"></div></div>
+                        <div class="rp-src"><div class="rp-grid" data-fields="xs_genre"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="xs_genreadv"></div></div>
+                        <div class="rp-src"><div class="rp-grid" data-fields="xs_kw"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="xs_kwadv"></div></div>
+                        <div class="rp-src"><div class="rp-grid" data-fields="xs_saga"></div></div>
+                        <div class="rp-src"><div class="rp-grid" data-fields="xs_people"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="xs_peopleadv"></div></div>
+                        <div class="rp-src"><div class="rp-grid" data-fields="xs_studio"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="xs_studioadv"></div></div>
+                        <div class="rp-src"><div class="rp-grid" data-fields="xs_cross"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="xs_crossadv"></div></div>
+                        <div class="rp-src"><div class="rp-grid" data-fields="xs_gems"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="xs_gemsadv"></div></div>
+                        <div class="rp-src"><div class="rp-grid" data-fields="xs_lang"></div><div class="rp-grid rp-src-adv" data-level="3" data-fields="xs_langadv"></div></div>
                         <div class="rp-grid" data-fields="extsrc"></div>
                     </div>
-                    <details class="rp-adv" data-level="3"><summary>Réglages experts <span>— sans HSS ni Jellyfin Enhanced, recherche et exploration</span></summary>
-                        <div class="rp-box"><div class="rp-grid" data-fields="extadv"></div></div>
-                    </details>
+                    <div class="rp-box" data-level="3"><h3>Point de départ et lecture de TMDb</h3><p>Combien de titres aimés servent de départ, combien de pages TMDb sont lues, quels comptes sont explorés à chaque recalcul complet.</p><div class="rp-grid" data-fields="xstart"></div></div>
+                    <div class="rp-box" data-level="3"><h3>Filtres de toutes les sources</h3><p>Ce qu'un titre trouvé doit avoir pour être proposé, quelle que soit sa source (les pépites et « les mieux notés » ont en plus leurs propres minimums, sous leur source).</p><div class="rp-grid" data-fields="xfilt"></div></div>
+                    <div class="rp-box" data-level="3"><h3>Sans Home Screen Sections ni Jellyfin Enhanced</h3><div class="rp-grid" data-fields="xalone"></div></div>
                 </div>
 
                 <!-- NOTIFICATIONS -->
@@ -315,10 +307,12 @@
                             <option value="Neural">Réseau de neurones (expérimental)</option>
                         </select>
                     </div><span class="rp-tip" tabindex="0" role="note" aria-label="Modèle de choix appris : apprend d'un coup les 10 poids du score (« quel titre a été choisi parmi tous ceux proposables »), en restant près des réglages actuels faute de preuve ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages, contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux ; long et gourmand (jusqu'à une heure de processeur). Par défaut : modèle de choix appris.">?<span class="rp-bubble">Modèle de choix appris : apprend d'un coup les 10 poids du score (« quel titre a été choisi parmi tous ceux proposables »), en restant près des réglages actuels faute de preuve ; peu de paramètres, donc fiable avec peu d'historique ; environ une minute. Recherche par curseurs : règle un à un plus de 30 réglages, contenu et signaux compris ; il faut beaucoup plus d'historique ; jusqu'à une heure. Réseau de neurones (expérimental) : petite correction non linéaire (96 paramètres) ajoutée au score, ramenée vers zéro sans preuve ; il faut beaucoup d'historique ; quelques minutes. Automatique : toutes, et garde celle qui se généralise le mieux ; long et gourmand (jusqu'à une heure de processeur). Par défaut : modèle de choix appris.</span></span></div></div>
-                    <details class="rp-adv" data-level="3"><summary>Réglages du calibrage <span>— validation croisée, prudence, recherche (0 = automatique) ; enregistrés aussitôt</span></summary>
+                    <div data-level="3">
+                        <h4 class="rp-h4">Réglages du calibrage</h4>
+                        <p class="mute">Validation croisée, prudence, recherche (0 = automatique) ; enregistrés aussitôt.</p>
                         <div class="rp-grid" data-fields="calib"></div>
                         <span id="rpCalOptState" class="mute rp-result"></span>
-                    </details>
+                    </div>
                     <div id="rpCalData" class="rp-result mute"></div>
                     <div class="rp-row">
                         <button is="emby-button" type="button" class="raised" id="rpCalStart"><span>Lancer</span></button>
@@ -563,7 +557,7 @@
             ['UpcomingMinPopularity', 'Popularité TMDb minimale', 'num', 'Indice de popularité de TMDb (activité récente : vues des fiches, votes, listes de suivi) ; en dessous, un titre hors bibliothèque n\'est pas proposé. Les titres de la bibliothèque passent toujours. 0 = aucun minimum. Pas encore sortis : peu ou pas de votes, la popularité (l\'attente) et le goût font le tri.', 1, 0, 1000, 'lua', 'c', '10'],
             ['UpcomingMinVotes', 'Votes TMDb minimum', 'int', 'Un titre hors bibliothèque avec moins de votes n\'est pas proposé (titres confidentiels écartés). 0 = aucun minimum.', 10, 0, 100000, 'lua', 'c', '0'],
             ['UpcomingTasteFloor', 'Goût minimal', 'num', 'Un titre hors bibliothèque doit être au moins aussi bien classé, pour ce compte, que cette part de sa bibliothèque : 0 = aucun minimum, 0,5 = mieux que la moitié de ses titres, 1 = mieux que tous. Plus haut = moins de titres, plus proches de ses goûts.', 0.05, 0, 1, 'lua', 'c', '0,5'],
-            ['ExtendedTitle', 'Titre de la rangée à part (sans Home Screen Sections)', 'text', 'Seulement sans Home Screen Sections : les titres hors bibliothèque ont alors leur propre rangée, sous la première de l\'accueil (si la rangée principale en reçoit, onglet Accueil). Avec HSS, ils vont dans les rangées Reco+ et ce titre ne sert pas.', 0, 0, 0, 'extadv', 'c', 'À découvrir pour toi'],
+            ['ExtendedTitle', 'Titre de la rangée à part (sans Home Screen Sections)', 'text', 'Seulement sans Home Screen Sections : les titres hors bibliothèque ont alors leur propre rangée, sous la première de l\'accueil (si la rangée principale en reçoit, onglet Accueil). Avec HSS, ils vont dans les rangées Reco+ et ce titre ne sert pas.', 0, 0, 0, 'xalone', 'c', 'À découvrir pour toi'],
             ['RowSize', 'Titres par rangée', 'int', 'Pour chaque rangée Reco+, {ROW} comprise (et pour chaque moitié d\'une rangée séparée).', 1, 5, 60, 'rowsadv', 'c', '20'],
             ['RowRepeatPercent', 'Reprise entre rangées : parmi les meilleurs (%)', 'int', 'Un titre déjà montré dans une rangée revient dans une autre s\'il fait partie de ce pourcentage de ses meilleurs titres, selon ce qu\'elle cherche (ressemblance au titre aimé, place dans la liste du moment, goût du compte) ; jamais dans la rangée juste au-dessus. 0 = aucun titre dans deux rangées (par défaut).', 5, 0, 100, 'rowsadv', 'c', '0'],
             ['RowRepeatMax', 'Reprise entre rangées : rangées au plus par titre', 'int', 'Nombre maximal de rangées où un même film ou une même série apparaît. 1 = aucun titre dans deux rangées.', 1, 1, 10, 'rowsadv', 'c', '3'],
@@ -572,7 +566,7 @@
             ['UserPageEnabled', 'Page « Reco+ » des utilisateurs', 'bool', 'Avec Plugin Pages installé : une page « Reco+ » dans le menu de chaque utilisateur, pour les réglages ci-dessous. Coupée : chacun suit les réglages du serveur.', 0, 0, 0, 'userpage', 'c', 'activée'],
             ['UserCanSetRegion', 'Chacun peut choisir son pays', 'bool', 'Dans sa page, un utilisateur peut fixer son pays au lieu de le laisser détecter.', 0, 0, 0, 'userpage', 'c', 'activé'],
             ['UserCanSetExtended', 'Chacun peut couper les titres hors bibliothèque', 'bool', 'Dans sa page, un utilisateur peut ne recevoir que des titres de la bibliothèque (mode étendu coupé pour lui seul).', 0, 0, 0, 'userpage', 'c', 'activé'],
-            ['Region', 'Pays des comptes', 'text', 'Code du pays (ex. FR, BE, CA) pour tous les comptes, sauf ceux qui choisissent le leur. Vide = détecté pour chaque compte, sans rien envoyer au dehors : fuseau horaire et langues de son navigateur, ses langues audio et sous-titres préférées, puis les réglages du serveur.', 0, 0, 0, 'userpage', 'c', 'détecté pour chaque compte'],
+            ['Region', 'Pays des comptes', 'text', 'Code du pays (ex. FR, BE, CA) pour tous les comptes, sauf ceux qui choisissent le leur. Vide = détecté pour chaque compte, sans rien envoyer au dehors : fuseau horaire et langues de son navigateur, ses langues audio et sous-titres préférées, puis les réglages du serveur. Sans effet sur le contrôle parental (pays des classifications, onglet Seerr).', 0, 0, 0, 'userpage', 'c', 'détecté pour chaque compte'],
             ['RegionFallback', 'Pays si rien ne permet de le détecter', 'text', 'Code du pays d\'un compte dont on ne sait rien (jamais connecté par le navigateur, aucune langue préférée).', 0, 0, 0, 'userpage', 'c', 'FR'],
             ['UseJellyfinEnhanced', 'Masquages et avis de Jellyfin Enhanced', 'bool', 'Lit, sans rien modifier, les titres masqués partout (« pas intéressé ») et les avis notés de chaque compte. Sans Jellyfin Enhanced : rien n\'est lu.', 0, 0, 0, 'sources', 'c', 'activé'],
             ['UseSeerrVotes', 'Nombre de votes TMDb (via Seerr)', 'bool', 'Lit le nombre de votes derrière chaque note, pour ne pas croire une note fondée sur une poignée de votes. Les fiches manquantes sont récupérées progressivement (150 par calcul complet, mises en cache 14 jours).', 0, 0, 0, 'sources', 'c', 'activé'],
@@ -600,8 +594,8 @@
             ['ProposeMarked', 'Proposer aussi ce que le compte a déjà marqué', 'bool', 'Titres notés (avis, pouce), en favori, en liste de suivi ou demandés, mais pas lus sur ce serveur. Coupé par défaut : une note ou un favori, c\'est un titre déjà vu ; une liste de suivi, c\'est déjà une liste. Ces marques comptent toujours pour les goûts.', 0, 0, 0, 'filters', 'c', 'coupé'],
             ['NewEpisodesPinned', 'Nouveautés de ce que vous suivez', 'int', 'Nombre maximal de titres placés en tête : nouveaux épisodes d\'une série vue sur ce serveur et rattrapée, ou aimée et diffusés récemment ; volet suivant d\'une saga dont les volets précédents sont vus. 0 = jamais.', 1, 0, 20, 'pinned', 'c', '3'],
             ['NewEpisodesMaxDays', 'Pendant (jours après l\'arrivée)', 'int', 'Au-delà, la nouveauté n\'est plus mise en avant (« À suivre » de Jellyfin prend le relais pour les séries).', 1, 1, 365, 'pinned', 'c', '45'],
-            ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. 0 = automatique : les « Titres par rangée » (onglet Accueil, réglages avancés), pour qu\'ils portent exactement sur ce que montre {ROW}.', 1, 0, 100, 'listadv', 'l', '0 (automatique)'],
-            ['SagaMax', 'Au-delà : regroupement thématique', 'int', 'Une collection plus grande que ce nombre n\'est pas une saga mais un regroupement (« Films Marvel », « Ghibli ») : 2 entrées au plus, sans règle de premier volet.', 1, 2, 100, 'listadv', 'e', '12'],
+            ['Window', 'Haut de liste (titres)', 'int', 'Nombre de premiers titres auxquels s\'appliquent le hasard et les minimums. 0 = automatique : les « Titres par rangée » (onglet Accueil, réglages avancés), pour qu\'ils portent exactement sur ce que montre {ROW}.', 1, 0, 100, 'mixadv', 'l', '0 (automatique)'],
+            ['SagaMax', 'Au-delà : regroupement thématique', 'int', 'Une collection plus grande que ce nombre n\'est pas une saga mais un regroupement (« Films Marvel », « Ghibli ») : 2 entrées au plus, sans règle de premier volet.', 1, 2, 100, 'diversadv', 'e', '12'],
 
             // ---- Facteurs de classement : interrupteur + force (×0,25 à ×3 de la valeur évaluée ; coupé = 0)
             ['FavoriteBoost', 'Favoris', 'factor', 'Un titre mis en favori compte davantage comme goût. Coupé : un favori compte comme un titre simplement vu.', 0, 0, 3, 'fsig', 'e', '1', 1],
@@ -628,7 +622,7 @@
             ['WHousehold', 'Avis du foyer', 'factor', 'Bonus des titres bien notés par les AUTRES comptes (avis Jellyfin Enhanced), uniquement s\'ils collent déjà aux goûts. La confiance croît avec le nombre d\'avis : un seul 5 étoiles pèse peu, cinq avis concordants pleinement (voir « Avis neutres ajoutés »).', 0, 0, 3, 'fbonus', 'e', '0,3', 0.3],
             ['Diversity', 'Diversité', 'enum:Personalized=personnalisée (suit la variété du compte),Calibrated=calibrée (part des genres de l\'historique),Fixed=fixe (la même pour tous)', 'Personnalisée : plusieurs forces de diversité sont essayées et la liste gardée est celle dont la variété ressemble le plus à celle de ce que le compte aime — un éclectique reçoit une liste variée, un fan d\'un seul genre une liste resserrée (la mieux évaluée sur l\'historique de référence). Calibrée (Steck, RecSys 2018) : la part de chaque genre dans la liste suit celle de l\'historique (70 % de thrillers vus → environ 70 % proposés, pas 100 %). Fixe : la même pénalité de redondance pour tous.', 0, 0, 0, 'diversmode', 'e', 'personnalisée'],
             ['Mmr', 'Pénalité de redondance', 'factor', 'Pénalise un titre trop proche de ceux déjà placés au-dessus. En diversité personnalisée, c\'est la force de base, multipliée selon le compte (×0 à ×4). Sans effet en diversité calibrée. Coupé : ordre pur des goûts, au risque de 5 films du même genre d\'affilée.', 0, 0, 3, 'divers', 'e', '0,3', 0.3],
-            ['CalibrationStrength', 'Diversité calibrée : force', 'num', 'De 0 (ordre des goûts) à 1 (seule la répartition des genres compte). Seulement en diversité calibrée.', 0.05, 0, 1, 'listadv', 'e', '0,5'],
+            ['CalibrationStrength', 'Diversité calibrée : force', 'num', 'De 0 (ordre des goûts) à 1 (seule la répartition des genres compte). Seulement en diversité calibrée.', 0.05, 0, 1, 'diversadv', 'e', '0,5'],
             ['FeatGenre', 'Genres', 'factor', 'Poids des genres dans la ressemblance entre deux titres.', 0, 0, 3, 'contentadv', 'e', '1', 1],
             ['FeatTag', 'Mots-clés', 'factor', 'Poids des mots-clés (tags) dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,5', 0.5],
             ['FeatStudio', 'Studios', 'factor', 'Poids des studios dans la ressemblance.', 0, 0, 3, 'contentadv', 'e', '0,35', 0.35],
@@ -684,7 +678,7 @@
             ['SeerrPublicUrl', 'URL publique (liens)', 'text', 'Adresse ouverte par les navigateurs des utilisateurs (liens vers Seerr). Vide = la même que ci-dessus.', 0, 0, 0, 'seerr', 'c'],
             ['SeerrLanguage', 'Langue TMDb', 'text', 'Doit être celle des métadonnées de la bibliothèque, pour que les genres se comparent (ex. fr). Vide = la langue préférée des métadonnées de Jellyfin.', 0, 0, 0, 'seerradv', 'c', 'celle des métadonnées de Jellyfin'],
             ['SeerrRate', 'Appels à Seerr par seconde', 'int', 'Rythme maximal des appels de Reco+ à Seerr pendant un calcul (2 en cours au plus). Seerr sert aussi les utilisateurs (fiches et demandes de Jellyfin Enhanced) : trop haut, il peut ne plus leur répondre pendant un calcul. Plus bas = calcul plus long. Les listes et fiches restent en cache (aussi après un redémarrage).', 1, 1, 50, 'seerradv', 'c', '8'],
-            ['RatingCountry', 'Pays des classifications', 'text', 'Pays dont on lit la classification d\'âge des titres hors bibliothèque, pour le contrôle parental (ex. FR). Vide = le pays des métadonnées de Jellyfin.', 0, 0, 0, 'seerradv', 'c', 'celui des métadonnées de Jellyfin'],
+            ['RatingCountry', 'Pays des classifications', 'text', 'Pays dont on lit la classification d\'âge des titres hors bibliothèque, pour le contrôle parental, comme Jellyfin Enhanced (ex. FR). Vide = le pays des métadonnées de Jellyfin. Sans rapport avec le pays des comptes (onglet Général), qui sert aux dates de sortie.', 0, 0, 0, 'seerradv', 'c', 'celui des métadonnées de Jellyfin'],
 
             // ---- Mode étendu
             ['ExtendedEnabled', 'Activer le mode étendu', 'bool', 'Recommande aussi des titres absents de la bibliothèque. Contrôle parental du compte respecté, avec les règles de Jellyfin (classification du pays choisi, titres non classés et étiquettes bloquées selon le compte).', 0, 0, 0, 'ext', 'c'],
@@ -697,43 +691,43 @@
             ['ExtendedMinFree', 'Titres hors bibliothèque au minimum, par rangée', 'int', 'Si le classement en place moins dans la rangée, les mieux classés sont ajoutés quand même, répartis régulièrement. 0 = le classement seul : aucun s\'ils sont tous moins bien notés que la rangée.', 1, 0, 20, 'extmix', 'c', '0'],
             ['ExtendedMaxFree', 'Titres hors bibliothèque au maximum, par rangée', 'int', 'Au plus ce nombre de titres hors bibliothèque prennent place d\'eux-mêmes dans la rangée (les mieux classés), en plus des places découverte. 0 = aucune limite : le classement seul décide. Une rangée plus courte que sa taille (liste du moment, nouveautés d\'un mois calme) est toujours complétée à la suite par des titres hors bibliothèque.', 1, 0, 60, 'extmix', 'c', '0 (aucune limite)'],
             ['ExtendedDiscoverySlots', 'Places découverte, par rangée', 'int', 'Places données aux titres hors bibliothèque les mieux notés (note TMDb fiable : ramenée vers la moyenne tant qu\'il y a peu de votes, et au moins autant de votes que pour les pépites) qui n\'en ont pas trouvé d\'eux-mêmes, même un peu en dehors des habitudes du compte. 0 = aucune.', 1, 0, 10, 'extmix', 'c', '0'],
-            ['ExtendedRequestButton', 'Bouton « Demander » de Reco+', 'bool', 'Utilisé seulement sans Jellyfin Enhanced. La demande est faite au nom de l\'utilisateur, avec ses droits et quotas Seerr.', 0, 0, 0, 'extadv', 'c', 'activé'],
-            ['ExtendedAnchors', 'Titres aimés servant de point de départ', 'int', 'Les N titres les plus aimés du compte dont on lit les recommandations et titres similaires TMDb. Plus = plus de candidats, plus variés (au-delà, des titres juste « bien aimés », qui pèsent moins à la présélection) ; aussi la base des genres, thèmes, auteurs, studios et langues explorés.', 1, 1, 500, 'extadv', 'c', '30'],
-            ['ExtendedPages', 'Pages lues par titre aimé', 'int', 'Pages de recommandations et de titres similaires TMDb (20 titres environ chacune) lues pour chaque titre de départ (mises en cache 3 jours). 1 = les plus proches seulement ; TMDb trie du plus proche au moins proche, les dernières pages s\'éloignent du titre de départ.', 1, 1, 10, 'extadv', 'c', '2'],
-            ['ExtendedDetails', 'Candidats détaillés par compte', 'int', 'Fiches demandées à Seerr pour départager les candidats (mises en cache 14 jours). Plus = meilleur choix, plus d\'appels. Présélection : titres proposés par les titres les plus aimés d\'abord. Seuls les titres détaillés peuvent être classés : c\'est le réglage qui compte le plus. Les sources se partagent ce nombre à parts équilibrées. Premier calcul plus long, ensuite en cache.', 5, 10, 2000, 'extadv', 'c', '200'],
-            ['ExtendedActiveDays', 'Exploration au recalcul complet : comptes actifs depuis (jours)', 'int', 'L\'exploration Seerr (la partie longue du calcul) n\'est refaite que pour les comptes actifs (lecture ou simple connexion) depuis ce nombre de jours ; les autres gardent leurs titres au plus une semaine, ou jusqu\'à leur prochaine activité. 0 = tous les comptes.', 1, 0, 3650, 'extadv', 'c', '30'],
-            ['ExtendedMinRating', 'Exploration : note TMDb minimale', 'num', 'Genres, thèmes, studios, langues et « mieux notés » : seuls les titres au moins aussi bien notés.', 0.1, 0, 10, 'extadv', 'c', '7,5'],
-            ['ExtendedMinVotes', 'Exploration : votes TMDb minimum', 'int', 'Écarte les notes gonflées par une poignée de votes (genres, thèmes, studios, langues).', 50, 0, 100000, 'extadv', 'c', '500'],
-            ['ExtendedTopRatedMinVotes', '« Les mieux notés » : votes TMDb minimum', 'int', 'Plus haut que pour les autres sources : ce sont les classiques reconnus.', 100, 0, 100000, 'extadv', 'c', '1000'],
-            ['ExtendedTopRatedPages', '« Les mieux notés » : pages lues', 'int', 'Par sorte (films, séries) : la première page, puis des pages tirées au hasard du jour.', 1, 1, 10, 'extadv', 'c', '2'],
-            ['ExtendedDiscoverPages', 'Exploration : pages lues par recherche', 'int', 'Par genre, thème, studio ou langue : la première page (les mieux notés), puis des pages tirées au hasard du jour. 20 titres environ par page.', 1, 1, 10, 'extadv', 'c', '2'],
-            ['ExtendedDiscoverDepth', 'Exploration : profondeur du tirage', 'int', 'Les pages tirées au hasard le sont parmi les pages 2 à N : plus N est grand, plus on va chercher loin sous le haut du classement.', 1, 1, 50, 'extadv', 'c', '10'],
-            ['ExtendedGenres', 'Genres préférés explorés', 'int', 'Les N genres qui pèsent le plus dans les titres aimés.', 1, 0, 20, 'extadv', 'c', '5'],
-            ['ExtendedKeywords', 'Thèmes explorés', 'int', 'Les N mots-clés TMDb présents dans au moins 2 titres aimés, les plus lourds d\'abord.', 1, 0, 50, 'extadv', 'c', '10'],
-            ['ExtendedPeopleMinTitles', 'Auteurs : présents dans au moins … titres aimés', 'int', 'Un réalisateur, créateur ou scénariste n\'est exploré que s\'il revient dans ce nombre de titres aimés.', 1, 1, 50, 'extadv', 'c', '2'],
-            ['ExtendedPeople', 'Auteurs explorés', 'int', 'Filmographies lues (réalisation, création, scénario ; pas les rôles d\'acteur).', 1, 0, 50, 'extadv', 'c', '10'],
-            ['ExtendedStudioMinTitles', 'Studios : présents dans au moins … titres aimés', 'int', 'Studios pour les films, chaînes pour les séries.', 1, 1, 50, 'extadv', 'c', '3'],
-            ['ExtendedStudios', 'Studios explorés', 'int', 'Par sorte (films, séries).', 1, 0, 30, 'extadv', 'c', '5'],
-            ['ExtendedLanguageMinShare', 'Langues : part minimale des titres aimés (%)', 'int', 'Une langue d\'origine n\'est explorée que si elle pèse au moins cette part des titres aimés (ex. japonais pour beaucoup d\'anime).', 1, 1, 100, 'extadv', 'c', '15'],
-            ['ExtendedCrossingsMax', 'Croisements explorés', 'int', 'Par sorte (films, séries) : les N couples genre × thème ou genre × langue d\'origine les plus forts dans les titres aimés. Listes plus étroites : la moitié des votes minimum suffit.', 1, 0, 30, 'extadv', 'c', '6'],
-            ['ExtendedGemMinRating', 'Pépites : note TMDb minimale', 'num', 'Plus haute que pour les autres sources : avec peu de votes, une note est moins sûre.', 0.1, 0, 10, 'extadv', 'c', '7,8'],
-            ['ExtendedMinRuntime', 'Toutes sources : durée minimale d\'un film (minutes)', 'int', 'Les films plus courts (courts métrages) ne sont pas proposés hors bibliothèque, listes du moment comprises. Durée inconnue : gardé. 0 = aucune limite.', 5, 0, 600, 'extadv', 'c', '40'],
-            ['ExtendedMinVotesAll', 'Toutes sources : votes TMDb minimum', 'int', 'Un titre hors bibliothèque trouvé par l\'exploration doit avoir au moins ce nombre de votes TMDb, quelle que soit la source (courts métrages, avant-premières, titres confidentiels écartés). Les titres pas encore sortis sont toujours écartés. Les listes du moment ont leurs propres minimums (onglet Accueil, réglages avancés).', 10, 0, 100000, 'extadv', 'c', '50'],
-            ['ExtendedGemMinVotes', 'Pépites : votes TMDb minimum', 'int', 'En dessous, la note ne veut rien dire (amis du réalisateur, fans). Sert aussi aux places découverte du mélange libre, même pépites coupées.', 10, 0, 100000, 'extadv', 'c', '50'],
-            ['ExtendedGemMaxVotes', 'Pépites : votes TMDb maximum', 'int', 'Au-dessus, le titre est déjà connu : il relève des autres sources.', 50, 0, 100000, 'extadv', 'c', '500'],
-            ['ExtendedGemGenres', 'Pépites : genres préférés explorés', 'int', 'En plus d\'une recherche tous genres, par sorte.', 1, 0, 20, 'extadv', 'c', '3'],
+            ['ExtendedRequestButton', 'Bouton « Demander » de Reco+', 'bool', 'Utilisé seulement sans Jellyfin Enhanced. La demande est faite au nom de l\'utilisateur, avec ses droits et quotas Seerr.', 0, 0, 0, 'xalone', 'c', 'activé'],
+            ['ExtendedAnchors', 'Titres aimés servant de point de départ', 'int', 'Les N titres les plus aimés du compte dont on lit les recommandations et titres similaires TMDb. Plus = plus de candidats, plus variés (au-delà, des titres juste « bien aimés », qui pèsent moins à la présélection) ; aussi la base des genres, thèmes, auteurs, studios et langues explorés.', 1, 1, 500, 'xstart', 'c', '30'],
+            ['ExtendedPages', 'Pages lues par titre aimé', 'int', 'Pages de recommandations et de titres similaires TMDb (20 titres environ chacune) lues pour chaque titre de départ (mises en cache 3 jours). 1 = les plus proches seulement ; TMDb trie du plus proche au moins proche, les dernières pages s\'éloignent du titre de départ.', 1, 1, 10, 'xstart', 'c', '2'],
+            ['ExtendedDetails', 'Candidats détaillés par compte', 'int', 'Fiches demandées à Seerr pour départager les candidats (mises en cache 14 jours). Plus = meilleur choix, plus d\'appels. Présélection : titres proposés par les titres les plus aimés d\'abord. Seuls les titres détaillés peuvent être classés : c\'est le réglage qui compte le plus. Les sources se partagent ce nombre à parts équilibrées. Premier calcul plus long, ensuite en cache.', 5, 10, 2000, 'xstart', 'c', '200'],
+            ['ExtendedActiveDays', 'Exploration au recalcul complet : comptes actifs depuis (jours)', 'int', 'L\'exploration Seerr (la partie longue du calcul) n\'est refaite que pour les comptes actifs (lecture ou simple connexion) depuis ce nombre de jours ; les autres gardent leurs titres au plus une semaine, ou jusqu\'à leur prochaine activité. 0 = tous les comptes.', 1, 0, 3650, 'xstart', 'c', '30'],
+            ['ExtendedMinRating', 'Recherches TMDb (genres, thèmes, studios…) : note minimale', 'num', 'Genres, thèmes, studios, langues et « mieux notés » : seuls les titres au moins aussi bien notés.', 0.1, 0, 10, 'xfilt', 'c', '7,5'],
+            ['ExtendedMinVotes', 'Recherches TMDb (genres, thèmes, studios…) : votes minimum', 'int', 'Écarte les notes gonflées par une poignée de votes (genres, thèmes, studios, langues).', 50, 0, 100000, 'xfilt', 'c', '500'],
+            ['ExtendedTopRatedMinVotes', '« Les mieux notés » : votes TMDb minimum', 'int', 'Plus haut que pour les autres sources : ce sont les classiques reconnus.', 100, 0, 100000, 'xs_topadv', 'c', '1000'],
+            ['ExtendedTopRatedPages', '« Les mieux notés » : pages lues', 'int', 'Par sorte (films, séries) : la première page, puis des pages tirées au hasard du jour.', 1, 1, 10, 'xs_topadv', 'c', '2'],
+            ['ExtendedDiscoverPages', 'Exploration : pages lues par recherche', 'int', 'Par genre, thème, studio ou langue : la première page (les mieux notés), puis des pages tirées au hasard du jour. 20 titres environ par page.', 1, 1, 10, 'xstart', 'c', '2'],
+            ['ExtendedDiscoverDepth', 'Exploration : profondeur du tirage', 'int', 'Les pages tirées au hasard le sont parmi les pages 2 à N : plus N est grand, plus on va chercher loin sous le haut du classement.', 1, 1, 50, 'xstart', 'c', '10'],
+            ['ExtendedGenres', 'Genres préférés explorés', 'int', 'Les N genres qui pèsent le plus dans les titres aimés.', 1, 0, 20, 'xs_genreadv', 'c', '5'],
+            ['ExtendedKeywords', 'Thèmes explorés', 'int', 'Les N mots-clés TMDb présents dans au moins 2 titres aimés, les plus lourds d\'abord.', 1, 0, 50, 'xs_kwadv', 'c', '10'],
+            ['ExtendedPeopleMinTitles', 'Auteurs : présents dans au moins … titres aimés', 'int', 'Un réalisateur, créateur ou scénariste n\'est exploré que s\'il revient dans ce nombre de titres aimés.', 1, 1, 50, 'xs_peopleadv', 'c', '2'],
+            ['ExtendedPeople', 'Auteurs explorés', 'int', 'Filmographies lues (réalisation, création, scénario ; pas les rôles d\'acteur).', 1, 0, 50, 'xs_peopleadv', 'c', '10'],
+            ['ExtendedStudioMinTitles', 'Studios : présents dans au moins … titres aimés', 'int', 'Studios pour les films, chaînes pour les séries.', 1, 1, 50, 'xs_studioadv', 'c', '3'],
+            ['ExtendedStudios', 'Studios explorés', 'int', 'Par sorte (films, séries).', 1, 0, 30, 'xs_studioadv', 'c', '5'],
+            ['ExtendedLanguageMinShare', 'Langues : part minimale des titres aimés (%)', 'int', 'Une langue d\'origine n\'est explorée que si elle pèse au moins cette part des titres aimés (ex. japonais pour beaucoup d\'anime).', 1, 1, 100, 'xs_langadv', 'c', '15'],
+            ['ExtendedCrossingsMax', 'Croisements explorés', 'int', 'Par sorte (films, séries) : les N couples genre × thème ou genre × langue d\'origine les plus forts dans les titres aimés. Listes plus étroites : la moitié des votes minimum suffit.', 1, 0, 30, 'xs_crossadv', 'c', '6'],
+            ['ExtendedGemMinRating', 'Pépites : note TMDb minimale', 'num', 'Plus haute que pour les autres sources : avec peu de votes, une note est moins sûre.', 0.1, 0, 10, 'xs_gemsadv', 'c', '7,8'],
+            ['ExtendedMinRuntime', 'Tout titre trouvé : durée minimale d\'un film (minutes)', 'int', 'Les films plus courts (courts métrages) ne sont pas proposés hors bibliothèque, listes du moment comprises. Durée inconnue : gardé. 0 = aucune limite.', 5, 0, 600, 'xfilt', 'c', '40'],
+            ['ExtendedMinVotesAll', 'Tout titre trouvé : votes TMDb minimum', 'int', 'Un titre hors bibliothèque trouvé par l\'exploration doit avoir au moins ce nombre de votes TMDb, quelle que soit la source (courts métrages, avant-premières, titres confidentiels écartés). Les titres pas encore sortis sont toujours écartés. Les listes du moment ont leurs propres minimums (onglet Accueil, réglages avancés).', 10, 0, 100000, 'xfilt', 'c', '50'],
+            ['ExtendedGemMinVotes', 'Pépites : votes TMDb minimum', 'int', 'En dessous, la note ne veut rien dire (amis du réalisateur, fans). Sert aussi aux places découverte du mélange libre, même pépites coupées.', 10, 0, 100000, 'xs_gemsadv', 'c', '50'],
+            ['ExtendedGemMaxVotes', 'Pépites : votes TMDb maximum', 'int', 'Au-dessus, le titre est déjà connu : il relève des autres sources.', 50, 0, 100000, 'xs_gemsadv', 'c', '500'],
+            ['ExtendedGemGenres', 'Pépites : genres préférés explorés', 'int', 'En plus d\'une recherche tous genres, par sorte.', 1, 0, 20, 'xs_gemsadv', 'c', '3'],
 
             // ---- Mode étendu : sources
-            ['ExtendedTopRated', 'Les mieux notés, tous genres', 'bool', 'Les films et séries les mieux notés de TMDb (liste commune à tous les comptes, mise en cache) ; le moteur ne garde que ceux qui ressemblent aux goûts du compte.', 0, 0, 0, 'extsrc', 'c', 'activé'],
-            ['ExtendedByGenre', 'Les mieux notés de ses genres préférés', 'bool', 'Pour les genres qui pèsent le plus dans les titres aimés : films et séries bien notés de ces genres.', 0, 0, 0, 'extsrc', 'c', 'activé'],
-            ['ExtendedByKeyword', 'Ses thèmes', 'bool', 'Mots-clés TMDb qui reviennent dans les titres aimés (« voyage dans le temps », « samouraï »…) : titres bien notés qui les portent.', 0, 0, 0, 'extsrc', 'c', 'activé'],
-            ['ExtendedSagas', 'Volets manquants des sagas', 'bool', 'Les autres films des sagas dont un titre est aimé, absents de la bibliothèque.', 0, 0, 0, 'extsrc', 'c', 'activé'],
-            ['ExtendedByPeople', 'Ses auteurs', 'bool', 'Réalisateurs, créateurs et scénaristes qui reviennent dans les titres aimés : le reste de leur filmographie.', 0, 0, 0, 'extsrc', 'c', 'activé'],
-            ['ExtendedByStudio', 'Ses studios et chaînes', 'bool', 'Studios (films) et chaînes (séries) qui reviennent dans les titres aimés : leurs titres bien notés.', 0, 0, 0, 'extsrc', 'c', 'activé'],
-            ['ExtendedCrossings', 'Croisements de ses goûts', 'bool', 'Genre × thème (« drame » et « vengeance ») et genre × langue d\'origine (« animation » en japonais) : plus précis qu\'une piste seule, au cœur des goûts.', 0, 0, 0, 'extsrc', 'c', 'activé'],
-            ['ExtendedGems', 'Pépites peu connues', 'bool', 'Titres très bien notés mais avec peu de votes TMDb, que les listes des mieux notés ne montrent jamais : tous genres et genres préférés.', 0, 0, 0, 'extsrc', 'c', 'activé'],
-            ['ExtendedByLanguage', 'Ses langues d\'origine', 'bool', 'Langues d\'origine qui pèsent dans les titres aimés : titres bien notés dans ces langues.', 0, 0, 0, 'extsrc', 'c', 'activé'],
-            ['ExtendedNoise', 'Hasard du jour', 'num', 'Bruit ajouté chaque jour au classement des titres hors bibliothèque : 0 = toujours le même ordre, 0,3 = les titres de valeur proche changent de place, 1 = beaucoup de mouvement. Un titre nettement moins bon ne passe pas devant un très bon. Fixe pour la journée.', 0.05, 0, 1, 'extsrc', 'c', '0,3'],
+            ['ExtendedTopRated', 'Les mieux notés, tous genres', 'bool', 'Les films et séries les mieux notés de TMDb (liste commune à tous les comptes, mise en cache) ; le moteur ne garde que ceux qui ressemblent aux goûts du compte.', 0, 0, 0, 'xs_top', 'c', 'activé'],
+            ['ExtendedByGenre', 'Les mieux notés de ses genres préférés', 'bool', 'Pour les genres qui pèsent le plus dans les titres aimés : films et séries bien notés de ces genres.', 0, 0, 0, 'xs_genre', 'c', 'activé'],
+            ['ExtendedByKeyword', 'Ses thèmes', 'bool', 'Mots-clés TMDb qui reviennent dans les titres aimés (« voyage dans le temps », « samouraï »…) : titres bien notés qui les portent.', 0, 0, 0, 'xs_kw', 'c', 'activé'],
+            ['ExtendedSagas', 'Volets manquants des sagas', 'bool', 'Les autres films des sagas dont un titre est aimé, absents de la bibliothèque.', 0, 0, 0, 'xs_saga', 'c', 'activé'],
+            ['ExtendedByPeople', 'Ses auteurs', 'bool', 'Réalisateurs, créateurs et scénaristes qui reviennent dans les titres aimés : le reste de leur filmographie.', 0, 0, 0, 'xs_people', 'c', 'activé'],
+            ['ExtendedByStudio', 'Ses studios et chaînes', 'bool', 'Studios (films) et chaînes (séries) qui reviennent dans les titres aimés : leurs titres bien notés.', 0, 0, 0, 'xs_studio', 'c', 'activé'],
+            ['ExtendedCrossings', 'Croisements de ses goûts', 'bool', 'Genre × thème (« drame » et « vengeance ») et genre × langue d\'origine (« animation » en japonais) : plus précis qu\'une piste seule, au cœur des goûts.', 0, 0, 0, 'xs_cross', 'c', 'activé'],
+            ['ExtendedGems', 'Pépites peu connues', 'bool', 'Titres très bien notés mais avec peu de votes TMDb, que les listes des mieux notés ne montrent jamais : tous genres et genres préférés.', 0, 0, 0, 'xs_gems', 'c', 'activé'],
+            ['ExtendedByLanguage', 'Ses langues d\'origine', 'bool', 'Langues d\'origine qui pèsent dans les titres aimés : titres bien notés dans ces langues.', 0, 0, 0, 'xs_lang', 'c', 'activé'],
+            ['ExtendedNoise', 'Hasard du jour (titres hors bibliothèque)', 'num', 'Bruit ajouté chaque jour au classement des titres hors bibliothèque : 0 = toujours le même ordre, 0,3 = les titres de valeur proche changent de place, 1 = beaucoup de mouvement. Un titre nettement moins bon ne passe pas devant un très bon. Fixe pour la journée.', 0.05, 0, 1, 'extsrc', 'c', '0,3'],
 
             // ---- Calibrage (enregistrés dès qu'ils changent, comme la méthode)
             ['CalibrationFolds', 'Validation croisée : groupes de comptes', 'int', 'Chaque méthode est refaite sans un groupe de comptes et mesurée sur ce groupe, pour chaque groupe. Plus de groupes = mesure moins bruitée (chaque apprentissage voit plus de comptes) mais calcul plus long. 0 = automatique : la racine carrée du nombre de comptes, arrondie (autant de groupes que de comptes par groupe : 4 comptes → 2, 9 → 3, 16 → 4, 25 → 5), entre 2 et 10, jamais plus que le nombre de comptes.', 1, 0, 10, 'calib', 'c', '0 (automatique)'],
@@ -943,7 +937,7 @@
         // ne vaut que hors bibliothèque
         var LIST_FILTER = /^(?:(Trending|Popular|Upcoming)(MinPopularity|MinVotes|TasteFloor)|(Releases)(TasteFloor))$/;
         var SOURCES = ['SourcePourToi', 'SourceTendances', 'SourcePopulaires', 'SourceSorties', 'SourceAVenir', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms'];
-        var EXT_GROUPS = ['ext', 'extmix', 'extadv', 'extsrc'];
+        var EXT_GROUPS = ['ext', 'extmix', 'extsrc', 'xstart', 'xfilt', 'xalone'].concat(F.map(function (f) { return f[7]; }).filter(function (g) { return /^xs_/.test(g); }));
         // rangées tirées des listes TMDb : sans Seerr, elles n'existent pas dans Home Screen Sections
         var LIST_ROWS = ['_RowLists', '_RowTrending', 'RowTrendingTitle', 'KindTendances', 'SourceTendances', '_RowPopular', 'RowPopularTitle', 'KindPopulaires', 'SourcePopulaires',
             '_RowReleases', 'RowReleasesTitle', 'KindSorties', 'SourceSorties', '_RowUpcoming', 'RowUpcomingTitle', 'KindAVenir', 'SourceAVenir', 'TrendingWindow', 'TrendingCount', 'TrendingTaste',
