@@ -3,6 +3,10 @@
 Reco+ versions, newest first. Each line is the changelog shown by Jellyfin's plugin catalogue.
 Compatibility: see the Jellyfin range of each version below (`targetAbi` in `manifest.json`).
 
+## 1.1.3 — Fixes
+
+- **1.1.3** (Jellyfin 12.2–12.4) — rows were missing for some accounts. An account that had saved its own Home Screen Sections choice never saw the Reco+ rows added to the Home Screen Sections table afterwards (Trending, Popular…): they are now ticked for it once, and stay unticked if it unticks them. The Preview tab says which rows Home Screen Sections does not show to an account. A row with no title from the library (Upcoming, or a current list whose library titles the account has already watched) stayed empty: its titles outside the library are now shown.
+
 ## 1.1.2 — Fixes
 
 - **1.1.2** (Jellyfin 12.2–12.4) — calibration no longer runs out of memory on larger servers — each case keeps only what that account's ranking reads, and the calibration caches have a size limit (measured on a MovieLens server: peak memory 4.3 GB → 1.2 GB, 54 → 13 minutes, same result). The options of the settings level selector are readable again when the list is open. Security: the Seerr API key and the Gotify token are no longer sent along when Seerr or the webhook answer with a redirect (the error now names the address to save instead), and Seerr answers are size-limited.
