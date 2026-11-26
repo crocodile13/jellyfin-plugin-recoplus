@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "1.1.1 (Jellyfin 12.2 to 12.4): \"Recompute now\" clicked while a full computation was already running was silently ignored, so new settings (or a Seerr connection just saved) only applied at the next computation. The request now waits and runs right after the current computation.",
+  "changelog": "1.1.2 (Jellyfin 12.2 to 12.4): calibration no longer runs out of memory on larger servers — each case keeps only what that account's ranking reads, and the calibration caches have a size limit (measured on a MovieLens server: peak memory 4.3 GB → 1.2 GB, 54 → 13 minutes, same result). The options of the settings level selector are readable again when the list is open. Security: the Seerr API key and the Gotify token are no longer sent along when Seerr or the webhook answer with a redirect (the error now names the address to save instead), and Seerr answers are size-limited.",
   "description": "Personal recommendations that replace Jellyfin's own.",
   "guid": "6b1f3c52-8d0e-4f7a-9c41-2e5d7a90c3b8",
   "imagePath": "thumb.png",
@@ -9,7 +9,7 @@
   "owner": "crocodile13",
   "targetAbi": "12.2.0.0",
   "timestamp": "2026-10-21T00:00:00.0000000Z",
-  "version": "1.1.1.0",
+  "version": "1.1.2.0",
   "status": "Active",
   "autoUpdate": true,
   "assemblies": [
