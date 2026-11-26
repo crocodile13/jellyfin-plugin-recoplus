@@ -265,7 +265,8 @@ await test('onglet Accueil : une ligne par rangée (titre, films ou séries, con
     const ids = [...rows.querySelectorAll('input, select')].map((e) => e.id.replace('rp_c_', ''));
     const line = (k, title, src) => [title, 'Kind' + k, src, 'Title' + k + 'Films', 'Title' + k + 'Series'];
     assert.deepEqual(ids, [...line('PourToi', 'HssSectionTitle', 'SourcePourToi'), ...line('Tendances', 'RowTrendingTitle', 'SourceTendances'),
-        ...line('Populaires', 'RowPopularTitle', 'SourcePopulaires'), ...line('AVenir', 'RowUpcomingTitle', 'SourceAVenir'),
+        ...line('Populaires', 'RowPopularTitle', 'SourcePopulaires'), ...line('Sorties', 'RowReleasesTitle', 'SourceSorties'),
+        ...line('AVenir', 'RowUpcomingTitle', 'SourceAVenir'),
         ...line('Nouveautes', 'RowNewTitle', 'SourceNouveautes'), ...line('ParceQue', 'RowBecauseTitle', 'SourceParceQue'),
         'RowSuiteTitle', 'KindSuite', 'SourceFilms', 'RowMoviesTitle', 'RowSeriesTitle']);
     // titres des moitiés : visibles seulement quand la rangée est séparée ; la suite du classement l'est par défaut

@@ -211,7 +211,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
     /// <summary>Titres par défaut des rangées (français : la clé de traduction ; voir <see cref="Texts"/>).</summary>
     public const string DefaultPourToi = "Pour toi", DefaultNew = "Nouveautés pour toi", DefaultMovies = "Films pour toi",
         DefaultSeries = "Séries pour toi", DefaultBecause = "Parce que tu as aimé {titre}", DefaultExtended = "À découvrir pour toi",
-        DefaultTrending = "Tendances", DefaultSuite = "Encore pour toi", DefaultPopular = "Populaires", DefaultUpcoming = "À venir";
+        DefaultTrending = "Tendances", DefaultSuite = "Encore pour toi", DefaultPopular = "Populaires", DefaultReleases = "Nouvelles sorties", DefaultUpcoming = "À venir";
 
     /// <summary>
     /// Titre choisi par l'administrateur, sinon le titre par défaut dans la langue voulue. Un titre resté égal au défaut
@@ -228,6 +228,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
         HomeRows.Series => Title(cfg.RowSeriesTitle, DefaultSeries, lang),
         HomeRows.Tendances => Title(cfg.RowTrendingTitle, DefaultTrending, lang),
         HomeRows.Populaires => Title(cfg.RowPopularTitle, DefaultPopular, lang),
+        HomeRows.Sorties => Title(cfg.RowReleasesTitle, DefaultReleases, lang),
         HomeRows.AVenir => Title(cfg.RowUpcomingTitle, DefaultUpcoming, lang),
         HomeRows.Suite => Title(cfg.RowSuiteTitle, DefaultSuite, lang),
         _ => Title(cfg.HssSectionTitle, DefaultPourToi, lang),

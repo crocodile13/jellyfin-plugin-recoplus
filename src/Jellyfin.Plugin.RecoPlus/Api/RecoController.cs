@@ -54,6 +54,24 @@ public sealed class ImpressionsBody
     public List<string>? Opened { get; set; }
 }
 
+/// <summary>Indices du pays signalés par le navigateur du compte connecté (script de l'accueil).</summary>
+public sealed class ClientBody
+{
+    public string? TimeZone { get; set; }
+
+    public List<string>? Languages { get; set; }
+}
+
+/// <summary>Réglages choisis par le compte connecté dans sa page Reco+.</summary>
+public sealed class MeBody
+{
+    /// <summary>Pays (ISO 3166-1) ; vide = détecté.</summary>
+    public string? Region { get; set; }
+
+    /// <summary>Titres hors bibliothèque ; null = comme le serveur.</summary>
+    public bool? Extended { get; set; }
+}
+
 /// <summary>Écriture d'un secret (jamais relu par l'API).</summary>
 public sealed class SecretBody
 {
@@ -76,10 +94,12 @@ public sealed class RecoController : ControllerBase
     private readonly System.Net.Http.IHttpClientFactory _httpFactory;
     private readonly ImpressionStore _impressions;
     private readonly IApplicationPaths _paths;
+    private readonly UserPrefsStore _prefs;
 
     public RecoController(RecoService reco, SeerrService seerr, SecretStore secrets, Notifier notifier, CalibrationService calib, IUserManager users,
-        System.Net.Http.IHttpClientFactory httpFactory, ImpressionStore impressions, IApplicationPaths paths)
+        System.Net.Http.IHttpClientFactory httpFactory, ImpressionStore impressions, IApplicationPaths paths, UserPrefsStore prefs)
     {
+        _prefs = prefs;
         _paths = paths;
         _impressions = impressions;
         _httpFactory = httpFactory;
@@ -179,7 +199,7 @@ public sealed class RecoController : ControllerBase
         }
 
         var r = _reco.For(me.Value);
-        bool on = cfg.Enabled && cfg.ExtendedEnabled && _seerr.Configured;
+        bool on = cfg.Enabled && _reco.ExtendedFor(me.Value.ToString("N"), cfg) && _seerr.Configured;
         bool hss = HomeScreenSectionsIntegration.Registered && CompatibilityGuard.Allowed(Feature.HomeScreenSection);
         // titre de chaque rangée Reco+ tel que configuré, dans la langue du compte (effet immédiat dans le client web),
         // et pour les rangées « Parce que … » le titre aimé de ce compte
@@ -214,6 +234,8 @@ public sealed class RecoController : ControllerBase
                 title = HomeScreenSectionsIntegration.ExtendedTitle(cfg, Lang),
             },
             canRequest = on && cfg.ExtendedRequestButton && (r?.SeerrUserId ?? 0) > 0,
+            // fuseau et langues du navigateur à signaler (détection du pays du compte), une fois par session
+            report = cfg.Enabled && !RecoService.IsExcluded(me.Value),
             // adresse publique seulement : l'adresse interne de Seerr n'a rien à faire chez les utilisateurs
             seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? string.Empty : cfg.SeerrPublicUrl.TrimEnd('/'),
             items = on ? (r?.Extended ?? new List<ExternalRec>()).Select(e => e.In(Lang)).ToList() : new List<ExternalRec>(),
@@ -263,7 +285,7 @@ public sealed class RecoController : ControllerBase
             return Unauthorized();
         }
 
-        if (!cfg.Enabled || !cfg.ExtendedEnabled || !cfg.ExtendedRequestButton || !_seerr.Configured)
+        if (!cfg.Enabled || !_reco.ExtendedFor(me.Value.ToString("N"), cfg) || !cfg.ExtendedRequestButton || !_seerr.Configured)
         {
             return BadRequest(Msg("demandes désactivées"));
         }
@@ -294,6 +316,131 @@ public sealed class RecoController : ControllerBase
         {
             return StatusCode(StatusCodes.Status502BadGateway, Msg("Seerr injoignable"));
         }
+    }
+
+    /// <summary>
+    /// Fuseau horaire et langues du navigateur du compte connecté, pour détecter son pays : rien d'autre (ni adresse, ni
+    /// appareil), seulement pour ce compte (identité du jeton de session), valeurs vérifiées.
+    /// </summary>
+    [HttpPost("Client")]
+    [Authorize]
+    public ActionResult Client([FromBody] ClientBody body)
+    {
+        var cfg = Plugin.Instance!.Configuration;
+        var me = CurrentUser;
+        if (me is null)
+        {
+            return Unauthorized();
+        }
+
+        if (!cfg.Enabled || RecoService.IsExcluded(me.Value))
+        {
+            return NoContent();
+        }
+
+        if ((body.Languages?.Count ?? 0) > 20 || (body.TimeZone?.Length ?? 0) > 64)
+        {
+            return BadRequest(Msg("valeurs invalides"));
+        }
+
+        _prefs.Report(me.Value.ToString("N"), body.TimeZone, body.Languages);
+        return NoContent();
+    }
+
+    /// <summary>Page Reco+ de l'utilisateur ouverte : réglages qu'il peut changer, et ce qui s'applique à lui aujourd'hui.</summary>
+    private bool UserPageOpen(Configuration.PluginConfiguration cfg)
+        => cfg.Enabled && cfg.UserPageEnabled && (cfg.UserCanSetRegion || cfg.UserCanSetExtended);
+
+    /// <summary>
+    /// Réglages du compte connecté (sa page Reco+) : ceux que l'administrateur lui ouvre, leur valeur, et le pays retenu
+    /// avec les indices qui l'ont désigné.
+    /// </summary>
+    [HttpGet("Me")]
+    [Authorize]
+    public ActionResult Me()
+    {
+        var cfg = Plugin.Instance!.Configuration;
+        var me = CurrentUser;
+        if (me is null)
+        {
+            return Unauthorized();
+        }
+
+        var u = _users.GetUserById(me.Value);
+        if (u is null)
+        {
+            return Unauthorized();
+        }
+
+        var key = me.Value.ToString("N");
+        var p = _prefs.For(key);
+        var guess = _reco.RegionOf(u, cfg);
+        var auto = _reco.RegionOf(u, cfg, withChoice: false);
+        bool open = UserPageOpen(cfg) && !RecoService.IsExcluded(me.Value);
+        return Ok(new
+        {
+            open,
+            region = new
+            {
+                canSet = open && cfg.UserCanSetRegion,
+                chosen = cfg.UserCanSetRegion ? p.Region : null,
+                current = guess.Country,
+                // ce que donnerait « automatique » : pays fixé par l'administrateur, sinon détecté, sinon le repli
+                auto = auto.Country,
+                detected = auto.Detected,
+                server = Regions.Clean(cfg.Region),
+                clues = auto.Clues.Select(c => new { source = c.Source, country = c.Country }).ToList(),
+            },
+            extended = new
+            {
+                canSet = open && cfg.UserCanSetExtended && cfg.ExtendedEnabled && _seerr.Configured,
+                server = cfg.ExtendedEnabled && _seerr.Configured,
+                mine = cfg.UserCanSetExtended ? p.Extended : null,
+            },
+            countries = Regions.Countries,
+        });
+    }
+
+    /// <summary>Enregistre les réglages du compte connecté (seulement ceux que l'administrateur lui ouvre) ; recalcule ses listes.</summary>
+    [HttpPost("Me")]
+    [Authorize]
+    public ActionResult SetMe([FromBody] MeBody body)
+    {
+        var cfg = Plugin.Instance!.Configuration;
+        var me = CurrentUser;
+        if (me is null)
+        {
+            return Unauthorized();
+        }
+
+        if (!UserPageOpen(cfg) || RecoService.IsExcluded(me.Value))
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, Msg("réglages fermés par l'administrateur"));
+        }
+
+        if (!_prefs.Set(me.Value.ToString("N"), body.Region, body.Extended, cfg.UserCanSetRegion, cfg.UserCanSetExtended))
+        {
+            return BadRequest(Msg("pays inconnu"));
+        }
+
+        RecoWorker.Instance?.ScheduleUser(me.Value);
+        return Ok(new { message = L("Enregistré : vos listes se recalculent.") });
+    }
+
+    /// <summary>Page Reco+ de l'utilisateur, servie à Plugin Pages (fragment HTML chargé avec la session du compte).</summary>
+    [HttpGet("UserPage")]
+    [Authorize]
+    [Produces("text/html")]
+    public ActionResult UserPage()
+    {
+        var s = Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Plugin).Namespace + ".Web.userPage.html");
+        if (s is null)
+        {
+            return NotFound();
+        }
+
+        Response.Headers.CacheControl = "no-cache";
+        return File(s, "text/html; charset=utf-8");
     }
 
     // ------------------------------------------------------------------ administration
@@ -330,6 +477,7 @@ public sealed class RecoController : ControllerBase
             checks = g?.Checks.ToList().Select(c => new { check = L(c.Check), ok = c.Ok, detail = L(c.Detail) }),
             disabled = g?.Disabled.ToDictionary(kv => L(CompatibilityGuard.Label(kv.Key)), kv => L(kv.Value)),
             hss = L(HomeScreenSectionsIntegration.State),
+            userPage = L(PluginPagesIntegration.State),
             // assistant de mise en route : Home Screen Sections installé, activé, rangées Reco+ dans son tableau
             hssSetup = HomeScreenSectionsIntegration.Setup(Plugin.Instance!.Configuration),
             seerrEnabled = Plugin.Instance!.Configuration.SeerrEnabled,

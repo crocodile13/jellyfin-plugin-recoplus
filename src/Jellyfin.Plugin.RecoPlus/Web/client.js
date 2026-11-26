@@ -48,10 +48,24 @@
         var lang = document.documentElement.getAttribute('lang') || navigator.language || '';
         cache.pending = a.getJSON(a.getUrl('RecoPlus/Extended', { lang: lang })).then(function (d) {
             if (d && d.texts) { TX = d.texts; }
+            if (d && d.report) { report(a, uid); }
             cache = { at: Date.now(), user: uid, data: d, pending: null };
             return d;
         }, function () { cache.pending = null; return null; });
         return cache.pending;
+    }
+
+    // Pays du compte (dates des nouvelles sorties) : fuseau horaire et langues du navigateur, rien d'autre, une fois par
+    // session et par compte ; le serveur vérifie chaque valeur
+    var reported = {};
+    function report(a, uid) {
+        if (reported[uid]) { return; }
+        reported[uid] = true;
+        var zone = '';
+        try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { /* navigateur sans Intl */ }
+        var langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']).slice(0, 4);
+        a.ajax({ type: 'POST', url: a.getUrl('RecoPlus/Client'), data: JSON.stringify({ TimeZone: zone, Languages: langs }), contentType: 'application/json' })
+            .then(null, function () { /* perdu : renvoyé à la prochaine session */ });
     }
 
     // ---- cartes Jellyfin Enhanced

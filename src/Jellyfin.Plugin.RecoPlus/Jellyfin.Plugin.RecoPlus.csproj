@@ -24,6 +24,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Web/configPage.html" />
     <EmbeddedResource Include="Web/client.js" />
+    <EmbeddedResource Include="Web/userPage.html" />
     <EmbeddedResource Include="Web/icon.svg" />
   </ItemGroup>
 </Project>

@@ -80,7 +80,7 @@ public class TrendingTests
     [Fact]
     public void BaseRowsFollowTheAllocationOrderAndListRowsNeedTheLists()
     {
-        Assert.Equal(new[] { "PourToi", "Tendances", "Populaires", "AVenir", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Suite" }, HomeRows.BaseRows(true));
+        Assert.Equal(new[] { "PourToi", "Tendances", "Populaires", "Sorties", "AVenir", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Suite" }, HomeRows.BaseRows(true));
         Assert.Equal(new[] { "PourToi", "Nouveautes", "ParceQue1", "ParceQue2", "ParceQue3", "Suite" }, HomeRows.BaseRows(false));
         Assert.Equal(HomeRows.BaseRows(true).Select(HomeRows.KindOfRow).Distinct().OrderBy(x => x, StringComparer.Ordinal), HomeRows.SourceRows.OrderBy(x => x, StringComparer.Ordinal));
     }

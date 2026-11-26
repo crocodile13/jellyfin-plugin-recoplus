@@ -162,6 +162,7 @@
                     <div class="rp-box" data-level="2"><h3>Ce qui est lu en plus de l'historique</h3><p>En plus de l'historique de lecture et des favoris (films, séries, saisons et épisodes) : ce que les comptes ont dit explicitement, et des données TMDb lues via Seerr.</p><div class="rp-grid" data-fields="sources"></div></div>
                     <div class="rp-box"><h3>Comptes ignorés</h3><p>Ces comptes n'ont pas de recommandations Reco+ (Jellyfin leur répond normalement) et leur historique ne compte pas pour le foyer : compte invité, de test, d'un enfant…</p><div data-fields="users"></div></div>
                     <div class="rp-box"><h3>Langue</h3><div class="rp-grid" data-fields="lang"></div></div>
+                    <div class="rp-box"><h3>Page des utilisateurs et pays</h3><p>Avec Plugin Pages, chaque utilisateur a une page « Reco+ » dans son menu pour régler ce que vous lui ouvrez ici ; sans Plugin Pages, ces réglages restent ceux du serveur. Le pays d'un compte sert aux dates de sortie de la rangée Nouvelles sorties (sorti en salle, en vidéo ou à la télévision dans ce pays) : il ne choisit pas des titres de ce pays.</p><div class="rp-grid" data-fields="userpage"></div></div>
                     <details class="rp-adv" data-level="3"><summary>Réglages experts <span>— « Plus comme ceci », recalculs, fuseau, performances</span></summary>
                         <div class="rp-box"><h3>Fonctionnement</h3><div class="rp-grid" data-fields="genadv"></div></div>
                     </details>
@@ -175,9 +176,10 @@
                         <div class="rp-rows" data-fields="rows"></div>
                     </div>
                     <div class="rp-box" data-level="2"><h3>Listes du moment (TMDb)</h3>
-                        <p>Rangées Tendances, Populaires et À venir : les listes de TMDb lues via Seerr à chaque calcul complet (en cache 6 heures), pour les films et pour les séries. Chaque compte n'y voit que ce qu'il n'a pas vu, rangé selon ses goûts autant que réglé ici. Sans Seerr, ces rangées n'existent pas dans Home Screen Sections.</p>
+                        <p>Rangées Tendances, Populaires, Nouvelles sorties et À venir : les listes de TMDb lues via Seerr à chaque calcul complet (en cache 6 heures), pour les films et pour les séries. Chaque compte n'y voit que ce qu'il n'a pas vu, rangé selon ses goûts autant que réglé ici. Sans Seerr, ces rangées n'existent pas dans Home Screen Sections.</p>
                         <h4 class="rp-h4">Tendances</h4><div class="rp-grid" data-fields="lt"></div>
                         <h4 class="rp-h4">Populaires</h4><div class="rp-grid" data-fields="lp"></div>
+                        <h4 class="rp-h4">Nouvelles sorties</h4><div class="rp-grid" data-fields="ls"></div>
                         <h4 class="rp-h4">À venir</h4><div class="rp-grid" data-fields="lu"></div>
                     </div>
                     <div class="rp-box" id="rpMixBox" data-level="2">
@@ -190,6 +192,7 @@
                             <p>Seuls les titres qui comptent et qui conviennent au compte : popularité et votes TMDb minimum, goût minimal. Les titres de la bibliothèque ne sont pas filtrés.</p>
                             <h4 class="rp-h4">Tendances</h4><div class="rp-grid" data-fields="lta"></div>
                             <h4 class="rp-h4">Populaires</h4><div class="rp-grid" data-fields="lpa"></div>
+                            <h4 class="rp-h4">Nouvelles sorties</h4><div class="rp-grid" data-fields="lsa"></div>
                             <h4 class="rp-h4">À venir</h4><div class="rp-grid" data-fields="lua"></div>
                         </div>
                         <div class="rp-box"><h3>Rangées</h3><div class="rp-grid" data-fields="rowsadv"></div></div>
@@ -475,6 +478,18 @@
             ['TitlePopulairesSeries', 'Titre', 'text', 'Titre de la rangée des séries quand la rangée est séparée. Vide = le titre de la rangée suivi de « : séries ».', 0, 0, 0, 'rows', 'c'],
             ['_Blank1PopulairesSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
             ['_Blank2PopulairesSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
+            ['_RowReleases', 'Nouvelles sorties', 'note', 'Les films sortis depuis peu dans le pays de chaque compte (en salle, en vidéo ou à la télévision) et les séries qui viennent de commencer, parmi ce que le public attend vraiment (popularité, votes et note TMDb minimum). Peu de goûts par défaut : l\'actualité d\'abord. Nécessite Seerr.', 0, 0, 0, 'rows', 'c'],
+            ['RowReleasesTitle', 'Titre', 'text', 'Titre de la rangée des nouvelles sorties.', 0, 0, 0, 'rows', 'c', 'Nouvelles sorties'],
+            ['KindSorties', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=en 2 rangées', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
+            ['SourceSorties', 'Contenu', 'enum:Local=bibliothèque seule,Mix=mélange,Seerr=hors bibliothèque', 'Bibliothèque seule : les nouvelles sorties déjà présentes. Hors bibliothèque : celles qui manquent (non demandées). Mélange : les deux.', 0, 0, 0, 'rows', 'c', 'mélange'],
+            ['_SubSortiesFilms', '↳ Rangée films', 'note', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
+            ['TitleSortiesFilms', 'Titre', 'text', 'Titre de la rangée des films quand la rangée est séparée. Vide = le titre de la rangée suivi de « : films ».', 0, 0, 0, 'rows', 'c'],
+            ['_Blank1SortiesFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
+            ['_Blank2SortiesFilms', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
+            ['_SubSortiesSeries', '↳ Rangée séries', 'note', 'Titre de la rangée des séries quand la rangée est séparée. Vide = le titre de la rangée suivi de « : séries ».', 0, 0, 0, 'rows', 'c'],
+            ['TitleSortiesSeries', 'Titre', 'text', 'Titre de la rangée des séries quand la rangée est séparée. Vide = le titre de la rangée suivi de « : séries ».', 0, 0, 0, 'rows', 'c'],
+            ['_Blank1SortiesSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
+            ['_Blank2SortiesSeries', '', 'blank', '', 0, 0, 0, 'rows', 'c'],
             ['_RowUpcoming', 'À venir', 'note', 'Les prochaines sorties (films en salle bientôt, séries qui commencent), comme « À venir » dans Seerr : à demander d\'avance. Nécessite Seerr.', 0, 0, 0, 'rows', 'c'],
             ['RowUpcomingTitle', 'Titre', 'text', 'Titre de la rangée des titres à venir.', 0, 0, 0, 'rows', 'c', 'À venir'],
             ['KindAVenir', 'Films ou séries', 'enum:Both=films et séries,Movies=films seulement,Series=séries seulement,Split=en 2 rangées', 'Films et séries ensemble, une seule sorte, ou deux rangées séparées (« … : films » et « … : séries ») : voir en tête de cette boîte.', 0, 0, 0, 'rows', 'c', 'films et séries'],
@@ -530,6 +545,12 @@
             ['TrendingTaste', 'Part des goûts dans l\'ordre', 'num', '0 = l\'ordre de TMDb (la plus forte tendance d\'abord, la même pour tous). 1 = les goûts du compte seuls, parmi les tendances. Entre les deux, un mélange des deux classements.', 0.05, 0, 1, 'lt', 'c', '0,6'],
             ['PopularCount', 'Titres lus par sorte', 'int', 'Les N premiers de la liste TMDb, pour les films et pour les séries.', 5, 5, 100, 'lp', 'c', '40'],
             ['PopularTaste', 'Part des goûts dans l\'ordre', 'num', '0 = l\'ordre de TMDb ; 1 = les goûts du compte seuls, parmi ces titres.', 0.05, 0, 1, 'lp', 'c', '0,6'],
+            ['ReleasesCount', 'Titres lus par sorte', 'int', 'Les N sorties récentes les plus populaires, pour les films et pour les séries (après les minimums ci-dessous).', 5, 5, 100, 'ls', 'c', '40'],
+            ['ReleasesTaste', 'Part des goûts dans l\'ordre', 'num', '0 = l\'ordre de TMDb (popularité, la même pour tous) ; 1 = les goûts du compte seuls. Bas par défaut : la rangée suit l\'actualité plus que les goûts.', 0.05, 0, 1, 'ls', 'c', '0,3'],
+            ['ReleasesDays', 'Sorties depuis (jours)', 'int', 'Films : sortis dans le pays du compte (salle, vidéo à la demande ou télévision) depuis ce nombre de jours ; sans date pour ce pays, la date de sortie TMDb. Séries : première diffusion depuis ce nombre de jours.', 1, 1, 365, 'ls', 'c', '60'],
+            ['ReleasesMinPopularity', 'Popularité TMDb minimale', 'num', 'Indice de popularité de TMDb (activité récente : vues des fiches, votes, listes de suivi) ; en dessous, une sortie n\'est pas montrée, même dans la bibliothèque : la rangée garde ce que le public attend. 0 = aucun minimum.', 1, 0, 1000, 'ls', 'c', '10'],
+            ['ReleasesMinVotes', 'Votes TMDb minimum', 'int', 'Une sortie avec moins de votes n\'est pas montrée, même dans la bibliothèque (en dessous, la note ne veut rien dire). 0 = aucun minimum.', 5, 0, 100000, 'ls', 'c', '20'],
+            ['ReleasesMinRating', 'Note TMDb minimale', 'num', 'Une sortie moins bien notée n\'est pas montrée, même dans la bibliothèque : écarte les productions de piètre qualité. 0 = aucun minimum.', 0.1, 0, 10, 'ls', 'c', '6'],
             ['UpcomingCount', 'Titres lus par sorte', 'int', 'Les N prochaines sorties, pour les films et pour les séries.', 5, 5, 100, 'lu', 'c', '40'],
             ['UpcomingTaste', 'Part des goûts dans l\'ordre', 'num', '0 = l\'ordre de TMDb (popularité attendue) ; 1 = les goûts du compte seuls.', 0.05, 0, 1, 'lu', 'c', '0,8'],
             ['TrendingMinPopularity', 'Popularité TMDb minimale', 'num', 'Indice de popularité de TMDb (activité récente : vues des fiches, votes, listes de suivi) ; en dessous, un titre hors bibliothèque n\'est pas proposé. Les titres de la bibliothèque passent toujours. 0 = aucun minimum.', 1, 0, 1000, 'lta', 'c', '0'],
@@ -538,6 +559,7 @@
             ['PopularMinPopularity', 'Popularité TMDb minimale', 'num', 'Indice de popularité de TMDb (activité récente : vues des fiches, votes, listes de suivi) ; en dessous, un titre hors bibliothèque n\'est pas proposé. Les titres de la bibliothèque passent toujours. 0 = aucun minimum.', 1, 0, 1000, 'lpa', 'c', '0'],
             ['PopularMinVotes', 'Votes TMDb minimum', 'int', 'Un titre hors bibliothèque avec moins de votes n\'est pas proposé (titres confidentiels écartés). 0 = aucun minimum.', 10, 0, 100000, 'lpa', 'c', '50'],
             ['PopularTasteFloor', 'Goût minimal', 'num', 'Un titre hors bibliothèque doit être au moins aussi bien classé, pour ce compte, que cette part de sa bibliothèque : 0 = aucun minimum, 0,5 = mieux que la moitié de ses titres, 1 = mieux que tous. Plus haut = moins de titres, plus proches de ses goûts.', 0.05, 0, 1, 'lpa', 'c', '0,3'],
+            ['ReleasesTasteFloor', 'Goût minimal', 'num', 'Un titre hors bibliothèque doit être au moins aussi bien classé, pour ce compte, que cette part de sa bibliothèque : 0 = aucun minimum, 0,5 = mieux que la moitié de ses titres, 1 = mieux que tous. Bas par défaut : l\'actualité d\'abord.', 0.05, 0, 1, 'lsa', 'c', '0,1'],
             ['UpcomingMinPopularity', 'Popularité TMDb minimale', 'num', 'Indice de popularité de TMDb (activité récente : vues des fiches, votes, listes de suivi) ; en dessous, un titre hors bibliothèque n\'est pas proposé. Les titres de la bibliothèque passent toujours. 0 = aucun minimum. Pas encore sortis : peu ou pas de votes, la popularité (l\'attente) et le goût font le tri.', 1, 0, 1000, 'lua', 'c', '10'],
             ['UpcomingMinVotes', 'Votes TMDb minimum', 'int', 'Un titre hors bibliothèque avec moins de votes n\'est pas proposé (titres confidentiels écartés). 0 = aucun minimum.', 10, 0, 100000, 'lua', 'c', '0'],
             ['UpcomingTasteFloor', 'Goût minimal', 'num', 'Un titre hors bibliothèque doit être au moins aussi bien classé, pour ce compte, que cette part de sa bibliothèque : 0 = aucun minimum, 0,5 = mieux que la moitié de ses titres, 1 = mieux que tous. Plus haut = moins de titres, plus proches de ses goûts.', 0.05, 0, 1, 'lua', 'c', '0,5'],
@@ -547,6 +569,11 @@
             ['RowRepeatMax', 'Reprise entre rangées : rangées au plus par titre', 'int', 'Nombre maximal de rangées où un même film ou une même série apparaît. 1 = aucun titre dans deux rangées.', 1, 1, 10, 'rowsadv', 'c', '3'],
             ['RowNewDays', 'Nouveautés : arrivées depuis (jours)', 'int', 'Seuls les titres ajoutés depuis ce nombre de jours vont dans la rangée des nouveautés.', 1, 1, 365, 'rowsadv', 'c', '30'],
             ['ExcludedUsers', '', 'users', '', 0, 0, 0, 'users', 'c'],
+            ['UserPageEnabled', 'Page « Reco+ » des utilisateurs', 'bool', 'Avec Plugin Pages installé : une page « Reco+ » dans le menu de chaque utilisateur, pour les réglages ci-dessous. Coupée : chacun suit les réglages du serveur.', 0, 0, 0, 'userpage', 'c', 'activée'],
+            ['UserCanSetRegion', 'Chacun peut choisir son pays', 'bool', 'Dans sa page, un utilisateur peut fixer son pays au lieu de le laisser détecter.', 0, 0, 0, 'userpage', 'c', 'activé'],
+            ['UserCanSetExtended', 'Chacun peut couper les titres hors bibliothèque', 'bool', 'Dans sa page, un utilisateur peut ne recevoir que des titres de la bibliothèque (mode étendu coupé pour lui seul).', 0, 0, 0, 'userpage', 'c', 'activé'],
+            ['Region', 'Pays des comptes', 'text', 'Code du pays (ex. FR, BE, CA) pour tous les comptes, sauf ceux qui choisissent le leur. Vide = détecté pour chaque compte, sans rien envoyer au dehors : fuseau horaire et langues de son navigateur, ses langues audio et sous-titres préférées, puis les réglages du serveur.', 0, 0, 0, 'userpage', 'c', 'détecté pour chaque compte'],
+            ['RegionFallback', 'Pays si rien ne permet de le détecter', 'text', 'Code du pays d\'un compte dont on ne sait rien (jamais connecté par le navigateur, aucune langue préférée).', 0, 0, 0, 'userpage', 'c', 'FR'],
             ['UseJellyfinEnhanced', 'Masquages et avis de Jellyfin Enhanced', 'bool', 'Lit, sans rien modifier, les titres masqués partout (« pas intéressé ») et les avis notés de chaque compte. Sans Jellyfin Enhanced : rien n\'est lu.', 0, 0, 0, 'sources', 'c', 'activé'],
             ['UseSeerrVotes', 'Nombre de votes TMDb (via Seerr)', 'bool', 'Lit le nombre de votes derrière chaque note, pour ne pas croire une note fondée sur une poignée de votes. Les fiches manquantes sont récupérées progressivement (150 par calcul complet, mises en cache 14 jours).', 0, 0, 0, 'sources', 'c', 'activé'],
             ['TrackImpressions', 'Titres montrés sans être ouverts', 'bool', 'Le script de l\'accueil note les cartes d\'une rangée Reco+ restées au moins une seconde à l\'écran du compte connecté (onglet au premier plan), une fois par jour, et celles qu\'il ouvre. Rien n\'est compté pour une page jamais affichée, un calcul ou un autre compte. Sert au facteur « Montré sans être ouvert » (onglet Moteur).', 0, 0, 0, 'sources', 'c', 'activé'],
@@ -863,10 +890,10 @@
             splitNotes();
         }
         // titre affiché d'une rangée (saisi, sinon par défaut), sans le « {titre} » des rangées « Parce que »
-        var SUB_RE = /^(?:_Sub|Title|_Blank1|_Blank2)(PourToi|Tendances|Populaires|AVenir|Nouveautes|ParceQue|Suite)(Films|Series)$/;
+        var SUB_RE = /^(?:_Sub|Title|_Blank1|_Blank2)(PourToi|Tendances|Populaires|Sorties|AVenir|Nouveautes|ParceQue|Suite)(Films|Series)$/;
         var SUBS = { RowMoviesTitle: ['Suite', 'Films'], RowSeriesTitle: ['Suite', 'Series'] };
         F.forEach(function (f) { var m = SUB_RE.exec(f[0]); if (m) { SUBS[f[0]] = [m[1], m[2]]; } });
-        var KIND_TITLE = { KindPourToi: 'HssSectionTitle', KindTendances: 'RowTrendingTitle', KindPopulaires: 'RowPopularTitle', KindAVenir: 'RowUpcomingTitle', KindNouveautes: 'RowNewTitle', KindParceQue: 'RowBecauseTitle', KindSuite: 'RowSuiteTitle' };
+        var KIND_TITLE = { KindPourToi: 'HssSectionTitle', KindTendances: 'RowTrendingTitle', KindPopulaires: 'RowPopularTitle', KindSorties: 'RowReleasesTitle', KindAVenir: 'RowUpcomingTitle', KindNouveautes: 'RowNewTitle', KindParceQue: 'RowBecauseTitle', KindSuite: 'RowSuiteTitle' };
         function splitNotes() {
             Object.keys(KIND_TITLE).forEach(function (k) {
                 var n = $('#' + idOf(k) + '_split');
@@ -912,14 +939,17 @@
         function num(name) { var n = parseFloat(String(val(name) || '0').replace(',', '.')); return isNaN(n) ? 0 : n; }
         function factorOff(name) { return sw(name) ? '' : tf('facteur « {0} » coupé (onglet Moteur)', t(fOf(name)[1])); }
         function srcOff(name) { return sw(name) ? '' : tf('source « {0} » coupée', t(fOf(name)[1])); }
-        var LIST_FILTER = /^(Trending|Popular|Upcoming)(MinPopularity|MinVotes|TasteFloor)$/;
-        var SOURCES = ['SourcePourToi', 'SourceTendances', 'SourcePopulaires', 'SourceAVenir', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms'];
+        // nouvelles sorties : popularité, votes et note filtrent aussi la bibliothèque (c'est la rangée) ; seul le goût minimal
+        // ne vaut que hors bibliothèque
+        var LIST_FILTER = /^(?:(Trending|Popular|Upcoming)(MinPopularity|MinVotes|TasteFloor)|(Releases)(TasteFloor))$/;
+        var SOURCES = ['SourcePourToi', 'SourceTendances', 'SourcePopulaires', 'SourceSorties', 'SourceAVenir', 'SourceNouveautes', 'SourceParceQue', 'SourceFilms'];
         var EXT_GROUPS = ['ext', 'extmix', 'extadv', 'extsrc'];
         // rangées tirées des listes TMDb : sans Seerr, elles n'existent pas dans Home Screen Sections
         var LIST_ROWS = ['_RowLists', '_RowTrending', 'RowTrendingTitle', 'KindTendances', 'SourceTendances', '_RowPopular', 'RowPopularTitle', 'KindPopulaires', 'SourcePopulaires',
-            '_RowUpcoming', 'RowUpcomingTitle', 'KindAVenir', 'SourceAVenir', 'TrendingWindow', 'TrendingCount', 'TrendingTaste', 'PopularCount', 'PopularTaste', 'UpcomingCount', 'UpcomingTaste']
-            .concat(F.map(function (f) { return f[0]; }).filter(function (n) { return /^(_Sub|Title)(Tendances|Populaires|AVenir)(Films|Series)$/.test(n) || LIST_FILTER.test(n); }));
-        var LIST_SRC = { Trending: 'SourceTendances', Popular: 'SourcePopulaires', Upcoming: 'SourceAVenir' };
+            '_RowReleases', 'RowReleasesTitle', 'KindSorties', 'SourceSorties', '_RowUpcoming', 'RowUpcomingTitle', 'KindAVenir', 'SourceAVenir', 'TrendingWindow', 'TrendingCount', 'TrendingTaste',
+            'PopularCount', 'PopularTaste', 'ReleasesCount', 'ReleasesTaste', 'ReleasesDays', 'ReleasesMinPopularity', 'ReleasesMinVotes', 'ReleasesMinRating', 'UpcomingCount', 'UpcomingTaste']
+            .concat(F.map(function (f) { return f[0]; }).filter(function (n) { return /^(_Sub|Title)(Tendances|Populaires|Sorties|AVenir)(Films|Series)$/.test(n) || LIST_FILTER.test(n); }));
+        var LIST_SRC = { Trending: 'SourceTendances', Popular: 'SourcePopulaires', Releases: 'SourceSorties', Upcoming: 'SourceAVenir' };
         var NEEDS_SEERR = ['TrendingShare', 'UseSeerrVotes', 'UseSeerrWatchlist', 'UseTmdbLibrarySignal', 'TmdbLibraryAnchors', 'RequestWeight', 'WatchlistWeight', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
         var NO_MIX = function () { return SOURCES.some(function (k) { return val(k) === 'Mix'; }) ? '' : t('aucune rangée au contenu « mélange »'); };
         var WHY = {
@@ -969,9 +999,11 @@
             CalibrationPasses: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? t('pas de recherche par curseurs avec la méthode choisie') : ''; },
             CalibrationRefine: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? t('pas de recherche par curseurs avec la méthode choisie') : ''; },
             CalibrationSlowFolds: function () { return v('rpCalMethod') === 'ChoiceModel' ? t('ni recherche par curseurs ni réseau avec la méthode choisie') : ''; },
+            UserCanSetRegion: function () { return sw('UserPageEnabled') ? '' : t('page des utilisateurs coupée'); },
+            UserCanSetExtended: function () { return !sw('UserPageEnabled') ? t('page des utilisateurs coupée') : !G.seerr || !G.ext ? t('pas de titres hors bibliothèque (Seerr et mode étendu)') : ''; },
             CalibrationInnerFolds: function () { return v('rpCalMethod') === 'Coordinate' ? t('pas de régularisation à choisir avec la recherche par curseurs') : ''; }
         };
-        ['PourToi', 'Tendances', 'Populaires', 'AVenir', 'Nouveautes', 'ParceQue'].forEach(function (b) {
+        ['PourToi', 'Tendances', 'Populaires', 'Sorties', 'AVenir', 'Nouveautes', 'ParceQue'].forEach(function (b) {
             WHY[KIND_TITLE['Kind' + b]] = function () {
                 return val('Kind' + b) === 'Split' && (val('Title' + b + 'Films') || '').trim() && (val('Title' + b + 'Series') || '').trim()
                     ? t('les deux rangées ont leur propre titre') : '';
@@ -985,7 +1017,7 @@
             var ext = EXT_GROUPS.indexOf(f[7]) >= 0;
             var lf = LIST_FILTER.exec(name);
             if (lf && G.seerr && !G.ext) { return t('mode étendu coupé (onglet Mode étendu) : bibliothèque seule'); }
-            if (lf && G.seerr && val(LIST_SRC[lf[1]]) === 'Local') { return t('rangée en bibliothèque seule'); }
+            if (lf && G.seerr && val(LIST_SRC[lf[1] || lf[3]]) === 'Local') { return t('rangée en bibliothèque seule'); }
             if (LIST_ROWS.indexOf(name) >= 0 && !G.seerr) { return t('Seerr non utilisé (onglet Seerr) : rangée absente de l\'accueil'); }
             if ((ext || NEEDS_SEERR.indexOf(name) >= 0) && !G.seerr) { return t('Seerr non utilisé (onglet Seerr)'); }
             if (SOURCES.indexOf(name) >= 0 && (!G.seerr || !G.ext)) { return !G.seerr ? t('Seerr non utilisé (onglet Seerr) : bibliothèque seule') : t('mode étendu coupé (onglet Mode étendu) : bibliothèque seule'); }
@@ -1153,7 +1185,7 @@
         function kpi(label, value) { var d = el('div', { 'class': 'rp-kpi' }); d.appendChild(el('span', {}, label)); d.appendChild(el('b', {}, value)); return d; }
 
         // effet des recommandations : taux par rangée et par place, part des lectures venues d'une proposition
-        var ROW_NAMES = { PourToi: 'Pour toi', Tendances: 'Tendances', Populaires: 'Populaires', AVenir: 'À venir', Suite: 'Encore pour toi', Films: 'Films', Series: 'Séries', Nouveautes: 'Nouveautés', ParceQue: 'Parce que tu as aimé {0}' };
+        var ROW_NAMES = { PourToi: 'Pour toi', Tendances: 'Tendances', Populaires: 'Populaires', Sorties: 'Nouvelles sorties', AVenir: 'À venir', Suite: 'Encore pour toi', Films: 'Films', Series: 'Séries', Nouveautes: 'Nouveautés', ParceQue: 'Parce que tu as aimé {0}' };
         function renderMeasure(m) {
             var box = $('#rpMeasure'); box.innerHTML = '';
             if (!m || !m.All || !(m.All.Proposed7 || m.All.Proposed30 || m.RecentStarts)) {
@@ -1193,6 +1225,7 @@
             k.appendChild(kpi(t('Accord TMDb (bibliothèque)'), e.TmdbLibrary || '—'));
             k.appendChild(kpi(t('Listes du moment (TMDb)'), e.TmdbLists || '—'));
             k.appendChild(kpi(t('Rangée d\'accueil'), s.hss));
+            k.appendChild(kpi(t('Page des utilisateurs'), s.userPage || '—'));
             if (e.LastError) { var d = el('div', { 'class': 'rp-alert' }); d.appendChild(el('b', {}, t('Dernière erreur de calcul'))); d.appendChild(el('span', {}, e.LastError)); al.appendChild(d); }
             renderMeasure(e.Measure);
             var ct = $('#rpChecks'); ct.innerHTML = '';
