@@ -76,7 +76,7 @@ Les réglages se présentent sur trois niveaux — **essentiels** (par défaut),
 ## Fonctionnalités
 
 - **Partout où Jellyfin recommande** : Suggestions, « Parce que vous avez regardé », « Plus comme ceci » et la Media Bar.
-- **Rangées d'accueil** avec [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) : « Pour toi », « Tendances », « Populaires », « À venir », « Nouveautés pour toi », jusqu'à trois « Parce que tu as aimé … », « Films pour toi » et « Séries pour toi ». Chaque rangée peut présenter des films, des séries, les deux, ou être scindée en deux.
+- **Rangées d'accueil** avec [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) : « Pour toi », « Tendances », « Populaires », « Nouvelles sorties » (sorties récentes dans votre pays), « À venir », « Nouveautés pour toi », jusqu'à trois « Parce que tu as aimé … », « Films pour toi » et « Séries pour toi ». Chaque rangée peut présenter des films, des séries, les deux, ou être scindée en deux.
 - **Tous les signaux exprimés sont pris en compte** : favoris (série, saison ou épisode), notes, avis et titres masqués de Jellyfin Enhanced, demandes et listes de suivi Seerr, titres affichés mais jamais ouverts.
 - **Suggestions hors bibliothèque** (mode étendu, facultatif) : des titres du catalogue TMDb choisis d'après vos goûts et classés par le même moteur, avec un curseur d'**audace des découvertes**, de prudente à aventureuse.
 - **Recommandations expliquées** : sur la fiche d'un titre ouvert depuis une rangée Reco+, une ligne discrète en donne la raison (« Parce que tu as aimé X », « Suite de X », « Nouveaux épisodes »…).
