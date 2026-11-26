@@ -404,9 +404,22 @@ public sealed class RecoController : ControllerBase
             extended = r?.Extended.Take(30).Select(e => $"{e.Name} ({e.Year}) — {Why(e)}{(cfg.AnyExternalRow() ? RowOf(e) : string.Empty)}"),
             rows = _reco.PreviewRows(userId, Lang),
             cards = _reco.PreviewCards(userId, Lang),
+            // rangées Reco+ que Home Screen Sections ne montre pas à ce compte (son propre choix, ou absentes du tableau)
+            hiddenRows = HiddenRows(cfg, userId),
             sources = r?.Sources,
             computedAt = r?.ComputedAt,
         });
+    }
+
+    /// <summary>Titres des rangées Reco+ déclarées que Home Screen Sections ne montre pas au compte ; vide sans HSS.</summary>
+    private List<string> HiddenRows(Configuration.PluginConfiguration cfg, Guid userId)
+    {
+        if (!HomeScreenSectionsIntegration.Registered || HomeScreenSectionsIntegration.EnabledFor(HttpContext.RequestServices, userId) is not { } shown)
+        {
+            return new List<string>();
+        }
+
+        return HomeScreenSectionsIntegration.Sections(cfg, Lang).Where(x => !shown.Contains(x.Row)).Select(x => x.Title).Distinct().ToList();
     }
 
     /// <summary>
@@ -453,6 +466,7 @@ public sealed class RecoController : ControllerBase
         try
         {
             int n = HomeScreenSectionsIntegration.AddRowsToAdminTable(Plugin.Instance!.Configuration);
+            HomeScreenSectionsIntegration.Instance?.EnableNewRows();   // aussi chez les comptes qui ont leur propre choix
             return Ok(new { added = n, message = L(n > 0 ? Texts.Pack("{0} rangées Reco+ ajoutées à Home Screen Sections", n) : "les rangées Reco+ étaient déjà dans Home Screen Sections") });
         }
         catch (Exception ex) when (ex is InvalidOperationException or TargetInvocationException or InvalidCastException or ArgumentException or MemberAccessException or MissingMethodException)

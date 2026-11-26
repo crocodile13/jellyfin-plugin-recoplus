@@ -249,6 +249,7 @@
   "Home Screen Sections absent : pas de rangées d'accueil (facultatif, le reste fonctionne).": "Home Screen Sections nicht installiert: keine Startseitenreihen (optional, alles andere funktioniert).",
   "Home Screen Sections n'a pas l'interface attendue ({0}).": "Home Screen Sections hat nicht die erwartete Schnittstelle ({0}).",
   "Home Screen Sections n'a pas pu être configuré : {0}": "Home Screen Sections konnte nicht eingerichtet werden: {0}",
+  "Home Screen Sections ne montre pas à ce compte : {0}. Elles sont décochées dans ses réglages d'accueil (menu de l'utilisateur → Modular Home), ou absentes du tableau de Home Screen Sections.": "Home Screen Sections zeigt diesem Konto diese Reihen nicht: {0}. Sie sind in seinen Startseiten-Einstellungen abgewählt (Benutzermenü → Modular Home) oder fehlen in der Tabelle von Home Screen Sections.",
   "Hors bibliothèque : les films et séries du mode étendu, selon la sorte de chaque rangée.": "Außerhalb der Bibliothek: Filme und Serien des erweiterten Modus, je nach Art der Reihe.",
   "Hors bibliothèque : les films.": "Außerhalb der Bibliothek: Filme.",
   "Hors bibliothèque : les séries.": "Außerhalb der Bibliothek: Serien.",

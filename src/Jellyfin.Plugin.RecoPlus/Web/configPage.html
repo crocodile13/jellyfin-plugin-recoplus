@@ -368,6 +368,7 @@
                         <select is="emby-select" id="rpPreviewUser"></select>
                         <button is="emby-button" type="button" class="raised" id="rpPreviewBtn"><span>Afficher</span></button>
                     </div>
+                    <p id="rpPreviewHidden" class="rp-alert" hidden></p>
                     <div id="rpPreviewCards" style="margin-top:1em"></div>
                     <div id="rpPreviewSourcesBox" class="rp-hidden rp-dev" style="margin-top:1em">
                         <h3>Mode étendu : apport de chaque source</h3>
@@ -1531,6 +1532,10 @@
             $('#rpPreviewBtn').addEventListener('click', function () {
                 api('GET', 'Preview?userId=' + encodeURIComponent($('#rpPreviewUser').value)).then(function (r) {
                     renderCards(r.cards || []);
+                    // rangées que Home Screen Sections ne montre pas à ce compte : elles ne sont ni sur son accueil ni ici
+                    var hid = $('#rpPreviewHidden'), hr = r.hiddenRows || [];
+                    hid.hidden = !hr.length;
+                    hid.textContent = hr.length ? tf('Home Screen Sections ne montre pas à ce compte : {0}. Elles sont décochées dans ses réglages d\'accueil (menu de l\'utilisateur → Modular Home), ou absentes du tableau de Home Screen Sections.', hr.join(', ')) : '';
                     var st = r.sources || {}, tb = $('#rpPreviewSources'), keys = Object.keys(st);
                     tb.innerHTML = '';
                     $('#rpPreviewSourcesBox').classList.toggle('rp-hidden', !keys.length);

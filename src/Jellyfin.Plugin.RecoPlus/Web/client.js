@@ -118,7 +118,7 @@
     function shapeOf(container) {
         var isLib = function (c) { return c.classList && c.classList.contains('card') && !c.classList.contains(EXT); };
         var ref = container && Array.prototype.find.call(container.children, isLib);
-        // rangée sans carte de la bibliothèque (« À venir », nouvelles sorties) : la forme des autres rangées Reco+
+        // rangée sans carte de la bibliothèque (« À venir ») : la forme des autres rangées Reco+
         if (!ref) { ref = Array.prototype.find.call(document.querySelectorAll('.verticalSection[class*="RecoPlus"] .itemsContainer > .card'), isLib); }
         var m = ref && /(?:^|\s)overflow(\w+)Card(?:\s|$)/.exec(ref.className);
         return m ? m[1] : 'Portrait';

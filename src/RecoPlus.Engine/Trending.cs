@@ -147,3 +147,53 @@ public static class SplitLayout
         return (stale, want.Where(w => !ids.Contains(w, StringComparer.Ordinal)).Select(w => (w, stale[0])).ToList());
     }
 }
+
+/// <summary>
+/// Rangées Reco+ ajoutées au tableau de Home Screen Sections après qu'un compte a enregistré son propre choix de
+/// sections : HSS ne les lui a jamais proposées, elles ne sont pas cochées chez lui, il ne les voit jamais (ticket #80).
+/// Reco+ retient, par compte, les rangées déjà proposées (rangées de base : les moitiés d'une rangée séparée comptent
+/// comme elle) ; une rangée active du tableau jamais proposée à ce compte est cochée chez lui, une fois. Décochée
+/// ensuite, elle le reste. Fonction pure.
+/// </summary>
+public static class OfferedRows
+{
+    /// <summary>Une rangée du tableau de l'administrateur : identifiant HSS, active, modifiable par chaque compte.</summary>
+    public sealed record AdminRow(string Id, bool Enabled, bool AllowUserOverride);
+
+    /// <summary>
+    /// Sections à cocher chez ce compte (dans l'ordre du tableau) et rangées de base désormais proposées.
+    /// </summary>
+    /// <param name="enabled">Sections cochées par le compte (identifiants HSS).</param>
+    /// <param name="table">Tableau de l'administrateur.</param>
+    /// <param name="offered">Rangées de base déjà proposées à ce compte ; null = rien de retenu (première fois).</param>
+    /// <param name="prefix">Préfixe des sections Reco+ (« RecoPlus »).</param>
+    public static (List<string> Add, HashSet<string> Offered) Apply(IReadOnlyCollection<string> enabled, IEnumerable<AdminRow> table,
+        IReadOnlySet<string>? offered, string prefix)
+    {
+        var before = offered ?? new HashSet<string>();
+        var now = new HashSet<string>(before, StringComparer.Ordinal);
+        var add = new List<string>();
+        var on = new HashSet<string>(enabled, StringComparer.Ordinal);
+        foreach (var r in table)
+        {
+            if (!r.Id.StartsWith(prefix, StringComparison.Ordinal) || r.Id.Length == prefix.Length)
+            {
+                continue;
+            }
+
+            var b = HomeRows.SplitOf(r.Id[prefix.Length..]).Base;
+            // inactive au tableau : pas proposée ; imposée (sans choix des comptes) : HSS décide lui-même
+            if (r.Enabled && r.AllowUserOverride && !on.Contains(r.Id) && !before.Contains(b))
+            {
+                add.Add(r.Id);
+            }
+
+            if (r.Enabled)
+            {
+                now.Add(b);
+            }
+        }
+
+        return (add, now);
+    }
+}

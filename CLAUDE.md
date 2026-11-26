@@ -260,6 +260,12 @@ de la CI.
   tableau n'est jamais montrée (sa page ne l'ajoute qu'à l'enregistrement). Choix des comptes :
   `plugins/configurations/Jellyfin.Plugin.HomeScreenSections/ModularHomeSettings.json` ; un compte sans entrée suit les
   sections actives du tableau ; `AllowUserOverride` coupé impose l'état `Enabled` à tous.
+- Un compte qui a enregistré son propre choix garde la liste de ce moment-là : une rangée ajoutée ensuite au tableau n'y
+  est pas cochée et il ne la voit jamais (ticket #80). HSS ne retient que les sections cochées, pas celles proposées :
+  Reco+ retient les rangées proposées à chaque compte (`rangees-proposees.json`, `OfferedRows`) et coche une fois celles
+  jamais proposées (`EnableNewRows` : au démarrage, à chaque enregistrement, dans l'assistant) ; décochée, elle le reste.
+  L'aperçu dit quelles rangées HSS ne montre pas au compte. Une section sans élément est créée masquée (`hide`) : le
+  script de l'accueil la remplit et la démasque quand elle ne vit que hors bibliothèque.
 - Rangée séparée ou réunie (`ReconcileSplits`) : le tableau de l'administrateur est mis à jour (la nouvelle forme
   reprend les réglages de l'ancienne, à sa place), puis seulement les comptes qui ont leur propre choix. Enregistrer
   le choix d'un compte qui suit le tableau le figerait.

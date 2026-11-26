@@ -310,8 +310,8 @@ public static class HomeRows
         {
             var repeats = new HashSet<string>(StringComparer.Ordinal);
             var l = Take(src, keep, repeats);
-            // aussi une rangée sans titre de la bibliothèque : « À venir », nouvelles sorties ne vivent souvent que hors
-            // bibliothèque (sans cet appel, elles restaient vides)
+            // aussi une rangée sans titre de la bibliothèque : « À venir » ne vit presque que hors bibliothèque, une liste du
+            // moment dont le compte a déjà vu les titres de la bibliothèque aussi (sans cet appel, elles restaient vides)
             if (fit is not null)
             {
                 var shown = l.Take(size).ToList();

@@ -135,6 +135,7 @@ class HttpError(RuntimeError):
 
 
 TOKEN: str | None = None
+USERS_IDS: dict = {}
 
 
 def call(method: str, path: str, body=None, query: dict | None = None, timeout=60, tries=20, token: str | None = None):
@@ -338,6 +339,39 @@ def setup_hss():
     again = call("POST", "/RecoPlus/HomeSections/Setup", {})
     if again.get("added") != 0:
         problems.append(f"Home Screen Sections : un second passage ajoute encore {again.get('added')} rangée(s)")
+
+
+def hss_own_choice_check():
+    """
+    Ticket #80 : un compte qui a enregistré son propre choix de sections avant qu'une rangée Reco+ n'arrive au tableau ne la
+    voyait jamais. Ici « potter » enregistre un choix sans « Nouveautés pour toi » ; l'assistant la coche chez lui, une
+    fois ; décochée ensuite par le compte, elle le reste.
+    """
+    tok = as_user("potter")
+    row = "RecoPlusNouveautes"
+    st = call("GET", "/ModularHomeViews/UserSettings", token=tok)
+    st["EnabledSections"] = [x for x in st.get("EnabledSections") or [] if x != row]
+    call("POST", "/ModularHomeViews/UserSettings", st, token=tok)
+    call("POST", "/RecoPlus/HomeSections/Setup", {})
+    after = call("GET", "/ModularHomeViews/UserSettings", token=tok).get("EnabledSections") or []
+    if row not in after:
+        problems.append(f"Home Screen Sections : rangée jamais proposée à un compte qui a son propre choix, pas cochée chez lui ({after})")
+    st = call("GET", "/ModularHomeViews/UserSettings", token=tok)
+    st["EnabledSections"] = [x for x in st.get("EnabledSections") or [] if x != row]
+    call("POST", "/ModularHomeViews/UserSettings", st, token=tok)
+    call("POST", "/RecoPlus/HomeSections/Setup", {})
+    again = call("GET", "/ModularHomeViews/UserSettings", token=tok).get("EnabledSections") or []
+    if row in again:
+        problems.append("Home Screen Sections : rangée décochée par le compte recochée par Reco+")
+    # l'aperçu le dit
+    hidden = call("GET", "/RecoPlus/Preview", query={"userId": USERS_IDS.get("potter"), "lang": "fr"}).get("hiddenRows") or []
+    if "Nouveautés pour toi" not in hidden:
+        problems.append(f"aperçu : rangée décochée par le compte non signalée ({hidden})")
+    # remise en état pour la suite du test
+    st = call("GET", "/ModularHomeViews/UserSettings", token=tok)
+    st["EnabledSections"] = (st.get("EnabledSections") or []) + [row]
+    call("POST", "/ModularHomeViews/UserSettings", st, token=tok)
+    log("Home Screen Sections, choix propre d'un compte : rangée nouvelle cochée une fois, décochée respectée")
 
 
 def setup_je(lib, users):
@@ -835,6 +869,11 @@ def run():
         setup_je(lib, users)
     if "hss" in EXPECT:
         setup_hss()
+        USERS_IDS.update(users)
+        try:
+            hss_own_choice_check()
+        except Exception as e:
+            problems.append(f"choix propre d'un compte dans Home Screen Sections : {e}")
     if "seerr" in EXPECT:
         WISHED.update(setup_seerr(users))
     # Reco+ : vérifications de compatibilité 20 s après le démarrage, planificateur 60 s après

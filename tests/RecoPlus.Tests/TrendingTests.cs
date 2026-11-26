@@ -180,18 +180,18 @@ public class TrendingTests
     [Fact]
     public void AListRowWithoutLibraryTitlesStillGetsItsOutsideTitles()
     {
-        // « À venir », nouvelles sorties : presque jamais dans la bibliothèque ; la rangée doit quand même être proposée au
-        // placement des titres hors bibliothèque (elle restait vide)
+        // « À venir » : presque jamais dans la bibliothèque ; une tendance dont le compte a déjà vu les titres de la
+        // bibliothèque : plus rien à lui montrer ; la rangée doit quand même recevoir ses titres hors bibliothèque
         var (ctx, vec, ordered, sc) = Setup();
         var asked = new List<(string Row, int Lib)>();
-        var o = new RowOptions { Size = 5, Lists = new() { ["AVenir"] = new[] { "tmdb:movie:1", "tmdb:movie:2" }, ["Sorties"] = Array.Empty<string>() } };
+        var o = new RowOptions { Size = 5, Lists = new() { ["AVenir"] = new[] { "tmdb:movie:1", "tmdb:movie:2" }, ["Tendances"] = Array.Empty<string>() } };
         var r = HomeRows.Allocate(ctx, vec, "u", ordered.Take(5).ToList(), ordered, sc, o, (row, _, shown) =>
         {
             asked.Add((row, shown.Count));
             return -1;
         });
         Assert.Contains(("AVenir", 0), asked);
-        Assert.Contains(("Sorties", 0), asked);
+        Assert.Contains(("Tendances", 0), asked);
         Assert.Empty(r.Rows["AVenir"]);
     }
 
@@ -279,5 +279,34 @@ public class TrendingTests
         var off = new EngineSettings { WPopularity = 1, GateTop = 500, TrendingShare = 0 };
         var ctx3 = new Context(ds2, Now, ds2.Users, off);
         Assert.Equal(Recommender.Score(ctx, vec, "u", cands, off)["t40"], Recommender.Score(ctx3, vec, "u", cands, off)["t40"], 9);
+    }
+
+    [Fact]
+    public void RowsNeverOfferedToAnAccountWithItsOwnChoiceAreTickedOnceThenItsChoiceStays()
+    {
+        static OfferedRows.AdminRow R(string id, bool on = true, bool user = true) => new(id, on, user);
+        var table = new[] { R("RecoPlusPourToi"), R("RecoPlusTendances"), R("RecoPlusPopulaires"), R("RecoPlusAVenir", on: false), R("RecoPlusFilms", user: false), R("ContinueWatching") };
+
+        // première fois (rien de retenu) : les rangées Reco+ actives absentes de son choix sont cochées ; pas une rangée
+        // inactive, ni une rangée imposée à tous (HSS décide), ni une section d'un autre plugin
+        var (add, offered) = OfferedRows.Apply(new[] { "RecoPlusPourToi", "ContinueWatching" }, table, null, "RecoPlus");
+        Assert.Equal(new[] { "RecoPlusTendances", "RecoPlusPopulaires" }, add);
+        // proposées : les rangées actives du tableau (« Films », moitié de la suite du classement, compte pour « Suite »)
+        Assert.Equal(new[] { "Populaires", "PourToi", "Suite", "Tendances" }, offered.OrderBy(x => x, StringComparer.Ordinal));
+
+        // le compte décoche ensuite Populaires : elle n'est plus recochée
+        (add, offered) = OfferedRows.Apply(new[] { "RecoPlusPourToi", "RecoPlusTendances" }, table, offered, "RecoPlus");
+        Assert.Empty(add);
+
+        // une rangée activée plus tard (À venir) est nouvelle pour lui : cochée, ses deux moitiés si elle est séparée
+        var later = new[] { R("RecoPlusPourToi"), R("RecoPlusTendances"), R("RecoPlusPopulaires"), R("RecoPlusAVenirFilms"), R("RecoPlusAVenirSeries") };
+        (add, _) = OfferedRows.Apply(new[] { "RecoPlusPourToi" }, later, offered, "RecoPlus");
+        Assert.Equal(new[] { "RecoPlusAVenirFilms", "RecoPlusAVenirSeries" }, add);
+
+        // une rangée déjà proposée qui devient séparée : ses moitiés ne sont pas cochées pour autant (c'est le rôle de la
+        // mise à jour des rangées séparées, qui suit ce que le compte affichait)
+        var split = new[] { R("RecoPlusPourToi"), R("RecoPlusPopulairesFilms"), R("RecoPlusPopulairesSeries") };
+        (add, _) = OfferedRows.Apply(new[] { "RecoPlusPourToi" }, split, offered, "RecoPlus");
+        Assert.Empty(add);
     }
 }
