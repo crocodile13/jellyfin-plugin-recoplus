@@ -1801,7 +1801,9 @@ public sealed class RecoService : IDisposable
             : null;
         PreviewCard External(ExternalRec e) => new(null, e.Name, e.Year, e.MediaType == "tv", true, e.PosterPath,
             string.IsNullOrEmpty(e.Reason) ? (e.Because.Length > 0 ? Texts.T("Parce que tu as aimé {0}", lang, e.Because) : string.Empty) : Texts.Render(e.Reason, lang), false);
-        foreach (var (row, ids) in r.Rows.Where(kv => kv.Value.Count > 0))
+        // aussi une rangée sans titre de la bibliothèque qui a des titres hors bibliothèque (« À venir », nouvelles sorties)
+        bool Shows(string row, List<string> ids) => ids.Count > 0 || (r.Layouts.TryGetValue(row, out var l) && l.Any(x => x.Length > 0));
+        foreach (var (row, ids) in r.Rows.Where(kv => Shows(kv.Key, kv.Value)))
         {
             var local = ids.Select(Local).Where(c => c is not null).Select(c => c!).ToList();
             var cards = new List<PreviewCard>();
