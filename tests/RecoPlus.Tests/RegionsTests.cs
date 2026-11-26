@@ -52,6 +52,9 @@ public class RegionsTests
         // rien : le pays de repli ; un repli mal formé redevient la France
         Assert.Equal(("IT", false), (Regions.Detect(null, Regions.Clues(null, new[] { "en" }, null, null, null, null, "UTC"), "it").Country, false));
         Assert.Equal("FR", Regions.Detect(null, Array.Empty<RegionClue>(), "???").Country);
+        Assert.Equal("FR", Regions.Detect("UK", Array.Empty<RegionClue>(), "FR").Country);   // « UK » n'est pas un code : c'est GB
+        Assert.Null(Regions.Clean("ZZ"));
+        Assert.Equal("GB", Regions.Clean(" gb "));
 
         // le serveur seul compte peu, mais suffit quand il n'y a rien d'autre
         clues = Regions.Clues(null, null, null, null, "ES", null, null);
@@ -92,8 +95,10 @@ public class RegionsTests
 
             // un fuseau inconnu n'est pas gardé (magasin sans intervalle entre deux signalements)
             var quick = new UserPrefsStore(() => path, NullLogger<UserPrefsStore>.Instance) { ReportInterval = TimeSpan.Zero };
-            Assert.True(quick.Report(u, "Mars/Olympus", null));
-            Assert.Null(quick.For(u).BrowserZone);
+            Assert.False(quick.Report(u, "Mars/Olympus", null));
+            Assert.Equal("Europe/Paris", quick.For(u).BrowserZone);   // un navigateur qui ne dit rien d'utile n'efface pas l'indice connu
+            Assert.True(quick.Report(u, "Europe/Brussels", null));
+            Assert.Equal(("Europe/Brussels", "fr-FR"), (quick.For(u).BrowserZone, quick.For(u).BrowserLanguages![0]));   // langues gardées
             store = quick;
 
             // seulement ce que l'administrateur ouvre ; un pays mal formé est refusé

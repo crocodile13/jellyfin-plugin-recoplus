@@ -97,10 +97,13 @@ public sealed partial class UserPrefsStore
         var z = CleanZone(zone);
         var langs = (languages ?? Array.Empty<string?>()).Take(20).Select(CleanLanguage).OfType<string>()
             .Distinct(StringComparer.OrdinalIgnoreCase).Take(MaxLanguages).ToList();
+        // un navigateur qui ne dit rien d'utile (« UTC » d'un navigateur protégé, pas d'Intl) n'efface pas l'indice connu
         return Change(userKey, p =>
         {
-            bool same = p.BrowserZone == z && (p.BrowserLanguages ?? new List<string>()).SequenceEqual(langs, StringComparer.Ordinal);
-            (p.BrowserZone, p.BrowserLanguages) = (z, langs.Count > 0 ? langs : null);
+            var zone = z ?? p.BrowserZone;
+            var l = langs.Count > 0 ? langs : p.BrowserLanguages;
+            bool same = p.BrowserZone == zone && (p.BrowserLanguages ?? new List<string>()).SequenceEqual(l ?? new List<string>(), StringComparer.Ordinal);
+            (p.BrowserZone, p.BrowserLanguages) = (zone, l);
             return !same;
         });
     }

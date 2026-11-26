@@ -54,12 +54,31 @@ public static class Regions
         ["geo"] = "ka", ["mac"] = "mk", ["bur"] = "my", ["tib"] = "bo", ["wel"] = "cy",
     };
 
-    /// <summary>Code pays ISO 3166-1 alpha-2 propre (« fr » → « FR ») ; null s'il n'en a pas la forme.</summary>
+    private static readonly Lazy<HashSet<string>> Known = new(() => new HashSet<string>(Zones.Value.Values, StringComparer.Ordinal));
+
+    /// <summary>
+    /// Code pays ISO 3166-1 alpha-2 propre (« fr » → « FR ») ; null s'il n'en a pas la forme ou n'est pas un pays connu
+    /// (« UK » n'existe pas : c'est « GB » ; un code inconnu ne correspondrait à aucune date de sortie).
+    /// </summary>
     public static string? Clean(string? country)
     {
-        var c = country?.Trim();
-        return c is { Length: 2 } && char.IsAsciiLetter(c[0]) && char.IsAsciiLetter(c[1]) ? c.ToUpperInvariant() : null;
+        var c = country?.Trim().ToUpperInvariant();
+        return c is { Length: 2 } && Known.Value.Contains(c) ? c : null;
     }
+
+    private static readonly Lazy<Dictionary<string, string>> Iso6392T = new(() =>
+    {
+        var res = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var c in CultureInfo.GetCultures(CultureTypes.NeutralCultures))
+        {
+            if (c.ThreeLetterISOLanguageName.Length == 3 && c.TwoLetterISOLanguageName.Length == 2)
+            {
+                res.TryAdd(c.ThreeLetterISOLanguageName, c.TwoLetterISOLanguageName);
+            }
+        }
+
+        return res;
+    });
 
     /// <summary>Pays d'un fuseau horaire IANA (« Europe/Paris » → « FR ») ; null pour un fuseau sans pays (« UTC »).</summary>
     public static string? OfTimeZone(string? zone)
@@ -90,8 +109,7 @@ public static class Regions
         var lang = parts[0].ToLowerInvariant();
         if (lang.Length == 3)
         {
-            lang = Iso6392B.TryGetValue(lang, out var b) ? b : CultureInfo.GetCultures(CultureTypes.NeutralCultures)
-                .FirstOrDefault(c => string.Equals(c.ThreeLetterISOLanguageName, lang, StringComparison.OrdinalIgnoreCase))?.TwoLetterISOLanguageName ?? lang;
+            lang = Iso6392B.TryGetValue(lang, out var b) ? b : Iso6392T.Value.TryGetValue(lang, out var two) ? two : lang;
         }
 
         return (LanguageCountry.TryGetValue(lang, out var c) ? c : null, false);

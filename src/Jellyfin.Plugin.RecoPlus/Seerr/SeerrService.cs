@@ -447,12 +447,13 @@ public sealed class SeerrService
 
     /// <summary>Fiche (cache 14 jours). Null si indisponible.</summary>
     /// <param name="requireVotes">Relire une fiche en cache qui n'a pas encore le nombre de votes (ancienne version).</param>
-    public async Task<SeerrDetails?> DetailsAsync(SeerrClient cl, string mediaType, int tmdbId, CancellationToken ct, bool requireVotes = false)
+    /// <param name="requireLocalReleases">Relire une fiche de film en cache qui n'a pas encore les dates de sortie par pays (ancienne version).</param>
+    public async Task<SeerrDetails?> DetailsAsync(SeerrClient cl, string mediaType, int tmdbId, CancellationToken ct, bool requireVotes = false, bool requireLocalReleases = false)
     {
         EnsureLoaded();
         var key = mediaType + ":" + tmdbId;
         if (_details.TryGetValue(key, out var d) && DateTime.UtcNow - d.FetchedAt < DetailsTtl && d.Format >= SeerrDetails.MinFormat(mediaType)
-            && (!requireVotes || d.VoteCount is not null))
+            && (!requireVotes || d.VoteCount is not null) && (!requireLocalReleases || mediaType != "movie" || d.LocalReleases is not null))
         {
             return d;
         }

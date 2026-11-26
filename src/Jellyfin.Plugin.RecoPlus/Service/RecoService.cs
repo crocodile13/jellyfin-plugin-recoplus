@@ -135,7 +135,13 @@ public sealed class RecoService : IDisposable
 
     /// <summary>Titres hors bibliothèque pour ce compte : mode étendu actif, et pas coupé par le compte dans sa page (si elle le lui permet).</summary>
     public bool ExtendedFor(string userKey, Configuration.PluginConfiguration cfg)
-        => cfg.ExtendedEnabled && !(cfg.UserPageEnabled && cfg.UserCanSetExtended && _prefs.For(userKey).Extended == false);
+        => cfg.ExtendedEnabled && !(UserPageAvailable(cfg) && cfg.UserCanSetExtended && _prefs.For(userKey).Extended == false);
+
+    /// <summary>
+    /// Page de l'utilisateur ouverte : activée par l'administrateur et Plugin Pages installé. Sans elle, les choix enregistrés
+    /// par les comptes ne s'appliquent pas (aucune page pour les voir ni les annuler) : le serveur décide.
+    /// </summary>
+    public static bool UserPageAvailable(Configuration.PluginConfiguration cfg) => cfg.UserPageEnabled && PluginPagesIntegration.Available;
 
     /// <summary>
     /// Pays d'un compte (dates des nouvelles sorties) : le sien s'il l'a choisi dans sa page (si elle le lui permet), sinon
@@ -155,7 +161,7 @@ public sealed class RecoService : IDisposable
         }
 
         var clues = Regions.Clues(p.BrowserZone, p.BrowserLanguages, u.AudioLanguagePreference, u.SubtitleLanguagePreference, country, lang, ServerZone());
-        var chosen = withChoice && cfg.UserPageEnabled && cfg.UserCanSetRegion && p.Region is not null ? p.Region : cfg.Region;
+        var chosen = withChoice && UserPageAvailable(cfg) && cfg.UserCanSetRegion && p.Region is not null ? p.Region : cfg.Region;
         return Regions.Detect(chosen, clues, cfg.RegionFallback);
     }
 
@@ -564,6 +570,7 @@ public sealed class RecoService : IDisposable
         if (!(seerr.Ok && cl is not null))
         {
             Status.TmdbLists = seerr.Ok ? "désactivé" : "Seerr indisponible";
+            Status.TmdbListCounts = new Dictionary<string, int[]>(StringComparer.Ordinal);
         }
 
         double now = Unix(DateTime.UtcNow);
@@ -650,7 +657,9 @@ public sealed class RecoService : IDisposable
         int done = 0;
         // droits d'accès et rangées Home Screen Sections de chaque compte : lus d'abord, un compte à la fois (bibliothèque
         // de Jellyfin, autre plugin) ; ensuite les comptes sont calculés en parallèle (réglage « Threads »)
-        var prep = targets.Select(u => (U: u, Accessible: _history.Accessible(u), Rows: RowOptionsOf(cfg, HomeScreenSectionsIntegration.EnabledFor(_services, u.Id)))).ToList();
+        // tout ce qui interroge Jellyfin ou HSS se fait ici, avant la boucle parallèle (pays : configuration du serveur, compte)
+        var prep = targets.Select(u => (U: u, Accessible: _history.Accessible(u), Rows: RowOptionsOf(cfg, HomeScreenSectionsIntegration.EnabledFor(_services, u.Id)),
+            Region: RegionOf(u, cfg).Country)).ToList();
         foreach (var p in prep)
         {
             (p.Rows.Saga, p.Rows.SagaMax) = (s.Saga, s.SagaMax);
@@ -687,7 +696,7 @@ public sealed class RecoService : IDisposable
             // rangées que HSS montre à ce compte : les autres ne « réservent » aucun titre
             var rowOpts = job.Rows;
             // pays du compte : dates de sortie de la rangée des nouvelles sorties
-            var region = RegionOf(u, cfg).Country;
+            var region = job.Region;
 
             // montré sans être ouvert (seulement ce que le compte a vraiment vu à l'écran)
             var expo = cfg.TrackImpressions && s.WImpression > 0 ? _impressions.For(key, now) : null;
@@ -803,7 +812,7 @@ public sealed class RecoService : IDisposable
 
                 r.Extended = recs.Select(p => p.Rec!).ToList();
                 r.ExtendedAt = DateTime.UtcNow;
-                var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo, NextPart);
+                var pools = ListPools(u, region, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo, NextPart);
                 var placedFrom = PlaceAll(recs.Select(p => (p.Id, p.Rec!)).ToList(), pools, noise, noiseSeed);
 
                 // bilan par source (aperçu) : trouvés, détaillés et autorisés, proposés, placés dans la rangée
@@ -842,7 +851,7 @@ public sealed class RecoService : IDisposable
             // et les titres hors bibliothèque gardés se replacent avec elles (rangées recomposées)
             if (ExtendedFor(key, cfg) && !(ex is not null && extIds.Count > 0))
             {
-                var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo, NextPart);
+                var pools = ListPools(u, region, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo, NextPart);
                 if (pools.Count > 0)
                 {
                     var kept = r.Extended.Select(e => (Id: "tmdb:" + e.MediaType + ":" + e.TmdbId, Rec: e)).Where(p => titles.ContainsKey(p.Id)).ToList();
@@ -1395,7 +1404,7 @@ public sealed class RecoService : IDisposable
     /// vus, pas déjà demandés ni masqués, pas arrivés entre-temps, autorisés par son contrôle parental et les filtres des
     /// listes. Mode étendu seulement (cartes et bouton Demander).
     /// </summary>
-    private Dictionary<string, ListPool> ListPools(User u, Dictionary<string, Interaction> h, HashSet<string>? hidden, Dictionary<string, TmdbList> lists,
+    private Dictionary<string, ListPool> ListPools(User u, string region, Dictionary<string, Interaction> h, HashSet<string>? hidden, Dictionary<string, TmdbList> lists,
         RowOptions rowOpts, Dictionary<string, Title> titles, LibrarySnapshot lib, SeerrSnapshot seerr, Configuration.PluginConfiguration cfg, ListOptions lo,
         Func<string, bool> nextPart)
     {
@@ -1405,7 +1414,6 @@ public sealed class RecoService : IDisposable
             return res;
         }
 
-        var region = RegionOf(u, cfg).Country;
         double now = Unix(DateTime.UtcNow);
         int days = cfg.ReleasesDays;
 
@@ -1569,7 +1577,8 @@ public sealed class RecoService : IDisposable
                     }
                 }
 
-                perKind.Add(ranked.Select(r => r.MediaType + ":" + r.TmdbId).Distinct(StringComparer.Ordinal).Take(count)
+                // nouvelles sorties : tout ce qui a été lu reste, le tri par pays (NewIn) ne vient qu'ensuite, compte par compte
+                perKind.Add(ranked.Select(r => r.MediaType + ":" + r.TmdbId).Distinct(StringComparer.Ordinal).Take(releases ? want : count)
                     .Select(k => lib.ByTmdb.TryGetValue(k, out var lid) ? lid : "tmdb:" + k).ToList());
             }
 
@@ -1624,7 +1633,7 @@ public sealed class RecoService : IDisposable
         var keys = ids.Select(id => (Id: id, Key: id.StartsWith("tmdb:", StringComparison.Ordinal) ? id[5..] : keyOf[id].FirstOrDefault(dates.ContainsKey)))
             .Where(x => x.Key is not null).ToList();
         var details = await Task.WhenAll(keys.Select(x => Exploration.TryTmdbKey(x.Key!, out var type, out var tid) && type == "movie"
-            ? _seerr.DetailsAsync(cl, type, tid, ct)
+            ? _seerr.DetailsAsync(cl, type, tid, ct, requireLocalReleases: true)
             : Task.FromResult<SeerrDetails?>(null))).ConfigureAwait(false);
         var res = new Dictionary<string, (IReadOnlyDictionary<string, string>? Local, string? Primary)>(StringComparer.Ordinal);
         for (int i = 0; i < keys.Count; i++)

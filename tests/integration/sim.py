@@ -695,6 +695,15 @@ def user_page_check():
     out["pays détecté"] = f"{me['region']['auto']} (indices : {', '.join(c['source'] + '=' + c['country'] for c in me['region']['clues'])})"
     if me["region"]["auto"] != "BE" or not me["region"]["detected"]:
         problems.append(f"{name} : pays détecté {me['region']} au lieu de la Belgique (fuseau Europe/Brussels)")
+    if "hss" not in EXPECT:
+        # sans Plugin Pages, pas de page pour voir ni annuler un choix : le serveur décide, l'enregistrement est refusé
+        try:
+            call("POST", "/RecoPlus/Me", {"Region": "CA"}, token=tok)
+            problems.append(f"{name} : réglage d'un compte accepté sans Plugin Pages")
+        except HttpError as e:
+            if e.status != 403:
+                problems.append(f"{name} : réglage d'un compte sans Plugin Pages, réponse {e.status} au lieu de 403")
+        return out
     call("POST", "/RecoPlus/Me", {"Region": "CA", "Extended": None}, token=tok)
     if call("GET", "/RecoPlus/Me", token=tok)["region"]["current"] != "CA":
         problems.append(f"{name} : le pays choisi dans sa page n'est pas retenu")
