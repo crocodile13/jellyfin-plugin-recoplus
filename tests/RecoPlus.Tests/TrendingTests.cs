@@ -178,6 +178,24 @@ public class TrendingTests
     }
 
     [Fact]
+    public void AListRowWithoutLibraryTitlesStillGetsItsOutsideTitles()
+    {
+        // « À venir », nouvelles sorties : presque jamais dans la bibliothèque ; la rangée doit quand même être proposée au
+        // placement des titres hors bibliothèque (elle restait vide)
+        var (ctx, vec, ordered, sc) = Setup();
+        var asked = new List<(string Row, int Lib)>();
+        var o = new RowOptions { Size = 5, Lists = new() { ["AVenir"] = new[] { "tmdb:movie:1", "tmdb:movie:2" }, ["Sorties"] = Array.Empty<string>() } };
+        var r = HomeRows.Allocate(ctx, vec, "u", ordered.Take(5).ToList(), ordered, sc, o, (row, _, shown) =>
+        {
+            asked.Add((row, shown.Count));
+            return -1;
+        });
+        Assert.Contains(("AVenir", 0), asked);
+        Assert.Contains(("Sorties", 0), asked);
+        Assert.Empty(r.Rows["AVenir"]);
+    }
+
+    [Fact]
     public void HiddenSplitHalvesAreNotFilledAndListTitlesOutsideCandidatesAreDropped()
     {
         var (ctx, vec, ordered, sc) = Setup();

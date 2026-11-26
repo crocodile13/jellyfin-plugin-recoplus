@@ -198,6 +198,28 @@ await test('plusieurs rangées : chacune reçoit ses titres, Seerr seul remplace
     assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 6, 'chaque titre une seule fois');
 });
 
+await test('rangée sans aucun titre de la bibliothèque (À venir, nouvelles sorties) : remplie hors bibliothèque, démasquée, à la forme des autres', async () => {
+    const items = ext(4);
+    const layouts = { RecoPlusPourToi: ['', '', ''], RecoPlusAVenir: ['movie:1000', 'movie:1001'], RecoPlusSorties: [] };
+    const p = page({ hssCards: 3, shape: 'Backdrop', data: { ...base, rowSize: 3, items, layouts } });
+    // Home Screen Sections crée la section d'une rangée sans élément, vide et masquée
+    const empty = (cls) => {
+        const s = p.w.document.createElement('div');
+        s.className = 'verticalSection ' + cls + ' section7 hide';
+        s.innerHTML = '<div is="emby-scroller"><div is="emby-itemscontainer" class="itemsContainer scrollSlider"></div></div>';
+        p.sections.appendChild(s);
+        return s;
+    };
+    const avenir = empty('RecoPlusAVenir');
+    const sorties = empty('RecoPlusSorties');
+    await wait(900);
+    assert.deepEqual(p.rowOf('RecoPlusAVenir'), ['E:1000', 'E:1001']);
+    assert.equal(avenir.classList.contains('hide'), false, 'démasquée');
+    assert.ok(avenir.querySelector('.recoplus-ext').className.includes('overflowBackdropCard'), 'forme des autres rangées Reco+');
+    assert.deepEqual(p.rowOf('RecoPlusSorties'), [], 'rien à placer : intacte');
+    assert.equal(sorties.classList.contains('hide'), true, 'rien à montrer : reste masquée');
+});
+
 await test('Seerr seul sans aucun titre montrable : la rangée garde la bibliothèque', async () => {
     const items = ext(2);
     const p = page({ hssCards: 3, data: { ...base, items, layouts: pour(['movie:1000', 'movie:1001']) }, je: jeStub({ status: { 1000: 5, 1001: 2 } }) });
