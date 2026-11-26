@@ -474,9 +474,6 @@ def task(key):
 def recompute():
     # un calcul déjà en cours (celui du démarrage, « aucune liste en cache ») ne compte pas : seulement un calcul qui a
     # démarré après la demande (sinon le rapport lisait les listes d'avant l'exploration Seerr)
-    asked = dt.datetime.now(dt.timezone.utc) - dt.timedelta(seconds=2)
-    call("POST", "/RecoPlus/Recompute")
-
     def started(last):
         # Jellyfin écrit jusqu'à 7 décimales et un « Z » : ramenées à ce que fromisoformat accepte
         try:
@@ -484,11 +481,18 @@ def recompute():
         except ValueError:
             return None
 
+    # le dernier calcul connu avant la demande, terminé ou en cours : seul un calcul démarré ensuite compte. Une marge
+    # d'horloge (2 s) laissait passer un calcul lancé juste avant par l'enregistrement de la configuration de Seerr, sans
+    # sa clé : le rapport lisait les listes d'avant Seerr (12.2, eco)
+    before = task("RecoPlusNightly") or {}
+    prev = started(before.get("LastExecutionResult") or {}) if before.get("State") == "Idle" else dt.datetime.now(dt.timezone.utc)
+    call("POST", "/RecoPlus/Recompute")
+
     def done():
         t = task("RecoPlusNightly") or {}
         last = t.get("LastExecutionResult") or {}
         st = started(last) if last else None
-        return t.get("State") == "Idle" and st is not None and st >= asked and last
+        return t.get("State") == "Idle" and st is not None and (prev is None or st > prev) and last
     res = wait("calcul de Reco+", done, timeout=900, every=3)
     log(f"calcul complet : {res.get('Status')}")
     if res.get("Status") != "Completed":
