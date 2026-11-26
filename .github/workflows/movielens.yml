@@ -16,6 +16,10 @@ on:
         description: "Also run the plugin's calibration on MovieLens servers (2005, 2012, 2019)"
         type: boolean
         default: false
+      memory:
+        description: "Only measure the calibration's memory on a small MovieLens server"
+        type: boolean
+        default: false
   push:
     branches: ["ml-*"]
 
@@ -27,6 +31,7 @@ jobs:
   bench:
     runs-on: ubuntu-latest
     timeout-minutes: 340
+    if: ${{ !inputs.memory }}
     strategy:
       fail-fast: false
       matrix:
@@ -118,3 +123,46 @@ jobs:
         with:
           name: movielens-calibration-${{ matrix.year }}
           path: out/calibration-*.json
+
+  # mémoire du calibrage (choix) sur le petit MovieLens : .NET par défaut, tas plafonné à 2 Go, ramasse-miettes « station »
+  memory:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.memory }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "10.0.x"
+      - name: Wikidata cache
+        uses: actions/cache@v4
+        with:
+          path: tests/movielens/data/wikidata.json
+          key: movielens-wikidata-mem-${{ github.run_id }}
+          restore-keys: movielens-wikidata-
+      - name: Export
+        run: python tests/movielens/bench.py --data ml-latest-small --server 2017 --server-users 40 --server-library 1500 --out out
+      - name: Calibrate three ways
+        run: |
+          dotnet build tests/movielens/Calibrate -c Release
+          run() {
+            name=$1; shift
+            set +e
+            env "$@" /usr/bin/time -v timeout 150m dotnet tests/movielens/Calibrate/bin/Release/net10.0/Calibrate.dll out/server-2017.json choice "out/cal-$name.json" > "out/$name.log" 2>&1
+            code=$?
+            set -e
+            peak=$(grep "Maximum resident" "out/$name.log" | awk '{print $NF}')
+            wall=$(grep "Elapsed (wall" "out/$name.log" | awk '{print $NF}')
+            echo "| $name | $code | $((peak / 1024)) Mo | $wall |" >> "$GITHUB_STEP_SUMMARY"
+          }
+          { echo "| Run | Exit | Peak memory | Time |"; echo "|---|---|---|---|"; } >> "$GITHUB_STEP_SUMMARY"
+          run default X=1
+          run heap-2GB DOTNET_GCHeapHardLimit=0x80000000
+          run workstation DOTNET_gcServer=0 DOTNET_GCgen0size=0x4000000
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: movielens-memory
+          path: out/
