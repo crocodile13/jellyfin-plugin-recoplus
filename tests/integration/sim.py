@@ -349,28 +349,34 @@ def hss_own_choice_check():
     """
     tok = as_user("potter")
     row = "RecoPlusNouveautes"
-    st = call("GET", "/ModularHomeViews/UserSettings", token=tok)
-    st["EnabledSections"] = [x for x in st.get("EnabledSections") or [] if x != row]
-    call("POST", "/ModularHomeViews/UserSettings", st, token=tok)
+
+    def mine():
+        return call("GET", "/ModularHomeViews/UserSettings", token=tok).get("EnabledSections") or []
+
+    def save(sections):
+        # HSS 3.0 : tant que son fichier des choix n'existe pas, un enregistrement crée un fichier vide sans rien y mettre ;
+        # on renvoie donc jusqu'à le relire (deux fois au plus)
+        for _ in range(2):
+            st = call("GET", "/ModularHomeViews/UserSettings", token=tok)
+            st["EnabledSections"] = sections
+            call("POST", "/ModularHomeViews/UserSettings", st, token=tok)
+            if sorted(mine()) == sorted(sections):
+                return
+        raise RuntimeError(f"choix du compte non enregistré par Home Screen Sections ({mine()})")
+
+    save([x for x in mine() if x != row])
     call("POST", "/RecoPlus/HomeSections/Setup", {})
-    after = call("GET", "/ModularHomeViews/UserSettings", token=tok).get("EnabledSections") or []
-    if row not in after:
-        problems.append(f"Home Screen Sections : rangée jamais proposée à un compte qui a son propre choix, pas cochée chez lui ({after})")
-    st = call("GET", "/ModularHomeViews/UserSettings", token=tok)
-    st["EnabledSections"] = [x for x in st.get("EnabledSections") or [] if x != row]
-    call("POST", "/ModularHomeViews/UserSettings", st, token=tok)
+    if row not in mine():
+        problems.append(f"Home Screen Sections : rangée jamais proposée à un compte qui a son propre choix, pas cochée chez lui ({mine()})")
+    save([x for x in mine() if x != row])
     call("POST", "/RecoPlus/HomeSections/Setup", {})
-    again = call("GET", "/ModularHomeViews/UserSettings", token=tok).get("EnabledSections") or []
-    if row in again:
+    if row in mine():
         problems.append("Home Screen Sections : rangée décochée par le compte recochée par Reco+")
     # l'aperçu le dit
     hidden = call("GET", "/RecoPlus/Preview", query={"userId": USERS_IDS.get("potter"), "lang": "fr"}).get("hiddenRows") or []
     if "Nouveautés pour toi" not in hidden:
         problems.append(f"aperçu : rangée décochée par le compte non signalée ({hidden})")
-    # remise en état pour la suite du test
-    st = call("GET", "/ModularHomeViews/UserSettings", token=tok)
-    st["EnabledSections"] = (st.get("EnabledSections") or []) + [row]
-    call("POST", "/ModularHomeViews/UserSettings", st, token=tok)
+    save(mine() + [row])   # remise en état pour la suite du test
     log("Home Screen Sections, choix propre d'un compte : rangée nouvelle cochée une fois, décochée respectée")
 
 
