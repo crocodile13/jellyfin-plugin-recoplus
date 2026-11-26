@@ -9,6 +9,16 @@ public sealed class Context
 {
     /// <summary>Construit le contexte : signaux de chaque utilisateur, titres aimés, « vus ensemble ».</summary>
     public Context(Dataset ds, double now, IReadOnlyDictionary<string, Dictionary<string, Interaction>> hist, EngineSettings p)
+        : this(ds, now, hist, p, null)
+    {
+    }
+
+    /// <summary>
+    /// Contexte qui ne servira qu'à noter <paramref name="onlyFor"/> (calibrage : un contexte par cas, gardé pour tous
+    /// les cas) : « vus ensemble » réduit à ce que lit son score (<see cref="Core.ItemCooc(IEnumerable{IReadOnlyCollection{string}}, double, int, IReadOnlyCollection{string}?, IReadOnlyDictionary{string, Interaction}?)"/>),
+    /// même score qu'avec le contexte complet. Null : complet.
+    /// </summary>
+    public Context(Dataset ds, double now, IReadOnlyDictionary<string, Dictionary<string, Interaction>> hist, EngineSettings p, string? onlyFor)
     {
         Ds = ds;
         Now = now;
@@ -28,7 +38,9 @@ public sealed class Context
         }
 
         Pos = Sig.ToDictionary(kv => kv.Key, kv => (IReadOnlyCollection<string>)kv.Value.Where(e => e.Value > 0).Select(e => e.Key).ToList(), StringComparer.Ordinal);
-        Cooc = Core.ItemCooc(Pos.Values, p.Shrink, p.MinCommon);
+        Cooc = onlyFor is not null && Pos.TryGetValue(onlyFor, out var mine) && hist.TryGetValue(onlyFor, out var seen)
+            ? Core.ItemCooc(Pos.Values, p.Shrink, p.MinCommon, mine, seen)
+            : Core.ItemCooc(Pos.Values, p.Shrink, p.MinCommon);
     }
 
     private Context(Context c)

@@ -78,16 +78,39 @@ public static class ChoiceModel
     public sealed class FeatureCache
     {
         private readonly System.Collections.Concurrent.ConcurrentDictionary<EvalEvent, CaseData?> _d = new();
+        private long _values;
 
         public FeatureCache(EngineSettings s) => Key = System.Text.Json.JsonSerializer.Serialize(s.Sanitized());
 
+        /// <summary>
+        /// Valeurs gardées au plus (8 octets chacune : 256 Mo) ; au-delà, les caractéristiques d'un cas sont recalculées
+        /// à chaque apprentissage au lieu d'être gardées (plus lent, mêmes résultats).
+        /// </summary>
+        public long Budget { get; init; } = 32_000_000;
+
         internal string Key { get; }
+
+        /// <summary>Valeurs actuellement gardées (tests).</summary>
+        public long Values => Interlocked.Read(ref _values);
 
         internal bool For(EngineSettings s) => System.Text.Json.JsonSerializer.Serialize(s) == Key;
 
         internal bool TryGet(EvalEvent e, out CaseData? d) => _d.TryGetValue(e, out d);
 
-        internal void Put(EvalEvent e, CaseData? d) => _d[e] = d;
+        internal void Put(EvalEvent e, CaseData? d)
+        {
+            long n = d?.X.LongLength ?? 0;
+            if (Interlocked.Add(ref _values, n) > Budget)
+            {
+                Interlocked.Add(ref _values, -n);
+                return;
+            }
+
+            if (!_d.TryAdd(e, d))
+            {
+                Interlocked.Add(ref _values, -n);
+            }
+        }
     }
 
     /// <summary>Caractéristiques de chaque candidat de chaque cas, garde-fou figé selon les réglages <paramref name="s"/>.</summary>
@@ -107,7 +130,7 @@ public static class ChoiceModel
 
             var (u, target, t0) = cases[i].Ev;
             var hist = Calibrator.Snapshot(ds, t0 - 1);
-            var ctx = new Context(ds, t0 - 1, hist, s);
+            var ctx = new Context(ds, t0 - 1, hist, s, u);
             var seen = hist[u];
             var cands = Calibrator.Candidates(ds, seen, t0);
             int ti = cands.IndexOf(target);
