@@ -25,6 +25,7 @@ public sealed partial class UserPrefsStore
     private readonly object _lock = new();
     private readonly object _saveLock = new();   // deux écritures à la fois se disputeraient le fichier temporaire
     private readonly Dictionary<string, Prefs> _byUser = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, DateTime> _lastReport = new(StringComparer.Ordinal);   // en mémoire seulement
     private bool _loaded;
 
     /// <param name="path">Chemin du fichier (null tant que le plugin n'est pas prêt).</param>
@@ -76,9 +77,23 @@ public sealed partial class UserPrefsStore
         }
     }
 
-    /// <summary>Indices signalés par le navigateur du compte connecté. Renvoie vrai s'ils ont changé.</summary>
+    /// <summary>Signalements d'un même compte : au plus un écrit par cet intervalle (un client qui boucle n'use pas le disque).</summary>
+    public TimeSpan ReportInterval { get; init; } = TimeSpan.FromMinutes(1);
+
+    /// <summary>Indices signalés par le navigateur du compte connecté. Renvoie vrai s'ils ont changé (et ont été gardés).</summary>
     public bool Report(string userKey, string? zone, IEnumerable<string?>? languages)
     {
+        lock (_lock)
+        {
+            var now = DateTime.UtcNow;
+            if (_lastReport.TryGetValue(userKey, out var last) && now - last < ReportInterval)
+            {
+                return false;
+            }
+
+            _lastReport[userKey] = now;
+        }
+
         var z = CleanZone(zone);
         var langs = (languages ?? Array.Empty<string?>()).Take(20).Select(CleanLanguage).OfType<string>()
             .Distinct(StringComparer.OrdinalIgnoreCase).Take(MaxLanguages).ToList();
@@ -131,6 +146,11 @@ public sealed partial class UserPrefsStore
             foreach (var u in gone)
             {
                 _byUser.Remove(u);
+            }
+
+            foreach (var u in _lastReport.Keys.Where(u => !users.Contains(u)).ToList())
+            {
+                _lastReport.Remove(u);
             }
         }
 
