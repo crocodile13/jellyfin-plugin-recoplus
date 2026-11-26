@@ -85,14 +85,16 @@ public class RegionsTests
             var u = Guid.NewGuid().ToString("N");
             var store = new UserPrefsStore(() => path, NullLogger<UserPrefsStore>.Instance);
             Assert.True(store.Report(u, "Europe/Paris", new[] { "fr-FR", "<script>", "en", "de", "es", "it" }));
-            Assert.False(store.Report(u, "Europe/Paris", new[] { "fr-FR", "en", "de", "es" }));   // rien de changé : rien d'écrit
+            Assert.False(store.Report(u, "Europe/Kyiv", null));   // moins d'une minute après : ignoré
             var p = store.For(u);
             Assert.Equal("Europe/Paris", p.BrowserZone);
             Assert.Equal(new[] { "fr-FR", "en", "de", "es" }, p.BrowserLanguages);
 
-            // un fuseau inconnu n'est pas gardé
-            store.Report(u, "Mars/Olympus", null);
-            Assert.Null(store.For(u).BrowserZone);
+            // un fuseau inconnu n'est pas gardé (magasin sans intervalle entre deux signalements)
+            var quick = new UserPrefsStore(() => path, NullLogger<UserPrefsStore>.Instance) { ReportInterval = TimeSpan.Zero };
+            Assert.True(quick.Report(u, "Mars/Olympus", null));
+            Assert.Null(quick.For(u).BrowserZone);
+            store = quick;
 
             // seulement ce que l'administrateur ouvre ; un pays mal formé est refusé
             Assert.True(store.Set(u, "be", false, canRegion: true, canExtended: false));
