@@ -124,7 +124,7 @@ jobs:
           name: movielens-calibration-${{ matrix.year }}
           path: out/calibration-*.json
 
-  # mémoire du calibrage (choix) sur le petit MovieLens : .NET par défaut, tas plafonné à 2 Go, ramasse-miettes « station »
+  # mémoire et durée du calibrage (choix) sur le petit MovieLens, .NET par défaut
   memory:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.memory }}
@@ -159,8 +159,6 @@ jobs:
           }
           { echo "| Run | Exit | Peak memory | Time |"; echo "|---|---|---|---|"; } >> "$GITHUB_STEP_SUMMARY"
           run default X=1
-          run heap-2GB DOTNET_GCHeapHardLimit=0x80000000
-          run workstation DOTNET_gcServer=0 DOTNET_GCgen0size=0x4000000
       - uses: actions/upload-artifact@v7
         if: always()
         with:

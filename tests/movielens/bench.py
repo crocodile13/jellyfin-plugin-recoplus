@@ -456,7 +456,8 @@ def export_server(d: Path, year: int, n_users: int, library: int, seed: int, mov
     at = stats_at_cut(d, [(now, lib)])
     ids = sorted({tmdb[int(t)] for t in lib if int(t) in tmdb})
     wd = wikidata(ids, root / "wikidata.json")
-    freq = Counter(x for info in wd.values() for x in set(info.get("Actor", [])))
+    # fréquences sur la bibliothèque seule : le cache Wikidata varie d'un run à l'autre, l'export doit rester le même
+    freq = Counter(x for t in ids for x in set(wd.get(t, {}).get("Actor", [])))
     titles = []
     for sid in sorted(lib, key=int):
         m = int(sid)
@@ -528,7 +529,7 @@ def main():
             break
     ids = sorted({tmdb[int(t)] for _, _, lib, _ in drafts for t in lib if int(t) in tmdb})
     wd = wikidata(ids, root / "wikidata.json")
-    actor_freq = Counter(x for info in wd.values() for x in set(info.get("Actor", [])))
+    actor_freq = Counter(x for t in ids for x in set(wd.get(t, {}).get("Actor", [])))
     at_cut = stats_at_cut(d, [(c, lib) for _, _, lib, cut in drafts for c in (cut, cut - TREND_DAYS * DAY)])
     houses = [build(h, hist, movies, tmdb, tags, wd, mcount, mfirst, actor_freq, a.seed + i, at_cut) for i, h, _, _ in drafts]
     covered = sum(1 for t in ids if wd.get(t, {}).get("Director"))
