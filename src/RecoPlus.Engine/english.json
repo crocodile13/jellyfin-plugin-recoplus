@@ -249,6 +249,7 @@
   "Home Screen Sections absent : pas de rangées d'accueil (facultatif, le reste fonctionne).": "Home Screen Sections not installed: no home rows (optional, everything else works).",
   "Home Screen Sections n'a pas l'interface attendue ({0}).": "Home Screen Sections doesn't have the expected interface ({0}).",
   "Home Screen Sections n'a pas pu être configuré : {0}": "Home Screen Sections could not be configured: {0}",
+  "Home Screen Sections ne montre pas à ce compte : {0}. Elles sont décochées dans ses réglages d'accueil (menu de l'utilisateur → Modular Home), ou absentes du tableau de Home Screen Sections.": "Home Screen Sections does not show these rows to this account: {0}. They are unticked in its home settings (user menu → Modular Home), or missing from the Home Screen Sections table.",
   "Hors bibliothèque : les films et séries du mode étendu, selon la sorte de chaque rangée.": "Outside the library: extended-mode movies and series, according to each row's kind.",
   "Hors bibliothèque : les films.": "Outside the library: movies.",
   "Hors bibliothèque : les séries.": "Outside the library: series.",

@@ -526,10 +526,15 @@ await test('aperçu visuel : rangées dans l\'ordre, affiches, hors bibliothèqu
         ] },
         { Id: 'ParceQue1', Title: 'Parce que tu as aimé Akira', Cards: [] },
     ];
-    const { d } = await open(cfg, { '/RecoPlus/Preview': { items: [], rows: {}, extended: [], cards } });
+    const { d } = await open(cfg, { '/RecoPlus/Preview': { items: [], rows: {}, extended: [], cards, hiddenRows: ['Tendances', 'Populaires'] } });
     await wait(50);
+    assert.equal(d.getElementById('rpPreviewHidden').hidden, true);
     d.getElementById('rpPreviewBtn').click();
     await wait(50);
+    // rangées que HSS ne montre pas à ce compte : dites, avec où les cocher (ticket #80)
+    const hid = d.getElementById('rpPreviewHidden');
+    assert.equal(hid.hidden, false);
+    assert.match(hid.textContent, /Tendances, Populaires.*Modular Home/);
     const host = d.getElementById('rpPreviewCards');
     assert.deepEqual([...host.querySelectorAll('h4')].map((h) => h.textContent), ['Pour toi', 'Parce que tu as aimé Akira']);
     const c = [...host.querySelectorAll('.rp-pv-card')];

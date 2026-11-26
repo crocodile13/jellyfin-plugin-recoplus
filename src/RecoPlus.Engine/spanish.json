@@ -249,6 +249,7 @@
   "Home Screen Sections absent : pas de rangées d'accueil (facultatif, le reste fonctionne).": "Home Screen Sections no está instalado: no hay filas de inicio (opcional, todo lo demás funciona).",
   "Home Screen Sections n'a pas l'interface attendue ({0}).": "Home Screen Sections no tiene la interfaz esperada ({0}).",
   "Home Screen Sections n'a pas pu être configuré : {0}": "No se ha podido configurar Home Screen Sections: {0}",
+  "Home Screen Sections ne montre pas à ce compte : {0}. Elles sont décochées dans ses réglages d'accueil (menu de l'utilisateur → Modular Home), ou absentes du tableau de Home Screen Sections.": "Home Screen Sections no muestra estas filas a esta cuenta: {0}. Están desmarcadas en sus ajustes de inicio (menú del usuario → Modular Home), o no están en la tabla de Home Screen Sections.",
   "Hors bibliothèque : les films et séries du mode étendu, selon la sorte de chaque rangée.": "Fuera de la biblioteca: películas y series del modo ampliado, según el tipo de cada fila.",
   "Hors bibliothèque : les films.": "Fuera de la biblioteca: películas.",
   "Hors bibliothèque : les séries.": "Fuera de la biblioteca: series.",

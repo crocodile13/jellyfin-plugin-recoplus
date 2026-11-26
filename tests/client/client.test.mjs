@@ -198,9 +198,9 @@ await test('plusieurs rangées : chacune reçoit ses titres, Seerr seul remplace
     assert.equal(p.sections.querySelectorAll('.recoplus-ext').length, 6, 'chaque titre une seule fois');
 });
 
-await test('rangée sans aucun titre de la bibliothèque (À venir, nouvelles sorties) : remplie hors bibliothèque, démasquée, à la forme des autres', async () => {
+await test('rangée sans aucun titre de la bibliothèque (À venir, tendance déjà vue) : remplie hors bibliothèque, démasquée, à la forme des autres', async () => {
     const items = ext(4);
-    const layouts = { RecoPlusPourToi: ['', '', ''], RecoPlusAVenir: ['movie:1000', 'movie:1001'], RecoPlusSorties: [] };
+    const layouts = { RecoPlusPourToi: ['', '', ''], RecoPlusAVenir: ['movie:1000', 'movie:1001'], RecoPlusTendances: [] };
     const p = page({ hssCards: 3, shape: 'Backdrop', data: { ...base, rowSize: 3, items, layouts } });
     // Home Screen Sections crée la section d'une rangée sans élément, vide et masquée
     const empty = (cls) => {
@@ -211,12 +211,12 @@ await test('rangée sans aucun titre de la bibliothèque (À venir, nouvelles so
         return s;
     };
     const avenir = empty('RecoPlusAVenir');
-    const sorties = empty('RecoPlusSorties');
+    const sorties = empty('RecoPlusTendances');
     await wait(900);
     assert.deepEqual(p.rowOf('RecoPlusAVenir'), ['E:1000', 'E:1001']);
     assert.equal(avenir.classList.contains('hide'), false, 'démasquée');
     assert.ok(avenir.querySelector('.recoplus-ext').className.includes('overflowBackdropCard'), 'forme des autres rangées Reco+');
-    assert.deepEqual(p.rowOf('RecoPlusSorties'), [], 'rien à placer : intacte');
+    assert.deepEqual(p.rowOf('RecoPlusTendances'), [], 'rien à placer : intacte');
     assert.equal(sorties.classList.contains('hide'), true, 'rien à montrer : reste masquée');
 });
 

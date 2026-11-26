@@ -315,6 +315,132 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
         _services = services;
         _users = users;
         _paths = paths;
+        Instance = this;
+    }
+
+    /// <summary>Instance en service (assistant de mise en route).</summary>
+    public static HomeScreenSectionsIntegration? Instance { get; private set; }
+
+    /// <summary>Rangées de base déjà proposées à chaque compte qui a son propre choix de sections (voir <see cref="OfferedRows"/>).</summary>
+    private static string? OfferedPath => Plugin.Instance is null ? null : System.IO.Path.Combine(Plugin.Instance.DataFolderPath, "rangees-proposees.json");
+
+    private readonly object _offeredLock = new();
+
+    /// <summary>
+    /// Rangées Reco+ actives du tableau de l'administrateur jamais proposées à un compte qui a enregistré son propre choix
+    /// de sections : cochées chez lui, une fois (sinon il ne les voit jamais, ticket #80). Seulement ces comptes : ceux qui
+    /// suivent le tableau les voient déjà. Rien si Home Screen Sections n'a pas la forme attendue.
+    /// </summary>
+    /// <returns>Nombre de comptes mis à jour.</returns>
+    public int EnableNewRows()
+    {
+        lock (_offeredLock)
+        {
+            try
+            {
+                var asm = AssemblyLoadContext.All.SelectMany(c => c.Assemblies).FirstOrDefault(a => a.GetName().Name == "Jellyfin.Plugin.HomeScreenSections");
+                var t = asm?.GetType("Jellyfin.Plugin.HomeScreenSections.Library.IHomeScreenManager");
+                var mgr = t is null ? null : _services.GetService(t);
+                var get = t?.GetMethod("GetUserSettings", new[] { typeof(Guid) });
+                var upd = t?.GetMethods().FirstOrDefault(m => m.Name == "UpdateUserSettings" && m.GetParameters().Length == 2);
+                if (mgr is null || get is null || upd is null || AdminConfig() is not { } a || OfferedPath is not { } path)
+                {
+                    return 0;
+                }
+
+                var allow = a.Row.GetProperty("AllowUserOverride");
+                var table = (a.Table.GetValue(a.Conf) as Array ?? Array.Empty<object>()).Cast<object>()
+                    .Select(o => new OfferedRows.AdminRow(a.Id.GetValue(o) as string ?? string.Empty,
+                        a.Row.GetProperty("Enabled")?.GetValue(o) as bool? ?? true, allow?.GetValue(o) as bool? ?? true))
+                    .ToList();
+                var known = ReadOffered(path);
+                var saved = SavedHssUsers();
+                int changed = 0;
+                bool dirty = false;
+                foreach (var u in _users.GetUsers().Where(u => saved.Contains(u.Id)))
+                {
+                    var settings = get.Invoke(mgr, new object[] { u.Id });
+                    if (settings?.GetType().GetProperty("EnabledSections")?.GetValue(settings) is not List<string> list)
+                    {
+                        continue;
+                    }
+
+                    var key = u.Id.ToString("N");
+                    var (add, offered) = OfferedRows.Apply(list, table, known.TryGetValue(key, out var k) ? k : null, Prefix);
+                    if (add.Count > 0)
+                    {
+                        list.AddRange(add);
+                        upd.Invoke(mgr, new[] { u.Id, settings });
+                        changed++;
+                    }
+
+                    if (!known.TryGetValue(key, out var prev) || !prev.SetEquals(offered))
+                    {
+                        known[key] = offered;
+                        dirty = true;
+                    }
+                }
+
+                // comptes disparus : oubliés
+                var users = _users.GetUsers().Select(u => u.Id.ToString("N")).ToHashSet(StringComparer.Ordinal);
+                dirty |= known.Keys.Where(x => !users.Contains(x)).ToList().Count(known.Remove) > 0;
+                if (dirty)
+                {
+                    WriteOffered(path, known);
+                }
+
+                if (changed > 0)
+                {
+                    _log.LogInformation("Reco+: Reco+ rows never offered to them ticked for {N} account(s) with their own Home Screen Sections choice", changed);
+                }
+
+                return changed;
+            }
+            catch (Exception ex) when (ex is TargetInvocationException or TargetException or InvalidOperationException or InvalidCastException or ArgumentException or MissingMethodException or MemberAccessException)
+            {
+                _log.LogWarning("Reco+: could not tick the new rows for the accounts ({Msg})", (ex.InnerException ?? ex).Message);
+                return 0;
+            }
+        }
+    }
+
+    private Dictionary<string, HashSet<string>> ReadOffered(string path)
+    {
+        var res = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+        try
+        {
+            var fi = new System.IO.FileInfo(path);
+            if (fi.Exists && fi.Length is > 0 and < 1024 * 1024 && JsonSerializer.Deserialize<Dictionary<string, List<string>>>(System.IO.File.ReadAllText(path)) is { } d)
+            {
+                foreach (var (u, rows) in d)
+                {
+                    if (Guid.TryParseExact(u, "N", out _) && rows is not null)
+                    {
+                        res[u] = rows.Where(IsRowId).ToHashSet(StringComparer.Ordinal);
+                    }
+                }
+            }
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException or JsonException)
+        {
+            _log.LogWarning("Reco+: unreadable offered-rows file ({Type}), starting from scratch", ex.GetType().Name);
+        }
+
+        return res;
+    }
+
+    private void WriteOffered(string path, Dictionary<string, HashSet<string>> known)
+    {
+        try
+        {
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path)!);
+            System.IO.File.WriteAllText(path + ".tmp", JsonSerializer.Serialize(known.ToDictionary(kv => kv.Key, kv => kv.Value.OrderBy(x => x, StringComparer.Ordinal).ToList())));
+            System.IO.File.Move(path + ".tmp", path, true);
+        }
+        catch (Exception ex) when (ex is System.IO.IOException or UnauthorizedAccessException)
+        {
+            _log.LogWarning(ex, "Reco+: could not write the offered rows");
+        }
     }
 
     /// <summary>
@@ -639,6 +765,7 @@ public sealed class HomeScreenSectionsIntegration : BackgroundService
 
             Registered = true;
             ReconcileSplits(asm, cfg);
+            EnableNewRows();
             State = Texts.Pack("{0} rangées déclarées ({1}) — à choisir et ordonner dans la configuration de Home Screen Sections", sections.Count, string.Join(" · ", sections.Select(x => x.Title).Distinct()));
             _notifier.Clear("off-" + Feature.HomeScreenSection);
             _log.LogInformation("Reco+: {N} rows registered with Home Screen Sections", sections.Count);
