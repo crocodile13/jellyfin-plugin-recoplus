@@ -19,6 +19,11 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     jamais un titre demandé ; filtres des listes appliqués).
   - `HomeRows.cs` : répartition des rangées sans doublon (`Allocate`, rappel `fit`), placement des titres hors
     bibliothèque (`PlaceRow`, `FitRow`, `FreePlaces`, `CapPlaces`, `ForcePlaces`), `RowSource`, `MixOptions`.
+  - `Regions.cs` : pays d'un compte (dates des nouvelles sorties, jamais le pays de production) : indices pondérés
+    (fuseau du navigateur 3, langue avec région 2, langue seule et langues audio / sous-titres 1, serveur 0,5), choix du
+    compte ou de l'administrateur d'abord, repli ; `zones.txt` (fuseaux IANA → pays, tiré de tzdata, alias compris). Pas
+    d'adresse IP (service extérieur ou base à tenir, faux derrière un VPN). `Releases.cs` : sorti récemment dans un pays
+    (types TMDb 2, 3, 4, 6 ; sans date locale, la date principale).
   - `Trending.cs` : listes TMDb du moment (intensité 1/√(1 + place), ordre tendance × goût), `KindFilter` (films,
     séries, les deux, séparées), `SplitLayout` (accueil HSS d'un compte quand une rangée est séparée ou réunie).
   - `ListPolicy.cs` (présentation : hasard du jour, minimums films/séries, filtres), `Exploration.cs` (mode étendu :
@@ -31,6 +36,8 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
   - `Service/RecoService.cs` : calcul complet ou d'un compte (`ComputeCore`), données (`Assemble`), jeu de calibrage,
     aperçu. `RecoWorker.cs` : quand recalculer (activité du compte regroupée, écart minimal, au démarrage).
     `CalibrationService.cs` : tâche de calibrage. `RecoModels.cs` : `UserRecs` (listes, rangées, compositions).
+    `RecoService.RegionOf` (pays d'un compte) et `ExtendedFor` (mode étendu coupé par le compte) : à utiliser partout à la
+    place de `cfg.ExtendedEnabled` pour ce qui vaut pour un compte.
   - `Integration/` : HSS par réflexion (aucune dépendance de compilation), injection du script dans `index.html`,
     décorateur de « Plus comme ceci » (volet suivant : `Sagas.Next` sur les sagas du dernier calcul,
     `RecoService.SagaCollections`), filtre des suggestions, garde de compatibilité (coupe une partie qui ne colle
@@ -40,6 +47,13 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
   - `Data/` : lecture de l'historique (Jellyfin, Playback Reporting, Jellyfin Enhanced), premiers lancements, titres
     montrés, secrets, journal (`LogTail`), export du jeu de calibrage (`CalibrationExport`).
   - `Api/RecoController.cs` : `RecoPlus/…` ; tout ce qui touche à la configuration exige les droits d'administration.
+    Côté utilisateur (session seulement, identité du jeton) : `Extended`, `Impressions`, `Request`, `Client` (fuseau et
+    langues du navigateur), `Me` (lire / écrire ses réglages, seulement ceux que l'administrateur ouvre), `UserPage`.
+  - Page de chaque utilisateur : `Integration/PluginPagesIntegration.cs` (déclarée à Plugin Pages par réflexion,
+    `PluginInterface.RegisterPage(JObject)`, `IsEnabled(string)` appelé à chaque menu), `Web/userPage.html` (fragment HTML
+    que Plugin Pages charge avec la session et insère : scripts exécutés, rien d'inséré comme HTML), `Data/UserPrefsStore.cs`
+    (`preferences.json` : pays choisi, mode étendu coupé, fuseau et langues signalés ; valeurs revérifiées à la lecture).
+    Un réglage ouvert aux utilisateurs = un interrupteur `UserCanSet…` côté administrateur, coupé = le serveur décide.
   - `I18n.cs` : réglage de langue (`UiLanguage` : celle de Jellyfin, français, anglais), langue et pays des
     métadonnées du serveur (valeurs par défaut de la langue TMDb et du pays des classifications).
   - `Web/icon.svg` : icône de l'entrée « Reco+ » du menu du tableau de bord (`EnableInMainMenu`, icône Material
@@ -77,7 +91,7 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
 ```
 ./build.sh                                                     # tests, compilation, paquet (SDK .NET 10)
 dotnet test tests/RecoPlus.Tests -c Release
-cd tests/client && npm install --no-save jsdom@24.1.3 && node client.test.mjs && node configpage.test.mjs
+cd tests/client && npm install --no-save jsdom@24.1.3 && node client.test.mjs && node configpage.test.mjs && node userpage.test.mjs
 cd prototype && python golden.py ../tests/RecoPlus.Tests/golden.json
 cd tools/reco-export && python test_reco_export.py
 ```
@@ -162,8 +176,9 @@ de la CI.
   actifs), vecteurs, puis chaque compte en parallèle : candidats (ni vus ni déjà connus), tranches horaires si
   l'heure de la journée est active, rangées, titres hors bibliothèque et composition des rangées.
 - Rangées d'accueil : `HomeRows.Allocate` remplit, dans l'ordre de `HomeRows.BaseRows` : « Pour
-  toi », les listes TMDb du moment (Tendances, Populaires, À venir ; avec Seerr, `TmdbListsAsync`, ordre
-  `Trending.Order`), Nouveautés, « Parce que … » 1-3, suite du classement (`HomeRows.Suite` : séparée par défaut, ses
+  toi », les listes TMDb du moment (Tendances, Populaires, Nouvelles sorties, À venir ; avec Seerr, `TmdbListsAsync`, ordre
+  `Trending.Order` ; nouvelles sorties : découverte TMDb filtrée par dates, votes et note, puis date de sortie dans le pays
+  de chaque compte, `TmdbList.NewIn` ; leurs minimums filtrent aussi la bibliothèque), Nouveautés, « Parce que … » 1-3, suite du classement (`HomeRows.Suite` : séparée par défaut, ses
   moitiés gardent les identifiants historiques `Films` et `Series` ; réunie : `Suite`). Chaque rangée de
   `HomeRows.KindRows` se règle en films / séries / les deux / séparée (titre propre à chaque moitié) (`KindFilter.Split` : identifiants suffixés `Films` et `Series`, servis par
   `HssSectionHandler.GetRow` via `additionalData`) ; à l'enregistrement, `ReconcileSplits` met à jour l'accueil HSS de
@@ -342,5 +357,7 @@ de la CI.
 - `QueueIfNotRunning` ignore une demande quand la tâche tourne déjà : un « Recalculer maintenant » pendant un calcul
   complet était perdu (réglages ou Seerr pris au calcul suivant). `RecoWorker` garde la demande (`_dueAll`) tant que
   `FullRunActive`. Côté test, attendre un calcul **démarré après** la demande (`sim.recompute`).
+- jsdom n'exécute pas les scripts d'un fragment de `createContextualFragment` (un navigateur, si : Plugin Pages en dépend) :
+  `userpage.test.mjs` les réinsère.
 - `index.html` réécrite (Reco+, Jellyfin Enhanced) sans `ETag` ni date : un navigateur gardait l'ancienne page, donc
   l'ancien script, après une mise à jour (#50, réglé en vidant le cache). La page réécrite porte `Cache-Control: no-cache`.

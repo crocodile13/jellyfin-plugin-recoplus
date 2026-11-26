@@ -16,7 +16,7 @@ Use the **Bug report** form: Reco+ and Jellyfin versions, other plugins installe
 
 ```bash
 ./build.sh                                   # engine tests, build, package (.NET 10 SDK)
-cd tests/client && npm install --no-save jsdom@24.1.3 && node client.test.mjs && node configpage.test.mjs
+cd tests/client && npm install --no-save jsdom@24.1.3 && node client.test.mjs && node configpage.test.mjs && node userpage.test.mjs
 cd prototype && python golden.py ../tests/RecoPlus.Tests/golden.json   # after an engine change
 ```
 

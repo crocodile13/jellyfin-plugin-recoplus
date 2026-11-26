@@ -13,5 +13,7 @@
     <EmbeddedResource Include="english.json" LogicalName="RecoPlus.Engine.english.json" />
     <EmbeddedResource Include="german.json" LogicalName="RecoPlus.Engine.german.json" />
     <EmbeddedResource Include="spanish.json" LogicalName="RecoPlus.Engine.spanish.json" />
+    <!-- fuseaux horaires → pays (détection du pays d'un compte, voir Regions) -->
+    <EmbeddedResource Include="zones.txt" LogicalName="RecoPlus.Engine.zones.txt" />
   </ItemGroup>
 </Project>

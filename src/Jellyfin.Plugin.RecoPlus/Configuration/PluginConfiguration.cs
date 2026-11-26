@@ -21,7 +21,7 @@ public enum MixMode
 /// <param name="MinPopularity">Popularité TMDb minimale d'un titre hors bibliothèque.</param>
 /// <param name="MinVotes">Votes TMDb minimum d'un titre hors bibliothèque.</param>
 /// <param name="TasteFloor">Goût minimal d'un titre hors bibliothèque : quantile du classement de la bibliothèque du compte.</param>
-public sealed record ListRowSettings(int Count, double Taste, double MinPopularity, int MinVotes, double TasteFloor);
+public sealed record ListRowSettings(int Count, double Taste, double MinPopularity, int MinVotes, double TasteFloor, double MinRating = 0);
 
 /// <summary>Période des tendances TMDb.</summary>
 public enum TrendWindow
@@ -120,6 +120,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Titre de la rangée des titres populaires.</summary>
     public string RowPopularTitle { get; set; } = string.Empty;
 
+    /// <summary>Titre de la rangée des nouvelles sorties.</summary>
+    public string RowReleasesTitle { get; set; } = string.Empty;
+
     /// <summary>Titre de la rangée des titres à venir.</summary>
     public string RowUpcomingTitle { get; set; } = string.Empty;
 
@@ -134,6 +137,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>Sortes de titres de la rangée des titres populaires.</summary>
     public KindFilter KindPopulaires { get; set; } = KindFilter.Both;
+
+    /// <summary>Sortes de titres de la rangée des nouvelles sorties.</summary>
+    public KindFilter KindSorties { get; set; } = KindFilter.Both;
 
     /// <summary>Sortes de titres de la rangée des titres à venir.</summary>
     public KindFilter KindAVenir { get; set; } = KindFilter.Both;
@@ -165,6 +171,12 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Titre de la moitié « séries » de la rangée des titres populaires séparée (vide = titre de la rangée suivi de « : séries »).</summary>
     public string TitlePopulairesSeries { get; set; } = string.Empty;
 
+    /// <summary>Titre de la moitié « films » de la rangée des nouvelles sorties séparée (vide = titre de la rangée suivi de « : films »).</summary>
+    public string TitleSortiesFilms { get; set; } = string.Empty;
+
+    /// <summary>Titre de la moitié « séries » de la rangée des nouvelles sorties séparée (vide = titre de la rangée suivi de « : séries »).</summary>
+    public string TitleSortiesSeries { get; set; } = string.Empty;
+
     /// <summary>Titre de la moitié « films » de la rangée des titres à venir séparée (vide = titre de la rangée suivi de « : films »).</summary>
     public string TitleAVenirFilms { get; set; } = string.Empty;
 
@@ -192,6 +204,8 @@ public sealed class PluginConfiguration : BasePluginConfiguration
         (HomeRows.Tendances, false) => TitleTendancesSeries,
         (HomeRows.Populaires, true) => TitlePopulairesFilms,
         (HomeRows.Populaires, false) => TitlePopulairesSeries,
+        (HomeRows.Sorties, true) => TitleSortiesFilms,
+        (HomeRows.Sorties, false) => TitleSortiesSeries,
         (HomeRows.AVenir, true) => TitleAVenirFilms,
         (HomeRows.AVenir, false) => TitleAVenirSeries,
         (HomeRows.Nouveautes, true) => TitleNouveautesFilms,
@@ -207,6 +221,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
         HomeRows.PourToi => KindPourToi,
         HomeRows.Tendances => KindTendances,
         HomeRows.Populaires => KindPopulaires,
+        HomeRows.Sorties => KindSorties,
         HomeRows.AVenir => KindAVenir,
         HomeRows.Nouveautes => KindNouveautes,
         HomeRows.ParceQue => KindParceQue,
@@ -231,6 +246,15 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Populaires : part du goût du compte dans l'ordre de la rangée.</summary>
     public double PopularTaste { get; set; } = 0.6;
 
+    /// <summary>Nouvelles sorties : titres lus par sorte.</summary>
+    public int ReleasesCount { get; set; } = 40;
+
+    /// <summary>Nouvelles sorties : part du goût du compte dans l'ordre de la rangée (bas : ce qui sort compte plus que les goûts).</summary>
+    public double ReleasesTaste { get; set; } = 0.3;
+
+    /// <summary>Nouvelles sorties : sortis depuis ce nombre de jours (films : dans le pays du compte ; séries : première diffusion).</summary>
+    public int ReleasesDays { get; set; } = 60;
+
     /// <summary>À venir : titres lus par sorte.</summary>
     public int UpcomingCount { get; set; } = 40;
 
@@ -242,6 +266,8 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     {
         HomeRows.Tendances => new(Math.Clamp(TrendingCount, 5, 100), Unit(TrendingTaste), Pos(TrendingMinPopularity), Math.Max(0, TrendingMinVotes), Unit(TrendingTasteFloor)),
         HomeRows.Populaires => new(Math.Clamp(PopularCount, 5, 100), Unit(PopularTaste), Pos(PopularMinPopularity), Math.Max(0, PopularMinVotes), Unit(PopularTasteFloor)),
+        HomeRows.Sorties => new(Math.Clamp(ReleasesCount, 5, 100), Unit(ReleasesTaste), Pos(ReleasesMinPopularity), Math.Max(0, ReleasesMinVotes), Unit(ReleasesTasteFloor),
+            double.IsFinite(ReleasesMinRating) ? Math.Clamp(ReleasesMinRating, 0, 10) : 0),
         _ => new(Math.Clamp(UpcomingCount, 5, 100), Unit(UpcomingTaste), Pos(UpcomingMinPopularity), Math.Max(0, UpcomingMinVotes), Unit(UpcomingTasteFloor)),
     };
 
@@ -265,6 +291,21 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>Populaires hors bibliothèque : goût minimal.</summary>
     public double PopularTasteFloor { get; set; } = 0.3;
+
+    /// <summary>
+    /// Nouvelles sorties : popularité TMDb minimale, bibliothèque comprise (le tri de la rangée : ce que le public attend
+    /// vraiment, pas tout ce qui sort).
+    /// </summary>
+    public double ReleasesMinPopularity { get; set; } = 10;
+
+    /// <summary>Nouvelles sorties : votes TMDb minimum, bibliothèque comprise (en dessous, la note ne veut rien dire).</summary>
+    public int ReleasesMinVotes { get; set; } = 20;
+
+    /// <summary>Nouvelles sorties : note TMDb minimale, bibliothèque comprise (écarte les sorties de piètre qualité).</summary>
+    public double ReleasesMinRating { get; set; } = 6;
+
+    /// <summary>Nouvelles sorties hors bibliothèque : goût minimal (bas : la rangée suit l'actualité plus que les goûts).</summary>
+    public double ReleasesTasteFloor { get; set; } = 0.1;
 
     /// <summary>À venir hors bibliothèque : popularité TMDb minimale (pas encore de votes : c'est l'attente qui compte).</summary>
     public double UpcomingMinPopularity { get; set; } = 10;
@@ -409,6 +450,26 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>Pays des classifications effectif : le réglage, sinon le pays des métadonnées du serveur, sinon les États-Unis.</summary>
     public string ClassificationCountry() => (!string.IsNullOrWhiteSpace(RatingCountry) ? RatingCountry : I18n.Metadata().Country ?? "US").Trim().ToUpperInvariant();
+
+    /// <summary>
+    /// Pays des comptes (dates de sortie des nouvelles sorties) ; vide = détecté pour chaque compte (<see cref="Regions"/>),
+    /// sauf s'il a choisi le sien dans sa page Reco+.
+    /// </summary>
+    public string Region { get; set; } = string.Empty;
+
+    /// <summary>Pays d'un compte quand rien ne permet de le détecter.</summary>
+    public string RegionFallback { get; set; } = "FR";
+
+    // ---- page de chaque utilisateur (Plugin Pages)
+
+    /// <summary>Page « Reco+ » dans le menu de chaque utilisateur (Plugin Pages installé) : ses propres réglages.</summary>
+    public bool UserPageEnabled { get; set; } = true;
+
+    /// <summary>Page de l'utilisateur : il peut choisir son pays.</summary>
+    public bool UserCanSetRegion { get; set; } = true;
+
+    /// <summary>Page de l'utilisateur : il peut couper les titres hors bibliothèque pour lui.</summary>
+    public bool UserCanSetExtended { get; set; } = true;
 
     // ---- mode étendu
 
@@ -568,6 +629,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Contenu de la rangée des titres populaires.</summary>
     public RowSource SourcePopulaires { get; set; } = RowSource.Mix;
 
+    /// <summary>Contenu de la rangée des nouvelles sorties.</summary>
+    public RowSource SourceSorties { get; set; } = RowSource.Mix;
+
     /// <summary>Contenu de la rangée des titres à venir (presque jamais dans la bibliothèque : Seerr par défaut).</summary>
     public RowSource SourceAVenir { get; set; } = RowSource.Seerr;
 
@@ -601,6 +665,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
         HomeRows.ParceQue => SourceParceQue,
         HomeRows.Tendances => SourceTendances,
         HomeRows.Populaires => SourcePopulaires,
+        HomeRows.Sorties => SourceSorties,
         HomeRows.AVenir => SourceAVenir,
         _ => RowSource.Local,
     };

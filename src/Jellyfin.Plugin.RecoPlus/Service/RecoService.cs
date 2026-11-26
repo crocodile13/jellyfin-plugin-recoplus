@@ -75,6 +75,7 @@ public sealed class RecoService : IDisposable
     private readonly JellyfinEnhancedReader _je;
     private readonly ImpressionStore _impressions;
     private readonly RecoLedger _ledger;
+    private readonly UserPrefsStore _prefs;
     private readonly IServiceProvider _services;
     private readonly Notifier _notifier;
     private readonly ConcurrentDictionary<string, UserRecs> _recs = new(StringComparer.Ordinal);
@@ -103,8 +104,9 @@ public sealed class RecoService : IDisposable
 
     public RecoService(LibraryIndex index, UserHistory history, UserDataReader userData, PlaybackReportingReader pr, SeerrService seerr,
         JellyfinEnhancedReader je, ImpressionStore impressions, RecoLedger ledger, IUserManager users, ILocalizationManager loc, ILogger<RecoService> log, IServiceProvider services,
-        Notifier notifier)
+        Notifier notifier, UserPrefsStore prefs)
     {
+        _prefs = prefs;
         _services = services;
         _notifier = notifier;
         _je = je;
@@ -124,6 +126,39 @@ public sealed class RecoService : IDisposable
 
     /// <summary>État courant.</summary>
     public EngineStatus Status { get; } = new();
+
+    /// <summary>Titres hors bibliothèque pour ce compte : mode étendu actif, et pas coupé par le compte dans sa page (si elle le lui permet).</summary>
+    public bool ExtendedFor(string userKey, Configuration.PluginConfiguration cfg)
+        => cfg.ExtendedEnabled && !(cfg.UserPageEnabled && cfg.UserCanSetExtended && _prefs.For(userKey).Extended == false);
+
+    /// <summary>
+    /// Pays d'un compte (dates des nouvelles sorties) : le sien s'il l'a choisi dans sa page (si elle le lui permet), sinon
+    /// celui fixé par l'administrateur, sinon détecté (<see cref="Regions"/>), sinon le pays de repli.
+    /// </summary>
+    /// <param name="u">Compte.</param>
+    /// <param name="cfg">Configuration.</param>
+    /// <param name="withChoice">Faux : sans le choix du compte (ce que donnerait « automatique »).</param>
+    public RegionGuess RegionOf(Jellyfin.Database.Implementations.Entities.User u, Configuration.PluginConfiguration cfg, bool withChoice = true)
+    {
+        var p = _prefs.For(u.Id.ToString("N"));
+        var (lang, country) = I18n.Metadata();
+        // pays et langue des métadonnées laissés aux valeurs par défaut de Jellyfin (États-Unis, anglais) : ils ne disent rien
+        if (string.Equals(country, "US", StringComparison.OrdinalIgnoreCase) && (lang is null || lang.StartsWith("en", StringComparison.OrdinalIgnoreCase)))
+        {
+            (lang, country) = (null, null);
+        }
+
+        var clues = Regions.Clues(p.BrowserZone, p.BrowserLanguages, u.AudioLanguagePreference, u.SubtitleLanguagePreference, country, lang, ServerZone());
+        var chosen = withChoice && cfg.UserPageEnabled && cfg.UserCanSetRegion && p.Region is not null ? p.Region : cfg.Region;
+        return Regions.Detect(chosen, clues, cfg.RegionFallback);
+    }
+
+    /// <summary>Fuseau horaire IANA de la machine (converti depuis Windows au besoin) ; null s'il est illisible.</summary>
+    private static string? ServerZone()
+    {
+        var id = TimeZoneInfo.Local.Id;
+        return TimeZoneInfo.TryConvertWindowsIdToIanaId(id, out var iana) ? iana : id;
+    }
 
     /// <summary>
     /// Vecteurs de contenu (pour « Plus comme ceci ») : ceux du dernier calcul, sinon construits à la demande depuis la
@@ -474,6 +509,7 @@ public sealed class RecoService : IDisposable
 
             _ledger.Retain(existing);
             _impressions.Retain(existing);
+            _prefs.Retain(existing);
         }
 
         var lo = cfg.Lists.Sanitized(cfg.RowSize);
@@ -555,7 +591,7 @@ public sealed class RecoService : IDisposable
                     activeDays, ExtendedRefresh.TotalDays);
             }
 
-            var extTargets = targets.Where(Active).ToList();
+            var extTargets = targets.Where(u => ExtendedFor(u.Id.ToString("N"), cfg) && Active(u)).ToList();
             if (only is null)
             {
                 _log.LogInformation("Reco+: Seerr exploration for {N} active account(s) out of {T}", extTargets.Count, targets.Count);
@@ -644,6 +680,8 @@ public sealed class RecoService : IDisposable
 
             // rangées que HSS montre à ce compte : les autres ne « réservent » aucun titre
             var rowOpts = job.Rows;
+            // pays du compte : dates de sortie de la rangée des nouvelles sorties
+            var region = RegionOf(u, cfg).Country;
 
             // montré sans être ouvert (seulement ce que le compte a vraiment vu à l'écran)
             var expo = cfg.TrackImpressions && s.WImpression > 0 ? _impressions.For(key, now) : null;
@@ -670,7 +708,8 @@ public sealed class RecoService : IDisposable
                     var candSet = cands.ToHashSet(StringComparer.Ordinal);
                     ro.Lists = lists.Where(kv => RowShown(ro, kv.Key)).ToDictionary(
                         kv => kv.Key,
-                        kv => (IReadOnlyList<string>)Trending.Order(kv.Value.Ids.Where(candSet.Contains), kv.Value.Score, sc, cfg.ListSettings(kv.Key).Taste),
+                        kv => (IReadOnlyList<string>)Trending.Order(kv.Value.Ids.Where(id => candSet.Contains(id) && kv.Value.NewIn(id, region, now, cfg.ReleasesDays)),
+                            kv.Value.Score, sc, cfg.ListSettings(kv.Key).Taste),
                         StringComparer.Ordinal);
                     var home = HomeRows.Allocate(uc, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, ro);
                     var view = new SlotRecs
@@ -775,7 +814,7 @@ public sealed class RecoService : IDisposable
 
             // pas d'exploration pour ce compte (inactif, ou Seerr injoignable) : ses titres hors bibliothèque précédents restent
             // (sans ce qui a changé depuis : vu, masqué, demandé, arrivé dans la bibliothèque, ou interdit au compte)
-            if (cfg.ExtendedEnabled && !extCands.ContainsKey(key) && _recs.TryGetValue(key, out var prevRecs))
+            if (ExtendedFor(key, cfg) && !extCands.ContainsKey(key) && _recs.TryGetValue(key, out var prevRecs))
             {
                 var policy = PolicyOf(u);
                 var country = cfg.ClassificationCountry();
@@ -795,7 +834,7 @@ public sealed class RecoService : IDisposable
 
             // pas d'exploration pour ce compte : les listes du moment reçoivent quand même leurs titres hors bibliothèque,
             // et les titres hors bibliothèque gardés se replacent avec elles (rangées recomposées)
-            if (cfg.ExtendedEnabled && !(ex is not null && extIds.Count > 0))
+            if (ExtendedFor(key, cfg) && !(ex is not null && extIds.Count > 0))
             {
                 var pools = ListPools(u, h, hid, lists, rowOpts, titles, lib, seerr, cfg, lo, NextPart);
                 if (pools.Count > 0)
@@ -816,6 +855,7 @@ public sealed class RecoService : IDisposable
             {
                 HomeRows.Tendances => Texts.Pack(cfg.TrendingWindow == Configuration.TrendWindow.Day ? "En tendance aujourd'hui" : "En tendance cette semaine"),
                 HomeRows.Populaires => Texts.Pack("Populaire en ce moment"),
+                HomeRows.Sorties => Texts.Pack("Sortie récente"),
                 HomeRows.AVenir => Texts.Pack("Bientôt à l'affiche"),
                 _ => null,
             });
@@ -1354,10 +1394,14 @@ public sealed class RecoService : IDisposable
         Func<string, bool> nextPart)
     {
         var res = new Dictionary<string, ListPool>(StringComparer.Ordinal);
-        if (!cfg.ExtendedEnabled)
+        if (!ExtendedFor(u.Id.ToString("N"), cfg))
         {
             return res;
         }
+
+        var region = RegionOf(u, cfg).Country;
+        double now = Unix(DateTime.UtcNow);
+        int days = cfg.ReleasesDays;
 
         var policy = PolicyOf(u);
         var country = cfg.ClassificationCountry();
@@ -1375,11 +1419,12 @@ public sealed class RecoService : IDisposable
             {
                 HomeRows.Tendances => cfg.TrendingWindow == Configuration.TrendWindow.Day ? "En tendance aujourd'hui" : "En tendance cette semaine",
                 HomeRows.Populaires => "Populaire en ce moment",
+                HomeRows.Sorties => "Sortie récente",
                 _ => "Bientôt à l'affiche",
             };
             var items = new List<(string, ExternalRec)>();
             var noBecause = new Dictionary<string, string>();
-            foreach (var id in tl.External)
+            foreach (var id in tl.External.Where(x => tl.NewIn(x, region, now, days)))
             {
                 var k = id[5..];
                 var d = Exploration.TryTmdbKey(k, out var type, out var tid) ? _seerr.CachedDetails(type, tid) : null;
@@ -1417,7 +1462,46 @@ public sealed class RecoService : IDisposable
     /// leur intensité 0..1 (<see cref="Trending.Scores"/>) et ceux qui manquent à la bibliothèque, fiche chargée, du plus
     /// fort au plus faible.
     /// </summary>
-    private sealed record TmdbList(List<string> Ids, Dictionary<string, double> Score, List<string> External);
+    private sealed record TmdbList(List<string> Ids, Dictionary<string, double> Score, List<string> External)
+    {
+        /// <summary>
+        /// Nouvelles sorties : dates de sortie de chaque titre (par pays pour les films, date principale sinon) ; null pour les
+        /// autres listes, où tout titre convient.
+        /// </summary>
+        public Dictionary<string, (IReadOnlyDictionary<string, string>? Local, string? Primary)>? Released { get; init; }
+
+        /// <summary>Le titre a sa place pour un compte de ce pays : toujours, sauf dans les nouvelles sorties (sorti là-bas depuis peu).</summary>
+        public bool NewIn(string id, string country, double now, int days)
+            => Released is null || (Released.TryGetValue(id, out var r) && Releases.IsNew(Releases.In(country, r.Local, r.Primary), now, days));
+    }
+
+    /// <summary>
+    /// Nouvelles sorties : jours lus avant la fenêtre (date principale TMDb), car un film sort souvent dans un pays
+    /// des mois après sa première sortie dans le monde (festival, pays d'origine).
+    /// </summary>
+    private const int ReleasesLeadDays = 180;
+
+    /// <summary>Filtres TMDb de la rangée des nouvelles sorties (dates, votes, note), lus par Seerr.</summary>
+    private static string ReleasesQuery(string type, Configuration.ListRowSettings set, int days, DateTime today)
+    {
+        string D(DateTime d) => d.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        var from = today.AddDays(-(Math.Clamp(days, 1, 365) + (type == "movie" ? ReleasesLeadDays : 0)));
+        var q = type == "movie"
+            ? "primaryReleaseDateGte=" + D(from) + "&primaryReleaseDateLte=" + D(today)
+            : "firstAirDateGte=" + D(from) + "&firstAirDateLte=" + D(today);
+        q += "&sortBy=popularity.desc";
+        if (set.MinVotes > 0)
+        {
+            q += "&voteCountGte=" + set.MinVotes.ToString(CultureInfo.InvariantCulture);
+        }
+
+        if (set.MinRating > 0)
+        {
+            q += "&voteAverageGte=" + set.MinRating.ToString("0.#", CultureInfo.InvariantCulture);
+        }
+
+        return q;
+    }
 
     /// <summary>
     /// Listes TMDb via Seerr (cache 6 h, partagé) : tendances (semaine ou jour), populaires, à venir ; films et séries lus
@@ -1435,22 +1519,26 @@ public sealed class RecoService : IDisposable
             var set = cfg.ListSettings(row);
             int count = set.Count;
             var perKind = new List<IReadOnlyList<string>>();
+            var dates = new Dictionary<string, string?>(StringComparer.Ordinal);   // nouvelles sorties : date principale par clé TMDb
             foreach (var type in new[] { "movie", "tv" })
             {
                 var (list, query) = row switch
                 {
                     HomeRows.Tendances => ("trending", "mediaType=" + type + "&timeWindow=" + window),
                     HomeRows.Populaires => (type == "movie" ? "movies" : "tv", string.Empty),
+                    HomeRows.Sorties => (type == "movie" ? "movies" : "tv", ReleasesQuery(type, set, cfg.ReleasesDays, DateTime.UtcNow.Date)),
                     _ => (type == "movie" ? "movies/upcoming" : "tv/upcoming", string.Empty),
                 };
                 // à venir : la liste de TMDb n'est pas triée par intérêt ; on en lit trois fois plus et on garde les plus
                 // attendues (popularité TMDb). Tendances et populaires sont déjà dans l'ordre de TMDb.
-                bool upcoming = row == HomeRows.AVenir;
-                int want = upcoming ? Math.Min(3 * count, UpcomingMaxRead) : count;
+                bool upcoming = row == HomeRows.AVenir, releases = row == HomeRows.Sorties;
+                // nouvelles sorties : une partie des films lus n'est pas encore sortie dans le pays du compte, on en lit plus
+                int want = upcoming || releases ? Math.Min(3 * count, UpcomingMaxRead) : count;
                 // hors bibliothèque, seulement les titres qui comptent (popularité, votes) ; les écartés ne prennent pas de
-                // place : on lit au plus deux fois plus de pages pour garder le nombre voulu
-                bool Counts(SeerrResult r) => lib.ByTmdb.ContainsKey(r.MediaType + ":" + r.TmdbId)
-                    || (r.Popularity >= set.MinPopularity && r.VoteCount >= set.MinVotes);
+                // place : on lit au plus deux fois plus de pages pour garder le nombre voulu. Nouvelles sorties : le tri vaut
+                // aussi pour la bibliothèque, c'est ce qui fait la rangée (ce que le public attend, pas tout ce qui sort).
+                bool Counts(SeerrResult r) => (!releases && lib.ByTmdb.ContainsKey(r.MediaType + ":" + r.TmdbId))
+                    || (r.Popularity >= set.MinPopularity && r.VoteCount >= set.MinVotes && r.Vote >= set.MinRating);
                 var found = new List<SeerrResult>();
                 for (int p = 1; p <= 2 * ((want + 19) / 20) && found.Count < want; p++)
                 {
@@ -1464,6 +1552,14 @@ public sealed class RecoService : IDisposable
                 }
 
                 var ranked = upcoming ? found.Select((r, i) => (r, i)).OrderByDescending(x => x.r.Popularity).ThenBy(x => x.i).Select(x => x.r) : found;
+                if (releases)
+                {
+                    foreach (var f in found)
+                    {
+                        dates.TryAdd(f.MediaType + ":" + f.TmdbId, f.Date);
+                    }
+                }
+
                 perKind.Add(ranked.Select(r => r.MediaType + ":" + r.TmdbId).Distinct(StringComparer.Ordinal).Take(count)
                     .Select(k => lib.ByTmdb.TryGetValue(k, out var lid) ? lid : "tmdb:" + k).ToList());
             }
@@ -1498,11 +1594,33 @@ public sealed class RecoService : IDisposable
                 }
             }
 
-            res[row] = new TmdbList(ids, score, external);
+            res[row] = new TmdbList(ids, score, external) { Released = row == HomeRows.Sorties ? await ReleaseDates(cl, ids, lib, dates, ct).ConfigureAwait(false) : null };
         }
 
         _seerr.SaveCache();
-        Status.TmdbLists = Texts.Pack("{0} titres lus (tendances, populaires, à venir), {1} dans la bibliothèque", read, inLib);
+        Status.TmdbLists = Texts.Pack("{0} titres lus (tendances, populaires, nouvelles sorties, à venir), {1} dans la bibliothèque", read, inLib);
+        return res;
+    }
+
+    /// <summary>
+    /// Dates de sortie des titres de la rangée des nouvelles sorties : par pays pour les films (fiche TMDb, en cache, lue
+    /// aussi pour ceux de la bibliothèque), date principale sinon (séries, fiche illisible).
+    /// </summary>
+    private async Task<Dictionary<string, (IReadOnlyDictionary<string, string>? Local, string? Primary)>> ReleaseDates(SeerrClient cl, List<string> ids,
+        LibrarySnapshot lib, Dictionary<string, string?> dates, CancellationToken ct)
+    {
+        var keyOf = lib.ByTmdb.ToLookup(kv => kv.Value, kv => kv.Key, StringComparer.Ordinal);
+        var keys = ids.Select(id => (Id: id, Key: id.StartsWith("tmdb:", StringComparison.Ordinal) ? id[5..] : keyOf[id].FirstOrDefault(dates.ContainsKey)))
+            .Where(x => x.Key is not null).ToList();
+        var details = await Task.WhenAll(keys.Select(x => Exploration.TryTmdbKey(x.Key!, out var type, out var tid) && type == "movie"
+            ? _seerr.DetailsAsync(cl, type, tid, ct)
+            : Task.FromResult<SeerrDetails?>(null))).ConfigureAwait(false);
+        var res = new Dictionary<string, (IReadOnlyDictionary<string, string>? Local, string? Primary)>(StringComparer.Ordinal);
+        for (int i = 0; i < keys.Count; i++)
+        {
+            res[keys[i].Id] = (details[i]?.LocalReleases, dates.GetValueOrDefault(keys[i].Key!) ?? details[i]?.ReleaseDate);
+        }
+
         return res;
     }
 

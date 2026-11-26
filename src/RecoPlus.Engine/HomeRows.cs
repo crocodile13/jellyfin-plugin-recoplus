@@ -32,13 +32,13 @@ public sealed class RowOptions
     public int SagaMax { get; set; } = 12;
 
     /// <summary>
-    /// Rangées tirées d'une liste TMDb (« Tendances », « Populaires », « AVenir ») : titres de la bibliothèque de la liste,
+    /// Rangées tirées d'une liste TMDb (« Tendances », « Populaires », « Sorties », « AVenir ») : titres de la bibliothèque de la liste,
     /// dans l'ordre de la rangée pour ce compte (<see cref="Trending.Order"/>). Rangée absente = pas de rangée.
     /// </summary>
     public Dictionary<string, IReadOnlyList<string>> Lists { get; set; } = new(StringComparer.Ordinal);
 
     /// <summary>
-    /// Sortes de titres par rangée (« PourToi », « Tendances », « Populaires », « AVenir », « Nouveautes », « ParceQue ») ;
+    /// Sortes de titres par rangée (« PourToi », « Tendances », « Populaires », « Sorties », « AVenir », « Nouveautes », « ParceQue ») ;
     /// absente = films et séries ensemble. <see cref="KindFilter.Split"/> : deux rangées, suffixes « Films » et « Series ».
     /// </summary>
     public Dictionary<string, KindFilter> Kinds { get; set; } = new(StringComparer.Ordinal);
@@ -116,7 +116,7 @@ public static class HomeRows
 {
     /// <summary>Identifiants des rangées (suffixes des sections Home Screen Sections).</summary>
     public const string PourToi = "PourToi", Films = "Films", Series = "Series", Nouveautes = "Nouveautes", ParceQue = "ParceQue", Tendances = "Tendances",
-        Populaires = "Populaires", AVenir = "AVenir";
+        Populaires = "Populaires", Sorties = "Sorties", AVenir = "AVenir";
 
     /// <summary>
     /// Suite du classement après les autres rangées. Séparée par défaut, ses deux moitiés gardent leurs identifiants
@@ -125,13 +125,13 @@ public static class HomeRows
     public const string Suite = "Suite";
 
     /// <summary>Rangées tirées d'une liste TMDb, dans l'ordre de priorité de la répartition.</summary>
-    public static readonly string[] ListRows = { Tendances, Populaires, AVenir };
+    public static readonly string[] ListRows = { Tendances, Populaires, Sorties, AVenir };
 
     /// <summary>Rangées dont la sorte de titres se règle (les autres sont « Films » et « Séries », déjà d'une seule sorte).</summary>
-    public static readonly string[] KindRows = { PourToi, Tendances, Populaires, AVenir, Nouveautes, ParceQue, Suite };
+    public static readonly string[] KindRows = { PourToi, Tendances, Populaires, Sorties, AVenir, Nouveautes, ParceQue, Suite };
 
     /// <summary>Contenus réglables, un par sorte de rangée (« ParceQue » vaut pour les trois rangées « Parce que … »).</summary>
-    public static readonly string[] SourceRows = { PourToi, Tendances, Populaires, AVenir, Nouveautes, ParceQue, Suite };
+    public static readonly string[] SourceRows = { PourToi, Tendances, Populaires, Sorties, AVenir, Nouveautes, ParceQue, Suite };
 
     /// <summary>
     /// Rangées de base, dans l'ordre de la répartition (et de la liste de Home Screen Sections) ; les listes TMDb seulement
@@ -430,7 +430,7 @@ public static class HomeRows
         // « Pour toi » : ce que HSS affichera, réserves comprises (aucune rangée ne les reprend)
         Emit(PourToi, null, k => pourToi.Where(id => Kind(k, id)), always: true);
 
-        // rangées des listes TMDb (tendances, populaires, à venir) : juste après « Pour toi », pour garder leur identité
+        // rangées des listes TMDb (tendances, populaires, nouvelles sorties, à venir) : juste après « Pour toi », pour garder leur identité
         foreach (var lr in ListRows)
         {
             if (o.Lists.TryGetValue(lr, out var list))

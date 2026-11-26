@@ -631,6 +631,13 @@ def report(lib, users):
             problems.append(f"{name} : titres déjà vus proposés {sorted(bad)}")
         if name != "nouveau" and not any(v for k, v in acc["rangees"].items()):
             problems.append(f"{name} : toutes les rangées sont vides")
+    # nouvelles sorties (TMDb via Seerr) : au moins un compte en reçoit
+    if "seerr" in EXPECT:
+        got = {n: a["apercu_cartes"].get("Nouvelles sorties", 0) + a["apercu_cartes"].get("Nouvelles sorties : films", 0)
+               + a["apercu_cartes"].get("Nouvelles sorties : séries", 0) for n, a in out["accounts"].items()}
+        out["nouvelles_sorties"] = got
+        if not any(got.values()):
+            problems.append(f"rangée « Nouvelles sorties » vide pour tous les comptes ({got})")
     return out
 
 
@@ -662,6 +669,46 @@ def after_report(lib, users):
             out["arrivee"] = f"« {title} » demandé par {who} et arrivé : proposé à {seen_in or 'personne'}"
             if who in seen_in:
                 problems.append(f"{who} : « {title} », qu'il a demandé, lui est proposé dès son arrivée ({seen_in[who]})")
+    return out
+
+
+def user_page_check():
+    """
+    Page Reco+ de l'utilisateur et pays du compte : le navigateur signale fuseau et langues, le pays détecté en découle ;
+    un choix du compte passe avant, un pays mal formé est refusé ; avec Plugin Pages, la page est dans son menu.
+    """
+    out = {}
+    name = "action"
+    tok = as_user(name)
+    call("POST", "/RecoPlus/Client", {"TimeZone": "Europe/Brussels", "Languages": ["fr-BE", "fr"]}, token=tok)
+    me = call("GET", "/RecoPlus/Me", query={"lang": "fr"}, token=tok)
+    out["pays détecté"] = f"{me['region']['auto']} (indices : {', '.join(c['source'] + '=' + c['country'] for c in me['region']['clues'])})"
+    if me["region"]["auto"] != "BE" or not me["region"]["detected"]:
+        problems.append(f"{name} : pays détecté {me['region']} au lieu de la Belgique (fuseau Europe/Brussels)")
+    call("POST", "/RecoPlus/Me", {"Region": "CA", "Extended": None}, token=tok)
+    if call("GET", "/RecoPlus/Me", token=tok)["region"]["current"] != "CA":
+        problems.append(f"{name} : le pays choisi dans sa page n'est pas retenu")
+    try:
+        call("POST", "/RecoPlus/Me", {"Region": "Belgique"}, token=tok)
+        problems.append(f"{name} : pays mal formé accepté")
+    except HttpError as e:
+        if e.status != 400:
+            problems.append(f"{name} : pays mal formé, réponse {e.status} au lieu de 400")
+    call("POST", "/RecoPlus/Me", {"Region": None, "Extended": None}, token=tok)
+    # un autre compte ne voit pas ce qu'un compte a signalé (identité du jeton)
+    other = call("GET", "/RecoPlus/Me", token=as_user("potter"))
+    if any(c["source"] == "timezone" for c in other["region"]["clues"]):
+        problems.append("potter : voit le fuseau signalé par un autre compte")
+    if "hss" in EXPECT:   # Plugin Pages installé avec Home Screen Sections
+        def listed():
+            pages = call("GET", "/PluginPages/User", token=tok) or {}
+            return [p for p in pages.get("Items", []) if p.get("Id") == "Jellyfin.Plugin.RecoPlus"]
+        try:
+            page = wait("page Reco+ dans Plugin Pages", listed, timeout=180)[0]
+            call("GET", page["Url"], token=tok)
+            out["Plugin Pages"] = f"page « {page.get('DisplayText')} » ({page.get('Url')}) dans le menu"
+        except (RuntimeError, HttpError) as e:
+            problems.append(f"Plugin Pages : page Reco+ absente du menu des utilisateurs ({e})")
     return out
 
 
@@ -807,6 +854,10 @@ def markdown(r) -> str:
     L.append("")
     for k, v in (r.get("seerr") or {}).items():
         L.append(f"Seerr, {k} : {v}  ")
+    if r.get("nouvelles_sorties") is not None:
+        L.append(f"Nouvelles sorties (cartes par compte) : {r.get('nouvelles_sorties')}  ")
+    for k, v in (r.get("page utilisateur") or {}).items():
+        L.append(f"Page de l'utilisateur, {k} : {v}  ")
     for label, res in (r.get("audace") or {}).items():
         L.append(f"**Audace {label}** : " + " ; ".join(f"{n} {v['n']} titres, votes médians {v['votes_median']}, note moyenne {v['rating_mean']}" for n, v in res.items()) + "  ")
         for n, v in res.items():
@@ -886,6 +937,10 @@ def run():
     wait("vérifications de Reco+", lambda: call("GET", "/RecoPlus/Status").get("checks"), timeout=300)
     recompute()
     r = report(lib, users)
+    try:
+        r["page utilisateur"] = user_page_check()
+    except Exception as e:
+        problems.append(f"page de l'utilisateur : {e}")
     try:
         r["index"] = index_check()
     except Exception as e:

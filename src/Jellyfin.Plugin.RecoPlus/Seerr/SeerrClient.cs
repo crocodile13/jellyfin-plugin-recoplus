@@ -132,6 +132,12 @@ public sealed class SeerrDetails
     /// <summary>Classification par pays (ISO 3166-1) : « FR » → « 12 ».</summary>
     public Dictionary<string, string> Certifications { get; init; } = new(StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>
+    /// Films : première sortie par pays (ISO 3166-1 → aaaa-mm-jj ; salles, numérique, télévision, voir
+    /// <see cref="Releases"/>) ; null : série, ou fiche lue par une version antérieure.
+    /// </summary>
+    public Dictionary<string, string>? LocalReleases { get; init; }
+
     public DateTime FetchedAt { get; init; } = DateTime.UtcNow;
 }
 
@@ -404,10 +410,20 @@ public sealed class SeerrClient
         var cast = credits.ValueKind == JsonValueKind.Object ? Arr(credits, "cast").OrderBy(c => Int(c, "order")).Select(c => Str(c, "name")).Where(n => n.Length > 0).Distinct().ToList() : new();
         var crew = credits.ValueKind == JsonValueKind.Object ? Arr(credits, "crew").ToList() : new();
         var certs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var local = movie ? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) : null;
         if (movie && d.TryGetProperty("releases", out var rel))
         {
             foreach (var c in Arr(rel, "results"))
             {
+                // première sortie retenue dans ce pays (dates ISO : l'ordre du texte est celui des dates)
+                var first = Arr(c, "release_dates").Where(r => Array.IndexOf(Releases.Types, Int(r, "type")) >= 0)
+                    .Select(r => Str(r, "release_date")).Where(x => Releases.Parse(x) is not null).Select(x => x[..10])
+                    .OrderBy(x => x, StringComparer.Ordinal).FirstOrDefault();
+                if (first is not null && Regions.Clean(Str(c, "iso_3166_1")) is { } where)
+                {
+                    local![where] = first;
+                }
+
                 // comme Jellyfin Enhanced : la sortie en salle (type 3) d'abord, sinon la première classification
                 var dates = Arr(c, "release_dates").ToList();
                 var cert = dates.Where(r => Int(r, "type") == 3).Select(r => Str(r, "certification")).FirstOrDefault(x => x.Length > 0)
@@ -460,6 +476,7 @@ public sealed class SeerrClient
             EpisodeCount = Int(d, "numberOfEpisodes"),
             CollectionId = coll,
             Certifications = certs,
+            LocalReleases = local,
             VoteCount = d.TryGetProperty("voteCount", out var vc) && vc.ValueKind == JsonValueKind.Number && vc.TryGetInt32(out var vcn) ? vcn : null,
             ReleaseDate = date.Length >= 10 ? date[..10] : null,
             Runtime = movie && Int(d, "runtime") is > 0 and var rt ? rt : null,

@@ -39,6 +39,9 @@ public sealed class PluginServiceRegistrator : IPluginServiceRegistrator
         services.AddSingleton(sp => new ImpressionStore(
             () => Plugin.Instance is null ? null : System.IO.Path.Combine(Plugin.Instance.DataFolderPath, "affichages.json"),
             sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<ImpressionStore>>()));
+        services.AddSingleton(sp => new UserPrefsStore(
+            () => Plugin.Instance is null ? null : System.IO.Path.Combine(Plugin.Instance.DataFolderPath, "preferences.json"),
+            sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<UserPrefsStore>>()));
         services.AddSingleton(sp => new RecoLedger(
             () => Plugin.Instance is null ? null : System.IO.Path.Combine(Plugin.Instance.DataFolderPath, "propositions.json"),
             sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<RecoLedger>>()));
@@ -50,6 +53,7 @@ public sealed class PluginServiceRegistrator : IPluginServiceRegistrator
         services.AddHostedService(sp => sp.GetRequiredService<CompatibilityGuard>());
         services.AddHostedService<RecoWorker>();
         services.AddHostedService<HomeScreenSectionsIntegration>();
+        services.AddHostedService<PluginPagesIntegration>();
         services.AddScoped<IEventConsumer<PlaybackStartEventArgs>, PlaybackStartConsumer>();
         services.AddScoped<IEventConsumer<PlaybackStopEventArgs>, PlaybackStopConsumer>();
         services.AddSingleton<SuggestionsFilter>();

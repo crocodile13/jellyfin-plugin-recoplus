@@ -1,0 +1,107 @@
+<div id="RecoPlusUserPage" class="verticalSection">
+    <style>
+        #RecoPlusUserPage { max-width: 54em; }
+        #RecoPlusUserPage .rpu-help { opacity: .75; margin: .4em 0 0; }
+        #RecoPlusUserPage .rpu-why { opacity: .75; margin: .2em 0 0; font-size: .9em; }
+        #RecoPlusUserPage .rpu-box { margin: 1.6em 0; }
+        #RecoPlusUserPage .rpu-msg { margin-top: 1em; min-height: 1.4em; }
+        #RecoPlusUserPage select option { color: CanvasText; background-color: Canvas; }
+    </style>
+    <h2 class="sectionTitle" data-t="Reco+ : mes réglages">Reco+ : mes réglages</h2>
+    <p class="rpu-help" id="rpuIntro" data-t="Ce que vous réglez ici ne vaut que pour votre compte.">Ce que vous réglez ici ne vaut que pour votre compte.</p>
+    <p class="rpu-help" id="rpuClosed" hidden data-t="L'administrateur n'a ouvert aucun réglage aux utilisateurs.">L'administrateur n'a ouvert aucun réglage aux utilisateurs.</p>
+
+    <div class="rpu-box" id="rpuRegionBox" hidden>
+        <div class="selectContainer">
+            <label class="selectLabel" for="rpuRegion" data-t="Mon pays">Mon pays</label>
+            <select is="emby-select" id="rpuRegion" class="emby-select-withcolor emby-select"></select>
+        </div>
+        <p class="rpu-why" id="rpuRegionWhy"></p>
+        <p class="rpu-help" data-t="Le pays où vous regardez : il sert aux dates de sortie de la rangée « Nouvelles sorties » (sorti en salle, en vidéo ou à la télévision dans ce pays). Il ne choisit pas des titres de ce pays.">Le pays où vous regardez : il sert aux dates de sortie de la rangée « Nouvelles sorties » (sorti en salle, en vidéo ou à la télévision dans ce pays). Il ne choisit pas des titres de ce pays.</p>
+    </div>
+
+    <div class="rpu-box" id="rpuExtBox" hidden>
+        <label class="checkboxContainer">
+            <input is="emby-checkbox" type="checkbox" id="rpuExtended" />
+            <span data-t="Me proposer aussi des titres absents de la bibliothèque">Me proposer aussi des titres absents de la bibliothèque</span>
+        </label>
+        <p class="rpu-help" data-t="Des films et des séries que le serveur n'a pas encore, à demander d'un clic. Décoché : seulement la bibliothèque.">Des films et des séries que le serveur n'a pas encore, à demander d'un clic. Décoché : seulement la bibliothèque.</p>
+    </div>
+
+    <div id="rpuSaveBox" hidden>
+        <button is="emby-button" type="button" id="rpuSave" class="raised button-submit block emby-button"><span data-t="Enregistrer">Enregistrer</span></button>
+        <p class="rpu-msg" id="rpuMsg" role="status"></p>
+    </div>
+
+    <script>
+        (function () {
+            var root = document.getElementById('RecoPlusUserPage');
+            if (!root || root.__rpu) { return; }
+            root.__rpu = true;
+            var a = window.ApiClient;
+            var LANG = 'fr', DICT = {};
+            var uiLang = document.documentElement.getAttribute('lang') || navigator.language || '';
+            function tr(s) { return LANG !== 'fr' && Object.prototype.hasOwnProperty.call(DICT, s) && DICT[s] ? DICT[s] : s; }
+            function trf(s) { var args = arguments; return tr(s).replace(/\{(\d+)\}/g, function (m, i) { var x = args[+i + 1]; return x === undefined ? m : String(x); }); }
+            function $(id) { return document.getElementById(id); }
+            function get(path) { return a.ajax({ type: 'GET', url: a.getUrl(path, { lang: uiLang }), dataType: 'json' }); }
+            var names = null;
+            try { names = new Intl.DisplayNames([uiLang || 'fr'], { type: 'region' }); } catch (e) { names = null; }
+            function country(c) { var n = null; try { n = names && names.of(c); } catch (e) { n = null; } return n && n !== c ? n : c; }
+            // indices du pays détecté, dans des mots simples
+            var SOURCES = {
+                timezone: 'fuseau horaire du navigateur', browser: 'langue du navigateur', audio: 'langue audio préférée',
+                subtitles: 'langue des sous-titres préférée', server: 'réglages du serveur',
+            };
+            function why(r) {
+                var by = [];
+                (r.clues || []).forEach(function (c) {
+                    if (c.country === r.auto && by.indexOf(SOURCES[c.source]) < 0 && SOURCES[c.source]) { by.push(SOURCES[c.source]); }
+                });
+                if (r.server) { return trf('Automatique : pays fixé par l\'administrateur ({0}).', country(r.server)); }
+                return r.detected ? trf('Automatique : {0}, d\'après : {1}.', country(r.auto), by.map(tr).join(', '))
+                    : trf('Automatique : rien ne permet de le détecter, {0} par défaut.', country(r.auto));
+            }
+            function render(me) {
+                $('rpuClosed').hidden = !!me.open && (me.region.canSet || me.extended.canSet);
+                $('rpuIntro').hidden = !$('rpuClosed').hidden;
+                $('rpuRegionBox').hidden = !me.region.canSet;
+                $('rpuExtBox').hidden = !me.extended.canSet;
+                $('rpuSaveBox').hidden = !(me.region.canSet || me.extended.canSet);
+                var sel = $('rpuRegion');
+                sel.textContent = '';
+                var auto = document.createElement('option');
+                auto.value = '';
+                auto.textContent = trf('Automatique ({0})', country(me.region.auto));
+                sel.appendChild(auto);
+                (me.countries || []).map(function (c) { return { c: c, n: country(c) }; })
+                    .sort(function (x, y) { return x.n.localeCompare(y.n, uiLang || undefined); })
+                    .forEach(function (x) {
+                        var o = document.createElement('option');
+                        o.value = x.c;
+                        o.textContent = x.n;
+                        sel.appendChild(o);
+                    });
+                sel.value = me.region.chosen || '';
+                $('rpuRegionWhy').textContent = why(me.region);
+                $('rpuExtended').checked = me.extended.mine !== false;
+            }
+            function load() {
+                return get('RecoPlus/Me').then(render, function () { $('rpuMsg').textContent = tr('Réglages illisibles pour le moment.'); });
+            }
+            $('rpuSave').addEventListener('click', function () {
+                var body = { Region: $('rpuRegion').value || null, Extended: $('rpuExtended').checked ? null : false };
+                a.ajax({ type: 'POST', url: a.getUrl('RecoPlus/Me', { lang: uiLang }), data: JSON.stringify(body), contentType: 'application/json', dataType: 'json' })
+                    .then(function (r) { $('rpuMsg').textContent = (r && r.message) || ''; return load(); },
+                        function () { $('rpuMsg').textContent = tr('Enregistrement impossible.'); });
+            });
+            get('RecoPlus/I18n').then(function (d) {
+                LANG = (d && d.lang) || 'fr';
+                DICT = (d && d.dict) || {};
+            }, function () { /* textes français */ }).then(function () {
+                root.querySelectorAll('[data-t]').forEach(function (e) { e.textContent = tr(e.getAttribute('data-t')); });
+                return load();
+            });
+        })();
+    </script>
+</div>
