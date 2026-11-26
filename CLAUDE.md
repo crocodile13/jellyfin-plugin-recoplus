@@ -233,7 +233,9 @@ de la CI.
   - même vocabulaire, même unité, même sens de lecture que les réglages voisins et ceux des autres onglets (« goût
     minimal », « part des goûts », « votes TMDb minimum » veulent dire la même chose partout) ;
   - à sa place logique : avec ce qu'il règle (onglet de la fonction, boîte de la rangée), le courant visible, le fin
-    dans « Réglages avancés », le diagnostic en mode développeur ;
+    au niveau expert dans la boîte de ce qu'il règle (une source d'exploration : ses réglages juste sous son
+    interrupteur, `.rp-src-adv` ; une liste du moment : ses filtres sous elle), le diagnostic en mode développeur.
+    Pas de menu dépliant « Réglages avancés » : il doublait le sélecteur de niveau ; chaque boîte a un titre ;
   - aide au survol qui dit l'effet concret, les bornes, la valeur par défaut, et ce qui le rend sans effet ;
   - compréhensible sans lire le code : si l'explication demande plus de deux phrases, revoir le réglage.
 - Pas de réglage obsolète : un réglage retiré est migré (`Plugin.Migrate`) puis supprimé de la page.

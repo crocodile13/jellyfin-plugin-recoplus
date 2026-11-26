@@ -97,13 +97,25 @@ await test('chaque groupe de champs a sa place dans la page, et les onglets rég
     void w;
 });
 
-await test('les réglages avancés sont repliés par défaut, les essentiels visibles', async () => {
+// niveau d'affichage d'un réglage : le plus haut des data-level qui l'entourent (1 = essentiel)
+const levelOf = (e) => { let l = 1; for (let x = e; x; x = x.parentElement) { l = Math.max(l, +(x.getAttribute && x.getAttribute('data-level') || 1)); } return l; };
+
+await test('niveaux : rien de replié (le sélecteur de niveau suffit), chaque réglage fin à son niveau, à côté de ce qu\'il règle', async () => {
     const { d } = await open(cfg);
-    for (const det of d.querySelectorAll('details.rp-adv')) { assert.equal(det.open, false); }
-    assert.equal(d.getElementById('rp_l_RandomPercent').closest('details'), null);
-    assert.equal(d.getElementById('rp_l_MinMovies').closest('details'), null);
-    assert.ok(d.getElementById('rp_e_Bm25K1').closest('details'));
-    assert.ok(d.getElementById('rp_e_GateTop').closest('details'));
+    assert.equal(d.querySelectorAll('details').length, 0, 'plus de menus dépliants : ils doublaient le sélecteur de niveau');
+    assert.equal(levelOf(d.getElementById('rp_l_RandomPercent')), 2);
+    assert.equal(levelOf(d.getElementById('rp_e_Bm25K1')), 3);
+    assert.equal(levelOf(d.getElementById('rp_e_GateTop')), 3);
+    // réglage fin dans la boîte de ce qu'il règle
+    const box = (id) => d.getElementById(id).closest('.rp-box');
+    assert.equal(box('rp_l_Window'), box('rp_l_RandomPercent'), 'taille du haut de liste avec sa composition');
+    assert.equal(box('rp_e_SagaMax'), box('rp_e_Saga'), 'regroupement thématique avec la règle de saga');
+    assert.equal(levelOf(d.getElementById('rp_l_Window')), 3);
+    assert.equal(d.getElementById('rp_c_ExtendedGemMinVotes').closest('.rp-src'), d.getElementById('rp_c_ExtendedGems').closest('.rp-src'), 'pépites : réglages sous leur source');
+    assert.equal(levelOf(d.getElementById('rp_c_ExtendedGemMinVotes')), 3);
+    assert.equal(box('rp_c_TrendingMinVotes'), box('rp_c_TrendingCount'), 'filtres d\'une liste du moment sous elle');
+    // chaque boîte a un titre
+    for (const b of d.querySelectorAll('#rpForm .rp-box')) { assert.ok(b.querySelector('h3'), 'boîte sans titre : ' + b.innerHTML.slice(0, 80)); }
 });
 
 await test('aller-retour : comptes ignorés, genres exclus, nouveaux réglages de liste', async () => {
@@ -213,8 +225,8 @@ await test('1.0.5 : rangées, diversité, affichages — aller-retour', async ()
     await wait(50);
     assert.equal(d.getElementById('rp_e_Diversity').value, 'Personalized');
     assert.equal(d.getElementById('rp_e_WShortTerm_on').checked, false, 'goût du moment coupé par défaut');
-    assert.ok(d.getElementById('rp_c_RowSize').closest('details.rp-adv'), 'taille des rangées : réglage avancé');
-    assert.ok(!d.getElementById('rp_c_RowBecauseTitle').closest('details.rp-adv'), 'titres : réglage de base');
+    assert.equal(levelOf(d.getElementById('rp_c_RowSize')), 2, 'taille des rangées : réglage avancé');
+    assert.equal(levelOf(d.getElementById('rp_c_RowBecauseTitle')), 1, 'titres : réglage de base');
     d.getElementById('rp_e_Diversity').value = 'Calibrated';
     d.getElementById('rp_c_RowSeriesTitle').value = 'Séries à voir';
     d.getElementById('rpForm').dispatchEvent(new d.defaultView.Event('submit', { cancelable: true }));
@@ -228,13 +240,12 @@ await test('1.0.5 : rangées, diversité, affichages — aller-retour', async ()
     assert.equal(s.TrackImpressions, true);
 });
 
-await test('chaque onglet de réglages : l\'avancé est replié par défaut', async () => {
+await test('chaque onglet de réglages a des réglages fins, cachés au niveau essentiel', async () => {
     const { d } = await open(cfg);
     await wait(50);
     const panes = [...d.querySelectorAll('#rpForm .rp-pane')];
-    const withAdv = panes.filter((p) => p.querySelector('details.rp-adv'));
-    assert.ok(withAdv.length >= 5, 'onglets avec avancé : ' + withAdv.length);
-    withAdv.forEach((p) => p.querySelectorAll('details.rp-adv').forEach((x) => assert.equal(x.open, false)));
+    const withFine = panes.filter((p) => p.querySelector('[data-level="3"] .rp-field, .rp-field[data-level="3"]'));
+    assert.ok(withFine.length >= 5, 'onglets avec réglages experts : ' + withFine.length);
 });
 
 await test('calibrage : méthode enregistrée au changement, avertissement si l\'historique ne suffit pas', async () => {
@@ -283,10 +294,10 @@ await test('onglet Accueil : une ligne par rangée (titre, films ou séries, con
     assert.equal(cells.length % 4, 0);
     assert.deepEqual([...d.getElementById('rp_c_KindParceQue').options].map((o) => o.value), ['Both', 'Movies', 'Series', 'Split']);
     assert.deepEqual([...d.getElementById('rp_c_SourceAVenir').options].map((o) => o.value), ['Local', 'Mix', 'Seerr']);
-    assert.ok(!rows.closest('details'), 'de base, pas replié');
+    assert.equal(levelOf(rows), 1, 'de base');
     assert.equal(d.getElementById('rp_c_RowNewTitle').value, 'Nouveautés pour vous');
     assert.equal(d.querySelectorAll('[id$="Title"]:not([data-fields="rows"] *):not(#rp_c_ExtendedTitle)').length, 0, 'aucun autre titre de rangée ailleurs');
-    assert.ok(d.getElementById('rp_c_ExtendedTitle').closest('details.rp-adv'), 'rangée à part (sans HSS) : réglage avancé du mode étendu');
+    assert.equal(levelOf(d.getElementById('rp_c_ExtendedTitle')), 3, 'rangée à part (sans HSS) : réglage expert du mode étendu');
     assert.ok(!d.querySelector('.content-primary').textContent.includes('prochain démarrage'), 'plus de redémarrage à annoncer');
 });
 
@@ -464,7 +475,7 @@ await test('mode étendu : sources dans « Où chercher », réglages d\'une sou
     Object.assign(c, { ExtendedByGenre: false, ExtendedByPeople: true, ExtendedGenres: 7, ExtendedNoise: 0.3 });
     const { d, saved } = await open(c);
     await wait(50);
-    const box = d.querySelector('[data-fields="extsrc"]');
+    const box = d.querySelector('[data-fields="extsrc"]').closest('.rp-box');
     for (const k of ['ExtendedTopRated', 'ExtendedByGenre', 'ExtendedByKeyword', 'ExtendedSagas', 'ExtendedByPeople', 'ExtendedByStudio', 'ExtendedCrossings', 'ExtendedGems', 'ExtendedByLanguage', 'ExtendedNoise']) {
         assert.ok(box.querySelector('#rp_c_' + k), k + ' dans « Où chercher »');
     }
