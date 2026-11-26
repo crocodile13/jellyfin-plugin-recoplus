@@ -349,7 +349,7 @@ public sealed class RecoController : ControllerBase
 
     /// <summary>Page Reco+ de l'utilisateur ouverte : réglages qu'il peut changer, et ce qui s'applique à lui aujourd'hui.</summary>
     private bool UserPageOpen(Configuration.PluginConfiguration cfg)
-        => cfg.Enabled && cfg.UserPageEnabled && (cfg.UserCanSetRegion || cfg.UserCanSetExtended);
+        => cfg.Enabled && RecoService.UserPageAvailable(cfg) && (cfg.UserCanSetRegion || cfg.UserCanSetExtended);
 
     /// <summary>
     /// Réglages du compte connecté (sa page Reco+) : ceux que l'administrateur lui ouvre, leur valeur, et le pays retenu

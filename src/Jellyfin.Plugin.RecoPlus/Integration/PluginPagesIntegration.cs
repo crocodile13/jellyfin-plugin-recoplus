@@ -27,6 +27,9 @@ public sealed class PluginPagesIntegration : BackgroundService
 
     public PluginPagesIntegration(ILogger<PluginPagesIntegration> log) => _log = log;
 
+    /// <summary>Plugin Pages est chargé par Jellyfin (la page des utilisateurs peut exister).</summary>
+    public static bool Available => AssemblyLoadContext.All.SelectMany(c => c.Assemblies).Any(a => a.GetName().Name == "Jellyfin.Plugin.PluginPages");
+
     /// <summary>État lisible (emballé : traduit à l'affichage).</summary>
     public static string State { get; private set; } = "non tenté";
 
