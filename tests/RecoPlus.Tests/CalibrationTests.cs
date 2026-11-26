@@ -77,6 +77,52 @@ public class CalibrationTests
     }
 
     [Fact]
+    public void ContextForOneAccountScoresLikeTheFullOneAndIsSmaller()
+    {
+        // calibrage : un contexte par cas, réduit à ce que lit le score du compte du cas (mêmes scores, bien moins de mémoire)
+        var ds = Golden();
+        var s = new EngineSettings { WCollab = 1.0 };
+        var vec = Core.BuildVectors(ds.Titles, s);
+        var hist = Calibrator.Snapshot(ds, ds.Now);
+        var full = new Context(ds, ds.Now, hist, s);
+        foreach (var u in ds.Users.Keys)
+        {
+            var mine = new Context(ds, ds.Now, hist, s, u);
+            var cands = Calibrator.Candidates(ds, hist[u], ds.Now);
+            Assert.Equal(Recommender.Score(full, vec, u, cands, s), Recommender.Score(mine, vec, u, cands, s));
+            Assert.True(mine.Cooc.Values.Sum(r => r.Count) <= full.Cooc.Values.Sum(r => r.Count));
+        }
+
+        Assert.Contains(ds.Users.Keys, u => new Context(ds, ds.Now, hist, s, u).Cooc.Values.Sum(r => r.Count) < full.Cooc.Values.Sum(r => r.Count));
+    }
+
+    [Fact]
+    public void CalibrationCachesStayWithinTheirBudgetWithTheSameResults()
+    {
+        var ds = Golden();
+        var cases = Calibrator.Cases(ds);
+        var s = new EngineSettings();
+        var sim = new SimilarityIndex(Core.BuildVectors(ds.Titles, s));
+        var one = Calibrator.ContextCache.CostOf(new Context(ds, cases[0].Ev.T0 - 1, Calibrator.Snapshot(ds, cases[0].Ev.T0 - 1), s, cases[0].Ev.User), new());
+        var small = new Calibrator.ContextCache { Budget = one * 3 };
+        var a = Calibrator.EvaluateRanks(ds, sim, cases, s);
+        var b = Calibrator.EvaluateRanks(ds, sim, cases, s, contexts: small);
+        var c = Calibrator.EvaluateRanks(ds, sim, cases, s, contexts: small);   // cas gardés relus, les autres refaits
+        Assert.Equal(a.PerEventGain, b.PerEventGain);
+        Assert.Equal(a.PerEventGain, c.PerEventGain);
+        Assert.InRange(small.Cost, 1, small.Budget);
+
+        // modèle de choix : caractéristiques gardées dans le budget, mêmes poids appris qu'avec un cache sans limite
+        var big = new ChoiceModel.FeatureCache(s);
+        var tiny = new ChoiceModel.FeatureCache(s) { Budget = 5_000 };
+        var x = ChoiceModel.Learn(ds, sim, cases, s, 1.0, cache: big);
+        var y = ChoiceModel.Learn(ds, sim, cases, s, 1.0, cache: tiny);
+        Assert.Equal(System.Text.Json.JsonSerializer.Serialize(x), System.Text.Json.JsonSerializer.Serialize(y));
+        Assert.True(big.Values > tiny.Budget, "le cache sans limite garde plus que le petit budget");
+        Assert.InRange(tiny.Values, 0, tiny.Budget);
+    }
+
+    [Fact]
     public void FoldsSpreadAccountsAndCvPicksTheBestValue()
     {
         var ds = Golden();

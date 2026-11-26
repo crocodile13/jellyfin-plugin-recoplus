@@ -308,7 +308,7 @@ public static class Calibrator
             ct.ThrowIfCancellationRequested();
             var (u, target, t0) = ev[i];
             var hist = Snapshot(ds, t0 - 1);
-            var ctx = new Context(ds, t0 - 1, hist, s);
+            var ctx = new Context(ds, t0 - 1, hist, s, u);
             var seen = hist[u];
             var cands = ds.Titles.Values.Where(t => !t.External && !seen.ContainsKey(t.Id) && (t.Added ?? 0) <= t0).Select(t => t.Id).ToList();
             var sc = Recommender.Score(ctx, vec, u, cands, s);
@@ -420,7 +420,9 @@ public static class Calibrator
     /// <summary>
     /// Contexte de chaque cas (historique à cette date, signaux, « vus ensemble », candidats), gardé tant que les réglages
     /// qui le changent ne bougent pas : la recherche essaie surtout des poids du score, qui n'y touchent pas. Une seule
-    /// version gardée à la fois (mémoire bornée).
+    /// version gardée à la fois, et au plus <see cref="Budget"/> entrées en tout (signaux, « vus ensemble », candidats) :
+    /// au-delà, le contexte d'un cas est recalculé à chaque fois au lieu d'être gardé (plus lent, mêmes résultats). Sans
+    /// ce plafond, un serveur avec un gros historique gardait des dizaines de Go (un contexte complet par cas).
     /// </summary>
     public sealed class ContextCache
     {
@@ -441,6 +443,17 @@ public static class Calibrator
         private readonly object _lock = new();
         private string? _key;
         private System.Collections.Concurrent.ConcurrentDictionary<EvalEvent, (Context Ctx, List<string> Cands)> _m = new();
+        private long _cost;
+
+        /// <summary>Entrées gardées au plus (de l'ordre de 50 octets chacune : quelques centaines de Mo).</summary>
+        public long Budget { get; init; } = 6_000_000;
+
+        /// <summary>Entrées actuellement gardées (tests).</summary>
+        public long Cost => Interlocked.Read(ref _cost);
+
+        /// <summary>Entrées que garderait un contexte (signaux, « vus ensemble », candidats).</summary>
+        public static long CostOf(Context ctx, List<string> cands)
+            => ctx.Cooc.Values.Sum(r => (long)r.Count + 1) + ctx.Sig.Values.Sum(r => (long)r.Count) + cands.Count;
 
         internal static string KeyOf(EngineSettings s)
         {
@@ -460,17 +473,30 @@ public static class Calibrator
             {
                 if (_key != key)
                 {
-                    (_key, _m) = (key, new());
+                    (_key, _m, _cost) = (key, new(), 0);
                 }
 
                 m = _m;
             }
 
-            return m.GetOrAdd(e, ev =>
+            if (m.TryGetValue(e, out var known))
             {
-                var hist = Snapshot(ds, ev.T0 - 1);
-                return (new Context(ds, ev.T0 - 1, hist, s), Candidates(ds, hist[ev.User], ev.T0));
-            });
+                return known;
+            }
+
+            var hist = Snapshot(ds, e.T0 - 1);
+            var made = (new Context(ds, e.T0 - 1, hist, s, e.User), Candidates(ds, hist[e.User], e.T0));
+            long cost = CostOf(made.Item1, made.Item2);
+            lock (_lock)
+            {
+                // gardé seulement dans le budget, et seulement si la version n'a pas changé entre-temps
+                if (ReferenceEquals(m, _m) && _cost + cost <= Budget && m.TryAdd(e, made))
+                {
+                    _cost += cost;
+                }
+            }
+
+            return made;
         }
     }
 
@@ -501,7 +527,7 @@ public static class Calibrator
             else
             {
                 var hist = Snapshot(ds, t0 - 1);
-                ctx = new Context(ds, t0 - 1, hist, s);
+                ctx = new Context(ds, t0 - 1, hist, s, u);
                 cands = Candidates(ds, hist[u], t0);
             }
 

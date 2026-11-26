@@ -457,7 +457,18 @@ public static class Core
 
     /// <summary>Cosinus item-item sur les titres aimés, avec rétrécissement et minimum de spectateurs communs.</summary>
     public static Dictionary<string, Dictionary<string, double>> ItemCooc(IEnumerable<IReadOnlyCollection<string>> userPositives, double shrink, int minCommon)
+        => ItemCooc(userPositives, shrink, minCommon, null, null);
+
+    /// <summary>
+    /// Même calcul, réduit à ce que lit le score d'UN compte : les lignes de <paramref name="rows"/> (ses titres aimés)
+    /// et, dans chaque ligne, rien de <paramref name="skipColumns"/> (ce qu'il a déjà vu, jamais candidat). Les valeurs
+    /// gardées sont exactement celles du calcul complet ; la taille passe du carré des titres aimés du foyer à
+    /// « titres aimés du compte × titres vus ensemble qu'il n'a pas vus » (calibrage : un contexte par cas).
+    /// </summary>
+    public static Dictionary<string, Dictionary<string, double>> ItemCooc(IEnumerable<IReadOnlyCollection<string>> userPositives, double shrink, int minCommon,
+        IReadOnlyCollection<string>? rows, IReadOnlyDictionary<string, Interaction>? skipColumns)
     {
+        var keep = rows is null ? null : new HashSet<string>(rows, StringComparer.Ordinal);
         var cnt = new Dictionary<string, int>(StringComparer.Ordinal);
         var pair = new Dictionary<string, Dictionary<string, int>>(StringComparer.Ordinal);
         foreach (var items in userPositives)
@@ -469,6 +480,11 @@ public static class Core
 
             foreach (var i in items)
             {
+                if (keep is not null && !keep.Contains(i))
+                {
+                    continue;
+                }
+
                 if (!pair.TryGetValue(i, out var row))
                 {
                     pair[i] = row = new Dictionary<string, int>(StringComparer.Ordinal);
@@ -476,7 +492,7 @@ public static class Core
 
                 foreach (var j in items)
                 {
-                    if (!string.Equals(i, j, StringComparison.Ordinal))
+                    if (!string.Equals(i, j, StringComparison.Ordinal) && (skipColumns is null || !skipColumns.ContainsKey(j)))
                     {
                         row[j] = row.GetValueOrDefault(j) + 1;
                     }
