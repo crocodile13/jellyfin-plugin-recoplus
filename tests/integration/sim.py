@@ -822,6 +822,23 @@ def shots_take():
     import shots
     out = OUT / "shots"
     out.mkdir(exist_ok=True)
+    # images de la bibliothèque : téléchargées de TMDb pendant l'analyse, parfois après elle (captures de 1.1.2 et 1.1.3 :
+    # cartes grises). On attend qu'elles soient là ; celles qui manquent sont redemandées une fois
+    def missing():
+        r = call("GET", "/Items", query={"IncludeItemTypes": "Movie,Series", "Recursive": "true", "Fields": "BackdropImageTags", "Limit": 1000})
+        return [i["Id"] for i in r.get("Items", []) if not (i.get("ImageTags") or {}).get("Primary") and not i.get("BackdropImageTags")]
+    lacking = missing()
+    if lacking:
+        log(f"captures : {len(lacking)} titres sans image, redemandées")
+        for iid in lacking:
+            try:
+                call("POST", f"/Items/{iid}/Refresh", query={"MetadataRefreshMode": "None", "ImageRefreshMode": "FullRefresh", "ReplaceAllImages": "false"})
+            except HttpError:
+                pass
+        try:
+            wait("images de la bibliothèque", lambda: len(missing()) <= 2 or None, timeout=600, every=15)
+        except RuntimeError:
+            log(f"captures : encore {len(missing())} titres sans image (la capture de l'accueil vérifie chaque carte)")
     info = call("GET", "/System/Info/Public")
     ids = {u["Name"]: u["Id"] for u in call("GET", "/Users")}
     pid = plugin_id("Reco+")
