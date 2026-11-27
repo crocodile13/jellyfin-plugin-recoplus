@@ -258,6 +258,15 @@ public sealed class EngineSettings
     public double HouseholdPrior { get; set; } = 2;
 
     /// <summary>
+    /// Origine du titre (<see cref="Origin"/>) : écart de familiarité du compte avec la langue et le pays du titre, dans le goût.
+    /// Choix de Marien : actif par défaut avec un poids prudent (mesuré sur le banc, pas encore sur de vrais historiques).
+    /// </summary>
+    public double WOrigin { get; set; } = 0.3;
+
+    /// <summary>Origine du titre : titres fictifs dans la langue du pays du compte (préférence de départ ; 0 = aucune).</summary>
+    public double OriginPrior { get; set; } = 5;
+
+    /// <summary>
     /// Part des tendances TMDb dans la popularité (0 = popularité dans le foyer seule, 1 = une tendance compte autant
     /// qu'un titre vu par tout le foyer) : popularité = 1 − (1 − foyer) × (1 − part × tendance). Bonus réservé comme la
     /// popularité (garde-fou) ; sans effet sans tendances (Seerr absent, calibrage).
@@ -357,6 +366,7 @@ public sealed class EngineSettings
         s.ReleaseDays = Clamp(s.ReleaseDays, 7, 3650);
         s.RatingPriorVotes = Clamp(s.RatingPriorVotes, 0, 100_000);
         s.HouseholdPrior = Clamp(s.HouseholdPrior, 0, 50);
+        s.OriginPrior = Clamp(s.OriginPrior, 0, 100);
         s.TrendingShare = Clamp(s.TrendingShare, 0, 1);
         s.Bm25K1 = Clamp(s.Bm25K1, 0, 5);
         s.Bm25B = Clamp(s.Bm25B, 0, 1);

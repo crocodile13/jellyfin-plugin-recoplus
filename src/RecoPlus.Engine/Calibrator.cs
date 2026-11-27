@@ -432,7 +432,8 @@ public static class Calibrator
         {
             nameof(EngineSettings.WCentroid), nameof(EngineSettings.WMaxSim), nameof(EngineSettings.WCollab), nameof(EngineSettings.WNegative),
             nameof(EngineSettings.WPopularity), nameof(EngineSettings.WQuality), nameof(EngineSettings.WFresh), nameof(EngineSettings.WTmdbAgreement),
-            nameof(EngineSettings.WRelease), nameof(EngineSettings.WHousehold), nameof(EngineSettings.WShortTerm), nameof(EngineSettings.WTimeOfDay),
+            nameof(EngineSettings.WRelease), nameof(EngineSettings.WHousehold), nameof(EngineSettings.WOrigin), nameof(EngineSettings.OriginPrior),
+            nameof(EngineSettings.WShortTerm), nameof(EngineSettings.WTimeOfDay),
             nameof(EngineSettings.WImpression), nameof(EngineSettings.WNeural), nameof(EngineSettings.Neural), nameof(EngineSettings.Mmr),
             nameof(EngineSettings.Diversity), nameof(EngineSettings.CalibrationStrength), nameof(EngineSettings.GateTop), nameof(EngineSettings.SagaMax),
             nameof(EngineSettings.FreshDays), nameof(EngineSettings.ReleaseDays), nameof(EngineSettings.Rating), nameof(EngineSettings.RatingPriorVotes),
@@ -674,6 +675,7 @@ public static class Calibrator
         new("Heure de la journée", s => s.WTimeOfDay, (s, v) => s.WTimeOfDay = v, 0.05, 2, true, false, true),
         new("Titres du goût du moment", s => s.ShortTermTitles, (s, v) => s.ShortTermTitles = (int)Math.Round(v), 2, 15, true, true, false, s => s.WShortTerm > 0),
         new("Avis du foyer", s => s.WHousehold, (s, v) => s.WHousehold = v, 0.05, 2, true, false, true),
+        new("Origine du titre", s => s.WOrigin, (s, v) => s.WOrigin = v, 0.05, 2, true, false, true),
         new("Genres", s => s.FeatGenre, (s, v) => s.FeatGenre = v, 0.25, 3, true, false, false),
         new("Mots-clés", s => s.FeatTag, (s, v) => s.FeatTag = v, 0.05, 2, true, false, true),
         new("Studios", s => s.FeatStudio, (s, v) => s.FeatStudio = v, 0.05, 2, true, false, true),

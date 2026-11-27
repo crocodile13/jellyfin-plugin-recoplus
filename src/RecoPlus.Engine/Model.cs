@@ -188,6 +188,12 @@ public sealed class Dataset
     public double Now { get; init; }
 
     /// <summary>
+    /// Origines du pays de chaque compte, au format de <see cref="Origin.Keys"/> (« l:fr », « c:france » ; vide ou absent :
+    /// aucune préférence, mode international) : la préférence de départ de l'origine des titres.
+    /// </summary>
+    public Dictionary<string, IReadOnlyList<string>> HomeOrigins { get; init; } = new(StringComparer.Ordinal);
+
+    /// <summary>
     /// Tendances TMDb du moment : titre → intensité 0..1 (1 = premier de la liste ; voir <see cref="Trending"/>). Vide hors
     /// du plugin (calibrage, prototype) : les tendances d'aujourd'hui ne disent rien des choix passés.
     /// </summary>

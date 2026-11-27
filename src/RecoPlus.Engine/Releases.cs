@@ -22,6 +22,30 @@ public static class Releases
             ? new DateTimeOffset(d, TimeSpan.Zero).ToUnixTimeSeconds()
             : null;
 
+    /// <summary>
+    /// Date de sortie d'un titre pour un compte : en mode international, la date principale (première sortie dans le
+    /// monde) ; sinon la plus ancienne de ses pays (la sortie la plus tôt chez l'un d'eux), et la date principale pour
+    /// un pays sans date connue.
+    /// </summary>
+    public static double? For(RegionGuess region, IReadOnlyDictionary<string, string>? local, string? primary)
+    {
+        if (region.International || region.Countries.Count == 0)
+        {
+            return Parse(primary);
+        }
+
+        double? best = null;
+        foreach (var c in region.Countries)
+        {
+            if (In(c, local, primary) is { } d && (best is null || d < best))
+            {
+                best = d;
+            }
+        }
+
+        return best;
+    }
+
     /// <summary>Date de sortie d'un titre dans un pays : sa première sortie retenue là-bas, sinon la date principale.</summary>
     public static double? In(string country, IReadOnlyDictionary<string, string>? local, string? primary)
         => local is not null && local.TryGetValue(country, out var d) && Parse(d) is { } t ? t : Parse(primary);

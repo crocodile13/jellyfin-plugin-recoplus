@@ -68,7 +68,7 @@ public sealed class ClientBody
 /// <summary>Réglages choisis par le compte connecté dans sa page Reco+.</summary>
 public sealed class MeBody
 {
-    /// <summary>Pays (ISO 3166-1) ; vide = détecté.</summary>
+    /// <summary>Pays (« FR », « FR,BE », « * » international) ; vide = détecté.</summary>
     public string? Region { get; set; }
 
     /// <summary>Titres hors bibliothèque ; null = comme le serveur.</summary>
@@ -238,7 +238,7 @@ public sealed class RecoController : ControllerBase
             },
             canRequest = on && cfg.ExtendedRequestButton && (r?.SeerrUserId ?? 0) > 0,
             // fuseau et langues du navigateur à signaler (détection du pays du compte), une fois par session
-            report = cfg.Enabled && !RecoService.IsExcluded(me.Value) && Regions.Clean(cfg.Region) is null,
+            report = cfg.Enabled && !RecoService.IsExcluded(me.Value) && Regions.ParseSpec(cfg.Region) is null,
             // adresse publique seulement : l'adresse interne de Seerr n'a rien à faire chez les utilisateurs
             seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? string.Empty : cfg.SeerrPublicUrl.TrimEnd('/'),
             items = on ? (r?.Extended ?? new List<ExternalRec>()).Select(e => e.In(Lang)).ToList() : new List<ExternalRec>(),
@@ -392,11 +392,11 @@ public sealed class RecoController : ControllerBase
             {
                 canSet = open && RecoService.UserPageOffers(cfg).Region,
                 chosen = cfg.UserCanSetRegion ? p.Region : null,
-                current = guess.Country,
+                current = guess.Spec,
                 // ce que donnerait « automatique » : pays fixé par l'administrateur, sinon détecté, sinon le repli
-                auto = auto.Country,
+                auto = auto.Spec,
                 detected = auto.Detected,
-                server = Regions.Clean(cfg.Region),
+                server = Regions.NormalizeSpec(cfg.Region),
                 clues = auto.Clues.Select(c => new { source = c.Source, country = c.Country }).ToList(),
             },
             extended = new

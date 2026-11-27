@@ -19,11 +19,23 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     jamais un titre demandé ; filtres des listes appliqués).
   - `HomeRows.cs` : répartition des rangées sans doublon (`Allocate`, rappel `fit`), placement des titres hors
     bibliothèque (`PlaceRow`, `FitRow`, `FreePlaces`, `CapPlaces`, `ForcePlaces`), `RowSource`, `MixOptions`.
-  - `Regions.cs` : pays d'un compte (dates des nouvelles sorties, jamais le pays de production) : indices pondérés
-    (fuseau du navigateur 3, langue avec région 2, langue seule et langues audio / sous-titres 1, serveur 0,5), choix du
-    compte ou de l'administrateur d'abord, repli ; `zones.txt` (fuseaux IANA → pays, tiré de tzdata, alias compris). Pas
-    d'adresse IP (service extérieur ou base à tenir, faux derrière un VPN). `Releases.cs` : sorti récemment dans un pays
-    (types TMDb 2, 3, 4, 6 ; sans date locale, la date principale).
+  - `Regions.cs` : pays d'un compte (dates des nouvelles sorties, préférence de départ de l'origine des titres) : notation
+    « » automatique, « * » international, « FR » ou « FR,BE,CH » liste (`ParseSpec`, `NormalizeSpec`, au plus 12 pays
+    connus) ; `RegionGuess` (`Spec`, `Country`). Indices pondérés : fuseau du navigateur 3, langue du navigateur avec
+    région 2 (seule 1), langue de l'interface Jellyfin 2 / 1, sous-titres 1, audio 0,5 (on regarde en VO), langue du
+    serveur 0,5 ; les indices de langue d'un pays plafonnés ensemble à 2,5. Choix du compte ou de l'administrateur
+    d'abord ; repli : `RegionFallback`, sinon pays des métadonnées du serveur, sinon US. `zones.txt` (fuseaux IANA → pays,
+    tiré de tzdata, alias compris). Pas d'adresse IP (service extérieur ou base à tenir, faux derrière un VPN).
+    `HomeOrigins` : langues (cultures .NET) et noms du pays (y compris ceux de TMDb, `TmdbNames`). `Releases.cs` : sorti
+    récemment dans un pays (types TMDb 2, 3, 4, 6 ; sans date locale, la date principale ; international : date
+    principale ; liste : la plus tôt des pays), `EnoughVotes` (seuil de votes qui monte sur 30 jours : relevé TMDb, un
+    film de moins d'un mois a 9 votes en médiane), `ConfidentRating` (note bayésienne, 10 votes à 6,8). Les votes
+    minimum ne sont plus envoyés à TMDb : filtrés après lecture.
+  - `Origin.cs` : origine du titre (« l:fr » langue originale, « c:france » pays de production) ; familiarité du compte
+    = ses titres aimés de cette origine + `OriginPrior` titres fictifs pour chaque origine de son pays (`Dataset.HomeOrigins`,
+    aucune en international) ; ingrédient du goût `WOrigin` = écart à la moyenne des candidats. **Choix de Marien :
+    actif par défaut avec un poids prudent (0,3)**, exception à la règle « sans gain prouvé, coupé » : mesuré sur le banc
+    seulement (voir le commit), à revoir sur de vrais historiques.
   - `Trending.cs` : listes TMDb du moment (intensité 1/√(1 + place), ordre tendance × goût), `KindFilter` (films,
     séries, les deux, séparées), `SplitLayout` (accueil HSS d'un compte quand une rangée est séparée ou réunie).
   - `ListPolicy.cs` (présentation : hasard du jour, minimums films/séries, filtres), `Exploration.cs` (mode étendu :
@@ -265,6 +277,8 @@ de la CI.
   moitiés, 50 = leurs défauts) ; un de ces champs changé à la main affiche « réglée à la main ». Même courbe dans
   `tests/integration/sim.py` (`bold_values`, arrondi comme `Math.round`) ; expérience sur les branches `sim-*`
   (`SIM_BOLDNESS`).
+- Relevé TMDb : `tests/integration/tmdb_stats.py` (branche `sim-*`, `SIM_TMDB_STATS`, eco 12.4) écrit les titres bruts de
+  chaque liste dans l'artifact (`tmdb-stats.json`) pour choisir les seuils ; l'analyse se fait à part.
 - Construction après le chargement de la langue (`__rpReady`) ; une variable locale ne s'appelle jamais `t`.
 - Une option de liste `enum:` ne contient pas de virgule dans son libellé (séparateur des options).
 

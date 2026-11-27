@@ -452,8 +452,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public string ClassificationCountry() => (!string.IsNullOrWhiteSpace(RatingCountry) ? RatingCountry : I18n.Metadata().Country ?? "US").Trim().ToUpperInvariant();
 
     /// <summary>
-    /// Pays des comptes (dates de sortie des nouvelles sorties) ; vide = détecté pour chaque compte (<see cref="Regions"/>),
-    /// sauf s'il a choisi le sien dans sa page Reco+.
+    /// Pays des comptes : vide = détecté pour chaque compte (<see cref="Regions"/>), sauf s'il a choisi le sien dans sa page
+    /// Reco+ ; « FR » ou « FR,BE,CH » = ces pays pour tous ; « * » = international (aucun pays favorisé, dates de sortie
+    /// mondiales).
     /// </summary>
     public string Region { get; set; } = string.Empty;
 
