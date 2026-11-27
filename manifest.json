@@ -12,9 +12,9 @@
         "version": "1.3.0.0",
         "changelog": "1.3.0 (Jellyfin 12.2 to 12.4): the current lists (Trending, Most popular of all time, New releases) are much more selective. Their minimum votes and ratings now come from a survey of 2,800 titles of TMDb's lists: 300 votes and 6/10 for Trending, 1,000 votes and 6.5/10 for Most popular of all time, 100 votes and 6.5/10 for New releases (20 votes let almost any title through). Trending and Most popular of all time get a minimum rating. A series needs a quarter of the votes, since TMDb counts about four times fewer for series. Upcoming titles, which have neither votes nor rating yet, no longer have a minimum-votes setting that could empty the row. Values still at the old defaults move to the new ones; values you changed stay. Settings page: each current list has its own block (what is read, order, filters), the shared filter rules are explained once, and long ranking factor names no longer spill out of their row.",
         "targetAbi": "12.2.0.0",
-        "sourceUrl": "",
-        "checksum": "",
-        "timestamp": ""
+        "sourceUrl": "https://github.com/crocodile13/jellyfin-plugin-recoplus/releases/download/v1.3.0.0/RecoPlus_1.3.0.0.zip",
+        "checksum": "85fc257e6c3e0dde4d8c4d5524d94590",
+        "timestamp": "2026-11-27T20:37:02Z"
       },
       {
         "version": "1.2.0.0",
