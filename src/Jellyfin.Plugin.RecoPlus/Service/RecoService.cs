@@ -1598,7 +1598,7 @@ public sealed class RecoService : IDisposable
                 // fiable (peu de votes : ramenée vers la médiane plutôt que crue)
                 double nowUnix = Unix(DateTime.UtcNow);
                 bool Counts(SeerrResult r) => (!releases && lib.ByTmdb.ContainsKey(r.MediaType + ":" + r.TmdbId))
-                    || (r.Popularity >= set.MinPopularity && Releases.EnoughVotes(r.VoteCount, Releases.AgeDays(r.Date, nowUnix), set.MinVotes)
+                    || (r.Popularity >= set.MinPopularity && Releases.EnoughVotes(r.VoteCount, Releases.AgeDays(r.Date, nowUnix), set.MinVotes, r.MediaType == "tv")
                         && (set.MinRating <= 0 || Releases.ConfidentRating(r.Vote, r.VoteCount) >= set.MinRating));
                 var found = new List<SeerrResult>();
                 for (int p = 1; p <= 2 * ((want + 19) / 20) && found.Count < want; p++)

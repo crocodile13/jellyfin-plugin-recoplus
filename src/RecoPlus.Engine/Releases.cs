@@ -62,6 +62,18 @@ public static class Releases
         => minVotes <= 0 || votes >= minVotes * (ageDays is double a ? Math.Clamp(a / rampDays, 0, 1) : 1);
 
     /// <summary>
+    /// Part du minimum de votes demandée à une série : TMDb compte environ quatre fois moins de votes pour les séries que
+    /// pour les films (relevé de novembre 2026 : séries récentes 42 votes en médiane contre 191 pour les films récents,
+    /// séries populaires 2 542 contre 9 286 pour les films de plus de deux mois). Un seul seuil écartait presque toutes
+    /// les séries ou ne filtrait presque aucun film.
+    /// </summary>
+    public const double SeriesVoteShare = 0.25;
+
+    /// <summary><see cref="EnoughVotes(int, double?, int, double)"/>, une série ne devant atteindre que <see cref="SeriesVoteShare"/> du minimum.</summary>
+    public static bool EnoughVotes(int votes, double? ageDays, int minVotes, bool series)
+        => EnoughVotes(votes, ageDays, series ? (int)Math.Round(minVotes * SeriesVoteShare) : minVotes);
+
+    /// <summary>
     /// Note TMDb fiable d'une sortie récente : ramenée vers la note médiane des sorties récentes (6,8 au relevé) tant
     /// qu'elle repose sur peu de votes (poids de 10 votes fictifs) : 9,0 sur 8 votes ≈ 7,8 ; 5,5 sur 25 votes ≈ 5,9.
     /// </summary>

@@ -29,8 +29,11 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
     `HomeOrigins` : langues (cultures .NET) et noms du pays (y compris ceux de TMDb, `TmdbNames`). `Releases.cs` : sorti
     récemment dans un pays (types TMDb 2, 3, 4, 6 ; sans date locale, la date principale ; international : date
     principale ; liste : la plus tôt des pays), `EnoughVotes` (seuil de votes qui monte sur 30 jours : relevé TMDb, un
-    film de moins d'un mois a 9 votes en médiane), `ConfidentRating` (note bayésienne, 10 votes à 6,8). Les votes
-    minimum ne sont plus envoyés à TMDb : filtrés après lecture.
+    film de moins d'un mois a 9 votes en médiane ; une série n'en demande que le quart : `SeriesVoteShare` 0,25, TMDb
+    compte environ quatre fois moins de votes pour les séries), `ConfidentRating` (note bayésienne, 10 votes à 6,8). Les
+    votes minimum ne sont plus envoyés à TMDb : filtrés après lecture. Seuils par défaut tirés du relevé (1.2.1) :
+    tendances 300 votes et note 6, plus populaires de tous les temps 1 000 et 6,5, nouvelles sorties 100 et 6,5 ; à venir :
+    ni votes ni note (pas encore sortis), seulement la popularité. Anciens défauts migrés (`ListThresholdsVersion`).
   - `Origin.cs` : origine du titre (« l:fr » langue originale, « c:france » pays de production) ; familiarité du compte
     = ses titres aimés de cette origine + `OriginPrior` titres fictifs pour chaque origine de son pays (`Dataset.HomeOrigins`,
     aucune en international) ; ingrédient du goût `WOrigin` = écart à la moyenne des candidats. **Choix de Marien :

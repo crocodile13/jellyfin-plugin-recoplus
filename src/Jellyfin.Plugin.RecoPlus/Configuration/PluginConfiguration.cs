@@ -297,23 +297,34 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     public ListRowSettings ListSettings(string row) => row switch
     {
         HomeRows.Tendances => new(Math.Clamp(TrendingCount, 5, 100), Unit(TrendingTaste), Pos(TrendingMinPopularity), Math.Max(0, TrendingMinVotes), Unit(TrendingTasteFloor),
-            0, Unit(TrendingRotation)),
+            Rating(TrendingMinRating), Unit(TrendingRotation)),
         HomeRows.Populaires => new(Math.Clamp(PopularCount, 5, 100), Unit(PopularTaste), Pos(PopularMinPopularity), Math.Max(0, PopularMinVotes), Unit(PopularTasteFloor),
-            0, Unit(PopularRotation)),
+            Rating(PopularMinRating), Unit(PopularRotation)),
         HomeRows.Sorties => new(Math.Clamp(ReleasesCount, 5, 100), Unit(ReleasesTaste), Pos(ReleasesMinPopularity), Math.Max(0, ReleasesMinVotes), Unit(ReleasesTasteFloor),
-            double.IsFinite(ReleasesMinRating) ? Math.Clamp(ReleasesMinRating, 0, 10) : 0, Unit(ReleasesRotation)),
-        _ => new(Math.Clamp(UpcomingCount, 5, 100), Unit(UpcomingTaste), Pos(UpcomingMinPopularity), Math.Max(0, UpcomingMinVotes), Unit(UpcomingTasteFloor),
+            Rating(ReleasesMinRating), Unit(ReleasesRotation)),
+        // à venir : pas encore sortis, donc ni votes ni note (relevé : 0 vote pour tous) ; l'attente (popularité) et le goût font le tri
+        _ => new(Math.Clamp(UpcomingCount, 5, 100), Unit(UpcomingTaste), Pos(UpcomingMinPopularity), 0, Unit(UpcomingTasteFloor),
             0, Unit(UpcomingRotation)),
     };
 
     // listes du moment, titres hors bibliothèque : seulement ceux qui comptent (popularité TMDb, votes) et qui
     // conviennent assez au compte (goût minimal : place dans son propre classement de la bibliothèque)
 
+    /// <summary>Seuils des listes passés aux valeurs du relevé TMDb (migration, une seule fois ; 0 = pas encore).</summary>
+    public int ListThresholdsVersion { get; set; }
+
     /// <summary>Tendances hors bibliothèque : popularité TMDb minimale (0 = aucune).</summary>
     public double TrendingMinPopularity { get; set; }
 
-    /// <summary>Tendances hors bibliothèque : votes TMDb minimum.</summary>
-    public int TrendingMinVotes { get; set; } = 50;
+    // seuils de votes et de note : relevé TMDb de novembre 2026 (2 800 titres des listes, via Seerr) ; un minimum de
+    // votes vaut pour un film d'au moins un mois (moins pour un plus récent), une série n'en demande que le quart
+    // (Releases.SeriesVoteShare) ; la note est la note fiable (peu de votes : ramenée vers la moyenne)
+
+    /// <summary>Tendances hors bibliothèque : votes TMDb minimum (300 : les tendances de plus de deux mois en ont 563 en médiane).</summary>
+    public int TrendingMinVotes { get; set; } = 300;
+
+    /// <summary>Tendances hors bibliothèque : note TMDb minimale (0 = aucune).</summary>
+    public double TrendingMinRating { get; set; } = 6;
 
     /// <summary>Tendances hors bibliothèque : goût minimal (0 = aucun ; 0,5 = au moins aussi bien classé que la moitié de la bibliothèque du compte).</summary>
     public double TrendingTasteFloor { get; set; } = 0.3;
@@ -321,8 +332,11 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Populaires hors bibliothèque : popularité TMDb minimale.</summary>
     public double PopularMinPopularity { get; set; }
 
-    /// <summary>Populaires hors bibliothèque : votes TMDb minimum.</summary>
-    public int PopularMinVotes { get; set; } = 50;
+    /// <summary>Les plus populaires de tous les temps, hors bibliothèque : votes TMDb minimum.</summary>
+    public int PopularMinVotes { get; set; } = 1000;
+
+    /// <summary>Les plus populaires de tous les temps, hors bibliothèque : note TMDb minimale (très votés ne veut pas dire bons).</summary>
+    public double PopularMinRating { get; set; } = 6.5;
 
     /// <summary>Populaires hors bibliothèque : goût minimal.</summary>
     public double PopularTasteFloor { get; set; } = 0.3;
@@ -333,11 +347,14 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// </summary>
     public double ReleasesMinPopularity { get; set; } = 10;
 
-    /// <summary>Nouvelles sorties : votes TMDb minimum, bibliothèque comprise (en dessous, la note ne veut rien dire).</summary>
-    public int ReleasesMinVotes { get; set; } = 20;
+    /// <summary>
+    /// Nouvelles sorties : votes TMDb minimum, bibliothèque comprise (100 : le quart le plus voté des films sortis depuis
+    /// un à deux mois ; 20 laissait passer presque tout).
+    /// </summary>
+    public int ReleasesMinVotes { get; set; } = 100;
 
     /// <summary>Nouvelles sorties : note TMDb minimale, bibliothèque comprise (écarte les sorties de piètre qualité).</summary>
-    public double ReleasesMinRating { get; set; } = 6;
+    public double ReleasesMinRating { get; set; } = 6.5;
 
     /// <summary>Nouvelles sorties hors bibliothèque : goût minimal (bas : la rangée suit l'actualité plus que les goûts).</summary>
     public double ReleasesTasteFloor { get; set; } = 0.1;
@@ -345,13 +362,12 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>À venir hors bibliothèque : popularité TMDb minimale (pas encore de votes : c'est l'attente qui compte).</summary>
     public double UpcomingMinPopularity { get; set; } = 10;
 
-    /// <summary>À venir hors bibliothèque : votes TMDb minimum (0 : un titre pas encore sorti n'a presque pas de votes).</summary>
-    public int UpcomingMinVotes { get; set; }
-
     /// <summary>À venir hors bibliothèque : goût minimal (plus haut : sans note ni votes, le goût fait le tri).</summary>
     public double UpcomingTasteFloor { get; set; } = 0.5;
 
     private static double Pos(double v) => double.IsFinite(v) ? Math.Max(0, v) : 0;
+
+    private static double Rating(double v) => double.IsFinite(v) ? Math.Clamp(v, 0, 10) : 0;
 
     private static double Unit(double v) => double.IsFinite(v) ? Math.Clamp(v, 0, 1) : 0;
 
