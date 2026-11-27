@@ -100,7 +100,7 @@ await test('langue : chaque texte de la page a sa traduction anglaise, allemande
     for (const m of HTML.matchAll(/data-t="([^"]+)"/g)) { texts.add(m[1].replace(/&amp;/g, '&')); }
     for (const m of HTML.matchAll(/\btrf?\('((?:[^'\\]|\\.)*)'/g)) { texts.add(m[1].replace(/\\'/g, '\'')); }
     const src = HTML.match(/var SOURCES = \{([\s\S]*?)\};/)[1];
-    for (const m of src.matchAll(/:\s*'((?:[^'\\]|\\.)*)'/g)) { texts.add(m[1]); }
+    for (const m of src.matchAll(/:\s*'((?:[^'\\]|\\.)*)'/g)) { texts.add(m[1].replace(/\\'/g, '\'')); }
     assert.ok(texts.size > 15, 'textes trouvés : ' + texts.size);
     const ph = (s) => [...s.matchAll(/\{\d+\}/g)].map((m) => m[0]).sort().join();
     for (const f of ['english', 'german', 'spanish']) {

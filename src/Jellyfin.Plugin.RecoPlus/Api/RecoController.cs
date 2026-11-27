@@ -60,6 +60,9 @@ public sealed class ClientBody
     public string? TimeZone { get; set; }
 
     public List<string>? Languages { get; set; }
+
+    /// <summary>Langue de l'interface Jellyfin (attribut lang de la page).</summary>
+    public string? Ui { get; set; }
 }
 
 /// <summary>Réglages choisis par le compte connecté dans sa page Reco+.</summary>
@@ -338,13 +341,13 @@ public sealed class RecoController : ControllerBase
             return NoContent();
         }
 
-        if ((body.Languages?.Count ?? 0) > 20 || (body.TimeZone?.Length ?? 0) > 64)
+        if ((body.Languages?.Count ?? 0) > 20 || (body.TimeZone?.Length ?? 0) > 64 || (body.Ui?.Length ?? 0) > 35)
         {
             return BadRequest(Msg("valeurs invalides"));
         }
 
         // fuseau ou langues nouveaux : le pays du compte peut changer, ses listes aussi (regroupé avec son activité)
-        if (_prefs.Report(me.Value.ToString("N"), body.TimeZone, body.Languages))
+        if (_prefs.Report(me.Value.ToString("N"), body.TimeZone, body.Languages, body.Ui))
         {
             RecoWorker.Instance?.ScheduleUser(me.Value);
         }

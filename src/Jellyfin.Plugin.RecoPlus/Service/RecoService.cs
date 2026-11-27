@@ -164,15 +164,17 @@ public sealed class RecoService : IDisposable
     {
         var p = _prefs.For(u.Id.ToString("N"));
         var (lang, country) = I18n.Metadata();
+        // repli : le réglage, sinon le pays des métadonnées du serveur (même laissé aux États-Unis par défaut), sinon les États-Unis
+        var fallback = Regions.Clean(cfg.RegionFallback) ?? Regions.Clean(country) ?? "US";
         // pays et langue des métadonnées laissés aux valeurs par défaut de Jellyfin (États-Unis, anglais) : ils ne disent rien
         if (string.Equals(country, "US", StringComparison.OrdinalIgnoreCase) && (lang is null || lang.StartsWith("en", StringComparison.OrdinalIgnoreCase)))
         {
             (lang, country) = (null, null);
         }
 
-        var clues = Regions.Clues(p.BrowserZone, p.BrowserLanguages, u.AudioLanguagePreference, u.SubtitleLanguagePreference, country, lang, ServerZone());
+        var clues = Regions.Clues(p.BrowserZone, p.BrowserLanguages, u.AudioLanguagePreference, u.SubtitleLanguagePreference, country, lang, ServerZone(), p.UiLanguage);
         var chosen = withChoice && UserPageAvailable(cfg) && cfg.UserCanSetRegion && p.Region is not null ? p.Region : cfg.Region;
-        return Regions.Detect(chosen, clues, cfg.RegionFallback);
+        return Regions.Detect(chosen, clues, fallback);
     }
 
     /// <summary>Fuseau horaire IANA de la machine (converti depuis Windows au besoin) ; null s'il est illisible.</summary>
@@ -1528,18 +1530,8 @@ public sealed class RecoService : IDisposable
         var q = type == "movie"
             ? "primaryReleaseDateGte=" + D(from) + "&primaryReleaseDateLte=" + D(today)
             : "firstAirDateGte=" + D(from) + "&firstAirDateLte=" + D(today);
-        q += "&sortBy=popularity.desc";
-        if (set.MinVotes > 0)
-        {
-            q += "&voteCountGte=" + set.MinVotes.ToString(CultureInfo.InvariantCulture);
-        }
-
-        if (set.MinRating > 0)
-        {
-            q += "&voteAverageGte=" + set.MinRating.ToString("0.#", CultureInfo.InvariantCulture);
-        }
-
-        return q;
+        // votes et note filtrés ensuite, selon l'âge et en note fiable (TMDb les filtrerait bruts)
+        return q + "&sortBy=popularity.desc";
     }
 
     /// <summary>
@@ -1578,8 +1570,12 @@ public sealed class RecoService : IDisposable
                 // hors bibliothèque, seulement les titres qui comptent (popularité, votes) ; les écartés ne prennent pas de
                 // place : on lit au plus deux fois plus de pages pour garder le nombre voulu. Nouvelles sorties : le tri vaut
                 // aussi pour la bibliothèque, c'est ce qui fait la rangée (ce que le public attend, pas tout ce qui sort).
+                // votes proportionnels à l'âge (un titre de quelques jours n'a pas encore de votes) ; nouvelles sorties : note
+                // fiable (peu de votes : ramenée vers la médiane plutôt que crue)
+                double nowUnix = Unix(DateTime.UtcNow);
                 bool Counts(SeerrResult r) => (!releases && lib.ByTmdb.ContainsKey(r.MediaType + ":" + r.TmdbId))
-                    || (r.Popularity >= set.MinPopularity && r.VoteCount >= set.MinVotes && r.Vote >= set.MinRating);
+                    || (r.Popularity >= set.MinPopularity && Releases.EnoughVotes(r.VoteCount, Releases.AgeDays(r.Date, nowUnix), set.MinVotes)
+                        && (set.MinRating <= 0 || Releases.ConfidentRating(r.Vote, r.VoteCount) >= set.MinRating));
                 var found = new List<SeerrResult>();
                 for (int p = 1; p <= 2 * ((want + 19) / 20) && found.Count < want; p++)
                 {

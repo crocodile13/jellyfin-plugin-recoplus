@@ -26,13 +26,19 @@ public static class Regions
     public const double TimeZoneWeight = 3, BrowserRegionWeight = 2, LanguageWeight = 1, ServerWeight = 0.5;
 
     /// <summary>
+    /// Langue audio préférée : moitié du poids d'une langue. Beaucoup regardent en VO (audio japonais pour un fan d'anime,
+    /// anglais en VOSTFR) : la langue des sous-titres dit mieux la langue de tous les jours.
+    /// </summary>
+    public const double AudioWeight = 0.5;
+
+    /// <summary>
     /// Plafond, par pays, de tous les indices tirés d'une langue (navigateur, audio, sous-titres, langue du serveur) : ils
     /// disent souvent la même chose (« français ») et ne doivent pas l'emporter, additionnés, sur le fuseau horaire, qui
     /// désigne le pays (un Belge au navigateur en fr-FR, audio et sous-titres français, reste en Belgique).
     /// </summary>
     public const double LanguageCap = 2.5;
 
-    private static readonly HashSet<string> LanguageSources = new(StringComparer.Ordinal) { "browser", "audio", "subtitles", "serverlang" };
+    private static readonly HashSet<string> LanguageSources = new(StringComparer.Ordinal) { "ui", "browser", "audio", "subtitles", "serverlang" };
 
     private static readonly Lazy<Dictionary<string, string>> Zones = new(LoadZones);
 
@@ -140,7 +146,7 @@ public static class Regions
             .Select(g => (Country: g.Key, W: g.Where(x => !x.Lang).Sum(x => x.Weight) + Math.Min(LanguageCap, g.Where(x => x.Lang).Sum(x => x.Weight)),
                 First: g.Min(x => x.i)))
             .OrderByDescending(g => g.W).ThenBy(g => g.First).FirstOrDefault();
-        return best.Country is null ? new RegionGuess(Clean(fallback) ?? "FR", false, list) : new RegionGuess(best.Country, true, list);
+        return best.Country is null ? new RegionGuess(Clean(fallback) ?? "US", false, list) : new RegionGuess(best.Country, true, list);
     }
 
     /// <summary>
@@ -148,10 +154,16 @@ public static class Regions
     /// sous-titres préférées, puis ceux du serveur (pays et langue des métadonnées, fuseau de la machine), plus faibles :
     /// ils valent pour tous les comptes et gardent souvent leurs valeurs par défaut.
     /// </summary>
+    /// <param name="uiLanguage">Langue de l'interface Jellyfin du compte (choisie dans Jellyfin, parfois avec région : « pt-BR »).</param>
     public static List<RegionClue> Clues(string? browserZone, IEnumerable<string>? browserLanguages, string? audioLanguage, string? subtitleLanguage,
-        string? serverCountry, string? serverLanguage, string? serverZone)
+        string? serverCountry, string? serverLanguage, string? serverZone, string? uiLanguage = null)
     {
         var res = new List<RegionClue>();
+        if (OfLanguage(uiLanguage) is ({ } ui, var uiRegion))
+        {
+            res.Add(new RegionClue("ui", ui, uiRegion ? BrowserRegionWeight : LanguageWeight));
+        }
+
         if (OfTimeZone(browserZone) is { } z)
         {
             res.Add(new RegionClue("timezone", z, TimeZoneWeight));
@@ -170,11 +182,11 @@ public static class Regions
             i++;
         }
 
-        foreach (var (src, l) in new[] { ("audio", audioLanguage), ("subtitles", subtitleLanguage) })
+        foreach (var (src, l, w) in new[] { ("audio", audioLanguage, AudioWeight), ("subtitles", subtitleLanguage, LanguageWeight) })
         {
             if (OfLanguage(l).Country is { } c)
             {
-                res.Add(new RegionClue(src, c, LanguageWeight));
+                res.Add(new RegionClue(src, c, w));
             }
         }
 

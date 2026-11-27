@@ -46,6 +46,11 @@ public class RegionsTests
         Assert.Equal("BE", Regions.Detect(null, Regions.Clues("Europe/Brussels", new[] { "fr-FR" }, "fre", "fre", null, "fr", null), "FR").Country);
         Assert.Equal("CH", Regions.Detect(null, Regions.Clues("Europe/Zurich", new[] { "de-DE", "de" }, "ger", "ger", null, null, null), "FR").Country);
 
+        // langue de l'interface Jellyfin : un indice de langue (avec région, comme le navigateur) ; audio en VO pèse moitié moins
+        // que les sous-titres (fan d'anime en VOSTFR : audio japonais, sous-titres français)
+        Assert.Equal("BR", Regions.Detect(null, Regions.Clues(null, null, null, null, null, null, null, "pt-BR"), "US").Country);
+        Assert.Equal("FR", Regions.Detect(null, Regions.Clues(null, null, "jpn", "fre", null, null, null), "US").Country);
+
         // sans fuseau : la langue avec région l'emporte sur la langue seule
         clues = Regions.Clues(null, new[] { "fr-CA", "en-US" }, "fre", "fre", null, null, null);
         Assert.Equal("CA", Regions.Detect(null, clues, "FR").Country);
@@ -56,8 +61,8 @@ public class RegionsTests
 
         // rien : le pays de repli ; un repli mal formé redevient la France
         Assert.Equal(("IT", false), (Regions.Detect(null, Regions.Clues(null, new[] { "en" }, null, null, null, null, "UTC"), "it").Country, false));
-        Assert.Equal("FR", Regions.Detect(null, Array.Empty<RegionClue>(), "???").Country);
-        Assert.Equal("FR", Regions.Detect("UK", Array.Empty<RegionClue>(), "FR").Country);   // « UK » n'est pas un code : c'est GB
+        Assert.Equal("US", Regions.Detect(null, Array.Empty<RegionClue>(), "???").Country);
+        Assert.Equal("FR", Regions.Detect("UK", Array.Empty<RegionClue>(), "FR").Country);   // « UK » n'est pas un code (c'est GB) : le repli
         Assert.Null(Regions.Clean("ZZ"));
         Assert.Equal("GB", Regions.Clean(" gb "));
 
@@ -81,6 +86,25 @@ public class RegionsTests
         Assert.False(Releases.IsNew(null, now, 60));
         Assert.Null(Releases.Parse("demain"));
         Assert.Equal(Releases.Parse("2026-11-12"), Releases.Parse("2026-11-12T00:00:00.000Z"));
+    }
+
+    [Fact]
+    public void RecentTitlesNeedVotesInProportionToTheirAgeAndAreJudgedOnAConfidentRating()
+    {
+        // relevé TMDb : Focker In-Law, 6 jours, 18 votes, attendu par le public ; Dracula Eternal, 315 jours, 2 votes
+        Assert.True(Releases.EnoughVotes(18, 6, 20));
+        Assert.False(Releases.EnoughVotes(2, 315, 50));
+        Assert.True(Releases.EnoughVotes(0, -19, 50));      // pas encore sorti (Avengers: Doomsday dans les tendances)
+        Assert.False(Releases.EnoughVotes(19, 45, 20));     // un mois passé : le minimum complet
+        Assert.False(Releases.EnoughVotes(5, null, 20));    // sans date : le minimum complet
+        Assert.True(Releases.EnoughVotes(0, 400, 0));
+        Assert.Equal(-19, Releases.AgeDays("2026-12-16", Releases.Parse("2026-11-27")!.Value)!.Value, 6);
+        // note fiable : peu de votes ramenés vers la médiane ; une mauvaise note avec des votes reste mauvaise
+        Assert.True(Releases.ConfidentRating(9.0, 8) is > 7.5 and < 8);
+        Assert.True(Releases.ConfidentRating(5.5, 25) < 6);          // Hexed
+        Assert.True(Releases.ConfidentRating(5.2, 55) < 6);          // Blade Runner 2099
+        Assert.True(Releases.ConfidentRating(5.9, 18) >= 6);         // DIG, 4 jours
+        Assert.Equal(6.8, Releases.ConfidentRating(0, 0));
     }
 
     [Fact]

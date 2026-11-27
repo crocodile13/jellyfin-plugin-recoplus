@@ -50,8 +50,11 @@ public sealed partial class UserPrefsStore
         /// <summary>Langues du navigateur (balises BCP 47), par ordre de préférence.</summary>
         public List<string>? BrowserLanguages { get; set; }
 
+        /// <summary>Langue de l'interface Jellyfin dans le navigateur (balise BCP 47).</summary>
+        public string? UiLanguage { get; set; }
+
         /// <summary>Copie (rien de partagé avec le magasin).</summary>
-        public Prefs Clone() => new() { Region = Region, Extended = Extended, BrowserZone = BrowserZone, BrowserLanguages = BrowserLanguages?.ToList() };
+        public Prefs Clone() => new() { Region = Region, Extended = Extended, BrowserZone = BrowserZone, BrowserLanguages = BrowserLanguages?.ToList(), UiLanguage = UiLanguage };
     }
 
     [GeneratedRegex("^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{1,8}){0,3}$", RegexOptions.CultureInvariant)]
@@ -81,7 +84,7 @@ public sealed partial class UserPrefsStore
     public TimeSpan ReportInterval { get; init; } = TimeSpan.FromMinutes(1);
 
     /// <summary>Indices signalés par le navigateur du compte connecté. Renvoie vrai s'ils ont changé (et ont été gardés).</summary>
-    public bool Report(string userKey, string? zone, IEnumerable<string?>? languages)
+    public bool Report(string userKey, string? zone, IEnumerable<string?>? languages, string? ui = null)
     {
         lock (_lock)
         {
@@ -102,8 +105,10 @@ public sealed partial class UserPrefsStore
         {
             var zone = z ?? p.BrowserZone;
             var l = langs.Count > 0 ? langs : p.BrowserLanguages;
-            bool same = p.BrowserZone == zone && (p.BrowserLanguages ?? new List<string>()).SequenceEqual(l ?? new List<string>(), StringComparer.Ordinal);
-            (p.BrowserZone, p.BrowserLanguages) = (zone, l);
+            var u = CleanLanguage(ui) ?? p.UiLanguage;
+            bool same = p.BrowserZone == zone && p.UiLanguage == u
+                        && (p.BrowserLanguages ?? new List<string>()).SequenceEqual(l ?? new List<string>(), StringComparer.Ordinal);
+            (p.BrowserZone, p.BrowserLanguages, p.UiLanguage) = (zone, l, u);
             return !same;
         });
     }
@@ -177,7 +182,7 @@ public sealed partial class UserPrefsStore
             }
 
             changed = edit(p);
-            if (p.Region is null && p.Extended is null && p.BrowserZone is null && p.BrowserLanguages is null)
+            if (p.Region is null && p.Extended is null && p.BrowserZone is null && p.BrowserLanguages is null && p.UiLanguage is null)
             {
                 changed |= _byUser.Remove(userKey);
             }
@@ -261,6 +266,7 @@ public sealed partial class UserPrefsStore
                             Extended = p.Extended,
                             BrowserZone = CleanZone(p.BrowserZone),
                             BrowserLanguages = langs is { Count: > 0 } ? langs : null,
+                            UiLanguage = CleanLanguage(p.UiLanguage),
                         };
                     }
                 }
