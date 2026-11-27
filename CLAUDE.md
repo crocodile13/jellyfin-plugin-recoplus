@@ -34,8 +34,10 @@ Marien (crocodile13). Dépôt public : jamais de donnée réelle de visionnage, 
   - `Origin.cs` : origine du titre (« l:fr » langue originale, « c:france » pays de production) ; familiarité du compte
     = ses titres aimés de cette origine + `OriginPrior` titres fictifs pour chaque origine de son pays (`Dataset.HomeOrigins`,
     aucune en international) ; ingrédient du goût `WOrigin` = écart à la moyenne des candidats. **Choix de Marien :
-    actif par défaut avec un poids prudent (0,3)**, exception à la règle « sans gain prouvé, coupé » : mesuré sur le banc
-    seulement (voir le commit), à revoir sur de vrais historiques.
+    actif par défaut avec un poids prudent**, exception à la règle « sans gain prouvé, coupé ». Banc hors ligne
+    (`offline.run(w=…, home=…)`, comptes tous français) : 0,3 avec 5 titres fictifs fait baisser la part des goûts
+    (0,63 → 0,58) et hit@10 ; d'où 0,1 et 2 (`OriginPrior`) : part des goûts inchangée, compte francophile bien
+    mieux servi. À revoir sur de vrais historiques.
   - `Trending.cs` : listes TMDb du moment (intensité 1/√(1 + place), ordre tendance × goût), `KindFilter` (films,
     séries, les deux, séparées), `SplitLayout` (accueil HSS d'un compte quand une rangée est séparée ou réunie).
   - `ListPolicy.cs` (présentation : hasard du jour, minimums films/séries, filtres), `Exploration.cs` (mode étendu :
