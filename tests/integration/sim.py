@@ -472,6 +472,12 @@ def task(key):
 
 
 def recompute():
+    """Demande un calcul complet et attend qu'il soit fini."""
+    computed_after(lambda: call("POST", "/RecoPlus/Recompute"), "calcul complet")
+
+
+def computed_after(action, label):
+    """Fait `action`, puis attend la fin d'un calcul complet démarré après elle (problème s'il n'y en a pas)."""
     # un calcul déjà en cours (celui du démarrage, « aucune liste en cache ») ne compte pas : seulement un calcul qui a
     # démarré après la demande (sinon le rapport lisait les listes d'avant l'exploration Seerr)
     def started(last):
@@ -486,7 +492,7 @@ def recompute():
     # sa clé : le rapport lisait les listes d'avant Seerr (12.2, eco)
     before = task("RecoPlusNightly") or {}
     prev = started(before.get("LastExecutionResult") or {}) if before.get("State") == "Idle" else dt.datetime.now(dt.timezone.utc)
-    call("POST", "/RecoPlus/Recompute")
+    action()
 
     def done():
         t = task("RecoPlusNightly") or {}
@@ -494,9 +500,9 @@ def recompute():
         st = started(last) if last else None
         return t.get("State") == "Idle" and st is not None and (prev is None or st > prev) and last
     res = wait("calcul de Reco+", done, timeout=900, every=3)
-    log(f"calcul complet : {res.get('Status')}")
+    log(f"{label} : {res.get('Status')}")
     if res.get("Status") != "Completed":
-        problems.append(f"calcul complet : {res.get('Status')} {res.get('ErrorMessage') or ''}")
+        problems.append(f"{label} : {res.get('Status')} {res.get('ErrorMessage') or ''}")
 
 
 def measure(lib, name, uid, p, items):
@@ -845,8 +851,13 @@ def browser_check():
         cfg = call("GET", f"/Plugins/{pid}/Configuration")
         if cfg.get("ExtendedEnabled") != ext:
             cfg["ExtendedEnabled"] = ext
-            call("POST", f"/Plugins/{pid}/Configuration", cfg)
-            time.sleep(3)
+            if ext:
+                # rallumé : Reco+ recalcule de lui-même (un compte recalculé pendant la coupure n'a plus de titres hors
+                # bibliothèque) ; aucun calcul demandé ici, celui attendu doit venir de l'enregistrement
+                computed_after(lambda: call("POST", f"/Plugins/{pid}/Configuration", cfg), "calcul après le mode étendu rallumé")
+            else:
+                call("POST", f"/Plugins/{pid}/Configuration", cfg)
+                time.sleep(3)
         errors: list = []
         try:
             res = browser.home(BASE, info.get("Id", ""), uid, as_user(name), name, PASSWORDS[name],

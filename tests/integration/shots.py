@@ -58,6 +58,24 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         _open(page, url, "home", account[2], account[3], ".sections .verticalSection, .homeSectionsContainer .verticalSection", out, f"home-{lang}")
         browser._stable(page)
         time.sleep(4)                                            # affiches chargées
+        # cartes sans aucune image (Jellyfin n'a pas encore téléchargé les images de la bibliothèque : `defaultCardBackground`,
+        # sans `data-src`, donc invisibles pour le contrôle des affiches floues ; constaté sur les captures de 1.1.2 et 1.1.3,
+        # cases grises) : on recharge l'accueil tant qu'il en reste, puis on abandonne (l'ancienne capture reste en place)
+        blank = """() => [...document.querySelectorAll('.verticalSection .cardImageContainer.defaultCardBackground')]
+          .filter(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0; }).length"""
+        for attempt in range(8):
+            empty = page.evaluate(blank)
+            if empty == 0:
+                break
+            log(f"accueil ({lang}) : {empty} carte(s) sans image, nouvel essai dans 20 s")
+            time.sleep(20)
+            page.reload(wait_until="domcontentloaded")
+            page.wait_for_selector(".sections .verticalSection, .homeSectionsContainer .verticalSection", state="attached", timeout=90000)
+            time.sleep(6)
+        else:
+            page.screenshot(path=str(out / f"echec-home-{lang}.jpg"), type="jpeg", quality=70)
+            b.close()
+            raise RuntimeError(f"home-{lang}: cards without image")
         # cadrée à partir de la première rangée remplie (au-dessus : l'en-tête et l'emplacement vide d'un bandeau), sur
         # la largeur de l'écran (les rangées débordent) ; JPEG : surtout des affiches, peu de texte fin
         # après l'agrandissement : la zone vide au-dessus des rangées prend une hauteur proportionnelle à la fenêtre
