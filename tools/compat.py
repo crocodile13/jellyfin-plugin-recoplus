@@ -73,20 +73,16 @@ def check() -> int:
     ex = set(re.findall(r'"jellyfin":"' + V + '"', integ))
     if not ex <= {f, t}:
         bad.append(f".github/workflows/integration.yml: exclusions sur {sorted(ex)}, hors de la fenêtre {f} → {t}")
-    # l'entrée en tête du catalogue (version en cours) vise la même ABI que meta.json
-    top = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))[0]["versions"][0]
-    abi = None
-    if top.get("targetAbi") != f + ".0.0":
-        abi = (f"manifest.json: l'entrée en tête ({top.get('version')}) vise {top.get('targetAbi')} : la version qui change "
-               f"la fenêtre ajoute la sienne avec \"targetAbi\": \"{f}.0.0\" (une version publiée ne se modifie pas)")
+    # l'ABI de la prochaine entrée du catalogue vient de meta.json (règle ci-dessus) : la publication l'y copie ; les
+    # entrées déjà publiées ne se modifient pas
     print(f"fenêtre {f} → {t} (compat.json)")
-    for b in bad + ([abi] if abi else []):
+    for b in bad:
         print("  ✗ " + b)
     if bad:
         print(f"  {len(bad)} endroit(s) à réaligner : python tools/compat.py set {f} {t}")
-    elif not abi:
+    else:
         print("  ✓ tout est aligné")
-    return 1 if bad or abi else 0
+    return 1 if bad else 0
 
 
 def set_window(f: str, t: str) -> int:
@@ -108,7 +104,7 @@ def set_window(f: str, t: str) -> int:
     text = p.read_text(encoding="utf-8").replace(f'"jellyfin":"{of}"', '"jellyfin":"\x00F"').replace(f'"jellyfin":"{ot}"', '"jellyfin":"\x00T"')
     p.write_text(text.replace('"jellyfin":"\x00F"', f'"jellyfin":"{f}"').replace('"jellyfin":"\x00T"', f'"jellyfin":"{t}"'), encoding="utf-8")
     SOURCE.write_text(json.dumps({"from": f, "to": t}, indent=2) + "\n", encoding="utf-8")
-    print(f"fenêtre {f} → {t} écrite ; l'entrée de la prochaine version de manifest.json doit viser {f}.0.0")
+    print(f"fenêtre {f} → {t} écrite ; meta.json vise {f}.0.0 : la prochaine version publiée l'ajoutera ainsi au catalogue")
     return check()
 
 
