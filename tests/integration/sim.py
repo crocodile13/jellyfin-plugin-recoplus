@@ -975,6 +975,12 @@ def run():
             r["seerr"] = after_report(lib, users)
         except Exception as e:   # le rapport s'écrit quand même ; l'erreur est un problème du test
             problems.append(f"Seerr, après le rapport : {e}")
+    if "seerr" in EXPECT and os.environ.get("SIM_TMDB_STATS"):
+        try:
+            import tmdb_stats
+            r["tmdb"] = tmdb_stats.collect(OUT / "tmdb-stats.json")
+        except Exception as e:
+            problems.append(f"relevé TMDb : {e}")
     if "seerr" in EXPECT and os.environ.get("SIM_BOLDNESS"):
         try:
             r["audace"] = boldness_experiment()

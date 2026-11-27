@@ -147,6 +147,7 @@ jobs:
           SIM_BENCH: ${{ matrix.plugins == 'bench' && '1' || '' }}
           SIM_BOLDNESS: ${{ github.event_name == 'push' && matrix.plugins == 'eco' && '1' || '' }}   # branches sim-* : audace prudente / aventureuse
           SIM_SHOTS: ${{ (github.event_name == 'push' || github.event_name == 'workflow_run') && matrix.plugins == 'eco' && matrix.jellyfin == '12.4' && '1' || '' }}   # branches sim-* et après une publication : captures README / wiki
+          SIM_TMDB_STATS: ${{ github.event_name == 'push' && matrix.plugins == 'eco' && matrix.jellyfin == '12.4' && '1' || '' }}   # branches sim-* : relevé TMDb (tmdb-stats.json)
         run: cd tests/integration && python sim.py run
 
       - name: Server log (Reco+ and errors only)
