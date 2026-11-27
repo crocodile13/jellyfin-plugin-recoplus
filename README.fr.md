@@ -160,7 +160,7 @@ Le moteur C# est vérifié pour reproduire exactement le prototype Python :
 - scores à 1e-9 près et listes identiques, sur un jeu synthétique que la CI régénère à chaque exécution (`prototype/golden.py`) ;
 - pendant le développement, 0 écart sur les 126 cas d'évaluation des données réelles.
 
-La CI compile et teste à chaque push. Quand une nouvelle version apparaît dans `manifest.json`, une release est publiée et le manifeste est complété automatiquement.
+La CI compile et teste à chaque push. Quand une nouvelle version apparaît dans `meta.json`, une release est publiée et la version est ajoutée automatiquement à `manifest.json`, une fois installable.
 
 ## Limites
 

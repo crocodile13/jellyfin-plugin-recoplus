@@ -129,11 +129,12 @@ de la CI.
   ne passe pas en 2) ; nouvelles fonctions et changements visibles → version mineure (1.2.0), correctifs → version
   corrective (1.1.1). Les changements intermédiaires se mergent **sans** toucher `manifest.json` (rien n'est publié) ;
   la version se monte une fois l'ensemble fini et mesuré. Un correctif qui gêne des utilisateurs sort tout de suite.
-- Monter une version : `Version`, `AssemblyVersion`, `FileVersion` du csproj, `meta.json` (version, changelog) et une
-  entrée en tête de `manifest.json` (changelog en anglais commençant par « 1.MINEUR.CORRECTIF » puis la fenêtre
-  Jellyfin, `targetAbi` = `compat.json` from, `sourceUrl`/`checksum`/`timestamp` vides), et une rubrique en tête de
-  `CHANGELOG.md`. La CI vérifie le format, l'ordre décroissant du catalogue et que toute entrée sous la première est
-  réellement publiée (l'entrée 1.0.36, jamais publiée, est restée un mois dans le catalogue).
+- Monter une version : `Version`, `AssemblyVersion`, `FileVersion` du csproj, `meta.json` (version, changelog en
+  anglais commençant par « 1.MINEUR.CORRECTIF » puis la fenêtre Jellyfin) et une rubrique en tête de `CHANGELOG.md`.
+  **`manifest.json` ne se touche pas** : la publication y ajoute l'entrée (changelog et `targetAbi` de `meta.json`,
+  adresse, somme, date) une fois le zip publié. Avant 1.3.0, la PR de version ajoutait l'entrée vide : la version
+  apparaissait dans le catalogue de Jellyfin quelques minutes avant de pouvoir s'installer. La CI vérifie le format,
+  l'ordre décroissant du catalogue, qu'il ne contient que des versions publiées et rien de plus récent que `meta.json`.
 - Publication automatique (`release.yml`) : release « Reco+ 1.x.y — Jellyfin A to B » (fenêtre lue dans `compat.json`).
 - Une version publiée ne se modifie pas : une correction est une nouvelle version.
 - PR des contributeurs extérieurs : la CI et le test d'intégration les vérifient, **seul Marien** les valide et les

@@ -1,7 +1,7 @@
 name: Release
 
-# Publishes the version declared in manifest.json when no release exists for it yet:
-# build + tests, zip, GitHub release, then manifest.json (checksum, URL, date) is updated so that
+# Publishes the version declared in meta.json when no release exists for it yet:
+# build + tests, zip, GitHub release, then the version is added to manifest.json (changelog, checksum, URL, date) so that
 # the repository URL below can be added to Jellyfin as a plugin repository.
 # Runs only after CI succeeded on a push to main (every check: jsdom, latest Jellyfin build, parity...),
 # and only for the commit main is still at: a newer commit gets its own CI and release run.
@@ -42,7 +42,7 @@ jobs:
         id: v
         if: steps.fresh.outputs.ok == 'true'
         run: |
-          VERSION=$(jq -r '.[0].versions[0].version' manifest.json)
+          VERSION=$(jq -r .version meta.json)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           if gh release view "v$VERSION" >/dev/null 2>&1; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
@@ -75,23 +75,25 @@ jobs:
         run: |
           VERSION=${{ steps.v.outputs.version }}
           JF="Jellyfin $(jq -r .from compat.json) to $(jq -r .to compat.json)"
-          { jq -r '.[0].versions[0].changelog' manifest.json; echo; echo "Requires $JF. Full history: CHANGELOG.md."; } > notes.md
+          { jq -r .changelog meta.json; echo; echo "Requires $JF. Full history: CHANGELOG.md."; } > notes.md
           gh release create "v$VERSION" "${{ steps.zip.outputs.zip }}" "${{ steps.zip.outputs.zip }}.sha256" \
             --title "Reco+ ${VERSION%.0} — $JF" --notes-file notes.md
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update manifest.json
+      - name: Add the version to manifest.json
         if: steps.v.outputs.exists == 'false'
         run: |
           VERSION=${{ steps.v.outputs.version }}
           URL="https://github.com/${{ github.repository }}/releases/download/v$VERSION/${{ steps.zip.outputs.zip }}"
           TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          # the entry only appears once the zip exists: a catalogue never lists a version that cannot be installed yet
           jq --arg v "$VERSION" --arg url "$URL" --arg md5 "${{ steps.zip.outputs.md5 }}" --arg t "$TIME" \
-            '.[0].versions |= map(if .version == $v then .sourceUrl = $url | .checksum = $md5 | .timestamp = $t else . end)' \
+             --arg ch "$(jq -r .changelog meta.json)" --arg abi "$(jq -r .targetAbi meta.json)" \
+            '.[0].versions |= ([{version: $v, changelog: $ch, targetAbi: $abi, sourceUrl: $url, checksum: $md5, timestamp: $t}] + map(select(.version != $v)))' \
             manifest.json > manifest.tmp && mv manifest.tmp manifest.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add manifest.json
-          git commit -m "manifest: v$VERSION (checksum, URL, date)"
+          git commit -m "manifest: v$VERSION (changelog, checksum, URL, date)"
           git push
