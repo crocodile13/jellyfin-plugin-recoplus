@@ -49,8 +49,10 @@
                 #RecoPlusConfigPage .rp-tip:hover .rp-bubble, #RecoPlusConfigPage .rp-tip:focus .rp-bubble { display: block; }
                 #RecoPlusConfigPage .rp-h4 { margin: 1em 0 .3em; font-size: .9em; color: var(--rp-mute); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
                 #RecoPlusConfigPage .rp-factors { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 0 2em; }
-                #RecoPlusConfigPage .rp-factor { display: grid; grid-template-columns: minmax(11em, 1fr) minmax(8em, 1.2fr) 7.5em 1.6em; gap: .8em; align-items: center; padding: .45em 0; border-bottom: 1px solid var(--rp-line); }
-                #RecoPlusConfigPage .rp-factor label { display: flex; gap: .55em; align-items: center; cursor: pointer; }
+                /* le nom du facteur garde la plus large colonne (sur deux lignes au plus) : avec le curseur plus large, les noms
+                   longs passaient sur trois lignes et débordaient de leur ligne (captures de 1.2.0) */
+                #RecoPlusConfigPage .rp-factor { display: grid; grid-template-columns: minmax(12em, 1.7fr) minmax(6em, 1fr) 7.5em 1.6em; gap: .8em; align-items: center; padding: .45em 0; border-bottom: 1px solid var(--rp-line); }
+                #RecoPlusConfigPage .rp-factor .checkboxContainer { padding-right: 0; }
                 #RecoPlusConfigPage .rp-factor input[type=range] { width: 100%; accent-color: var(--rp-accent); }
                 #RecoPlusConfigPage .rp-factor input[type=range]:disabled { opacity: .3; }
                 #RecoPlusConfigPage .rp-factor .rp-mult { font-size: .85em; color: var(--rp-mute); white-space: nowrap; }
