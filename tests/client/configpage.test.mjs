@@ -385,7 +385,7 @@ await test('réglages sans effet : grisés, désactivés, avec la raison (une fo
     for (const id of ['rp_c__RowTrending', 'rp_c_RowTrendingTitle', 'rp_c_KindTendances', 'rp_c_SourceAVenir', 'rp_c_TrendingWindow', 'rp_c_UpcomingTaste']) {
         assert.equal(why(id), 'Seerr non utilisé (onglet Seerr) : rangée absente de l\'accueil', id);
     }
-    const lbox = d.querySelector('[data-fields="lt"]').closest('.rp-box');
+    const lbox = d.querySelector('[data-fields="ltr"]').closest('.rp-box');
     assert.equal(lbox.querySelector('.rp-boxwhy').textContent, 'Sans effet : Seerr non utilisé (onglet Seerr) : rangée absente de l\'accueil.');
     assert.ok(off('rp_e_TrendingShare'), 'tendance dans la popularité : Seerr');
     const box = d.getElementById('rpMixBox');
