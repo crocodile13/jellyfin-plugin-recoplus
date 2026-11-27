@@ -669,8 +669,8 @@ await test('le choix de niveau est un menu de Jellyfin comme les autres (couleur
     assert.doesNotMatch(HTML, /CanvasText/);
 });
 
-await test('pays des comptes : code inconnu signalé sans griser le champ ; sans Seerr, réglages de pays grisés avec la raison', async () => {
-    const { d } = await open(cfg, { '/RecoPlus/Status': { ...status, countries: ['BE', 'FR', 'GB'] } });
+await test('pays des comptes : code inconnu signalé sans griser le champ ; sans Seerr ni origine des titres, réglages de pays grisés avec la raison', async () => {
+    const { d } = await open({ ...cfg, Engine: { ...cfg.Engine, WOrigin: 0.1, OriginPrior: 2 } }, { '/RecoPlus/Status': { ...status, countries: ['BE', 'FR', 'GB'] } });
     await wait(50);
     const region = d.getElementById('rp_c_Region');
     const note = () => region.closest('.rp-field').querySelector('.rp-badcode');
@@ -682,7 +682,10 @@ await test('pays des comptes : code inconnu signalé sans griser le champ ; sans
     // pays fixé pour tous : le pays de repli ne sert plus
     assert.ok(d.getElementById('rp_c_RegionFallback').closest('.rp-field').classList.contains('rp-off'));
     const seerr = d.getElementById('rp_c_SeerrEnabled'); seerr.checked = false; seerr.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
-    assert.match(region.closest('.rp-field').querySelector('.rp-why').textContent, /nouvelles sorties/);
+    // sans Seerr, le pays sert encore à l'origine des titres (facteur actif) : réglable ; facteur coupé aussi : grisé
+    assert.equal(region.disabled, false, 'origine des titres : le pays sert encore');
+    const origin = d.getElementById('rp_e_WOrigin_on'); origin.checked = false; origin.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.match(region.closest('.rp-field').querySelector('.rp-why').textContent, /Origine du titre/);
 });
 
 await test('état : la tuile des rangées d\'accueil dit leur nombre, la liste entière au survol', async () => {

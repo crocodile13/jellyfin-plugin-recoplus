@@ -147,11 +147,15 @@ public sealed class RecoService : IDisposable
     public static bool UserPageAvailable(Configuration.PluginConfiguration cfg) => cfg.UserPageEnabled && PluginPagesIntegration.Available;
 
     /// <summary>
-    /// Réglages que la page de l'utilisateur propose vraiment : le pays ne sert qu'aux nouvelles sorties (Seerr), les titres
-    /// hors bibliothèque qu'au mode étendu (Seerr) ; rien sans page.
+    /// Réglages que la page de l'utilisateur propose vraiment : le pays sert aux nouvelles sorties (Seerr) et à l'origine des
+    /// titres (facteur du moteur, sans Seerr aussi), les titres hors bibliothèque au mode étendu (Seerr) ; rien sans page.
     /// </summary>
     public static (bool Region, bool Extended) UserPageOffers(Configuration.PluginConfiguration cfg)
-        => UserPageAvailable(cfg) ? (cfg.UserCanSetRegion && cfg.SeerrEnabled, cfg.UserCanSetExtended && cfg.ExtendedEnabled && cfg.SeerrEnabled) : (false, false);
+        => UserPageAvailable(cfg) ? (cfg.UserCanSetRegion && CountryMatters(cfg), cfg.UserCanSetExtended && cfg.ExtendedEnabled && cfg.SeerrEnabled) : (false, false);
+
+    /// <summary>Le pays d'un compte sert à quelque chose : nouvelles sorties (Seerr) ou origine des titres (facteur actif).</summary>
+    public static bool CountryMatters(Configuration.PluginConfiguration cfg)
+        => cfg.SeerrEnabled || (cfg.Engine.WOrigin > 0 && cfg.Engine.OriginPrior > 0);
 
     /// <summary>
     /// Pays d'un compte (dates des nouvelles sorties) : le sien s'il l'a choisi dans sa page (si elle le lui permet), sinon
@@ -701,8 +705,8 @@ public sealed class RecoService : IDisposable
                 .OrderBy(id => id, StringComparer.Ordinal).ToList();
             var r = new UserRecs { ComputedAt = DateTime.UtcNow, SeerrUserId = seerr.UserMap.GetValueOrDefault(key) };
 
-            // en tête : les nouveautés de ce que le compte suit (nouveaux épisodes, nouvelle saison, volet suivant d'une
-            // saga), pendant un temps ; jamais un titre qu'il a lui-même demandé (il sait déjà qu'il le veut)
+            // en tête : les demandes du compte qui viennent d'arriver, puis les nouveautés de ce qu'il suit (nouveaux
+            // épisodes, nouvelle saison, volet suivant d'une saga), pendant un temps
             // épisodes que le compte n'a pas encore vus : un fichier remplacé (meilleure version) d'un épisode vu n'est
             // pas une nouveauté
             var urows = rows.GetValueOrDefault(u.Id);
@@ -710,8 +714,12 @@ public sealed class RecoService : IDisposable
                 id => Guid.TryParse(id, out var sg) && lib.EpisodeDates.TryGetValue(sg, out var ed)
                     ? ed.Where(e => !(urows is not null && urows.TryGetValue(e.Id, out var er) && er.Played)).Select(e => (e.Added, e.Aired)).ToList()
                     : null, now,
-                new PinOptions(Math.Clamp(cfg.NewEpisodesPinned, 0, 20), Math.Clamp(cfg.NewEpisodesMaxDays, 1, 365), s.SagaMax, lo));
-            r.Pinned = pinned;
+                new PinOptions(Math.Clamp(cfg.NewEpisodesPinned, 0, 20), Math.Clamp(cfg.NewEpisodesMaxDays, 1, 365), s.SagaMax, lo, Math.Clamp(cfg.RequestArrivedDays, 0, 30)));
+            // demande arrivée : en tête de « Pour toi », des suggestions (bandeaux), ou des deux ; r.Pinned sert aux
+            // suggestions, homePins à la rangée « Pour toi »
+            var arrivedPins = pinned.Where(id => h.TryGetValue(id, out var px) && titles.TryGetValue(id, out var pt) && Pins.Arrived(px, pt)).ToHashSet(StringComparer.Ordinal);
+            var homePins = cfg.RequestArrivedWhere == Configuration.ArrivedPlace.Banner ? pinned.Where(id => !arrivedPins.Contains(id)).ToList() : pinned;
+            r.Pinned = cfg.RequestArrivedWhere == Configuration.ArrivedPlace.Home ? pinned.Where(id => !arrivedPins.Contains(id)).ToList() : pinned;
 
             // rangées que HSS montre à ce compte : les autres ne « réservent » aucun titre
             var rowOpts = job.Rows;
@@ -741,12 +749,18 @@ public sealed class RecoService : IDisposable
                     // rangées des listes TMDb : leurs titres de la bibliothèque, dans l'ordre de ce compte (tendance et goût)
                     var ro = rowOpts.Clone();
                     var candSet = cands.ToHashSet(StringComparer.Ordinal);
+                    // un titre vu il y a très longtemps peut revenir dans les listes (réglage, coupé par défaut) : regardé
+                    // jusqu'au bout, jamais abandonné ni masqué, dernière lecture assez ancienne
+                    double oldCut = now - (Math.Clamp(cfg.ListsLongAgoYears, 1, 50) * 365.25 * Core.Day);
+                    bool LongAgo(string id) => cfg.ListsLongAgoWatched && h.TryGetValue(id, out var ox) && !ox.Hidden && ox.Played && ox.Last > 0 && ox.Last < oldCut
+                        && uc.Sig.GetValueOrDefault(key)?.GetValueOrDefault(id) >= 0 && accessible.Contains(id) && titles.TryGetValue(id, out var otl) && ListPolicy.Allows(otl, lo);
+                    string daySeed = key + "|" + Exploration.Day(DateTime.UtcNow);
                     ro.Lists = lists.Where(kv => RowShown(ro, kv.Key)).ToDictionary(
                         kv => kv.Key,
-                        kv => (IReadOnlyList<string>)Trending.Order(CapPerKind(kv.Key, kv.Value.Ids.Where(id => candSet.Contains(id) && kv.Value.NewIn(id, region, now, cfg.ReleasesDays)), titles, cfg),
-                            kv.Value.Score, sc, cfg.ListSettings(kv.Key).Taste),
+                        kv => (IReadOnlyList<string>)Trending.Order(CapPerKind(kv.Key, kv.Value.Ids.Where(id => (candSet.Contains(id) || LongAgo(id)) && kv.Value.NewIn(id, region, now, cfg.ReleasesDays)), titles, cfg),
+                            kv.Value.Score, sc, cfg.ListSettings(kv.Key).Taste, cfg.ListSettings(kv.Key).Rotation, daySeed + "|" + kv.Key),
                         StringComparer.Ordinal);
-                    var home = HomeRows.Allocate(uc, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, ro);
+                    var home = HomeRows.Allocate(uc, vec, key, homePins.Concat(shaped).ToList(), ordered, sc, ro);
                     var view = new SlotRecs
                     {
                         Ranked = shaped,
@@ -786,7 +800,7 @@ public sealed class RecoService : IDisposable
                 foreach (var hv in views)
                 {
                     uc.Slot = hv.Slot;
-                    var placed = PlaceExternals(uc, vec, key, r.Pinned, general, pools, hv, cfg, s, expo, noise, noiseSeed, titles, now);
+                    var placed = PlaceExternals(uc, vec, key, homePins, general, pools, hv, cfg, s, expo, noise, noiseSeed, titles, now);
                     if (hv.Default)
                     {
                         (r.Rows, r.RowAnchors, r.RowAnchorIds, r.Layouts) = (hv.View.Rows, hv.View.RowAnchors, hv.View.RowAnchorIds, hv.View.Layouts);
@@ -886,7 +900,7 @@ public sealed class RecoService : IDisposable
             }
 
             // pourquoi chaque titre est là (fiche du titre, quand on y arrive depuis une rangée Reco+)
-            r.Reasons = Reasons.For(uc, vec, key, r.Rows, r.RowAnchorIds, r.Pinned, row => ListReason(row, cfg) is { } why ? Texts.Pack(why) : null);
+            r.Reasons = Reasons.For(uc, vec, key, r.Rows, r.RowAnchorIds, pinned, row => ListReason(row, cfg) is { } why ? Texts.Pack(why) : null);
             _recs[key] = r;
             // mesure : ce qui a été proposé à ce compte (titres de la bibliothèque), pour le bilan de l'état du moteur
             _ledger.Record(key, r.Rows, id => titles.TryGetValue(id, out var lt) && !lt.External, now);
@@ -1118,7 +1132,8 @@ public sealed class RecoService : IDisposable
             if (listRow)
             {
                 var taste = Normalized(1.0);
-                rank = id => ((1.0 - pool!.Taste) * pool.Score.GetValueOrDefault(id)) + (pool.Taste * taste(id));
+                // même tirage du jour que l'ordre des titres de la bibliothèque (Trending.Order) : une seule liste mêlée
+                rank = id => Trending.Daily(((1.0 - pool!.Taste) * pool.Score.GetValueOrDefault(id)) + (pool.Taste * taste(id)), pool.Rotation, noiseSeed + "|" + kindRow + "|" + id);
             }
             else if (anchor is not null && vec.TryGetValue(anchor, out var av))
             {
@@ -1414,7 +1429,7 @@ public sealed class RecoService : IDisposable
     private static string? ListReason(string row, Configuration.PluginConfiguration cfg) => row switch
     {
         HomeRows.Tendances => cfg.TrendingWindow == Configuration.TrendWindow.Day ? "En tendance aujourd'hui" : "En tendance cette semaine",
-        HomeRows.Populaires => "Populaire en ce moment",
+        HomeRows.Populaires => "Parmi les plus populaires de tous les temps",
         HomeRows.Sorties => "Sortie récente",
         HomeRows.AVenir => "Bientôt à l'affiche",
         _ => null,
@@ -1436,7 +1451,7 @@ public sealed class RecoService : IDisposable
     }
 
     /// <summary>Titres hors bibliothèque d'une rangée de liste TMDb pour un compte : titres (dans l'ordre de la liste), intensité, part du goût.</summary>
-    private sealed record ListPool(List<(string Id, ExternalRec Rec)> Items, Dictionary<string, double> Score, double Taste, double TasteFloor);
+    private sealed record ListPool(List<(string Id, ExternalRec Rec)> Items, Dictionary<string, double> Score, double Taste, double TasteFloor, double Rotation = 0);
 
     /// <summary>
     /// Titres hors bibliothèque des listes TMDb proposables à un compte, pour les rangées affichées qui en reçoivent : pas
@@ -1488,14 +1503,15 @@ public sealed class RecoService : IDisposable
                     items.Add((id, rec));
                 }
 
-                if (items.Count >= size * 2)
+                // réservoir du tirage du jour : plus large quand la liste se renouvelle
+                if (items.Count >= size * (2 + (int)Math.Ceiling(4 * cfg.ListSettings(row).Rotation)))
                 {
                     break;
                 }
             }
 
             var set = cfg.ListSettings(row);
-            res[row] = new ListPool(items, tl.Score, set.Taste, set.TasteFloor);
+            res[row] = new ListPool(items, tl.Score, set.Taste, set.TasteFloor, set.Rotation);
         }
 
         return res;
@@ -1564,7 +1580,8 @@ public sealed class RecoService : IDisposable
                 var (list, query) = row switch
                 {
                     HomeRows.Tendances => ("trending", "mediaType=" + type + "&timeWindow=" + window),
-                    HomeRows.Populaires => (type == "movie" ? "movies" : "tv", string.Empty),
+                    // les plus populaires de tous les temps : les plus votés sur TMDb (la popularité du moment doublait les tendances)
+                    HomeRows.Populaires => (type == "movie" ? "movies" : "tv", "sortBy=vote_count.desc"),
                     HomeRows.Sorties => (type == "movie" ? "movies" : "tv", ReleasesQuery(type, set, cfg.ReleasesDays, DateTime.UtcNow.Date)),
                     _ => (type == "movie" ? "movies/upcoming" : "tv/upcoming", string.Empty),
                 };
@@ -1572,7 +1589,8 @@ public sealed class RecoService : IDisposable
                 // attendues (popularité TMDb). Tendances et populaires sont déjà dans l'ordre de TMDb.
                 bool upcoming = row == HomeRows.AVenir, releases = row == HomeRows.Sorties;
                 // nouvelles sorties : une partie des films lus n'est pas encore sortie dans le pays du compte, on en lit plus
-                int want = upcoming || releases ? Math.Min(3 * count, UpcomingMaxRead) : count;
+                // renouvellement du jour : un réservoir plus large où tirer (jusqu'à 3 fois plus à 1)
+                int want = upcoming || releases ? Math.Min(3 * count, UpcomingMaxRead) : (int)Math.Round(count * (1 + (2 * set.Rotation)));
                 // hors bibliothèque, seulement les titres qui comptent (popularité, votes) ; les écartés ne prennent pas de
                 // place : on lit au plus deux fois plus de pages pour garder le nombre voulu. Nouvelles sorties : le tri vaut
                 // aussi pour la bibliothèque, c'est ce qui fait la rangée (ce que le public attend, pas tout ce qui sort).
@@ -1596,6 +1614,7 @@ public sealed class RecoService : IDisposable
                 }
 
                 var ranked = upcoming ? found.Select((r, i) => (r, i)).OrderByDescending(x => x.r.Popularity).ThenBy(x => x.i).Select(x => x.r) : found;
+                int keep = releases ? want : upcoming ? count : want;
                 if (releases)
                 {
                     foreach (var f in found)
@@ -1605,7 +1624,7 @@ public sealed class RecoService : IDisposable
                 }
 
                 // nouvelles sorties : tout ce qui a été lu reste, le tri par pays (NewIn) ne vient qu'ensuite, compte par compte
-                perKind.Add(ranked.Select(r => r.MediaType + ":" + r.TmdbId).Distinct(StringComparer.Ordinal).Take(releases ? want : count)
+                perKind.Add(ranked.Select(r => r.MediaType + ":" + r.TmdbId).Distinct(StringComparer.Ordinal).Take(keep)
                     .Select(k => lib.ByTmdb.TryGetValue(k, out var lid) ? lid : "tmdb:" + k).ToList());
             }
 

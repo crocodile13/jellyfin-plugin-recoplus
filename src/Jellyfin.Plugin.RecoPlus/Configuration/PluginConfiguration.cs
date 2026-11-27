@@ -21,7 +21,21 @@ public enum MixMode
 /// <param name="MinPopularity">Popularité TMDb minimale d'un titre hors bibliothèque.</param>
 /// <param name="MinVotes">Votes TMDb minimum d'un titre hors bibliothèque.</param>
 /// <param name="TasteFloor">Goût minimal d'un titre hors bibliothèque : quantile du classement de la bibliothèque du compte.</param>
-public sealed record ListRowSettings(int Count, double Taste, double MinPopularity, int MinVotes, double TasteFloor, double MinRating = 0);
+/// <param name="Rotation">Renouvellement du jour (0 = ordre fixe ; <see cref="Trending.Daily"/>).</param>
+public sealed record ListRowSettings(int Count, double Taste, double MinPopularity, int MinVotes, double TasteFloor, double MinRating = 0, double Rotation = 0);
+
+/// <summary>Où une demande arrivée passe en tête.</summary>
+public enum ArrivedPlace
+{
+    /// <summary>En tête de « Pour toi » et des suggestions (bandeaux comme Media Bar Enhanced).</summary>
+    Both,
+
+    /// <summary>En tête de « Pour toi » seulement.</summary>
+    Home,
+
+    /// <summary>En tête des suggestions seulement (bandeaux).</summary>
+    Banner,
+}
 
 /// <summary>Période des tendances TMDb.</summary>
 public enum TrendWindow
@@ -117,7 +131,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>Titre de la rangée des tendances.</summary>
     public string RowTrendingTitle { get; set; } = string.Empty;
 
-    /// <summary>Titre de la rangée des titres populaires.</summary>
+    /// <summary>Titre de la rangée des plus populaires de tous les temps (titres les plus votés sur TMDb).</summary>
     public string RowPopularTitle { get; set; } = string.Empty;
 
     /// <summary>Titre de la rangée des nouvelles sorties.</summary>
@@ -261,14 +275,35 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// <summary>À venir : part du goût du compte dans l'ordre de la rangée.</summary>
     public double UpcomingTaste { get; set; } = 0.8;
 
+    /// <summary>Tendances : renouvellement du jour (0 = ordre fixe, 1 = le plus fort).</summary>
+    public double TrendingRotation { get; set; } = 0.3;
+
+    /// <summary>Les plus populaires de tous les temps : renouvellement du jour (la liste elle-même ne bouge presque pas).</summary>
+    public double PopularRotation { get; set; } = 0.6;
+
+    /// <summary>Nouvelles sorties : renouvellement du jour.</summary>
+    public double ReleasesRotation { get; set; } = 0.3;
+
+    /// <summary>À venir : renouvellement du jour.</summary>
+    public double UpcomingRotation { get; set; } = 0.3;
+
+    /// <summary>Rangées de listes : proposer aussi un titre vu il y a très longtemps (coupé par défaut).</summary>
+    public bool ListsLongAgoWatched { get; set; }
+
+    /// <summary>Rangées de listes : « très longtemps » = au moins ce nombre d'années depuis la dernière lecture.</summary>
+    public int ListsLongAgoYears { get; set; } = 3;
+
     /// <summary>Taille de lecture et part du goût d'une rangée de liste.</summary>
     public ListRowSettings ListSettings(string row) => row switch
     {
-        HomeRows.Tendances => new(Math.Clamp(TrendingCount, 5, 100), Unit(TrendingTaste), Pos(TrendingMinPopularity), Math.Max(0, TrendingMinVotes), Unit(TrendingTasteFloor)),
-        HomeRows.Populaires => new(Math.Clamp(PopularCount, 5, 100), Unit(PopularTaste), Pos(PopularMinPopularity), Math.Max(0, PopularMinVotes), Unit(PopularTasteFloor)),
+        HomeRows.Tendances => new(Math.Clamp(TrendingCount, 5, 100), Unit(TrendingTaste), Pos(TrendingMinPopularity), Math.Max(0, TrendingMinVotes), Unit(TrendingTasteFloor),
+            0, Unit(TrendingRotation)),
+        HomeRows.Populaires => new(Math.Clamp(PopularCount, 5, 100), Unit(PopularTaste), Pos(PopularMinPopularity), Math.Max(0, PopularMinVotes), Unit(PopularTasteFloor),
+            0, Unit(PopularRotation)),
         HomeRows.Sorties => new(Math.Clamp(ReleasesCount, 5, 100), Unit(ReleasesTaste), Pos(ReleasesMinPopularity), Math.Max(0, ReleasesMinVotes), Unit(ReleasesTasteFloor),
-            double.IsFinite(ReleasesMinRating) ? Math.Clamp(ReleasesMinRating, 0, 10) : 0),
-        _ => new(Math.Clamp(UpcomingCount, 5, 100), Unit(UpcomingTaste), Pos(UpcomingMinPopularity), Math.Max(0, UpcomingMinVotes), Unit(UpcomingTasteFloor)),
+            double.IsFinite(ReleasesMinRating) ? Math.Clamp(ReleasesMinRating, 0, 10) : 0, Unit(ReleasesRotation)),
+        _ => new(Math.Clamp(UpcomingCount, 5, 100), Unit(UpcomingTaste), Pos(UpcomingMinPopularity), Math.Max(0, UpcomingMinVotes), Unit(UpcomingTasteFloor),
+            0, Unit(UpcomingRotation)),
     };
 
     // listes du moment, titres hors bibliothèque : seulement ceux qui comptent (popularité TMDb, votes) et qui
@@ -394,6 +429,15 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 
     /// <summary>Pendant ce nombre de jours après l'arrivée de la nouveauté.</summary>
     public int NewEpisodesMaxDays { get; set; } = 45;
+
+    /// <summary>
+    /// Titre demandé par le compte (Seerr) qui vient d'arriver dans la bibliothèque : en tête de « Pour toi » (et des
+    /// suggestions lues par les bandeaux) pendant ce nombre de jours, puis classé comme n'importe quel titre (0 = jamais).
+    /// </summary>
+    public int RequestArrivedDays { get; set; } = 3;
+
+    /// <summary>Où une demande arrivée passe en tête : « Pour toi », les suggestions lues par les bandeaux, ou les deux.</summary>
+    public ArrivedPlace RequestArrivedWhere { get; set; } = ArrivedPlace.Both;
 
     /// <summary>Lire les masquages (« pas intéressé ») et les avis notés de Jellyfin Enhanced.</summary>
     public bool UseJellyfinEnhanced { get; set; } = true;
