@@ -133,6 +133,9 @@ public sealed class RecoService : IDisposable
     /// <summary>État courant.</summary>
     public EngineStatus Status { get; } = new();
 
+    /// <summary>Les listes reprises du disque ont été écrites par une autre version du plugin (mise à jour).</summary>
+    public bool CachedFromOlderVersion { get; private set; }
+
     /// <summary>Titres hors bibliothèque pour ce compte : mode étendu actif, et pas coupé par le compte dans sa page (si elle le lui permet).</summary>
     public bool ExtendedFor(string userKey, Configuration.PluginConfiguration cfg)
         => cfg.ExtendedEnabled && !(UserPageAvailable(cfg) && cfg.UserCanSetExtended && _prefs.For(userKey).Extended == false);
@@ -142,6 +145,13 @@ public sealed class RecoService : IDisposable
     /// par les comptes ne s'appliquent pas (aucune page pour les voir ni les annuler) : le serveur décide.
     /// </summary>
     public static bool UserPageAvailable(Configuration.PluginConfiguration cfg) => cfg.UserPageEnabled && PluginPagesIntegration.Available;
+
+    /// <summary>
+    /// Réglages que la page de l'utilisateur propose vraiment : le pays ne sert qu'aux nouvelles sorties (Seerr), les titres
+    /// hors bibliothèque qu'au mode étendu (Seerr) ; rien sans page.
+    /// </summary>
+    public static (bool Region, bool Extended) UserPageOffers(Configuration.PluginConfiguration cfg)
+        => UserPageAvailable(cfg) ? (cfg.UserCanSetRegion && cfg.SeerrEnabled, cfg.UserCanSetExtended && cfg.ExtendedEnabled && cfg.SeerrEnabled) : (false, false);
 
     /// <summary>
     /// Pays d'un compte (dates des nouvelles sorties) : le sien s'il l'a choisi dans sa page (si elle le lui permet), sinon
@@ -301,6 +311,9 @@ public sealed class RecoService : IDisposable
                     var f = JsonSerializer.Deserialize<RecsFile>(File.ReadAllText(CachePath));
                     if (f?.Format == 1)
                     {
+                        // listes écrites par une autre version : servies en attendant, mais tout est recalculé au démarrage
+                        // (nouvelle rangée, nouveaux filtres, réglages des comptes : sinon seulement à leur prochaine activité)
+                        CachedFromOlderVersion = f.PluginVersion != (typeof(RecoService).Assembly.GetName().Version?.ToString() ?? string.Empty);
                         foreach (var (u, r) in f.Users)
                         {
                             _recs.TryAdd(u, r);
@@ -723,7 +736,7 @@ public sealed class RecoService : IDisposable
                     var candSet = cands.ToHashSet(StringComparer.Ordinal);
                     ro.Lists = lists.Where(kv => RowShown(ro, kv.Key)).ToDictionary(
                         kv => kv.Key,
-                        kv => (IReadOnlyList<string>)Trending.Order(kv.Value.Ids.Where(id => candSet.Contains(id) && kv.Value.NewIn(id, region, now, cfg.ReleasesDays)),
+                        kv => (IReadOnlyList<string>)Trending.Order(CapPerKind(kv.Key, kv.Value.Ids.Where(id => candSet.Contains(id) && kv.Value.NewIn(id, region, now, cfg.ReleasesDays)), titles, cfg),
                             kv.Value.Score, sc, cfg.ListSettings(kv.Key).Taste),
                         StringComparer.Ordinal);
                     var home = HomeRows.Allocate(uc, vec, key, r.Pinned.Concat(shaped).ToList(), ordered, sc, ro);
@@ -866,14 +879,7 @@ public sealed class RecoService : IDisposable
             }
 
             // pourquoi chaque titre est là (fiche du titre, quand on y arrive depuis une rangée Reco+)
-            r.Reasons = Reasons.For(uc, vec, key, r.Rows, r.RowAnchorIds, r.Pinned, row => row switch
-            {
-                HomeRows.Tendances => Texts.Pack(cfg.TrendingWindow == Configuration.TrendWindow.Day ? "En tendance aujourd'hui" : "En tendance cette semaine"),
-                HomeRows.Populaires => Texts.Pack("Populaire en ce moment"),
-                HomeRows.Sorties => Texts.Pack("Sortie récente"),
-                HomeRows.AVenir => Texts.Pack("Bientôt à l'affiche"),
-                _ => null,
-            });
+            r.Reasons = Reasons.For(uc, vec, key, r.Rows, r.RowAnchorIds, r.Pinned, row => ListReason(row, cfg) is { } why ? Texts.Pack(why) : null);
             _recs[key] = r;
             // mesure : ce qui a été proposé à ce compte (titres de la bibliothèque), pour le bilan de l'état du moteur
             _ledger.Record(key, r.Rows, id => titles.TryGetValue(id, out var lt) && !lt.External, now);
@@ -1396,6 +1402,31 @@ public sealed class RecoService : IDisposable
         return ds;
     }
 
+    /// <summary>Raison d'un titre venu d'une liste TMDb (texte français, clé de traduction) ; null pour une autre rangée.</summary>
+    private static string? ListReason(string row, Configuration.PluginConfiguration cfg) => row switch
+    {
+        HomeRows.Tendances => cfg.TrendingWindow == Configuration.TrendWindow.Day ? "En tendance aujourd'hui" : "En tendance cette semaine",
+        HomeRows.Populaires => "Populaire en ce moment",
+        HomeRows.Sorties => "Sortie récente",
+        HomeRows.AVenir => "Bientôt à l'affiche",
+        _ => null,
+    };
+
+    /// <summary>
+    /// Nouvelles sorties : les N premières de la liste par sorte (films, séries) parmi celles sorties dans le pays du compte
+    /// (« titres lus par sorte ») ; les autres listes passent telles quelles.
+    /// </summary>
+    private static IEnumerable<string> CapPerKind(string row, IEnumerable<string> ids, IReadOnlyDictionary<string, Title> titles, Configuration.PluginConfiguration cfg)
+    {
+        if (row != HomeRows.Sorties)
+        {
+            return ids;
+        }
+
+        int n = cfg.ListSettings(row).Count, movies = 0, series = 0;
+        return ids.Where(id => titles.TryGetValue(id, out var t) && (t.Kind == TitleKind.Movie ? movies++ < n : series++ < n)).ToList();
+    }
+
     /// <summary>Titres hors bibliothèque d'une rangée de liste TMDb pour un compte : titres (dans l'ordre de la liste), intensité, part du goût.</summary>
     private sealed record ListPool(List<(string Id, ExternalRec Rec)> Items, Dictionary<string, double> Score, double Taste, double TasteFloor);
 
@@ -1429,16 +1460,10 @@ public sealed class RecoService : IDisposable
                 continue;
             }
 
-            string reason = row switch
-            {
-                HomeRows.Tendances => cfg.TrendingWindow == Configuration.TrendWindow.Day ? "En tendance aujourd'hui" : "En tendance cette semaine",
-                HomeRows.Populaires => "Populaire en ce moment",
-                HomeRows.Sorties => "Sortie récente",
-                _ => "Bientôt à l'affiche",
-            };
+            string reason = ListReason(row, cfg) ?? string.Empty;
             var items = new List<(string, ExternalRec)>();
             var noBecause = new Dictionary<string, string>();
-            foreach (var id in tl.External.Where(x => tl.NewIn(x, region, now, days)))
+            foreach (var id in CapPerKind(row, tl.External.Where(x => tl.NewIn(x, region, now, days)), titles, cfg))
             {
                 var k = id[5..];
                 var d = Exploration.TryTmdbKey(k, out var type, out var tid) ? _seerr.CachedDetails(type, tid) : null;

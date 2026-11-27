@@ -669,6 +669,22 @@ await test('le choix de niveau est un menu de Jellyfin comme les autres (couleur
     assert.doesNotMatch(HTML, /CanvasText/);
 });
 
+await test('pays des comptes : code inconnu signalé sans griser le champ ; sans Seerr, réglages de pays grisés avec la raison', async () => {
+    const { d } = await open(cfg, { '/RecoPlus/Status': { ...status, countries: ['BE', 'FR', 'GB'] } });
+    await wait(50);
+    const region = d.getElementById('rp_c_Region');
+    const note = () => region.closest('.rp-field').querySelector('.rp-badcode');
+    region.value = 'UK'; region.dispatchEvent(new d.defaultView.Event('input', { bubbles: true }));
+    assert.match(note().textContent, /UK/);
+    assert.equal(region.disabled, false, 'à corriger : pas grisé');
+    region.value = 'gb'; region.dispatchEvent(new d.defaultView.Event('input', { bubbles: true }));
+    assert.ok(note().classList.contains('rp-hidden'));
+    // pays fixé pour tous : le pays de repli ne sert plus
+    assert.ok(d.getElementById('rp_c_RegionFallback').closest('.rp-field').classList.contains('rp-off'));
+    const seerr = d.getElementById('rp_c_SeerrEnabled'); seerr.checked = false; seerr.dispatchEvent(new d.defaultView.Event('change', { bubbles: true }));
+    assert.match(region.closest('.rp-field').querySelector('.rp-why').textContent, /nouvelles sorties/);
+});
+
 await test('état : la tuile des rangées d\'accueil dit leur nombre, la liste entière au survol', async () => {
     const hss = '12 rangées déclarées (Pour toi · Tendances · Populaires) — à choisir et ordonner dans la configuration de Home Screen Sections';
     const { d } = await open(cfg, { '/RecoPlus/Status': { ...status, hss } });

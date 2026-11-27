@@ -235,7 +235,7 @@ public sealed class RecoController : ControllerBase
             },
             canRequest = on && cfg.ExtendedRequestButton && (r?.SeerrUserId ?? 0) > 0,
             // fuseau et langues du navigateur à signaler (détection du pays du compte), une fois par session
-            report = cfg.Enabled && !RecoService.IsExcluded(me.Value),
+            report = cfg.Enabled && !RecoService.IsExcluded(me.Value) && Regions.Clean(cfg.Region) is null,
             // adresse publique seulement : l'adresse interne de Seerr n'a rien à faire chez les utilisateurs
             seerrUrl = string.IsNullOrWhiteSpace(cfg.SeerrPublicUrl) ? string.Empty : cfg.SeerrPublicUrl.TrimEnd('/'),
             items = on ? (r?.Extended ?? new List<ExternalRec>()).Select(e => e.In(Lang)).ToList() : new List<ExternalRec>(),
@@ -343,13 +343,18 @@ public sealed class RecoController : ControllerBase
             return BadRequest(Msg("valeurs invalides"));
         }
 
-        _prefs.Report(me.Value.ToString("N"), body.TimeZone, body.Languages);
+        // fuseau ou langues nouveaux : le pays du compte peut changer, ses listes aussi (regroupé avec son activité)
+        if (_prefs.Report(me.Value.ToString("N"), body.TimeZone, body.Languages))
+        {
+            RecoWorker.Instance?.ScheduleUser(me.Value);
+        }
+
         return NoContent();
     }
 
     /// <summary>Page Reco+ de l'utilisateur ouverte : réglages qu'il peut changer, et ce qui s'applique à lui aujourd'hui.</summary>
     private bool UserPageOpen(Configuration.PluginConfiguration cfg)
-        => cfg.Enabled && RecoService.UserPageAvailable(cfg) && (cfg.UserCanSetRegion || cfg.UserCanSetExtended);
+        => cfg.Enabled && RecoService.UserPageOffers(cfg) is var o && (o.Region || o.Extended);
 
     /// <summary>
     /// Réglages du compte connecté (sa page Reco+) : ceux que l'administrateur lui ouvre, leur valeur, et le pays retenu
@@ -382,7 +387,7 @@ public sealed class RecoController : ControllerBase
             open,
             region = new
             {
-                canSet = open && cfg.UserCanSetRegion,
+                canSet = open && RecoService.UserPageOffers(cfg).Region,
                 chosen = cfg.UserCanSetRegion ? p.Region : null,
                 current = guess.Country,
                 // ce que donnerait « automatique » : pays fixé par l'administrateur, sinon détecté, sinon le repli
@@ -393,7 +398,7 @@ public sealed class RecoController : ControllerBase
             },
             extended = new
             {
-                canSet = open && cfg.UserCanSetExtended && cfg.ExtendedEnabled && _seerr.Configured,
+                canSet = open && RecoService.UserPageOffers(cfg).Extended && _seerr.Configured,
                 server = cfg.ExtendedEnabled && _seerr.Configured,
                 mine = cfg.UserCanSetExtended ? p.Extended : null,
             },
@@ -482,6 +487,8 @@ public sealed class RecoController : ControllerBase
             // assistant de mise en route : Home Screen Sections installé, activé, rangées Reco+ dans son tableau
             hssSetup = HomeScreenSectionsIntegration.Setup(Plugin.Instance!.Configuration),
             seerrEnabled = Plugin.Instance!.Configuration.SeerrEnabled,
+            // codes pays valides (page : un code saisi inconnu est signalé sous son champ)
+            countries = Regions.Countries,
             seerrOk = _seerr.Configured && _seerr.Last.Ok,
             secrets = new
             {

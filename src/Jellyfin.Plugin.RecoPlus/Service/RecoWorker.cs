@@ -133,7 +133,12 @@ public sealed class RecoWorker : BackgroundService
                 // listes reprises du cache disque ; on ne calcule que celles qui manquent : tout d'un coup si aucune
                 // n'existe (première installation, cache perdu), sinon compte par compte (nouveau compte)
                 var (tracked, missing) = _reco.UsersWithoutRecs();
-                if (missing.Count > 0 && missing.Count == tracked)
+                if (_reco.CachedFromOlderVersion)
+                {
+                    _log.LogInformation("Reco+: cached lists were written by another version, computing all accounts");
+                    ScheduleAll(TimeSpan.Zero);
+                }
+                else if (missing.Count > 0 && missing.Count == tracked)
                 {
                     _log.LogInformation("Reco+: no cached list, computing all accounts");
                     ScheduleAll(TimeSpan.Zero);
