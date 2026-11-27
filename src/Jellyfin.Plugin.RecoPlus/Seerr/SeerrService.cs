@@ -570,7 +570,10 @@ public sealed class SeerrService
     public Task<List<SeerrResult>> ListAsync(SeerrClient cl, string list, string query, string defaultType, int page, CancellationToken ct)
     {
         var lang = Plugin.Instance?.Configuration.TmdbLanguage() ?? "en";
-        return CachedListAsync("L:" + list + "?" + query + ":" + page + ":" + lang, ListTtl, c => cl.ListAsync(list, query, defaultType, lang, page, c), ct);
+        // découverte : toutes les langues d'origine (SeerrClient.ListAsync) ; clé distincte de l'ancienne, filtrée par la
+        // langue du serveur, pour ne pas la reprendre du cache sur disque
+        var key = list is "movies" or "tv" ? "Lall:" : "L:";
+        return CachedListAsync(key + list + "?" + query + ":" + page + ":" + lang, ListTtl, c => cl.ListAsync(list, query, defaultType, lang, page, c), ct);
     }
 
     /// <summary>Films d'une saga TMDb (cache 7 jours).</summary>
