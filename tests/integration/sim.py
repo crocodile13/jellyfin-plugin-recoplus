@@ -658,7 +658,8 @@ def report(lib, users):
 
 
 def after_report(lib, users):
-    """Bouton « Demander » (au nom du compte), puis arrivée d'un titre demandé : jamais reproposé à celui qui l'a demandé."""
+    """Bouton « Demander » (au nom du compte), puis arrivée d'un titre demandé : en tête de « Pour toi » de celui qui l'a
+    demandé pendant quelques jours (RequestArrivedDays, 3 par défaut), dans aucune autre de ses rangées."""
     out = {}
     name = "action"
     items = call("GET", "/RecoPlus/Extended", token=as_user(name)).get("items", [])
@@ -673,18 +674,21 @@ def after_report(lib, users):
     if arrived:
         recompute()
         for who, title in arrived.items():
-            seen_in = {}
+            seen_in, first = {}, {}
             for n, uid in users.items():
                 if n not in PERSONAS:
                     continue
                 prev = call("GET", "/RecoPlus/Preview", query={"userId": uid, "lang": "fr"})
+                first[n] = (prev.get("items") or [""])[0]
                 rows = {"Pour toi": [re.sub(r"^📌 ", "", x) for x in prev.get("items") or []], **(prev.get("rows") or {})}
                 where = [k for k, v in rows.items() if title in [x.removesuffix(" (série)") for x in v]]
                 if where:
                     seen_in[n] = where
             out["arrivee"] = f"« {title} » demandé par {who} et arrivé : proposé à {seen_in or 'personne'}"
-            if who in seen_in:
-                problems.append(f"{who} : « {title} », qu'il a demandé, lui est proposé dès son arrivée ({seen_in[who]})")
+            if first.get(who, "").removesuffix(" (série)") != "📌 " + title:
+                problems.append(f"{who} : « {title} », qu'il a demandé et qui vient d'arriver, n'est pas en tête de « Pour toi » ({first.get(who)})")
+            if len(seen_in.get(who, [])) > 1:
+                problems.append(f"{who} : « {title} » en tête et aussi dans d'autres rangées ({seen_in[who]})")
     return out
 
 
@@ -701,13 +705,9 @@ def user_page_check():
     out["pays détecté"] = f"{me['region']['auto']} (indices : {', '.join(c['source'] + '=' + c['country'] for c in me['region']['clues'])})"
     if me["region"]["auto"] != "BE" or not me["region"]["detected"]:
         problems.append(f"{name} : pays détecté {me['region']} au lieu de la Belgique (fuseau Europe/Brussels)")
-    if "hss" not in EXPECT or "seerr" not in EXPECT:
-        # sans Plugin Pages, pas de page pour voir ni annuler un choix ; sans Seerr, rien à y régler (le pays ne sert qu'aux
-        # nouvelles sorties, le choix des titres hors bibliothèque qu'au mode étendu) : l'enregistrement est refusé
-        if "hss" in EXPECT:
-            pages = call("GET", "/PluginPages/User", token=tok) or {}
-            if any(p.get("Id") == "Jellyfin.Plugin.RecoPlus" for p in pages.get("Items", [])):
-                problems.append("Plugin Pages : page Reco+ dans le menu alors qu'elle n'a rien à régler (sans Seerr)")
+    if "hss" not in EXPECT:
+        # sans Plugin Pages, pas de page pour voir ni annuler un choix : l'enregistrement est refusé. Sans Seerr, le pays
+        # reste réglable (origine des titres, facteur actif par défaut), pas le choix des titres hors bibliothèque
         try:
             call("POST", "/RecoPlus/Me", {"Region": "CA"}, token=tok)
             problems.append(f"{name} : réglage d'un compte accepté sans Plugin Pages")

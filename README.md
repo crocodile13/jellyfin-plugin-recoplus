@@ -76,7 +76,7 @@ Settings come in three levels — **essential** (default), **advanced** and **ex
 ## Features
 
 - **Everywhere Jellyfin recommends**: Suggestions, "Because you watched", "More like this" and the Media Bar.
-- **Home rows** with [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections): "For you", "Trending", "Popular", "New releases" (released lately in your country), "Upcoming", "New for you", up to three "Because you liked …", "Movies for you" and "Series for you". Each row can show movies, series, both, or be split in two.
+- **Home rows** with [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections): "For you", "Trending", "Most popular of all time", "New releases" (released lately in your country), "Upcoming", "New for you", up to three "Because you liked …", "Movies for you" and "Series for you". Each row can show movies, series, both, or be split in two.
 - **Every signal counts**: favourites (series, season or episode), ratings, Jellyfin Enhanced reviews and hidden titles, Seerr requests and watchlists, titles shown but never opened.
 - **Suggestions beyond the library** (extended mode, optional): titles from the TMDb catalogue chosen from your tastes and ranked by the same engine, with a **discovery boldness** slider from cautious to bold.
 - **Explained recommendations**: on the page of a title opened from a Reco+ row, a discreet line gives the reason ("Because you liked X", "Sequel to X", "New episodes"…).
@@ -108,7 +108,7 @@ Settings come in three levels — **essential** (default), **advanced** and **ex
 | Extension / service | | Adds |
 |---|---|---|
 | [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) | recommended | the home rows; it decides which rows each user sees, and in which order |
-| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | recommended | requests and watchlists taken into account, trending / popular / upcoming rows, suggestions beyond the library (extended mode) |
+| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | recommended | requests and watchlists taken into account, trending / most popular / new releases / upcoming rows, suggestions beyond the library (extended mode) |
 | [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | recommended | reviews and hidden titles; its cards and *Request* button for titles outside the library |
 | [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) | add-on | precise first-play dates, useful for calibration |
 | [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) | add-on | shows Reco+ recommendations when its "Personalized Recommendations" option is on |

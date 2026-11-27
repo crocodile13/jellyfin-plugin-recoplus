@@ -568,12 +568,14 @@ public static class Recommender
     /// compte sait déjà qu'il le veut, ce n'est pas une découverte), puis 1 − ½^(âge / demi-vie d'une demande) : plus il
     /// reste longtemps sans être regardé, plus le rappeler a du sens. L'âge part de la demande, ou de l'arrivée du titre
     /// dans la bibliothèque si elle est plus tardive (un titre demandé il y a un an et arrivé hier est une nouvelle que
-    /// le compte attendait, pas un oubli). 1 pour tout autre titre.
+    /// le compte attendait, pas un oubli). 1 pour tout autre titre, et pour un titre demandé arrivé dans la bibliothèque après
+    /// la demande : il passe quelques jours en tête (<see cref="PinOptions.ArrivedDays"/>), puis reprend la place de
+    /// n'importe quel titre (choix de Marien).
     /// </summary>
     public static double IntentFactor(Interaction? x, Title? t, double now, EngineSettings w)
     {
         double at = x is null ? 0 : Math.Max(x.Requested, x.Watchlisted);
-        if (at <= 0)
+        if (at <= 0 || (t is not null && Pins.Arrived(x!, t)))
         {
             return 1.0;
         }

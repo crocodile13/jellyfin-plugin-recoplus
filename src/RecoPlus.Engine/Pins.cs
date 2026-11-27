@@ -9,12 +9,15 @@ namespace RecoPlus.Engine;
 /// <param name="MaxDays">Fenêtre (jours) : arrivés dans la bibliothèque depuis, et pour un titre aimé sans être vu ici, sortis depuis.</param>
 /// <param name="SagaMax">Au-delà de ce nombre de titres, une collection n'est pas une saga mais un regroupement.</param>
 /// <param name="Filters">Filtres des listes (genres exclus, note et année minimales) : un titre filtré n'est jamais placé en tête.</param>
-public sealed record PinOptions(int Max, double MaxDays, int SagaMax, ListOptions? Filters = null);
+/// <param name="ArrivedDays">Titre demandé par le compte (Seerr), arrivé dans la bibliothèque : en tête pendant ce nombre de jours
+/// après son arrivée, devant les autres nouveautés (0 = jamais).</param>
+public sealed record PinOptions(int Max, double MaxDays, int SagaMax, ListOptions? Filters = null, double ArrivedDays = 0);
 
 /// <summary>
 /// Titres placés en tête : les nouveautés de ce que le compte suit déjà, seulement. Une nouveauté qu'il ne connaît pas
 /// encore mais qui prolonge ce qu'il a regardé ou aimé : nouveaux épisodes ou nouvelle saison d'une série, volet suivant
-/// d'une saga. Jamais un titre qu'il a lui-même demandé ou mis de côté (il sait déjà qu'il le veut).
+/// d'une saga ; et, quelques jours, un titre qu'il a demandé et qui vient d'arriver (la nouvelle qu'il attendait). Jamais
+/// un titre seulement mis de côté, ni un titre demandé qui n'est pas encore arrivé.
 /// <list type="bullet">
 /// <item>Titre vu sur ce serveur (même sans l'avoir aimé, pourvu que son poids soit positif : ni abandon ni masqué) :
 /// la nouveauté est arrivée après sa dernière lecture ; pour une série, le compte avait vu presque tout ce qui existait
@@ -50,6 +53,20 @@ public static class Pins
 
         static bool SeenHere(Interaction x) => x.Played || x.Episodes > 0 || x.Completion > 0;
         bool Shown(Title t) => o.Filters is null || ListPolicy.Allows(t, o.Filters);
+
+        // demandes arrivées : devant tout le reste, les plus récentes d'abord
+        var arrived = new List<(string Id, double At)>();
+        if (o.ArrivedDays > 0)
+        {
+            foreach (var (id, x) in h)
+            {
+                if (x.Requested > 0 && !x.Hidden && !SeenHere(x) && ds.Titles.TryGetValue(id, out var t) && !t.External && allowed(id) && Shown(t)
+                    && Arrived(x, t) && now - (t.Added ?? 0) <= o.ArrivedDays * Core.Day)
+                {
+                    arrived.Add((id, t.Added ?? 0));
+                }
+            }
+        }
 
         // nouveaux épisodes, nouvelle saison
         foreach (var (id, x) in h)
@@ -116,6 +133,11 @@ public static class Pins
             }
         }
 
-        return found.OrderByDescending(kv => kv.Value).ThenBy(kv => kv.Key, StringComparer.Ordinal).Take(o.Max).Select(kv => kv.Key).ToList();
+        var first = arrived.OrderByDescending(a => a.At).ThenBy(a => a.Id, StringComparer.Ordinal).Select(a => a.Id).ToList();
+        return first.Concat(found.Where(kv => !first.Contains(kv.Key)).OrderByDescending(kv => kv.Value).ThenBy(kv => kv.Key, StringComparer.Ordinal)
+                .Take(o.Max).Select(kv => kv.Key)).ToList();
     }
+
+    /// <summary>Titre demandé arrivé dans la bibliothèque après la demande (à l'écart d'horloge près).</summary>
+    public static bool Arrived(Interaction x, Title t) => x.Requested > 0 && !t.External && t.Added is double added && added + Slack >= x.Requested;
 }

@@ -200,6 +200,16 @@ de la CI.
   `TrendingShare`, OU probabiliste avec la popularité du foyer, parité avec le prototype) ; avec des titres hors bibliothèque, `PlaceExternals` choisit leur place selon le contenu de chaque rangée
   (bibliothèque seule, Seerr seul, mélange) et les titres de la bibliothèque remplacés passent aux rangées suivantes.
   Le serveur compose (`UserRecs.Layouts`), le script applique ; chaque rangée garde sa taille.
+- Listes du moment : « Les plus populaires de tous les temps » (`Populaires`) = découverte Seerr triée par `vote_count.desc`
+  (la popularité du moment doublait Tendances). Renouvellement du jour par liste (`…Rotation`, `Trending.Daily` : clé en
+  logarithme + Gumbel(compte, jour, rangée, titre) × renouvellement, même graine dans `Trending.Order` et `PlaceExternals`) ;
+  réservoir lu plus large (× (1 + 2 r)). `ListsLongAgoWatched` / `ListsLongAgoYears` : un titre vu il y a très longtemps peut
+  revenir dans les listes (coupé par défaut). **Piège Seerr** : sur `/discover/movies` et `/discover/tv`, le paramètre
+  `language` est le filtre de langue ORIGINALE (la langue d'affichage est celle du compte Seerr) : toujours `language=all`
+  (`SeerrClient.ListAsync`, exploration) ; avec la langue du serveur, un serveur français n'avait que des séries françaises.
+- Demande arrivée (`Pins.Arrived`, `RequestArrivedDays` 3, `RequestArrivedWhere` : accueil, bandeau ou les deux) : en tête
+  quelques jours puis classée comme les autres (`IntentFactor` = 1 une fois arrivée ; choix de Marien). Avant l'arrivée,
+  une demande reste un signal de goût (0,6, demi-vie 21 j, coupée à 90 j) et n'est proposée nulle part pendant une demi-vie.
 - Reprises entre rangées (`RowOptions.RepeatShare` / `RepeatMax`, réglages `RowRepeatPercent` 0 % / `RowRepeatMax` 3) :
   chaque source de rangée garde tous ses titres dans son ordre propre (ne pas filtrer `used` d'avance) ; `Take` prend un
   titre déjà montré seulement parmi les premiers de la rangée, jamais de la rangée juste au-dessus (`above`), jamais de

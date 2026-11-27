@@ -310,3 +310,39 @@ public class TrendingTests
         Assert.Empty(add);
     }
 }
+
+public class DailyRotationTests
+{
+    private static readonly List<string> Ids = Enumerable.Range(0, 60).Select(i => "t" + i.ToString("D2", System.Globalization.CultureInfo.InvariantCulture)).ToList();
+
+    private static List<string> Day(double rotation, string day)
+        => Trending.Order(Ids, Trending.Scores(Ids), new Dictionary<string, double>(), 0, rotation, "u|" + day + "|Populaires");
+
+    [Fact]
+    public void ZeroKeepsTheFixedOrderAndTheSameDayGivesTheSameList()
+    {
+        Assert.Equal(Ids, Day(0, "2026-11-27"));
+        Assert.Equal(Day(0.6, "2026-11-27"), Day(0.6, "2026-11-27"));
+    }
+
+    [Fact]
+    public void TheListChangesFromDayToDayWhileTheTopStaysMoreFrequent()
+    {
+        int changed = 0, topShown = 0, bottomShown = 0;
+        var prev = Day(0.6, "2026-01-00").Take(20).ToList();
+        for (int d = 1; d <= 60; d++)
+        {
+            var top = Day(0.6, "2026-01-" + d.ToString("D2", System.Globalization.CultureInfo.InvariantCulture)).Take(20).ToList();
+            changed += top.Except(prev).Count();
+            topShown += top.Count(id => string.CompareOrdinal(id, "t10") < 0);
+            bottomShown += top.Count(id => string.CompareOrdinal(id, "t50") >= 0);
+            prev = top;
+        }
+
+        Assert.True(changed / 60.0 >= 4, "titres nouveaux par jour : " + (changed / 60.0));
+        Assert.True(topShown > 2 * bottomShown && bottomShown > 0, $"haut {topShown}, fond {bottomShown}");
+        // un renouvellement plus fort change plus
+        int Changes(double r) => Enumerable.Range(1, 30).Sum(d => Day(r, "d" + d).Take(20).Except(Day(r, "d" + (d - 1)).Take(20)).Count());
+        Assert.True(Changes(0.9) > Changes(0.2));
+    }
+}

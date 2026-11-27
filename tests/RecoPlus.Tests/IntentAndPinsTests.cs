@@ -77,9 +77,11 @@ public class IntentAndPinsTests
         Assert.Equal(0.0, Recommender.IntentFactor(new Interaction { Title = "a", Requested = Now }, t, Now, w), 12);
         Assert.Equal(0.5, Recommender.IntentFactor(new Interaction { Title = "a", Requested = Now - (21 * Day) }, t, Now, w), 12);
         Assert.Equal(0.5, Recommender.IntentFactor(new Interaction { Title = "a", Watchlisted = Now - (21 * Day) }, t, Now, w), 12);
-        // demandé il y a longtemps mais arrivé hier : c'est l'arrivée qui compte (il ne l'a pas encore eu sous la main)
+        // demandé puis arrivé dans la bibliothèque : quelques jours en tête (Pins), puis un titre comme les autres
         var late = new Title { Id = "a", Kind = TitleKind.Movie, Added = Now - Day };
-        Assert.True(Recommender.IntentFactor(new Interaction { Title = "a", Requested = Now - (200 * Day) }, late, Now, w) < 0.05);
+        Assert.Equal(1.0, Recommender.IntentFactor(new Interaction { Title = "a", Requested = Now - (200 * Day) }, late, Now, w));
+        // mis de côté (liste de suivi) après son arrivée : retenu comme avant
+        Assert.True(Recommender.IntentFactor(new Interaction { Title = "a", Watchlisted = Now - Day }, t, Now, w) < 0.05);
     }
 
     [Fact]
@@ -91,9 +93,9 @@ public class IntentAndPinsTests
         Assert.False(Recommender.HeldBack(new Interaction { Title = "a", Requested = Now - (22 * Day) }, t, Now, w));
         Assert.False(Recommender.HeldBack(new Interaction { Title = "a" }, t, Now, w));
         Assert.False(Recommender.HeldBack(null, t, Now, w));
-        // demandé il y a longtemps, arrivé il y a 5 jours : encore retenu
+        // demandé il y a longtemps, arrivé il y a 5 jours : plus retenu (il est passé en tête, puis classé normalement)
         var late = new Title { Id = "a", Kind = TitleKind.Movie, Added = Now - (5 * Day) };
-        Assert.True(Recommender.HeldBack(new Interaction { Title = "a", Requested = Now - (300 * Day) }, late, Now, w));
+        Assert.False(Recommender.HeldBack(new Interaction { Title = "a", Requested = Now - (300 * Day) }, late, Now, w));
     }
 
     private static (Context Ctx, Dictionary<string, SparseVector> Vec, List<string> Cands, EngineSettings S) Library(double requestedAt)
@@ -216,7 +218,7 @@ public class IntentAndPinsTests
             }
         }
 
-        public List<string> Pins(int max = 5)
+        public List<string> Pins(int max = 5, double arrivedDays = 0)
         {
             var users = new Dictionary<string, Dictionary<string, Interaction>>(StringComparer.Ordinal) { ["u"] = H };
             var ds = new Dataset { Titles = Titles, Users = users, Now = Now };
@@ -228,12 +230,33 @@ public class IntentAndPinsTests
             ds.LinkCollections();
             var s = new EngineSettings();
             var sig = new Context(ds, Now, users, s).Sig["u"];
-            return RecoPlus.Engine.Pins.Select(ds, H, sig, id => !Denied.Contains(id), id => Eps.TryGetValue(id, out var e) ? e : null, Now, new PinOptions(max, 45, s.SagaMax, Filters));
+            return RecoPlus.Engine.Pins.Select(ds, H, sig, id => !Denied.Contains(id), id => Eps.TryGetValue(id, out var e) ? e : null, Now, new PinOptions(max, 45, s.SagaMax, Filters, arrivedDays));
         }
     }
 
     private static Interaction Watched(string id, double last, int episodes = 0)
         => new() { Title = id, Played = true, Completion = 1, Episodes = episodes, Start = last - Day, Last = last };
+
+    [Fact]
+    public void AnArrivedRequestGoesFirstForAFewDaysThenTakesItsNormalPlace()
+    {
+        var w = new World();
+        w.Movie("arrive", Now - Day, Now - (30 * Day));                       // demandé il y a 10 jours, arrivé hier
+        w.H["arrive"] = new Interaction { Title = "arrive", Requested = Now - (10 * Day) };
+        w.Movie("ancien", Now - (5 * Day), Now - (300 * Day));                // arrivé il y a 5 jours : fenêtre passée
+        w.H["ancien"] = new Interaction { Title = "ancien", Requested = Now - (20 * Day) };
+        w.Movie("suivi", Now - Day, Now - (30 * Day));                        // seulement mis de côté : jamais en tête
+        w.H["suivi"] = new Interaction { Title = "suivi", Watchlisted = Now - (10 * Day) };
+        w.Movie("vu", Now - Day, Now - (30 * Day));                           // déjà regardé : plus une nouvelle
+        w.H["vu"] = Watched("vu", Now - (Day / 2));
+        w.H["vu"].Requested = Now - (10 * Day);
+        w.Series("caught", 10, Now - (200 * Day), 3, Now - (2 * Day));
+        w.H["caught"] = Watched("caught", Now - (30 * Day), 10);
+        Assert.Equal(new[] { "arrive", "caught" }, w.Pins(arrivedDays: 3));
+        Assert.Equal(new[] { "caught" }, w.Pins(arrivedDays: 0));           // 0 = jamais en tête
+        w.Denied.Add("arrive");                                               // interdit au compte (contrôle parental)
+        Assert.Equal(new[] { "caught" }, w.Pins(arrivedDays: 3));
+    }
 
     [Fact]
     public void NewEpisodesOfACaughtUpSeriesGoFirstWithoutNeedingALike()

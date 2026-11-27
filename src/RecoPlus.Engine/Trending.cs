@@ -65,6 +65,16 @@ public static class Trending
     }
 
     /// <summary>
+    /// Renouvellement du jour d'une liste du moment : la clé d'ordre d'un titre (place TMDb mêlée au goût, ≥ 0) passe en
+    /// logarithme et reçoit un tirage de Gumbel propre au titre et à la graine (compte, jour, rangée), multiplié par
+    /// <paramref name="rotation"/>. Revient à tirer chaque jour la liste titre par titre avec une probabilité proportionnelle
+    /// à clé^(1/rotation) : les premiers restent les plus fréquents, ceux du fond passent de temps en temps ; même jour,
+    /// même liste. 0 = la clé telle quelle (ordre fixe).
+    /// </summary>
+    public static double Daily(double key, double rotation, string seed)
+        => rotation > 0 && double.IsFinite(rotation) ? Math.Log(Math.Max(key, 1e-6)) + (Math.Min(rotation, 1.0) * Exploration.Gumbel(seed)) : key;
+
+    /// <summary>
     /// Ordre de la rangée « Tendances » pour un compte : mélange de la tendance et du goût du compte, tous deux ramenés à
     /// 0..1 parmi les titres de la rangée. <paramref name="tasteShare"/> = 0 : l'ordre de TMDb ; 1 : le goût seul (parmi les
     /// tendances). À égalité, la tendance la plus forte, puis l'identifiant (ordre stable).
@@ -73,8 +83,10 @@ public static class Trending
     /// <param name="trend">Intensité de chaque titre (<see cref="Scores"/>).</param>
     /// <param name="taste">Score du compte pour chaque titre (absent = le plus bas).</param>
     /// <param name="tasteShare">Part du goût, 0..1.</param>
+    /// <param name="rotation">Renouvellement du jour (<see cref="Daily"/>) ; 0 = ordre fixe.</param>
+    /// <param name="seed">Graine du tirage (compte, jour, rangée).</param>
     public static List<string> Order(IEnumerable<string> ids, IReadOnlyDictionary<string, double> trend,
-        IReadOnlyDictionary<string, double> taste, double tasteShare)
+        IReadOnlyDictionary<string, double> taste, double tasteShare, double rotation = 0, string seed = "")
     {
         var l = ids.Distinct(StringComparer.Ordinal).ToList();
         double a = double.IsFinite(tasteShare) ? Math.Clamp(tasteShare, 0.0, 1.0) : 0.0;
@@ -82,7 +94,7 @@ public static class Trending
         var known = tv.Where(double.IsFinite).ToList();
         double lo = known.Count > 0 ? known.Min() : 0, span = known.Count > 0 ? known.Max() - lo : 0;
         double Norm(double v) => double.IsNaN(v) ? 0.0 : span > 0 ? (v - lo) / span : 1.0;
-        return l.Select((id, i) => (Id: id, Tr: trend.GetValueOrDefault(id), Key: ((1.0 - a) * trend.GetValueOrDefault(id)) + (a * Norm(tv[i]))))
+        return l.Select((id, i) => (Id: id, Tr: trend.GetValueOrDefault(id), Key: Daily(((1.0 - a) * trend.GetValueOrDefault(id)) + (a * Norm(tv[i])), rotation, seed + "|" + id)))
             .OrderByDescending(x => x.Key).ThenByDescending(x => x.Tr).ThenBy(x => x.Id, StringComparer.Ordinal)
             .Select(x => x.Id).ToList();
     }

@@ -49,6 +49,12 @@ public static class Reasons
                 continue;
             }
 
+            if (hist.TryGetValue(id, out var px) && Pins.Arrived(px, t))
+            {
+                res[id] = Texts.Pack("Tu l'as demandé : il vient d'arriver");
+                continue;
+            }
+
             if (t.Kind == TitleKind.Series)
             {
                 res[id] = Texts.Pack("Nouveaux épisodes");

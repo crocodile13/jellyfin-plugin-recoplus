@@ -76,7 +76,7 @@ Les réglages se présentent sur trois niveaux — **essentiels** (par défaut),
 ## Fonctionnalités
 
 - **Partout où Jellyfin recommande** : Suggestions, « Parce que vous avez regardé », « Plus comme ceci » et la Media Bar.
-- **Rangées d'accueil** avec [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) : « Pour toi », « Tendances », « Populaires », « Nouvelles sorties » (sorties récentes dans votre pays), « À venir », « Nouveautés pour toi », jusqu'à trois « Parce que tu as aimé … », « Films pour toi » et « Séries pour toi ». Chaque rangée peut présenter des films, des séries, les deux, ou être scindée en deux.
+- **Rangées d'accueil** avec [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) : « Pour toi », « Tendances », « Les plus populaires de tous les temps », « Nouvelles sorties » (sorties récentes dans votre pays), « À venir », « Nouveautés pour toi », jusqu'à trois « Parce que tu as aimé … », « Films pour toi » et « Séries pour toi ». Chaque rangée peut présenter des films, des séries, les deux, ou être scindée en deux.
 - **Tous les signaux exprimés sont pris en compte** : favoris (série, saison ou épisode), notes, avis et titres masqués de Jellyfin Enhanced, demandes et listes de suivi Seerr, titres affichés mais jamais ouverts.
 - **Suggestions hors bibliothèque** (mode étendu, facultatif) : des titres du catalogue TMDb choisis d'après vos goûts et classés par le même moteur, avec un curseur d'**audace des découvertes**, de prudente à aventureuse.
 - **Recommandations expliquées** : sur la fiche d'un titre ouvert depuis une rangée Reco+, une ligne discrète en donne la raison (« Parce que tu as aimé X », « Suite de X », « Nouveaux épisodes »…).
@@ -108,7 +108,7 @@ Les réglages se présentent sur trois niveaux — **essentiels** (par défaut),
 | Extension / service | | Apport |
 |---|---|---|
 | [Home Screen Sections](https://github.com/IAmParadox27/jellyfin-plugin-home-sections) | recommandé | les rangées d'accueil ; il détermine quelles rangées chaque utilisateur voit, et dans quel ordre |
-| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | recommandé | demandes et listes de suivi prises en compte, rangées tendances / populaires / à venir, suggestions hors bibliothèque (mode étendu) |
+| [Seerr](https://github.com/seerr-team/seerr) (Jellyseerr / Overseerr) | recommandé | demandes et listes de suivi prises en compte, rangées tendances / plus populaires / nouvelles sorties / à venir, suggestions hors bibliothèque (mode étendu) |
 | [Jellyfin Enhanced](https://github.com/n00bcodr/Jellyfin-Enhanced) | recommandé | avis et titres masqués ; ses cartes et son bouton *Demander* pour les titres hors bibliothèque |
 | [Playback Reporting](https://github.com/jellyfin/jellyfin-plugin-playbackreporting) | complément | dates de premier visionnage précises, utiles au calibrage |
 | [Media Bar Enhanced](https://github.com/IAmParadox27/jellyfin-plugin-media-bar) | complément | affiche les recommandations de Reco+ lorsque son option « Personalized Recommendations » est activée |

@@ -111,6 +111,13 @@ public static class Exploration
         return picks.ToArray();
     }
 
+    /// <summary>Tirage de Gumbel standard, reproductible pour une graine (−ln(−ln U)).</summary>
+    public static double Gumbel(string seed)
+    {
+        double u = ((Hash(seed) >> 11) + 0.5) / 9007199254740992.0;   // ]0, 1[
+        return -Math.Log(-Math.Log(u));
+    }
+
     /// <summary>Tirage gaussien centré réduit, reproductible pour une graine (Box-Muller).</summary>
     public static double Gaussian(string seed)
     {
