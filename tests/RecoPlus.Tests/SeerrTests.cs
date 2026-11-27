@@ -142,6 +142,15 @@ public class SeerrTests
         Assert.Equal("movie:7", res[0].MediaType + ":" + res[0].TmdbId);
         await cl.DiscoverAsync("tv", new Dictionary<string, string>(), 1, CancellationToken.None);
         Assert.Equal("/api/v1/discover/tv?page=1", path);
+
+        // listes du moment : populaires et nouvelles sorties passent par la découverte, où `language` filtre la langue
+        // originale ; jamais celle du serveur (un serveur français n'aurait que des séries françaises)
+        await cl.ListAsync("tv", string.Empty, "tv", "fr", 2, CancellationToken.None);
+        Assert.Equal("/api/v1/discover/tv?page=2&language=all", path);
+        await cl.ListAsync("movies", "sortBy=popularity.desc", "movie", "fr", 1, CancellationToken.None);
+        Assert.Equal("/api/v1/discover/movies?page=1&language=all&sortBy=popularity.desc", path);
+        await cl.ListAsync("trending", "mediaType=tv&timeWindow=week", "tv", "fr", 1, CancellationToken.None);
+        Assert.Equal("/api/v1/discover/trending?page=1&language=fr&mediaType=tv&timeWindow=week", path);
     }
 
     [Fact]
