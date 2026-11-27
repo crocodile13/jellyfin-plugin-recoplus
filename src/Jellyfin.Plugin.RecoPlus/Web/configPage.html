@@ -31,6 +31,9 @@
                 #RecoPlusConfigPage .rp-box { background: var(--rp-soft); border-radius: 8px; padding: 1em 1.2em; margin: 0 0 1em; }
                 #RecoPlusConfigPage .rp-box h3 { margin: 0 0 .3em; font-size: 1.05em; }
                 #RecoPlusConfigPage .rp-box > p { color: var(--rp-mute); font-size: .88em; margin: 0 0 .9em; max-width: 60em; }
+                /* Jellyfin borne les formulaires des pages de configuration (`.content-primary form`, environ 54em) : les onglets
+                   du formulaire prenaient la moitié de la largeur de l'onglet État, et leurs listes coupaient leur texte */
+                #RecoPlusConfigPage #rpForm { max-width: none; }
                 #RecoPlusConfigPage .rp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 2em; align-items: end; }
                 /* source d'exploration : son interrupteur, puis ses réglages fins (niveau expert) juste dessous, en retrait */
                 #RecoPlusConfigPage .rp-src { margin: 0 0 .4em; }

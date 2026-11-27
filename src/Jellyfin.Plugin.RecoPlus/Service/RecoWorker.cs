@@ -110,6 +110,25 @@ public sealed class RecoWorker : BackgroundService
         }
     }
 
+    /// <summary>Mode étendu au dernier enregistrement des réglages (null : pas encore lu).</summary>
+    private bool? _extendedWas;
+
+    private void OnConfigChanged(object? sender, MediaBrowser.Model.Plugins.BasePluginConfiguration e)
+    {
+        // mode étendu rallumé : un compte recalculé pendant qu'il était coupé n'a plus de titres hors bibliothèque, et rien
+        // ne les rendrait avant le prochain calcul complet (constaté : accueil sans eux après l'avoir rallumé)
+        if (e is Configuration.PluginConfiguration c)
+        {
+            bool was = _extendedWas ?? c.ExtendedEnabled;
+            _extendedWas = c.ExtendedEnabled;
+            if (c.ExtendedEnabled && !was && c.Enabled)
+            {
+                _log.LogInformation("Reco+: extended mode switched back on, computing all accounts");
+                ScheduleAll(TimeSpan.Zero);
+            }
+        }
+    }
+
     private void OnUserData(object? sender, UserDataSaveEventArgs e)
     {
         // marqué vu / non vu, favori : signaux forts
@@ -125,6 +144,12 @@ public sealed class RecoWorker : BackgroundService
     {
         _lib.ItemAdded += OnItemAdded;
         _userData.UserDataSaved += OnUserData;
+        _extendedWas = Plugin.Instance?.Configuration.ExtendedEnabled;
+        if (Plugin.Instance is { } plugin)
+        {
+            plugin.ConfigurationChanged += OnConfigChanged;
+        }
+
         try
         {
             await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken).ConfigureAwait(false);
@@ -215,6 +240,11 @@ public sealed class RecoWorker : BackgroundService
         {
             _lib.ItemAdded -= OnItemAdded;
             _userData.UserDataSaved -= OnUserData;
+            if (Plugin.Instance is { } current)
+            {
+                current.ConfigurationChanged -= OnConfigChanged;
+            }
+
         }
     }
 }
