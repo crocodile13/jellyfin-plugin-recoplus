@@ -61,8 +61,35 @@ def take(url: str, server_id: str, admin: tuple, account: tuple, lang: str, out,
         # cartes sans aucune image (Jellyfin n'a pas encore téléchargé les images de la bibliothèque : `defaultCardBackground`,
         # sans `data-src`, donc invisibles pour le contrôle des affiches floues ; constaté sur les captures de 1.1.2 et 1.1.3,
         # cases grises) : on recharge l'accueil tant qu'il en reste, puis on abandonne (l'ancienne capture reste en place)
-        blank = """() => [...document.querySelectorAll('.verticalSection .cardImageContainer.defaultCardBackground')]
-          .filter(e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 0; }).length"""
+        # chaque image de carte visible des rangées doit se charger vraiment : image de fond (cartes de Jellyfin et de Home
+        # Screen Sections), `data-src` (chargement paresseux) ou balise img (cartes de Jellyfin Enhanced) ; sans aucune
+        # adresse, ou adresse en échec (image pas encore téléchargée par Jellyfin), la carte est grise
+        blank = """() => new Promise(done => {
+          const vis = e => { const r = e.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight && r.width > 40; };
+          const cards = [...document.querySelectorAll('.verticalSection .card')].filter(vis);
+          const urlOf = c => {
+            const img = c.querySelector('img[src]');
+            if (img && img.getAttribute('src')) { return img.src; }
+            for (const e of c.querySelectorAll('.cardImageContainer, .cardImage, [data-src]')) {
+              const d = e.getAttribute('data-src');
+              if (d) { return d; }
+              const m = /url\\(["']?([^"')]+)["']?\\)/.exec(getComputedStyle(e).backgroundImage || '');
+              if (m) { return m[1]; }
+            }
+            return null;
+          };
+          let bad = 0;
+          const one = c => new Promise(res => {
+            const u = urlOf(c);
+            if (!u) { bad++; res(); return; }
+            const i = new Image();
+            i.onload = () => { if (!i.naturalWidth) { bad++; } res(); };
+            i.onerror = () => { bad++; res(); };
+            i.src = u;
+          });
+          const t = setTimeout(() => done(bad + 1000), 30000);
+          Promise.all(cards.map(one)).then(() => { clearTimeout(t); done(bad); });
+        })"""
         for attempt in range(8):
             empty = page.evaluate(blank)
             if empty == 0:
