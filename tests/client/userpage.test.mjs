@@ -55,7 +55,8 @@ await test('pays : automatique avec la raison, puis la liste des pays ; le choix
     const opts = [...d.getElementById('rpuRegion').options];
     assert.equal(opts[0].value, '');
     assert.match(opts[0].textContent, /^Automatique \(/);
-    assert.deepEqual(opts.slice(1).map((o) => o.value).sort(), ['BE', 'CA', 'FR']);
+    assert.deepEqual(opts.slice(1, 3).map((o) => o.value), ['*', 'custom']);
+    assert.deepEqual(opts.slice(3).map((o) => o.value).sort(), ['BE', 'CA', 'FR']);
     // la raison ne cite que les indices du pays retenu
     const why = d.getElementById('rpuRegionWhy').textContent;
     assert.match(why, /fuseau horaire du navigateur/);
@@ -72,6 +73,25 @@ await test('pays : automatique avec la raison, puis la liste des pays ; le choix
     d.getElementById('rpuSave').click();
     await wait(20);
     assert.deepEqual(posts[1].body, { Region: null, Extended: null });
+});
+
+await test('pays : international et plusieurs pays (liste saisie, relue au chargement)', async () => {
+    const { d, posts } = await open({ ...ME, region: { ...ME.region, chosen: 'FR,BE', current: 'FR,BE' } });
+    assert.equal(d.getElementById('rpuRegion').value, 'custom');
+    assert.equal(d.getElementById('rpuCustomBox').hidden, false);
+    assert.equal(d.getElementById('rpuCustom').value, 'FR, BE');
+    d.getElementById('rpuCustom').value = ' fr, ch ';
+    d.getElementById('rpuSave').click();
+    await wait(20);
+    assert.deepEqual(posts[0].body, { Region: 'fr, ch', Extended: null });
+    // international : la case de saisie disparaît, « * » est envoyé
+    const sel = d.getElementById('rpuRegion');
+    sel.value = '*';
+    sel.dispatchEvent(new d.defaultView.Event('change'));
+    assert.equal(d.getElementById('rpuCustomBox').hidden, true);
+    d.getElementById('rpuSave').click();
+    await wait(20);
+    assert.deepEqual(posts[1].body, { Region: '*', Extended: null });
 });
 
 await test('réglages fermés : seulement le message, rien à enregistrer', async () => {

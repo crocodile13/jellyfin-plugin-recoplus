@@ -177,6 +177,10 @@ public sealed class RecoService : IDisposable
         return Regions.Detect(chosen, clues, fallback);
     }
 
+    /// <summary>Origines du pays de chaque compte (origine des titres : préférence de départ ; aucune en mode international).</summary>
+    private Dictionary<string, IReadOnlyList<string>> HomeOriginsOf(IEnumerable<Jellyfin.Database.Implementations.Entities.User> users, Configuration.PluginConfiguration cfg)
+        => users.ToDictionary(u => u.Id.ToString("N"), u => Regions.HomeOrigins(RegionOf(u, cfg)), StringComparer.Ordinal);
+
     /// <summary>Fuseau horaire IANA de la machine (converti depuis Windows au besoin) ; null s'il est illisible.</summary>
     private static string? ServerZone()
     {
@@ -593,6 +597,7 @@ public sealed class RecoService : IDisposable
         {
             Titles = titles, Users = hist, Collections = colls, Now = now, Reviews = reviews, LocalHour = LocalHourFunc(cfg),
             Trending = lists.TryGetValue(HomeRows.Tendances, out var trendList) ? trendList.Score : new Dictionary<string, double>(StringComparer.Ordinal),
+            HomeOrigins = HomeOriginsOf(users, cfg),
         };
         var ctx = new Context(ds, now, hist, s);
         progress?.Report(40);
@@ -674,7 +679,7 @@ public sealed class RecoService : IDisposable
         // de Jellyfin, autre plugin) ; ensuite les comptes sont calculés en parallèle (réglage « Threads »)
         // tout ce qui interroge Jellyfin ou HSS se fait ici, avant la boucle parallèle (pays : configuration du serveur, compte)
         var prep = targets.Select(u => (U: u, Accessible: _history.Accessible(u), Rows: RowOptionsOf(cfg, HomeScreenSectionsIntegration.EnabledFor(_services, u.Id)),
-            Region: RegionOf(u, cfg).Country)).ToList();
+            Region: RegionOf(u, cfg))).ToList();
         foreach (var p in prep)
         {
             (p.Rows.Saga, p.Rows.SagaMax) = (s.Saga, s.SagaMax);
@@ -1399,6 +1404,7 @@ public sealed class RecoService : IDisposable
             Reviews = reviews,
             Now = Unix(DateTime.UtcNow),
             LocalHour = LocalHourFunc(cfg),
+            HomeOrigins = HomeOriginsOf(users, cfg),
         };
         ApplySagas(ds, lib, tmdbOf);
         return ds;
@@ -1437,7 +1443,7 @@ public sealed class RecoService : IDisposable
     /// vus, pas déjà demandés ni masqués, pas arrivés entre-temps, autorisés par son contrôle parental et les filtres des
     /// listes. Mode étendu seulement (cartes et bouton Demander).
     /// </summary>
-    private Dictionary<string, ListPool> ListPools(User u, string region, Dictionary<string, Interaction> h, HashSet<string>? hidden, Dictionary<string, TmdbList> lists,
+    private Dictionary<string, ListPool> ListPools(User u, RegionGuess region, Dictionary<string, Interaction> h, HashSet<string>? hidden, Dictionary<string, TmdbList> lists,
         RowOptions rowOpts, Dictionary<string, Title> titles, LibrarySnapshot lib, SeerrSnapshot seerr, Configuration.PluginConfiguration cfg, ListOptions lo,
         Func<string, bool> nextPart)
     {
@@ -1512,8 +1518,8 @@ public sealed class RecoService : IDisposable
         public Dictionary<string, (IReadOnlyDictionary<string, string>? Local, string? Primary)>? Released { get; init; }
 
         /// <summary>Le titre a sa place pour un compte de ce pays : toujours, sauf dans les nouvelles sorties (sorti là-bas depuis peu).</summary>
-        public bool NewIn(string id, string country, double now, int days)
-            => Released is null || (Released.TryGetValue(id, out var r) && Releases.IsNew(Releases.In(country, r.Local, r.Primary), now, days));
+        public bool NewIn(string id, RegionGuess region, double now, int days)
+            => Released is null || (Released.TryGetValue(id, out var r) && Releases.IsNew(Releases.For(region, r.Local, r.Primary), now, days));
     }
 
     /// <summary>

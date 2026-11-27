@@ -283,7 +283,53 @@ def rec_jellyfin(ctx, user, cands, k, seed=0):
 # --- moteur
 ENGINE_W = dict(centroid=1.0, maxsim=2.0, collab=0.3, pop=0.5, quality=0.1, neg=0.6, fresh=2.0, fresh_days=45.0,
                 gate="rank", gate_top=60, release=0.0, release_days=365.0, rating="community",
-                rating_prior_votes=150.0, household=0.3, household_prior=2.0, trending_share=0.5)
+                rating_prior_votes=150.0, household=0.3, household_prior=2.0, trending_share=0.5, origin=0.3, origin_prior=5.0)
+
+
+def origin_keys(t) -> list:
+    """Origines d'un titre comme Origin.Keys : « l:fr » (langue originale) et « c:france » (pays de production)."""
+    res = []
+    lang = (t.language or "").strip().lower()
+    if len(lang) >= 2:
+        res.append("l:" + lang[:2])
+    for c in t.countries or []:
+        k = "c:" + (c or "").strip().lower()
+        if len(k) > 2 and k not in res:
+            res.append(k)
+    return res
+
+
+def origin_deviation(ds, user, liked: dict, cands, prior) -> dict:
+    """Comme Origin.Deviation : familiarité du compte avec l'origine de chaque candidat, moins la moyenne des candidats."""
+    h, total = defaultdict(float), 0.0
+    for t, s in liked.items():
+        if t not in ds.titles:
+            continue
+        ks = origin_keys(ds.titles[t])
+        if not ks:
+            continue
+        total += s
+        for k in ks:
+            h[k] += s
+    homes = []
+    for x in (ds.meta.get("home_origins") or {}).get(user) or []:
+        x = (x or "").strip().lower()
+        if len(x) > 2 and x not in homes:
+            homes.append(x)
+    p = max(0.0, prior)
+    denom = total + (p if homes else 0.0)
+    if not denom > 0:
+        return {c: 0.0 for c in cands}
+
+    def fam(k):
+        return (h.get(k, 0.0) + (p if k in homes else 0.0)) / denom
+    f = {}
+    for c in cands:
+        ks = origin_keys(ds.titles[c]) if c in ds.titles else []
+        if ks:
+            f[c] = max([0.0] + [fam(k) for k in ks])
+    mean = sum(f.values()) / len(f) if f else 0.0
+    return {c: (f[c] - mean if c in f else 0.0) for c in cands}
 
 
 def household(ds, title, user, prior) -> float:
@@ -361,6 +407,8 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W, expo=None):
     tot = sum(pos.values()) or 1.0
     others_pop = Counter(t for u, s in ctx.pos.items() if u != user for t in s)
     maxpop = max(others_pop.values(), default=1)
+    w_or = W.get("origin", 0.3)
+    orig = origin_deviation(ctx.ds, user, pos, cands, W.get("origin_prior", 5.0)) if w_or > 0 else {}
     out, parts, feats = {}, {}, {}
     for c in cands:
         v = vec[c]
@@ -380,7 +428,7 @@ def score_engine(ctx, vec, user, cands, W=ENGINE_W, expo=None):
         fr = math.exp(-age / W["fresh_days"]) if T[c].added else 0.0
         st = dot(stp, v) if short else 0.0
         taste = W["centroid"] * cen + W["maxsim"] * ms + W["collab"] * col - W["neg"] * neg_pen + wst * st \
-            + (W.get("tod", 0.0) * dot(tod, v) if tod else 0.0)
+            + (W.get("tod", 0.0) * dot(tod, v) if tod else 0.0) + w_or * orig.get(c, 0.0)
         if W.get("gate") == "rank":
             parts[c] = (taste, fr, pop, q, re_, hh)
             feats[c] = (cen, ms, col, -neg_pen, st)

@@ -9,8 +9,17 @@ namespace RecoPlus.Engine;
 /// <summary>Indice du pays d'un compte : d'où il vient (pour l'expliquer), le pays qu'il désigne, son poids.</summary>
 public sealed record RegionClue(string Source, string Country, double Weight);
 
-/// <summary>Pays retenu pour un compte, avec les indices qui l'ont désigné.</summary>
-public sealed record RegionGuess(string Country, bool Detected, IReadOnlyList<RegionClue> Clues);
+/// <summary>
+/// Pays retenus pour un compte (un ou plusieurs ; aucun en mode international), avec les indices qui l'ont désigné.
+/// </summary>
+public sealed record RegionGuess(IReadOnlyList<string> Countries, bool International, bool Detected, IReadOnlyList<RegionClue> Clues)
+{
+    /// <summary>Notation courte : « * » (international), « FR » ou « FR,BE,CH ».</summary>
+    public string Spec => International ? Regions.InternationalSpec : string.Join(",", Countries);
+
+    /// <summary>Premier pays (affichage) ; « US » en mode international.</summary>
+    public string Country => Countries.Count > 0 ? Countries[0] : "US";
+}
 
 /// <summary>
 /// Pays d'un compte (« région ») : celui où il regarde, pour les dates de sortie (sorti en salle, en vidéo ou à la
@@ -68,6 +77,120 @@ public static class Regions
         ["chi"] = "zh", ["per"] = "fa", ["ice"] = "is", ["baq"] = "eu", ["may"] = "ms", ["alb"] = "sq", ["arm"] = "hy",
         ["geo"] = "ka", ["mac"] = "mk", ["bur"] = "my", ["tib"] = "bo", ["wel"] = "cy",
     };
+
+    /// <summary>Notation du mode international (toutes les sorties, sans pays) dans les réglages.</summary>
+    public const string InternationalSpec = "*";
+
+    /// <summary>Pays au plus dans une liste personnalisée.</summary>
+    public const int MaxCountries = 12;
+
+    /// <summary>
+    /// Lit une notation de pays : vide = automatique (null) ; « * » (ou « international ») = international ; « FR » ou
+    /// « FR, BE, CH » = une liste de pays connus (inconnus ignorés, doublons retirés, au plus <see cref="MaxCountries"/>).
+    /// Une notation dont aucun pays n'est connu vaut automatique.
+    /// </summary>
+    public static (bool International, IReadOnlyList<string> Countries)? ParseSpec(string? spec)
+    {
+        var s = spec?.Trim();
+        if (string.IsNullOrEmpty(s) || s.Length > 200)
+        {
+            return null;
+        }
+
+        if (s == InternationalSpec || s.Equals("international", StringComparison.OrdinalIgnoreCase))
+        {
+            return (true, Array.Empty<string>());
+        }
+
+        var list = s.Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Clean).OfType<string>()
+            .Distinct(StringComparer.Ordinal).Take(MaxCountries).ToList();
+        return list.Count > 0 ? (false, list) : null;
+    }
+
+    private static readonly Lazy<Dictionary<string, string[]>> CountryLanguages = new(() =>
+    {
+        var res = new Dictionary<string, SortedSet<string>>(StringComparer.Ordinal);
+        foreach (var c in CultureInfo.GetCultures(CultureTypes.SpecificCultures))
+        {
+            try
+            {
+                var region = new RegionInfo(c.Name).TwoLetterISORegionName.ToUpperInvariant();
+                var lang = c.TwoLetterISOLanguageName.ToLowerInvariant();
+                if (region.Length == 2 && lang.Length == 2)
+                {
+                    (res.TryGetValue(region, out var set) ? set : res[region] = new SortedSet<string>(StringComparer.Ordinal)).Add(lang);
+                }
+            }
+            catch (ArgumentException)
+            {
+                // culture sans région reconnue
+            }
+        }
+
+        return res.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray(), StringComparer.Ordinal);
+    });
+
+    /// <summary>
+    /// Langues parlées dans les pays d'un compte (deux lettres, cultures de .NET : France → fr ; Belgique → fr, nl ; Suisse
+    /// → de, fr, it, rm) ; aucune en mode international. Préférence de départ de l'origine des titres (<see cref="Origin"/>).
+    /// </summary>
+    public static IReadOnlyList<string> LanguagesOf(RegionGuess region)
+        => region.International ? Array.Empty<string>()
+            : region.Countries.SelectMany(c => CountryLanguages.Value.GetValueOrDefault(c) ?? Array.Empty<string>()).Distinct(StringComparer.Ordinal).ToList();
+
+    /// <summary>
+    /// Noms de pays tels que TMDb et Jellyfin les écrivent (pays de production) quand ils diffèrent du nom anglais de .NET.
+    /// </summary>
+    private static readonly Dictionary<string, string[]> TmdbNames = new(StringComparer.Ordinal)
+    {
+        ["US"] = new[] { "United States of America", "USA" }, ["GB"] = new[] { "United Kingdom", "UK" }, ["KR"] = new[] { "South Korea", "Korea" }, // i18n:skip
+        ["KP"] = new[] { "North Korea" }, ["HK"] = new[] { "Hong Kong" }, ["MO"] = new[] { "Macao", "Macau" }, ["CZ"] = new[] { "Czech Republic", "Czechia" }, // i18n:skip
+        ["RU"] = new[] { "Russia" }, ["TW"] = new[] { "Taiwan" }, ["VN"] = new[] { "Vietnam" }, ["IR"] = new[] { "Iran" }, // i18n:skip
+        ["SY"] = new[] { "Syria" }, ["LA"] = new[] { "Laos" }, ["BO"] = new[] { "Bolivia" }, ["VE"] = new[] { "Venezuela" }, // i18n:skip
+        ["TZ"] = new[] { "Tanzania" }, ["MD"] = new[] { "Moldova" }, ["MK"] = new[] { "North Macedonia", "Macedonia" }, // i18n:skip
+        ["PS"] = new[] { "Palestine", "Palestinian Territory" }, ["CI"] = new[] { "Cote D'Ivoire", "Côte d'Ivoire", "Ivory Coast" }, // i18n:skip
+        ["CD"] = new[] { "Congo" }, ["TR"] = new[] { "Turkey", "Türkiye" }, ["BA"] = new[] { "Bosnia and Herzegovina" }, // i18n:skip
+    };
+
+    /// <summary>
+    /// Origines du pays d'un compte au format de <see cref="Origin.Keys"/> : ses langues (« l:fr ») et ses noms (« c:france »,
+    /// avec ceux de TMDb) ; aucune en mode international. La préférence de départ de l'origine des titres.
+    /// </summary>
+    public static IReadOnlyList<string> HomeOrigins(RegionGuess region)
+    {
+        var res = new List<string>();
+        foreach (var l in LanguagesOf(region))
+        {
+            res.Add("l:" + l);
+        }
+
+        foreach (var c in region.International ? Array.Empty<string>() : region.Countries)
+        {
+            var names = new List<string>(TmdbNames.GetValueOrDefault(c) ?? Array.Empty<string>());
+            try
+            {
+                names.Add(new RegionInfo(c).EnglishName);
+            }
+            catch (ArgumentException)
+            {
+                // pays inconnu de .NET : seulement les noms de TMDb
+            }
+
+            foreach (var n in names)
+            {
+                var k = "c:" + n.Trim().ToLowerInvariant();
+                if (!res.Contains(k))
+                {
+                    res.Add(k);
+                }
+            }
+        }
+
+        return res;
+    }
+
+    /// <summary>Notation propre d'une liste lue par <see cref="ParseSpec"/> ; null pour automatique.</summary>
+    public static string? NormalizeSpec(string? spec) => ParseSpec(spec) is { } p ? (p.International ? InternationalSpec : string.Join(",", p.Countries)) : null;
 
     private static readonly Lazy<HashSet<string>> Known = new(() => new HashSet<string>(Zones.Value.Values, StringComparer.Ordinal));
 
@@ -137,16 +260,16 @@ public static class Regions
     public static RegionGuess Detect(string? chosen, IEnumerable<RegionClue> clues, string fallback)
     {
         var list = clues.Where(c => Clean(c.Country) is not null && c.Weight > 0).ToList();
-        if (Clean(chosen) is { } fixedCountry)
+        if (ParseSpec(chosen) is { } fixedSpec)
         {
-            return new RegionGuess(fixedCountry, false, list);
+            return new RegionGuess(fixedSpec.Countries, fixedSpec.International, false, list);
         }
 
         var best = list.Select((c, i) => (C: Clean(c.Country)!, c.Weight, Lang: LanguageSources.Contains(c.Source), i)).GroupBy(x => x.C)
             .Select(g => (Country: g.Key, W: g.Where(x => !x.Lang).Sum(x => x.Weight) + Math.Min(LanguageCap, g.Where(x => x.Lang).Sum(x => x.Weight)),
                 First: g.Min(x => x.i)))
             .OrderByDescending(g => g.W).ThenBy(g => g.First).FirstOrDefault();
-        return best.Country is null ? new RegionGuess(Clean(fallback) ?? "US", false, list) : new RegionGuess(best.Country, true, list);
+        return best.Country is null ? new RegionGuess(new[] { Clean(fallback) ?? "US" }, false, false, list) : new RegionGuess(new[] { best.Country }, false, true, list);
     }
 
     /// <summary>

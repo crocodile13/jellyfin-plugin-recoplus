@@ -38,7 +38,7 @@ public sealed partial class UserPrefsStore
     /// <summary>Réglages et indices d'un compte.</summary>
     public sealed class Prefs
     {
-        /// <summary>Pays choisi par le compte (ISO 3166-1) ; null = détecté.</summary>
+        /// <summary>Pays choisis par le compte (« FR », « FR,BE », « * » international) ; null = détecté.</summary>
         public string? Region { get; set; }
 
         /// <summary>Titres hors bibliothèque pour ce compte ; null = comme le serveur.</summary>
@@ -120,7 +120,7 @@ public sealed partial class UserPrefsStore
     public bool Set(string userKey, string? region, bool? extended, bool canRegion, bool canExtended)
     {
         string? r = null;
-        if (canRegion && !string.IsNullOrWhiteSpace(region) && (r = Regions.Clean(region)) is null)
+        if (canRegion && !string.IsNullOrWhiteSpace(region) && (r = Regions.NormalizeSpec(region)) is null)
         {
             return false;
         }
@@ -262,7 +262,7 @@ public sealed partial class UserPrefsStore
                         var langs = p.BrowserLanguages?.Take(MaxLanguages).Select(CleanLanguage).OfType<string>().ToList();
                         _byUser[u] = new Prefs
                         {
-                            Region = Regions.Clean(p.Region),
+                            Region = Regions.NormalizeSpec(p.Region),
                             Extended = p.Extended,
                             BrowserZone = CleanZone(p.BrowserZone),
                             BrowserLanguages = langs is { Count: > 0 } ? langs : null,

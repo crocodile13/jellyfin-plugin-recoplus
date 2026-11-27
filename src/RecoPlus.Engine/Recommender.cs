@@ -157,7 +157,11 @@ public static class Recommender
             Re = new double[n];
             Hh = new double[n];
             Tod = new double[n];
+            Or = new double[n];
         }
+
+        /// <summary>Écart de familiarité avec l'origine du titre (langue, pays ; <see cref="Origin"/>).</summary>
+        public double[] Or { get; }
 
         /// <summary>Proximité aux titres aimés regardés dans la même tranche horaire.</summary>
         public double[] Tod { get; }
@@ -424,6 +428,12 @@ public static class Recommender
             c.Tm[ci] = tmdbAgreement is not null && tmdbAgreement.TryGetValue(id, out var a) ? a : 0.0;
         }
 
+        if (w.WOrigin > 0)
+        {
+            var dev = Origin.Deviation(ctx.Ds, user, pos, cands, w.OriginPrior);
+            Array.Copy(dev, c.Or, dev.Length);
+        }
+
         return c;
     }
 
@@ -447,7 +457,8 @@ public static class Recommender
 
     /// <summary>Goût d'un candidat : seul juge de l'ordre avant les bonus.</summary>
     public static double Taste(Components c, int i, EngineSettings w)
-        => (w.WCentroid * c.Cen[i]) + (w.WMaxSim * c.Ms[i]) + (w.WCollab * c.Col[i]) - (w.WNegative * c.Neg[i]) + (w.WShortTerm * c.St[i]) + (w.WTimeOfDay * c.Tod[i]);
+        => (w.WCentroid * c.Cen[i]) + (w.WMaxSim * c.Ms[i]) + (w.WCollab * c.Col[i]) - (w.WNegative * c.Neg[i]) + (w.WShortTerm * c.St[i]) + (w.WTimeOfDay * c.Tod[i])
+           + (w.WOrigin * c.Or[i]);
 
     /// <summary>Tranche horaire : 0 nuit (0-6 h), 1 matin (6-12 h), 2 après-midi (12-18 h), 3 soirée (18-24 h).</summary>
     public static int Slot(int hour) => Math.Clamp(hour, 0, 23) / 6;

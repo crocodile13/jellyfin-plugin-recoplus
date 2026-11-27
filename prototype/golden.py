@@ -89,8 +89,13 @@ def synth(seed=7):
     exposure = {}
     for u in range(5):
         exposure[f"u{u}"] = {tid: (rng.choice([1, 2, 5, 14]), now - rng.uniform(0, 60) * DAY) for tid in rng.sample(ids, 12)}
+    # origines du pays de chaque compte (origine des titres) : tirage à part, le reste du jeu ne change pas ; des origines
+    # mal écrites (« L:FR ») et un compte en mode international (aucune)
+    hr = random.Random(77)
+    home = {u: hr.choice([[], ["l:fr", "c:france"], [" L:FR "], ["c:japan"], ["l:ja", "c:japan"], ["l:en", "l:fr", "c:canada"], ["l:ko", "c:korea"]])
+            for u in sorted(users)}
     ds = Dataset(titles, users, {"now": now, "colls": {c: [k for k in v if k in titles] for c, v in colls.items()},
-                                 "reviews": reviews, "exposure": exposure})
+                                 "reviews": reviews, "exposure": exposure, "home_origins": home})
     return ds
 
 
@@ -124,6 +129,7 @@ def dump_ds(ds):
         "now": ds.meta["now"],
         "collections": ds.meta["colls"],
         "reviews": ds.meta.get("reviews", {}),
+        "home_origins": ds.meta.get("home_origins", {}),
         "exposure": {u: {t: list(e) for t, e in ex.items()} for u, ex in ds.meta.get("exposure", {}).items()},
         "titles": [dict(id=t.id, kind=t.kind, name=t.name, year=t.year, genres=t.genres, tags=t.tags, studios=t.studios,
                         people=t.people, community=t.community, added=t.added, episodes=t.n_episodes,
@@ -165,6 +171,9 @@ if __name__ == "__main__":
                                                      neural=[round(random.Random(3).uniform(-1.5, 1.5), 4) for _ in range(96)]),
          "tfidf", 0.3, {}, "fixed"),
         ("diversité calibrée forte + bm25", base_P, dict(base_W, short=0.3), "bm25", 0.3, {}, "calibrated", 0.9),
+        ("origine du titre forte, préférence de départ forte", base_P, dict(base_W, origin=1.5, origin_prior=12.0), "tfidf", 0.3, {}, "fixed"),
+        ("origine du titre sans préférence de départ", base_P, dict(base_W, origin=1.0, origin_prior=0.0), "tfidf", 0.0, {}, "fixed"),
+        ("origine du titre coupée", base_P, dict(base_W, origin=0.0), "tfidf", 0.3, {}, "fixed"),
     ]
     for v in variants:
         name, P, W, scheme, mmr = v[:5]

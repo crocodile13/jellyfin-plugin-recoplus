@@ -100,10 +100,19 @@ public class ParityTests
             }
         }
 
+        var homes = new Dictionary<string, IReadOnlyList<string>>(StringComparer.Ordinal);
+        if (d.TryGetProperty("home_origins", out var hl) && hl.ValueKind == JsonValueKind.Object)
+        {
+            foreach (var u in hl.EnumerateObject())
+            {
+                homes[u.Name] = u.Value.EnumerateArray().Select(x => x.GetString() ?? string.Empty).ToList();
+            }
+        }
+
         int shift = d.TryGetProperty("utc_offset_hours", out var off) && off.ValueKind == JsonValueKind.Number ? off.GetInt32() : 0;
         var ds = new Dataset
         {
-            Titles = titles, Users = users, Collections = colls, Thematic = thematic, Now = d.GetProperty("now").GetDouble(), Reviews = reviews,
+            Titles = titles, Users = users, Collections = colls, Thematic = thematic, Now = d.GetProperty("now").GetDouble(), Reviews = reviews, HomeOrigins = homes,
             LocalHour = shift == 0 ? null : t => (int)((((t + (shift * 3600)) % 86400) + 86400) % 86400 / 3600),
         };
         ds.LinkCollections();
@@ -140,6 +149,8 @@ public class ParityTests
             RatingPriorVotes = Num(w, "rating_prior_votes", d.RatingPriorVotes),
             WHousehold = Num(w, "household", d.WHousehold),
             HouseholdPrior = Num(w, "household_prior", d.HouseholdPrior),
+            WOrigin = Num(w, "origin", d.WOrigin),
+            OriginPrior = Num(w, "origin_prior", d.OriginPrior),
             Rating = rating switch { "critic" => RatingSource.Critic, "best" => RatingSource.Best, "mean" => RatingSource.Mean, _ => RatingSource.Community },
             FeatCountry = feat.ValueKind == JsonValueKind.Object ? Num(feat, "n", 0) : 0,
             FeatLanguage = feat.ValueKind == JsonValueKind.Object ? Num(feat, "l", 0) : 0,

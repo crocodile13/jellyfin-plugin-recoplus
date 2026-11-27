@@ -5,6 +5,7 @@ pour chaque compte, les titres mis de côté (holdout) sont-ils retrouvés dans 
 
     python offline.py            mesure avec les réglages par défaut
     import offline; offline.run(extra=…)   extra(title_id) → {caractéristique: poids} ajouté au contenu de chaque titre
+    offline.run(w={"origin": 0}, home={"anime": ["l:ja", "c:japan"]})   réglages du score, origines du pays des comptes
 """
 from __future__ import annotations
 
@@ -40,7 +41,7 @@ def load():
         y = int(g("year")) if g("year").isdigit() else None
         titles[tid] = Title(tid, kind, g("title"), y, [x.text for x in r.findall("genre")], [x.text for x in r.findall("tag")],
                             [x.text for x in r.findall("studio")], people, float(g("rating") or 0) or None, NOW - 400 * DAY,
-                            n_episodes=10 if kind == "Series" else 0)
+                            n_episodes=10 if kind == "Series" else 0, countries=[x.text for x in r.findall("country") if x.text])
         u = r.find("uniqueid[@type='tmdb']")
         if u is not None and (u.text or "").isdigit():
             tmdb[tid] = ("tv" if kind == "Series" else "movie", int(u.text))
@@ -94,7 +95,7 @@ def history(p):
     return h
 
 
-def run(extra=None):
+def run(extra=None, w=None, home=None):
     """hit@10, hit@20, MRR des titres mis de côté, et part du top 10 dans les univers du compte ; par compte aussi."""
     personas = dict(catalog.PERSONAS)
     universe = bench.universe_of()
@@ -102,13 +103,13 @@ def run(extra=None):
     if extra is not None:
         EN.tokens = lambda t: {**base(t), **extra(t.id)}
     try:
-        ds = Dataset(T)
+        ds = Dataset(T, meta={"home_origins": home or {}})
         hist = {u: history(p) for u, p in personas.items()}
         ctx = EN.Context(ds, NOW, hist)
         vec = EN.build_vectors(T)
     finally:
         EN.tokens = base
-    w = dict(EN.ENGINE_W)
+    w = dict(EN.ENGINE_W, **(w or {}))
     h10 = h20 = mrr = n = 0
     taste, per = [], {}
     for u, p in personas.items():
