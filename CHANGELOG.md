@@ -3,6 +3,10 @@
 Reco+ versions, newest first. Each line is the changelog shown by Jellyfin's plugin catalogue.
 Compatibility: see the Jellyfin range of each version below (`targetAbi` in `manifest.json`).
 
+## 1.2.0 — New releases, country of each account, title origin, user page, daily lists
+
+- **1.2.0** (Jellyfin 12.2–12.4) — a New releases row shows what has just come out in each account's country (theaters, digital, TV), movies and series. Each account's country is detected (browser time zone and languages, Jellyfin language, usual subtitles) or chosen: one country, several, or international. A new Title origin factor gently lifts titles in a language and from a country familiar to the account. With the Plugin Pages plugin, every user gets a Reco+ page to set their country and titles outside the library. Popular becomes Most popular of all time (TMDb's most voted titles), and every current list renews each day (adjustable). A title you requested goes on top of For you and of banners such as Media Bar Enhanced for 3 days when it arrives, then takes its normal place. Fixes: Popular and New releases only listed titles in the server's language (Seerr filter); switching extended mode back on now recomputes at once; the settings page uses Jellyfin's own look, the full width and no folded sections. Security: Seerr and the webhook never follow redirects, Seerr answers are size-limited, the secrets file is private.
+
 ## 1.1.3 — Fixes
 
 - **1.1.3** (Jellyfin 12.2–12.4) — rows were missing for some accounts. An account that had saved its own Home Screen Sections choice never saw the Reco+ rows added to the Home Screen Sections table afterwards (Trending, Popular…): they are now ticked for it once, and stay unticked if it unticks them. The Preview tab says which rows Home Screen Sections does not show to an account. A row with no title from the library (Upcoming, or a current list whose library titles the account has already watched) stayed empty: its titles outside the library are now shown.
