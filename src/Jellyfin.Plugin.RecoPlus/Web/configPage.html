@@ -954,6 +954,22 @@
             .concat(F.map(function (f) { return f[0]; }).filter(function (n) { return /^(_Sub|Title)(Tendances|Populaires|Sorties|AVenir)(Films|Series)$/.test(n) || LIST_FILTER.test(n); }));
         var LIST_SRC = { Trending: 'SourceTendances', Popular: 'SourcePopulaires', Releases: 'SourceSorties', Upcoming: 'SourceAVenir' };
         var NEEDS_SEERR = ['TrendingShare', 'UseSeerrVotes', 'UseSeerrWatchlist', 'UseTmdbLibrarySignal', 'TmdbLibraryAnchors', 'RequestWeight', 'WatchlistWeight', 'RequestHalfLifeDays', 'RequestMaxDays', 'WTmdbAgreement'];
+        // le pays d'un compte ne sert qu'aux dates des nouvelles sorties, une liste TMDb (Seerr)
+        var NO_RELEASES = function () { return G.seerr ? '' : t('Seerr non utilisé (onglet Seerr) : pas de nouvelles sorties'); };
+        // 10. code pays : connu du serveur (liste reçue avec l'état), sinon dit sous le champ, sans le griser (à corriger)
+        var COUNTRIES = null;
+        function countryOk(v) { v = String(v || '').trim().toUpperCase(); return !!v && !!COUNTRIES && COUNTRIES.indexOf(v) >= 0; }
+        function checkCountries() {
+            ['Region', 'RegionFallback'].forEach(function (name) {
+                var id = idOf(name), input = id && $('#' + id);
+                if (!input) { return; }
+                var holder = input.closest('.rp-field'), note = holder && holder.querySelector(':scope > .rp-badcode');
+                var v = String(input.value || '').trim();
+                var bad = !!COUNTRIES && v && !countryOk(v);
+                if (bad && !note) { note = el('div', { 'class': 'rp-badcode ko' }); holder.appendChild(note); }
+                if (note) { note.textContent = bad ? tf('Code de pays inconnu : {0} (deux lettres ISO, par exemple FR, BE, GB, CA).', v) : ''; note.classList.toggle('rp-hidden', !bad); }
+            });
+        }
         var NO_MIX = function () { return SOURCES.some(function (k) { return val(k) === 'Mix'; }) ? '' : t('aucune rangée au contenu « mélange »'); };
         var WHY = {
             ExtendedMixMode: function () { return NO_MIX(); },
@@ -1002,7 +1018,9 @@
             CalibrationPasses: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? t('pas de recherche par curseurs avec la méthode choisie') : ''; },
             CalibrationRefine: function () { return /^(ChoiceModel|Neural)$/.test(v('rpCalMethod') || '') ? t('pas de recherche par curseurs avec la méthode choisie') : ''; },
             CalibrationSlowFolds: function () { return v('rpCalMethod') === 'ChoiceModel' ? t('ni recherche par curseurs ni réseau avec la méthode choisie') : ''; },
-            UserCanSetRegion: function () { return sw('UserPageEnabled') ? '' : t('page des utilisateurs coupée'); },
+            UserCanSetRegion: function () { return !sw('UserPageEnabled') ? t('page des utilisateurs coupée') : NO_RELEASES(); },
+            Region: function () { return NO_RELEASES(); },
+            RegionFallback: function () { return NO_RELEASES() || (countryOk(val('Region')) ? t('pays fixé pour tous les comptes') : ''); },
             UserCanSetExtended: function () { return !sw('UserPageEnabled') ? t('page des utilisateurs coupée') : !G.seerr || !G.ext ? t('pas de titres hors bibliothèque (Seerr et mode étendu)') : ''; },
             CalibrationInnerFolds: function () { return v('rpCalMethod') === 'Coordinate' ? t('pas de régularisation à choisir avec la recherche par curseurs') : ''; }
         };
@@ -1092,6 +1110,7 @@
         }
         page.addEventListener('change', applyWhen);
         page.addEventListener('input', applyWhen);
+        page.addEventListener('input', checkCountries);
         page.addEventListener('change', splitNotes);
         page.addEventListener('input', splitNotes);
 
@@ -1209,6 +1228,7 @@
 
         function renderStatus(s) {
             lastStatus = s;
+            if (Array.isArray(s.countries)) { COUNTRIES = s.countries; checkCountries(); applyWhen(); }
             renderHealth(s);
             if (waitPreview && s.engine && !s.engine.Running && s.engine.LastFullRun && s.engine.LastFullRun !== waitPreview.last) {
                 waitPreview = null;

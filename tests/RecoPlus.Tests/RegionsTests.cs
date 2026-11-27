@@ -41,6 +41,11 @@ public class RegionsTests
         Assert.Equal("BE", Regions.Detect(null, clues, "FR").Country);
         Assert.True(Regions.Detect(null, clues, "FR").Detected);
 
+        // les indices de langue disent la même chose : plafonnés ensemble, ils ne battent pas le fuseau (Belge en fr-FR,
+        // audio et sous-titres français ; Suisse en de-DE, audio et sous-titres allemands)
+        Assert.Equal("BE", Regions.Detect(null, Regions.Clues("Europe/Brussels", new[] { "fr-FR" }, "fre", "fre", null, "fr", null), "FR").Country);
+        Assert.Equal("CH", Regions.Detect(null, Regions.Clues("Europe/Zurich", new[] { "de-DE", "de" }, "ger", "ger", null, null, null), "FR").Country);
+
         // sans fuseau : la langue avec région l'emporte sur la langue seule
         clues = Regions.Clues(null, new[] { "fr-CA", "en-US" }, "fre", "fre", null, null, null);
         Assert.Equal("CA", Regions.Detect(null, clues, "FR").Country);

@@ -695,8 +695,13 @@ def user_page_check():
     out["pays détecté"] = f"{me['region']['auto']} (indices : {', '.join(c['source'] + '=' + c['country'] for c in me['region']['clues'])})"
     if me["region"]["auto"] != "BE" or not me["region"]["detected"]:
         problems.append(f"{name} : pays détecté {me['region']} au lieu de la Belgique (fuseau Europe/Brussels)")
-    if "hss" not in EXPECT:
-        # sans Plugin Pages, pas de page pour voir ni annuler un choix : le serveur décide, l'enregistrement est refusé
+    if "hss" not in EXPECT or "seerr" not in EXPECT:
+        # sans Plugin Pages, pas de page pour voir ni annuler un choix ; sans Seerr, rien à y régler (le pays ne sert qu'aux
+        # nouvelles sorties, le choix des titres hors bibliothèque qu'au mode étendu) : l'enregistrement est refusé
+        if "hss" in EXPECT:
+            pages = call("GET", "/PluginPages/User", token=tok) or {}
+            if any(p.get("Id") == "Jellyfin.Plugin.RecoPlus" for p in pages.get("Items", [])):
+                problems.append("Plugin Pages : page Reco+ dans le menu alors qu'elle n'a rien à régler (sans Seerr)")
         try:
             call("POST", "/RecoPlus/Me", {"Region": "CA"}, token=tok)
             problems.append(f"{name} : réglage d'un compte accepté sans Plugin Pages")

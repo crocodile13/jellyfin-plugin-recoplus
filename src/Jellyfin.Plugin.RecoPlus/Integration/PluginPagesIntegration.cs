@@ -5,6 +5,7 @@ using System.Runtime.Loader;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Jellyfin.Plugin.RecoPlus.Service;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RecoPlus.Engine;
@@ -27,8 +28,19 @@ public sealed class PluginPagesIntegration : BackgroundService
 
     public PluginPagesIntegration(ILogger<PluginPagesIntegration> log) => _log = log;
 
-    /// <summary>Plugin Pages est chargé par Jellyfin (la page des utilisateurs peut exister).</summary>
-    public static bool Available => AssemblyLoadContext.All.SelectMany(c => c.Assemblies).Any(a => a.GetName().Name == "Jellyfin.Plugin.PluginPages");
+    private static int _registered;   // 0 : pas encore tenté ; 1 : page déclarée ; 2 : Plugin Pages absent ou déclaration refusée
+
+    /// <summary>
+    /// La page des utilisateurs existe : déclarée à Plugin Pages (après la tentative), ou Plugin Pages chargé tant que la
+    /// déclaration n'a pas encore été tentée (premières secondes après le démarrage). Gardé une fois la tentative faite : lu
+    /// à chaque calcul et à chaque accueil.
+    /// </summary>
+    public static bool Available => Volatile.Read(ref _registered) switch
+    {
+        1 => true,
+        2 => false,
+        _ => AssemblyLoadContext.All.SelectMany(c => c.Assemblies).Any(a => a.GetName().Name == "Jellyfin.Plugin.PluginPages"),
+    };
 
     /// <summary>État lisible (emballé : traduit à l'affichage).</summary>
     public static string State { get; private set; } = "non tenté";
@@ -38,7 +50,7 @@ public sealed class PluginPagesIntegration : BackgroundService
     /// moins un réglage aux utilisateurs.
     /// </summary>
     public static bool IsEnabled(string id)
-        => Plugin.Instance?.Configuration is { Enabled: true, UserPageEnabled: true } c && (c.UserCanSetRegion || c.UserCanSetExtended);
+        => Plugin.Instance?.Configuration is { Enabled: true } c && RecoService.UserPageOffers(c) is var o && (o.Region || o.Extended);
 
     /// <inheritdoc />
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -54,6 +66,7 @@ public sealed class PluginPagesIntegration : BackgroundService
         if (asm is null)
         {
             State = "Plugin Pages absent";
+            Volatile.Write(ref _registered, 2);
             return;
         }
 
@@ -81,11 +94,13 @@ public sealed class PluginPagesIntegration : BackgroundService
             });
             register.Invoke(null, new[] { parse.Invoke(null, new object[] { payload }) });
             State = Texts.Pack("page « Reco+ » déclarée dans le menu des utilisateurs");
+            Volatile.Write(ref _registered, 1);
             _log.LogInformation("Reco+: user page registered with Plugin Pages");
         }
         catch (Exception ex) when (ex is TargetInvocationException or TargetException or InvalidOperationException or InvalidCastException or ArgumentException or MissingMethodException or MemberAccessException)
         {
             State = Texts.Pack("échec : {0}", (ex.InnerException ?? ex).Message);
+            Volatile.Write(ref _registered, 2);
             _log.LogWarning("Reco+: could not register the user page with Plugin Pages ({Msg})", (ex.InnerException ?? ex).Message);
         }
     }

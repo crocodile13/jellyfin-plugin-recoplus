@@ -25,6 +25,15 @@ public static class Regions
     /// <summary>Poids des indices : un fuseau horaire désigne un pays, une langue souvent plusieurs.</summary>
     public const double TimeZoneWeight = 3, BrowserRegionWeight = 2, LanguageWeight = 1, ServerWeight = 0.5;
 
+    /// <summary>
+    /// Plafond, par pays, de tous les indices tirés d'une langue (navigateur, audio, sous-titres, langue du serveur) : ils
+    /// disent souvent la même chose (« français ») et ne doivent pas l'emporter, additionnés, sur le fuseau horaire, qui
+    /// désigne le pays (un Belge au navigateur en fr-FR, audio et sous-titres français, reste en Belgique).
+    /// </summary>
+    public const double LanguageCap = 2.5;
+
+    private static readonly HashSet<string> LanguageSources = new(StringComparer.Ordinal) { "browser", "audio", "subtitles", "serverlang" };
+
     private static readonly Lazy<Dictionary<string, string>> Zones = new(LoadZones);
 
     private static readonly Lazy<string[]> AllCountries = new(() => Zones.Value.Values.Distinct(StringComparer.Ordinal).OrderBy(c => c, StringComparer.Ordinal).ToArray());
@@ -127,8 +136,9 @@ public static class Regions
             return new RegionGuess(fixedCountry, false, list);
         }
 
-        var best = list.Select((c, i) => (C: Clean(c.Country)!, c.Weight, i)).GroupBy(x => x.C)
-            .Select(g => (Country: g.Key, W: g.Sum(x => x.Weight), First: g.Min(x => x.i)))
+        var best = list.Select((c, i) => (C: Clean(c.Country)!, c.Weight, Lang: LanguageSources.Contains(c.Source), i)).GroupBy(x => x.C)
+            .Select(g => (Country: g.Key, W: g.Where(x => !x.Lang).Sum(x => x.Weight) + Math.Min(LanguageCap, g.Where(x => x.Lang).Sum(x => x.Weight)),
+                First: g.Min(x => x.i)))
             .OrderByDescending(g => g.W).ThenBy(g => g.First).FirstOrDefault();
         return best.Country is null ? new RegionGuess(Clean(fallback) ?? "FR", false, list) : new RegionGuess(best.Country, true, list);
     }
@@ -175,7 +185,7 @@ public static class Regions
 
         if (OfLanguage(serverLanguage).Country is { } sl)
         {
-            res.Add(new RegionClue("server", sl, ServerWeight));
+            res.Add(new RegionClue("serverlang", sl, ServerWeight));
         }
 
         if (OfTimeZone(serverZone) is { } sz)
