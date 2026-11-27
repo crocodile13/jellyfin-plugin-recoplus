@@ -259,12 +259,14 @@ public sealed class EngineSettings
 
     /// <summary>
     /// Origine du titre (<see cref="Origin"/>) : écart de familiarité du compte avec la langue et le pays du titre, dans le goût.
-    /// Choix de Marien : actif par défaut avec un poids prudent (mesuré sur le banc, pas encore sur de vrais historiques).
+    /// Choix de Marien : actif par défaut avec un poids prudent. Banc hors ligne (comptes simulés, tous français) : 0,3
+    /// fait baisser la part des goûts (0,63 → 0,58) ; 0,1 avec 2 titres fictifs la garde (0,63) et retrouve mieux les
+    /// titres du compte francophile. Pas encore mesuré sur de vrais historiques.
     /// </summary>
-    public double WOrigin { get; set; } = 0.3;
+    public double WOrigin { get; set; } = 0.1;
 
     /// <summary>Origine du titre : titres fictifs dans la langue du pays du compte (préférence de départ ; 0 = aucune).</summary>
-    public double OriginPrior { get; set; } = 5;
+    public double OriginPrior { get; set; } = 2;
 
     /// <summary>
     /// Part des tendances TMDb dans la popularité (0 = popularité dans le foyer seule, 1 = une tendance compte autant
