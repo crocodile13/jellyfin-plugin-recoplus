@@ -26,6 +26,23 @@ public static class Releases
     public static double? In(string country, IReadOnlyDictionary<string, string>? local, string? primary)
         => local is not null && local.TryGetValue(country, out var d) && Parse(d) is { } t ? t : Parse(primary);
 
+    /// <summary>Âge d'un titre en jours à la date <paramref name="now"/> (négatif : pas encore sorti) ; null sans date lisible.</summary>
+    public static double? AgeDays(string? date, double now) => Parse(date) is { } t ? (now - t) / Core.Day : null;
+
+    /// <summary>
+    /// Assez de votes TMDb pour l'âge du titre : les votes s'accumulent avec le temps (relevé TMDb : un film de moins d'un
+    /// mois a 9 votes en médiane, une série récente 2 à 7). Le minimum complet vaut à partir de <paramref name="rampDays"/>
+    /// jours, proportionnellement moins avant ; un titre pas encore sorti n'en a pas besoin. Sans date : le minimum complet.
+    /// </summary>
+    public static bool EnoughVotes(int votes, double? ageDays, int minVotes, double rampDays = 30)
+        => minVotes <= 0 || votes >= minVotes * (ageDays is double a ? Math.Clamp(a / rampDays, 0, 1) : 1);
+
+    /// <summary>
+    /// Note TMDb fiable d'une sortie récente : ramenée vers la note médiane des sorties récentes (6,8 au relevé) tant
+    /// qu'elle repose sur peu de votes (poids de 10 votes fictifs) : 9,0 sur 8 votes ≈ 7,8 ; 5,5 sur 25 votes ≈ 5,9.
+    /// </summary>
+    public static double ConfidentRating(double rating, int votes) => Exploration.ConfidentRating(rating, votes, 6.8, 10);
+
     /// <summary>Sorti depuis au plus <paramref name="days"/> jours (et pas dans le futur) à la date <paramref name="now"/>.</summary>
     public static bool IsNew(double? released, double now, int days)
         => released is { } r && r <= now && r >= now - (Math.Clamp(days, 1, 365) * Core.Day);

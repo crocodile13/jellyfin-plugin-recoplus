@@ -64,7 +64,7 @@
         var zone = '';
         try { zone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { /* navigateur sans Intl */ }
         var langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']).slice(0, 4);
-        a.ajax({ type: 'POST', url: a.getUrl('RecoPlus/Client'), data: JSON.stringify({ TimeZone: zone, Languages: langs }), contentType: 'application/json' })
+        a.ajax({ type: 'POST', url: a.getUrl('RecoPlus/Client'), data: JSON.stringify({ TimeZone: zone, Languages: langs, Ui: document.documentElement.getAttribute('lang') || '' }), contentType: 'application/json' })
             .then(null, function () { /* perdu : renvoyé à la prochaine session */ });
     }
 

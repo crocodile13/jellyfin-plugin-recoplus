@@ -457,8 +457,8 @@ public sealed class PluginConfiguration : BasePluginConfiguration
     /// </summary>
     public string Region { get; set; } = string.Empty;
 
-    /// <summary>Pays d'un compte quand rien ne permet de le détecter.</summary>
-    public string RegionFallback { get; set; } = "FR";
+    /// <summary>Pays d'un compte quand rien ne permet de le détecter ; vide = le pays des métadonnées de Jellyfin (sinon les États-Unis).</summary>
+    public string RegionFallback { get; set; } = string.Empty;
 
     // ---- page de chaque utilisateur (Plugin Pages)
 
