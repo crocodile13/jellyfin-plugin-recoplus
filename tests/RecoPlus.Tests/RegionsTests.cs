@@ -159,3 +159,17 @@ public class RegionsTests
         }
     }
 }
+
+public class ListThresholdTests
+{
+    [Fact]
+    public void SeriesNeedAQuarterOfTheVotesAndRecentTitlesProportionallyFewer()
+    {
+        Assert.True(Releases.EnoughVotes(100, 60, 100, series: false));
+        Assert.False(Releases.EnoughVotes(99, 60, 100, series: false));
+        Assert.True(Releases.EnoughVotes(25, 60, 100, series: true));      // TMDb : environ quatre fois moins de votes pour une série
+        Assert.False(Releases.EnoughVotes(24, 60, 100, series: true));
+        Assert.True(Releases.EnoughVotes(50, 15, 100, series: false));     // sorti depuis quinze jours : la moitié suffit
+        Assert.True(Releases.EnoughVotes(0, 5, 0, series: false));         // 0 = aucun minimum
+    }
+}

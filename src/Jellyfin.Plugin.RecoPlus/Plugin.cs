@@ -73,6 +73,34 @@ public sealed class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
             return string.Empty;
         }
 
+        // seuils des listes du moment restés aux anciennes valeurs par défaut (avant 1.2.1, bien trop indulgentes : 20 votes
+        // ne disent presque rien) : les nouvelles, tirées du relevé TMDb ; une valeur réglée à la main reste
+        if (c.ListThresholdsVersion < 1)
+        {
+            if (c.TrendingMinVotes == 50)
+            {
+                c.TrendingMinVotes = 300;
+            }
+
+            if (c.PopularMinVotes == 50)
+            {
+                c.PopularMinVotes = 1000;
+            }
+
+            if (c.ReleasesMinVotes == 20)
+            {
+                c.ReleasesMinVotes = 100;
+            }
+
+            if (c.ReleasesMinRating == 6)
+            {
+                c.ReleasesMinRating = 6.5;
+            }
+
+            c.ListThresholdsVersion = 1;
+            changed = true;
+        }
+
         // haut de liste resté égal à la taille des rangées (avant 1.0.40) : automatique, il la suit désormais
         if (c.Lists is { } lists && lists.Window == c.RowSize)
         {
